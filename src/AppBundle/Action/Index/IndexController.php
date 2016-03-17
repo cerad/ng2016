@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends Controller
 {
-    private $authUtils;
     private $loginForm;
 
     public function __construct(LoginForm $loginForm)

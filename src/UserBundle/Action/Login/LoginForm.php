@@ -3,16 +3,23 @@ namespace Cerad\Bundle\UserBundle\Action\Login;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class LoginForm
 {
     private $authUtils;
     private $csrfTokenManager;
+    private $router;
 
-    public function __construct(AuthenticationUtils $authUtils, CsrfTokenManagerInterface $csrfTokenManager)
+    public function __construct(
+        AuthenticationUtils $authUtils,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        RouterInterface $router
+    )
     {
         $this->authUtils = $authUtils;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->router = $router;
     }
 
     public function renderError()
@@ -29,10 +36,11 @@ EOT;
     {
         $lastUsername = $this->authUtils->getLastUsername();
         $csrfToken = $this->csrfTokenManager->getToken('authenticate');
+        $loginCheckPath = $this->router->generate('cerad_user_login_check');
 
         return  <<<EOT
 {$this->renderError()}
-<form action="/user/login-check" method="post">
+<form action="{$loginCheckPath}" method="post">
     <label for="username">Username:</label>
     <input type="text" id="username" name="_username" value="{$lastUsername}" /><br />
 

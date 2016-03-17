@@ -36,3 +36,4 @@ services:
         arguments:
             - '@security.authentication_utils'
             - '@security.csrf.token_manager'
+            - '@router'
