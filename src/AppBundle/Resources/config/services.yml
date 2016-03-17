@@ -1,0 +1,7 @@
+services:
+
+    app_action_index_controller:
+        class: AppBundle\Action\Index\IndexController
+        calls: [[setContainer, ['@service_container']]]
+        arguments:
+            - '@cerad_user_login_form'

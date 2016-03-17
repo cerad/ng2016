@@ -1,3 +1,7 @@
+cerad_user:
+    resource: "@CeradUserBundle/Resources/config/routing.yml"
+    prefix:   /user
+
 app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix: /

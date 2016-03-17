@@ -2,23 +2,79 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    hide_user_not_found: false
+
+    encoders:
+        Cerad\Bundle\UserBundle\Entity\User:
+            id: cerad_user_encoder
+
     providers:
-        in_memory:
-            memory: ~
+        cerad_user_provider:
+            id: cerad_user_provider
+
+    role_hierarchy:
+        ROLE_USER:           []
+        ROLE_STAFF:          [ROLE_USER]
+
+        ROLE_SCORE_ENTRY:    [ROLE_STAFF]
+        ROLE_SCORE_ADMIN:    [ROLE_STAFF, ROLE_SCORE_ENTRY]
+
+        ROLE_ASSIGNOR:       [ROLE_STAFF]
+        ROLE_ASSIGNOR_KAC:   [ROLE_ASSIGNOR]
+        ROLE_ASSIGNOR_CORE:  [ROLE_ASSIGNOR]
+        ROLE_ASSIGNOR_EXTRA: [ROLE_ASSIGNOR]
+
+        ROLE_ASSIGNOR_ADMIN:
+          - ROLE_ASSIGNOR
+          - ROLE_ASSIGNOR_KAC
+          - ROLE_ASSIGNOR_CORE
+          - ROLE_ASSIGNOR_EXTRA
+
+        ROLE_DEVELOPER: [ROLE_USER]
+
+        ROLE_ADMIN:
+          - ROLE_STAFF
+          - ROLE_ASSIGNOR_ADMIN
+          - ROLE_SCORE_ADMIN
+          - ROLE_ALLOWED_TO_SWITCH
+
+        ROLE_SUPER_ADMIN:
+          - ROLE_ADMIN
+          - ROLE_DEVELOPER
+          - ROLE_ALLOWED_TO_SWITCH
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
+            switch_user: true
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+            form_login:
+                provider:            cerad_user_provider
+                login_path:          cerad_user_login
+                check_path:          cerad_user_login_check
+                default_target_path: app_index
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+                username_parameter:  _username
+                password_parameter:  _password
+
+                csrf_parameter:       _csrf_token
+                csrf_token_id:        authenticate
+                csrf_token_generator: security.csrf.token_manager
+
+            logout:
+                path:   cerad_user_logout
+                target: app_index
+
+            remember_me:
+                name:     zayso_remember_me
+                secret:  "%secret%"
+                lifetime: 31536000  # 365 days in seconds
+                path:     app_index
+                domain:   ~
+                remember_me_parameter: _remember_me
+
+

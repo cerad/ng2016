@@ -1,0 +1,9 @@
+app_index:
+    path: /
+    defaults:
+        _controller: app_action_index_controller
+
+cerad_user_login:
+    path: /user/login
+    defaults:
+        _controller: app_action_index_controller
