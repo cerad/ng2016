@@ -1,17 +1,5 @@
 services:
 
-    app_action_index_controller:
-        class: AppBundle\Action\Index\IndexController
-        calls: [[setContainer, ['@service_container']]]
-        arguments:
-            - '@cerad_user_login_form'
-            - '@app_action_index_page_template'
-
-    app_action_index_page_template:
-        class: AppBundle\Action\Index\IndexPageTemplate
-        parent: app_page_template
-        calls: [['setBaseTemplate', ['@app_base_template']]]
-
     app_base_template:
         class: AppBundle\Action\BaseTemplate
 
@@ -20,5 +8,34 @@ services:
         calls:
            - ['setRouter',  ['@router']]
            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+           - ['setBaseTemplate', ['@app_base_template']]
 
+    # action index
+    app_action_index_controller:
+        class: AppBundle\Action\Index\IndexController
+        calls: [[setContainer, ['@service_container']]]
+
+    # action welcome
+    app_action_welcome_controller:
+        class: AppBundle\Action\Welcome\WelcomeController
+        calls: [[setContainer, ['@service_container']]]
+        arguments:
+            - '@app_action_welcome_page_template'
+            - '@cerad_user_login_form'
+
+    app_action_welcome_page_template:
+        class: AppBundle\Action\Welcome\WelcomePageTemplate
+        parent: app_page_template
+
+    # action home
+    app_action_home_controller:
+        class: AppBundle\Action\Home\HomeController
+        calls: [[setContainer, ['@service_container']]]
+        arguments:
+            - '@app_action_home_page_template'
+            - '@cerad_user_login_form'
+
+    app_action_home_page_template:
+        class: AppBundle\Action\Home\HomePageTemplate
+        parent: app_page_template
 

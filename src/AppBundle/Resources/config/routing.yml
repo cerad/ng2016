@@ -3,6 +3,16 @@ app_index:
     defaults:
         _controller: app_action_index_controller
 
+app_welcome:
+    path: /welcome
+    defaults:
+        _controller: app_action_welcome_controller
+
+app_home:
+    path: /home
+    defaults:
+        _controller: app_action_home_controller
+
 cerad_user_login:
     path: /user/login
     defaults:

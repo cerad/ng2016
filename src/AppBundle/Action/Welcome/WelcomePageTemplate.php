@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Index;
+namespace AppBundle\Action\Welcome;
 
 use AppBundle\Action\PageTemplate;
 
@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Kernel;
 
 use Cerad\Bundle\UserBundle\Action\Login\LoginForm;
 
-class IndexPageTemplate extends PageTemplate
+class WelcomePageTemplate extends PageTemplate
 {
     protected function renderUser(LoginForm $loginForm)
     {
