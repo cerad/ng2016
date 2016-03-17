@@ -11,17 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 class IndexController extends Controller
 {
     private $loginForm;
+    private $pageTemplate;
 
-    public function __construct(LoginForm $loginForm)
+    public function __construct(LoginForm $loginForm, IndexPageTemplate $pageTemplate)
     {
-        $this->loginForm = $loginForm;
+        $this->loginForm    = $loginForm;
+        $this->pageTemplate = $pageTemplate;
     }
     public function __invoke(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('@App/Index/Index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        $params = [
+            'base_dir'  => realpath($this->getParameter('kernel.root_dir').'/..'),
             'loginForm' => $this->loginForm,
-        ]);
+        ];
+        return new Response($this->pageTemplate->render($params));
     }
 }
