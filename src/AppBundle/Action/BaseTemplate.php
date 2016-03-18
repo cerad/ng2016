@@ -21,17 +21,19 @@ class BaseTemplate
     {
         return <<<EOT
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{$this->escape($this->title)}</title>
-        {$this->renderStylesheets()}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    </head>
-    <body>
-        {$content}
-        {$this->renderJavascripts()}
-    </body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$this->escape($this->title)}</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
+  </head>
+  <body>
+    {$content}
+    {$this->renderJavascripts()}
+  </body>
 </html>
 EOT;
     }

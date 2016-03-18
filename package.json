@@ -1,0 +1,35 @@
+{
+  "name": "ng2016",
+  "version": "1.0.0",
+  "description": "AYSO National Games 2016",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "gulp-build": "./node_modules/.bin/gulp build",
+    "gulp-watch": "./node_modules/.bin/gulp watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerad/ng2016.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cerad/ng2016/issues"
+  },
+  "homepage": "https://github.com/cerad/ng2016#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.2",
+    "normalize.css": "^3.0.3"
+  }
+}

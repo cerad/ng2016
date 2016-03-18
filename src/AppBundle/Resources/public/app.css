@@ -1,0 +1,291 @@
+/*
+    06 May 2014 - There are some differences between this and the s1games app.css
+                  Wondering if this is really needed
+
+*/
+
+root { display: block }
+
+some_nowhitespace { nowhitespace: afterproperty }
+
+/*
+ * http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; nowhitespace: afterproperty; nowhitespace: afterproperty; nowhitespace: afterproperty; padding: 0; border: 0; font-size: .8em; font: inherit; vertical-align: baseline /*border: 1px solid; /*border-color: #80d2ff;*/ }
+
+some_nowhitespace { nowhitespace: afterproperty }
+
+/* HTML5 display-role reset for older browsers */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block }
+
+body { line-height: 1 }
+
+ol, ul { list-style: none }
+
+blockquote, q { quotes: none }
+
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+
+some_nowhitespace { nowhitespace: afterproperty }
+
+/*
+    * zAYSO CSS for 2014 National Games
+    * By: Rick Roberts  web.ng2014@gmail.com
+    * Version: 11 Sept 2013
+*/
+
+.sf-toolbar, .sf-toolbar * { border: none }
+
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, dl, pre, code, address, variable, form, fieldset, blockquote, label, img { margin: 0; padding: 0; font-family: Arial,'Trebuchet MS',sans-serif; font-size: small; }
+
+h3, h4, legend { color: red; font-weight: 700; font-size: 18px!important; }
+
+strong { font-weight: 700 }
+
+em { font-style: italic }
+
+button { /*margin-left: 131px; /*/;
+    nowhitespace: afterproperty; nowhitespace: afterproperty; text-align: center; /* without this, button text is left-aligned in IE */ padding: 5px 10px;;
+}
+
+#layout-header * { padding: 10px }
+
+#layout-content h3 { padding: 5px 20px }
+
+#layout-userinfo ul { font-size: small; float: right; padding: .25em; margin-right: 25px; }
+
+#notes { padding: 5px 10px; font-size: inherit; }
+
+table { font-size: inherit; table-layout: fixed; margin-left: auto; margin-right: auto; }
+
+table.data { table-layout: auto }
+
+table colgroup col { width: 20% }
+
+table th, .row-hdr { width: auto; background-color: #004080; color: #fff; font-weight: 700; vertical-align: middle; padding: 0 10px; overflow: hidden; height: 2.5em; border: 1px solid #0054a8; }
+
+table td { padding: 5px; height: 1.1em; vertical-align: middle; }
+
+    table td p { margin: 0 5px }
+
+table.app_table > tbody > tr > td { border: 1px solid }
+
+table table { margin-left: 0; margin-right: 0; }
+
+.app_form { margin-left: auto; nowhitespace: afterproperty; nowhitespace: afterproperty; nowhitespace: afterproperty; margin-right: auto; position: relative /* labels need this on the their parent element */;; }
+
+some_nowhitespace { nowhitespace: afterproperty }
+
+/*
+ *  http://www.texotela.co.uk/code/css/fieldsetform/
+ *  Styling fields contained within a fieldset
+ *    (nothing fancy, just lined up labels (text right-aligned) and fields).
+*/
+
+form.app_form fieldset { padding: 0 10px; margin-bottom: 6px; }
+
+    form.app_form fieldset legend {
+        /*display: none;*/;
+        font-size: 1.1em; font-weight: 700; color: inherit;;
+    }
+
+    form.app_form fieldset div, form.app_form fieldset > label { margin: 0 auto 6px; /*	border: solid #67874f 1px; */ padding: 2px; }
+
+    form.app_form fieldset > label { margin-left: 51%; font-size: small; }
+
+    form.app_form fieldset div label { clear: none; nowhitespace: afterproperty; nowhitespace: afterproperty; nowhitespace: afterproperty; display: block; float: left; width: auto; min-width: 50%; font-size: inherit; text-align: right; /* increase or decrease line-height depending on font-size set in 'div.field .input' trial and error needed to get it right */ line-height: 1.7em; padding-right: 6px; }
+
+    form.app_form fieldset div select { clear: none; text-align: left; font-size: inherit; height: 1.8em; }
+
+input[type="text"], input[type="checkbox"], input[type="email"] { clear: none; text-align: left; font-size: inherit; height: 1.1em; }
+
+label#checkbox_label { display: block; padding-left: 15px; text-indent: -15px; }
+
+input#cerad_tourn_account_user_login_remember_me { width: 13px; height: 13px; padding: 0; margin: 0; vertical-align: bottom; position: relative; top: -1px; overflow: hidden; }
+
+form.app_form fieldset div textarea { clear: none; height: 10em; width: 45%; padding: 2px; overflow: auto; }
+
+.controls { font: inherit; font-size: inherit; text-align: right; padding: 10px 25% 10px 0; float: right; }
+
+.app_help { padding: 0 20px 30px 10px; line-height: 1.25em; width: 96%; clear: both; }
+
+    .app_help h3 { margin-left: -20px }
+
+    .app_help li { padding-top: 10px; padding-left: 20px; }
+
+    .app_help ul ul li { list-style-type: disc; padding-left: 0; margin-left: 30px; }
+
+    .app_help ul ol li { padding-left: 10px }
+
+some_nowhitespace { nowhitespace: afterproperty }
+
+/*
+ *  Development styling for S1Games
+ *  R Roberts
+ *  26 Sept 2013
+ */
+
+.sf-toolbar, .sf-toolbar * { border: none }
+
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, dl, pre, code, address, variable, form, fieldset, blockquote, label, img { margin: 0; padding: 0; font-family: Verdana,Arial,'Trebuchet MS',sans-serif; font-size: small; color: #000; }
+
+body { width: 100% }
+
+h1 { font-weight: 700; font-size: 16px; }
+
+h2 { vertical-align: middle; text-align: center; font-weight: 700; padding: 10px 0; }
+
+h3, legend { font-weight: 700; font-size: 16px!important; }
+
+h4 { color: inherit; font-weight: 700; font-size: 14px!important; }
+
+h5 { color: inherit; font-weight: 700; font-size: 12px!important; }
+
+strong { font-weight: 700 }
+
+em { font-style: italic }
+
+hr { width: 100%; margin: 15px auto; clear: both; }
+
+#layout-header td { vertical-align: middle }
+
+#layout-header { display: inline-block }
+
+#layout-content { display: inline-block; padding-top: 4px; width: 100%; }
+
+#layout-topmenu { clear: both; width: 100%; }
+
+#layout-block { min-width: 650px; margin-left: auto; margin-right: auto; }
+
+#notes { display: inline-block; padding: 15px 10px 5px; font-size: inherit; }
+
+    #notes ul li { list-style-type: disc; margin-left: 40px; }
+
+    #notes ol li { list-style-type: decimal; margin-left: 80px; }
+
+table.data { table-layout: auto }
+
+table colgroup col { width: 20% }
+
+#person-list th { width: 20% }
+
+.schedule th, .standings th, .results th, .scoring th, .my_schedule th, .row-hdr { padding: 0 8px; width: auto; }
+
+.standings tr, .schedule tr, .results tr { outline: thin solid #cce6ff }
+
+.standings td tr, .schedule td tr, .results td tr { outline: none }
+
+.app_table th, .assign th { line-height: 2em }
+
+.schedule tr, .standings tr, .results tr { line-height: 2em; height: 2em; }
+
+.schedule tr:nth-child(odd), .standings tr:nth-child(odd), .results tr:nth-child(odd), #person-list tr:nth-child(odd), .my_schedule tr:nth-child(odd) { background: #cce6ff }
+
+.schedule td, .standings td, .results td, .scoring td { text-align: center; line-height: 1.2em; padding: 5px; vertical-align: middle; }
+
+.tbl-title th
+.row-hdr { background: #004080; height: 2em; }
+
+.tbl-hdr th { background: #0054a8; height: 3em; border: 1px solid #0054a8; }
+
+.schedule-search { /*display: none;_NO__DOTCOMMA__AFTER__*/   }
+
+.schedule table tr:nth-child(odd), #person-list table tr:nth-child(odd), .my_schedule table tr:nth-child(odd) { background: inherit }
+
+input[type="submit"] { padding: 5px 20px; font-size: inherit; }
+
+.account-person-list { width: 70%; line-height: 1.5em; margin-left: auto; margin-right: auto; }
+
+form#cerad_tourn_schedule_official_search, form#cerad_tourn_schedule_search { padding-top: 0 }
+
+    form#cerad_tourn_schedule_official_search fieldset, form#cerad_tourn_schedule_search fieldset { padding-left: 2%; line-height: 2em; }
+
+        form#cerad_tourn_schedule_official_search fieldset div label, form#cerad_tourn_schedule_search fieldset div label { padding-right: 2em; padding-left: 1%; }
+
+        form#cerad_tourn_schedule_official_search fieldset div div, form#cerad_tourn_schedule_search fieldset div div { padding-left: 1%; padding-bottom: 10px; }
+
+        form#cerad_tourn_schedule_official_search fieldset div input[type="text"], form#cerad_tourn_schedule_search fieldset div input[type="text"] { position: absolute; left: 12em; }
+
+    form#cerad_tourn_schedule_official_search input[type="submit"], form#cerad_tourn_schedule_search input[type="submit"] { float: right; margin-right: 10%; }
+
+    form#cerad_tourn_schedule_official_search #list_filters, form#cerad_tourn_schedule_search #list_filters { display: none }
+
+    form#cerad_tourn_schedule_official_search .required, form#cerad_tourn_schedule_search .required { font-weight: 700; font-size: 1.1em; text-decoration: underline; }
+
+#form_CoreTeams, #form_ExtraTeams { width: 325px; height: 120px; }
+
+.admin { margin-left: 20px; width: 100%; float: left; min-width: 300px; }
+
+    .admin h2 { text-align: left }
+
+    .admin li { margin-left: 2em; line-height: 2em; list-style: disc; }
+
+    .admin ul { margin-bottom: 15px; margin-right: 30px; }
+
+.admin_container { margin-left: 10px; width: 45%; min-width: 350px; float: left; }
+
+.import_controls { padding-left: 40px; line-height: 3em; }
+
+    .import_controls form { padding: 0 0 20px }
+
+table.import_results { padding: 0 20px; width: 80%; }
+
+table#person-list td { padding: 0; max-width: 200px; min-width: 20%; word-wrap: break-word; }
+
+    table#person-list td table { width: 95% }
+
+table#person-list table tr { max-width: 85% }
+
+table#person-list table td { max-width: 100%; min-width: 45%; }
+
+#form_slots_1_role, #form_slots_2_role, #form_slots_3_role { text-align: right; border: 0; background: inherit; }
+
+.results-legend, .schedule-legend { text-align: center; line-height: 1.5em; }
+
+.my_schedule { width: 80% }
+
+    .my_schedule th { width: 20%; line-height: 2em; }
+
+    .my_schedule td { text-align: left }
+
+.current-teams { width: 400px }
+
+    .current-teams td { text-align: center; border: solid 1px #000; }
+
+#export-link { padding: 10px }
+
+.text-left { text-align: left!important }
+
+.text-right { text-align: right!important }
+
+.dwide { min-width: 400px;}
+
+@media print {
+	.sf-toolbar, .sf-toolbar * { display: none }
+
+	.schedule-search { display: none }
+}
+
+@media (max-width: 600px) {
+	td > table { display: block }
+
+	    td > table td { display: inline-block }
+}
+
+some_nowhitespace { nowhitespace: afterproperty }
+/* All Mobile Portrait size smaller than 768 (devices and browsers) */
+
+@media only screen and (max-width: 767px) {
+	table.schedule {
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+
+	.cerad_common_form1 table td { padding: 0 }
+}
