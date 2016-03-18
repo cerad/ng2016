@@ -23,6 +23,10 @@ class WelcomeController extends Controller
     }
     public function __invoke(Request $request)
     {
+        // Verify not signed in
+        if ($this->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_welcome');
+        }
         $params = [
             'base_dir'  => realpath($this->getParameter('kernel.root_dir').'/..'),
             'loginForm' => $this->loginForm,

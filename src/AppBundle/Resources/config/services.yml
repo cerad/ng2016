@@ -10,6 +10,10 @@ services:
            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
            - ['setBaseTemplate', ['@app_base_template']]
 
+    app_action_abstract_controller:
+        abstract: true
+        calls: [[setContainer, ['@service_container']]]
+
     # action index
     app_action_index_controller:
         class: AppBundle\Action\Index\IndexController
@@ -30,7 +34,7 @@ services:
     # action home
     app_action_home_controller:
         class: AppBundle\Action\Home\HomeController
-        calls: [[setContainer, ['@service_container']]]
+        parent: app_action_abstract_controller
         arguments:
             - '@app_action_home_page_template'
             - '@cerad_user_login_form'

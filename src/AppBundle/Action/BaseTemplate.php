@@ -1,23 +1,16 @@
 <?php
 namespace AppBundle\Action;
 
-class BaseTemplate
+class BaseTemplate extends AbstractTemplate
 {
     protected $title = 'NG2016';
+    protected $content = null;
 
-    protected function escape($content)
+    public function setContent($content)
     {
-        return htmlspecialchars($content, ENT_COMPAT);
+        $this->content = $content;
     }
-    protected function renderStylesheets()
-    {
-        return null;
-    }
-    protected function renderJavascripts()
-    {
-        return null;
-    }
-    public function render($content = null)
+    public function render()
     {
         return <<<EOT
 <!DOCTYPE html>
@@ -31,10 +24,27 @@ class BaseTemplate
     <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
   </head>
   <body>
-    {$content}
-    {$this->renderJavascripts()}
+    <div id="layout-body">
+      <div id="layout-content">
+{$this->content}
+      </div>
+    </div>
+{$this->renderJavascripts()}
   </body>
 </html>
 EOT;
     }
+    /* ====================================================
+     * Maybe implement blocks later
+     */
+    protected function renderStylesheets()
+    {
+        return null;
+    }
+    protected function renderJavascripts()
+    {
+        return null;
+    }
+    public function addStylesheet() {}
+    public function addJavascript() {}
 }
