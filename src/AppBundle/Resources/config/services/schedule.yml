@@ -1,0 +1,6 @@
+services:
+
+    # action schedule team
+    app_action_schedule_team_controller:
+        class: AppBundle\Action\Schedule\Team\TeamController
+        parent: app_action_abstract_controller

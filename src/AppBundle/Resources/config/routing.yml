@@ -1,3 +1,4 @@
+
 app_index:
     path: /
     defaults:
@@ -17,3 +18,7 @@ cerad_user_login:
     path: /user/login
     defaults:
         _controller: app_action_index_controller
+
+app_schedule:
+    resource: "@AppBundle/Resources/config/routes/schedule.yml"
+    prefix: /schedule

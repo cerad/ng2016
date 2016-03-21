@@ -113,10 +113,10 @@ EOD;
 <li class="has-sub">Schedules
   <ul>
     <li>
-      <a href="/project/natgames/schedule-team">Team Schedules</a>
+      <a href="{$this->generateUrl('app_schedule_team')}">Team Schedules</a>
     </li>
     <li class="last">
-      <a href="/project/natgames/schedule-game">Game Schedules</a>
+      <a href="{$this->generateUrl('app_schedule_game')}">Game Schedules</a>
     </li>
   </ul>
 </li>
