@@ -4,3 +4,5 @@ services:
     app_action_schedule_team_controller:
         class: AppBundle\Action\Schedule\Team\TeamController
         parent: app_action_abstract_controller
+        arguments:
+            - '@cerad_project_team_repository'

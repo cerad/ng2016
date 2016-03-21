@@ -1,0 +1,297 @@
+  
+AYSONationalGames2016:
+    info:
+        key: AYSONationalGames2016
+        slugs:
+            - natgames
+            - ng2016
+            
+        status:   Active
+        verified: Yes
+                
+        fedId:     AYSO
+        fedRoleId: AYSOV
+                
+        title:   "AYSO National Games 2016"
+        desc:    "AYSO National Games 2016 - Palm Beach County, Florida - July 5th to July 10th"
+        results: natgames
+        
+        submit:  "Emails your application to Art Hundiak and yourself."
+        prefix:   NatGames2016
+             
+        assignor:
+            name:  "Tom B"
+            email: "assignor.ng2014@gmail.com"
+            phone:  909.262.9999
+
+        system:
+            name:  "AYSO National Games 2016"
+            email: "no.response.ng2016@gmail.com"
+            phone:  ""
+
+        dates:
+            - '2016-07-06' # Wed Soccerfest
+            - '2016-07-07' # Thu Pool Play
+            - '2016-07-08' # Fri Pool Play
+            - '2016-07-09' # Sat Pool Play and Quarter Finals
+            - '2016-07-10' # Sun Semi and Finals
+
+        programs:
+            Core: Core
+
+        genders:
+            B:  Boys
+            G:  Girls
+
+        ages:
+            VIP: VIP
+            U10: U10
+            U12: U12
+            U14: U14
+            U16: U16
+            U19: U19
+
+        levels:
+            AYSO_U10B_Core:
+                program: Core
+                gender:  B
+                age:     U10
+                div:     U10B
+
+            AYSO_U10G_Core:
+                program: Core
+                gender:  G
+                age:     U10
+                div:     U10G
+
+            AYSO_U12B_Core:
+                program: Core
+                gender:  B
+                age:     U12
+                div:     U12B
+
+            AYSO_U12G_Core:
+                program: Core
+                gender:  G
+                age:     U12
+                div:     U12G
+
+        pools:
+
+        venues:
+            Polo: Polo Grounds
+
+        fields:
+
+
+    # ==================================================
+    # Basic volunteer plan
+    plans:
+      attending:
+        type:    select
+        label:   I will attend the games
+        default: na
+        choices:
+          na:    Not yet answered
+          no:    No
+          yes:   Yes - For Sure
+          yesx:  Yes - If my team is selected
+          maybe: Maybe
+                    
+      refereeing:
+        type:    select
+        label:   I will referee
+        default: no
+        choices: { no: No, yes: Yes, maybe: Not Sure }
+        
+      venue:
+        type:    select
+        label:   I will work at
+        default: na
+        choices: 
+          na:    Not yet answered
+          core:  Torrance/Redondo Beach (CORE site)
+          extra: Riverside (EXTRA site)
+          other: Where needed (either site)
+           
+#     refLevelCR:
+#       type:    select
+#       label:   Level to center at
+#       default: na
+#       choices: { na: na, U10: U10, U12: U12, U14: U14, U16: U16, U19: U19
+             
+#     refLevelAR:
+#       type:    select
+#       label:   Level to assist at
+#       default: na
+#       choices: { na: na, U10: U10, U12: U12, U14: U14, U16: U16, U19: U19
+             
+      willInstruct:
+        type:    select
+        label:   I am certified Instructor
+        default: no
+        choices: { no: No, ri: Referee Instructor, ari: Advanced Referee Instructor, nri: National Referee Instructor}
+           
+      willAssess:
+        type:    select
+        label:   I am certified Assessor
+        default: no
+        choices: { no: No, ra: Referee Assessor, nra: National Referee Assessor}
+           
+      willMentor:
+        type:    select
+        label:   I will be available as a mentor
+        default: no
+        choices: { no: No, yes: Yes}
+           
+      wantMentor:
+        type:    select
+        label:   I would like to work with a mentor
+        default: no
+        choices: { no: No, yes: Yes}
+           
+      #willAssess:
+      #  type:    select
+      #  label:   I will do assessments/observations
+      #  default: no
+      #  choices: { no: No, yes: Yes, maybe: Not Sure}
+      #     
+      #wantAssess:
+      #  type:    select
+      #  label:   I request an assessment or observation
+      #  default: no
+      #  choices: 
+      #    no:           No 
+      #    Informal:     Informal 
+      #    Intermediate: Intermediate
+      #    AdvancedCR:   Advanced CR
+      #    AdvancedAR:   Adcanced AR
+      #    AdvancedCRAR: Advanced CR and AR
+      #    NationalCR:   National CR
+      #    NationalAR:   Advanced AR
+      #    NationalCRAR: National CR and AR
+             
+      coaching:
+        type:    select
+        label:   I will coach or manage a team
+        default: no
+        choices: { no: No, yes: Yes, maybe: Not Sure}
+           
+      volunteering:
+        type:    select
+        label:   I will volunteer for other jobs
+        default: no
+        choices: { no: No, yes: Yes, maybe: Not Sure}
+           
+      playing:
+        type:    select
+        label:   I have (or am) a player in the games
+        default: no
+        choices: { no: No, yes: Yes, player: Yes - I am a player }
+           
+      opening:
+        type:    select
+        label:   I will attend the Tuesday Night Opening Ceremony?
+        default: no
+        choices: { no: No, yesRAL: Yes in Riverside, yesTOA: Yes in Torrance, maybe: Not Sure}
+        
+      tshirt:
+        type:    select
+        label:   T-Shirt Size
+        default: na
+        choices: 
+          na:        na
+          youthm:    Youth Medium 
+          youthl:    Youth Large
+          adults:    Adult Small
+          adultm:    Adult Medium
+          adultl:    Adult Large
+          adultlx:   Adult Large X
+          adultlxx:  Adult Large XX
+          adultlxxx: Adult Large XXX
+             
+      shuttle:
+        type:    select
+        label:   I need shuttle service during the games
+        default: no
+        choices: { no: No, yes: Yes, maybe: Not Sure}
+           
+      housing:
+        type:    select
+        label:   I would use low cost referee housing
+        default: no
+        choices: { no: No, yes: Yes, maybe: Not Sure}
+           
+      #hotel:
+      #  type:  text
+      #  label: Hotel staying at
+      #  size:  30
+      
+      availSatAfter:
+        type:    select
+        label:   Available Saturday Afternoon (Quarter Finals)
+        default: no
+        choices: { no: No, yes: Yes, maybe: Yes - If My Team Advances}
+        
+      availSunMorn:
+        type:    select
+        label:   Available Sunday Morning (Semi Finals)
+        default: no
+        choices: { no: No, yes: Yes, maybe: Yes - If My Team Advances}
+        
+      availSunAfter:
+        type:    select
+        label:   Available Sunday Afternoon (Finals)
+        default: no
+        choices: { no: No, yes: Yes, maybe: Yes - If My Team Advances}
+        
+      notes:
+        type:  textarea
+        label: Notes
+        rows:  5
+        cols:  40
+        
+    # Break out availability
+    avail:
+      
+      AvailWen:
+        type:    select
+        label:   Available Wednesday (Jamborees)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
+           
+      AvailThu:
+        type:    select
+        label:   Available Thursday (Pool Play)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
+
+      AvailFri:
+        type:    select
+        label:   Available Friday (Pool Play)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
+
+      AvailSatMorn:
+        type:    select
+        label:   Available Saturday Morning (Pool Play)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
+           
+      AvailSatAfter:
+        type:    select
+        label:   Available Saturday Afternoon (Quarter Finals)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
+
+      AvailSunMorn:
+        type:    select
+        label:   Available Sunday Morning (Semi-Finals)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
+
+      AvailSunAfter:
+        type:    select
+        label:   Available Sunday Afternoon (Finals)
+        default: no
+        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}

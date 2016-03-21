@@ -1,0 +1,8 @@
+services:
+
+    cerad_project_database_connection:
+        alias: doctrine.dbal.project_connection
+
+    cerad_project_team_repository:
+        class:  Cerad\Bundle\ProjectBundle\EntityRepository\ProjectTeamRepository
+        arguments: ['@cerad_project_database_connection']

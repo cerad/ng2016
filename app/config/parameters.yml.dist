@@ -9,7 +9,8 @@ parameters:
     database_user:     root
     database_password: ~
 
-    database_name_users: ng2014
+    database_name_users:   ng2014
+    database_name_project: ng2014games
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
