@@ -46,6 +46,7 @@ EOD;
   </div>
 </div>
 EOT;
-        return $this->baseTemplate->render($content);
+        $this->baseTemplate->setContent($content);
+        return $this->baseTemplate->render();
     }
 }
