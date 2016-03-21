@@ -2,6 +2,9 @@ services:
 
     app_base_template:
         class: AppBundle\Action\BaseTemplate
+        calls:
+           - ['setRouter',  ['@router']]
+           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
 
     app_page_template:
         abstract: true

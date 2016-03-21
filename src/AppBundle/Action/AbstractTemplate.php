@@ -49,6 +49,10 @@ abstract class AbstractTemplate implements AbstractTemplateInterface
     {
         return $this->router->generate($route, $parameters, $referenceType);
     }
+    protected function isGranted($attributes, $object = null)
+    {
+        return $this->securityAuthorizationChecker->isGranted($attributes, $object);
+    }
     protected function escape($content)
     {
         return htmlspecialchars($content, ENT_COMPAT);
