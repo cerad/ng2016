@@ -1,7 +1,7 @@
-  
-AYSONationalGames2014:  
+parameters:
+  app_project:
     info:
-        id: AYSONationalGames2014
+        key: AYSONationalGames2014
         slugs:
             - natgames
             - natgames2014
@@ -30,7 +30,14 @@ AYSONationalGames2014:
             phone:  ""
 
         programs: [Core,Extra]
-        
+
+        dates:
+            - '2014-07-02' # Wed Soccerfest
+            - '2014-07-03' # Thu Pool Play
+            - '2014-07-04' # Fri Pool Play
+            - '2014-07-05' # Sat Pool Play and Quarter Finals
+            - '2014-07-06' # Sun Semi and Finals
+
     # ==============================================
     # For the schedule search form
     searches:

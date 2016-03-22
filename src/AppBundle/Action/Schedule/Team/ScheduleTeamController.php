@@ -14,7 +14,8 @@ class ScheduleTeamController extends AbstractController
     /** @var  ScheduleRepository */
     private $scheduleRepository;
 
-    private $projectTeams;
+    private $project;
+    private $projectTeams = [];
     private $projectTeamKeys = [];
 
     private $projectGames = [];
@@ -25,6 +26,8 @@ class ScheduleTeamController extends AbstractController
     }
     public function __invoke(Request $request)
     {
+        $this->project = $this->getCurrentProject();
+
         // Save selected teams in session
         $session = $request->getSession();
         $this->projectTeamKeys = $session->has('project_team_keys') ? $session->get('project_team_keys') : [];
@@ -35,15 +38,16 @@ class ScheduleTeamController extends AbstractController
             $session->set('project_team_keys',$this->projectTeamKeys);
         }
 
+        // Search teams
+        $projectKey = $this->project['info']['key'];
+        $this->projectTeams = $this->scheduleRepository->findProjectTeams($projectKey);
+
         // Find games
         $this->projectGames = $this->scheduleRepository->findProjectGamesForProjectTeamKeys($this->projectTeamKeys);
 
-        // Search form
-        $this->projectTeams = $this->scheduleRepository->findProjectTeams();
-
         return new Response($this->renderPage());
     }
-    protected function renderPage()
+    private function renderPage()
     {
         $projectTeamCount = count($this->projectTeams);
 
@@ -93,10 +97,40 @@ EOD;
         }
         return $html;
     }
-    private function renderProjectGamesRows($projectGames)
+    private function renderProjectGames()
+    {
+        $projectGameCount = count($this->projectGames);
+
+        return <<<EOD
+<div id="layout-block">
+<div class="schedule-games-list">
+<table id="schedule" class="schedule" border="1">
+  <thead>
+    <tr><th colspan="20" class="text-center">Team Schedule - Game Count: {$projectGameCount}</th></tr>
+    <tr>
+      <th class="schedule-game" >Game</th>
+      <th class="schedule-dow"  >Day</th>
+      <th class="schedule-time" >Time</th>
+      <th class="schedule-field">Field</th>
+      <th class="schedule-group">Group</th>
+      <th class="schedule-blank">&nbsp;</th>
+      <th class="schedule-slot" >Slot</th>
+      <th class="schedule-teams">Home / Away</th>
+    </tr>
+  </thead>
+  <tbody>
+  {$this->renderProjectGamesRows()}
+  </tbody>
+</table>
+</div>
+<br />
+</div
+EOD;
+    }
+    private function renderProjectGamesRows()
     {
         $html = null;
-        foreach($projectGames as $projectGame) {
+        foreach($this->projectGames as $projectGame) {
 
             $projectGameTeamHome = $projectGame['project_game_teams'][1];
             $projectGameTeamAway = $projectGame['project_game_teams'][2];
@@ -121,36 +155,5 @@ EOD;
 EOD;
         }
         return $html;
-    }
-    private function renderProjectGames()
-    {
-        $projectGames = $this->scheduleRepository->findProjectGamesForProjectTeamKeys($this->projectTeamKeys);
-        $projectGameCount = count($projectGames);
-
-        return <<<EOD
-<div id="layout-block">
-<div class="schedule-games-list">
-<table id="schedule" class="schedule" border="1">
-  <thead>
-    <tr><th colspan="20" class="text-center">Team Schedule - Game Count: {$projectGameCount}</th></tr>
-    <tr>
-      <th class="schedule-game" >Game</th>
-      <th class="schedule-dow"  >Day</th>
-      <th class="schedule-time" >Time</th>
-      <th class="schedule-field">Field</th>
-      <th class="schedule-group">Group</th>
-      <th class="schedule-blank">&nbsp;</th>
-      <th class="schedule-slot" >Slot</th>
-      <th class="schedule-teams">Home / Away</th>
-    </tr>
-  </thead>
-  <tbody>
-  {$this->renderProjectGamesRows($projectGames)}
-  </tbody>
-</table>
-</div>
-<br />
-</div
-EOD;
     }
 }

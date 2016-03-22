@@ -26,7 +26,7 @@ class ScheduleRepository
         }
         return $item;
     }
-    public function findProjectTeams()
+    public function findProjectTeams($projectKey)
     {
         $qb = $this->conn->createQueryBuilder();
 
@@ -39,10 +39,12 @@ class ScheduleRepository
         ]);
         $qb->from('teams','project_team');
 
-        $qb->andWhere('project_team.levelKey LIKE :level');
+        $qb->andWhere('project_team.projectKey = :projectKey');
+        $qb->andWhere('project_team.levelKey LIKE :levelKey');
         $qb->andWhere("project_team.status = 'Active'");
 
-        $qb->setParameter(':level','%_Core');
+        $qb->setParameter(':projectKey',$projectKey);
+        $qb->setParameter(':levelKey','%_Core');
 
         $qb->addOrderBy('project_team.levelKey','DESC');
 

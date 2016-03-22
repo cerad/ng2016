@@ -16,5 +16,8 @@ abstract class AbstractController extends Controller
     {
         return $this->get('app_base_template');
     }
-    abstract protected function renderPage();
+    protected function getCurrentProject()
+    {
+        return $this->getParameter('app_project');
+    }
 }
