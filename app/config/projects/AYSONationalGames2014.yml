@@ -11,7 +11,8 @@ parameters:
                 
         fedId:     AYSO
         fedRoleId: AYSOV
-                
+
+        abbv:    "NG2014x"
         title:   "AYSO National Games 2014"
         desc:    "AYSO National Games 2014 - Section One, Califorina - June 30 to July 6"
         results: natgames
@@ -29,14 +30,44 @@ parameters:
             email: "no.response.ng2014@gmail.com"
             phone:  ""
 
-        programs: [Core,Extra]
+        programs:
+            Core:  Core
+            Extra: Extra
 
         dates:
-            - '2014-07-02' # Wed Soccerfest
-            - '2014-07-03' # Thu Pool Play
-            - '2014-07-04' # Fri Pool Play
-            - '2014-07-05' # Sat Pool Play and Quarter Finals
-            - '2014-07-06' # Sun Semi and Finals
+            '2014-07-02': Wed # Soccerfest
+            '2014-07-03': Thu # Pool Play
+            '2014-07-04': Fri # Pool Play
+            '2014-07-05': Sat # Pool Play and Quarter Finals
+            '2014-07-06': Sun # Semi and Finals
+
+        genders:
+            B: Boys
+            G: Girls
+
+        ages:
+            VIP: VIP
+            U10: U10
+            U12: U12
+            U14: U14
+            U16: U16
+            U19: U19
+
+        search_defaults:
+            programs: ['Core']
+            dates:    ['2014-07-03']
+            genders:  ['B']
+            ages:     ['U12']
+
+        search_controls:
+            dates:
+                label: Days
+            programs:
+                label: Programs
+            genders:
+                label: Genders
+            ages:
+                label: Ages
 
     # ==============================================
     # For the schedule search form

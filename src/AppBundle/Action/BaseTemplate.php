@@ -18,7 +18,7 @@ class BaseTemplate extends AbstractTemplate
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{$this->escape($this->title)}</title>
+    <title>{$this->escape($this->project['abbv'])}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all" />
@@ -28,7 +28,7 @@ class BaseTemplate extends AbstractTemplate
   <body>
     <div id="layout-body">
       <div id="layout-header" style="width: 100%; text-align: center;">
-        <h4>AYSO National Games 2016</h4>
+        <h4>{$this->escape($this->project['title'])}</h4>
       </div>
       <div id="layout-topmenu">
 {$this->renderTopMenu()}

@@ -9,3 +9,9 @@ services:
         parent: app_action_abstract_controller
         arguments:
             - '@app_action_schedule_repository'
+
+    app_action_schedule_game_controller:
+        class: AppBundle\Action\Schedule\Game\ScheduleGameController
+        parent: app_action_abstract_controller
+        arguments:
+            - '@app_action_schedule_repository'

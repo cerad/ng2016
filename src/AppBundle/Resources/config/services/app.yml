@@ -5,6 +5,7 @@ services:
         calls:
            - ['setRouter',  ['@router']]
            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+           - ['setProject', ['%app_project%']]
 
     app_page_template:
         abstract: true

@@ -11,6 +11,8 @@ abstract class AbstractTemplate implements AbstractTemplateInterface
     /** @var  BaseTemplate */
     protected $baseTemplate;
 
+    protected $project;
+
     /** @var  TokenStorageInterface */
     private $securityTokenStorage;
 
@@ -32,6 +34,10 @@ abstract class AbstractTemplate implements AbstractTemplateInterface
     public function setBaseTemplate(BaseTemplate $baseTemplate)
     {
         $this->baseTemplate = $baseTemplate;
+    }
+    public function setProject(array $project)
+    {
+        $this->project = $project['info'];
     }
     protected function getUser()
     {
