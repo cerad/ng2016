@@ -129,16 +129,16 @@ EOD;
 <li class="has-sub">Results
   <ul>
     <li>
-      <a href="/project/natgames/results-poolplay">Pool Play</a>
+      <a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a>
     </li>
     <li>
-      <a href="/project/natgames/results-playoffs">Medal Round</a>
+      <a href="{$this->generateUrl('app_results_medalround')}">Medal Round</a>
     </li>
     <li>
-      <a href="/project/natgames/results-sportsmanship">Sportsmanship</a>
+      <a href="{$this->generateUrl('app_results_sportsmanship')}">Sportsmanship</a>
     </li>
     <li class="last">
-      <a href="/project/natgames/results-sportsmanship">Final Standings</a>
+      <a href="{$this->generateUrl('app_results_final')}">Final Standings</a>
     </li>
   </ul>
 </li>
