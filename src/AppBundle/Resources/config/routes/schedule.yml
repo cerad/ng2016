@@ -1,9 +1,9 @@
 app_schedule_team:
-    path: /schedule/team
+    path: /team
     defaults:
         _controller: app_action_schedule_team_controller
 
 app_schedule_game:
-    path: /schedule/game
+    path: /game
     defaults:
         _controller: app_action_schedule_game_controller

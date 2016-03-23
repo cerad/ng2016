@@ -14,12 +14,6 @@ class ScheduleGameController extends AbstractController
     /** @var  ScheduleRepository */
     private $scheduleRepository;
 
-    private $project;
-    private $projectTeams = [];
-    private $projectTeamKeys = [];
-
-    private $projectGames = [];
-
     public function __construct(ScheduleRepository $scheduleRepository)
     {
         $this->scheduleRepository = $scheduleRepository;
@@ -33,11 +27,14 @@ class ScheduleGameController extends AbstractController
 
         $session = $request->getSession();
         if ($session->has('schedule_game_search')) {
-            $search = array_merge($search,$session->get('schedule_game_search'));
+            $sessionSearchData = $session->get('schedule_game_search');
+            if (is_array($sessionSearchData)) {
+                $search = array_merge($search, $sessionSearchData);
+            }
         }
         // Search posted
         if ($request->isMethod('POST')) {
-            $search = $request->request->all();
+            $search = $request->request->get('search');
             $session->set('schedule_game_search',$search);
         }
         return new Response($this->renderPage($project,$search));
@@ -50,8 +47,20 @@ class ScheduleGameController extends AbstractController
         $content = <<<EOD
 {$this->renderSearchForm($project,$search)}
 <br />
+{$this->renderSchedule($search)}
+<br />
 EOD;
+        $script = <<<EOD
+<script type="text/javascript">
+$(document).ready(function() {
+    // checkbox all functionality
+    $('.cerad-checkbox-all').change(Cerad.checkboxAll);
+});
+</script>
+EOD;
+
         $baseTemplate = $this->getBaseTemplate();
+        $baseTemplate->addScript ($script);
         $baseTemplate->setContent($content);
         return $baseTemplate->render();
     }
@@ -85,37 +94,40 @@ EOD;
     }
     protected function renderSearchCheckbox($name,$label,$items,$selected)
     {
-        $items = array_merge(['All' => 'All'],$items);
-
         $html = <<<EOD
 <table border="1">
   <tr><th colspan="30">{$label}</th></tr>
-  <tr>
+    <td align="center">All<br />
+    <input type="checkbox" name="search[{$name}][]" class="cerad-checkbox-all" value="All" /></td>
 EOD;
         foreach($items as $value => $label) {
             $checked = in_array($value, $selected) ? ' checked' : null;
             $html .= <<<EOD
     <td align="center">{$label}<br />
-    <input type="checkbox" name="{$name}[]" class="cerad-checkbox-all" value="{$value}"{$checked} /></td>
+    <input type="checkbox" name="search[{$name}][]" value="{$value}"{$checked} /></td>
 EOD;
         }
-        $html .= "  </tr>\n</table>\n";
-
+        $html .= <<<EOD
+  </tr>
+</table>
+EOD;
         return $html;
     }
     /* ============================================================
      * Render games
      */
-    private function renderProjectGames()
+    protected function renderSchedule($criteria)
     {
-        $projectGameCount = count($this->projectGames);
+        $projectGames = $this->scheduleRepository->findProjectGames($criteria);
+
+        $projectGameCount = count($projectGames);
 
         return <<<EOD
 <div id="layout-block">
 <div class="schedule-games-list">
 <table id="schedule" class="schedule" border="1">
   <thead>
-    <tr><th colspan="20" class="text-center">Team Schedule - Game Count: {$projectGameCount}</th></tr>
+    <tr><th colspan="20" class="text-center">Game Schedule - Game Count: {$projectGameCount}</th></tr>
     <tr>
       <th class="schedule-game" >Game</th>
       <th class="schedule-dow"  >Day</th>
@@ -128,7 +140,7 @@ EOD;
     </tr>
   </thead>
   <tbody>
-  {$this->renderProjectGamesRows()}
+  {$this->renderScheduleRows($projectGames)}
   </tbody>
 </table>
 </div>
@@ -136,16 +148,16 @@ EOD;
 </div
 EOD;
     }
-    private function renderProjectGamesRows()
+    protected function renderScheduleRows($projectGames)
     {
         $html = null;
-        foreach($this->projectGames as $projectGame) {
+        foreach($projectGames as $projectGame) {
 
             $projectGameTeamHome = $projectGame['project_game_teams'][1];
             $projectGameTeamAway = $projectGame['project_game_teams'][2];
 
             $html .= <<<EOD
-<tr id="schedule-team-{$projectGame['number']}" class="game-status-{$projectGame['number']}">
+<tr id="schedule-{$projectGame['number']}" class="game-status-{$projectGame['number']}">
   <td class="schedule-game" >{$projectGame['number']}</td>
   <td class="schedule-dow"  >{$projectGame['dow']}</td>
   <td class="schedule-time" >{$projectGame['time']}</td>

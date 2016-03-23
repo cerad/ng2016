@@ -54,6 +54,7 @@ parameters:
             U19: U19
 
         search_defaults:
+            projects: ['AYSONationalGames2014']
             programs: ['Core']
             dates:    ['2014-07-03']
             genders:  ['B']

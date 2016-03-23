@@ -24,6 +24,7 @@ class BaseTemplate extends AbstractTemplate
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
     <script src="/js/jquery.min.js"></script>
+    <script src="/js/zayso.js"></script>
   </head>
   <body>
     <div id="layout-body">
@@ -37,7 +38,7 @@ class BaseTemplate extends AbstractTemplate
 {$this->content}
       </div>
     </div>
-{$this->renderJavascripts()}
+{$this->renderScripts()}
   </body>
 </html>
 EOT;
@@ -146,14 +147,24 @@ EOD;
     /* ====================================================
      * Maybe implement blocks later
      */
+    protected $scripts = [];
+
     protected function renderStylesheets()
     {
         return null;
     }
-    protected function renderJavascripts()
+    protected function renderScripts()
     {
-        return null;
+        $html = null;
+        foreach($this->scripts as $script) {
+            $html .= $script . "\n";
+        }
+        return $html;
     }
     public function addStylesheet() {}
-    public function addJavascript() {}
+
+    public function addScript($script)
+    {
+        $this->scripts[] = $script;
+    }
 }

@@ -59,7 +59,6 @@ class ScheduleRepository
         }
         return $projectTeams;
     }
-    // Move to game repo
     public function findProjectGamesForProjectTeamKeys(array $projectTeamKeys)
     {
         if (count($projectTeamKeys) < 1) return [];
@@ -79,6 +78,71 @@ class ScheduleRepository
         $qb->andWhere('project_game_team.teamKey IN (?)');
 
         $stmt = $this->conn->executeQuery($qb->getSQL(),[$projectTeamKeys],[Connection::PARAM_STR_ARRAY]);
+
+        $projectGameIds = [];
+        while($row = $stmt->fetch()) {
+            $projectGameIds[] = $row['id'];
+        }
+        return $this->findProjectGamesForProjectGamesIds($projectGameIds);
+    }
+    protected function genLevelKeys(array $criteria)
+    {
+        $feds = ['AYSO'];
+        $programs = isset($criteria['programs']) ? $criteria['programs'] : [];
+        $genders  = isset($criteria['genders' ]) ? $criteria['genders']  : [];
+        $ages     = isset($criteria['ages'    ]) ? $criteria['ages']     : [];
+
+        $levelKeys = [];
+        foreach($feds as $fed) {
+            foreach ($programs as $program) {
+                foreach ($genders as $gender) {
+                    foreach ($ages as $age) {
+                        // TODO VIP
+                        $levelKeys[] = sprintf('%s_%s%s_%s', $fed, $age, $gender, $program);
+                    }
+                }
+            }
+        }
+        return $levelKeys;
+    }
+    public function findProjectGames(array $criteria)
+    {
+        $levelKeys = $this->genLevelKeys($criteria);
+
+        $paramValues = [];
+        $paramTypes  = [];
+
+        $qb = $this->conn->createQueryBuilder();
+
+        $qb->addSelect('distinct project_game.id AS id');
+
+        $qb->from('games','project_game');
+
+        $qb->leftJoin(
+            'project_game',
+            'game_teams',
+            'project_game_team',
+            'project_game_team.gameId = project_game.id'
+        );
+
+        if (isset($criteria['projects']) && count($criteria['projects'])) {
+            $paramValues[] = $criteria['projects'];
+            $paramTypes [] = Connection::PARAM_STR_ARRAY;
+            $qb->andWhere('project_game.projectKey IN (?)');
+        }
+        if (isset($criteria['dates']) && count($criteria['dates'])) {
+            $paramValues[] = $criteria['dates'];
+            $paramTypes [] = Connection::PARAM_STR_ARRAY;
+            $qb->andWhere('DATE(project_game.dtBeg) IN (?)');
+        }
+        if (count($levelKeys)) {
+            $paramValues[] = $levelKeys;
+            $paramTypes [] = Connection::PARAM_STR_ARRAY;
+            $qb->andWhere('project_game.levelKey IN (?)');
+        }
+        if (count($paramValues) < 1) return [];
+
+        $stmt = $this->conn->executeQuery($qb->getSQL(),$paramValues,$paramTypes);
 
         $projectGameIds = [];
         while($row = $stmt->fetch()) {

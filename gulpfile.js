@@ -6,18 +6,26 @@ const concatCss = require('gulp-concat-css');
 const appPublicDir   = path.join(__dirname, 'src/AppBundle/Resources/public');
 const nodeModulesDir = path.join(__dirname,'node_modules');
 
-const stylesTask = function() {
+const appTask = function() {
+
     // Control the order
     gulp.src([
-            appPublicDir + '/common.css',
-            appPublicDir + '/schedule.css',
-            appPublicDir + '/app.css',
-            appPublicDir + '/cssmenu.css'
+            appPublicDir + '/css/common.css',
+            appPublicDir + '/css/schedule.css',
+            appPublicDir + '/css/app.css',
+            appPublicDir + '/css/cssmenu.css'
         ])
         .pipe(concat("zayso.css"))
         .pipe(gulp.dest('web/css'));
+
+    // Javascripts
+    gulp.src([
+            appPublicDir + '/js/zayso.js'
+        ])
+        .pipe(gulp.dest('web/js'));
+
 };
-gulp.task('styles',stylesTask);
+gulp.task('app',appTask);
 
 const nodeModulesTask = function() {
 
@@ -38,7 +46,7 @@ gulp.task('node_modules',nodeModulesTask);
 
 const buildTask = function()
 {
-    stylesTask();
+    appTask();
     nodeModulesTask();
 };
 gulp.task('build',buildTask);
@@ -48,6 +56,9 @@ const watchTask = function()
     buildTask();
 
     // Why the warnings, seems to work fine
-    gulp.watch([appPublicDir + '/*.css'],  ['styles']);
+    gulp.watch([
+        appPublicDir + '/css/*.css',
+        appPublicDir + '/js/*.js'
+    ],  ['app']);
 };
 gulp.task('watch',watchTask);
