@@ -162,7 +162,7 @@ EOD;
   <td class="schedule-dow"  >{$projectGame['dow']}</td>
   <td class="schedule-time" >{$projectGame['time']}</td>
   <td class="schedule-field">{$projectGame['field_name']}</td>
-  <td class="schedule-group">{$projectGame['group']}</td>
+  <td class="schedule-group">{$projectGame['group_key']}</td>
   <td>&nbsp;</td>
   <td><table>
     <tr><td>{$projectGameTeamHome['group_slot']}</td></tr>

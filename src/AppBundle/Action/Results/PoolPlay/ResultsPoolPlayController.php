@@ -15,6 +15,7 @@ class ResultsPoolPlayController extends AbstractController
     protected $scheduleRepository;
 
     protected $project;
+    protected $projectedGames;
 
     public function __construct(ScheduleRepository $scheduleRepository)
     {
@@ -26,6 +27,24 @@ class ResultsPoolPlayController extends AbstractController
 
         $params = $request->query->all();
         print_r($params);
+
+        $criteria = [];
+
+        if (isset($params['project']) && $params['project']) {
+            $criteria['projects'] = explode(',',$params['project']);
+        }
+        if (isset($params['genders']) && $params['genders']) {
+            $criteria['genders'] = explode(',',$params['genders']);
+        }
+        if (isset($params['programs']) && $params['programs']) {
+            $criteria['programs'] = explode(',',$params['programs']);
+        }
+        if (isset($params['pools']) && $params['pools']) {
+            $criteria['group_names'] = explode(',',$params['pools']);
+        }
+        $criteria['group_types'] = ['PP'];
+
+        $this->projectGames = $projectGames = $this->scheduleRepository->findProjectGames($criteria);
 
         /*
         $session = $request->getSession();
