@@ -29,7 +29,7 @@ class BaseTemplate extends AbstractTemplate
   <body>
     <div id="layout-body">
       <div id="layout-header" style="width: 100%; text-align: center;">
-        <h4>{$this->escape($this->project['title'])}</h4>
+        <h1>{$this->escape($this->project['title'])}</h1>
       </div>
       <div id="layout-topmenu">
 {$this->renderTopMenu()}
@@ -52,7 +52,7 @@ EOT;
             return $this->renderTopMenuForGuest();
         }
         return <<<EOD
-<div id='cssmenu'>
+<div class='cssmenu'>
 <ul>
 {$this->renderTopMenuSchedules()}
 {$this->renderTopMenuResults()}
@@ -97,7 +97,7 @@ EOD;
     protected function renderTopMenuForGuest()
     {
         return <<<EOD
-<div id='cssmenu'>
+<div class='cssmenu'>
 <ul>
 {$this->renderTopMenuSchedules()}
 {$this->renderTopMenuResults()}

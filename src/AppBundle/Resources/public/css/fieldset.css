@@ -1,0 +1,39 @@
+/*
+ *  http://www.texotela.co.uk/code/css/fieldsetform/
+ *  Styling fields contained within a fieldset
+ *    (nothing fancy, just lined up labels (text right-aligned) and fields).
+*/
+
+form.app_form fieldset { padding: 0 10px; margin-bottom: 6px; }
+
+    form.app_form fieldset legend {
+        /*display: none;*/;
+        font-size: 1.1em; font-weight: 700; color: inherit;;
+    }
+
+    form.app_form fieldset div, form.app_form fieldset > label { margin: 0 auto 6px; /*	border: solid #67874f 1px; */ padding: 2px; }
+
+    form.app_form fieldset > label { margin-left: 51%; font-size: small; }
+
+    form.app_form fieldset div label { clear: none;    display: block; float: left; width: auto; min-width: 50%; font-size: inherit; text-align: right; /* increase or decrease line-height depending on font-size set in 'div.field .input' trial and error needed to get it right */ line-height: 1.7em; padding-right: 6px; }
+
+    form.app_form fieldset div select { clear: none; text-align: left; font-size: inherit; height: 1.8em; }
+
+label#checkbox_label { display: block; padding-left: 15px; text-indent: -15px; }
+
+input#cerad_tourn_account_user_login_remember_me { width: 13px; height: 13px; padding: 0; margin: 0; vertical-align: bottom; position: relative; top: -1px; overflow: hidden; }
+
+form.app_form fieldset div textarea { clear: none; height: 10em; width: 45%; padding: 2px; overflow: auto; }
+
+.controls { font: inherit; font-size: inherit; text-align: right; padding: 10px 25% 10px 0; float: right; }
+
+.app_help { padding: 0 20px 30px 10px; line-height: 1.25em; width: 96%; clear: both; }
+
+    .app_help h3 { margin-left: -20px }
+
+    .app_help li { padding-top: 10px; padding-left: 20px; }
+
+    .app_help ul ul li { list-style-type: disc; padding-left: 0; margin-left: 30px; }
+
+    .app_help ul ol li { padding-left: 10px }
+
