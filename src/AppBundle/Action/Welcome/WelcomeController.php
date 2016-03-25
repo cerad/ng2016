@@ -25,7 +25,7 @@ class WelcomeController extends Controller
     {
         // Verify not signed in
         if ($this->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('app_welcome');
+            return $this->redirectToRoute('app_home');
         }
         $params = [
             'base_dir'  => realpath($this->getParameter('kernel.root_dir').'/..'),

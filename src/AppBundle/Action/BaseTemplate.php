@@ -99,6 +99,7 @@ EOD;
         return <<<EOD
 <div class='cssmenu'>
 <ul>
+  <li><a href="{$this->generateUrl('app_welcome')}">Welcome</a></li>
 {$this->renderTopMenuSchedules()}
 {$this->renderTopMenuResults()}
   <li class="right">
