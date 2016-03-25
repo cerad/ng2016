@@ -10,7 +10,9 @@ const appTask = function() {
 
     // Control the order
     gulp.src([
+            appPublicDir + '/css/reset.css',
             appPublicDir + '/css/common.css',
+            appPublicDir + '/css/fieldset.css',
             appPublicDir + '/css/schedule.css',
             appPublicDir + '/css/app.css',
             appPublicDir + '/css/cssmenu.css'
