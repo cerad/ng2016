@@ -196,9 +196,11 @@ class ScheduleRepository
 
             $start = \DateTime::createFromFormat('Y-m-d H:i:s',$projectGame['start']);
 
+            // Display only
             $projectGame['dow']  = $start->format('D');
             $projectGame['time'] = $start->format('g:i A');
 
+            // Is this for display only or is used by the calculator?
             $levelParts = explode('_',$projectGame['level_key']);
             $projectGame['group_key'] = sprintf('%s %s %s %s',
                 $levelParts[1],
@@ -215,9 +217,10 @@ class ScheduleRepository
 
         $qb->addSelect([
             'project_game_team.id         AS  id',
-            'project_game_team.teamKey    AS `key`',
             'project_game_team.slot       AS  slot',
+            'project_game_team.teamKey    AS `key`',
             'project_game_team.teamName   AS  name',
+            'project_game_team.teamPoints AS  points',
             'project_game_team.groupSlot  AS  group_slot',
             'project_game_team.gameId     AS  project_game_id',
             'project_game_team.report     AS  report',
@@ -232,8 +235,10 @@ class ScheduleRepository
         $stmt = $this->conn->executeQuery($qb->getSQL(),[$projectGameIds],[Connection::PARAM_INT_ARRAY]);
 
         while($projectGameTeam = $stmt->fetch()) {
+
             $projectGameTeam['report'] = unserialize($projectGameTeam['report']);
-            $projectGames[$projectGameTeam['project_game_id']]['project_game_teams'][$projectGameTeam['slot']] = $projectGameTeam;
+
+            $projectGames[$projectGameTeam['project_game_id']]['teams'][$projectGameTeam['slot']] = $projectGameTeam;
         }
         return $projectGames;
     }

@@ -153,8 +153,8 @@ EOD;
         $html = null;
         foreach($projectGames as $projectGame) {
 
-            $projectGameTeamHome = $projectGame['project_game_teams'][1];
-            $projectGameTeamAway = $projectGame['project_game_teams'][2];
+            $projectGameTeamHome = $projectGame['teams'][1];
+            $projectGameTeamAway = $projectGame['teams'][2];
 
             $html .= <<<EOD
 <tr id="schedule-{$projectGame['number']}" class="game-status-{$projectGame['number']}">

@@ -84,6 +84,10 @@ class StandingsCalculator
         }
         $report = $this->projectFactory->createProjectPoolTeamReport($team);
 
+        //
+        $report['pool_key']  = $poolKey;
+        $report['pool_slot'] = $poolSlot;
+
         // TODO Read the rules carefully, compare 2012 and 2014
         $report['pointsEarned'] += $team['points']; // Soccerfest
 
@@ -95,6 +99,9 @@ class StandingsCalculator
 
     protected function calcPoolTeamPoints($poolKey,$poolTeamReport,$gameTeamReport)
     {
+        // Need this because the gameTeamReport only persists values that are actually set
+        $gameTeamReport = array_merge($this->projectFactory->createProjectGameTeamReport(),$gameTeamReport);
+
         // Goal scored and allowed
         $goalsScored  = $gameTeamReport['goalsScored'];
         $goalsAllowed = $gameTeamReport['goalsAllowed'];
@@ -211,8 +218,8 @@ class StandingsCalculator
         if ($ga1 > $ga2) return  1;
 
         // Just the key
-        $key1 = $team1['team']['groupSlot'];
-        $key2 = $team2['team']['groupSlot'];
+        $key1 = $team1['team']['group_slot'];
+        $key2 = $team2['team']['group_slot'];
 
         return strcmp($key1,$key2);
     }

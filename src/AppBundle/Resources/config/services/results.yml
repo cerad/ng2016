@@ -1,10 +1,10 @@
 services:
 
     app_points_calculator:
-        class: AppBundle\Action\Results\PoolPlay\PointCalculator
+        class: AppBundle\Action\Results\PoolPlay\Calculator\PointCalculator
 
     app_standings_calculator:
-        class: AppBundle\Action\Results\PoolPlay\StandingCalculator
+        class: AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator
         arguments: ['@cerad_project_factory']
 
     app_action_results_repository:
@@ -16,3 +16,4 @@ services:
         parent: app_action_abstract_controller
         arguments:
             - '@app_action_schedule_repository'
+            - '@app_standings_calculator'

@@ -6,6 +6,8 @@ class ProjectFactory
     public function createProjectGameTeamReport()
     {
         return [
+            'type' => 'project_game_team_report',
+
             'status' => 'None', // Empty, Entered, Verified
 
             'goalsScored'  => null, // Null serves as flag that the game was played
@@ -13,8 +15,6 @@ class ProjectFactory
 
             'pointsEarned' => 0,
             'pointsMinus'  => 0,
-
-            'winPercent'   => null,
 
             'playerWarnings'  => 0,
             'playerEjections' => 0,
@@ -24,6 +24,9 @@ class ProjectFactory
             'benchEjections'  => 0,
             'specWarnings'    => 0,
             'specEjections'   => 0,
+            'totalWarnings'   => 0, // TODO
+            'totalEjections'  => 0,
+
             'sportsmanship'   => 0,
 
             'fudgeFactor' => 0,
@@ -33,6 +36,8 @@ class ProjectFactory
     {
         $report = $this->createProjectGameTeamReport();
         return array_merge($report,[
+
+            'type' => 'project_pool_team_report',
 
             'team' => $team,
 
@@ -45,6 +50,8 @@ class ProjectFactory
             'gamesWon'    => 0,
             'gamesLost'   => 0,
             'gamesTied'   => 0,
+
+            'winPercent'  => null,
         ]);
     }
 }
