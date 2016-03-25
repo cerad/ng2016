@@ -43,7 +43,6 @@ EOD;
 
         return <<<EOD
 User: {$this->escape($user->getAccountName())}
-<a href="{$this->generateUrl('cerad_user_logout')}">Logout</a>
 EOD;
     }
     /* ====================================================
