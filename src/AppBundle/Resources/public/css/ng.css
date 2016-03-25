@@ -1,0 +1,20 @@
+.skArea {
+    background: #fff;
+    min-height: 100%;
+}
+
+.skBanners {
+    float: left;
+    padding: 16px 0;
+}
+
+.skHeader {
+    position: relative;
+}
+
+.skWidth {
+    width: 940px;
+    margin: auto;
+    display: table;
+    max-width: 100%;
+}

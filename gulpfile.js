@@ -14,6 +14,7 @@ const appTask = function() {
             appPublicDir + '/css/common.css',
             appPublicDir + '/css/fieldset.css',
             appPublicDir + '/css/schedule.css',
+            appPublicDir + '/css/ng.css',
             appPublicDir + '/css/app.css',
         ])
         .pipe(concat("zayso.css"))
@@ -36,6 +37,14 @@ const appTask = function() {
             appPublicDir + '/js/ie10-viewport-bug-workaround.js'
         ])
         .pipe(gulp.dest('web/js'));
+        
+    // images
+    gulp.src([
+            appPublicDir + '/img/header-ipad_01.png'
+        ])
+        .pipe(gulp.dest('web/img'));
+        
+   
 
 };
 gulp.task('app',appTask);
