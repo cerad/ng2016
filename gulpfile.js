@@ -15,7 +15,6 @@ const appTask = function() {
             appPublicDir + '/css/fieldset.css',
             appPublicDir + '/css/schedule.css',
             appPublicDir + '/css/app.css',
-            appPublicDir + '/css/cssmenu.css'
         ])
         .pipe(concat("zayso.css"))
         .pipe(gulp.dest('web/css'));
@@ -23,6 +22,18 @@ const appTask = function() {
     // Javascripts
     gulp.src([
             appPublicDir + '/js/zayso.js'
+        ])
+        .pipe(gulp.dest('web/js'));
+
+    // Bootstrap Javascripts
+    gulp.src([
+            appPublicDir + '/js/bootstrap.min.js'
+        ])
+        .pipe(gulp.dest('web/js'));
+        
+    // Bootstrap Javascripts
+    gulp.src([
+            appPublicDir + '/js/ie10-viewport-bug-workaround.js'
         ])
         .pipe(gulp.dest('web/js'));
 
