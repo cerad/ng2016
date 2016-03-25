@@ -52,7 +52,7 @@ EOT;
 
     <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
 
-    <button type="submit">Login</button>
+    <button type="submit">Sign In</button>
 </form>
 EOT;
     }
