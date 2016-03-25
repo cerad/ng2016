@@ -132,8 +132,8 @@ EOD;
         $html = null;
         foreach($this->projectGames as $projectGame) {
 
-            $projectGameTeamHome = $projectGame['project_game_teams'][1];
-            $projectGameTeamAway = $projectGame['project_game_teams'][2];
+            $projectGameTeamHome = $projectGame['teams'][1];
+            $projectGameTeamAway = $projectGame['teams'][2];
 
             $html .= <<<EOD
 <tr id="schedule-team-{$projectGame['number']}" class="game-status-{$projectGame['number']}">
@@ -141,7 +141,7 @@ EOD;
   <td class="schedule-dow"  >{$projectGame['dow']}</td>
   <td class="schedule-time" >{$projectGame['time']}</td>
   <td class="schedule-field">{$projectGame['field_name']}</td>
-  <td class="schedule-group">{$projectGame['group']}</td>
+  <td class="schedule-group">{$projectGame['group_key']}</td>
   <td>&nbsp;</td>
   <td><table>
     <tr><td>{$projectGameTeamHome['group_slot']}</td></tr>
