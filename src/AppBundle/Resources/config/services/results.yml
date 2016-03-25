@@ -1,0 +1,19 @@
+services:
+
+    app_points_calculator:
+        class: AppBundle\Action\Results\PoolPlay\Calculator\PointCalculator
+
+    app_standings_calculator:
+        class: AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator
+        arguments: ['@cerad_project_factory']
+
+    app_action_results_repository:
+        class: AppBundle\Action\Schedule\ScheduleRepository
+        arguments: ['@doctrine.dbal.project_connection']
+
+    app_action_results_poolplay_controller:
+        class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayController
+        parent: app_action_abstract_controller
+        arguments:
+            - '@app_action_schedule_repository'
+            - '@app_standings_calculator'

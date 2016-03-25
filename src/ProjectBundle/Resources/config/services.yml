@@ -6,3 +6,6 @@ services:
     cerad_project_team_repository:
         class:  Cerad\Bundle\ProjectBundle\EntityRepository\ProjectTeamRepository
         arguments: ['@cerad_project_database_connection']
+
+    cerad_project_factory:
+        class: Cerad\Bundle\ProjectBundle\ProjectFactory

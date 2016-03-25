@@ -107,6 +107,9 @@ class ScheduleRepository
     }
     public function findProjectGames(array $criteria)
     {
+        // Never grab everything by accident
+        if (count($criteria) < 1) return [];
+
         $levelKeys = $this->genLevelKeys($criteria);
 
         $paramValues = [];
@@ -140,6 +143,17 @@ class ScheduleRepository
             $paramTypes [] = Connection::PARAM_STR_ARRAY;
             $qb->andWhere('project_game.levelKey IN (?)');
         }
+        if (isset($criteria['group_types']) && count($criteria['group_types'])) {
+            $paramValues[] = $criteria['group_types'];
+            $paramTypes [] = Connection::PARAM_STR_ARRAY;
+            $qb->andWhere('project_game.groupType IN (?)');
+        }
+        if (isset($criteria['group_names']) && count($criteria['group_names'])) {
+            $paramValues[] = $criteria['group_names'];
+            $paramTypes [] = Connection::PARAM_STR_ARRAY;
+            $qb->andWhere('project_game.groupName IN (?)');
+        }
+
         if (count($paramValues) < 1) return [];
 
         $stmt = $this->conn->executeQuery($qb->getSQL(),$paramValues,$paramTypes);
@@ -182,11 +196,13 @@ class ScheduleRepository
 
             $start = \DateTime::createFromFormat('Y-m-d H:i:s',$projectGame['start']);
 
+            // Display only
             $projectGame['dow']  = $start->format('D');
             $projectGame['time'] = $start->format('g:i A');
 
+            // Is this for display only or is used by the calculator?
             $levelParts = explode('_',$projectGame['level_key']);
-            $projectGame['group'] = sprintf('%s %s %s %s',
+            $projectGame['group_key'] = sprintf('%s %s %s %s',
                 $levelParts[1],
                 $levelParts[2],
                 $projectGame['group_type'],
@@ -201,11 +217,13 @@ class ScheduleRepository
 
         $qb->addSelect([
             'project_game_team.id         AS  id',
-            'project_game_team.teamKey    AS `key`',
             'project_game_team.slot       AS  slot',
+            'project_game_team.teamKey    AS `key`',
             'project_game_team.teamName   AS  name',
+            'project_game_team.teamPoints AS  points',
             'project_game_team.groupSlot  AS  group_slot',
             'project_game_team.gameId     AS  project_game_id',
+            'project_game_team.report     AS  report',
         ]);
         $qb->from('game_teams','project_game_team');
 
@@ -217,7 +235,10 @@ class ScheduleRepository
         $stmt = $this->conn->executeQuery($qb->getSQL(),[$projectGameIds],[Connection::PARAM_INT_ARRAY]);
 
         while($projectGameTeam = $stmt->fetch()) {
-            $projectGames[$projectGameTeam['project_game_id']]['project_game_teams'][$projectGameTeam['slot']] = $projectGameTeam;
+
+            $projectGameTeam['report'] = unserialize($projectGameTeam['report']);
+
+            $projectGames[$projectGameTeam['project_game_id']]['teams'][$projectGameTeam['slot']] = $projectGameTeam;
         }
         return $projectGames;
     }

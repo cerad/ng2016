@@ -15,7 +15,8 @@ parameters:
         abbv:    "NG2014x"
         title:   "AYSO National Games 2014"
         desc:    "AYSO National Games 2014 - Section One, Califorina - June 30 to July 6"
-        results: natgames
+
+        standings: natgames
         
         submit:  "Emails your application to Art Hundiak and yourself."
         prefix:   NatGames
@@ -69,6 +70,45 @@ parameters:
                 label: Genders
             ages:
                 label: Ages
+
+        choices:
+            dates:
+                '2014-07-02': Wed # Soccerfest
+                '2014-07-03': Thu # Pool Play
+                '2014-07-04': Fri # Pool Play
+                '2014-07-05': Sat # Pool Play and Quarter Finals
+                '2014-07-06': Sun # Semi and Finals
+
+            programs:
+                Core:  Core
+                Extra: Extra
+
+            genders:
+                B: Boys
+                G: Girls
+
+            ages:
+                VIP: VIP
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+
+            pools:
+                Core:
+                    B:
+                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
+                    G:
+                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
 
     # ==============================================
     # For the schedule search form

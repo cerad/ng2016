@@ -1,0 +1,19 @@
+app_results_poolplay:
+    path: /poolplay
+    defaults:
+        _controller: app_action_results_poolplay_controller
+
+app_results_medalround:
+    path: /medalround
+    defaults:
+        _controller: app_action_results_medalround_controller
+
+app_results_sportsmanship:
+    path: /sportsmanship
+    defaults:
+        _controller: app_action_results_sportsmanship_controller
+
+app_results_final:
+    path: /final
+    defaults:
+        _controller: app_action_results_final_controller

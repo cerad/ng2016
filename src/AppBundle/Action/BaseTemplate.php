@@ -120,10 +120,18 @@ EOT;
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Results <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="/project/natgames/results-poolplay">Pool Play</a></li>
-              <li><a href="/project/natgames/results-playoffs">Medal Round</a></li>
-              <li><a href="/project/natgames/results-sportsmanship">Sportsmanship</a></li>
-              <li><a href="/project/natgames/results-sportsmanship">Final Standings</a></li>
+              <li>
+                <a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a>
+              </li>
+              <li>
+                <a href="{$this->generateUrl('app_results_medalround')}">Medal Round</a>
+              </li>
+              <li>
+                <a href="{$this->generateUrl('app_results_sportsmanship')}">Sportsmanship</a>
+              </li>
+              <li>
+                <a href="{$this->generateUrl('app_results_final')}">Final Standings</a>
+              </li>
             </ul>
           </li>
 EOT;

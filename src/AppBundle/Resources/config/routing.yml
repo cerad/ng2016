@@ -1,24 +1,10 @@
-
-app_index:
-    path: /
-    defaults:
-        _controller: app_action_index_controller
-
-app_welcome:
-    path: /welcome
-    defaults:
-        _controller: app_action_welcome_controller
-
-app_home:
-    path: /home
-    defaults:
-        _controller: app_action_home_controller
-
-cerad_user_login:
-    path: /user/login
-    defaults:
-        _controller: app_action_index_controller
+app:
+    resource: "@AppBundle/Resources/config/routes/app.yml"
 
 app_schedule:
     resource: "@AppBundle/Resources/config/routes/schedule.yml"
     prefix: /schedule
+
+app_results:
+    resource: "@AppBundle/Resources/config/routes/results.yml"
+    prefix: /results
