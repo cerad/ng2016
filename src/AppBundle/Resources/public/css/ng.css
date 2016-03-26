@@ -4,8 +4,10 @@
 }
 
 .skBanners {
-    float: left;
     padding: 16px 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 .skHeader {
@@ -17,4 +19,16 @@
     margin: auto;
     display: table;
     max-width: 100%;
+}
+
+span.skFont {
+    font-family:  Lato, Arial, Helvetica, sans-serif;
+    font-kerning:  auto;
+    font-size: 18px;
+    font-stretch: normal;
+    font-style: italic;
+    font-variant: normal;
+    font-variant-ligatures: normal;
+    font-weight: normal;
+    color: rgb(124, 124, 124);
 }

@@ -16,6 +16,7 @@ const appTask = function() {
             appPublicDir + '/css/schedule.css',
             appPublicDir + '/css/ng.css',
             appPublicDir + '/css/app.css',
+            appPublicDir + '/css/bs_custom.css',
         ])
         .pipe(concat("zayso.css"))
         .pipe(gulp.dest('web/css'));
@@ -40,9 +41,9 @@ const appTask = function() {
         
     // images
     gulp.src([
-            appPublicDir + '/img/header-ipad_01.png'
+            appPublicDir + '/images/header-ipad_01.png'
         ])
-        .pipe(gulp.dest('web/img'));
+        .pipe(gulp.dest('web/images'));
         
    
 

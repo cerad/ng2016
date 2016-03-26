@@ -40,4 +40,15 @@ services:
         class: AppBundle\Action\Home\HomeController
         parent: app_action_abstract_controller
 
+    # action admin
+    app_action_admin_controller:
+        class: AppBundle\Action\Admin\AdminController
+        parent: app_action_abstract_controller
+        arguments:
+          - '@app_action_admin_page_template'
+        
+    app_action_admin_page_template:
+        class: AppBundle\Action\Admin\AdminPageTemplate
+        parent: app_page_template
+
 
