@@ -12,7 +12,29 @@ class BaseTemplate extends AbstractTemplate
     }
     public function render()
     {
-        return <<<EOT
+      return <<<EOT
+        {$this->renderHead()}
+        {$this->renderHeader()}
+        <body>
+          <div id="layout-body">
+            <div id="layout-topmenu">
+              {$this->renderTopMenu()}
+            </div>
+            <div id="layout-content">
+              {$this->content}
+            </div>
+          </div>
+      {$this->renderScripts()}
+
+      {$this->renderFooter()}
+
+EOT;
+    }
+    
+    /*  DOC & Header  */
+    protected function renderHead()
+    {
+    return <<<EOT
         <!DOCTYPE html>
         <html lang="en">
           <head>
@@ -23,33 +45,48 @@ class BaseTemplate extends AbstractTemplate
             <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
             <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all" />
             <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
-
           </head>
-          <body>
-            <div id="layout-body">
-              <div id="layout-header" style="width: 100%; text-align: center;">
-                <h1>{$this->escape($this->project['title'])}</h1>
-              </div>
-              <div id="layout-topmenu">
-        {$this->renderTopMenu()}
-              </div>
-              <div id="layout-content">
-        {$this->content}
-              </div>
-            </div>
-        {$this->renderScripts()}
+EOT;
+    }
+    
+    protected function renderHeader()
+    {
+      return <<<EOT
+    <div class="skArea">
+      <div class="skWidth">
+        <div class="skHeader">
 
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
-        <script src="/js/bootstrap.min.js"></script>
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="/js/ie10-viewport-bug-workaround.js"></script>
-        <script src="/js/zayso.js"></script>
+          <div class="skLogo">
+            <a id="dnn_dnnLOGO_hypLogo" title="National Games" href="/default.aspx?portalid=14066" name="dnn_dnnLOGO_hypLogo"></a>
+          </div>
 
-          </body>
+          <div class="skBanners">
+            <h1><img src="/img/header-ipad_01.png"></h1>
+
+            <center>
+              <span>AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</span>
+
+              <div class="clear-both"></div>
+            </center>
+          </div>
+
+          <div class="clear-both"></div>
+        </div>
+      </div>
+    </div>
+EOT;
+    }
+    
+    /* Footer item go here */
+    protected function renderFooter()
+    {
+        return <<<EOT
+    <div class="cerad-footer">
+      <br />
+      <hr>
+      <p> ZAYSO - For assistance contact Art Hundiak at <a href="mailto:ahundiak@gmail.com">ahundiak@gmail.com</a> or 256.799.6274 </p>
+    </div>
+        </body>
         </html>
 EOT;
     }
@@ -81,7 +118,7 @@ EOD;
             return $this->renderTopMenuForGuest();
         }
         
-        return <<<EOT
+        $html = <<<EOT
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <!-- Collect the nav links, forms, and other content for toggling -->
@@ -93,8 +130,12 @@ EOD;
             </ul>
             <ul class="nav navbar-nav navbar-right">
             {$this->renderMyAccount()}
-            {$this->renderAdmin()}
-            {$this->renderSignOut()}
+EOT;
+            if ( $this->isGranted('ROLE_ADMIN') ) {
+                $html .= $this->renderAdmin();
+            }
+            $html .= $this->renderSignOut();
+            return $html . <<<EOT
             </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -205,23 +246,30 @@ EOT;
         </li>
 EOT;
     }
+    
+    protected function renderScripts()
+    {
+        return <<<EOT
+          <!-- Bootstrap core JavaScript
+          ================================================== -->
+          <!-- Placed at the end of the document so the pages load faster -->
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+          <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+          <script src="/js/bootstrap.min.js"></script>
+          <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+          <script src="/js/ie10-viewport-bug-workaround.js"></script>
+          <script src="/js/zayso.js"></script>
+EOT;
+    }
+    
     /* ====================================================
      * Maybe implement blocks later
      */
-    protected $scripts = [];
-
     protected function renderStylesheets()
     {
         return null;
     }
-    protected function renderScripts()
-    {
-        $html = null;
-        foreach($this->scripts as $script) {
-            $html .= $script . "\n";
-        }
-        return $html;
-    }
+
     public function addStylesheet() {}
 
     public function addScript($script)

@@ -430,3 +430,12 @@ margin-right:auto;
 padding:0;
 }
 }
+
+.cerad-footer {
+  text-align: center;  
+}
+
+.cerad-footer p {
+    font-size: smaller;
+    font-style: italic;
+}
