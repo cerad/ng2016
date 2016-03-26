@@ -6,7 +6,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-abstract class AbstractTemplate implements AbstractTemplateInterface
+abstract class AbstractTemplate //implements AbstractTemplateInterface
 {
     /** @var  BaseTemplate */
     protected $baseTemplate;
@@ -63,5 +63,5 @@ abstract class AbstractTemplate implements AbstractTemplateInterface
     {
         return htmlspecialchars($content, ENT_COMPAT);
     }
-    abstract public function render();
+    //abstract public function render();
 }

@@ -314,10 +314,13 @@ EOD;
         $homeTotalEjections = $homePlayerEjections;
         $awayTotalEjections = $awayPlayerEjections;
 
+        $gameNumber = $game['number'];
+        $gameReportUpdateUrl = $this->generateUrl('game_report_update',['gameNumber' => $gameNumber]);
+
         return <<<EOD
-<tr id="results-poolplay-games-{$game['number']}" class="game-status-{$game['status']}">
-  <td><a href="">{$game['number']}</a></td>
-  <td>REPORT</td>
+<tr id="results-poolplay-games-{$gameNumber}" class="game-status-{$game['status']}">
+  <td><a href="{$gameReportUpdateUrl}">{$gameNumber}</a></td>
+  <td>{$game['report']['status']}</td>
   <td>{$gameStart}</td>
   <td><a href="">{$game['field_name']}</a></td>
   <td>{$homeTeam['group_slot']}<br/>{$awayTeam['group_slot']}</td>
