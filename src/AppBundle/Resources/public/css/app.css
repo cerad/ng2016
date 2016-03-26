@@ -166,7 +166,7 @@ padding:5px 20px;
 }
 
 .account-person-list {
-width:90%;
+width:70%;
 line-height:1.5em;
 margin-left:auto;
 margin-right:auto;
@@ -410,13 +410,20 @@ display:none;
 }
 }
 
-@media (max-width: 600px){
+@media only screen and  (max-width: 600px){
 td > table {
 display:block;
 }
 
 td > table td {
 display:inline-block;
+}
+
+.account-person-list {
+    width: 100%;
+    line-height: 1.5em;
+    margin-left: auto;
+    margin-right: auto;
 }
 }
 
