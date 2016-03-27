@@ -14,6 +14,11 @@ app_home:
     defaults:
         _controller: app_action_home_controller
 
+app_admin:
+    path: /admin
+    defaults:
+        _controller: app_action_admin_controller
+
 cerad_user_login:
     path: /user/login
     defaults:

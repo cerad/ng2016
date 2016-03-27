@@ -8,6 +8,7 @@ parameters:
             
         status:   Active
         verified: Yes
+        show_header_image: null
                 
         fedId:     AYSO
         fedRoleId: AYSOV

@@ -1,0 +1,15 @@
+.panel {
+  margin: 10px;
+  line-height: 2em;
+}
+.panel-float-left {
+    float: left;
+    height: 260px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+ }
+ 
+.panel-float-clear {
+    clear: both;
+ }

@@ -4,7 +4,8 @@ em { font-style: italic }
 
 #banner {
     width: 100%;
-    margin-top: 0.2em;
+    margin: 20px;
+    text-align: center;
 }
 
 .newsletter-box {
