@@ -2,14 +2,17 @@
 
 namespace AppBundle\Action\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Action\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController extends Controller
+class AdminController extends AbstractController
 {
     /** @var AdminPageTemplate  */
     private $pageTemplate;
+    
+    private $project;
 
     public function __construct(AdminPageTemplate $pageTemplate)
     {
@@ -19,11 +22,17 @@ class AdminController extends Controller
     public function __invoke(Request $request)
     {
         // Verify user is admin
-        if (!$this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_STAFF')) {
             return $this->redirectToRoute('app_home');
         }
         
-        $params = [];
+        $this->project = $project = $this->getCurrentProject()['info'];
+        
+        $params = [
+          'project' => $this->project,          
+        ];
+        
         return new Response($this->pageTemplate->render($params));
     }
+ 
 }

@@ -46,7 +46,7 @@ EOT;
             <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"> -->
             <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
           </head>
 EOT;
@@ -95,11 +95,14 @@ EOT;
     /* Footer item go here */
     protected function renderFooter()
     {
-        return <<<EOT
+        return
+<<<EOT
     <div class="cerad-footer">
       <br />
       <hr>
-      <p> ZAYSO - For assistance contact Art Hundiak at <a href="mailto:ahundiak@gmail.com">ahundiak@gmail.com</a> or 256.799.6274 </p>
+      <p> ZAYSO - For assistance contact {$this->project['support']['name']} at
+      <a href="mailto:{$this->project['support']['email']}?subject={$this->project['support']['subject']}">{$this->project['support']['email']}</a>
+      or {$this->project['support']['phone']} </p>
     </div>
     
 				<div class="clear-both"></div>
@@ -151,7 +154,7 @@ EOT;
         return
 <<<EOD
         <ul class="nav navbar-nav">
-          <li><a href="http://www.aysonationalgames.org/" target="_blank">NG2016 Site </a></li>
+          <li><a href="http://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" height="20px"></a></li>
           {$this->renderTopMenuSchedules()}
           {$this->renderTopMenuResults()}
         </ul>
@@ -170,7 +173,7 @@ EOD;
            {$this->renderRefereeSchedules()}
            {$this->renderMyAccount()}
 EOT;
-          if ( $this->isGranted('ROLE_ADMIN') ) {
+          if ( $this->isGranted('ROLE_STAFF') ) {
               $html .= $this->renderAdmin();
           }
           $html .= $this->renderSignOut();
@@ -188,10 +191,10 @@ EOT;
         return
 <<<EOT
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Schedules <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('app_schedule_team')}">Team Schedules</a></li>
-            <li><a href="{$this->generateUrl('app_schedule_game')}">Game Schedules</a></li>
+            <li><a href="{$this->generateUrl('app_schedule_team')}">TEAM SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('app_schedule_game')}">GAME SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
@@ -202,12 +205,12 @@ EOT;
         return
 <<<EOT
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Results <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a></li>
-            <li><a href="{$this->generateUrl('app_results_medalround')}">Medal Round</a></li>
-            <li><a href="{$this->generateUrl('app_results_sportsmanship')}">Sportsmanship</a></li>
-            <li><a href="{$this->generateUrl('app_results_final')}">Final Standings</a></li>
+            <li><a href="{$this->generateUrl('app_results_poolplay')}">POOL PLAY</a></li>
+            <li><a href="{$this->generateUrl('app_results_medalround')}">MEDAL ROUND</a></li>
+            <li><a href="{$this->generateUrl('app_results_sportsmanship')}">SPORTSMANSHIP</a></li>
+            <li><a href="{$this->generateUrl('app_results_final')}">FINAL STANDINGS</a></li>
           </ul>
         </li>
 EOT;
@@ -218,7 +221,7 @@ EOT;
         return
 <<<EOT
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{$this->generateUrl('app_welcome')}">Sign In</a></li>
+            <li><a href="{$this->generateUrl('app_welcome')}">SIGN IN</a></li>
           </ul>
 EOT;
     }
@@ -227,7 +230,7 @@ EOT;
     {
         return
 <<<EOT
-            <li><a href="{$this->generateUrl('cerad_user_logout')}">Sign Out</a></li>
+            <li><a href="{$this->generateUrl('cerad_user_logout')}">SIGN OUT</a></li>
 EOT;
     }
     
@@ -236,11 +239,11 @@ EOT;
       return
 <<<EOT
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Referee Schedules <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="/project/natgames/schedule-user">My Schedule</a></li>
-            <li><a href="/project/natgames/schedule-referee">Request Assignments</a></li>
-            <li><a href="/project/natgames/schedule-assignor">Assignor Schedule</a></li>
+            <li><a href="/project/natgames/schedule-user">MY SCHEDULE</a></li>
+            <li><a href="/project/natgames/schedule-referee">REQUEST ASSIGNMENTS</a></li>
+            <li><a href="/project/natgames/schedule-assignor">ASSIGNOR SCHEDULE</a></li>
          </ul>
        </li>
 EOT;
@@ -251,12 +254,12 @@ EOT;
       return
 <<<EOT
         <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Home <span class="caret"></span></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">HOME <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="{$this->generateUrl('app_home')}">My Account</a></li>
-          <li><a href="{$this->generateUrl('app_home')}">My Plans</a></li>
-          <li><a href="{$this->generateUrl('app_home')}">My Info</a></li>
-          <li><a href="{$this->generateUrl('app_home')}">My Schedule</a></li>
+          <li><a href="{$this->generateUrl('app_home')}">MY ACCOUNT</a></li>
+          <li><a href="{$this->generateUrl('app_home')}">MY PLANS</a></li>
+          <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
+          <li><a href="{$this->generateUrl('app_home')}">MY SCHEDULE</a></li>
         </ul>
 EOT;
     }
@@ -266,7 +269,7 @@ EOT;
       return
 <<<EOT
         <li>
-          <a href="{$this->generateUrl('app_admin')}">Admin</a>
+          <a href="{$this->generateUrl('app_admin')}">ADMIN</a>
         </li>
 EOT;
     }

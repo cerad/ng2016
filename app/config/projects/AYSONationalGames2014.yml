@@ -22,10 +22,27 @@ parameters:
         submit:  "Emails your application to Art Hundiak and yourself."
         prefix:   NatGames
              
+        support:
+            name: "Art Hundiak"
+            email: "ahundiak@gmail.com"
+            subject: "NG2016 ZAYSO question..."
+            phone: 256-457-5943
+              
+        schedules:
+            name: "Rick Roberts"
+            email: "web.ng2016@gmail.com"
+            subject: "NG2016 schedule question..."
+            phone: 310-920-8209
+            
         assignor:
-            name:  "Jody Kinsey"
-            email: "assignor.ng2014@gmail.com"
-            phone:  909.262.8806
+            name:  "Tom Tobin"
+            email: "spsoccerref@earthlink.net"
+            phone:  661-644-5096
+
+        administrator:
+            name:  "Tom Bobadilla"
+            email: "thomasbobadilla@ayso.org"
+            phone:  424-221-7980
 
         system:
             name:  "AYSO National Games 2014"

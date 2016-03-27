@@ -6,9 +6,14 @@ use AppBundle\Action\PageTemplate;
 
 class AdminPageTemplate extends PageTemplate
 {
+    protected $project = null;
+    
+    
     /* Admin Page content */
     public function render($params = [])
     {
+        $this->project = $params['project'];
+    
         $content =
 <<<EOT
 <h3>Administrative Functions</h3>
@@ -17,9 +22,9 @@ EOT;
   
         $content .= $this->renderScheduleManagement();
   
-        $content .= $this->renderTeamManagement();
-  
         $content .= $this->renderRefereeManagement();
+  
+        $content .= $this->renderTeamManagement();
   
         $content .= $this->renderAccountManagement();
           
@@ -221,10 +226,10 @@ EOT;
     <h3>Need help?</h3>
     <ul class="cerad-common-help">
       <ul class="ul_bullets">
-        <li>For help with Match Reporting, contact Art Hundiak at <a href="mailto:ahundiak@gmail.com">ahundiak@gmail.com</a> or at 256-457-5943</li>
-        <li>For help with Schedule Management, contact Bill Owen at <a href="mailto:stats@ayso13.org">stats@ayso13.org</a> or at 626-484-5439</li>
-        <li>For help with Referee Assignments, contact Jody Kinsey at <a href="mailto:jodykinsey23@gmail.com">jodykinsey23@gmail.com</a> or at 909-262-8806</li>
-        <li>For help with Account Management, contact Art Hundiak at <a href="mailto:ahundiak@gmail.com">ahundiak@gmail.com</a> or at 256-457-5943</li>
+        <li>For help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>
+        <li>For help with Referee Assignments, contact {$this->project['assignor']['name']} at <a href="mailto:{$this->project['assignor']['email']}">{$this->project['assignor']['email']}</a> or at {$this->project['assignor']['phone']}</li>
+        <li>For help with Account Management, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
+        <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a> or at {$this->project['schedules']['phone']}</li>
       </ul>
     </ul>
     </div>
