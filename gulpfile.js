@@ -41,7 +41,9 @@ const appTask = function() {
         
     // images
     gulp.src([
-            appPublicDir + '/images/header-ipad_01.png'
+            appPublicDir + '/images/header-ipad_01.png',
+            appPublicDir + '/images/National_Games.png',
+            
         ])
         .pipe(gulp.dest('web/images'));
         
