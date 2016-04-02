@@ -43,6 +43,11 @@ EOT;
             <title>{$this->escape($this->project['abbv'])}</title>
             <link rel="apple-touch-icon" href="/images/national_games.png">
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
+<link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-57x57.png'"><!-- iPhone -->
+<link rel="apple-touch-icon" type="image/png" sizes="72x72" href="/images/apple-touch-icon-72x72.png'"><!-- iPad -->
+<link rel="apple-touch-icon" type="image/png" sizes="114x114" href="/images/apple-touch-icon-114x114.png'"><!-- iPhone4 -->
+<link rel="icon" type="image/png" href="/images/apple-touch-icon-114x114.png'><!-- Opera Speed Dial, at least 144?114 px -->
             <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <!-- Optional theme -->
