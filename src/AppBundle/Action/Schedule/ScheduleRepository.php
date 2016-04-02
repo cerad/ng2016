@@ -180,6 +180,7 @@ class ScheduleRepository
             'project_game.levelKey   AS level_key',
             'project_game.projectKey AS project_key',
             'project_game.status     AS status',
+            'project_game.report     AS report',
         ]);
         $qb->from('games','project_game');
 
@@ -209,6 +210,11 @@ class ScheduleRepository
                 $projectGame['group_name']
             );
             $projectGame['project_game_teams'] = [];
+            
+            $projectGame['report'] = $projectGame['report'] ? unserialize(($projectGame['report'])) : [
+                'status' => 'Normal',
+                'notes'  => null,
+            ];
 
             $projectGames[$projectGame['id']] = $projectGame;
         }

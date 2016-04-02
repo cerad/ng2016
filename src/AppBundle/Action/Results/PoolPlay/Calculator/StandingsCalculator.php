@@ -173,7 +173,7 @@ class StandingsCalculator
 
             //$wpf = ($poolTeamReport->getPointsEarned() + $sfPoints) / (($poolTeamReport->getGamesPlayed() * 10) + 6);
 
-            $winPercent = sprintf('%.3f',$wpf);
+            $winPercent = sprintf('%.2f',$wpf * 100.0);
         }
         $poolTeamReport['winPercent'] = $winPercent;
 
@@ -202,8 +202,8 @@ class StandingsCalculator
         if ($pe1 > $pe2) return -1; */
 
         // Head to head
-        //$compare = $this->compareHeadToHead($team1,$team2);
-        //if ($compare) return $compare;
+        $compare = $this->compareHeadToHead($team1,$team2);
+        if ($compare) return $compare;
 
         // Most Sportsmanship
         $sp1 = $team1['sportsmanship'];
@@ -212,6 +212,7 @@ class StandingsCalculator
         if ($sp1 > $sp2) return -1;
 
         // Fewest Goals Allowed
+        // TODO Should be goals scored
         $ga1 = $team1['goalsAllowed'];
         $ga2 = $team2['goalsAllowed'];
         if ($ga1 < $ga2) return -1;
@@ -231,23 +232,23 @@ class StandingsCalculator
         foreach($this->poolGames as $game)
         {
             // Group will be unique within a pool
-            $homeTeamGroupSlot = $game['teams'][1]['groupSlot'];
-            $awayTeamGroupSlot = $game['teams'][2]['groupSlot'];
+            $homeTeamGroupSlot = $game['teams'][1]['group_slot'];
+            $awayTeamGroupSlot = $game['teams'][2]['group_slot'];
 
-            $team1GroupSlot = $team1['team']['groupSlot'];
-            $team2GroupSlot = $team2['team']['groupSlot'];
+            $team1GroupSlot = $team1['team']['group_slot'];
+            $team2GroupSlot = $team2['team']['group_slot'];
 
             if (($homeTeamGroupSlot == $team1GroupSlot) && ($awayTeamGroupSlot == $team2GroupSlot))
             {
-                $score1 = $game['teams'][1]['goalsScored'];
-                $score2 = $game['teams'][2]['goalsScored'];
+                $score1 = $game['teams'][1]['report']['goalsScored'];
+                $score2 = $game['teams'][2]['report']['goalsScored'];
                 if ($score1 > $score2) $team1Wins++;
                 if ($score1 < $score2) $team2Wins++;
             }
             if ($homeTeamGroupSlot == $team2GroupSlot && ($awayTeamGroupSlot == $team1GroupSlot))
             {
-                $score2 = $game['teams'][1]['goalsScored'];
-                $score1 = $game['teams'][2]['goalsScored'];
+                $score2 = $game['teams'][1]['report']['goalsScored'];
+                $score1 = $game['teams'][2]['report']['goalsScored'];
                 if ($score1 > $score2) $team1Wins++;
                 if ($score1 < $score2) $team2Wins++;
             }
