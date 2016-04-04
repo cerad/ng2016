@@ -3,12 +3,24 @@ namespace Cerad\Bundle\ProjectBundle;
 
 class ProjectFactory
 {
-    public function createProjectGameTeamReport()
+    public function createProjectGameReport($game = [])
+    {
+        return [
+            'type'   => 'project_game_report',
+            'desc'   => null,
+            'status' => 'Pending',
+            'notes'  => null,
+            'game'   => $game,
+            'teamReports' => [],
+        ];
+    }
+    public function createProjectGameTeamReport($team = [])
     {
         return [
             'type' => 'project_game_team_report',
-
-            'status' => 'None', // Empty, Entered, Verified
+            'team' => $team,
+            
+            'status' => 'Pending', // Empty, Entered, Verified
 
             'goalsScored'  => null, // Null serves as flag that the game was played
             'goalsAllowed' => null,
@@ -28,8 +40,8 @@ class ProjectFactory
             'totalEjections'  => 0,
 
             'sportsmanship'   => 0,
-
-            'fudgeFactor' => 0,
+            'injuries'        => 0,
+            'fudgeFactor'     => 0,
         ];
     }
     public function createProjectPoolTeamReport($team)

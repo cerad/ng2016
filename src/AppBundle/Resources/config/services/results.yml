@@ -1,7 +1,7 @@
 services:
 
     app_points_calculator:
-        class: AppBundle\Action\Results\PoolPlay\Calculator\PointCalculator
+        class: AppBundle\Action\Results\PoolPlay\Calculator\PointsCalculator
 
     app_standings_calculator:
         class: AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator

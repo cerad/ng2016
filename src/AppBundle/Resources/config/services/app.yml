@@ -1,5 +1,10 @@
 services:
 
+    app_kernel_listener:
+        class:  AppBundle\Listener\KernelListener
+        calls: [[setContainer, ['@service_container']]]
+        tags:  [{ name: kernel.event_subscriber }]
+
     app_base_template:
         class: AppBundle\Action\BaseTemplate
         calls:
@@ -13,6 +18,7 @@ services:
            - ['setRouter',  ['@router']]
            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
            - ['setBaseTemplate', ['@app_base_template']]
+           - ['setProject', ['%app_project%']]
 
     app_action_abstract_controller:
         abstract: true
