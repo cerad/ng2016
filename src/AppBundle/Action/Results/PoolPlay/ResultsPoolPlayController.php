@@ -208,7 +208,6 @@ EOD;
   <th>Team</th>
   <th align="center">TPE</th>
   <th align="center">WP</th>
-  <th>&nbsp;</th>
   <th align="center">GT</th>
   <th align="center">GP</th>
   <th align="center">GW</th>
@@ -246,7 +245,6 @@ EOD;
   <td class="text-left">{$gameTeam['name']}</td>
   <td align="center">{$poolTeamReport['pointsEarned']}</td>
   <td align="center">{$poolTeamReport['winPercent']}</td>
-  <td>&nbsp;</td>
   <td align="center">{$poolTeamReport['gamesTotal']}</td>
   <td align="center">{$poolTeamReport['gamesPlayed']}</td>
   <td align="center">{$poolTeamReport['gamesWon']}</td>
