@@ -13,16 +13,16 @@ class ProjectFactory
             'name'   => null, // Unique
             'email'  => null, // Unique?
             'phone'  => null,
-            'badge'  => null,
+            'badge'  => null, // Referee Badge
             'gender' => null,
             'age'    => null,
 
             'notes'  => null,
-            'status' => 'Active',
-
+            'status' => 'Active', // Verified?
+            
             'plans' => [
-                'willAttend'  => 'no',
-                'willReferee' => 'no',
+                'willAttend'  => 'no', // ROLE_ATTENDEE
+                'willReferee' => 'no', // ROLE_REFEREE
             ],
             'roles' => [],
         ];

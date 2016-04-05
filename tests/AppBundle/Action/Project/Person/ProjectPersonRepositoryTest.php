@@ -47,7 +47,7 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
         
         $official = $officials[9];
 
-        var_dump($official);
+        //var_dump($official);
 
         $this->assertEquals('Adrian Backer',$official['name']);
         $this->assertEquals('2F1297A9-920E-44F1-8A75-3B52DFADA8F2',$official['personKey']);

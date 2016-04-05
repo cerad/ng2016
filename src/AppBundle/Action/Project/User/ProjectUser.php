@@ -1,0 +1,61 @@
+<?php
+namespace AppBundle\Action\Project\User;
+
+use AppBundle\ArrayAccessTrait;
+
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
+class ProjectUser implements AdvancedUserInterface, \ArrayAccess
+{
+    use ArrayAccessTrait;
+
+    public $id;
+    public $email;
+    public $username;
+
+    public $salt;
+    public $password;
+    public $passwordPlain;
+    public $passwordToken;
+
+    public $enabled = true;
+    
+    public $roles = [];
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+    public function getPassword()
+    {
+        return $this->password;
+    }
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+    public function getUsername()
+    {
+        return $this->username;
+    }
+    public function eraseCredentials()
+    {
+        $this->passwordPlain = null;
+    }
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+}
