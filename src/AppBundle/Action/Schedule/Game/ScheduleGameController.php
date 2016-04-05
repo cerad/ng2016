@@ -85,7 +85,7 @@ EOD;
   </table>
           <div class="col-xs-10">
           <div class="row float-right">
-      <button type="submit" id="form_search" name="search" class="btn btn-sm btn-primary submit">Search</button>
+      <button type="submit" id="form_search" class="btn btn-sm btn-primary submit">Search</button>
 <a href=href="/project/natgames/schedule-game.xls" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
 <a href=href="/project/natgames/schedule-ga,e.csv" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a> 
       </div>
@@ -102,7 +102,7 @@ EOD;
     protected function renderSearchCheckbox($name,$label,$items,$selected)
     {
         $html = <<<EOD
-<table border="1">
+<table>
   <tr><th colspan="30">{$label}</th></tr>
     <td align="center">All<br />
     <input type="checkbox" name="search[{$name}][]" class="cerad-checkbox-all" value="All" /></td>

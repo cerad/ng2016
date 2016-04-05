@@ -99,16 +99,21 @@ table-layout:auto;
   outline: thin solid #B90101;
 }
 
+
 .schedule th,.standings th,.results th,.scoring th,.my_schedule th,.row-hdr {
 width:auto;
 padding:0 8px;
 }
 
 .standings tr,.schedule tr,.results tr {
-
   border-left: thin solid #B90101;
   border-right: thin solid #B90101;
   border-bottom: thin solid #B90101;
+  border: none;
+}
+
+#schedule table tr, #standings table tr, #results table tr {
+  border: none;
 }
 
 .standings td tr,.schedule td tr,.results td tr {
@@ -132,7 +137,6 @@ background:#FFB8B8;
 text-align:center;
 line-height:1.2em;
 vertical-align:middle;
-padding:5px;
 }
 
 .tbl-title th
@@ -354,7 +358,8 @@ padding:0 10px;
 table td {
 height:1.1em;
 vertical-align:middle;
-padding:5px;
+    padding: 0 5px;
+    margin: 5px 0;
 }
 
 table td p {

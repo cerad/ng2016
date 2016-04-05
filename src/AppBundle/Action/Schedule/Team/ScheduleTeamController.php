@@ -109,7 +109,7 @@ EOD;
         return <<<EOD
 <div id="layout-block">
 <div class="schedule-games-list">
-<table id="schedule" class="schedule" border="1">
+<table id="schedule" class="schedule" border="0">
   <thead>
     <tr><th colspan="20" class="text-center">Team Schedule - Game Count: {$projectGameCount}</th></tr>
     <tr>
@@ -118,7 +118,7 @@ EOD;
       <th class="schedule-time" >Time</th>
       <th class="schedule-field">Field</th>
       <th class="schedule-group">Group</th>
-      <th class="schedule-blank">&nbsp;</th>
+    <!--  <th class="schedule-blank">&nbsp;</th> -->
       <th class="schedule-slot" >Slot</th>
       <th class="schedule-teams">Home / Away</th>
     </tr>
@@ -147,7 +147,7 @@ EOD;
   <td class="schedule-time" >{$projectGame['time']}</td>
   <td class="schedule-field">{$projectGame['field_name']}</td>
   <td class="schedule-group">{$projectGame['group_key']}</td>
-  <td>&nbsp;</td>
+<!--  <td>&nbsp;</td>  -->
   <td><table>
     <tr><td>{$projectGameTeamHome['group_slot']}</td></tr>
     <tr><td>{$projectGameTeamAway['group_slot']}</td></tr>

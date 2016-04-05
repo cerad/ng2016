@@ -18,7 +18,7 @@
  
  .entry { margin-left:5px; margin-top: 5px; margin-bottom: 5px;}
  
- .row { margin-bottom: 0.5em; }
+ .row { margin-bottom: 0.5em; margin-top: 0.5em; }
  
  .row label.text-center, .row p.text-center  { text-align: center !important }
 
