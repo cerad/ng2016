@@ -81,7 +81,9 @@ const watchTask = function()
     // Why the warnings, seems to work fine
     gulp.watch([
         appPublicDir + '/css/*.css',
-        appPublicDir + '/js/*.js'
+        appPublicDir + '/js/*.js',
+        appPublicDir + '/images/*.png',
+        appPublicDir + '/images/*.ico',
     ],  ['app']);
 };
 gulp.task('watch',watchTask);
