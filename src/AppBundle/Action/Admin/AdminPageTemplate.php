@@ -16,6 +16,7 @@ class AdminPageTemplate extends PageTemplate
     
         $content =
 <<<EOT
+<div class="container no-disc">
 <h3>Administrative Functions</h3>
 EOT;
         $content .= $this->renderMatchReporting();
@@ -34,7 +35,10 @@ EOT;
 EOT;
 
         $content .= $this->renderAdminHelp();
-      
+<<<EOT
+</div>  <!-- .container -->
+EOT;
+
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();
     }
@@ -220,10 +224,8 @@ EOT;
     {
       return
 <<<EOT
+    <legend>Need help?</legend>
     <div class="app_help">
-    <br/>
-    <hr>
-    <h3>Need help?</h3>
     <ul class="cerad-common-help">
       <ul class="ul_bullets">
         <li>For help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>

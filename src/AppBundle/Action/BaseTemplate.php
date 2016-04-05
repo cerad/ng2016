@@ -20,7 +20,7 @@ class BaseTemplate extends AbstractTemplate
             <div id="layout-topmenu">
               {$this->renderTopMenu()}
             </div>
-            <div id="layout-content">
+            <div class="container" id="layout-content">
               {$this->content}
             </div>
           </div>
@@ -41,17 +41,15 @@ EOT;
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>{$this->escape($this->project['abbv'])}</title>
-            <link rel="apple-touch-icon" href="/images/national_games.png">
-            <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
-<link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-57x57.png'"><!-- iPhone -->
-<link rel="apple-touch-icon" type="image/png" sizes="72x72" href="/images/apple-touch-icon-72x72.png'"><!-- iPad -->
-<link rel="apple-touch-icon" type="image/png" sizes="114x114" href="/images/apple-touch-icon-114x114.png'"><!-- iPhone4 -->
-<link rel="icon" type="image/png" href="/images/apple-touch-icon-114x114.png'><!-- Opera Speed Dial, at least 144?114 px -->
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico">
+<link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-72x72.png"><!-- iPad -->
+<link rel="apple-touch-icon" type="image/png" sizes="114x114" href="/images/apple-touch-icon-114x114.png"><!-- iPhone4 -->
+<link rel="icon" type="image/png" href="/images/apple-touch-icon-114x114.png"><!-- Opera Speed Dial, at least 144?114 px -->
             <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <!-- Optional theme -->
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="http://dbtek.github.io/bootstrap-vertical-tabs/assets/bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" type="text/css">
             <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
           </head>
 EOT;

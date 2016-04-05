@@ -10,6 +10,8 @@ class GameReportUpdateView extends AbstractTemplate
 {
     private $gameStatuses;
     private $reportStatuses;
+    
+    private $scheduleURL;    
 
     public function __construct()
     {
@@ -31,11 +33,18 @@ class GameReportUpdateView extends AbstractTemplate
             'Verified'  => 'Verified',
             'Clear'     => 'Clear',
         ];
+        
+        if (!empty($_SESSION["RETURN_TO_URL"]) ) {
+            $this->scheduleURL = $_SESSION["RETURN_TO_URL"];
+        } else {
+            $this->scheduleURL = "#";
+        }
+
     }
     public function __invoke(Request $request)
     {
         $gameReport = $request->attributes->get('gameReport');
-
+        
         $content = <<<EOD
 {$this->renderForm($gameReport)}
 <br />
@@ -51,7 +60,7 @@ EOD;
 
         $gameNumber     = $game['number'];
         $gameNumberNext = $gameNumber + 1;
-
+        
         $gameReportUpdateUrl = $this->generateUrl('game_report_update',['gameNumber' => $gameNumber]);
 
         $homeTeamReport = $gameReport['teamReports'][1];
@@ -64,93 +73,157 @@ EOD;
         $awayTeamReportPrefix = 'gameReport[teamReports][2]';
         
         $html = <<<EOD
-<form method="post" action="{$gameReportUpdateUrl}" class="cerad_common_form1">
-<h2>{$this->escape($gameReport['desc'])}</h2>
-<table class="scoring" border="1" style="width: 70%;min-width: 660px">
-<tbody>
-<tr>
-  <td style="width:25%;min-width:160">&nbsp;</td>
-  <td style="width:25%">Home : {$homeTeam['groupSlot']}<br />{$homeTeam['name']}</td>
-  <td style="width:25%">Away : {$awayTeam['groupSlot']}<br />{$awayTeam['name']}</td>
-</tr><tr>
-  <td style="text-align: right;">Goals Scored</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[goalsScored]" size="4" value="{$homeTeamReport['goalsScored']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[goalsScored]" size="4" value="{$awayTeamReport['goalsScored']}" /></td>
-</tr><tr>
-  <td style="text-align: right;">Sportsmanship</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[sportsmanship]" size="4" value="{$homeTeamReport['sportsmanship']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[sportsmanship]" size="4" value="{$awayTeamReport['sportsmanship']}" /></td>
-</tr>
-<tr><td colspan="5">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: right;">Player Cautions</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[playerWarnings]" size="4" value="{$homeTeamReport['playerWarnings']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[playerWarnings]" size="4" value="{$awayTeamReport['playerWarnings']}" /></td>
-</tr><tr>
-  <td style="text-align: right;">Player Sendoffs</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[playerEjections]" size="4" value="{$homeTeamReport['playerEjections']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[playerEjections]" size="4" value="{$awayTeamReport['playerEjections']}" /></td>
-</tr>
-<tr><td colspan="5">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: right;">Coach Ejections</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[coachEjections]" size="4" value="{$homeTeamReport['coachEjections']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[coachEjections]" size="4" value="{$awayTeamReport['coachEjections']}" /></td>
-</tr><tr>
-  <td style="text-align: right;">Substitute Ejections</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[benchEjections]" size="4" value="{$homeTeamReport['benchEjections']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[benchEjections]" size="4" value="{$awayTeamReport['benchEjections']}" /></td>
-</tr><tr>
-  <td style="text-align: right;">Spectator Ejections</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[specEjections]" size="4" value="{$homeTeamReport['specEjections']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[specEjections]" size="4" value="{$awayTeamReport['specEjections']}" /></td>
-</tr>
-<tr><td colspan="5">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: right;">Serious Injuries</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[injuries]" size="4" value="{$homeTeamReport['injuries']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[injuries]" size="4" value="{$awayTeamReport['injuries']}" /></td>
-</tr>
-<tr><td colspan="5">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: right;vertical-align: text-top">Notes</td>
-  <td colspan="2" style="padding-left: 5px; text-align: left;">
-    <textarea name="gameReport[notes]" rows="4" cols="42" wrap="hard" class="textarea">{$this->escape($gameReport['notes'])}</textarea>
-  </td>
-</tr>
-<tr><td colspan="4">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: right;">Points Earned</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[pointsEarned]" readonly="readonly" size="4" value="{$homeTeamReport['pointsEarned']}" /></td>
-  <td><input type="number" name="{$awayTeamReportPrefix}[pointsEarned]" readonly="readonly" size="4" value="{$awayTeamReport['pointsEarned']}" /></td>
-</tr><tr>
-  <td style="text-align: right;">Points Minus</td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[pointsMinus]" readonly="readonly" size="4" value="{$homeTeamReport['pointsMinus']}" /></td>
-  <td><input type="number" name="{$homeTeamReportPrefix}[pointsMinus]" readonly="readonly" size="4" value="{$awayTeamReport['pointsMinus']}" /></td>
-</tr>
-</tbody>
-</table>
-<br />
-<table style="width:80%">
-<tr>
-  <td style="min-width:275px;">&nbsp;</td>
-  <td style="min-width:275px;">&nbsp;</td>
-  <td style="min-width:100px;">
-    <button type="submit" name="save" class="submit">Save</button>
-    <button type="submit" name="next" class="submit">Save Then Next</button>
-    <input type="number"  name="nextGameNumber" value="{$gameNumberNext}" />
-  </td>
-  <td style="min-width:225px;vertical-align:top;"><a href="/project/natgames/results-poolplay?level=AYSO_U12B_Core&amp;pool=D#results-poolplay-games-11210">Return to Schedule</a></td>
-</tr>
-</table>
-<hr>
-<table style="width:80%">
-<tr>
-  <td style="min-width:275px;">&nbsp;</td>
-  <td style="min-width:275px;">
-    <div>
-    <label for="gameStatus">Game Status</label>
-    <select id="gameStatus" name="gameReport[game][status]">
+<div class="container">
+<form method="post" action="{$gameReportUpdateUrl}" class="cerad_common_form1 form-horizontal">
+      <fieldset>
+        <legend class="text-center">{$this->escape($gameReport['desc'])}</legend> <!-- Game Report -->
+
+        <div class="form-group">
+          <div class="col-xs-2">
+            <!-- required for floating -->
+            <!-- Nav tabs -->
+
+            <ul class="nav nav-tabs tabs-left">
+              <li class="active"><a href="#score" data-toggle="tab">Score</a></li>
+
+              <li><a href="#misconduct" data-toggle="tab">Misconduct</a></li>
+
+              <li><a href="#injuries" data-toggle="tab">Injuries</a></li>
+
+              <li><a href="#notes" data-toggle="tab">Notes</a></li>
+
+              <li><a href="#showAll" data-toggle="tab">Show All</a></li>
+            </ul>
+          </div>
+
+          <div class="col-xs-10">
+            <!-- Tab panes -->
+
+            <div class="tab-content">          
+                
+              <div class="tab-pane active" id="score">
+                  
+                    <div class="row">
+                        <div class="col-xs-4"></div> 
+                        <label class="col-xs-3 control-label text-center" >Home: {$homeTeam['groupSlot']}<br/>{$homeTeam['name']}</label> 
+                        <label class="col-xs-3 control-label text-center" >Away: {$awayTeam['groupSlot']}<br/>{$awayTeam['name']}</label> 
+                    </div>      
+        
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Goals Scored</label>
+                        <input type="number" name="{$homeTeamReportPrefix}[goalsScored]" value="{$homeTeamReport['goalsScored']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[goalsScored]" value="{$awayTeamReport['goalsScored']}" placeholder="0" class="col-xs-3 entry">
+                    </div>
+        
+                    <div class="row">
+                      <label class="col-xs-4 control-label">Sportsmanship</label>
+                      <input type="number" name="{$homeTeamReportPrefix}[sportsmanship]" value="{$homeTeamReport['sportsmanship']}" placeholder="40" class="col-xs-3 entry">
+                      <input type="number" name="{$awayTeamReportPrefix}[sportsmanship]" value="{$awayTeamReport['sportsmanship']}" placeholder="40" class="col-xs-3 entry">
+                    </div>
+                  
+                    <div class="row">
+                      <label class="col-xs-4 control-label">Points Earned</label>
+                      <input type="number" name="{$homeTeamReportPrefix}[pointsEarned]" value="{$homeTeamReport['pointsEarned']}" readonly="readonly" class="col-xs-3 entry">
+                      <input type="number" name="{$awayTeamReportPrefix}[pointsEarned]" value="{$awayTeamReport['pointsEarned']}" readonly="readonly" class="col-xs-3 entry">
+                    </div>
+        
+                    <div class="row">
+                      <label class="col-xs-4 control-label">Points Minus</label>
+                      <input type="number" name="{$homeTeamReportPrefix}[pointsMinus]" value="{$homeTeamReport['pointsMinus']}" readonly="readonly" class="col-xs-3 entry">
+                      <input type="number" name="{$awayTeamReportPrefix}[pointsMinus]" value="{$awayTeamReport['pointsMinus']}" readonly="readonly" class="col-xs-3 entry">
+                    </div>
+                </div>
+        
+                <div class="tab-pane" id="misconduct">
+                    <div class="row">
+                        <div class="col-xs-4"></div> 
+                        <label class="col-xs-3 control-label text-center" >Home: {$homeTeam['groupSlot']}<br/>{$homeTeam['name']}</label> 
+                        <label class="col-xs-3 control-label text-center" >Away: {$awayTeam['groupSlot']}<br/>{$awayTeam['name']}</label> 
+                    </div>      
+        
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Player Cautions</label>            
+                        <input type="number" name="{$homeTeamReportPrefix}[playerWarnings]" value="{$homeTeamReport['playerWarnings']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[playerWarnings]" value="{$awayTeamReport['playerWarnings']}" placeholder="0" class="col-xs-3 entry">
+                    </div>
+                    
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Player Send-Offs</label>
+                        <input type="number" name="{$homeTeamReportPrefix}[playerEjections]" value="{$homeTeamReport['playerEjections']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[playerEjections]" value="{$awayTeamReport['playerEjections']}" placeholder="0" class="col-xs-3 entry">
+                    </div>
+                    
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Coach Ejections</label>
+                        <input type="number" name="{$homeTeamReportPrefix}[coachEjections]" value="{$homeTeamReport['coachEjections']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[coachEjections]" value="{$awayTeamReport['coachEjections']}" placeholder="0" class="col-xs-3 entry">
+                    </div>
+                    
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Substitute Ejections</label>
+                        <input type="number" name="{$homeTeamReportPrefix}[benchEjections]" value="{$homeTeamReport['benchEjections']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[benchEjections]" value="{$awayTeamReport['benchEjections']}" placeholder="0" class="col-xs-3 entry">
+                    </div>
+                    
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Spectator Ejections</label>
+                        <input type="number" name="{$homeTeamReportPrefix}[specEjections]" value="{$homeTeamReport['specEjections']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[specEjections]" value="{$awayTeamReport['specEjections']}" placeholder="0" class="col-xs-3 entry">
+                    </div>
+                </div>
+        
+                <div class="tab-pane" id="injuries">
+                    <div class="row">
+                        <div class="col-xs-4"></div> 
+                        <label class="col-xs-3 control-label text-center" >Home: {$homeTeam['groupSlot']}<br/>{$homeTeam['name']}</label> 
+                        <label class="col-xs-3 control-label text-center" >Away: {$awayTeam['groupSlot']}<br/>{$awayTeam['name']}</label> 
+                    </div>      
+        
+                    <div class="row">
+                        <label class="col-xs-4 control-label">Serious Injuries</label>
+                        <input type="number" name="{$homeTeamReportPrefix}[injuries]" value="{$homeTeamReport['injuries']}" placeholder="0" class="col-xs-3 entry">
+                        <input type="number" name="{$awayTeamReportPrefix}[injuries]" value="{$awayTeamReport['injuries']}" placeholder="0" class="col-xs-3 entry">            
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="notes">
+                  <div class="row">
+                    <label class="col-xs-4 control-label">Notes</label> 
+                    <textarea name="gameReport[notes]" rows="10" cols="48" wrap="hard" class="textarea">{$this->escape($gameReport['notes'])}</textarea>
+                  </div>
+                </div>
+        
+                <div class="tab-pane" id="showAll">
+                  <p>Maybe have a tab to show everything ??</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <legend></legend>
+          <div class="col-xs-11">
+          <div class="row float-right">
+                  <button type="submit" name="save" class="btn btn-sm btn-primary submit" ><span class="glyphicon glyphicon-save"></span> Save</button>
+                  <button type="submit" name="next" class="btn btn-sm btn-primary submit active"><span class="glyphicon glyphicon-arrow-right"></span> Save Then Next</button>
+                  <a href="{$this->scheduleURL}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share-alt"></span> Return to Schedule</a>
+          </div>
+        </div>
+        <div class="col-xs-10">
+        <div class="col-xs-8 col-xs-offset-7">
+          <div class="row">
+                <label class="col-xs-4 control-label">Next Match Number</label> 
+              <input class="col-xs-3 entry" type="number" name="nextGameNumber" value="{$gameNumberNext}" />
+            </div>
+        </div>
+        </div>
+          <div class="clear-both"></div>       
+      </fieldset>
+
+      <fieldset>
+           <div class="form-group">
+          <div class="col-xs-12">
+              <div class="row">
+                  <label class="col-xs-2 control-label" for="gameStatus">Game Status</label>
+                  <select class="col-xs-3 entry" id="gameStatus" name="gameReport[game][status]">
 EOD;
         $status = $game['status'];
         foreach($this->gameStatuses as $value => $text) {
@@ -161,11 +234,9 @@ EOD;
         }
         $html .= <<<EOD
       </select>
-    </div>
-  <td>
-  <td style="min-width:210px;">
-    <div><label for="form_gameReport_status">Report Status</label>
-    <select id="gameReportStatus" name="gameReport[status]">
+               
+                  <label class="col-xs-2 control-label" for="gameReportStatus">Report Status</label> 
+    <select class="col-xs-3 entry" id="gameReportStatus" name="gameReport[status]">
 EOD;
         $status = $gameReport['status'];
         foreach($this->reportStatuses as $value => $text) {
@@ -175,13 +246,13 @@ EOD;
 EOD;
         }
         $html .= <<<EOD
-    </select>
-    </div>
-  </td>
-  <td style="min-width:275px;">&nbsp;</td>
-</tr>
-</table>
+      </select>
+               </div>
+          </div>
+          </div>
+        </fieldset>      
 </form>
+</div> <!-- .container -->
 EOD;
         return $html;
     }
@@ -190,52 +261,8 @@ EOD;
      */
     protected function renderScoringNotes()
     {
-        return <<<EOD
-<div class="app_table" id="notes">
-<table>
-  <thead>
-    <th colspan="4">Scoring Notes</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td width="10%"></td>
-      <td style="vertical-align: top;" width="35%">
-        <ul>
-          <li>Enter score and other info then click "Save"</li>
-          <li>Status fields will update themselves</li>
-          <br><br>
-          <li><strong>NOTE:</strong> Six points for proper participation in Soccerfest are added separately</li>
-        </ul>
-      </td>
-      <td width="35%">
-          <p>Points earned will be calculated</p>
-        <ul>
-          <li>Win: 6 pts / Tie: 3 pts / Shutout: 1 pt</li>
-          <li>For winner only: 1 pt per goal (3 pts max)
-          <li>Player Cautions: No impact</li>
-          <li>Player Sendoffs: -1 pt per sendoff</li>
-          <li>Coach/Substitute Ejections: -1 pt per ejection</li>
-          <li>FORFEIT: Score as 1-0</li>
-        </ul>
-      </td>
-      <td width="10%"></td>
-    </tr>
-    <tr></tr>
-    <tr>
-      <td width="10%"></td>
-      <td style="vertical-align: top;" width="35%" colspan=2>
-        <ul class="cerad-common-help">
-        <ul class="ul_bullets">
-          <li>For help with Match Reporting, contact Art Hundiak at <a href="mailto:ahundiak@gmail.com">ahundiak@gmail.com</a> or at 256-457-5943</li>
-          <li>For help with Schedule Management, contact Bill Owen at <a href="mailto:stats@ayso13.org">stats@ayso13.org</a> or at 626-484-5439</li>
-          <li>For help with Account Management, contact Art Hundiak at <a href="mailto:ahundiak@gmail.com">ahundiak@gmail.com</a> or at 256-457-5943</li>
-        </ul></ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
-</div>
-EOD;
-
+        include 'GameReportUpdateNotes.php';
+        
+        return $notes;
     }
 }

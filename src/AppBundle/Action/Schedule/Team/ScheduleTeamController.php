@@ -56,7 +56,7 @@ class ScheduleTeamController extends AbstractController
          */
 
         $content = <<<EOD
-<div id="layout-block">
+<div class="container">
   <form class="cerad_common_form1" method="post" action="{$this->generateUrl('app_schedule_team')}">
   <fieldset>
     <table>
@@ -68,11 +68,16 @@ class ScheduleTeamController extends AbstractController
         </select>
       <td><tr>
     </table>
-    <div class="layout-block">
-      <div class="controls"><button type="submit" id="form_search" name="search" class="submit">Search</button></div>
-      <div style="padding: 10px 0 0 25%; float: left;"><a href="/project/natgames/schedule-team.xls">Export to Excel</a></div>
-      <div style="padding: 10px 0 0 4em; float: left;"><a href="/project/natgames/schedule-team.csv">Export to Text</a></div>
-    </div>
+          <div class="col-xs-10">
+          <div class="row float-right">
+      <button type="submit" id="form_search" name="search" class="btn btn-sm btn-primary submit">Search</button>
+<a href=href="/project/natgames/schedule-team.xls" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+<a href=href="/project/natgames/schedule-team.csv" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a> 
+      </div>
+      </div>
+      <div class="clear-both"></div>
+      <br/>
+      <legend></legend>
   </fieldset>
   </form>
 </div>

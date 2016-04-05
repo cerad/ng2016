@@ -13,3 +13,13 @@
 .panel-float-clear {
     clear: both;
  }
+ 
+ legend { font-size: 16px; font-weight:bold; margin-top: 1em; }
+ 
+ .entry { margin-left:5px; margin-top: 5px; margin-bottom: 5px;}
+ 
+ .row { margin-bottom: 0.5em; }
+ 
+ .row label.text-center, .row p.text-center  { text-align: center !important }
+
+.no-disc li { list-style: none }

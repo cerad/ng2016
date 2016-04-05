@@ -28,6 +28,11 @@ class ResultsPoolPlayController extends AbstractController
     {
         $this->scheduleRepository  = $scheduleRepository;
         $this->standingsCalculator = $standingsCalculator;
+        
+        session_abort();
+        session_start(); 
+        $_SESSION["RETURN_TO_URL"] = $_SERVER['REQUEST_URI'];
+
     }
     protected function findProjectGames($params)
     {
@@ -152,7 +157,7 @@ EOD;
             $html .= <<<EOD
   </tr>
 </table>
-<br />
+
 EOD;
         }
         return $html;
@@ -288,6 +293,7 @@ EOD;
         $html .= <<<EOD
 </tbody>
 </table>
+<br/>
 </div>
 EOD;
         return $html;
