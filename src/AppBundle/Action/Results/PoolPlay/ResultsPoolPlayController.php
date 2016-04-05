@@ -28,6 +28,11 @@ class ResultsPoolPlayController extends AbstractController
     {
         $this->scheduleRepository  = $scheduleRepository;
         $this->standingsCalculator = $standingsCalculator;
+        
+        session_abort();
+        session_start(); 
+        $_SESSION["RETURN_TO_URL"] = $_SERVER['REQUEST_URI'];
+
     }
     protected function findProjectGames($params)
     {
@@ -72,9 +77,9 @@ class ResultsPoolPlayController extends AbstractController
         $content = <<<EOD
 <div id="layout-block">
 {$this->renderPoolLinks()}
-<br />
+
 {$this->renderLegend()}
-<hr style="border: 4px  ridge" />
+<!-- <hr style="border: 4px  ridge" /> -->
 {$this->renderPools()}
 <br />
 </div>
@@ -152,7 +157,7 @@ EOD;
             $html .= <<<EOD
   </tr>
 </table>
-<br />
+
 EOD;
         }
         return $html;
@@ -195,14 +200,14 @@ EOD;
     {
         $html = <<<EOD
 <div id="layout-block">
+<legend class="float-right">Pool Team Standings : {$poolKey}</legend>
+
 <table class="standings" border = "1">
-<tr class="tbl-title"><th colspan="16">Pool Team Standings : {$poolKey}</th></tr>
 <tr class="tbl-hdr">
   <th>Pool Slot</th>
   <th>Team</th>
   <th align="center">TPE</th>
   <th align="center">WP</th>
-  <th>&nbsp;</th>
   <th align="center">GT</th>
   <th align="center">GP</th>
   <th align="center">GW</th>
@@ -221,7 +226,7 @@ EOD;
         $html .= <<<EOD
 </table>
 </div>
-<br/>
+
 EOD;
 
         return $html;
@@ -240,7 +245,6 @@ EOD;
   <td class="text-left">{$gameTeam['name']}</td>
   <td align="center">{$poolTeamReport['pointsEarned']}</td>
   <td align="center">{$poolTeamReport['winPercent']}</td>
-  <td>&nbsp;</td>
   <td align="center">{$poolTeamReport['gamesTotal']}</td>
   <td align="center">{$poolTeamReport['gamesPlayed']}</td>
   <td align="center">{$poolTeamReport['gamesWon']}</td>
@@ -264,7 +268,7 @@ EOD;
 <div id="layout-block">
 <table class="results" border = "1">
 <thead>
-<tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolKey}</th></tr>
+<!-- <tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolKey}</th></tr> -->
 <tr class="tbl-hdr">
   <th>Game</th>
   <th>Report</th>
@@ -288,6 +292,7 @@ EOD;
         $html .= <<<EOD
 </tbody>
 </table>
+<br/>
 </div>
 EOD;
         return $html;
@@ -323,14 +328,14 @@ EOD;
   <td>{$game['report']['status']}</td>
   <td>{$gameStart}</td>
   <td><a href="">{$game['field_name']}</a></td>
-  <td>{$homeTeam['group_slot']}<br/>{$awayTeam['group_slot']}</td>
-  <td class="text-left">{$this->escape($homeTeam['name'])}<br/>{$this->escape($awayTeam['name'])}</td>
-  <td>{$homeTeamReport['goalsScored']}<br/>{$awayTeamReport['goalsScored']}</td>
-  <td>{$homeTeamReport['pointsEarned']}<br/>{$awayTeamReport['pointsEarned']}</td>
-  <td>{$homeSportsmanship}<br/>{$awaySportsmanship}</td>
-  <td>{$homePlayerWarnings}<br/>{$awayPlayerWarnings}</td>
-  <td>{$homePlayerEjections}<br/>{$awayPlayerEjections}</td>
-  <td>{$homeTotalEjections}<br/>{$awayTotalEjections}</td>
+  <td>{$homeTeam['group_slot']}<hr class="seperator"/>{$awayTeam['group_slot']}</td>
+  <td class="text-left">{$this->escape($homeTeam['name'])}<hr class="seperator"/>{$this->escape($awayTeam['name'])}</td>
+  <td>{$homeTeamReport['goalsScored']}<hr class="seperator"/>{$awayTeamReport['goalsScored']}</td>
+  <td>{$homeTeamReport['pointsEarned']}<hr class="seperator"/>{$awayTeamReport['pointsEarned']}</td>
+  <td>{$homeSportsmanship}<hr class="seperator"/>{$awaySportsmanship}</td>
+  <td>{$homePlayerWarnings}<hr class="seperator"/>{$awayPlayerWarnings}</td>
+  <td>{$homePlayerEjections}<hr class="seperator"/>{$awayPlayerEjections}</td>
+  <td>{$homeTotalEjections}<hr class="seperator"/>{$awayTotalEjections}</td>
 </tr>
 EOD;
 

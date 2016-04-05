@@ -193,19 +193,11 @@ p {
     margin-right: 3em;
 }
 
-some_nowhitespace { nowhitespace: afterproperty }
-
-some_nowhitespace { nowhitespace: afterproperty }
-
 /*
  ***********************************
     FONT FOR INTERNET EXPLORER
  ***********************************
 */
-
-some_nowhitespace { nowhitespace: afterproperty; }
-
-some_nowhitespace { nowhitespace: afterproperty; }
 
 /*
  ***********************************
@@ -216,10 +208,6 @@ some_nowhitespace { nowhitespace: afterproperty; }
 @font-face { font-family: "Bebas Neue"; src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf"); }
 
 @font-face { font-family: "Palatino Linotype"; src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf"); }
-
-some_nowhitespace { nowhitespace: afterproperty; }
-
-some_nowhitespace { nowhitespace: afterproperty; }
 
 /************************************
   END FONT FOR...
@@ -259,8 +247,6 @@ p { margin-top: 0; margin-bottom: 0.5em; }
 
 .social-bar a { text-decoration: none; margin-right: 3em; }
 
-some_nowhitespace { nowhitespace: afterproperty; }
-
 /*
  ***********************************
     FONT FOR INTERNET EXPLORER
@@ -271,8 +257,6 @@ some_nowhitespace { nowhitespace: afterproperty; }
 
 @font-face { font-family: "Palatino Linotype"; src: url(../css/pala.eot); }
 
-some_nowhitespace { nowhitespace: afterproperty; }
-
 /*
  ***********************************
      FONT FOR OTHER BROWSERS
@@ -282,8 +266,6 @@ some_nowhitespace { nowhitespace: afterproperty; }
 @font-face { font-family: "Bebas Neue"; src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf"); }
 
 @font-face { font-family: "Palatino Linotype"; src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf"); }
-
-some_nowhitespace { nowhitespace: afterproperty; }
 
 /************************************
   END FONT FOR...

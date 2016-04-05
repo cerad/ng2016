@@ -35,7 +35,7 @@ font-weight:700;
 padding:10px 0;
 }
 
-h3,legend {
+h3 {
 font-weight:700;
 font-size:16px!important;
 }
@@ -91,25 +91,14 @@ margin-left:auto;
 margin-right:auto;*/
 }
 
-#notes {
-display:inline-block;
-font-size:inherit;
-padding:5px 10px;
-}
-
-#notes ul li {
-list-style-type:disc;
-margin-left:40px;
-}
-
-#notes ol li {
-list-style-type:decimal;
-margin-left:80px;
-}
-
 table.data {
 table-layout:auto;
 }
+
+.schedule, .standings, .results {
+  outline: thin solid #B90101;
+}
+
 
 .schedule th,.standings th,.results th,.scoring th,.my_schedule th,.row-hdr {
 width:auto;
@@ -117,7 +106,14 @@ padding:0 8px;
 }
 
 .standings tr,.schedule tr,.results tr {
-outline:thin solid #cce6ff;
+  border-left: thin solid #B90101;
+  border-right: thin solid #B90101;
+  border-bottom: thin solid #B90101;
+  border: none;
+}
+
+#schedule table tr, #standings table tr, #results table tr {
+  border: none;
 }
 
 .standings td tr,.schedule td tr,.results td tr {
@@ -134,26 +130,25 @@ height:2em;
 }
 
 .schedule tr:nth-child(odd),.standings tr:nth-child(odd),.results tr:nth-child(odd),#person-list tr:nth-child(odd),.my_schedule tr:nth-child(odd) {
-background:#cce6ff;
+background:#FFB8B8;
 }
 
 .schedule td,.standings td,.results td,.scoring td {
 text-align:center;
 line-height:1.2em;
 vertical-align:middle;
-padding:5px;
 }
 
 .tbl-title th
 .row-hdr {
-background:#004080;
+background:#B90101;
 height:2em;
 }
 
 .tbl-hdr th {
-background:#0054a8;
+background:#DB352F;
 height:3em;
-border:1px solid #0054a8;
+border:1px solid #B90101;
 }
 
 .schedule table tr:nth-child(odd),#person-list table tr:nth-child(odd),.my_schedule table tr:nth-child(odd) {
@@ -172,9 +167,6 @@ margin-left:auto;
 margin-right:auto;
 }
 
-form * {
-  margin: 10px;
-}
 form#cerad_tourn_schedule_official_search,form#cerad_tourn_schedule_search {
 padding-top:0;
 }
@@ -323,7 +315,7 @@ root {
 display:block;
 }
 
-h3,h4,legend {
+h3,h4 {
 color:red;
 font-weight:700;
 font-size:18px!important;
@@ -353,20 +345,21 @@ margin-right:auto;
 
 table th,.row-hdr {
 width:auto;
-background-color:#004080;
+background-color:#DB352F;
 color:#fff;
 font-weight:700;
 vertical-align:middle;
 overflow:hidden;
 height:2.5em;
-border:1px solid #0054a8;
+border:1px solid #B90101;
 padding:0 10px;
 }
 
 table td {
 height:1.1em;
 vertical-align:middle;
-padding:5px;
+    padding: 0 5px;
+    margin: 5px 0;
 }
 
 table td p {
@@ -381,6 +374,8 @@ table table {
 margin-left:0;
 margin-right:0;
 }
+
+table.standings, table.results { min-width: 80%; }
 
 .app_form {
 margin-left:auto;
@@ -445,4 +440,8 @@ padding:0;
 .cerad-footer p {
     font-size: smaller;
     font-style: italic;
+}
+
+.seperator {
+  margin: 3px auto;
 }

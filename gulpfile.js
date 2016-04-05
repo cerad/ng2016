@@ -10,10 +10,10 @@ const appTask = function() {
 
     // Control the order
     gulp.src([
-            appPublicDir + '/css/reset.css',
+            //appPublicDir + '/css/reset.css',
             appPublicDir + '/css/common.css',
-            appPublicDir + '/css/fieldset.css',
-            appPublicDir + '/css/schedule.css',
+            //appPublicDir + '/css/fieldset.css',
+            //appPublicDir + '/css/schedule.css',
             appPublicDir + '/css/ng.css',
             appPublicDir + '/css/app.css',
             appPublicDir + '/css/bs_custom.css',
@@ -41,14 +41,12 @@ const appTask = function() {
         
     // images
     gulp.src([
-            appPublicDir + '/images/header-ipad_01.png',
-            appPublicDir + '/images/National_Games.png',
+            appPublicDir + '/images/*.png',
+            appPublicDir + '/images/*.ico',
             
         ])
         .pipe(gulp.dest('web/images'));
         
-   
-
 };
 gulp.task('app',appTask);
 
@@ -83,7 +81,9 @@ const watchTask = function()
     // Why the warnings, seems to work fine
     gulp.watch([
         appPublicDir + '/css/*.css',
-        appPublicDir + '/js/*.js'
+        appPublicDir + '/js/*.js',
+        appPublicDir + '/images/*.png',
+        appPublicDir + '/images/*.ico',
     ],  ['app']);
 };
 gulp.task('watch',watchTask);

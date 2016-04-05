@@ -70,6 +70,7 @@ EOD;
     protected function renderSearchForm(array $project, array $search)
     {
         $html = <<<EOD
+<div class="container">
 <form method="post" action="{$this->generateUrl('app_schedule_game')}" class="cerad_common_form1">
 <fieldset><table id="schedule-select"><tr>
 EOD;
@@ -81,12 +82,18 @@ EOD;
         }
         $html .= <<<EOD
   </tr>
-  <tr></table>
-  <div class="layout-block">
-    <div class="controls"><button type="submit" id="form_search"" class="submit">Search</button></div>
-    <div style="padding: 10px 0 0 25%; float: left;"><a href="/project/natgames/schedule-game.xls">Export to Excel</a></div>
-    <div style="padding: 10px 0 0 4em; float: left;"><a href="/project/natgames/schedule-game.csv">Export to Text</a></div>
-  </div>
+  </table>
+          <div class="col-xs-10">
+          <div class="row float-right">
+      <button type="submit" id="form_search" class="btn btn-sm btn-primary submit">Search</button>
+<a href=href="/project/natgames/schedule-game.xls" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+<a href=href="/project/natgames/schedule-ga,e.csv" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a> 
+      </div>
+      </div>
+      <div class="clear-both"></div>
+      <br/>
+      <legend></legend>
+
 </fieldset>
 </form>
 EOD;
@@ -95,7 +102,7 @@ EOD;
     protected function renderSearchCheckbox($name,$label,$items,$selected)
     {
         $html = <<<EOD
-<table border="1">
+<table>
   <tr><th colspan="30">{$label}</th></tr>
     <td align="center">All<br />
     <input type="checkbox" name="search[{$name}][]" class="cerad-checkbox-all" value="All" /></td>
@@ -110,6 +117,7 @@ EOD;
         $html .= <<<EOD
   </tr>
 </table>
+</div>
 EOD;
         return $html;
     }

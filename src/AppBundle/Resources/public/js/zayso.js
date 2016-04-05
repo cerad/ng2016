@@ -28,8 +28,13 @@ Cerad.alert = function(msg)
  * 23 June 2014
  * Checking the all box when the rest of the boxes are unchecked should have caused them to be checked
  * Stupid error.  Still used attr when checking the boxes.
+ *
+ * 5 Apr 2016
+ * Fixed the checkbox call.  JS library change?
+ * 
  */
-Cerad.checkboxAll = function(e)
+
+$('.cerad-checkbox-all').change( function(e)
 {   
     var nameRoot = $(this).attr('name');
         
@@ -40,6 +45,4 @@ Cerad.checkboxAll = function(e)
     var checked = $(this).prop('checked') ? true : false;
         
     $(group).prop('checked', checked);
-};
-
-
+});
