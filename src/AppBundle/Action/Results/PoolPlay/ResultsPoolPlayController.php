@@ -77,9 +77,9 @@ class ResultsPoolPlayController extends AbstractController
         $content = <<<EOD
 <div id="layout-block">
 {$this->renderPoolLinks()}
-<br />
+
 {$this->renderLegend()}
-<hr style="border: 4px  ridge" />
+<!-- <hr style="border: 4px  ridge" /> -->
 {$this->renderPools()}
 <br />
 </div>
@@ -200,8 +200,9 @@ EOD;
     {
         $html = <<<EOD
 <div id="layout-block">
+<legend class="float-right">Pool Team Standings : {$poolKey}</legend>
+
 <table class="standings" border = "1">
-<tr class="tbl-title"><th colspan="16">Pool Team Standings : {$poolKey}</th></tr>
 <tr class="tbl-hdr">
   <th>Pool Slot</th>
   <th>Team</th>
@@ -226,7 +227,7 @@ EOD;
         $html .= <<<EOD
 </table>
 </div>
-<br/>
+
 EOD;
 
         return $html;
@@ -269,7 +270,7 @@ EOD;
 <div id="layout-block">
 <table class="results" border = "1">
 <thead>
-<tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolKey}</th></tr>
+<!-- <tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolKey}</th></tr> -->
 <tr class="tbl-hdr">
   <th>Game</th>
   <th>Report</th>
