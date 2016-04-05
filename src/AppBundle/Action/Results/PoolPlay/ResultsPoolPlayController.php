@@ -330,14 +330,14 @@ EOD;
   <td>{$game['report']['status']}</td>
   <td>{$gameStart}</td>
   <td><a href="">{$game['field_name']}</a></td>
-  <td>{$homeTeam['group_slot']}<br/>{$awayTeam['group_slot']}</td>
-  <td class="text-left">{$this->escape($homeTeam['name'])}<br/>{$this->escape($awayTeam['name'])}</td>
-  <td>{$homeTeamReport['goalsScored']}<br/>{$awayTeamReport['goalsScored']}</td>
-  <td>{$homeTeamReport['pointsEarned']}<br/>{$awayTeamReport['pointsEarned']}</td>
-  <td>{$homeSportsmanship}<br/>{$awaySportsmanship}</td>
-  <td>{$homePlayerWarnings}<br/>{$awayPlayerWarnings}</td>
-  <td>{$homePlayerEjections}<br/>{$awayPlayerEjections}</td>
-  <td>{$homeTotalEjections}<br/>{$awayTotalEjections}</td>
+  <td>{$homeTeam['group_slot']}<hr class="seperator"/>{$awayTeam['group_slot']}</td>
+  <td class="text-left">{$this->escape($homeTeam['name'])}<hr class="seperator"/>{$this->escape($awayTeam['name'])}</td>
+  <td>{$homeTeamReport['goalsScored']}<hr class="seperator"/>{$awayTeamReport['goalsScored']}</td>
+  <td>{$homeTeamReport['pointsEarned']}<hr class="seperator"/>{$awayTeamReport['pointsEarned']}</td>
+  <td>{$homeSportsmanship}<hr class="seperator"/>{$awaySportsmanship}</td>
+  <td>{$homePlayerWarnings}<hr class="seperator"/>{$awayPlayerWarnings}</td>
+  <td>{$homePlayerEjections}<hr class="seperator"/>{$awayPlayerEjections}</td>
+  <td>{$homeTotalEjections}<hr class="seperator"/>{$awayTotalEjections}</td>
 </tr>
 EOD;
 
