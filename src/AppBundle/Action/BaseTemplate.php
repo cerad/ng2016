@@ -62,7 +62,7 @@ EOT;
 <<<EOT
     <div id="banner">
           <h1>{$this->escape($this->project['title'])}</h1>
-    </div
+    </div>
 EOT;
       } else {
           $html =
@@ -120,7 +120,7 @@ EOT;
     {
         $html =
 <<<EOT
-        <nav class="navbar navbar-default" role="navigation">
+        <nav class="navbar navbar-default">
           
           <div class="container">
              <div class="navbar-header">
@@ -157,7 +157,7 @@ EOT;
         return
 <<<EOD
         <ul class="nav navbar-nav">
-          <li><a href="http://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" height="20px"></a></li>
+          <li><a href="http://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" height="20" alt="National Games"></a></li>
           {$this->renderTopMenuSchedules()}
           {$this->renderTopMenuResults()}
         </ul>
