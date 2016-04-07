@@ -25,13 +25,13 @@ parameters:
         support:
             name: "Art Hundiak"
             email: "ahundiak@gmail.com"
-            subject: "NG2016 ZAYSO question..."
+            subject: "NG2016%20ZAYSO%20question..."
             phone: 256-457-5943
               
         schedules:
             name: "Rick Roberts"
             email: "web.ng2016@gmail.com"
-            subject: "NG2016 schedule question..."
+            subject: "NG2016%20schedule%20question..."
             phone: 310-920-8209
             
         assignor:

@@ -204,20 +204,20 @@ EOD;
 
 <table class="standings" border = "1">
 <tr class="tbl-hdr">
-  <th>Pool Slot</th>
-  <th>Team</th>
-  <th align="center">TPE</th>
-  <th align="center">WP</th>
-  <th align="center">GT</th>
-  <th align="center">GP</th>
-  <th align="center">GW</th>
-  <th align="center">GS</th>
-  <th align="center">GA</th>
-  <th align="center">YC</th>
-  <th align="center">RC</th>
-  <th align="center">TE</th>
-  <th align="center">SP</th>
-  <th align="center">SF</th>
+  <th class="text-center">Pool Slot</th>
+  <th class="text-center">Team</th>
+  <th class="text-center">TPE</th>
+  <th class="text-center">WP</th>
+  <th class="text-center">GT</th>
+  <th class="text-center">GP</th>
+  <th class="text-center">GW</th>
+  <th class="text-center">GS</th>
+  <th class="text-center">GA</th>
+  <th class="text-center">YC</th>
+  <th class="text-center">RC</th>
+  <th class="text-center">TE</th>
+  <th class="text-center">SP</th>
+  <th class="text-center">SF</th>
 </tr>
 EOD;
         foreach($poolTeams as $poolTeamReport) {
@@ -243,18 +243,18 @@ EOD;
 <tr>
   <td>{$gameTeam['group_slot']}</td>
   <td class="text-left">{$gameTeam['name']}</td>
-  <td align="center">{$poolTeamReport['pointsEarned']}</td>
-  <td align="center">{$poolTeamReport['winPercent']}</td>
-  <td align="center">{$poolTeamReport['gamesTotal']}</td>
-  <td align="center">{$poolTeamReport['gamesPlayed']}</td>
-  <td align="center">{$poolTeamReport['gamesWon']}</td>
-  <td align="center">{$poolTeamReport['goalsScored']}</td>
-  <td align="center">{$poolTeamReport['goalsAllowed']}</td>
-  <td align="center">{$poolTeamReport['playerWarnings']}</td>
-  <td align="center">{$poolTeamReport['playerEjections']}</td>
-  <td align="center">{$totalEjections}</td>
-  <td align="center">{$poolTeamReport['sportsmanship']}</td>
-  <td align="center">{$gameTeam['points']}</td>
+  <td class="text-center">{$poolTeamReport['pointsEarned']}</td>
+  <td class="text-center">{$poolTeamReport['winPercent']}</td>
+  <td class="text-center">{$poolTeamReport['gamesTotal']}</td>
+  <td class="text-center">{$poolTeamReport['gamesPlayed']}</td>
+  <td class="text-center">{$poolTeamReport['gamesWon']}</td>
+  <td class="text-center">{$poolTeamReport['goalsScored']}</td>
+  <td class="text-center">{$poolTeamReport['goalsAllowed']}</td>
+  <td class="text-center">{$poolTeamReport['playerWarnings']}</td>
+  <td class="text-center">{$poolTeamReport['playerEjections']}</td>
+  <td class="text-center">{$totalEjections}</td>
+  <td class="text-center">{$poolTeamReport['sportsmanship']}</td>
+  <td class="text-center">{$gameTeam['points']}</td>
 </tr>
 EOD;
     }
@@ -270,18 +270,18 @@ EOD;
 <thead>
 <!-- <tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolKey}</th></tr> -->
 <tr class="tbl-hdr">
-  <th>Game</th>
-  <th>Report</th>
-  <th>{$this->escape('Day & Time')}</th>
-  <th>Field</th>
-  <th>Pool</th>
-  <th>Home vs Away</th>
-  <th>GS</th>
-  <th>PE</th>
-  <th>SP</th>
-  <th>YC</th>
-  <th>RC</th>
-  <th>TE</th>
+  <th class="text-center">Game</th>
+  <th class="text-center">Report</th>
+  <th class="text-center">{$this->escape('Day & Time')}</th>
+  <th class="text-center">Field</th>
+  <th class="text-center">Pool</th>
+  <th class="text-center">Home vs Away</th>
+  <th class="text-center">GS</th>
+  <th class="text-center">PE</th>
+  <th class="text-center">SP</th>
+  <th class="text-center">YC</th>
+  <th class="text-center">RC</th>
+  <th class="text-center">TE</th>
 </tr>
 </thead>
 </tbody>

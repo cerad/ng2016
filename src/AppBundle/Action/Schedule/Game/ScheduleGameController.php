@@ -142,7 +142,6 @@ EOD;
       <th class="schedule-time" >Time</th>
       <th class="schedule-field">Field</th>
       <th class="schedule-group">Group</th>
-      <th class="schedule-blank">&nbsp;</th>
       <th class="schedule-slot" >Slot</th>
       <th class="schedule-teams">Home / Away</th>
     </tr>
@@ -171,15 +170,8 @@ EOD;
   <td class="schedule-time" >{$projectGame['time']}</td>
   <td class="schedule-field">{$projectGame['field_name']}</td>
   <td class="schedule-group">{$projectGame['group_key']}</td>
-  <td>&nbsp;</td>
-  <td><table>
-    <tr><td>{$projectGameTeamHome['group_slot']}</td></tr>
-    <tr><td>{$projectGameTeamAway['group_slot']}</td></tr>
-  </table></td>
-  <td><table>
-    <tr><td class="text-left">{$projectGameTeamHome['name']}</td></tr>
-    <tr><td class="text-left">{$projectGameTeamAway['name']}</td></tr>
-  </table></td>
+    <td>{$projectGameTeamHome['group_slot']}<hr class="seperator">{$projectGameTeamAway['group_slot']}</td>
+  <td class="text-left">{$projectGameTeamHome['name']}<hr class="seperator">{$projectGameTeamAway['name']}</td>
 </tr>
 EOD;
         }
