@@ -233,7 +233,7 @@ EOT;
     {
         return
 <<<EOT
-            <li><a href="{$this->generateUrl('cerad_user_logout')}">SIGN OUT</a></li>
+            <li><a href="{$this->generateUrl('user_logout')}">SIGN OUT</a></li>
 EOT;
     }
     

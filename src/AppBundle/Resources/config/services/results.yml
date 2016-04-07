@@ -5,11 +5,11 @@ services:
 
     app_standings_calculator:
         class: AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator
-        arguments: ['@cerad_project_factory']
+        arguments: ['@project_factory']
 
     app_action_results_repository:
         class: AppBundle\Action\Schedule\ScheduleRepository
-        arguments: ['@doctrine.dbal.project_connection']
+        arguments: ['@project_connection']
 
     app_action_results_poolplay_controller:
         class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayController

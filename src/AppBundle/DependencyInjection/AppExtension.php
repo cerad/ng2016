@@ -25,6 +25,7 @@ class AppExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $loader->load('services/app.yml');
+        $loader->load('services/user.yml');
         $loader->load('services/game.yml');
         $loader->load('services/project.yml');
         $loader->load('services/results.yml');

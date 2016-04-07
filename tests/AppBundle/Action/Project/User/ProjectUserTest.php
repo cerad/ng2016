@@ -3,7 +3,7 @@ namespace Tests\AppBundle\Action\Project\User;
 
 use AppBundle\Action\Project\User\ProjectUser;
 
-class ProjectUsertest extends \PHPUnit_Framework_TestCase
+class ProjectUserTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {

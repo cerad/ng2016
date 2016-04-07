@@ -1,8 +1,11 @@
 services:
 
+    project_connection:
+        alias: doctrine.dbal.project_connection
+
     project_factory:
         class: AppBundle\Action\Project\ProjectFactory
 
     project_person_repository:
         class: AppBundle\Action\Project\Person\ProjectRersonRepository
-        arguments: ['@doctrine.dbal.users_connection','@project_factory']
+        arguments: ['@user_connection','@project_factory']

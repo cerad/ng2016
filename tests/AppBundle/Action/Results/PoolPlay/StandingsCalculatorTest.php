@@ -3,7 +3,7 @@ namespace Tests\AppBundle\Action\Results\PoolPlay;
 
 use AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 
 class StandingsCalculatorTest extends \PHPUnit_Framework_TestCase
 {

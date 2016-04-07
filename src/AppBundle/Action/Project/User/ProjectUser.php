@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\Project\User;
 
-use AppBundle\ArrayAccessTrait;
+use AppBundle\Common\ArrayAccessTrait;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
@@ -22,6 +22,9 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     
     public $roles = [];
 
+    public $name;
+    public $personKey;
+    
     public function getRoles()
     {
         return $this->roles;

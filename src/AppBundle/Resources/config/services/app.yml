@@ -35,7 +35,7 @@ services:
         parent: app_action_abstract_controller
         arguments:
             - '@app_action_welcome_page_template'
-            - '@cerad_user_login_form'
+            - '@user_login_form'
 
     app_action_welcome_page_template:
         class: AppBundle\Action\Welcome\WelcomePageTemplate

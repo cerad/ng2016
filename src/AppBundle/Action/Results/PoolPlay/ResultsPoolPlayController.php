@@ -29,9 +29,9 @@ class ResultsPoolPlayController extends AbstractController
         $this->scheduleRepository  = $scheduleRepository;
         $this->standingsCalculator = $standingsCalculator;
         
-        session_abort();
-        session_start(); 
-        $_SESSION["RETURN_TO_URL"] = $_SERVER['REQUEST_URI'];
+        //session_abort();
+        //session_start();
+        //$_SESSION["RETURN_TO_URL"] = $_SERVER['REQUEST_URI'];
 
     }
     protected function findProjectGames($params)

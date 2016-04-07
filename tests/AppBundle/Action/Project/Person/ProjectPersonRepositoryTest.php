@@ -1,7 +1,7 @@
 <?php
 namespace Tests\AppBundle\Action\Project\Person;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 

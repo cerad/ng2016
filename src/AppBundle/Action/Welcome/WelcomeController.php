@@ -1,8 +1,7 @@
 <?php
-
 namespace AppBundle\Action\Welcome;
 
-use Cerad\Bundle\UserBundle\Action\Login\LoginForm;
+use AppBundle\Action\Project\User\Login\LoginForm;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

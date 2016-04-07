@@ -1,0 +1,23 @@
+services:
+
+    user_connection:
+        alias: doctrine.dbal.user_connection
+
+    user_provider:
+        class:  AppBundle\Action\Project\User\ProjectUserProvider
+        arguments:
+            - '@user_connection'
+            - '@event_dispatcher'
+            - '@logger'
+
+    user_encoder:
+        class:  AppBundle\Action\Project\User\ProjectUserEncoder
+        arguments:
+            - '%cerad_user_master_password%'
+
+    user_login_form:
+        class: AppBundle\Action\Project\User\Login\LoginForm
+        arguments:
+            - '@security.authentication_utils'
+            - '@security.csrf.token_manager'
+            - '@router'
