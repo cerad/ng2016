@@ -42,7 +42,7 @@ EOD;
         $user = $this->getUser();
 
         return <<<EOD
-User: {$this->escape($user->getAccountName())}
+User: {$this->escape($user->name)}
 EOD;
     }
     /* ====================================================
@@ -55,7 +55,7 @@ EOD;
         return <<<EOD
 <table class="account-person-list app_table" border="1">
   <tr><th colspan="2">Account Information</th></tr>
-  <tr><td>Name:   </td><td>{$user->getAccountName()}</td></tr>
+  <tr><td>Name:   </td><td>{$user['name']}</td></tr>
   <tr><td>Account:</td><td>{$user->getUsername()}</td></tr>
   <tr><td style="text-align: center;" colspan="2">
     <a href="/person-person/update/1">

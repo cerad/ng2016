@@ -1,9 +1,0 @@
-cerad_user_login:
-    path:  /login
-    defaults: { _controller: CeradTournBundle:AccountUser/AccountUserLogin:login }
-
-cerad_user_login_check:
-    path:  /login-check
-
-cerad_user_logout:
-    path:  /logout

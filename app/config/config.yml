@@ -3,6 +3,7 @@ imports:
     - { resource: doctrine.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: users.yml    }
     - { resource: projects/AYSONationalGames2014.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
@@ -19,10 +20,10 @@ framework:
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
-    validation:      { enable_annotations: true }
+    validation:      { enable_annotations: false }
     #serializer:      { enable_annotations: true }
-    templating:
-        engines: ['twig']
+    #templating:
+    #    engines: ['php']
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -35,12 +36,12 @@ framework:
     assets: ~
 
 # Twig Configuration
-twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
-    paths:
-        "%kernel.root_dir%/../src/AppBundle/Action":  App
-        "%kernel.root_dir%/../src/UserBundle/Action": CeradUser
+#twig:
+#    debug:            "%kernel.debug%"
+#    strict_variables: "%kernel.debug%"
+#    paths:
+#        "%kernel.root_dir%/../src/AppBundle/Action":  App
+#        "%kernel.root_dir%/../src/UserBundle/Action": CeradUser
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -1,11 +1,9 @@
 <?php
 namespace Tests\AppBundle\Action\Results\PoolPlay;
 
-use AppBundle\Action\Results\PoolPlay\PointCalculator;
-
 use AppBundle\Action\Results\PoolPlay\Calculator\PointsCalculator;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 
 class PointsCalculatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,8 +1,32 @@
 <?php
-namespace Cerad\Bundle\ProjectBundle;
+namespace AppBundle\Action\Project;
 
 class ProjectFactory
 {
+    public function createProjectPerson()
+    {
+        return [
+            'projectKey' => null,
+            'personKey'  => null,
+            'orgKey'     => null, // sar etc
+
+            'name'   => null, // Unique
+            'email'  => null, // Unique?
+            'phone'  => null,
+            'badge'  => null, // Referee Badge
+            'gender' => null,
+            'age'    => null,
+
+            'notes'  => null,
+            'status' => 'Active', // Verified?
+            
+            'plans' => [
+                'willAttend'  => 'no', // ROLE_ATTENDEE
+                'willReferee' => 'no', // ROLE_REFEREE
+            ],
+            'roles' => [],
+        ];
+    }
     public function createProjectGameReport($game = [])
     {
         return [
