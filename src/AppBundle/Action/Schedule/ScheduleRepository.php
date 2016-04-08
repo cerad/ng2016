@@ -59,7 +59,7 @@ class ScheduleRepository
         }
         return $projectTeams;
     }
-    public function findProjectGamesForProjectTeamKeys(array $projectTeamKeys)
+    public function findProjectGamesForProjectTeamKeys(array $projectTeamKeys =  array('0'))
     {
         if (count($projectTeamKeys) < 1) return [];
 

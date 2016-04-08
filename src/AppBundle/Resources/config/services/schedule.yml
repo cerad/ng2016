@@ -22,6 +22,12 @@ services:
         arguments:
             - '@app_action_schedule_repository'
 
+    schedule_team_view_xls:
+        class: AppBundle\Action\Schedule\Team\ScheduleTeamViewXls
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+
     app_action_schedule_game_controller:
         class: AppBundle\Action\Schedule\Game\ScheduleGameController
         parent: app_action_abstract_controller

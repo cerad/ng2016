@@ -11,19 +11,19 @@ use Symfony\Component\HttpFoundation\Request;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
-class ScheduleTeamViewCsv extends AbstractExport 
+class ScheduleTeamViewXls extends AbstractExport 
 {
     private $outFilename;
-
-    private $csvWriterType = 'CSV';
-    private $csvExt = '.csv';
-    private $csvContentType = "text/csv"; 
-        
+    
+    private $xlsWriterType = 'Excel2007';
+    private $xlsExt = '.xlsx';
+    private $xlsContentType = "application/vnd.ms-excel"; 
+    
     public function __construct(ScheduleRepository $scheduleRepository)
     {
         parent::__construct($scheduleRepository);
         
-        $this->outFilename =  $this->outFileNameTeamSchedule . $this->csvExt;
+        $this->outFilename =  $this->outFileNameTeamSchedule . $this->xlsExt;
     }
     public function __invoke(Request $request)
     {
@@ -32,11 +32,11 @@ class ScheduleTeamViewCsv extends AbstractExport
         // generate the response
         $response = $this->generateResponse(
             $this->scheduleRepository->findProjectGamesForProjectTeamKeys($projectTeamKeys),
-            $this->csvWriterType,
-            $this->csvContentType,
+            $this->xlsWriterType,
+            $this->xlsContentType,
             $this->outFilename
         );
-            
+
         return $response;
     
     }
