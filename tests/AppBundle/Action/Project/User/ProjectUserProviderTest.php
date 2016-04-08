@@ -13,6 +13,8 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var  Connection */
     protected $userConn;
 
+    protected $users;
+
     public function setUp()
     {
         $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../../app/config/parameters.yml'));
@@ -32,26 +34,35 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         $this->userConn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
 
-        //$this->projectPersonRepository = new ProjectPersonRepository($conn, new ProjectFactory());
+        $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../../app/config/users.yml'));
+        $this->users = $params['parameters']['users'];
+
     }
     public function testLoadUserByUsername()
     {
-        $provider = new ProjectUserProvider($this->userConn);
+        $provider = new ProjectUserProvider($this->userConn,$this->users);
 
         $username = 'ahundiak@gmail.com';
-
         $user = $provider->loadUserByUsername($username);
-
         $this->assertEquals($username,$user->getUsername());
+
+        $username = 'referee';
+        $user = $provider->loadUserByUsername($username);
+        $this->assertEquals($username,$user['username']);
+        $this->assertEquals('Referee',$user['name']);
     }
     public function testRefreshUser()
     {
-        $provider = new ProjectUserProvider($this->userConn);
+        $provider = new ProjectUserProvider($this->userConn,$this->users);
         $user = new ProjectUser();
         $user->id = 10;
 
         $user = $provider->refreshUser($user);
-
         $this->assertEquals('godder4@verizon.net',$user->getUsername());
+
+        $user['id'] = -2;
+        $user = $provider->refreshUser($user);
+        $this->assertEquals('assignor@fake.com',$user['email']);
+
     }
 }

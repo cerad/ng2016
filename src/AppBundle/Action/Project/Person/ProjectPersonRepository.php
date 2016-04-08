@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\Project\Person;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 
 use Doctrine\DBAL\Connection;
 

@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\GameReport;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 
 use Doctrine\DBAL\Connection;
 

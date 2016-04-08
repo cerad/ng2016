@@ -15,6 +15,7 @@ security:
     role_hierarchy:
         ROLE_USER:           []
         ROLE_STAFF:          [ROLE_USER]
+        ROLE_REFEREE:        [ROLE_USER]
 
         ROLE_SCORE_ENTRY:    [ROLE_STAFF]
         ROLE_SCORE_ADMIN:    [ROLE_STAFF, ROLE_SCORE_ENTRY]

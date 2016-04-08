@@ -2,7 +2,7 @@
     "name": "cerad/ng2016",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "AYSO National Games 2016",
     "autoload": {
         "psr-4": { "": "src/", "Cerad\\Bundle\\": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
@@ -20,7 +20,8 @@
         "symfony/monolog-bundle": "^2.8",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "^2.0"
+        "incenteev/composer-parameter-handler": "^2.0",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

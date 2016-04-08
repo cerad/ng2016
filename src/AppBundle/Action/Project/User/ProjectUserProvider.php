@@ -7,10 +7,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-use Psr\Log\LoggerInterface;
-
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
@@ -23,20 +19,21 @@ class ProjectUserProvider implements UserProviderInterface
     /** @var  Connection */
     private $userConn;
 
-    protected $logger;
-    protected $dispatcher;
-    protected $repository;
-   
+    private $users;
+    private $usersMap = [];
+
     public function __construct
     (
         Connection $userConn,
-        EventDispatcherInterface $dispatcher = null, 
-        LoggerInterface $logger = null
+        $users = []
     )
     {
-        $this->logger     = $logger;
-        $this->dispatcher = $dispatcher;
-        $this->userConn   = $userConn;
+        $this->users    = $users;
+        $this->userConn = $userConn;
+
+        foreach($users as $username => $user) {
+            $this->usersMap[(int)$user['id']] = $username;
+        }
     }
     /**
      * @return QueryBuilder
@@ -74,18 +71,39 @@ class ProjectUserProvider implements UserProviderInterface
             return null;
         }
         $user = new ProjectUser();
-        $user->id       = $row['id'];
-        $user->username = $row['username'];
-        $user->email    = $row['email'];
-        $user->enabled  = $row['enabled'];
-        $user->salt     = $row['salt'];
-        $user->password = $row['password'];
+        $user['id']       = $row['id'];
+        $user['username'] = $row['username'];
+        $user['email']    = $row['email'];
+        $user['enabled']  = $row['enabled'];
+        $user['salt']     = $row['salt'];
+        $user['password'] = $row['password'];
 
-        $user->roles = unserialize($row['roles']);
+        $user['roles'] = unserialize($row['roles']);
 
-        $user->name      = $row['name'];
-        $user->personKey = $row['personKey'];
+        $user['name']      = $row['name'];
+        $user['personKey'] = $row['personKey'];
         
+        return $user;
+    }
+    /**
+     * @param $username string
+     * @return ProjectUser|null
+     */
+    private function loadUserFromMemory($username)
+    {
+        $row = isset($this->users[$username]) ? $this->users[$username] : null;
+        if (!$row) return null;
+
+        $user = new ProjectUser();
+
+        $user['username'] = $username;
+
+        $user['id']    = $row['id'];
+        $user['name']  = $row['name'];
+        $user['email'] = $row['email'];
+
+        $user['roles'] = [$row['role']];
+
         return $user;
     }
     /**
@@ -102,7 +120,10 @@ class ProjectUserProvider implements UserProviderInterface
         $qb->setParameter('email',   $username);
 
         $user = $this->loadUser($qb);
-
+        if ($user) {
+            return $user;
+        }
+        $user = $this->loadUserFromMemory($username);
         if ($user) {
             return $user;
         }
@@ -144,6 +165,10 @@ class ProjectUserProvider implements UserProviderInterface
 
         if ($user) {
             return $user;
+        }
+        $username = isset($this->usersMap[$userId]) ? $this->usersMap[$userId] : null;
+        if ($username) {
+            return $this->loadUserFromMemory($username);
         }
         throw new UsernameNotFoundException('User ID Not Found: ' . $userId);
     }

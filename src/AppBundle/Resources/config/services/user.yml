@@ -7,8 +7,7 @@ services:
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:
             - '@user_connection'
-            - '@event_dispatcher'
-            - '@logger'
+            - '%users%'
 
     user_encoder:
         class:  AppBundle\Action\Project\User\ProjectUserEncoder
