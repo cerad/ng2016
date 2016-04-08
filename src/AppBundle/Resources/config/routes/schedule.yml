@@ -1,7 +1,13 @@
 app_schedule_team:
-    path: /team
+    path: /team.{_format}
     defaults:
-        _controller: app_action_schedule_team_controller
+        _format: html
+        _controller: schedule_team_controller
+        _view_html:  schedule_team_view_html
+        _view_xls:   schedule_team_view_xls
+        _view_csv:   schedule_team_view_csv
+        _view_pdf:   schedule_team_view_pdf
+        _view_json:  schedule_team_view_json
 
 app_schedule_game:
     path: /game

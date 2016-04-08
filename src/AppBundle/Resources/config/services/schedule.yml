@@ -4,9 +4,21 @@ services:
         class: AppBundle\Action\Schedule\ScheduleRepository
         arguments: ['@doctrine.dbal.project_connection']
 
-    app_action_schedule_team_controller:
+    schedule_team_controller:
         class: AppBundle\Action\Schedule\Team\ScheduleTeamController
         parent: app_action_abstract_controller
+        arguments:
+            - '@app_action_schedule_repository'
+
+    schedule_team_view_html:
+        class: AppBundle\Action\Schedule\Team\ScheduleTeamView
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+
+    schedule_team_view_csv:
+        class: AppBundle\Action\Schedule\Team\ScheduleTeamViewCsv
+        parent: abstract_view
         arguments:
             - '@app_action_schedule_repository'
 
