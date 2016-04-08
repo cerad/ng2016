@@ -1,6 +1,5 @@
 <?php
-
-namespace Cerad\Bundle\UserBundle\Security;
+namespace AppBundle\Action\Project\User;
 
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -8,9 +7,12 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
  * Defaults to sha512
  * Then tries legacy md5
  * Also supports master password
+ * TODO: use latest salt free encoding routine
  */
-class UserEncoder extends MessageDigestPasswordEncoder
+class ProjectUserEncoder extends MessageDigestPasswordEncoder
 {
+    private $master;
+    
     public function __construct($master, $algorithm = 'sha512', $encodeHashAsBase64 = true, $iterations = 5000)
     {
         parent::__construct($algorithm,$encodeHashAsBase64,$iterations);

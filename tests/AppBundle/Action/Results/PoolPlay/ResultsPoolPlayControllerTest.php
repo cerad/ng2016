@@ -29,7 +29,7 @@ class ResultsPoolPlayControllerTest extends WebTestCase
 
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Pool Games Results : U14B Core PP D")')->count()
+            $crawler->filter('html:contains("Pool Team Standings : U14B Core PP D")')->count()
         );
 
     }

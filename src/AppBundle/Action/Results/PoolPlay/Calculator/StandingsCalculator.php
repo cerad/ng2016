@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\Results\PoolPlay\Calculator;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 
 class StandingsCalculator
 {

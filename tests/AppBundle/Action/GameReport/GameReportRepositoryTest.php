@@ -1,7 +1,7 @@
 <?php
 namespace Tests\AppBundle\Action\Results\PoolPlay;
 
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 use AppBundle\Action\GameReport\GameReportRepository;
 
 use Symfony\Component\Yaml\Yaml;

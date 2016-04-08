@@ -5,16 +5,17 @@ security:
     hide_user_not_found: false
 
     encoders:
-        Cerad\Bundle\UserBundle\Entity\User:
-            id: cerad_user_encoder
+        AppBundle\Action\Project\User\ProjectUser:
+            id: user_encoder
 
     providers:
-        cerad_user_provider:
-            id: cerad_user_provider
+        user_provider:
+            id: user_provider
 
     role_hierarchy:
         ROLE_USER:           []
         ROLE_STAFF:          [ROLE_USER]
+        ROLE_REFEREE:        [ROLE_USER]
 
         ROLE_SCORE_ENTRY:    [ROLE_STAFF]
         ROLE_SCORE_ADMIN:    [ROLE_STAFF, ROLE_SCORE_ENTRY]
@@ -53,9 +54,9 @@ security:
             switch_user: true
 
             form_login:
-                provider:            cerad_user_provider
-                login_path:          cerad_user_login
-                check_path:          cerad_user_login_check
+                provider:            user_provider
+                login_path:          user_login
+                check_path:          user_login_check
                 default_target_path: app_index
 
                 username_parameter:  _username
@@ -66,7 +67,7 @@ security:
                 csrf_token_generator: security.csrf.token_manager
 
             logout:
-                path:   cerad_user_logout
+                path:   user_logout
                 target: app_index
 
             remember_me:
@@ -76,5 +77,3 @@ security:
                 path:     app_index
                 domain:   ~
                 remember_me_parameter: _remember_me
-
-

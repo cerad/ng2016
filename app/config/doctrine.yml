@@ -12,7 +12,7 @@ doctrine:
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-            users:
+            user:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
@@ -42,9 +42,9 @@ doctrine:
                     #CeradUserBundle:   ~
                     #CeradPersonBundle: ~
 
-            users:
-               connection: users
-               mappings:
-                    CeradUserBundle: ~
+            #users:
+            #   connection: users
+            #   mappings:
+            #        CeradUserBundle: ~
                         
                        

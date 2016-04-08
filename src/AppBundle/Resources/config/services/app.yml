@@ -20,6 +20,14 @@ services:
            - ['setBaseTemplate', ['@app_base_template']]
            - ['setProject', ['%app_project%']]
 
+    abstract_view:
+        abstract: true
+        calls:
+           - ['setRouter',  ['@router']]
+           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+           - ['setBaseTemplate', ['@app_base_template']]
+           - ['setProject', ['%app_project%']]
+
     app_action_abstract_controller:
         abstract: true
         calls: [[setContainer, ['@service_container']]]
@@ -35,7 +43,7 @@ services:
         parent: app_action_abstract_controller
         arguments:
             - '@app_action_welcome_page_template'
-            - '@cerad_user_login_form'
+            - '@user_login_form'
 
     app_action_welcome_page_template:
         class: AppBundle\Action\Welcome\WelcomePageTemplate

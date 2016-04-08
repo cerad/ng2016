@@ -1,7 +1,3 @@
-cerad_user:
-    resource: "@CeradUserBundle/Resources/config/routing.yml"
-    prefix:   /user
-
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
     prefix: /

@@ -5,7 +5,7 @@ use AppBundle\Action\PageTemplate;
 
 use Symfony\Component\HttpKernel\Kernel;
 
-use Cerad\Bundle\UserBundle\Action\Login\LoginForm;
+use AppBundle\Action\Project\User\Login\LoginForm;
 
 class WelcomePageTemplate extends PageTemplate
 {

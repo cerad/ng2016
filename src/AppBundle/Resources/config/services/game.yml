@@ -2,7 +2,7 @@ services:
 
     game_report_repository:
         class: AppBundle\Action\GameReport\GameReportRepository
-        arguments: ['@doctrine.dbal.project_connection','@cerad_project_factory']
+        arguments: ['@project_connection','@project_factory']
 
     game_report_update_view:
         class: AppBundle\Action\GameReport\Update\GameReportUpdateView
@@ -14,5 +14,5 @@ services:
         arguments:
             - '@game_report_repository'
             - '@app_points_calculator'
-            - '@cerad_project_factory'
+            - '@project_factory'
 
