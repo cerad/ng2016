@@ -41,18 +41,27 @@ EOT;
         return  <<<EOT
 {$this->renderError()}
 <form action="{$loginCheckPath}" method="post">
+<div class="col-xs-3">
+<div class="row">
     <label for="username">Username:</label>
     <input type="text" id="username" name="_username" value="{$lastUsername}" /><br />
+</div>
+<div class="row">
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="_password" /><br />
-
+</div>
+<div class="row">
     <label for="remember_me" style="display:none">Remember Me:</label>
     <input type="checkbox" id="remember_me" name="_remember_me" style="display:none" />
 
     <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
+</div>
 
-    <button type="submit">Sign In</button>
+ <div class="row">
+      <button type="submit" class="float-right btn btn-sm btn-primary submit"><span class="glyphicon glyphicon-edit"></span>Sign In</button>
+</div>
+</div>
 </form>
 EOT;
     }
