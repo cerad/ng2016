@@ -28,8 +28,26 @@ services:
         arguments:
             - '@app_action_schedule_repository'
 
-    app_action_schedule_game_controller:
+    schedule_game_controller:
         class: AppBundle\Action\Schedule\Game\ScheduleGameController
         parent: app_action_abstract_controller
+        arguments:
+            - '@app_action_schedule_repository'
+
+    schedule_game_view_html:
+        class: AppBundle\Action\Schedule\Game\ScheduleGameView
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+
+    schedule_game_view_csv:
+        class: AppBundle\Action\Schedule\Game\ScheduleGameViewCsv
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+
+    schedule_game_view_xls:
+        class: AppBundle\Action\Schedule\Game\ScheduleGameViewXls
+        parent: abstract_view
         arguments:
             - '@app_action_schedule_repository'

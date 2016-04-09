@@ -4,19 +4,15 @@ namespace AppBundle\Action\Schedule\Team;
 
 use AppBundle\Action\AbstractController;
 
-use AppBundle\Action\Schedule\ScheduleRepository;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ScheduleTeamController extends AbstractController
 {
     /** @var  ScheduleRepository */
-    private $scheduleRepository; // No longer used
 
-    public function __construct(ScheduleRepository $scheduleRepository)
+    public function __construct()
     {
-        $this->scheduleRepository = $scheduleRepository;
     }
     public function __invoke(Request $request)
     {

@@ -23,7 +23,7 @@ class ScheduleTeamViewCsv extends AbstractExport
     {
         parent::__construct($scheduleRepository);
         
-        $this->outFilename =  $this->outFileNameTeamSchedule . $this->csvExt;
+        $this->outFilename =  $this->outFileNameSchedule . 'Team' . $this->csvExt;
     }
     public function __invoke(Request $request)
     {

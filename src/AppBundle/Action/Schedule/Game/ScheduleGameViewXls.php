@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Schedule\Team;
+namespace AppBundle\Action\Schedule\Game;
 
 use AppBundle\Action\Schedule\AbstractExport;
 
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
-class ScheduleTeamViewXls extends AbstractExport 
+class ScheduleGameViewXls extends AbstractExport 
 {
     private $outFilename;
     
@@ -23,15 +23,15 @@ class ScheduleTeamViewXls extends AbstractExport
     {
         parent::__construct($scheduleRepository);
         
-        $this->outFilename =  $this->outFileNameSchedule . 'Team' . $this->xlsExt;
+        $this->outFilename =  $this->outFileNameSchedule . 'Game' . $this->xlsExt;
     }
     public function __invoke(Request $request)
     {
-        $projectTeamKeys = $request->attributes->get('projectTeamKeys');
+        $this->search = $request->attributes->get('schedule_game_search');
 
         // generate the response
         $response = $this->generateResponse(
-            $this->scheduleRepository->findProjectGamesForProjectTeamKeys($projectTeamKeys),
+            $this->scheduleRepository->findProjectGames($this->search),
             $this->xlsWriterType,
             $this->xlsContentType,
             $this->outFilename

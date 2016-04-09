@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Schedule\Team;
+namespace AppBundle\Action\Schedule\Game;
 
 use AppBundle\Action\Schedule\AbstractExport;
 
@@ -11,32 +11,32 @@ use Symfony\Component\HttpFoundation\Request;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
-class ScheduleTeamViewXls extends AbstractExport 
+class ScheduleGameViewCsv extends AbstractExport 
 {
     private $outFilename;
-    
-    private $xlsWriterType = 'Excel2007';
-    private $xlsExt = '.xlsx';
-    private $xlsContentType = "application/vnd.ms-excel"; 
-    
+
+    private $csvWriterType = 'CSV';
+    private $csvExt = '.csv';
+    private $csvContentType = "text/csv"; 
+        
     public function __construct(ScheduleRepository $scheduleRepository)
     {
         parent::__construct($scheduleRepository);
         
-        $this->outFilename =  $this->outFileNameSchedule . 'Team' . $this->xlsExt;
+        $this->outFilename =  $this->outFileNameSchedule . 'Game' . $this->csvExt;
     }
     public function __invoke(Request $request)
     {
-        $projectTeamKeys = $request->attributes->get('projectTeamKeys');
+        $this->search = $request->attributes->get('schedule_game_search');
 
         // generate the response
         $response = $this->generateResponse(
-            $this->scheduleRepository->findProjectGamesForProjectTeamKeys($projectTeamKeys),
-            $this->xlsWriterType,
-            $this->xlsContentType,
+            $this->scheduleRepository->findProjectGames($this->search),
+            $this->csvWriterType,
+            $this->csvContentType,
             $this->outFilename
         );
-
+            
         return $response;
     
     }

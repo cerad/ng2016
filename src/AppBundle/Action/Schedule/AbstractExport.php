@@ -13,17 +13,16 @@ use PHPExcel_IOFactory;
 
 class AbstractExport extends AbstractView
 {
-    /** @var  ScheduleRepository */
     protected $scheduleRepository;
     
-    protected $outFileNameTeamSchedule = 'TeamSchedule';
+    protected $outFileNameSchedule = 'Schedule';
     protected $extension;
     
     public function __construct(ScheduleRepository $scheduleRepository)
     {
         $this->scheduleRepository = $scheduleRepository;
         
-        $this->outFileNameTeamSchedule =  date('Ymd_His') . '_' . $this->outFileNameTeamSchedule;
+        $this->outFileNameSchedule =  date('Ymd_His') . '_' . $this->outFileNameSchedule;
     }
 
     protected function generateBuffer($projectGames, $extension) {
