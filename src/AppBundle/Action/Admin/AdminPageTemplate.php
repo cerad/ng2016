@@ -55,7 +55,7 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">Enter Match Results</a></li>
+      <li><a href="{$this->generateUrl('game_report_update',['gameNumber' => 11001])}">Enter Match Results</a></li>
 
       <li><a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a></li>
 
