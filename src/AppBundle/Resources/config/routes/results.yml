@@ -8,7 +8,10 @@ app_results_poolplay:
 app_results_medalround:
     path: /medalround
     defaults:
-        _controller: app_action_results_medalround_controller
+        _format: html
+        _controller: results_medalround_controller
+        _view_html:  results_medalround_view_html
+    defaults:
 
 app_results_sportsmanship:
     path: /sportsmanship
