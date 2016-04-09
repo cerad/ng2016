@@ -11,9 +11,14 @@ services:
         class: AppBundle\Action\Schedule\ScheduleRepository
         arguments: ['@project_connection']
 
-    app_action_results_poolplay_controller:
+    results_poolplay_controller:
         class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayController
         parent: app_action_abstract_controller
+
+    results_poolplay_view_html:
+        class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayView
+        parent: abstract_view
         arguments:
             - '@app_action_schedule_repository'
             - '@app_standings_calculator'
+

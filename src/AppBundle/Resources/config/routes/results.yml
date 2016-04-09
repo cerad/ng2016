@@ -1,7 +1,9 @@
 app_results_poolplay:
     path: /poolplay
     defaults:
-        _controller: app_action_results_poolplay_controller
+        _format: html
+        _controller: results_poolplay_controller
+        _view_html:  results_poolplay_view_html
 
 app_results_medalround:
     path: /medalround
