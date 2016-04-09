@@ -14,11 +14,12 @@ class ScheduleGameController extends AbstractController
         $project = $this->getCurrentProject()['info'];
 
         // Save selected teams in session
-        $search = $project['search_defaults'];
+        $searchDefaults = $project['search_defaults'];
 
         $session = $request->getSession();
         $search = $session->has('schedule_game_search') ? $session->get('schedule_game_search') : [];
-
+        $search = !empty($search) ? $search : $searchDefaults;
+        
         // Search posted
         if ($request->isMethod('POST')) {
             $search = $request->request->get('search');
@@ -28,7 +29,7 @@ class ScheduleGameController extends AbstractController
 
         $request->attributes->set('project',$project);
         $request->attributes->set('schedule_game_search',$search);
-        
+     
         return null;
     }
 }

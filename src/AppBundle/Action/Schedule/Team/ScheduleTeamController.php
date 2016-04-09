@@ -21,7 +21,8 @@ class ScheduleTeamController extends AbstractController
         // Get selected teams from session
         $session = $request->getSession();
         $projectTeamKeys = $session->has('project_team_keys') ? $session->get('project_team_keys') : [];
-
+        $projectTeamKeys = !empty($projectTeamKeys) ? $projectTeamKeys : array('0');
+        
         // Search posted
         if ($request->isMethod('POST')) {
             $projectTeamKeys = $request->request->get('project_teams');
