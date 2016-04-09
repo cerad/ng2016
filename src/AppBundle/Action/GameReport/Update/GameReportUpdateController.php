@@ -3,7 +3,7 @@
 namespace AppBundle\Action\GameReport\Update;
 
 use AppBundle\Action\AbstractController;
-use Cerad\Bundle\ProjectBundle\ProjectFactory;
+use AppBundle\Action\Project\ProjectFactory;
 use AppBundle\Action\GameReport\GameReportRepository;
 use AppBundle\Action\Results\PoolPlay\Calculator\PointsCalculator;
 
