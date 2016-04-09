@@ -31,3 +31,14 @@ user_login_check:
 
 user_logout:
     path:  /user/logout
+
+user_authen_connect:
+    path:  /user/authen/connect/{providerName}
+    defaults:
+        _controller: user_authen_connect_controller
+
+user_authen_callback:
+    path:  /user/authen/callback
+    defaults:
+        _controller: user_authen_callback_controller
+

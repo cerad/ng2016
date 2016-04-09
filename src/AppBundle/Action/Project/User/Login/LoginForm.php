@@ -38,6 +38,9 @@ EOT;
         $csrfToken = $this->csrfTokenManager->getToken('authenticate');
         $loginCheckPath = $this->router->generate('user_login_check');
 
+        $loginGoogle   = $this->router->generate('user_authen_connect',['providerName' => 'google']);
+        $loginFacebook = $this->router->generate('user_authen_connect',['providerName' => 'facebook']);
+
         return  <<<EOT
 {$this->renderError()}
 <form action="{$loginCheckPath}" method="post">
@@ -63,6 +66,9 @@ EOT;
 </div>
 </div>
 </form>
+<a href="{$loginGoogle}">Google</a>
+<a href="{$loginFacebook}">Facebook</a>
+
 EOT;
     }
 }

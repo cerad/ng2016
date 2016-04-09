@@ -20,3 +20,27 @@ services:
             - '@security.authentication_utils'
             - '@security.csrf.token_manager'
             - '@router'
+
+    user_authen_connect_controller:
+        class: AppBundle\Action\Project\User\Authen\ConnectController
+        parent: app_action_abstract_controller
+
+    user_authen_callback_controller:
+        class: AppBundle\Action\Project\User\Authen\CallbackController
+        parent: app_action_abstract_controller
+        arguments:
+            - '@user_provider'
+
+    user_authen_provider_google:
+        class: AppBundle\Action\Project\User\Authen\Provider\GoogleProvider
+        arguments:
+            - '@router'
+            - '%provider_google_client_id%'
+            - '%provider_google_client_secret%'
+
+    user_authen_provider_facebook:
+        class: AppBundle\Action\Project\User\Authen\Provider\FacebookProvider
+        arguments:
+            - '@router'
+            - '%provider_facebook_client_id%'
+            - '%provider_facebook_client_secret%'
