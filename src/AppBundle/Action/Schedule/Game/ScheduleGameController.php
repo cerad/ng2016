@@ -18,8 +18,14 @@ class ScheduleGameController extends AbstractController
 
         $session = $request->getSession();
         $search = $session->has('schedule_game_search') ? $session->get('schedule_game_search') : [];
-        $search = !empty($search) ? $search : $searchDefaults;
-        
+
+        //ensure all groups are in the search
+        $search['projects'] = !empty($search['projects']) ? $search['projects'] : $searchDefaults['projects'];
+        $search['programs'] = !empty($search['programs']) ? $search['programs'] : $searchDefaults['programs'];
+        $search['dates'] = !empty($search['dates']) ? $search['dates'] : $searchDefaults['dates'];
+        $search['genders'] = !empty($search['genders']) ? $search['genders'] : $searchDefaults['genders'];
+        $search['ages'] = !empty($search['ages']) ? $search['ages'] : $searchDefaults['ages'];
+
         // Search posted
         if ($request->isMethod('POST')) {
             $search = $request->request->get('search');

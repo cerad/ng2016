@@ -51,3 +51,16 @@ services:
         parent: abstract_view
         arguments:
             - '@app_action_schedule_repository'
+
+    schedule_game_view_core:
+        class: AppBundle\Action\Schedule\Game\ScheduleGameViewCore
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+
+    schedule_game_view_extra:
+        class: AppBundle\Action\Schedule\Game\ScheduleGameViewExtra
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+

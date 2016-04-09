@@ -19,3 +19,5 @@ app_schedule_game:
         _view_csv:   schedule_game_view_csv
         _view_pdf:   schedule_game_view_pdf
         _view_json:  schedule_game_view_json
+        _view_core:   schedule_game_view_core
+        _view_extra:   schedule_game_view_extra
