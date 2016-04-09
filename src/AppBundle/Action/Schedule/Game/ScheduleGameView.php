@@ -52,6 +52,7 @@ EOD;
 
         $baseTemplate = $this->baseTemplate;
         $baseTemplate->setContent($content);
+        $baseTemplate->addScript ($script);
         return $baseTemplate->render();
     }
     /* ==================================================================
