@@ -23,18 +23,7 @@ const appTask = function() {
 
     // Javascripts
     gulp.src([
-            appPublicDir + '/js/zayso.js'
-        ])
-        .pipe(gulp.dest('web/js'));
-
-    // Bootstrap Javascripts
-    gulp.src([
-            appPublicDir + '/js/bootstrap.min.js'
-        ])
-        .pipe(gulp.dest('web/js'));
-        
-    // Bootstrap Javascripts
-    gulp.src([
+            appPublicDir + '/js/zayso.js',
             appPublicDir + '/js/ie10-viewport-bug-workaround.js'
         ])
         .pipe(gulp.dest('web/js'));
@@ -61,7 +50,8 @@ const nodeModulesTask = function() {
 
     gulp.src([
             path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
-            path.join(nodeModulesDir,'jquery/dist/jquery.min.map')
+            path.join(nodeModulesDir,'jquery/dist/jquery.min.map'),
+            path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js')
         ])
         .pipe(gulp.dest('web/js'));
 };
