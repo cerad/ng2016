@@ -7,7 +7,8 @@ app_index:
 app_welcome:
     path: /welcome
     defaults:
-        _controller: app_action_welcome_controller
+        _view:       welcome_view
+        _controller: welcome_controller
 
 app_home:
     path: /home
@@ -18,27 +19,3 @@ app_admin:
     path: /admin
     defaults:
         _controller: app_action_admin_controller
-
-# =================================================
-# User routes
-user_login:
-    path: /user/login
-    defaults:
-        _controller: app_action_index_controller
-
-user_login_check:
-    path:  /user/login-check
-
-user_logout:
-    path:  /user/logout
-
-user_authen_connect:
-    path:  /user/authen/connect/{providerName}
-    defaults:
-        _controller: user_authen_connect_controller
-
-user_authen_callback:
-    path:  /user/authen/callback
-    defaults:
-        _controller: user_authen_callback_controller
-

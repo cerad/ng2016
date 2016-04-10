@@ -15,11 +15,24 @@ services:
             - '%cerad_user_master_password%'
 
     user_login_form:
-        class: AppBundle\Action\Project\User\Login\LoginForm
+        class: AppBundle\Action\Project\User\Login\UserLoginForm
         arguments:
             - '@security.authentication_utils'
             - '@security.csrf.token_manager'
             - '@router'
+
+# ==========================================================================
+# User Create
+
+    user_create_controller:
+        class: AppBundle\Action\Project\User\Create\UserCreateController
+        parent: abstract_controller
+        arguments:
+            - '@user_connection'
+
+    user_create_view:
+        class: AppBundle\Action\Project\User\Create\UserCreateView
+        parent: abstract_view
 
 # ==========================================================================
 # Password management
@@ -35,6 +48,7 @@ services:
         parent: abstract_view
         arguments:
             - '@user_connection'
+
 
 # ==========================================================================
 # Socal network authentication
