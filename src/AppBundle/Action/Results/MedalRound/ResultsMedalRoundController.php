@@ -1,16 +1,15 @@
 <?php
 
-namespace AppBundle\Action\Results\PoolPlay;
+namespace AppBundle\Action\Results\MedalRound;
 
 use AppBundle\Action\AbstractController;
 
 use AppBundle\Action\Schedule\ScheduleRepository;
-use AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ResultsPoolPlayController extends AbstractController
+class ResultsMedalRoundController extends AbstractController
 {
     public function __construct(
     //    ScheduleRepository  $scheduleRepository,
@@ -47,10 +46,10 @@ class ResultsPoolPlayController extends AbstractController
         if (isset($params['ages']) && $params['ages']) {
             $criteria['ages'] = explode(',',$params['ages']);
         }
-        if (isset($params['pools']) && $params['pools']) {
-            $criteria['group_names'] = explode(',',$params['pools']);
-        }
-        $criteria['group_types'] = ['PP'];
+        //if (isset($params['pools']) && $params['pools']) {
+        //    $criteria['group_names'] = explode(',',$params['pools']);
+        //}
+        $criteria['group_types'] = ['QF','SF','FM'];
 
         // Put criteria in session
         $request->attributes->set('project',$project);

@@ -10,6 +10,14 @@ app_schedule_team:
         _view_json:  schedule_team_view_json
 
 app_schedule_game:
-    path: /game
+    path: /game.{_format}
     defaults:
-        _controller: app_action_schedule_game_controller
+        _format: html
+        _controller: schedule_game_controller
+        _view_html:  schedule_game_view_html
+        _view_xls:   schedule_game_view_xls
+        _view_csv:   schedule_game_view_csv
+        _view_pdf:   schedule_game_view_pdf
+        _view_json:  schedule_game_view_json
+        _view_core:  schedule_game_core_xls
+        _view_extra: schedule_game_extra_xls

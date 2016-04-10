@@ -399,6 +399,10 @@ padding:10px;
   margin: 10px;
 }
 
+div#layout-content {
+    min-width: 500px;
+}
+
 @media print{
 .sf-toolbar,.sf-toolbar *,.schedule-search {
 display:none;
@@ -420,6 +424,10 @@ display:inline-block;
     margin-left: auto;
     margin-right: auto;
 }
+#schedule-select {
+    margin-bottom: 20px;
+}
+
 }
 
 @media only screen and (max-width: 767px){
@@ -431,6 +439,7 @@ margin-right:auto;
 .cerad_common_form1 table td {
 padding:0;
 }
+
 }
 
 .cerad-footer {

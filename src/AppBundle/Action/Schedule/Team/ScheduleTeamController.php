@@ -4,19 +4,15 @@ namespace AppBundle\Action\Schedule\Team;
 
 use AppBundle\Action\AbstractController;
 
-use AppBundle\Action\Schedule\ScheduleRepository;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ScheduleTeamController extends AbstractController
 {
     /** @var  ScheduleRepository */
-    private $scheduleRepository; // No longer used
 
-    public function __construct(ScheduleRepository $scheduleRepository)
+    public function __construct()
     {
-        $this->scheduleRepository = $scheduleRepository;
     }
     public function __invoke(Request $request)
     {
@@ -25,7 +21,8 @@ class ScheduleTeamController extends AbstractController
         // Get selected teams from session
         $session = $request->getSession();
         $projectTeamKeys = $session->has('project_team_keys') ? $session->get('project_team_keys') : [];
-
+        $projectTeamKeys = !empty($projectTeamKeys) ? $projectTeamKeys : array('0');
+        
         // Search posted
         if ($request->isMethod('POST')) {
             $projectTeamKeys = $request->request->get('project_teams');

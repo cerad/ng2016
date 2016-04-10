@@ -29,7 +29,6 @@ EOD;
         $userContent = $this->renderUser($params['loginForm']);
 
         $content = <<<EOT
-<div id="wrapper">
   <div id="container">
     <div id="welcome">
       <h1><span>Welcome to</span> NG2016 {$version}</h1>
@@ -44,7 +43,6 @@ EOD;
       {$userContent}
     </div>
   </div>
-</div>
 EOT;
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();

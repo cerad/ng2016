@@ -30,6 +30,7 @@ class GameReportRepositoryTest extends \PHPUnit_Framework_TestCase
             'user'     => $params['database_user'],
             'password' => $params['database_password'],
             'host'     => $params['database_host'],
+            'port'     => $params['database_port'],
             'driver'   => $params['database_driver'],
         );
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */

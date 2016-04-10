@@ -55,7 +55,7 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">Enter Match Results</a></li>
+      <li><a href="{$this->generateUrl('game_report_update',['gameNumber' => 11001])}">Enter Match Results</a></li>
 
       <li><a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a></li>
 
@@ -86,10 +86,10 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">View Game Schedule</a></li>
-      <li><a href="#">View Team Schedule</a></li>
-      <li><a href="#">Export Core Game Schedule (Excel)</a></li>
-      <li><a href="#">Export Extra Game Schedule (Excel)</a></li>
+      <li><a href="{$this->generateUrl('app_schedule_game')}">View Game Schedule</a></li>
+      <li><a href="{$this->generateUrl('app_schedule_team')}">View Team Schedule</a></li>
+      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'core'])}">Export Core Game Schedule (Excel)</a></li>
+      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'extra'])}">Export Extra Game Schedule (Excel)</a></li>
 EOT;
       if ($this->isGranted('ROLE_SUPER_ADMIN')) {
         $html .=
