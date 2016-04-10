@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Action\Project\User\Authen;
 
+use AppBundle\Action\Project\ProjectFactory;
 use AppBundle\Action\Project\User\Authen\Provider\AbstractProvider;
 
 use AppBundle\Action\AbstractController;
@@ -9,18 +10,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ConnectController extends AbstractController
 {
+    /** @var  ProviderFactory */
+    private $providerFactory;
+
+    public function __construct(ProviderFactory $providerFactory)
+    {
+        $this->providerFactory = $providerFactory;
+    }
     public function __invoke(Request $request, $providerName)
     {
-        $serviceId = 'user_authen_provider_' . $providerName;
+        $provider = $this->providerFactory->create($providerName);
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if (!$this->container->has($serviceId)) {
-            return $this->redirectToRoute('app_welcome');
-        }
-        /** @var AbstractProvider $provider */
-        /** @noinspection PhpUndefinedFieldInspection */
-        $provider = $this->container->get($serviceId);
-        
+        //$redirectUrl = $provider->getAuthorizationUrl();
+
         return $this->redirect($provider->getAuthorizationUrl());
     }
 }

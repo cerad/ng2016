@@ -24,12 +24,21 @@ services:
     user_authen_connect_controller:
         class: AppBundle\Action\Project\User\Authen\ConnectController
         parent: app_action_abstract_controller
+        arguments:
+            - '@user_authen_provider_factory'
 
     user_authen_callback_controller:
         class: AppBundle\Action\Project\User\Authen\CallbackController
         parent: app_action_abstract_controller
         arguments:
+            - '@user_authen_provider_factory'
             - '@user_provider'
+
+    user_authen_provider_factory:
+        class: AppBundle\Action\Project\User\Authen\ProviderFactory
+        arguments:
+            - '@router'
+            - '%user_authen_providers%'
 
     user_authen_provider_google:
         class: AppBundle\Action\Project\User\Authen\Provider\GoogleProvider

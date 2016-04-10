@@ -3,7 +3,6 @@ namespace AppBundle\Action\Project\User\Authen;
 
 use AppBundle\Action\AbstractController;
 use AppBundle\Action\Project\User\ProjectUserProvider;
-use AppBundle\Action\Project\User\Authen\Provider\AbstractProvider;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -14,11 +13,14 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class CallbackController extends AbstractController
 {
+    private $providerFactory;
+
     private $userProvider;
 
-    public function __construct(ProjectUserProvider $userProvider)
+    public function __construct(ProviderFactory $providerFactory, ProjectUserProvider $userProvider)
     {
-        $this->userProvider = $userProvider;
+        $this->userProvider    = $userProvider;
+        $this->providerFactory = $providerFactory;
     }
     public function __invoke(Request $request)
     {
@@ -29,9 +31,7 @@ class CallbackController extends AbstractController
         $code         = $request->query->get('code');
         $providerName = $request->query->get('state');
 
-        /** @var AbstractProvider $provider */
-        /** @noinspection PhpUndefinedFieldInspection */
-        $provider = $this->container->get('user_authen_provider_' . $providerName);
+        $provider = $this->providerFactory->create($providerName);
         
         $accessTokenData = $provider->getAccessToken($code);
 
