@@ -1,0 +1,47 @@
+# User routes
+user_login:
+    path: /login
+    defaults:
+        _controller: app_action_index_controller
+
+user_login_check:
+    path:  /login-check
+
+user_logout:
+    path:  /logout
+
+user_create:
+    path: /create
+    defaults:
+        _view:       user_create_view
+        _controller: user_create_controller
+
+# user password
+user_password_update:
+    path: /password/update
+    defaults:
+        _controller: user_password_update_controller
+
+user_password_reset_request:
+    path: /password/reset-request
+    defaults:
+        _view:       user_password_reset_request_view
+        _controller: user_password_reset_request_controller
+
+user_password_reset_response:
+    path: /password/reset-response/{userId}/{token}
+    defaults:
+        _view:       user_password_reset_response_view
+        _controller: user_password_reset_response_controller
+
+# user social network
+user_authen_connect:
+    path:  /authen/connect/{providerName}
+    defaults:
+        _controller: user_authen_connect_controller
+
+user_authen_callback:
+    path:  /authen/callback
+    defaults:
+        _controller: user_authen_callback_controller
+

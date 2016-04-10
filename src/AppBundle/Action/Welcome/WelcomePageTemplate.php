@@ -5,11 +5,11 @@ use AppBundle\Action\PageTemplate;
 
 use Symfony\Component\HttpKernel\Kernel;
 
-use AppBundle\Action\Project\User\Login\LoginForm;
+use AppBundle\Action\Project\User\Login\UserLoginForm;
 
 class WelcomePageTemplate extends PageTemplate
 {
-    protected function renderUser(LoginForm $loginForm)
+    protected function renderUser(UserLoginForm $loginForm)
     {
         $user = $this->getUser();
         if ($user) {

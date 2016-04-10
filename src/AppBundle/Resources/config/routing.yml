@@ -1,6 +1,10 @@
 app:
     resource: "@AppBundle/Resources/config/routes/app.yml"
 
+app_user:
+    resource: "@AppBundle/Action/Project/User/routes.yml"
+    prefix: /user
+
 app_game:
     resource: "@AppBundle/Resources/config/routes/game.yml"
     prefix: /game
