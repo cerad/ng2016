@@ -29,10 +29,21 @@ services:
         parent: abstract_controller
         arguments:
             - '@user_connection'
+            - '@user_provider'
+            - '@user_encoder'
+            - '@user_create_form'
 
     user_create_view:
         class: AppBundle\Action\Project\User\Create\UserCreateView
         parent: abstract_view
+
+    user_create_form:
+        class: AppBundle\Action\Project\User\Create\UserCreateForm
+      #parent: abstract_view
+        calls:
+            - ['setRouter',  ['@router']]
+        arguments:
+            - '@user_connection'
 
 # ==========================================================================
 # Password management

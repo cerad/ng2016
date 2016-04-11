@@ -61,4 +61,8 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     {
         return true;
     }
+    public function getAccountName()
+    {
+        return $this->name;
+    }
 }
