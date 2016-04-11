@@ -25,3 +25,8 @@ parameters:
             name:  Staff
             role:  ROLE_STAFF
             email: staff@fake.com
+        admin:
+            id:    -6
+            name:  Admin
+            role:  ROLE_ADMIN
+            email: admin@fake.com

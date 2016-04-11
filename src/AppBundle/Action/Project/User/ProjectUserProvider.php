@@ -49,6 +49,26 @@ class ProjectUserProvider implements UserProviderInterface
             'user.salt         AS salt',
             'user.password     AS password',
             'user.roles        AS roles',
+            
+            'user.name      AS name',
+            'user.enabled   AS enabled',
+            'user.personKey AS personKey',
+        ]);
+        $qb->from('users', 'user');
+
+        return $qb;
+    }
+    private function createQueryBuilderForUser2014()
+    {
+        $qb = $this->userConn->createQueryBuilder();
+
+        $qb->addSelect([
+            'user.id           AS id',
+            'user.username     AS username',
+            'user.email        AS email',
+            'user.salt         AS salt',
+            'user.password     AS password',
+            'user.roles        AS roles',
 
             'user.person_guid  AS personKey',
 
@@ -78,7 +98,7 @@ class ProjectUserProvider implements UserProviderInterface
         $user['salt']     = $row['salt'];
         $user['password'] = $row['password'];
 
-        $user['roles'] = unserialize($row['roles']);
+        $user['roles'] = explode(',',$row['roles']);
 
         $user['name']      = $row['name'];
         $user['personKey'] = $row['personKey'];
@@ -114,10 +134,13 @@ class ProjectUserProvider implements UserProviderInterface
     {
         $qb = $this->createQueryBuilderForUser();
 
-        $qb->andWhere(('user.username = :username OR user.email = :email'));
+        $qb->where(('user.username = :username OR user.email = :email OR user.providerKey = :providerKey'));
         
-        $qb->setParameter('username',$username);
-        $qb->setParameter('email',   $username);
+        $qb->setParameters([
+            'username'    => $username,
+            'email'       => $username,
+            'providerKey' => $username,
+        ]);
 
         $user = $this->loadUser($qb);
         if ($user) {

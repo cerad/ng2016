@@ -32,7 +32,8 @@ class AppExtension extends Extension
         $loader->load('services/schedule.yml');
 
         $actionLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Action'));
-        
+
         $actionLoader->load('Project/User/services.yml');
+        $actionLoader->load('Project/Person/services.yml');
     }
 }

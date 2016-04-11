@@ -21,13 +21,13 @@ class UserCreateController extends AbstractController
     private $userCreateForm;
     
     public function __construct(
-        Connection $conn,
+        Connection          $conn,
         ProjectUserProvider $userProvider,
         ProjectUserEncoder  $userEncoder,
-        UserCreateForm $userCreateForm
+        UserCreateForm      $userCreateForm
     )
     {
-        $this->conn = $conn;
+        $this->conn           = $conn;
         $this->userEncoder    = $userEncoder;
         $this->userProvider   = $userProvider;
         $this->userCreateForm = $userCreateForm;
@@ -35,9 +35,10 @@ class UserCreateController extends AbstractController
     public function __invoke(Request $request)
     {
         $userData = [
-            'name'     => null,
-            'email'    => null,
-            'password' => null,
+            'name'     =>  null,
+            'email'    =>  null,
+            'password' =>  null,
+            'role'     => 'ROLE_USER',
         ];
         $userCreateForm = $this->userCreateForm;
         $userCreateForm->setData($userData);
@@ -47,22 +48,30 @@ class UserCreateController extends AbstractController
 
             $userData = $userCreateForm->getData();
 
-            $user = $this->createUser($userData['name'],$userData['email'],$userData['password']);
+            $user = $this->createUser(
+                $userData['name'],
+                $userData['email'],
+                $userData['password'],
+                $userData['role']
+            );
             $this->loginUser($request,$user);
 
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('project_person_register');
         }
         $request->attributes->set('userCreateForm',$userCreateForm);
         
         return null;
     }
-    private function createUser($name,$email,$password)
+    private function createUser($name,$email,$password,$role)
     {
         // Encode password
-        $salt     = $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $salt     = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $password = $this->userEncoder->encodePassword($password,$salt);
 
         // Derive username from email?
+        $emailParts = explode('@',$email);
+        $username  = $emailParts[0];
+        $username = $this->generateUniqueUsername($username);
 
         // Person guid
         $personKey = sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X',
@@ -73,32 +82,29 @@ class UserCreateController extends AbstractController
 
         // The insert
         $qb = $this->conn->createQueryBuilder();
+        
         $qb->insert('users');
+
         $qb->values([
-            'username'           => '?',
-            'username_canonical' => '?',
-            'email'              => '?',
-            'email_canonical'    => '?',
-
-            'salt'     => '?',
-            'password' => '?',
-            'roles'    => '?',
-
-            'account_name'    => '?',
-            'account_enabled' => '?',
-            'person_guid'     => '?',
+            'name'      => ':name',
+            'email'     => ':email',
+            'username'  => ':username',
+            'personKey' => ':personKey',
+            'salt'      => ':salt',
+            'password'  => ':password',
+            'enabled'   => ':enabled',
+            'roles'     => ':roles',
         ]);
+
         $qb->setParameters([
-            0 => $email,
-            1 => $email,
-            2 => $email,
-            3 => $email,
-            4 => $salt,
-            5 => $password,
-            6 => serialize(['ROLE_USER']),
-            7 => $name,
-            8 => true,
-            9 => $personKey,
+            'name'      => $name,
+            'email'     => $email,
+            'username'  => $username,
+            'personKey' => $personKey,
+            'salt'      => $salt,
+            'password'  => $password,
+            'enabled'   => true,
+            'roles'     => $role,
         ]);
         // TODO add try/catch
         $qb->execute();
@@ -112,5 +118,25 @@ class UserCreateController extends AbstractController
 
         $event = new InteractiveLoginEvent($request, $token);
         $this->get("event_dispatcher")->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $event);
+    }
+    private function hasUsername($username)
+    {
+        $qb = $this->conn->createQueryBuilder();
+        $qb->select('user.id AS id');
+        $qb->from  ('users','user');
+        $qb->where ('user.username = :username');
+        $qb->setParameter('username',$username);
+        return $qb->execute()->fetch();
+    }
+    private function generateUniqueUsername($username)
+    {
+        $cnt = 1;
+        $usernameTry = $username;
+        while(1) {
+            if (!$this->hasUsername($usernameTry)) return $usernameTry;
+            $cnt++;
+            $usernameTry = $username . $cnt; //die($usernameTry);
+        }
+        return null;
     }
 }
