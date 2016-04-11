@@ -1,3 +1,7 @@
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
     prefix: /
+
+app_project_person:
+    resource: "@AppBundle/Action/Project/Person/routes.yml"
+    prefix: /project/person

@@ -1,12 +1,12 @@
 <?php
-namespace AppBundle\Action\Project\User\Create;
+namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractForm;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserCreateForm extends AbstractForm
+class RegisterForm extends AbstractForm
 {
     /** @var Connection  */
     private $conn;
@@ -22,9 +22,7 @@ class UserCreateForm extends AbstractForm
         
         $data = $request->request->all();
         $errors = [];
-
-        $role = filter_var(trim($data['role']), FILTER_SANITIZE_STRING);
-
+        
         $name = filter_var(trim($data['name']), FILTER_SANITIZE_STRING);
         if (strlen($name) === 0) {
             $errors['name'][] = [
@@ -44,7 +42,6 @@ class UserCreateForm extends AbstractForm
             ];
         }
         $this->formData = array_merge($this->formData,[
-            'role'     => $role,
             'name'     => $name,
             'email'    => $email,
             'password' => $password,
@@ -69,7 +66,9 @@ class UserCreateForm extends AbstractForm
         }
         // Unique
         $qb = $this->conn->createQueryBuilder();
-        $qb->addSelect('user.id AS id');
+        $qb->addSelect([
+            'user.id AS id',
+        ]);
         $qb->from('users','user');
         $qb->andWhere('user.email = :email OR user.username = :email');
         $qb->setParameter('email',$email);
@@ -102,12 +101,8 @@ class UserCreateForm extends AbstractForm
     <input type="email" id="user_create_email" name="email" value="{$formData['email']}" required placeholder="buffy@sunnydale.org" /><br />
   </div>
   <div class="row">
-    <label for="user_create_password">Password</label>
+    <label for="user_create_password">Password:</label>
     <input type="password" id="user_create_password" name="password" value="" required placeholder="********" /><br />
-  </div>
-  <div class="row">
-    <label for="user_create_role">Role</label>
-    <input type="text" id="user_create_role" name="role" value="{$formData['role']}" required placeholder="ROLE_..." /><br />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <div class="row">

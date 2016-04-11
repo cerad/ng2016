@@ -20,6 +20,11 @@ services:
            - ['setBaseTemplate', ['@app_base_template']]
            - ['setProject', ['%app_project%']]
 
+    abstract_form:
+        abstract: true
+        calls:
+           - ['setRouter',  ['@router']]
+
     abstract_view:
         abstract: true
         calls:

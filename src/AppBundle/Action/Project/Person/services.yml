@@ -1,0 +1,25 @@
+services:
+
+    project_person_connection:
+        alias: doctrine.dbal.ng2016_connection
+
+
+# ==========================================================================
+# Register
+
+    project_person_register_controller:
+        class: AppBundle\Action\Project\Person\Register\RegisterController
+        parent: abstract_controller
+        arguments:
+            - '@project_person_connection'
+            - '@project_person_register_form'
+
+    project_person_register_view:
+        class: AppBundle\Action\Project\Person\Register\RegisterView
+        parent: abstract_view
+
+    project_person_register_form:
+        class: AppBundle\Action\Project\Person\Register\RegisterForm
+        parent: abstract_form
+        arguments:
+            - '@project_connection'
