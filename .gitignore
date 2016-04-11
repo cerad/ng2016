@@ -4,6 +4,7 @@
 /bin/symfony_requirements
 /app/config/parameters.yml
 /build/
+/app/config/providers.yml
 /web/app.php
 /phpunit.xml
 /var/*

@@ -5,7 +5,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class LoginForm
+class UserLoginForm
 {
     private $authUtils;
     private $csrfTokenManager;
@@ -38,6 +38,12 @@ EOT;
         $csrfToken = $this->csrfTokenManager->getToken('authenticate');
         $loginCheckPath = $this->router->generate('user_login_check');
 
+        $loginGoogle   = $this->router->generate('user_authen_connect',['providerName' => 'google']);
+        $loginFacebook = $this->router->generate('user_authen_connect',['providerName' => 'facebook']);
+
+        $passwordReset = $this->router->generate('user_password_reset_request');
+        $userCreate    = $this->router->generate('user_create');
+        
         return  <<<EOT
 {$this->renderError()}
 <form action="{$loginCheckPath}" method="post">
@@ -63,6 +69,11 @@ EOT;
 </div>
 </div>
 </form>
+<a href="{$loginGoogle}">Google</a>
+<a href="{$loginFacebook}">Facebook</a>
+<a href="{$passwordReset}">Reset Password</a>
+<a href="{$userCreate}">Create User</a>
+
 EOT;
     }
 }

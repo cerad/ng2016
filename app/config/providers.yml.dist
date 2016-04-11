@@ -1,0 +1,45 @@
+parameters:
+    provider_google_client_id:     '598858148500-66np3bunhlmgnl3fc5t9rd3ln7humlmj.apps.googleusercontent.com'
+    provider_google_client_secret: 'pnzR-8jNO3UQDuszif3Tq1cE'
+
+    provider_facebook_client_id:     '1419454721704661'
+    provider_facebook_client_secret: '281f1de04a075872671cff6d30172248'
+
+    user_authen_providers:
+
+        google:
+            state: 'google'
+            class: 'AppBundle\Action\Project\User\Provider\GoogleProvider'
+            scope: 'openid profile email'
+            keys:
+                id:             id
+                name:           name
+                email:          email
+                email_verified: verified_email
+                gender:         gender
+
+            user_info_url:     'https://www.googleapis.com/oauth2/v2/userinfo'
+            access_token_url:  'https://accounts.google.com/o/oauth2/token'
+            authorization_url: 'https://accounts.google.com/o/oauth2/auth'
+
+            client_id:     ''
+            client_secret: ''
+
+        facebook:
+            state: 'facebook'
+            class: 'AppBundle\Action\Project\User\Provider\FacebookProvider'
+            scope: 'email'
+            keys:
+                id:             id
+                name:           name
+                email:          email
+                email_verified: verified
+                gender:         gender
+
+            user_info_url:     'https://graph.facebook.com/me'
+            access_token_url:  'https://graph.facebook.com/oauth/access_token'
+            revoke_token_url:  'https://graph.facebook.com/me/permissions'
+            authorization_url: 'https://www.facebook.com/dialog/oauth'
+
+            client_id:     ''
+            client_secret: ''
