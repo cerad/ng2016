@@ -10,6 +10,9 @@ user_login_check:
 user_logout:
     path:  /logout
 
+cerad_user_logout:
+    path:  /logout
+
 user_create:
     path: /create
     defaults:
