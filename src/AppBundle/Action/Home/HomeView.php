@@ -19,7 +19,7 @@ class HomeView extends AbstractView
     {
         $content = <<<EOD
 <legend>Home Page</legend>
-<div id="user">
+<div class="float-right" id="user">
 {$this->renderUser()}
 </div>
 <div class="account-person-list">
