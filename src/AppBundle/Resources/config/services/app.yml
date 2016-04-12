@@ -54,9 +54,13 @@ services:
             - '@router'
 
     # action home
-    app_action_home_controller:
+    home_controller:
         class:  AppBundle\Action\Home\HomeController
         parent: abstract_controller
+
+    home_view:
+        class: AppBundle\Action\Home\HomeView
+        parent: abstract_view
 
     # action admin
     app_action_admin_controller:
