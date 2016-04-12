@@ -50,6 +50,7 @@ security:
             security: false
 
         main:
+            pattern:  ^/
             anonymous: ~
             switch_user: true
 

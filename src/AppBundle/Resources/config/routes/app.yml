@@ -13,7 +13,8 @@ app_welcome:
 app_home:
     path: /home
     defaults:
-        _view:       home_view   
+        _role:       ROLE_USER
+        _view:       home_view
         _controller: home_controller
 
 app_admin:

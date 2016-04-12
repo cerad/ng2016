@@ -13,6 +13,7 @@ services:
         arguments:
             - '@project_person_connection'
             - '@project_person_register_form'
+            - '%app_project_key%'
 
     project_person_register_view:
         class: AppBundle\Action\Project\Person\Register\RegisterView

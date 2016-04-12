@@ -1,0 +1,18 @@
+services:
+
+    project_connection:
+        alias: doctrine.dbal.project_connection
+
+    project_factory:
+        class: AppBundle\Action\Project\ProjectFactory
+
+    project_person_repository:
+        class: AppBundle\Action\Project\Person\ProjectRersonRepository
+        arguments: ['@user_connection','@project_factory']
+
+    project_migrate_command:
+        class: AppBundle\Action\Project\Migrate\ProjectMigrateCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - '@doctrine.dbal.ng2014_connection'
+            - '@doctrine.dbal.ng2016_connection'

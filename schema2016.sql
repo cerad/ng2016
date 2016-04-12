@@ -48,8 +48,7 @@ CREATE TABLE project_persons
 
   PRIMARY KEY(id),
   UNIQUE INDEX project_person_key_index  (projectKey,personKey),
-  UNIQUE INDEX project_person_name_index (projectKey,name),
-  UNIQUE INDEX project_person_email_index(projectKey,email)
+  UNIQUE INDEX project_person_name_index (projectKey,name)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 

@@ -14,20 +14,22 @@ use Doctrine\DBAL\Connection;
 class RegisterController extends AbstractController
 {
     private $conn;
+    private $projectKey;
     private $registerForm;
     
     public function __construct(
         Connection   $conn,
-        RegisterForm $registerForm
+        RegisterForm $registerForm,
+        $projectKey
     )
     {
-        $this->conn = $conn;
+        $this->conn         = $conn;
+        $this->projectKey   = $projectKey;
         $this->registerForm = $registerForm;
     }
     public function __invoke(Request $request)
     {
-        $project = $this->getCurrentProject();
-        $projectKey = $project['info']['key'];
+        $projectKey = $this->projectKey;
 
         $user = $this->getUser();
         $personKey = $user['personKey'];
