@@ -20,8 +20,25 @@ class UserCreateView extends AbstractView
     private function render()
     {
         $content = <<<EOD
-<h3>Create Zayso User</h3>
+<h3>Create a Zayso Account</h3>
+<br/>
 {$this->userCreateForm->render()}
+<br/><br />
+<h4>Do you have a Google Account?</h4>
+<br/>
+<a href="#" class="btn btn-small btn-primary" role="button">
+  <span class="glyphicon glyphicon-plus"></span> 
+  Sign up with Google
+</a>
+<br/><br/>
+<h4>Do you have a Facebook Account?</h4>
+<br/>
+<a href="#" class="btn btn-small btn-primary" role="button">
+  <span class="glyphicon glyphicon-plus"></span> 
+  Sign up with Facebook
+</a>
+<br/><br/>
+<h4>Already have a Zayso account? <a href="#">Sign in.</a></h4>
 EOD;
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();

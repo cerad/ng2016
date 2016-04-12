@@ -23,7 +23,8 @@ CREATE TABLE users
   password      VARCHAR(255),
   passwordToken VARCHAR( 20),
 
-  enabled       BOOLEAN  NOT NULL,
+  enabled       BOOLEAN  NOT NULL DEFAULT TRUE,
+  locked        BOOLEAN  NOT NULL DEFAULT FALSE,
   roles         longtext NOT NULL,
   providerKey   VARCHAR(255), -- Social network
 

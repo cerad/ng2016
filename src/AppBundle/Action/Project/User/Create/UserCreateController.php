@@ -92,7 +92,7 @@ class UserCreateController extends AbstractController
             'personKey' => ':personKey',
             'salt'      => ':salt',
             'password'  => ':password',
-            'enabled'   => ':enabled',
+            //'enabled'   => ':enabled',
             'roles'     => ':roles',
         ]);
 
@@ -103,7 +103,7 @@ class UserCreateController extends AbstractController
             'personKey' => $personKey,
             'salt'      => $salt,
             'password'  => $password,
-            'enabled'   => true,
+            //'enabled'   => true,
             'roles'     => $role,
         ]);
         // TODO add try/catch
@@ -119,23 +119,20 @@ class UserCreateController extends AbstractController
         $event = new InteractiveLoginEvent($request, $token);
         $this->get("event_dispatcher")->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $event);
     }
-    private function hasUsername($username)
-    {
-        $qb = $this->conn->createQueryBuilder();
-        $qb->select('user.id AS id');
-        $qb->from  ('users','user');
-        $qb->where ('user.username = :username');
-        $qb->setParameter('username',$username);
-        return $qb->execute()->fetch();
-    }
     private function generateUniqueUsername($username)
     {
+        $sql = 'SELECT id FROM users WHERE username = ?';
+        $stmt = $this->conn->prepare($sql);
+
         $cnt = 1;
         $usernameTry = $username;
-        while(1) {
-            if (!$this->hasUsername($usernameTry)) return $usernameTry;
+        while(true) {
+            $stmt->execute([$usernameTry]);
+            if (!$stmt->fetch()) {
+                return($usernameTry);
+            }
             $cnt++;
-            $usernameTry = $username . $cnt; //die($usernameTry);
+            $usernameTry = $username . $cnt;
         }
         return null;
     }

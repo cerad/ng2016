@@ -19,6 +19,7 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     public $passwordToken;
 
     public $enabled = true;
+    public $locked  = false;
     
     public $roles = [];
 
@@ -51,7 +52,7 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     }
     public function isAccountNonLocked()
     {
-        return true;
+        return $this->locked ? false : true;
     }
     public function isAccountNonExpired()
     {
