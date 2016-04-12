@@ -20,7 +20,7 @@ class BaseTemplate extends AbstractTemplate
             <div id="layout-topmenu">
               {$this->renderTopMenu()}
             </div>
-            <div class="container" id="layout-content">
+            <div class="container">
               {$this->content}
             </div>
           </div>
@@ -47,9 +47,7 @@ EOT;
 <link rel="icon" type="image/png" href="/images/apple-touch-icon-114x114.png"><!-- Opera Speed Dial, at least 144?114 px -->
             <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<!-- Optional theme -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"> -->
-  <link rel="stylesheet" href="http://dbtek.github.io/bootstrap-vertical-tabs/assets/bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" type="text/css">
+          <link rel="stylesheet" href="http://dbtek.github.io/bootstrap-vertical-tabs/assets/bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" type="text/css">
             <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
           </head>
 EOT;
@@ -61,32 +59,18 @@ EOT;
         $html = 
 <<<EOT
     <div id="banner">
-          <h1>{$this->escape($this->project['title'])}</h1>
+          <h1>
+          <a href="http://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" height="30" alt="National Games"></a>
+          {$this->escape($this->project['title'])}
+          </h1>
     </div>
 EOT;
       } else {
           $html =
 <<<EOT
-    <div class="skArea">
-      <div class="skWidth">
-        <div class="skHeader">
-          <div class="skLogo">
-            <a id="dnn_dnnLOGO_hypLogo" title="National Games" href="/default.aspx?portalid=14066" name="dnn_dnnLOGO_hypLogo"></a>
-          </div>
-
-          <div class="skBanners">
-            <h1><img src="/images/header-ipad_01.png" width="100%"></h1>
-
-            <center>
-              <span class="skFont">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</span>
-
-              <div class="clear-both"></div>
-            </center>
-          </div>
-
-          <div class="clear-both"></div>
-        </div>
-      </div>
+    <div class="skBanners">
+        <a href="http://www.aysonationalgames.org/" target="_blank"><img class="width-90" src="/images/header-ipad_01.png"></a>
+        <center class="skFont  width-90">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</center>
     </div>
 EOT;
       }
@@ -154,14 +138,14 @@ EOT;
      */
     protected function renderMenuForGuest()
     {
-        return
-<<<EOD
-        <ul class="nav navbar-nav">
-          <li><a href="http://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" height="20" alt="National Games"></a></li>
+        return 
+<<<EOT
+       <ul class="nav navbar-nav">
           {$this->renderTopMenuSchedules()}
           {$this->renderTopMenuResults()}
         </ul>
-EOD;
+EOT;
+
     }
     
     /* ====================================================
@@ -184,7 +168,11 @@ EOT;
         </ul>
 EOT;
       } else {
-        $html = $this->renderSignin();
+        if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
+            $html = $this->renderCreateNewAccount();            
+        } else {
+            $html = $this->renderSignIn();
+        }
       }
       return $html;
     }
@@ -219,12 +207,22 @@ EOT;
 EOT;
     }
     
+    protected function renderCreateNewAccount()
+    {
+        return
+<<<EOT
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{$this->generateUrl('user_create')}">CREATE NEW ACCOUNT</a></li>
+          </ul>
+EOT;
+    }
+
     protected function renderSignIn()
     {
         return
 <<<EOT
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{$this->generateUrl('app_welcome')}">SIGN IN</a></li>
+            <li><a href="{$this->generateUrl('user_login')}">SIGN IN</a></li>
           </ul>
 EOT;
     }

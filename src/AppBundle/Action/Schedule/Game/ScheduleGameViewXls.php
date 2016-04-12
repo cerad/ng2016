@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ScheduleGameViewXls extends AbstractView 
 {
-    private $outFilename;
+    private $outFileName;
     private $scheduleRepository;
     private $exporter;
 
@@ -20,7 +20,7 @@ class ScheduleGameViewXls extends AbstractView
     {
         $this->scheduleRepository = $scheduleRepository;
         
-        $this->outFileName =  date('Ymd_His') . '_' . 'TeamSchedule.xlsx';
+        $this->outFileName =  date('Ymd_His') . '_' . 'GameSchedule.xlsx';
      
         $this->exporter = new AbstractExporter();
     }

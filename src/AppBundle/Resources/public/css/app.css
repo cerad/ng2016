@@ -442,6 +442,16 @@ padding:0;
 
 }
 
+.cerad-common-help li {
+    list-style: disc;
+    margin-left: 30px;
+}
+
+.app_help li {
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
 .cerad-footer {
   text-align: center;  
 }
