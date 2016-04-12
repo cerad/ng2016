@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ScheduleGameViewCsv extends AbstractView 
 {
-    private $outFilename;
+    private $outFileName;
     private $scheduleRepository;
     private $exporter;
 

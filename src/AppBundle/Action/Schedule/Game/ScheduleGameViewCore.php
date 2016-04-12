@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ScheduleGameViewCore extends AbstractView
 {
-    private $outFilename;
+    private $outFileName;
     private $scheduleRepository;
     private $exporter;
     
