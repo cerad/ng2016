@@ -14,7 +14,7 @@
     clear: both;
  }
  
- legend { font-size: 16px; font-weight:bold; margin-top: 1em; }
+ legend { font-size: 16px; font-weight:bold; margin-top: 1em; margin-left: -20px;}
  
  .entry { margin-left:5px; margin-top: 5px; margin-bottom: 5px;}
  
@@ -23,3 +23,11 @@
  .row label.text-center, .row p.text-center  { text-align: center !important }
 
 .no-disc li { list-style: none }
+
+.form-control { width: 300px; }
+
+.vcenter {
+    margin-top: 0.5em;
+}
+
+.width-90 { max-width: 90%; margin-left: auto; margin-right: auto; }

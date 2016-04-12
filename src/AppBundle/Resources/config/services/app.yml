@@ -51,6 +51,7 @@ services:
         parent: abstract_view
         arguments:
             - '@user_login_form'
+            - '@router'
 
     # action home
     app_action_home_controller:
