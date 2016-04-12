@@ -46,33 +46,33 @@ EOT;
         
         return  <<<EOT
 {$this->renderError()}
-<form action="{$loginCheckPath}" method="post">
-<div class="col-xs-3">
-<div class="row">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="_username" value="{$lastUsername}" /><br />
-</div>
-<div class="row">
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="_password" /><br />
-</div>
-<div class="row">
-    <label for="remember_me" style="display:none">Remember Me:</label>
-    <input type="checkbox" id="remember_me" name="_remember_me" style="display:none" />
-
-    <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-</div>
-
- <div class="row">
-      <button type="submit" class="float-right btn btn-sm btn-primary submit"><span class="glyphicon glyphicon-edit"></span>Sign In</button>
-</div>
-</div>
+<form class="cerad_tourn_account_login cerad_common_form1 app_form" action="{$loginCheckPath}" method="post">
+    <div class="row col-xs-12">
+            <label class="form-label col-xs-2 vcenter" for="username"><span class="pull-right">Email</span></label>
+            <input class="form-control col-xs-1" type="text" id="username" name="_username" value="{$lastUsername}" /><br />
+    </div>
+    <div class="row col-xs-12">
+            <label class="form-label col-xs-2 vcenter" for="password"><span class="pull-right">Password</span></label>
+            <input class="form-control col-xs-1" type="password" id="password" name="_password" /><br />
+    </div>
+    <div class="row col-xs-12">
+        <label for="remember_me" style="display:none">Remember me</label>
+        <input type="checkbox" id="remember_me" name="_remember_me" style="display:none" />
+    
+        <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
+    </div>
+    
+    <div class="row col-xs-12">
+          <button type="submit" class="btn btn-sm btn-primary submit"><span class="glyphicon glyphicon-edit"></span><span  style="padding-left:10px">Sign In</span></button>
+    </div>
+    
+    <div class="row col-xs-12 text-center">
+        <a href="{$loginGoogle}">Google</a> |
+        <a href="{$loginFacebook}">Facebook</a> |
+        <a href="{$passwordReset}">Reset Password</a> |
+        <a href="{$userCreate}">Create User</a>
+    </div>
 </form>
-<a href="{$loginGoogle}">Google</a>
-<a href="{$loginFacebook}">Facebook</a>
-<a href="{$passwordReset}">Reset Password</a>
-<a href="{$userCreate}">Create User</a>
 
 EOT;
     }
