@@ -18,7 +18,7 @@ class HomeView extends AbstractView
     protected function renderPage()
     {
         $content = <<<EOD
-<h1><span>Home Page</span></h1>
+<legend>Home Page</legend>
 <div id="user">
 {$this->renderUser()}
 </div>
