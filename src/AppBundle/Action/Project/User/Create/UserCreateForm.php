@@ -68,13 +68,10 @@ class UserCreateForm extends AbstractForm
             return $errors;
         }
         // Unique
-        $qb = $this->conn->createQueryBuilder();
-        $qb->addSelect('user.id AS id');
-        $qb->from('users','user');
-        $qb->andWhere('user.email = :email OR user.username = :email');
-        $qb->setParameter('email',$email);
-        $row = $qb->execute()->fetch();
-        if ($row) {
+        $sql = 'SELECT id FROM users WHERE email = ? OR username = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$email,$email]);
+        if ($stmt->fetch()) {
             $errors['email'][] = [
                 'name' => 'email',
                 'msg'  => 'Email is already being used.'
@@ -91,32 +88,37 @@ class UserCreateForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
-<form action="{$this->generateUrl('user_create')}" method="post" novalidate>
-<div class="col-xs-3">
-  <div class="row">
+<form role="form" style="width: 300px;" action="{$this->generateUrl('user_create')}" method="post" novalidate>
+  <div class="form-group">
     <label for="user_create_name">Name</label>
-    <input type="text" id="user_create_name" name="name" value="{$formData['name']}" required placeholder="Buffy Summers" /><br />
+    <input 
+      type="text" id="user_create_name" class="form-control" required
+      name="name" value="{$formData['name']}" required placeholder="Buffy Summers" />
   </div>
-  <div class="row">
+  <div class="form-group">
     <label for="user_create_email">Email</label>
-    <input type="email" id="user_create_email" name="email" value="{$formData['email']}" required placeholder="buffy@sunnydale.org" /><br />
+    <input 
+      type="email" id="user_create_email" class="form-control" required
+      name="email" value="{$formData['email']}" placeholder="buffy@sunnydale.org" />
   </div>
-  <div class="row">
+  <div class="form-group">
     <label for="user_create_password">Password</label>
-    <input type="password" id="user_create_password" name="password" value="" required placeholder="********" /><br />
+    <input 
+      type="password" id="user_create_password" class="form-control" required
+      name="password" value="" required placeholder="********" />
   </div>
-  <div class="row">
+  <div class="form-group">
     <label for="user_create_role">Role</label>
-    <input type="text" id="user_create_role" name="role" value="{$formData['role']}" required placeholder="ROLE_..." /><br />
+    <input 
+      type="text" id="user_create_role" class="form-control" required
+      name="role" value="{$formData['role']}" required placeholder="ROLE_..." />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <div class="row">
-    <button type="submit" class="btn btn-sm btn-primary submit">
-      <span class="glyphicon glyphicon-edit"></span>Create Zayso Account
-    </button>
-  </div>
-</div>
+  <button type="submit" class="btn btn-sm btn-primary submit">
+    <span class="glyphicon glyphicon-plus"></span> Create New Zayso Account
+  </button>
 </form>
+
 EOD;
         return $html;
     }
