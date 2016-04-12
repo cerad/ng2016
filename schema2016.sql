@@ -40,11 +40,23 @@ CREATE TABLE project_persons
 (
   id INT AUTO_INCREMENT NOT NULL,
 
-  projectKey VARCHAR(40) NOT NULL,
-  personKey  VARCHAR(40) NOT NULL,
+  projectKey VARCHAR( 40) NOT NULL,
+  personKey  VARCHAR( 40) NOT NULL,
+  orgKey     VARCHAR( 40),
 
   name       VARCHAR(255) NOT NULL,
   email      VARCHAR(255) NOT NULL,
+  phone      VARCHAR( 20),
+  gender     VARCHAR(  1),
+  age        INTEGER,
+
+  refereeBadge     VARCHAR( 20),
+  refereeBadgeUser VARCHAR( 20),
+  refereeUpgrading VARCHAR( 20),
+
+  notes LONGTEXT,
+  plans LONGTEXT,
+  avail LONGTEXT,
 
   PRIMARY KEY(id),
   UNIQUE INDEX project_person_key_index  (projectKey,personKey),

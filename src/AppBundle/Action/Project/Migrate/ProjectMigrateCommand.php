@@ -106,22 +106,58 @@ class ProjectMigrateCommand extends Command
             'projectPerson.project_id  AS projectKey',
             'physicalPerson.guid       AS personKey',
             'physicalPerson.email      AS email',
+            'physicalPerson.phone      AS phone',
+            'physicalPerson.gender     AS gender',
+            'physicalPerson.dob        AS dob',
             'projectPerson.person_name AS name',
+            'fed.fed_key     AS fedKey',
+            'fed.org_key     AS orgKey',
+            'fed.mem_year    AS regYear',
+            'cert.badge      AS refereeBadge',
+            'cert.badge_user AS refereeBadgeUser',
+            'cert.upgrading  AS refereeUpgrading',
         ]);
         $qb->from('person_plans','projectPerson');
+
         $qb->leftJoin('projectPerson','persons','physicalPerson','physicalPerson.id = projectPerson.person_id');
+
+        $qb->leftJoin('physicalPerson','person_feds','fed',
+            'fed.person_id = projectPerson.id AND fed.fed_role = \'AYSOV\'');
+
+        $qb->leftJoin('fed','person_fed_certs','cert',
+            'cert.person_fed_id = fed.id AND cert.role = \'Referee\'');
+
         $retrieveStmt = $qb->execute();
 
-        $sql = 'INSERT INTO project_persons (projectKey,personKey,name,email) VALUES(?,?,?,?)';
+        $sql = <<<EOD
+INSERT INTO project_persons 
+(projectKey,personKey,orgKey,name,email,phone,gender,age,refereeBadge,refereeBadgeUser,refereeUpgrading) 
+VALUES(?,?,?,?,?,?,?,?,?,?,?)
+EOD;
         $insertStmt = $this->ng2016Conn->prepare($sql);
 
-        while ($row = $retrieveStmt->fetch()) {
+        while ($row = $retrieveStmt->fetch()) { //var_dump($row); die();
+
             $name = $this->generateUniqueProjectName($row['projectKey'],$row['name']);
+
+            $age = null;
+            if ($row['dob']) {
+                $d1 = \DateTime::createFromFormat('Y-m-d', $row['dob']);
+                $d2 = \DateTime::createFromFormat('Y-m-d', '2014-07-02');
+                $age = $d1->diff($d2)->y;
+            }
             $insertStmt->execute([
                 $row['projectKey'],
                 $row['personKey'],
+                $row['orgKey'],
                 $name,
                 $row['email'],
+                $row['phone'],
+                $row['gender'],
+                $age,
+                $row['refereeBadge'],
+                $row['refereeBadgeUser'],
+                $row['refereeUpgrading'],
             ]);
         }
     }
@@ -144,7 +180,7 @@ class ProjectMigrateCommand extends Command
             }
             $cnt++;
             $nameTry = sprintf('%s(%d)',$name,$cnt);
-            echo sprintf("%s\n",$nameTry);
+            //echo sprintf("%s\n",$nameTry);
         }
         return null;
     }
