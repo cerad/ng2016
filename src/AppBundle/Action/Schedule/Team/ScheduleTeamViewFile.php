@@ -10,34 +10,40 @@ use AppBundle\Action\Schedule\ScheduleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ScheduleTeamViewCsv extends AbstractView 
+class ScheduleTeamViewFile extends AbstractView
 {
     private $outFileName;
     private $scheduleRepository;
     private $exporter;
     
-    public function __construct(ScheduleRepository $scheduleRepository)
+    public function __construct(ScheduleRepository $scheduleRepository, AbstractExporter $exporter)
     {
         $this->scheduleRepository = $scheduleRepository;
         
-        $this->outFileName =  date('Ymd_His') . '_' . 'TeamSchedule.csv';
+        $this->outFileName =  'TeamSchedule.' . '_' . date('Ymd_His') . '.' . $exporter->fileExtension;
      
-        $this->exporter = new AbstractExporter();
+        $this->exporter = $exporter;
     }
     public function __invoke(Request $request)
     {
         $projectTeamKeys = $request->attributes->get('projectTeamKeys');
 
-        // generate the response
-        $response = $this->generateResponse(
-            $this->scheduleRepository->findProjectGamesForProjectTeamKeys($projectTeamKeys),
-            $this->outFileName
-        );
-            
+        $projectGames = $this->scheduleRepository->findProjectGamesForProjectTeamKeys($projectTeamKeys);
+
+        $content = $this->generateContent($projectGames);
+        $exporter = $this->exporter;
+
+        $response = new Response();
+
+        $response->setContent($exporter->export($content));
+
+        $response->headers->set('Content-Type', $exporter->contentType);
+
+        $response->headers->set('Content-Disposition', 'attachment; filename='. $this->outFileName);
+
         return $response;
-    
     }
-    protected function generateResponse($projectGames, $outFilename)
+    protected function generateContent($projectGames)
     {
         //set the header labels
         $data =   array(
@@ -62,19 +68,6 @@ class ScheduleTeamViewCsv extends AbstractView
                 $projectGameTeamAway['name']
             );
         }
-        $csv = $this->exporter->exportCSV ($data);
-        
-        //generate the response with this content
-        $response = new Response();
-        
-        $response->setContent($csv);
-        $response->headers->set('Content-Type', 'text/csv');
-
-        $response->headers->set('Content-Disposition', "attachment; filename=".$outFilename);
-
-        return $response;
-
-    }    
-
+        return $data;
+    }
 }
-    

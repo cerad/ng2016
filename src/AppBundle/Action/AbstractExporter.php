@@ -18,13 +18,35 @@ use PHPExcel_IOFactory;
 
 class AbstractExporter
 {
+    private $format;
     private $objPHPExcel;
     
-    public function __construct() {
-        // Create new PHPExcel object
-        $this->objPHPExcel = new PHPExcel();        
-    }
+    public $fileExtension;
+    public $contentType;
     
+    public function __construct($format) 
+    {
+        $this->format = $format;
+        $this->objPHPExcel = new PHPExcel();  
+        
+        switch($format) {
+            case 'csv':
+                $this->fileExtension = 'csv';
+                $this->contentType   = 'text/csv';
+                break;
+            case 'xls':
+                $this->fileExtension = 'xlsx';
+                $this->contentType   = 'application/vnd.ms-excel';
+                break;
+        }
+    }
+    public function export($content)
+    {
+        switch ($this->format) {
+            case 'csv': return $this->exportCSV ($content);
+            case 'xls': return $this->exportXLSX($content);
+        }
+    }
     public function exportCSV($content) {
         
         $this->writeWorksheet($content);
