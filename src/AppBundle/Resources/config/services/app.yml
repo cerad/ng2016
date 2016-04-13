@@ -4,6 +4,7 @@ services:
         class:  AppBundle\Listener\KernelListener
         calls: [[setContainer, ['@service_container']]]
         tags:  [{ name: kernel.event_subscriber }]
+        arguments: ['%secure_routes%']
 
     app_base_template:
         class: AppBundle\Action\BaseTemplate

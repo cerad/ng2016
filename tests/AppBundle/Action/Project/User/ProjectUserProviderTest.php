@@ -49,7 +49,7 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
         $username = 'refereex';
         $user = $provider->loadUserByUsername($username);//var_dump($user); die();
         $this->assertEquals($username,$user['username']);
-        $this->assertEquals('Referee',$user['name']);
+        $this->assertEquals('Referee(x)',$user['name']);
     }
     public function testRefreshUser()
     {

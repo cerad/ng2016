@@ -22,7 +22,8 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
 {
     /** @var  ContainerInterface */
     private $container;
-
+    private $secureRoutes = false;
+    
     public static function getSubscribedEvents()
     {
         return [
@@ -30,6 +31,10 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
             KernelEvents::CONTROLLER => [['onController']],
             KernelEvents::VIEW       => [['onView']],
         ];
+    }
+    public function __construct($secureRoutes)
+    {
+        $this->secureRoutes = $secureRoutes;
     }
     public function setContainer(ContainerInterface $container = null)
     {
@@ -46,9 +51,10 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
         $container = $this->container;
 
         // Disable the listener in case of problems
-        if ($container->has('secure_routes') && !$container->get('secure_routes')) {
+        if (!$this->secureRoutes) {
             return;
         }
+        
         /** @var TokenStorageInterface $tokenStorage */
         $tokenStorage = $container->get('security.token_storage');
 
@@ -88,7 +94,8 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
         $conn       = $container->get('doctrine.dbal.ng2016_connection');
         $projectKey = $container->getParameter('app_project_key');
         $personKey  = $token->getUser()['personKey'];
-
+        if (!$personKey) return; // Fake users
+        
         $stmt = $conn->prepare('SELECT id FROM project_persons WHERE projectKey = ? AND personKey = ?');
         $stmt->execute([$projectKey, $personKey]);
         if (!$stmt->fetch()) {

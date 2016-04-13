@@ -131,8 +131,8 @@ class ProjectMigrateCommand extends Command
 
         $sql = <<<EOD
 INSERT INTO project_persons 
-(projectKey,personKey,orgKey,name,email,phone,gender,age,refereeBadge,refereeBadgeUser,refereeUpgrading) 
-VALUES(?,?,?,?,?,?,?,?,?,?,?)
+(projectKey,personKey,orgKey,fedKey,registered,name,email,phone,gender,age,refereeBadge,refereeUpgrading) 
+VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
 EOD;
         $insertStmt = $this->ng2016Conn->prepare($sql);
 
@@ -146,17 +146,20 @@ EOD;
                 $d2 = \DateTime::createFromFormat('Y-m-d', '2014-07-02');
                 $age = $d1->diff($d2)->y;
             }
+            $registered = true;
+
             $insertStmt->execute([
                 $row['projectKey'],
                 $row['personKey'],
                 $row['orgKey'],
+                $row['fedKey'],
+                $registered,
                 $name,
                 $row['email'],
                 $row['phone'],
                 $row['gender'],
                 $age,
                 $row['refereeBadge'],
-                $row['refereeBadgeUser'],
                 $row['refereeUpgrading'],
             ]);
         }
