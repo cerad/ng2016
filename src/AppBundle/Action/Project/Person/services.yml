@@ -23,4 +23,5 @@ services:
         class: AppBundle\Action\Project\Person\Register\RegisterForm
         parent: abstract_form
         arguments:
-            - '@project_connection'
+            - '@project_person_connection'
+            - '%app_project_plans%'

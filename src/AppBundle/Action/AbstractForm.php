@@ -1,12 +1,16 @@
 <?php
 namespace AppBundle\Action;
 
+use AppBundle\Common\RenderEscapeTrait;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class AbstractForm
 {
+    use RenderEscapeTrait;
+    
     /** @var  RouterInterface */
     private $router;
 

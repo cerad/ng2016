@@ -45,6 +45,10 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
 
         $container = $this->container;
 
+        // Disable the listener in case of problems
+        if ($container->has('secure_routes') && !$container->get('secure_routes')) {
+            return;
+        }
         /** @var TokenStorageInterface $tokenStorage */
         $tokenStorage = $container->get('security.token_storage');
 

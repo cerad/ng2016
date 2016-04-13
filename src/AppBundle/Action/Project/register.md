@@ -21,3 +21,10 @@ An entry in UserProject indicates that the user has had a chance to register in 
 
 The UserProject table could also be used to view teams.
 
+Create User Person
+  At this point we do not know about their eayso id.
+  Could prompt for it during the Create User form.
+  If given then we could check for existing person record.
+  If not then maybe create one?
+  
+Make all users answer register question before proceeding to the site.

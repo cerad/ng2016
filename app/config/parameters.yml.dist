@@ -12,6 +12,10 @@ parameters:
     database_name_users:   ng2014
     database_name_project: ng2014games
 
+    database_name_ng2016:      ng2016
+    database_name_ng2014:      ng2014
+    database_name_ng2014games: ng2014games
+
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~
@@ -21,3 +25,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     cerad_user_master_password: zayso
+    secure_routes: true # If true, Processes _role parameter in routes

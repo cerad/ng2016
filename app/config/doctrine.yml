@@ -32,7 +32,15 @@ doctrine:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
-                dbname:   ng2014
+                dbname:   %database_name_ng2014%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+            ng2014games:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name_ng2014games%
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
@@ -40,7 +48,7 @@ doctrine:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
-                dbname:   ng2016
+                dbname:   %database_name_ng2016%
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8

@@ -1,7 +1,12 @@
-  
-AYSONationalGames2016:
+parameters:
+
+  app_project_key: AYSONationalGames2016
+
+  app_project_fed_role_key: AYSOV
+
+  app_project:
     info:
-        key: AYSONationalGames2016
+        key: AYSONationalGames2014 # For now until we migrate
         slugs:
             - natgames
             - ng2016
@@ -12,7 +17,8 @@ AYSONationalGames2016:
                 
         fedId:     AYSO
         fedRoleId: AYSOV
-                
+
+        abbv:    "NG2016"
         title:   "AYSO National Games 2016"
         desc:    "AYSO National Games 2016 - Palm Beach County, Florida - July 5th to July 10th"
         results: natgames
@@ -48,11 +54,16 @@ AYSONationalGames2016:
             phone:  ""
 
         dates:
-            - '2016-07-06' # Wed Soccerfest
-            - '2016-07-07' # Thu Pool Play
-            - '2016-07-08' # Fri Pool Play
-            - '2016-07-09' # Sat Pool Play and Quarter Finals
-            - '2016-07-10' # Sun Semi and Finals
+            #- '2016-07-06' # Wed Soccerfest
+            #- '2016-07-07' # Thu Pool Play
+            #- '2016-07-08' # Fri Pool Play
+            #- '2016-07-09' # Sat Pool Play and Quarter Finals
+            #- '2016-07-10' # Sun Semi and Finals
+            '2014-07-02': Wed # Soccerfest 2014
+            '2014-07-03': Thu # Pool Play
+            '2014-07-04': Fri # Pool Play
+            '2014-07-05': Sat # Pool Play and Quarter Finals
+            '2014-07-06': Sun # Semi and Finals
 
         programs:
             Core: Core
@@ -68,6 +79,62 @@ AYSONationalGames2016:
             U14: U14
             U16: U16
             U19: U19
+
+        search_defaults:
+            projects: ['AYSONationalGames2014']
+            programs: ['Core']
+            dates:    ['2014-07-03']
+            genders:  ['B']
+            ages:     ['U12']
+
+        search_controls:
+            dates:
+                label: Days
+            programs:
+                label: Programs
+            genders:
+                label: Genders
+            ages:
+                label: Ages
+
+        choices:
+            dates:
+                '2014-07-02': Wed # Soccerfest
+                '2014-07-03': Thu # Pool Play
+                '2014-07-04': Fri # Pool Play
+                '2014-07-05': Sat # Pool Play and Quarter Finals
+                '2014-07-06': Sun # Semi and Finals
+
+            programs:
+                Core:  Core
+                Extra: Extra
+
+            genders:
+                B: Boys
+                G: Girls
+
+            ages:
+                VIP: VIP
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+
+            pools:
+                Core:
+                    B:
+                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
+                    G:
+                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
 
         levels:
             AYSO_U10B_Core:
@@ -313,3 +380,31 @@ AYSONationalGames2016:
         label:   Available Sunday Afternoon (Finals)
         default: no
         choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
+
+
+    # ==================================================
+    # Basic volunteer plan for the form
+  app_project_plans:
+
+        willAttend:
+            type:    select
+            label:   Will Attend
+            default: na
+            choices:
+                na:    Not yet answered
+                no:    No
+                yes:   Yes - For Sure
+                yesx:  Yes - If my team is selected
+                maybe: Maybe
+
+        willReferee:
+            type:    select
+            label:   Will Referee
+            default: no
+            choices: { no: No, yes: Yes, maybe: Not Sure }
+
+        willVolunteer:
+            type:    select
+            label:   Will Volunteer
+            default: no
+            choices: { no: No, yes: Yes, maybe: Not Sure }

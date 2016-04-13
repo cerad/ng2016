@@ -44,6 +44,8 @@ CREATE TABLE project_persons
   personKey  VARCHAR( 40) NOT NULL,
   orgKey     VARCHAR( 40),
 
+  registered BOOLEAN NOT NULL DEFAULT FALSE, -- Maybe
+
   name       VARCHAR(255) NOT NULL,
   email      VARCHAR(255) NOT NULL,
   phone      VARCHAR( 20),
@@ -53,6 +55,7 @@ CREATE TABLE project_persons
   refereeBadge     VARCHAR( 20),
   refereeBadgeUser VARCHAR( 20),
   refereeUpgrading VARCHAR( 20),
+  refereeApproved  BOOLEAN NOT NULL DEFAULT FALSE,
 
   notes LONGTEXT,
   plans LONGTEXT,

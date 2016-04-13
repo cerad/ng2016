@@ -23,7 +23,8 @@ class RegisterView extends AbstractView
     private function render()
     {
         $content = <<<EOD
-<h3>Register Project Person {$this->projectPerson['name']} {$this->projectPerson['email']}</h3>
+<h3>Register for {$this->project['title']}</h3><br/>
+{$this->registerForm->render()}
 EOD;
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();
