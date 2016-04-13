@@ -42,7 +42,7 @@ class RegisterController extends AbstractController
 
         $registerForm = $this->registerForm;
         $registerForm->setData($projectPerson);
-        //$registerForm->handleRequest($request);
+        $registerForm->handleRequest($request);
         if ($registerForm->isValid()) {
             
         }

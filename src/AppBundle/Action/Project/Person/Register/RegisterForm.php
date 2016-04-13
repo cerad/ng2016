@@ -11,20 +11,36 @@ class RegisterForm extends AbstractForm
     /** @var Connection  */
     private $conn;
     private $projectPlans;
+    private $projectControls;
+    private $formControls;
 
-    public function __construct(Connection $conn, $projectPlans)
+    public function __construct(Connection $conn, $projectControls, $formControls)
     {
         $this->conn = $conn;
-        $this->projectPlans = $projectPlans;
+        $this->projectPlans    = $projectControls;
+        $this->projectControls = $projectControls;
+
+        $this->formControls = $formControls;
     }
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) return;
+
         $this->isPost = true;
-        
+
         $data = $request->request->all();
+
+        // Validate
         $errors = [];
-        
+
+        //dump($data);
+        unset($data['register']);
+        unset($data['_csrf_token']);
+
+        $this->formData = array_replace_recursive($this->formData,$data);
+
+        if (1) return;
+
         $name = filter_var(trim($data['name']), FILTER_SANITIZE_STRING);
         if (strlen($name) === 0) {
             $errors['name'][] = [
@@ -86,10 +102,6 @@ class RegisterForm extends AbstractForm
     }
     public function render()
     {
-        $formData = $this->formData;
-        $formData = array_merge($formData,[
-            'fedKey' => null,
-        ]);
         $csrfToken = 'TODO';
 
         $html = <<<EOD
@@ -105,31 +117,7 @@ class RegisterForm extends AbstractForm
       </button>
     </div>
   </div>
-  <div class="form-group">
-    <label class="control-label col-sm-4" for="name">Registration Name:</label>
-    <div class="col-sm-8">
-      <input 
-        type="text" id="email" class="form-control" required 
-        name="name" value="{$this->escape($formData['name'])}" placeholder="Your Name">
-    </div>
-  </div>
-   <div class="form-group">
-    <label class="control-label col-sm-4" for="email">Registration Email:</label>
-    <div class="col-sm-8">
-      <input 
-        type="email" id="email" class="form-control" required 
-        name="email" value="{$this->escape($formData['email'])}" placeholder="Your Email">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-4" for="fedKey"><a href="">eAYSO Volunteer ID:</a></label>
-    <div class="col-sm-8">
-      <input 
-        type="integer" id="fedKey" class="form-control" 
-        name="fedKey" value="{$this->escape($formData['fedKey'])}" placeholder="8-digit number">
-    </div>
-  </div>
-  {$this->renderProjectPlans()}
+  {$this->renderFormControls()}
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <div class="form-group"> 
     <div class="col-sm-offset-4 col-sm-8">
@@ -142,43 +130,66 @@ class RegisterForm extends AbstractForm
 EOD;
         return $html;
     }
-    private function renderProjectPlans()
+    private function renderFormControls()
     {
         $html = null;
-        foreach($this->projectPlans as $key => $plan) {
-            $html .= $this->renderFormControl('plans',$key,$plan);
+        foreach($this->formControls as $key => $meta)
+        {
+            if (!isset($meta['type'])) {
+                $meta = array_merge($meta,$this->projectControls[$key]);
+            }
+            $html .= $this->renderFormControl($key,$meta);
         }
         return $html;
     }
-    private function renderFormControl($group,$key,$data)
+    private function renderFormControl($key,$meta)
     {
+        $group = isset($meta['group']) ? $meta['group'] : null;
+
         $id   = $group ? sprintf('%s_%s', $group,$key) : $key;
         $name = $group ? sprintf('%s[%s]',$group,$key) : $key;
 
+        $default = isset($meta['default']) ? $meta['default'] : null;
+
         if ($group) {
-            $value = isset($this->formData[$group][$key]) ? $this->formData[$group][$key] : $data['default'];
+            $value = isset($this->formData[$group][$key]) ? $this->formData[$group][$key] : $default;
         }
         else {
-            $value = isset($this->formData[$key]) ? $this->formData[$key] : $data['default'];
+            $value = isset($this->formData[$key]) ? $this->formData[$key] : $default;
         }
+        $label = isset($meta['label']) ? $this->escape($meta['label']) : null;
 
         return <<<EOD
   <div class="form-group">
-    <label class="control-label col-sm-4" for="{$id}">{$this->escape($data['label'])}</label>
+    <label class="control-label col-sm-4" for="{$id}">{$label}</label>
     <div class="col-sm-8">
-      {$this->renderFormControlInput($data,$value,$id,$name)}
+      {$this->renderFormControlInput($meta,$value,$id,$name)}
     </div>
   </div>
 EOD;
     }
-    private function renderFormControlInput($data,$value,$id,$name)
+    private function renderFormControlInput($meta,$value,$id,$name)
     {
-        $type = $data['type'];
+        $type = $meta['type'];
 
         switch($type) {
-            case 'select': return $this->renderFormControlInputSelect($data['choices'],$value,$id,$name);
+            case 'select': return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name);
         }
-        return sprintf("<h1>Unknown input type %s</h1>\n",$type);
+        return $this->renderFormControlInputText($meta,$value,$id,$name);
+    }
+    private function renderFormControlInputText($meta,$value,$id,$name)
+    {
+        $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
+
+        $placeHolder = isset($meta['placeHolder']) ? $this->escape($meta['placeHolder']) : null;
+
+        $value = $this->escape($value);
+
+        return  <<<EOD
+<input 
+  type="{$meta['type']} id="{$id}" class="form-control" {$required}
+  name="{$name}" value="{$value}" placeHolder="{$placeHolder}"} />
+EOD;
     }
     private function renderFormControlInputSelect($choices,$value,$id,$name)
     {
@@ -190,6 +201,7 @@ EOD;
             $selected = ($value === $choiceValue) ? ' selected' : null;
             $html .= <<<EOD
   <option value="{$choiceValue}"{$selected}>{$this->escape($choiceContent)}</option>
+  
 EOD;
         }
         $html .= <<<EOD

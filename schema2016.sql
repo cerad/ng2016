@@ -53,7 +53,6 @@ CREATE TABLE project_persons
   age        INTEGER,
 
   refereeBadge     VARCHAR( 20),
-  refereeBadgeUser VARCHAR( 20),
   refereeUpgrading VARCHAR( 20),
   refereeApproved  BOOLEAN NOT NULL DEFAULT FALSE,
 

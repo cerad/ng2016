@@ -171,24 +171,9 @@ parameters:
 
     # ==================================================
     # Basic volunteer plan
+    # This section is depreciated
+    # app_project_plans for 2016
     plans:
-      attending:
-        type:    select
-        label:   I will attend the games
-        default: na
-        choices:
-          na:    Not yet answered
-          no:    No
-          yes:   Yes - For Sure
-          yesx:  Yes - If my team is selected
-          maybe: Maybe
-                    
-      refereeing:
-        type:    select
-        label:   I will referee
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure }
-        
       venue:
         type:    select
         label:   I will work at
@@ -234,39 +219,13 @@ parameters:
         label:   I would like to work with a mentor
         default: no
         choices: { no: No, yes: Yes}
-           
-      #willAssess:
-      #  type:    select
-      #  label:   I will do assessments/observations
-      #  default: no
-      #  choices: { no: No, yes: Yes, maybe: Not Sure}
-      #     
-      #wantAssess:
-      #  type:    select
-      #  label:   I request an assessment or observation
-      #  default: no
-      #  choices: 
-      #    no:           No 
-      #    Informal:     Informal 
-      #    Intermediate: Intermediate
-      #    AdvancedCR:   Advanced CR
-      #    AdvancedAR:   Adcanced AR
-      #    AdvancedCRAR: Advanced CR and AR
-      #    NationalCR:   National CR
-      #    NationalAR:   Advanced AR
-      #    NationalCRAR: National CR and AR
-             
+
       coaching:
         type:    select
         label:   I will coach or manage a team
         default: no
         choices: { no: No, yes: Yes, maybe: Not Sure}
-           
-      volunteering:
-        type:    select
-        label:   I will volunteer for other jobs
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure}
+
            
       playing:
         type:    select
@@ -384,7 +343,37 @@ parameters:
 
     # ==================================================
     # Basic volunteer plan for the form
-  app_project_plans:
+  app_project_registration_form_controls:
+
+      name:
+          type:        text
+          label:       Registration Name
+          placeHolder: Your Name
+          required:    true
+
+      email:
+          type:        email
+          label:       Registration Email
+          placeHolder: Your Name
+          required:    true
+
+      phone:
+          type:        phone
+          label:       Registration Phone #
+          placeHolder: Your Phone Number
+          required:    false
+
+      fedKey:
+          type:        integer # aysois
+          label:       AYSO Volunteer ID
+          href:        eayso.org
+          placeHolder: 8-digit number
+
+      willAttend:    { group: plans }
+      willVolunteer: { group: plans }
+      willReferee:   { group: plans }
+
+  app_project_controls:
 
         willAttend:
             type:    select
@@ -397,14 +386,30 @@ parameters:
                 yesx:  Yes - If my team is selected
                 maybe: Maybe
 
+        willVolunteer:
+            type:    select
+            label:   Will Volunteer
+            default: no
+            choices: { no: No, yes: Yes, maybe: Not Sure }
+
         willReferee:
             type:    select
             label:   Will Referee
             default: no
             choices: { no: No, yes: Yes, maybe: Not Sure }
 
-        willVolunteer:
+        refereeBadge:
             type:    select
-            label:   Will Volunteer
-            default: no
-            choices: { no: No, yes: Yes, maybe: Not Sure }
+            label:   AYSO Referee Badge
+            default: na
+            choices:
+                None:         None
+                Regional:     Regional
+                Intermediate: Intermediate
+                Advanced:     Advanced
+                National:     National
+                National_1:   National 1
+                National_2:   National 2
+                Assistant:    Assistant
+                U8Official:   U8 Official
+

@@ -24,4 +24,6 @@ services:
         parent: abstract_form
         arguments:
             - '@project_person_connection'
-            - '%app_project_plans%'
+            - '%app_project_controls%'
+            - '%app_project_registration_form_controls%'
+
