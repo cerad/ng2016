@@ -350,28 +350,33 @@ parameters:
           label:       Registration Name
           placeHolder: Your Name
           required:    true
+          transformer: unique_project_name_transformer
 
       email:
           type:        email
           label:       Registration Email
-          placeHolder: Your Name
+          placeHolder: Your Email
           required:    true
 
       phone:
           type:        phone
-          label:       Registration Phone #
+          label:       Phone Number
           placeHolder: Your Phone Number
           required:    false
+          transformer: phone_transformer
 
       fedKey:
-          type:        integer # aysois
+          type:        integer # aysoid
           label:       AYSO Volunteer ID
           href:        eayso.org
           placeHolder: 8-digit number
+          transformer: aysoid_transformer
+          constraints: ['aysoid_constraint'] # Maybe class name?
 
       willAttend:    { group: plans }
       willVolunteer: { group: plans }
       willReferee:   { group: plans }
+      tshirt:        { group: plans }
 
   app_project_controls:
 
@@ -413,3 +418,18 @@ parameters:
                 Assistant:    Assistant
                 U8Official:   U8 Official
 
+        tshirt:
+            type:    select
+            label:   T-Shirt Size
+            default: na
+            choices:
+                na:        na
+                youths:    Youth Small
+                youthm:    Youth Medium
+                youthl:    Youth Large
+                adults:    Adult Small
+                adultm:    Adult Medium
+                adultl:    Adult Large
+                adultlx:   Adult Large X
+                adultlxx:  Adult Large XX
+                adultlxxx: Adult Large XXX

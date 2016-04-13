@@ -43,6 +43,7 @@ CREATE TABLE project_persons
   projectKey VARCHAR( 40) NOT NULL,
   personKey  VARCHAR( 40) NOT NULL,
   orgKey     VARCHAR( 40),
+  fedKey     VARCHAR( 40),
 
   registered BOOLEAN NOT NULL DEFAULT FALSE, -- Maybe
 
@@ -56,9 +57,11 @@ CREATE TABLE project_persons
   refereeUpgrading VARCHAR( 20),
   refereeApproved  BOOLEAN NOT NULL DEFAULT FALSE,
 
-  notes LONGTEXT,
-  plans LONGTEXT,
-  avail LONGTEXT,
+  notes     LONGTEXT,
+  notesUser LONGTEXT,
+  plans     LONGTEXT,
+  avail     LONGTEXT,
+  roles     LONGTEXT,
 
   PRIMARY KEY(id),
   UNIQUE INDEX project_person_key_index  (projectKey,personKey),

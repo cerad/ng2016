@@ -26,4 +26,5 @@ services:
             - '@project_person_connection'
             - '%app_project_controls%'
             - '%app_project_registration_form_controls%'
-
+      #calls:
+      #     - ['addTransformer',  ['aysoid_transformer']]

@@ -1,26 +1,26 @@
 parameters:
     users:
-        referee:
+        refereex:
             id:    -1
             name:  Referee
             role:  ROLE_REFEREE
             email: referee@fake.com
-        assignor:
+        assignorx:
             id:    -2
             name:  Assignor
             role:  ROLE_ASSIGNOR
             email: assignor@fake.com
-        scorer:
+        scorerx:
             id:    -3
             name:  Scorer
             role:  ROLE_SCORE_ENTRY
             email: scorer@fake.com
-        user:
+        userx:
             id:    -4
             name:  User
             role:  ROLE_USER
             email: user@fake.com
-        staff:
+        staffx:
             id:    -5
             name:  Staff
             role:  ROLE_STAFF

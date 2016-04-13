@@ -25,7 +25,7 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
         $config = new \Doctrine\DBAL\Configuration();
 
         $connectionParams = array(
-            'dbname'   => $params['database_name_users'],
+            'dbname'   => $params['database_name_ng2016'],
             'user'     => $params['database_user'],
             'password' => $params['database_password'],
             'host'     => $params['database_host'],
@@ -44,10 +44,10 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $username = 'ahundiak@gmail.com';
         $user = $provider->loadUserByUsername($username);
-        $this->assertEquals($username,$user->getUsername());
+        $this->assertEquals($username,$user['email']);
 
-        $username = 'referee';
-        $user = $provider->loadUserByUsername($username);
+        $username = 'refereex';
+        $user = $provider->loadUserByUsername($username);//var_dump($user); die();
         $this->assertEquals($username,$user['username']);
         $this->assertEquals('Referee',$user['name']);
     }
@@ -55,10 +55,11 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $provider = new ProjectUserProvider($this->userConn,$this->users);
         $user = new ProjectUser();
-        $user->id = 10;
+        $user['id'] = 10;
 
         $user = $provider->refreshUser($user);
-        $this->assertEquals('godder4@verizon.net',$user->getUsername());
+        $this->assertEquals('godder4',$user['username']);
+        $this->assertEquals('godder4@verizon.net',$user['email']);
 
         $user['id'] = -2;
         $user = $provider->refreshUser($user);
