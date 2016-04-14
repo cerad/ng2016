@@ -61,8 +61,9 @@ class RegisterController extends AbstractController
             'projectPerson.personKey  AS personKey',
             'projectPerson.name       AS name',
             'projectPerson.email      AS email',
+            'projectPerson.registered AS registered',
         ]);
-        $qb->from ('project_persons','projectPerson');
+        $qb->from ('projectPersons','projectPerson');
         $qb->where('projectPerson.projectKey = :projectKey AND projectPerson.personKey = :personKey');
         $qb->setParameters([
             'projectKey' => $projectKey,
@@ -76,18 +77,20 @@ class RegisterController extends AbstractController
         // TODO ensure name is unique within a project
         
         $qb = $this->conn->createQueryBuilder();
-        $qb->insert('project_persons');
+        $qb->insert('projectPersons');
         $qb->values([
             'projectKey' => ':projectKey',
             'personKey'  => ':personKey',
             'name'       => ':name',
             'email'      => ':email',
+            'registered' => ':registered',
         ]);
         $qb->setParameters([
             'projectKey' => $projectKey,
             'personKey'  => $personKey,
             'name'       => $name,
             'email'      => $email,
+            'registered' => false,
         ]);
         return $qb->execute();
     }

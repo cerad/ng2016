@@ -1,0 +1,20 @@
+users:
+    user1:
+        name:      Art Hundiak
+        email:     ahundiak@fake.com
+        username:  ahundiak
+        personKey: person-0001
+        roles:     ROLE_USER
+
+projectPersons:
+    item1:
+        projectKey: AYSONationalGames2016
+        personKey:  person-0001
+        name:       Art Hundiak Registered
+        email:      ahundiak@fake.com
+        registered: true
+        roles:
+            role1:
+                role:   ROLE_REFEREE
+                active: true
+

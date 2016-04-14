@@ -24,7 +24,7 @@ services:
     abstract_form:
         abstract: true
         calls:
-           - ['setRouter',  ['@router']]
+           - ['setContainer',  ['@service_container']]
 
     abstract_view:
         abstract: true

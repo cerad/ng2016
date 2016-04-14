@@ -40,11 +40,17 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
     }
     public function testLoadUserByUsername()
     {
-        $provider = new ProjectUserProvider($this->userConn,$this->users);
+        $provider = new ProjectUserProvider(
+            'AYSONationalGames2014',
+            $this->userConn,$this->userConn,$this->users
+        );
 
         $username = 'ahundiak@gmail.com';
         $user = $provider->loadUserByUsername($username);
         $this->assertEquals($username,$user['email']);
+
+        $roles = $user['roles'];
+        $this->assertTrue(in_array('ROLE_REFEREE',$roles));
 
         $username = 'refereex';
         $user = $provider->loadUserByUsername($username);//var_dump($user); die();
@@ -53,7 +59,10 @@ class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
     }
     public function testRefreshUser()
     {
-        $provider = new ProjectUserProvider($this->userConn,$this->users);
+        $provider = new ProjectUserProvider(
+            'AYSONationalGames2014',
+            $this->userConn,$this->userConn,$this->users
+        );
         $user = new ProjectUser();
         $user['id'] = 10;
 

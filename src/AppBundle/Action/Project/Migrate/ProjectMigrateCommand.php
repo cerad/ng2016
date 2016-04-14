@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Action\Project\Migrate;
 
+use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use Symfony\Component\Console\Command\Command;
 //  Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,24 +11,51 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 class ProjectMigrateCommand extends Command
 {
+    private $maxCnt = 100;
+
     private $ng2014Conn;
     private $ng2016Conn;
+    private $users = [];
+
+    private $projectPersonRepository;
 
     public function __construct(Connection $ng2014Conn, Connection $ng2016Conn)
     {
         parent::__construct();
         $this->ng2014Conn = $ng2014Conn;
         $this->ng2016Conn = $ng2016Conn;
+
+        $this->projectPersonRepository = new ProjectPersonRepository($ng2016Conn);
     }
     protected function configure()
     {
         $this
-            ->setName('project_migrate')
+            ->setName('project:migrate')
             ->setDescription('Migrate Project Database');
+    }
+    private function clearDatabase(Connection $conn)
+    {
+        $databaseName = $conn->getDatabase();
+        $conn->exec('DROP   DATABASE ' . $databaseName);
+        $conn->exec('CREATE DATABASE ' . $databaseName);
+        $conn->exec('USE '             . $databaseName);
+    }
+    private function createDatabase(Connection $conn)
+    {
+        $cmd = sprintf("mysql -u%s -p%s %s < schema2016.sql",
+            $conn->getUsername(),
+            $conn->getPassword(),
+            $conn->getDatabase()
+        );
+        exec($cmd);
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         echo sprintf("Migrate Project...\n");
+
+        $this->clearDatabase ($this->ng2016Conn);
+        $this->createDatabase($this->ng2016Conn);
+
         $this->migrateUsers();
         $this->migrateProjectPersons();
         echo sprintf("Migrate Project Completed.\n");
@@ -52,12 +80,16 @@ class ProjectMigrateCommand extends Command
         ]);
         $qb->from('users', 'user');
         $retrieveStmt = $qb->execute();
-        while($row = $retrieveStmt->fetch()) {
+        $cnt = 0;
+        while(($row = $retrieveStmt->fetch()) && ($cnt++ < $this->maxCnt)) {
 
-            $roles = unserialize(($row['roles']));
+            $roles = unserialize($row['roles']);
+
             if (!in_array('ROLE_USER',$roles)) {
                 $roles[] = 'ROLE_USER';
             }
+            $roles = implode(',',$roles);
+
             $username = $row['username'];
             if ($username === $row['email']) {
                 $username = $this->generateUniqueUsername($username);
@@ -69,8 +101,11 @@ class ProjectMigrateCommand extends Command
                 $row['personKey'],
                 $row['salt'],
                 $row['password'],
-                implode(',',$roles),
+                $roles,
             ]);
+            $row['username'] = $username;
+            $row['roles']    = $roles;
+            $this->users[$row['personKey']] = $row;
         }
     }
     private $uniqueUsernameStmt;
@@ -130,15 +165,23 @@ class ProjectMigrateCommand extends Command
         $retrieveStmt = $qb->execute();
 
         $sql = <<<EOD
-INSERT INTO project_persons 
-(projectKey,personKey,orgKey,fedKey,registered,name,email,phone,gender,age,refereeBadge,refereeUpgrading) 
-VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+INSERT INTO projectPersons 
+(projectKey,personKey,orgKey,fedKey,registered,verified,name,email,phone,gender,age) 
+VALUES(?,?,?,?,?,?,?,?,?,?,?)
 EOD;
-        $insertStmt = $this->ng2016Conn->prepare($sql);
+        $insertProjectPersonStmt = $this->ng2016Conn->prepare($sql);
 
-        while ($row = $retrieveStmt->fetch()) { //var_dump($row); die();
+        $sql = <<<EOD
+INSERT INTO projectPersonRoles
+(projectPersonId,role,badge)
+VALUES(?,?,?)
+EOD;
+        $insertProjectPersonRoleStmt = $this->ng2016Conn->prepare($sql);
 
-            $name = $this->generateUniqueProjectName($row['projectKey'],$row['name']);
+        $cnt = 0;
+        while (($row = $retrieveStmt->fetch()) && ($cnt++ < $this->maxCnt)) { //var_dump($row); die();
+
+            $name = $this->projectPersonRepository->generateUniqueName($row['projectKey'],$row['name']);
 
             $age = null;
             if ($row['dob']) {
@@ -147,45 +190,28 @@ EOD;
                 $age = $d1->diff($d2)->y;
             }
             $registered = true;
-
-            $insertStmt->execute([
+            $verified   = false;
+            
+            $insertProjectPersonStmt->execute([
                 $row['projectKey'],
                 $row['personKey'],
                 $row['orgKey'],
                 $row['fedKey'],
                 $registered,
+                $verified,
                 $name,
                 $row['email'],
                 $row['phone'],
                 $row['gender'],
                 $age,
+            ]);
+            $projectPersonId = $this->ng2016Conn->lastInsertId();
+
+            $insertProjectPersonRoleStmt->execute([
+                $projectPersonId,
+                'ROLE_REFEREE',
                 $row['refereeBadge'],
-                $row['refereeUpgrading'],
             ]);
         }
     }
-    private $uniqueProjectNameStmt;
-
-    private function generateUniqueProjectName($projectKey,$name)
-    {
-        if (!$this->uniqueProjectNameStmt) {
-            $sql = 'SELECT id FROM project_persons WHERE projectKey = ? AND name = ?';
-            $this->uniqueProjectNameStmt = $this->ng2016Conn->prepare($sql);
-        }
-        $stmt = $this->uniqueProjectNameStmt;
-
-        $cnt = 1;
-        $nameTry = $name;
-        while(true) {
-            $stmt->execute([$projectKey,$nameTry]);
-            if (!$stmt->fetch()) {
-                return($nameTry);
-            }
-            $cnt++;
-            $nameTry = sprintf('%s(%d)',$name,$cnt);
-            //echo sprintf("%s\n",$nameTry);
-        }
-        return null;
-    }
-
 }

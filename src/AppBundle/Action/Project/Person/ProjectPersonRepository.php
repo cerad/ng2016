@@ -3,7 +3,9 @@ namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Action\Project\ProjectFactory;
 
+use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class ProjectPersonRepository
 {
@@ -13,10 +15,68 @@ class ProjectPersonRepository
     /** @var ProjectFactory */
     private $projectFactory;
 
-    public function __construct(Connection $conn, ProjectFactory $projectFactory)
+    public function __construct(Connection $conn, ProjectFactory $projectFactory = null)
     {
         $this->conn = $conn;
         $this->projectFactory = $projectFactory;
+    }
+    public function find($projectKey,$personKey)
+    {
+        $qb = $this->createProjectPersonQueryBuilder();
+        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
+        $qb->setParameters([$projectKey,$personKey]);
+        
+        $stmt = $qb->execute();
+        $projectPerson = $stmt->fetch();
+        if (!$projectPerson) return null;
+        
+        $projectPerson['roles'] = [];
+
+        return $projectPerson;
+    }
+    /** 
+     * @return QueryBuilder
+     */
+    private function createProjectPersonQueryBuilder()
+    {
+        $qb = $this->conn->createQueryBuilder();
+        $qb->select([
+            'projectPerson.id         AS id',
+            'projectPerson.projectKey AS projectKey',
+            'projectPerson.personKey  AS personKey',
+            'projectPerson.orgKey     AS orgKey',
+            'projectPerson.fedKey     AS fedKey',
+            'projectPerson.name       AS name',
+            'projectPerson.email      AS email',
+
+            'projectPerson.registered AS verified',
+            'projectPerson.registered AS registered',
+        ]);
+        $qb->from('projectPersons','projectPerson');
+        return $qb;
+    }
+    /** @var  Statement */
+    private $uniqueProjectNameStmt;
+
+    public function generateUniqueName($projectKey,$name)
+    {
+        if (!$this->uniqueProjectNameStmt) {
+            $sql = 'SELECT id FROM projectPersons WHERE projectKey = ? AND name = ?';
+            $this->uniqueProjectNameStmt = $this->conn->prepare($sql);
+        }
+        $stmt = $this->uniqueProjectNameStmt;
+
+        $cnt = 1;
+        $nameTry = $name;
+        while(true) {
+            $stmt->execute([$projectKey,$nameTry]);
+            if (!$stmt->fetch()) {
+                return($nameTry);
+            }
+            $cnt++;
+            $nameTry = sprintf('%s(%d)',$name,$cnt);
+        }
+        return null;
     }
 
     public function findOfficials($projectKey)

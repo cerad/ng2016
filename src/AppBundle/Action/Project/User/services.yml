@@ -6,7 +6,9 @@ services:
     user_provider:
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:
-            - '@user_connection'
+            - '%app_project_key%'
+            - '@doctrine.dbal.ng2016_connection' # user connection
+            - '@doctrine.dbal.ng2016_connection' # project person connection
             - '%users%'
 
     user_encoder:

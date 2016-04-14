@@ -3,29 +3,32 @@ namespace AppBundle\Action;
 
 use AppBundle\Common\RenderEscapeTrait;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-abstract class AbstractForm
+abstract class AbstractForm implements ContainerAwareInterface
 {
     use RenderEscapeTrait;
+    use ContainerAwareTrait;
     
-    /** @var  RouterInterface */
-    private $router;
-
+    /** @var  ContainerInterface */
+    protected $container;
+    
     protected $isPost = false;
     
     protected $formData;
     protected $formDataErrors = [];
-
-    public function setRouter(RouterInterface $router)
-    {
-        $this->router = $router;
-    }
+    
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        return $this->router->generate($route, $parameters, $referenceType);
+        /** @var RouterInterface $router */
+        $router = $this->container->get('router');
+        
+        return $router->generate($route, $parameters, $referenceType);
     }
     public function setData($formData)
     {

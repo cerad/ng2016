@@ -19,15 +19,25 @@ class ProjectUserProvider implements UserProviderInterface
     /** @var  Connection */
     private $userConn;
 
+    /** @var  Connection */
+    private $projectPersonConn;
+
     private $users;
     private $usersMap = [];
 
+    private $projectKey = '';
+
     public function __construct
     (
+        $projectKey,
         Connection $userConn,
+        Connection $projectPersonConn,
         $users = []
     )
     {
+        $this->projectKey        = $projectKey;
+        $this->projectPersonConn = $projectPersonConn;
+
         $this->users    = $users;
         $this->userConn = $userConn;
 
@@ -52,28 +62,8 @@ class ProjectUserProvider implements UserProviderInterface
             
             'user.name      AS name',
             'user.enabled   AS enabled',
+            'user.locked    AS locked',
             'user.personKey AS personKey',
-        ]);
-        $qb->from('users', 'user');
-
-        return $qb;
-    }
-    private function createQueryBuilderForUser2014()
-    {
-        $qb = $this->userConn->createQueryBuilder();
-
-        $qb->addSelect([
-            'user.id           AS id',
-            'user.username     AS username',
-            'user.email        AS email',
-            'user.salt         AS salt',
-            'user.password     AS password',
-            'user.roles        AS roles',
-
-            'user.person_guid  AS personKey',
-
-            'user.account_name    AS name',
-            'user.account_enabled AS enabled',
         ]);
         $qb->from('users', 'user');
 
@@ -92,17 +82,54 @@ class ProjectUserProvider implements UserProviderInterface
         }
         $user = new ProjectUser();
         $user['id']       = $row['id'];
-        $user['username'] = $row['username'];
+        $user['name']      = $row['name'];
         $user['email']    = $row['email'];
+        $user['username'] = $row['username'];
         $user['enabled']  = $row['enabled'];
+        $user['locked' ]  = $row['locked'];
         $user['salt']     = $row['salt'];
         $user['password'] = $row['password'];
 
-        $user['roles'] = explode(',',$row['roles']);
+        $roles = explode(',',$row['roles']);
 
-        $user['name']      = $row['name'];
-        $user['personKey'] = $row['personKey'];
-        
+        $personKey  = $row['personKey'];
+        $projectKey = $this->projectKey;
+
+        $user['personKey']  = $personKey;
+        $user['projectKey'] = $projectKey;
+        $user['registered'] = null; // default value but okay to foc
+
+        $qb = $this->projectPersonConn->createQueryBuilder();
+        $qb->select([
+            'projectPerson.registered',
+            'projectPersonRole.role',
+            'projectPersonRole.active',
+        ]);
+        $qb->from('projectPersons','projectPerson');
+        $qb->leftJoin(
+            'projectPerson',
+            'projectPersonRoles',
+            'projectPersonRole',
+            'projectPersonRole.projectPersonId = projectPerson.id'
+        );
+        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
+        $qb->setParameters([$projectKey,$personKey]);
+
+        $stmt = $qb->execute();
+
+        while($row  = $stmt->fetch()) {
+
+            $user['registered'] = $row['registered'];
+
+            if ($row['active']) {
+                $role = $row['role'];
+                if (!in_array($role, $roles)) {
+                    $roles[] = $role;
+                }
+            }
+        }
+        $user['roles'] = $roles;
+
         return $user;
     }
     /**
@@ -123,6 +150,10 @@ class ProjectUserProvider implements UserProviderInterface
         $user['email'] = $row['email'];
 
         $user['roles'] = [$row['role']];
+
+        $user['registered'] = true;
+        $user['projectKey'] = $this->projectKey;
+        $user['personKey' ] = '???';
 
         return $user;
     }
@@ -176,7 +207,7 @@ class ProjectUserProvider implements UserProviderInterface
             throw new UnsupportedUserException();
         }
         /** @var ProjectUser $user */
-        $userId = $user->id;
+        $userId = $user['id'];
         
         $qb = $this->createQueryBuilderForUser();
 

@@ -2,7 +2,6 @@
 namespace AppBundle\Listener;
 
 
-use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -83,26 +82,16 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
             return;
         }
         // Make sure register is called at least once
-        // TODO Use session info or maybe the ProjectUser to avoid the query
+        $user = $token->getUser();
+        if ($user['registered'] !== null) {
+            return;
+        }
+        // Allow this one through
         if ($request->attributes->get('_route') === 'project_person_register') {
             return;
         }
-        if (!$container->has('doctrine.dbal.ng2016_connection')) {
-            return; // Only for ng2016 stuff
-        }
-        /** @var Connection $conn */
-        $conn       = $container->get('doctrine.dbal.ng2016_connection');
-        $projectKey = $container->getParameter('app_project_key');
-        $personKey  = $token->getUser()['personKey'];
-        if (!$personKey) return; // Fake users
-        
-        $stmt = $conn->prepare('SELECT id FROM project_persons WHERE projectKey = ? AND personKey = ?');
-        $stmt->execute([$projectKey, $personKey]);
-        if (!$stmt->fetch()) {
-            $event->setResponse($this->redirectToRoute('project_person_register'));
-            $event->stopPropagation();
-            return;
-        }
+        $event->setResponse($this->redirectToRoute('project_person_register'));
+        $event->stopPropagation();
         return;
     }
     public function onController(/** @noinspection PhpUnusedParameterInspection */
