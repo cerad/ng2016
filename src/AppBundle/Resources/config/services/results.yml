@@ -32,3 +32,14 @@ services:
         arguments:
             - '@app_action_schedule_repository'
             - '@app_standings_calculator'
+
+    results_sportsmanship_controller:
+        class: AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipController
+        parent: app_action_abstract_controller
+
+    results_sportsmanship_view_html:
+        class: AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipView
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+            - '@app_standings_calculator'
