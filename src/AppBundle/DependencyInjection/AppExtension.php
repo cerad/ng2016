@@ -34,5 +34,7 @@ class AppExtension extends Extension
         $actionLoader->load('Project/services.yml');
         $actionLoader->load('Project/User/services.yml');
         $actionLoader->load('Project/Person/services.yml');
+
+        $actionLoader->load('Physical/Person/services.yml');
     }
 }
