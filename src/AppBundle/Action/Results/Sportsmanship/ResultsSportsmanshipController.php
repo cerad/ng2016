@@ -34,7 +34,7 @@ class ResultsSportsmanshipController extends AbstractController
         if (isset($params['ages']) && $params['ages']) {
             $criteria['ages'] = explode(',',$params['ages']);
         }
-        $criteria['group_types'] = ['PP','QF','SF','FM'];
+        $criteria['group_types'] = ['PP'];
 
         // Put criteria in session
         $request->attributes->set('project',$project);

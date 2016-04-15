@@ -35,9 +35,9 @@ class ResultsSportsmanshipView extends AbstractView
 
         $this->project = $request->attributes->get('project');
         $criteria = $request->attributes->get('criteria');
-              
+          
         $this->games = count($criteria) > 1 ? $this->scheduleRepository->findProjectGames($criteria) : [];
-
+   
         $this->computeSportsmanshipStandings();
         
         return new Response($this->renderPage());
@@ -85,15 +85,13 @@ class ResultsSportsmanshipView extends AbstractView
          
                 $teamSportsmanship = isset($teamReport['sportsmanship']) ? $teamReport['sportsmanship'] : null;
          
-                if (in_array($name, $this->standings)) {
-                    //$this->standings[$key] = $key=>array(             
+                if (isset($this->standings[$name])) {
+                    $this->standings[$name][] = $teamSportsmanship;
+                } else {
+                    $this->standings[$name] = array($teamSportsmanship);
                 }
             }       
-            if (isset($this->standings[$name])) {
-                $this->standings[$name][] = $teamSportsmanship;
-            } else {
-                $this->standings[$name] = array($teamSportsmanship);
-            }
+
         }
       
         foreach($this->standings as &$team) {
