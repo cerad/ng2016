@@ -19,15 +19,25 @@ class ProjectUserProvider implements UserProviderInterface
     /** @var  Connection */
     private $userConn;
 
+    /** @var  Connection */
+    private $projectPersonConn;
+
     private $users;
     private $usersMap = [];
 
+    private $projectKey = '';
+
     public function __construct
     (
+        $projectKey,
         Connection $userConn,
+        Connection $projectPersonConn,
         $users = []
     )
     {
+        $this->projectKey        = $projectKey;
+        $this->projectPersonConn = $projectPersonConn;
+
         $this->users    = $users;
         $this->userConn = $userConn;
 
@@ -38,7 +48,7 @@ class ProjectUserProvider implements UserProviderInterface
     /**
      * @return QueryBuilder
      */
-    private function createQueryBuilderForUser()
+    private function createUserQueryBuilder()
     {
         $qb = $this->userConn->createQueryBuilder();
 
@@ -49,11 +59,11 @@ class ProjectUserProvider implements UserProviderInterface
             'user.salt         AS salt',
             'user.password     AS password',
             'user.roles        AS roles',
-
-            'user.person_guid  AS personKey',
-
-            'user.account_name    AS name',
-            'user.account_enabled AS enabled',
+            
+            'user.name      AS name',
+            'user.enabled   AS enabled',
+            'user.locked    AS locked',
+            'user.personKey AS personKey',
         ]);
         $qb->from('users', 'user');
 
@@ -72,17 +82,56 @@ class ProjectUserProvider implements UserProviderInterface
         }
         $user = new ProjectUser();
         $user['id']       = $row['id'];
-        $user['username'] = $row['username'];
+        $user['name']     = $row['name'];
         $user['email']    = $row['email'];
-        $user['enabled']  = $row['enabled'];
+        $user['username'] = $row['username'];
+        $user['enabled']  = $row['enabled'] ? true : false;
+        $user['locked' ]  = $row['locked']  ? true : false;
         $user['salt']     = $row['salt'];
         $user['password'] = $row['password'];
 
-        $user['roles'] = unserialize($row['roles']);
+        $roles = explode(',',$row['roles']);
 
-        $user['name']      = $row['name'];
-        $user['personKey'] = $row['personKey'];
-        
+        $personKey  = $row['personKey'];
+        $projectKey = $this->projectKey;
+
+        $user['personKey']  = $personKey;
+        $user['projectKey'] = $projectKey;
+        $user['registered'] = null; // default value but okay to foc
+
+        $qb = $this->projectPersonConn->createQueryBuilder();
+        $qb->select([
+            'projectPerson.registered',
+            'projectPersonRole.role',
+            'projectPersonRole.active',
+        ]);
+        $qb->from('projectPersons','projectPerson');
+        $qb->leftJoin(
+            'projectPerson',
+            'projectPersonRoles',
+            'projectPersonRole',
+            'projectPersonRole.projectPersonId = projectPerson.id'
+        );
+        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
+        $qb->setParameters([$projectKey,$personKey]);
+
+        $stmt = $qb->execute();
+
+        while($row  = $stmt->fetch()) {
+
+            // Preserve null,true,false - the query returns 0 or 1 when the value is set
+            if ($row ['registered'] !== null) {
+                $user['registered'] = $row['registered'] ? true : false;
+            }
+            if ($row['active']) {
+                $role = $row['role'];
+                if (!in_array($role, $roles)) {
+                    $roles[] = $role;
+                }
+            }
+        }
+        $user['roles'] = $roles;
+
         return $user;
     }
     /**
@@ -104,6 +153,10 @@ class ProjectUserProvider implements UserProviderInterface
 
         $user['roles'] = [$row['role']];
 
+        $user['registered'] = true;
+        $user['projectKey'] = $this->projectKey;
+        $user['personKey' ] = $username . '-key';
+
         return $user;
     }
     /**
@@ -112,12 +165,11 @@ class ProjectUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $qb = $this->createQueryBuilderForUser();
+        $qb = $this->createUserQueryBuilder();
 
-        $qb->andWhere(('user.username = :username OR user.email = :email'));
+        $qb->where(('user.username = ? OR user.email = ? OR user.providerKey = ?'));
         
-        $qb->setParameter('username',$username);
-        $qb->setParameter('email',   $username);
+        $qb->setParameters([$username,$username,$username]);
 
         $user = $this->loadUser($qb);
         if ($user) {
@@ -128,21 +180,6 @@ class ProjectUserProvider implements UserProviderInterface
             return $user;
         }
 
-        // Check for social network identifiers
-        
-        // See if a fed person exists
-        /*
-        $event = new FindPersonEvent($username);
-        
-        $this->dispatcher->dispatch(FindPersonEvent::FindByFedKeyEventName,$event);
-        
-        $person = $event->getPerson();
-        if ($person)
-        {
-            $user = $this->userManager->findUserByPersonGuid($person->getGuid());
-            if ($user) return $user;
-        }
-        */
         // Bail
         throw new UsernameNotFoundException('User Not Found: ' . $username);
     }
@@ -153,19 +190,24 @@ class ProjectUserProvider implements UserProviderInterface
             throw new UnsupportedUserException();
         }
         /** @var ProjectUser $user */
-        $userId = $user->id;
-        
-        $qb = $this->createQueryBuilderForUser();
+        $userId = $user['id'];
 
-        $qb->andWhere(('user.id = :id'));
-
-        $qb->setParameter('id',$userId);
-
+        $qb = $this->createUserQueryBuilder();
+        $qb->where(('user.id = ?'));
+        $qb->setParameters([$userId]);
         $user = $this->loadUser($qb);
-
         if ($user) {
             return $user;
         }
+        // This is cleaner than using a query builder but takes an extra query
+        /*
+        $sql  = 'SELECT username FROM users WHERE id = ?';
+        $stmt = $this->userConn->executeQuery($sql,[$userId]);
+        $row = $stmt->fetch();
+        if ($row) {
+            return $this->loadUserByUsername($row['username']);
+        }*/
+        // Check memory
         $username = isset($this->usersMap[$userId]) ? $this->usersMap[$userId] : null;
         if ($username) {
             return $this->loadUserFromMemory($username);

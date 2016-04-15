@@ -19,20 +19,22 @@ class AppExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        //$configuration = new Configuration();
+        //$config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-
         $loader->load('services/app.yml');
         $loader->load('services/game.yml');
-        $loader->load('services/project.yml');
         $loader->load('services/results.yml');
         $loader->load('services/schedule.yml');
 
         $actionLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Action'));
-        
+
+        $actionLoader->load('Project/services.yml');
         $actionLoader->load('Project/User/services.yml');
+        $actionLoader->load('Project/Person/services.yml');
+
+        $actionLoader->load('Physical/Person/services.yml');
     }
 }

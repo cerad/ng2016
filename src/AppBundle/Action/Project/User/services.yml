@@ -1,12 +1,19 @@
 services:
 
     user_connection:
-        alias: doctrine.dbal.user_connection
+        alias: doctrine.dbal.ng2016_connection
+
+    user_repository:
+        class: AppBundle\Action\Project\User\ProjectUserProvider
+        arguments:
+            - '@user_connection'
 
     user_provider:
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:
-            - '@user_connection'
+            - '%app_project_key%'
+            - '@doctrine.dbal.ng2016_connection' # user connection
+            - '@doctrine.dbal.ng2016_connection' # project person connection
             - '%users%'
 
     user_encoder:
@@ -25,14 +32,23 @@ services:
 # User Create
 
     user_create_controller:
-        class: AppBundle\Action\Project\User\Create\UserCreateController
+        class:  AppBundle\Action\Project\User\Create\UserCreateController
         parent: abstract_controller
         arguments:
             - '@user_connection'
+            - '@user_provider'
+            - '@user_encoder'
+            - '@user_create_form'
 
     user_create_view:
-        class: AppBundle\Action\Project\User\Create\UserCreateView
+        class:  AppBundle\Action\Project\User\Create\UserCreateView
         parent: abstract_view
+
+    user_create_form:
+        class:  AppBundle\Action\Project\User\Create\UserCreateForm
+        parent: abstract_form
+        arguments:
+            - '@user_connection'
 
 # ==========================================================================
 # Password management

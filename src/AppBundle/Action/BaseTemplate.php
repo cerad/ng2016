@@ -164,15 +164,17 @@ EOT;
               $html .= $this->renderAdmin();
           }
           $html .= $this->renderSignOut();
-<<<EOT
+$html .= <<<EOT
         </ul>
 EOT;
-      } else {
+      } else { // TODO Do not use _SERVER
+          /*
         if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
             $html = $this->renderCreateNewAccount();            
         } else {
             $html = $this->renderSignIn();
-        }
+        }*/
+          $html = $this->renderSignIn();
       }
       return $html;
     }

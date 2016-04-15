@@ -9,21 +9,24 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
 {
     use ArrayAccessTrait;
 
-    public $id;
-    public $email;
-    public $username;
+    // These should be all be private but phpstorm complains when they are unused
+    protected $id;
+    private   $name;
+    protected $email;
+    private   $username;
 
-    public $salt;
-    public $password;
-    public $passwordPlain;
-    public $passwordToken;
+    private   $salt;
+    private   $password;
+    protected $passwordToken;
 
-    public $enabled = true;
+    private $enabled = true;
+    private $locked  = false;
     
-    public $roles = [];
-
-    public $name;
-    public $personKey;
+    private $roles = ['ROLE_USER'];
+    
+    protected $personKey;
+    protected $projectKey;
+    protected $registered;
     
     public function getRoles()
     {
@@ -43,7 +46,6 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     }
     public function eraseCredentials()
     {
-        $this->passwordPlain = null;
     }
     public function isEnabled()
     {
@@ -51,7 +53,7 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     }
     public function isAccountNonLocked()
     {
-        return true;
+        return $this->locked ? false : true;
     }
     public function isAccountNonExpired()
     {
@@ -60,5 +62,10 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     public function isCredentialsNonExpired()
     {
         return true;
+    }
+    // For ng2014 code
+    public function getAccountName()
+    {
+        return $this->name;
     }
 }

@@ -1,7 +1,12 @@
-  
-AYSONationalGames2016:
+parameters:
+
+  app_project_key: AYSONationalGames2016
+
+  app_project_fed_role_key: AYSOV
+
+  app_project:
     info:
-        key: AYSONationalGames2016
+        key: AYSONationalGames2014 # For now until we migrate
         slugs:
             - natgames
             - ng2016
@@ -12,7 +17,8 @@ AYSONationalGames2016:
                 
         fedId:     AYSO
         fedRoleId: AYSOV
-                
+
+        abbv:    "NG2016"
         title:   "AYSO National Games 2016"
         desc:    "AYSO National Games 2016 - Palm Beach County, Florida - July 5th to July 10th"
         results: natgames
@@ -48,11 +54,16 @@ AYSONationalGames2016:
             phone:  ""
 
         dates:
-            - '2016-07-06' # Wed Soccerfest
-            - '2016-07-07' # Thu Pool Play
-            - '2016-07-08' # Fri Pool Play
-            - '2016-07-09' # Sat Pool Play and Quarter Finals
-            - '2016-07-10' # Sun Semi and Finals
+            #- '2016-07-06' # Wed Soccerfest
+            #- '2016-07-07' # Thu Pool Play
+            #- '2016-07-08' # Fri Pool Play
+            #- '2016-07-09' # Sat Pool Play and Quarter Finals
+            #- '2016-07-10' # Sun Semi and Finals
+            '2014-07-02': Wed # Soccerfest 2014
+            '2014-07-03': Thu # Pool Play
+            '2014-07-04': Fri # Pool Play
+            '2014-07-05': Sat # Pool Play and Quarter Finals
+            '2014-07-06': Sun # Semi and Finals
 
         programs:
             Core: Core
@@ -68,6 +79,62 @@ AYSONationalGames2016:
             U14: U14
             U16: U16
             U19: U19
+
+        search_defaults:
+            projects: ['AYSONationalGames2014']
+            programs: ['Core']
+            dates:    ['2014-07-03']
+            genders:  ['B']
+            ages:     ['U12']
+
+        search_controls:
+            dates:
+                label: Days
+            programs:
+                label: Programs
+            genders:
+                label: Genders
+            ages:
+                label: Ages
+
+        choices:
+            dates:
+                '2014-07-02': Wed # Soccerfest
+                '2014-07-03': Thu # Pool Play
+                '2014-07-04': Fri # Pool Play
+                '2014-07-05': Sat # Pool Play and Quarter Finals
+                '2014-07-06': Sun # Semi and Finals
+
+            programs:
+                Core:  Core
+                Extra: Extra
+
+            genders:
+                B: Boys
+                G: Girls
+
+            ages:
+                VIP: VIP
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+
+            pools:
+                Core:
+                    B:
+                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
+                    G:
+                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
 
         levels:
             AYSO_U10B_Core:
@@ -104,24 +171,9 @@ AYSONationalGames2016:
 
     # ==================================================
     # Basic volunteer plan
+    # This section is depreciated
+    # app_project_plans for 2016
     plans:
-      attending:
-        type:    select
-        label:   I will attend the games
-        default: na
-        choices:
-          na:    Not yet answered
-          no:    No
-          yes:   Yes - For Sure
-          yesx:  Yes - If my team is selected
-          maybe: Maybe
-                    
-      refereeing:
-        type:    select
-        label:   I will referee
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure }
-        
       venue:
         type:    select
         label:   I will work at
@@ -167,39 +219,13 @@ AYSONationalGames2016:
         label:   I would like to work with a mentor
         default: no
         choices: { no: No, yes: Yes}
-           
-      #willAssess:
-      #  type:    select
-      #  label:   I will do assessments/observations
-      #  default: no
-      #  choices: { no: No, yes: Yes, maybe: Not Sure}
-      #     
-      #wantAssess:
-      #  type:    select
-      #  label:   I request an assessment or observation
-      #  default: no
-      #  choices: 
-      #    no:           No 
-      #    Informal:     Informal 
-      #    Intermediate: Intermediate
-      #    AdvancedCR:   Advanced CR
-      #    AdvancedAR:   Adcanced AR
-      #    AdvancedCRAR: Advanced CR and AR
-      #    NationalCR:   National CR
-      #    NationalAR:   Advanced AR
-      #    NationalCRAR: National CR and AR
-             
+
       coaching:
         type:    select
         label:   I will coach or manage a team
         default: no
         choices: { no: No, yes: Yes, maybe: Not Sure}
-           
-      volunteering:
-        type:    select
-        label:   I will volunteer for other jobs
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure}
+
            
       playing:
         type:    select
@@ -313,3 +339,97 @@ AYSONationalGames2016:
         label:   Available Sunday Afternoon (Finals)
         default: no
         choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
+
+
+    # ==================================================
+    # Basic volunteer plan for the form
+  app_project_registration_form_controls:
+
+      name:
+          type:        text
+          label:       Registration Name
+          placeHolder: Your Name
+          required:    true
+          transformer: unique_project_name_transformer
+
+      email:
+          type:        email
+          label:       Registration Email
+          placeHolder: Your Email
+          required:    true
+
+      phone:
+          type:        phone
+          label:       Phone Number
+          placeHolder: Your Phone Number
+          required:    false
+          transformer: phone_transformer
+
+      fedKey:
+          type:        integer # aysoid
+          label:       AYSO Volunteer ID
+          href:        eayso.org
+          placeHolder: 8-digit number
+          transformer: aysoid_transformer
+          constraints: ['aysoid_constraint'] # Maybe class name?
+
+      willAttend:    { group: plans }
+      willVolunteer: { group: plans }
+      willReferee:   { group: plans }
+      tshirt:        { group: plans }
+
+  app_project_controls:
+
+        willAttend:
+            type:    select
+            label:   Will Attend
+            default: na
+            choices:
+                na:    Not yet answered
+                no:    No
+                yes:   Yes - For Sure
+                yesx:  Yes - If my team is selected
+                maybe: Maybe
+
+        willVolunteer:
+            type:    select
+            label:   Will Volunteer
+            default: no
+            choices: { no: No, yes: Yes, maybe: Not Sure }
+
+        willReferee:
+            type:    select
+            label:   Will Referee
+            default: no
+            choices: { no: No, yes: Yes, maybe: Not Sure }
+
+        refereeBadge:
+            type:    select
+            label:   AYSO Referee Badge
+            default: na
+            choices:
+                None:         None
+                Regional:     Regional
+                Intermediate: Intermediate
+                Advanced:     Advanced
+                National:     National
+                National_1:   National 1
+                National_2:   National 2
+                Assistant:    Assistant
+                U8Official:   U8 Official
+
+        tshirt:
+            type:    select
+            label:   T-Shirt Size
+            default: na
+            choices:
+                na:        na
+                youths:    Youth Small
+                youthm:    Youth Medium
+                youthl:    Youth Large
+                adults:    Adult Small
+                adultm:    Adult Medium
+                adultl:    Adult Large
+                adultlx:   Adult Large X
+                adultlxx:  Adult Large XX
+                adultlxxx: Adult Large XXX

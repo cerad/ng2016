@@ -50,6 +50,7 @@ security:
             security: false
 
         main:
+            pattern:  ^/ # Not sure if this actully does anything or not
             anonymous: ~
             switch_user: true
 
@@ -57,7 +58,7 @@ security:
                 provider:            user_provider
                 login_path:          user_login
                 check_path:          user_login_check
-                default_target_path: app_index
+                default_target_path: app_welcome
 
                 username_parameter:  _username
                 password_parameter:  _password
@@ -68,12 +69,12 @@ security:
 
             logout:
                 path:   user_logout
-                target: app_index
+                target: app_welcome
 
-            remember_me:
-                name:     zayso_remember_me
-                secret:  "%secret%"
-                lifetime: 31536000  # 365 days in seconds
-                path:     app_index
-                domain:   ~
-                remember_me_parameter: _remember_me
+            #remember_me: # Never did seem to work
+            #    name:     zayso_remember_me
+            #    secret:  "%secret%"
+            #    lifetime: 31536000  # 365 days in seconds
+            #    path:     app_index
+            #    domain:   ~
+            #    remember_me_parameter: _remember_me

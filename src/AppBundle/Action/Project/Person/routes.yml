@@ -1,0 +1,8 @@
+# Project Person Routes
+project_person_register:
+    path: /register
+    defaults:
+        _role:       ROLE_USER
+        _view:       project_person_register_view
+        _controller: project_person_register_controller
+

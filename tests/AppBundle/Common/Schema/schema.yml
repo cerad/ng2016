@@ -1,0 +1,17 @@
+# notnull defaults to true
+tables:
+    users:
+        columns:
+            id:
+                type:       integer
+                unsigned:      true
+                primaryKey:    true
+                autoincrement: true
+            personKey:
+                type:    string
+                length:  40
+                notnull: true
+            verified:
+                type: boolean
+                default: null
+                notnull: false

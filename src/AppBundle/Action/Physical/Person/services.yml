@@ -1,0 +1,10 @@
+services:
+
+    phone_transformer:
+        class:  AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer
+
+    ayso_region_key_transformer:
+        class:  AppBundle\Action\Physical\Person\DataTransformer\AYSO\RegionKeyTransformer
+
+    ayso_volunteer_key_transformer:
+        class:  AppBundle\Action\Physical\Person\DataTransformer\AYSO\VolunteerKeyTransformer
