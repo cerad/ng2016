@@ -11,12 +11,13 @@ app_results_medalround:
         _format: html
         _controller: results_medalround_controller
         _view_html:  results_medalround_view_html
-    defaults:
 
 app_results_sportsmanship:
     path: /sportsmanship
     defaults:
-        _controller: app_action_results_sportsmanship_controller
+        _format: html
+        _controller: results_sportsmanship_controller
+        _view_html:  results_sportsmanship_view_html
 
 app_results_final:
     path: /final

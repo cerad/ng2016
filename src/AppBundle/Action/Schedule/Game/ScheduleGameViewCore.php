@@ -16,35 +16,41 @@ class ScheduleGameViewCore extends AbstractView
     private $scheduleRepository;
     private $exporter;
     
-    public function __construct(ScheduleRepository $scheduleRepository)
+    public function __construct(ScheduleRepository $scheduleRepository, AbstractExporter $exporter)
     {
         $this->scheduleRepository = $scheduleRepository;
         
-        $this->outFileName =  date('Ymd_His') . '_' . 'GameScheduleCore.xlsx';
-     
-        $this->exporter = new AbstractExporter();
+        $this->outFileName =  'GameScheduleCore' . '_' . date('Ymd_His') . '.' . $exporter->fileExtension;
+        
+        $this->exporter = $exporter;
     }
     public function __invoke(Request $request)
     {
-        $this->search = array(
-            'dates'     => array_keys($this->project['dates']),
-            'ages'      => array_keys($this->project['ages']),
+        $search = array(
             'projects'  => array($this->project['key']),
             'programs'  => array('Core'),
-            'genders'   => array_keys($this->project['genders']),
         );
-
+    
+        $projectGames = $this->scheduleRepository->findProjectGames($search);
+  
         // generate the response
-        $response = $this->generateResponse(
-            $this->scheduleRepository->findProjectGames($this->search),
-            $this->outFileName
-        );
+        $content = $this->generateResponse($projectGames);
+        
+        $exporter = $this->exporter;
+
+        $response = new Response();
+
+        $response->setContent($exporter->export($content));
+
+        $response->headers->set('Content-Type', $exporter->contentType);
+
+        $response->headers->set('Content-Disposition', 'attachment; filename='. $this->outFileName);
 
         return $response;
     
     }
     
-    protected function generateResponse($projectGames, $outFilename)
+    protected function generateResponse($projectGames)
     {
         //set the header labels
         $data =   array(
@@ -69,16 +75,8 @@ class ScheduleGameViewCore extends AbstractView
                 $projectGameTeamAway['name']
             );
         }
-        $xlsx = $this->exporter->exportXLSX($data);
 
-        //generate the response with this content
-        $response = new Response();
-        
-        $response->setContent($xlsx);
-        $response->headers->set('Content-Type', 'application/vnd.ms-excel');
-        $response->headers->set('Content-Disposition', "attachment; filename=".$outFilename);
-
-        return $response;
+        return $data;
 
     }
 
