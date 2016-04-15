@@ -3,6 +3,11 @@ services:
     user_connection:
         alias: doctrine.dbal.ng2016_connection
 
+    user_repository:
+        class: AppBundle\Action\Project\User\ProjectUserProvider
+        arguments:
+            - '@user_connection'
+
     user_provider:
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:

@@ -28,7 +28,8 @@ CREATE TABLE users
 
   enabled       BOOLEAN  NOT NULL DEFAULT TRUE,
   locked        BOOLEAN  NOT NULL DEFAULT FALSE,
-  roles         LONGTEXT NOT NULL,
+
+  roles         VARCHAR(255) NOT NULL DEFAULT 'ROLE_USER', -- LONGTEXT cannot have default value
 
   providerKey   VARCHAR(255), -- Social network
 
@@ -88,7 +89,7 @@ CREATE TABLE projectPersonRoles
 
   role     VARCHAR(40), -- ROLE_REFEREE, ROLE_SCORE_ENTRY etc
 
-  active   BOOLEAN NOT NULL DEFAULT true,  -- Role is used by security
+  active   BOOLEAN NOT NULL DEFAULT TRUE,  -- Role is used by security
   approved BOOLEAN NOT NULL DEFAULT FALSE, -- Set by assignor
   verified BOOLEAN NOT NULL DEFAULT FALSE, -- Set by verifier, might not be needed
   ready    BOOLEAN NOT NULL DEFAULT TRUE,  -- Set by user

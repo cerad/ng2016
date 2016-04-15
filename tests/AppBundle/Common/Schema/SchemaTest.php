@@ -19,8 +19,13 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     private $conn;
     private $params;
 
+    public function testExample()
+    {
+        
+    }
     public function setUp()
     {
+        if (1) return;
         $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../app/config/parameters.yml'));
         $this->params = $params = $params['parameters'];
 
@@ -126,7 +131,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
 
         //var_dump($createQueries);
     }
-    public function test3()
+    public function sest3()
     {
         $conn = $this->conn;
 
@@ -203,7 +208,7 @@ EOD;
         $name = $projectPersonRepository->generateUniqueName($projectKey,'Art Hundiak Registered');
         $this->assertEquals('Art Hundiak Registered(2)',$name);
     }
-    public function sest3()
+    public function sest3x()
     {
         $conn = $this->conn;
 

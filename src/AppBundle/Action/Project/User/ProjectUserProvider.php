@@ -48,7 +48,7 @@ class ProjectUserProvider implements UserProviderInterface
     /**
      * @return QueryBuilder
      */
-    private function createQueryBuilderForUser()
+    private function createUserQueryBuilder()
     {
         $qb = $this->userConn->createQueryBuilder();
 
@@ -82,11 +82,11 @@ class ProjectUserProvider implements UserProviderInterface
         }
         $user = new ProjectUser();
         $user['id']       = $row['id'];
-        $user['name']      = $row['name'];
+        $user['name']     = $row['name'];
         $user['email']    = $row['email'];
         $user['username'] = $row['username'];
-        $user['enabled']  = $row['enabled'];
-        $user['locked' ]  = $row['locked'];
+        $user['enabled']  = $row['enabled'] ? true : false;
+        $user['locked' ]  = $row['locked']  ? true : false;
         $user['salt']     = $row['salt'];
         $user['password'] = $row['password'];
 
@@ -119,8 +119,10 @@ class ProjectUserProvider implements UserProviderInterface
 
         while($row  = $stmt->fetch()) {
 
-            $user['registered'] = $row['registered'];
-
+            // Preserve null,true,false - the query returns 0 or 1 when the value is set
+            if ($row ['registered'] !== null) {
+                $user['registered'] = $row['registered'] ? true : false;
+            }
             if ($row['active']) {
                 $role = $row['role'];
                 if (!in_array($role, $roles)) {
@@ -153,7 +155,7 @@ class ProjectUserProvider implements UserProviderInterface
 
         $user['registered'] = true;
         $user['projectKey'] = $this->projectKey;
-        $user['personKey' ] = '???';
+        $user['personKey' ] = $username . '-key';
 
         return $user;
     }
@@ -163,15 +165,11 @@ class ProjectUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $qb = $this->createQueryBuilderForUser();
+        $qb = $this->createUserQueryBuilder();
 
-        $qb->where(('user.username = :username OR user.email = :email OR user.providerKey = :providerKey'));
+        $qb->where(('user.username = ? OR user.email = ? OR user.providerKey = ?'));
         
-        $qb->setParameters([
-            'username'    => $username,
-            'email'       => $username,
-            'providerKey' => $username,
-        ]);
+        $qb->setParameters([$username,$username,$username]);
 
         $user = $this->loadUser($qb);
         if ($user) {
@@ -182,21 +180,6 @@ class ProjectUserProvider implements UserProviderInterface
             return $user;
         }
 
-        // Check for social network identifiers
-        
-        // See if a fed person exists
-        /*
-        $event = new FindPersonEvent($username);
-        
-        $this->dispatcher->dispatch(FindPersonEvent::FindByFedKeyEventName,$event);
-        
-        $person = $event->getPerson();
-        if ($person)
-        {
-            $user = $this->userManager->findUserByPersonGuid($person->getGuid());
-            if ($user) return $user;
-        }
-        */
         // Bail
         throw new UsernameNotFoundException('User Not Found: ' . $username);
     }
@@ -208,18 +191,23 @@ class ProjectUserProvider implements UserProviderInterface
         }
         /** @var ProjectUser $user */
         $userId = $user['id'];
-        
-        $qb = $this->createQueryBuilderForUser();
 
-        $qb->andWhere(('user.id = :id'));
-
-        $qb->setParameter('id',$userId);
-
+        $qb = $this->createUserQueryBuilder();
+        $qb->where(('user.id = ?'));
+        $qb->setParameters([$userId]);
         $user = $this->loadUser($qb);
-
         if ($user) {
             return $user;
         }
+        // This is cleaner than using a query builder but takes an extra query
+        /*
+        $sql  = 'SELECT username FROM users WHERE id = ?';
+        $stmt = $this->userConn->executeQuery($sql,[$userId]);
+        $row = $stmt->fetch();
+        if ($row) {
+            return $this->loadUserByUsername($row['username']);
+        }*/
+        // Check memory
         $username = isset($this->usersMap[$userId]) ? $this->usersMap[$userId] : null;
         if ($username) {
             return $this->loadUserFromMemory($username);

@@ -22,7 +22,7 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     private $enabled = true;
     private $locked  = false;
     
-    private $roles = [];
+    private $roles = ['ROLE_USER'];
     
     protected $personKey;
     protected $projectKey;
