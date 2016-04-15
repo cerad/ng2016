@@ -7,6 +7,9 @@ services:
         class: AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator
         arguments: ['@project_factory']
 
+    app_sportsmanship_calculator:
+        class: AppBundle\Action\Results\Sportsmanship\Calculator\SportsmanshipCalculator
+
     app_action_results_repository:
         class: AppBundle\Action\Schedule\ScheduleRepository
         arguments: ['@project_connection']
@@ -42,4 +45,4 @@ services:
         parent: abstract_view
         arguments:
             - '@app_action_schedule_repository'
-            - '@app_standings_calculator'
+            - '@app_sportsmanship_calculator'
