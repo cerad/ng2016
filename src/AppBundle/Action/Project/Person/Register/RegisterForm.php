@@ -10,9 +10,9 @@ class RegisterForm extends AbstractForm
 {
     /** @var Connection  */
     private $conn;
-    private $projectPlans;
     private $projectControls;
-    private $formControls;
+
+    private $formControls = [];
 
     public function __construct(Connection $conn, $projectControls, $formControls)
     {
@@ -20,7 +20,13 @@ class RegisterForm extends AbstractForm
         $this->projectPlans    = $projectControls;
         $this->projectControls = $projectControls;
 
-        $this->formControls = $formControls;
+        foreach($formControls as $key => $meta)
+        {
+            if (!isset($meta['type'])) {
+                $meta = array_merge($meta,$projectControls[$key]);
+            }
+            $this->formControls[$key] = $meta;
+        }
     }
     public function handleRequest(Request $request)
     {
@@ -29,7 +35,20 @@ class RegisterForm extends AbstractForm
         $this->isPost = true;
 
         $data = $request->request->all();
+        
+        $this->submit = $data['register'];
 
+        foreach($data as $key => $value)
+        {
+            if (isset($this->formControls[$key])) {
+                $meta = $this->formControls[$key];
+                if (isset($meta['transformer'])) {
+                    $transformer = $this->getTransformer($meta['transformer']);
+                    $value = $transformer->reverseTransform($value);
+                }
+            }
+            $data[$key] = $value;
+        }
         // Validate
         $errors = [];
 
@@ -37,68 +56,9 @@ class RegisterForm extends AbstractForm
         unset($data['register']);
         unset($data['_csrf_token']);
 
-        $this->formData = array_replace_recursive($this->formData,$data);
+        $this->formData = array_replace_recursive($this->formData, $data);
 
-        if (1) return;
-
-        $name = filter_var(trim($data['name']), FILTER_SANITIZE_STRING);
-        if (strlen($name) === 0) {
-            $errors['name'][] = [
-                'name' => 'name',
-                'msg'  => 'Name cannot be blank.'
-            ];
-        }
-
-        $email  = filter_var(trim($data['email']), FILTER_SANITIZE_EMAIL);
-        $errors = $this->validateEmail($email,$errors);
-
-        $password = filter_var(trim($data['password']), FILTER_SANITIZE_STRING);
-        if (strlen($password) === 0) {
-            $errors['password'][] = [
-                'name' => 'password',
-                'msg'  => 'Password cannot be blank.'
-            ];
-        }
-        $this->formData = array_merge($this->formData,[
-            'name'     => $name,
-            'email'    => $email,
-            'password' => $password,
-        ]);
-        $this->formDataErrors = $errors;
-    }
-    private function validateEmail($email,$errors)
-    {
-        if (strlen($email) === 0) {
-            $errors['email'][] = [
-                'name' => 'email',
-                'msg'  => 'Email cannot be blank.'
-            ];
-            return $errors;
-        }
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $errors['email'][] = [
-                'name' => 'email',
-                'msg'  => 'Email is not valid.'
-            ];
-            return $errors;
-        }
-        // Unique
-        $qb = $this->conn->createQueryBuilder();
-        $qb->addSelect([
-            'user.id AS id',
-        ]);
-        $qb->from('users','user');
-        $qb->andWhere('user.email = :email OR user.username = :email');
-        $qb->setParameter('email',$email);
-        $row = $qb->execute()->fetch();
-        if ($row) {
-            $errors['email'][] = [
-                'name' => 'email',
-                'msg'  => 'Email is already being used.'
-            ];
-            return $errors;
-        }
-        return $errors;
+        return;
     }
     public function render()
     {
@@ -135,9 +95,6 @@ EOD;
         $html = null;
         foreach($this->formControls as $key => $meta)
         {
-            if (!isset($meta['type'])) {
-                $meta = array_merge($meta,$this->projectControls[$key]);
-            }
             $html .= $this->renderFormControl($key,$meta);
         }
         return $html;
@@ -156,6 +113,10 @@ EOD;
         }
         else {
             $value = isset($this->formData[$key]) ? $this->formData[$key] : $default;
+        }
+        if (isset($meta['transformer'])) {
+            $transformer = $this->getTransformer($meta['transformer']);
+            $value = $transformer->transform($value);
         }
         $label = isset($meta['label']) ? $this->escape($meta['label']) : null;
 

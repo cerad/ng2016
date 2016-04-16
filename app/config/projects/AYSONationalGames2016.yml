@@ -350,7 +350,7 @@ parameters:
           label:       Registration Name
           placeHolder: Your Name
           required:    true
-          transformer: unique_project_name_transformer
+          transformex: unique_project_name_transformer
 
       email:
           type:        email
@@ -370,7 +370,7 @@ parameters:
           label:       AYSO Volunteer ID
           href:        eayso.org
           placeHolder: 8-digit number
-          transformer: aysoid_transformer
+          transformer: ayso_volunteer_key_transformer
           constraints: ['aysoid_constraint'] # Maybe class name?
 
       willAttend:    { group: plans }

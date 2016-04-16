@@ -11,9 +11,7 @@ class PhoneTransformer implements DataTransformerInterface
 
         if (!$value) return $value;
 
-        return sprintf('(%s)%s-%s',substr($value,0,3),substr($value,3,3),substr($value,6,4));
-
-        //return substr($value,0,3) . '.' . substr($value,3,3) . '.' . substr($value,6,4);
+        return sprintf('(%s) %s-%s',substr($value,0,3),substr($value,3,3),substr($value,6,4));
     }
     public function reverseTransform($value)
     {

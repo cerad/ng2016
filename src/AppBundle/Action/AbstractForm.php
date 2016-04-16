@@ -6,6 +6,7 @@ use AppBundle\Common\RenderEscapeTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -19,6 +20,8 @@ abstract class AbstractForm implements ContainerAwareInterface
     protected $container;
     
     protected $isPost = false;
+    
+    protected $submit;
     
     protected $formData;
     protected $formDataErrors = [];
@@ -43,6 +46,18 @@ abstract class AbstractForm implements ContainerAwareInterface
         if (!$this->isPost) return false;
         if (count($this->formDataErrors)) return false;
         return true;
+    }
+    public function getSubmit() 
+    {
+        return $this->submit;
+    }
+    /** 
+     * @param string $id
+     * @return DataTransformerInterface
+     */
+    protected function getTransformer($id)
+    {
+        return $this->container->get($id);
     }
     abstract function handleRequest(Request $request);
     
