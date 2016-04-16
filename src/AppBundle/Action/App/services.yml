@@ -66,6 +66,8 @@ services:
     home_view:
         class:  AppBundle\Action\App\Home\HomeView
         parent: abstract_view
+        arguments:
+            - '@project_person_repository'
 
     # action admin
     admin_controller:

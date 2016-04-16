@@ -4,14 +4,33 @@ namespace AppBundle\Action\App\Home;
 
 use AppBundle\Action\AbstractView;
 
+use AppBundle\Action\Project\Person\ProjectPersonRepository;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 
 class HomeView extends AbstractView
 {
+    private $user;
+    private $projectPerson;
+    private $projectPersonRepository;
+    
+    public function __construct(ProjectPersonRepository $projectPersonRepository)
+    {
+        $this->projectPersonRepository = $projectPersonRepository;
+    }
     public function __invoke(Request $request)
     {
+        $this->user = $user = $this->getUser();
+        $projectKey = $user['projectKey'];
+        $personKey  = $user['personKey'];
+
+        $this->projectPerson = $this->projectPersonRepository->find($projectKey,$personKey);
+
+        if (!$this->projectPerson) {
+            throw new InternalErrorException('No project person in the home view for ' . $user['name']);
+        }
         return new Response($this->renderPage());
     }
 
@@ -37,10 +56,8 @@ EOD;
      */
     protected function renderUser()
     {
-        $user = $this->getUser();
-
         return <<<EOD
-User: {$this->escape($user['name'])}
+User: {$this->escape($this->user['name'])}
 EOD;
     }
     /* ====================================================
@@ -49,7 +66,8 @@ EOD;
      */
     protected function renderAccountInformation()
     {
-        $user = $this->getUser();
+        $user = $this->user;
+
         return <<<EOD
 <table class="account-person-list app_table" border="1">
   <tr><th colspan="2">Account Information</th></tr>

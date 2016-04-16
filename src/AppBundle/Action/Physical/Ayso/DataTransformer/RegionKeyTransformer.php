@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Physical\Person\DataTransformer\AYSO;
+namespace AppBundle\Action\Physical\Ayso\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
