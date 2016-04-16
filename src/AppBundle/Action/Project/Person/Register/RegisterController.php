@@ -3,6 +3,8 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractController;
 
+use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -13,85 +15,58 @@ use Doctrine\DBAL\Connection;
 
 class RegisterController extends AbstractController
 {
-    private $conn;
-    private $projectKey;
     private $registerForm;
-    
+    private $aysoRepository;
+    private $projectPersonRepository;
+
     public function __construct(
-        Connection   $conn,
-        RegisterForm $registerForm,
-        $projectKey
+        RegisterForm            $registerForm,
+        PhysicalAysoRepository  $aysoRepository,
+        ProjectPersonRepository $projectPersonRepository
     )
     {
-        $this->conn         = $conn;
-        $this->projectKey   = $projectKey;
-        $this->registerForm = $registerForm;
+        $this->registerForm            = $registerForm;
+        $this->aysoRepository          = $aysoRepository;
+        $this->projectPersonRepository = $projectPersonRepository;
     }
     public function __invoke(Request $request)
     {
-        $projectKey = $this->projectKey;
-
         $user = $this->getUser();
-        $personKey = $user['personKey'];
+        
+        $projectKey = $user['projectKey'];
+        $personKey  = $user['personKey'];
 
-        $projectPerson = $this->findProjectPerson($projectKey,$personKey);
+        $projectPersonRepository = $this->projectPersonRepository;
+
+        $projectPerson = $projectPersonRepository->find($projectKey,$personKey);
         if (!$projectPerson) {
-            $this->insertProjectPerson($projectKey,$personKey,$user['name'],$user['email']);
-            $projectPerson = $this->findProjectPerson($projectKey,$personKey);
+            $projectPerson = $projectPersonRepository->create($projectKey,$personKey,$user['name'],$user['email']);
         }
-
+        dump($projectPerson);
+        
         $registerForm = $this->registerForm;
         $registerForm->setData($projectPerson);
         $registerForm->handleRequest($request);
+        
         if ($registerForm->isValid()) {
-            
+            $projectPersonOriginal = $projectPerson;
+            $projectPerson = $registerForm->getData();
+            //dump($projectPerson);
+            if ($registerForm->getSubmit() == 'nope') {
+                $projectPerson['registered'] = false;
+                $projectPerson['verified']   = null;
+                $projectPersonRepository->save($projectPerson);
+                return $this->redirectToRoute('app_home');
+            }
+            // Need some notifications here
+            $projectPerson['registered'] = true;
+            $projectPersonRepository->save($projectPerson,$projectPersonOriginal);
+
+            return $this->redirectToRoute('project_person_register');
         }
         $request->attributes->set('registerForm', $registerForm);
         $request->attributes->set('projectPerson',$projectPerson);
         
         return null;
-    }
-    private function findProjectPerson($projectKey,$personKey)
-    {
-        $qb = $this->conn->createQueryBuilder();
-
-        $qb->addSelect([
-            'projectPerson.id         AS id',
-            'projectPerson.projectKey AS projectKey',
-            'projectPerson.personKey  AS personKey',
-            'projectPerson.name       AS name',
-            'projectPerson.email      AS email',
-            'projectPerson.registered AS registered',
-        ]);
-        $qb->from ('projectPersons','projectPerson');
-        $qb->where('projectPerson.projectKey = :projectKey AND projectPerson.personKey = :personKey');
-        $qb->setParameters([
-            'projectKey' => $projectKey,
-            'personKey'  => $personKey,
-        ]);
-        $row = $qb->execute()->fetch();
-        return $row;
-    }
-    private function insertProjectPerson($projectKey,$personKey,$name,$email)
-    {
-        // TODO ensure name is unique within a project
-        
-        $qb = $this->conn->createQueryBuilder();
-        $qb->insert('projectPersons');
-        $qb->values([
-            'projectKey' => ':projectKey',
-            'personKey'  => ':personKey',
-            'name'       => ':name',
-            'email'      => ':email',
-            'registered' => ':registered',
-        ]);
-        $qb->setParameters([
-            'projectKey' => $projectKey,
-            'personKey'  => $personKey,
-            'name'       => $name,
-            'email'      => $email,
-            'registered' => false,
-        ]);
-        return $qb->execute();
     }
 }

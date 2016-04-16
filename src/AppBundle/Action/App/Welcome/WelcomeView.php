@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Welcome;
+namespace AppBundle\Action\App\Welcome;
 
 use AppBundle\Action\AbstractView;
 
@@ -14,17 +14,10 @@ class WelcomeView extends AbstractView
 {
     /** @var  UserLoginForm */
     private $userLoginForm;
-
-    /** @var  Router */
-    private $router;
     
-    public function __construct(UserLoginForm $userLoginForm,
-                                RouterInterface $router
-    )
+    public function __construct(UserLoginForm $userLoginForm)
     {
         $this->userLoginForm = $userLoginForm;
-        $this->router = $router;
-        
     }
     public function __invoke(Request $request)
     {
@@ -75,7 +68,7 @@ EOT;
         <p>If you just want to peruse the Schedules and Results, no need to go any further.  You do not need to sign-in to access Schedules or Results above.</p>
         <br/>
         <p>To volunteer to officiate, you will need to create a ZAYSO account.  If you officiated at the 2012 National Games in Tennesee or 2014 National Games in Southern California, you can simply sign-in below and update your plans for the 2016 National Games.
-            If you need help remembering your password, you can request help by <a href="{$this->router->generate('user_password_reset_request')}">clicking here</a>.</p>
+            If you need help remembering your password, you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.</p>
         <br/>
         <p>If this is your first time to the National Games (you are in for a treat), click "Create New Account" in the menu above and get started.</p>
     </div>
@@ -106,7 +99,7 @@ EOD;
     <legend>Need Help?</legend>
     <ul class="cerad-common-help">
         <li>
-            Forgot your ZAYSO account password?  <a href="{$this->router->generate('user_password_reset_request')}">Click here to recover your ZAYSO password.</a>
+            Forgot your ZAYSO account password?  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to recover your ZAYSO password.</a>
         </li>
       <li>
             Need to create an account? Click "Create New Account" in the menu above to create an account.

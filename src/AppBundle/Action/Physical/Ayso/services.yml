@@ -12,3 +12,12 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@ayso_connection'
+
+    ayso_region_key_transformer:
+        class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer
+
+    ayso_volunteer_key_transformer:
+        class:  AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer
+
+    ayso_region_to_sar_transformer:
+        class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer

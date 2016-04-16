@@ -3,6 +3,10 @@ services:
     project_person_connection:
         alias: doctrine.dbal.ng2016_connection
 
+    project_person_repository:
+        class: AppBundle\Action\Project\Person\ProjectPersonRepository
+        arguments:
+            - '@project_person_connection'
 
 # ==========================================================================
 # Register
@@ -11,9 +15,9 @@ services:
         class: AppBundle\Action\Project\Person\Register\RegisterController
         parent: abstract_controller
         arguments:
-            - '@project_person_connection'
             - '@project_person_register_form'
-            - '%app_project_key%'
+            - '@ayso_repository'
+            - '@project_person_repository'
 
     project_person_register_view:
         class: AppBundle\Action\Project\Person\Register\RegisterView

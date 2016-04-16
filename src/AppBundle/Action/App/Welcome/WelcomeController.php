@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Welcome;
+namespace AppBundle\Action\App\Welcome;
 
 use AppBundle\Action\AbstractController;
 

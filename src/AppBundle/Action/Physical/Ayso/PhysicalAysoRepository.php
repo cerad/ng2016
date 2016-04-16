@@ -15,6 +15,9 @@ class PhysicalAysoRepository
     /** @var  Statement */
     private $findVolCertStmt;
 
+    /** @var  Statement */
+    private $findOrgStmt;
+
     public function __construct(Connection $conn)
     {
         $this->conn = $conn;
@@ -49,5 +52,17 @@ EOD;
         $this->findVolCertStmt->execute([$fedKey,$role]);
 
         return $this->findVolCertStmt->fetch() ? : null;
+    }
+    public function findOrg($orgKey)
+    {
+        if (!$this->findOrgStmt) {
+            $sql = <<<EOD
+SELECT orgKey,sar FROM orgs WHERE orgKey = ?
+EOD;
+            $this->findOrgStmt = $this->conn->prepare($sql);
+        }
+        $this->findOrgStmt->execute([$orgKey]);
+
+        return $this->findOrgStmt->fetch() ? : null;
     }
 }

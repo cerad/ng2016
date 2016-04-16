@@ -8,36 +8,20 @@ use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use Symfony\Component\Yaml\Yaml;
 
 use Doctrine\DBAL\Connection;
+use Tests\AppBundle\AbstractTestDatabase;
 
-class ProjectPersonRepositoryTest extends \PHPUnit_Framework_TestCase
+class ProjectPersonRepositoryTest extends AbstractTestDatabase
 {
-    /** @var  Connection */
-    protected $conn;
-
     /** @var  ProjectPersonRepository */
     protected $projectPersonRepository;
 
     public function setUp()
     {
-        $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../../app/config/parameters.yml'));
-        $params = $params['parameters'];
+        $this->databaseNameKey = 'database_name_users';
 
-        /** @noinspection PhpInternalEntityUsedInspection */
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $config = new \Doctrine\DBAL\Configuration();
+        parent::setUp();
 
-        $connectionParams = array(
-            'dbname'   => $params['database_name_users'],
-            'user'     => $params['database_user'],
-            'password' => $params['database_password'],
-            'host'     => $params['database_host'],
-            'port'     => $params['database_port'],
-            'driver'   => $params['database_driver'],
-        );
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
-
-        $this->projectPersonRepository = new ProjectPersonRepository($conn, new ProjectFactory());
+        $this->projectPersonRepository = new ProjectPersonRepository($this->conn, new ProjectFactory());
     }
     public function testFindOfficials()
     {

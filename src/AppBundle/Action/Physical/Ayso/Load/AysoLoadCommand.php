@@ -54,6 +54,12 @@ EOD;
         $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ? WHERE fedKey = ? AND role = ?';
         $this->updateCertStmt = $this->conn->prepare($sql);
 
+        $sql = 'SELECT sar FROM orgs WHERE orgKey = ?';
+        $this->checkOrgStmt = $this->conn->prepare($sql);
+
+        $sql = 'INSERT INTO orgs (orgKey,sar) VALUES (?,?)';
+        $this->insertOrgStmt = $this->conn->prepare($sql);
+
         // Mess with badge list
         $badgeSorts = [];
         foreach($this->certMetas as $certMeta) {
@@ -65,7 +71,8 @@ EOD;
         $filename = $input->getArgument('filename');
 
         echo sprintf("Loading AYSO File: %s...\n",$filename);
-        $this->load($filename);
+        //$this->load($filename);
+        $this->processOrgs();
     }
     /** @var  Statement */
     private $insertVolStmt;
@@ -81,6 +88,12 @@ EOD;
 
     /** @var  Statement */
     private $checkCertStmt;
+
+    /** @var  Statement */
+    private $insertOrgStmt;
+
+    /** @var  Statement */
+    private $checkOrgStmt;
 
     private function load($filename)
     {
@@ -234,6 +247,39 @@ EOD;
         $this->updateCertStmt->execute([$roleDate,$badge,$badgeDate,$fedKey,$role]);
         return;
         // die(sprintf('Update Badge %s > %s',$badge, $badgeExisting));
+    }
+    /* ==============================================================================
+     * Quick and dirty mapping from sar to org key
+     *
+     */
+    private function processOrgs()
+    {
+        $sql = 'SELECT DISTINCT sar FROM vols';
+        $stmt = $this->conn->executeQuery($sql);
+        while($row = $stmt->fetch()) {
+            $sar = $row['sar'];
+            $this->processSar($sar);
+        }
+    }
+    private function processSar($sar)
+    {
+        if (!$sar) return;
+
+        $sarParts = explode('/',$sar);
+        if (count($sarParts) != 3) {
+            die('sar error: ' . $sar);
+        }
+        $region = (int)$sarParts[2];
+        if ($region < 1 || $region > 9999) {
+            die('sar region number error: ' . $sar);
+        }
+        $orgKey = sprintf('AYSOR:%04d',$region);
+        //die(sprintf('%s %s',$sar,$orgKey));
+        $row = $this->checkOrgStmt->execute([$orgKey]);
+        if ($row) {
+            return;
+        }
+        $this->insertOrgStmt->execute([$orgKey,$sar]);
     }
     protected function clearDatabase(Connection $conn)
     {

@@ -20,6 +20,81 @@ class ProjectPersonRepository
         $this->conn = $conn;
         $this->projectFactory = $projectFactory;
     }
+    public function save($projectPerson,$projectPersonOriginal = null)
+    {
+        $id = $projectPerson['id'] ? : null;
+        if (!$id) {
+            return $this->insert($projectPerson);
+        }
+        if (isset($projectPersonOriginal['name']) && ($projectPersonOriginal['name'] != $projectPerson['name'])) {
+            $projectPerson['name'] = $this->generateUniqueName($projectPerson['projectKey'],$projectPerson['name']);
+        }
+
+        $sql = <<<EOD
+UPDATE projectPersons SET
+orgKey = ?,     fedKey = ?,
+registered = ?, verified = ?,
+name   = ?,     email = ?, phone = ?,
+gender = ?,     age = ?, 
+notes = ?,      notesUser = ?,
+plans = ?,      avail = ?
+WHERE projectKey = ? AND personKey = ?
+EOD;
+        $stmt = $this->conn->prepare(($sql));
+        $stmt->execute([
+            $projectPerson['orgKey'],
+            $projectPerson['fedKey'],
+            $projectPerson['registered'],
+            $projectPerson['verified'],
+            $projectPerson['name'  ],
+            $projectPerson['email' ],
+            $projectPerson['phone' ],
+            $projectPerson['gender'],
+            $projectPerson['age'],
+            $projectPerson['notes'],
+            $projectPerson['notesUser'],
+            isset($projectPerson['plans']) ? serialize($projectPerson['plans']) : null,
+            isset($projectPerson['avail']) ? serialize($projectPerson['avail']) : null,
+            $projectPerson['projectKey'],
+            $projectPerson['personKey'],
+
+        ]);
+
+        return $projectPerson;
+    }
+    private function insert($projectPerson)
+    {
+        // Prevent dups
+        $projectPerson['name'] = $this->generateUniqueName($projectPerson['projectKey'],$projectPerson['name']);
+        
+        $sql = <<<EOD
+INSERT INTO projectPersons
+(projectKey,personKey,orgKey, fedKey,registered,verified, name,email,phone, gender,age,notes, notesUser,plans,avail)
+VALUES
+(?,?,?, ?,?,?, ?,?,?, ?,?,?, ?)
+EOD;
+        $stmt = $this->conn->prepare(($sql));
+        $stmt->execute([
+            $projectPerson['projectKey'],
+            $projectPerson['personKey'],
+            $projectPerson['orgKey'],
+            $projectPerson['fedKey'],
+            $projectPerson['registered'],
+            $projectPerson['verified'],
+            $projectPerson['name'],
+            $projectPerson['email'],
+            $projectPerson['phone'],
+            $projectPerson['gender'],
+            $projectPerson['age'],
+            $projectPerson['notes'],
+            $projectPerson['notesUser'],
+            isset($projectPerson['plans']) ? serialize($projectPerson['plans']) : null,
+            isset($projectPerson['avail']) ? serialize($projectPerson['avail']) : null,
+        ]);
+        $projectPerson['id'] = $this->conn->lastInsertId();
+
+        return $projectPerson;
+    }
     public function find($projectKey,$personKey)
     {
         $qb = $this->createProjectPersonQueryBuilder();
@@ -29,7 +104,10 @@ class ProjectPersonRepository
         $stmt = $qb->execute();
         $projectPerson = $stmt->fetch();
         if (!$projectPerson) return null;
-        
+
+        $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
+        $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
+
         $projectPerson['roles'] = [];
 
         return $projectPerson;
@@ -48,12 +126,47 @@ class ProjectPersonRepository
             'projectPerson.fedKey     AS fedKey',
             'projectPerson.name       AS name',
             'projectPerson.email      AS email',
+            'projectPerson.phone      AS phone',
+            'projectPerson.gender     AS gender',
+            'projectPerson.age        AS age',
+            'projectPerson.plans      AS plans',
+            'projectPerson.avail      AS avail',
+            'projectPerson.notes      AS notes',
+            'projectPerson.notesUser  AS notesUser',
 
-            'projectPerson.registered AS verified',
+            'projectPerson.verified   AS verified',
             'projectPerson.registered AS registered',
         ]);
         $qb->from('projectPersons','projectPerson');
         return $qb;
+    }
+    public function create($projectKey,$personKey,$name,$email)
+    {
+        $name = $this->generateUniqueName($projectKey,$name);
+        return [
+
+            'id' => null,
+
+            'projectKey' => $projectKey,
+            'personKey'  => $personKey,
+            'name'       => $name,
+            'email'      => $email,
+            
+            'orgKey' => null,
+            'fedKey' => null,
+            'phone'  => null,
+            'gender' => null,
+            'age'    => null,
+            
+            'verified'   => null,
+            'registered' => null,
+
+            'notes'     => null,
+            'notesUser' => null,
+
+            'plans' => null,
+            'avail' => null,
+        ];
     }
     /** @var  Statement */
     private $uniqueProjectNameStmt;
@@ -78,7 +191,7 @@ class ProjectPersonRepository
         }
         return null;
     }
-
+    // ng2014 format
     public function findOfficials($projectKey)
     {
         $qb = $this->conn->createQueryBuilder();

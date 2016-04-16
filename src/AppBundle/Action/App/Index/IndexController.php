@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Index;
+namespace AppBundle\Action\App\Index;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
