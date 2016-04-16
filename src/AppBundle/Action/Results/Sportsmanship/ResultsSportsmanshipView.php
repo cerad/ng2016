@@ -170,7 +170,7 @@ EOD;
         $html = <<<EOD
 <div id="layout-block">
 <table class="standings" border = "1">
-<tr><th class="text-center" colspan="4" style="font-size: 1.2em;">Sportsmanship Standings: {$levelKey}</th></tr>
+<tr><th class="text-center" colspan="4" style="font-size: 1.2em;">Sportsmanship Standings : {$levelKey}</th></tr>
 <tr class="tbl-hdr">
     <th>&nbsp;Team</th>
     <th class="text-center">Sportsmanship</th>
