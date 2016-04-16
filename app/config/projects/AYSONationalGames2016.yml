@@ -384,6 +384,7 @@ parameters:
       willAttend:    { group: plans }
       willVolunteer: { group: plans }
       willReferee:   { group: plans }
+      refereeBadge:  { group: plans }
       tshirt:        { group: plans }
 
   app_project_controls:

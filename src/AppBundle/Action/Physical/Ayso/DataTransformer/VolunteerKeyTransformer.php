@@ -5,17 +5,17 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class VolunteerKeyTransformer implements DataTransformerInterface
 {
-    public function transform($value)
+    public function transform($fedKey)
     {   
-        if (!$value) return null;
+        if (!$fedKey) return null;
 
-        if (substr($value,0,6) == 'AYSOV:') return substr($value,6);
+        if (substr($fedKey,0,6) == 'AYSOV:') return substr($fedKey,6);
 
-        return $value;
+        return $fedKey;
     }
-    public function reverseTransform($value)
+    public function reverseTransform($aysoid)
     {
-        $id = preg_replace('/\D/','',$value);
+        $id = preg_replace('/\D/','',$aysoid);
         
         if (!$id) return null;
         

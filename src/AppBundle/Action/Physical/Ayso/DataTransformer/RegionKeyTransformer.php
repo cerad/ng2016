@@ -5,17 +5,17 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class RegionKeyTransformer implements DataTransformerInterface
 {           
-    public function transform($value)
+    public function transform($orgKey)
     {
-        if (!$value) return null;
+        if (!$orgKey) return null;
 
-        if (substr($value,0,6) == 'AYSOR:') return (int)substr($value,6);
+        if (substr($orgKey,0,6) == 'AYSOR:') return (int)substr($orgKey,6);
 
-        return (int)$value;
+        return (int)$orgKey;
     }
-    public function reverseTransform($value)
+    public function reverseTransform($regionNumber)
     {
-        $key = (int)preg_replace('/\D/','',$value);
+        $key = (int)preg_replace('/\D/','',$regionNumber);
         
         if (!$key) return null;
         

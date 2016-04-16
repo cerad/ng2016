@@ -14,7 +14,7 @@ class PhysicalAysoRepositoryTest extends AbstractTestDatabase
         parent::setUp();
     }
 
-    public function testFind()
+    public function testFindVolAndCert()
     {
         $conn = $this->conn;
         $this->resetDatabase($conn);
@@ -63,5 +63,20 @@ EOD;
 
         $badgeDate = new \DateTime($cert['badgeDate']);
         $this->assertEquals('Jun',$badgeDate->format('M'));
+    }
+    public function testFindOrg()
+    {
+        $sql = <<<EOD
+INSERT INTO orgs (orgKey,sar) VALUES(?,?);
+EOD;
+        $insertOrgStmt = $this->conn->prepare($sql);
+        $insertOrgStmt->execute([
+           'AYSOR:0894','5/C/0894'
+        ]);
+        $aysoRepository = new PhysicalAysoRepository($this->conn);
+
+        $org = $aysoRepository->findOrg('AYSOR:0894');
+        
+        $this->assertEquals('5/C/0894',$org['sar']);
     }
 }

@@ -8,7 +8,7 @@ CREATE TABLE vols
   email   VARCHAR(255),
   phone   VARCHAR(255),
   gender  VARCHAR(  8),
-  sar     VARCHAR( 10),
+  sar     VARCHAR( 20),
   regYear VARCHAR( 20),
 
   CONSTRAINT aysoVols_primaryKey PRIMARY KEY(fedKey)
@@ -26,5 +26,14 @@ CREATE TABLE certs
   badgeDate DATE,
 
   CONSTRAINT aysoCerts_primaryKey PRIMARY KEY(fedKey,role)
+
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+CREATE TABLE orgs
+(
+  orgKey VARCHAR( 20),
+  sar    VARCHAR( 20),
+
+  CONSTRAINT aysoOrgs_primaryKey PRIMARY KEY(orgKey)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
