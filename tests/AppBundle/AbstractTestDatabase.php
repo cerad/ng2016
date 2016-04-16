@@ -12,7 +12,8 @@ abstract class AbstractTestDatabase extends PHPUnit_Framework_TestCase
     /** @var  Connection */
     protected $conn;
     protected $params;
-    protected $schemaFile = 'schema2016.sql';
+    protected $schemaFile      = 'schema2016.sql';
+    protected $databaseNameKey = 'database_name_test';
 
     public function setUp()
     {
@@ -24,7 +25,7 @@ abstract class AbstractTestDatabase extends PHPUnit_Framework_TestCase
         $config = new \Doctrine\DBAL\Configuration();
 
         $connectionParams = array(
-            'dbname'   => $params['database_name_test'],
+            'dbname'   => $params[$this->databaseNameKey],
             'user'     => $params['database_user'],
             'password' => $params['database_password'],
             'host'     => $params['database_host'],
