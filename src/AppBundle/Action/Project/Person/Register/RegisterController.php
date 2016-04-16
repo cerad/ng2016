@@ -3,6 +3,7 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractController;
 
+use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -14,29 +15,26 @@ use Doctrine\DBAL\Connection;
 
 class RegisterController extends AbstractController
 {
-    private $conn;
-    private $projectKey;
     private $registerForm;
+    private $aysoRepository;
     private $projectPersonRepository;
 
     public function __construct(
-        Connection   $conn,
-        ProjectPersonRepository $projectPersonRepository,
-        RegisterForm $registerForm,
-        $projectKey
+        RegisterForm            $registerForm,
+        PhysicalAysoRepository  $aysoRepository,
+        ProjectPersonRepository $projectPersonRepository
     )
     {
-        $this->conn         = $conn;
-        $this->projectKey   = $projectKey;
-        $this->registerForm = $registerForm;
+        $this->registerForm            = $registerForm;
+        $this->aysoRepository          = $aysoRepository;
         $this->projectPersonRepository = $projectPersonRepository;
     }
     public function __invoke(Request $request)
     {
-        $projectKey = $this->projectKey;
-
         $user = $this->getUser();
-        $personKey = $user['personKey'];
+        
+        $projectKey = $user['projectKey'];
+        $personKey  = $user['personKey'];
 
         $projectPersonRepository = $this->projectPersonRepository;
 
@@ -44,7 +42,8 @@ class RegisterController extends AbstractController
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->create($projectKey,$personKey,$user['name'],$user['email']);
         }
-
+        dump($projectPerson);
+        
         $registerForm = $this->registerForm;
         $registerForm->setData($projectPerson);
         $registerForm->handleRequest($request);
@@ -69,27 +68,5 @@ class RegisterController extends AbstractController
         $request->attributes->set('projectPerson',$projectPerson);
         
         return null;
-    }
-    private function insertProjectPerson($projectKey,$personKey,$name,$email)
-    {
-        // TODO ensure name is unique within a project
-        
-        $qb = $this->conn->createQueryBuilder();
-        $qb->insert('projectPersons');
-        $qb->values([
-            'projectKey' => ':projectKey',
-            'personKey'  => ':personKey',
-            'name'       => ':name',
-            'email'      => ':email',
-            'registered' => ':registered',
-        ]);
-        $qb->setParameters([
-            'projectKey' => $projectKey,
-            'personKey'  => $personKey,
-            'name'       => $name,
-            'email'      => $email,
-            'registered' => false,
-        ]);
-        return $qb->execute();
     }
 }

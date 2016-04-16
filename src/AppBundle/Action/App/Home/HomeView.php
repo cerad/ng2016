@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Home;
+namespace AppBundle\Action\App\Home;
 
 use AppBundle\Action\AbstractView;
 

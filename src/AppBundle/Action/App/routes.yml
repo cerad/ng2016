@@ -2,7 +2,7 @@
 app_index:
     path: /
     defaults:
-        _controller: app_action_index_controller
+        _controller: index_controller
 
 app_welcome:
     path: /welcome
@@ -20,4 +20,4 @@ app_home:
 app_admin:
     path: /admin
     defaults:
-        _controller: app_action_admin_controller
+        _controller: admin_controller

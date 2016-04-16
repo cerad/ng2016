@@ -29,12 +29,15 @@ class ProjectPersonRepository
         if (isset($projectPersonOriginal['name']) && ($projectPersonOriginal['name'] != $projectPerson['name'])) {
             $projectPerson['name'] = $this->generateUniqueName($projectPerson['projectKey'],$projectPerson['name']);
         }
+
         $sql = <<<EOD
 UPDATE projectPersons SET
-orgKey = ?, fedKey = ?,
+orgKey = ?,     fedKey = ?,
 registered = ?, verified = ?,
-name   = ?, email = ?, phone = ?,
-gender = ?, age = ?
+name   = ?,     email = ?, phone = ?,
+gender = ?,     age = ?, 
+notes = ?,      notesUser = ?,
+plans = ?,      avail = ?
 WHERE projectKey = ? AND personKey = ?
 EOD;
         $stmt = $this->conn->prepare(($sql));
@@ -48,6 +51,10 @@ EOD;
             $projectPerson['phone' ],
             $projectPerson['gender'],
             $projectPerson['age'],
+            $projectPerson['notes'],
+            $projectPerson['notesUser'],
+            isset($projectPerson['plans']) ? serialize($projectPerson['plans']) : null,
+            isset($projectPerson['avail']) ? serialize($projectPerson['avail']) : null,
             $projectPerson['projectKey'],
             $projectPerson['personKey'],
 
@@ -62,9 +69,9 @@ EOD;
         
         $sql = <<<EOD
 INSERT INTO projectPersons
-(projectKey,personKey,orgKey,fedKey,registered,verified,name,email,phone,gender,age)
+(projectKey,personKey,orgKey, fedKey,registered,verified, name,email,phone, gender,age,notes, notesUser,plans,avail)
 VALUES
-(?,?,?, ?,?,?, ?,?,?, ?,?)
+(?,?,?, ?,?,?, ?,?,?, ?,?,?, ?)
 EOD;
         $stmt = $this->conn->prepare(($sql));
         $stmt->execute([
@@ -79,6 +86,10 @@ EOD;
             $projectPerson['phone'],
             $projectPerson['gender'],
             $projectPerson['age'],
+            $projectPerson['notes'],
+            $projectPerson['notesUser'],
+            isset($projectPerson['plans']) ? serialize($projectPerson['plans']) : null,
+            isset($projectPerson['avail']) ? serialize($projectPerson['avail']) : null,
         ]);
         $projectPerson['id'] = $this->conn->lastInsertId();
 
@@ -93,7 +104,10 @@ EOD;
         $stmt = $qb->execute();
         $projectPerson = $stmt->fetch();
         if (!$projectPerson) return null;
-        
+
+        $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
+        $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
+
         $projectPerson['roles'] = [];
 
         return $projectPerson;
@@ -115,6 +129,10 @@ EOD;
             'projectPerson.phone      AS phone',
             'projectPerson.gender     AS gender',
             'projectPerson.age        AS age',
+            'projectPerson.plans      AS plans',
+            'projectPerson.avail      AS avail',
+            'projectPerson.notes      AS notes',
+            'projectPerson.notesUser  AS notesUser',
 
             'projectPerson.verified   AS verified',
             'projectPerson.registered AS registered',
@@ -142,6 +160,12 @@ EOD;
             
             'verified'   => null,
             'registered' => null,
+
+            'notes'     => null,
+            'notesUser' => null,
+
+            'plans' => null,
+            'avail' => null,
         ];
     }
     /** @var  Statement */

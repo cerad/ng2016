@@ -43,40 +43,39 @@ services:
         calls: [[setContainer, ['@service_container']]]
 
     # action index
-    app_action_index_controller:
-        class: AppBundle\Action\Index\IndexController
-        parent: app_action_abstract_controller
+    index_controller:
+        class:  AppBundle\Action\App\Index\IndexController
+        parent: abstract_controller
 
     # action welcome
     welcome_controller:
-        class:  AppBundle\Action\Welcome\WelcomeController
+        class:  AppBundle\Action\App\Welcome\WelcomeController
         parent: abstract_controller
 
     welcome_view:
-        class: AppBundle\Action\Welcome\WelcomeView
+        class:  AppBundle\Action\App\Welcome\WelcomeView
         parent: abstract_view
         arguments:
             - '@user_login_form'
-            - '@router'
 
     # action home
     home_controller:
-        class:  AppBundle\Action\Home\HomeController
+        class:  AppBundle\Action\App\Home\HomeController
         parent: abstract_controller
 
     home_view:
-        class: AppBundle\Action\Home\HomeView
+        class:  AppBundle\Action\App\Home\HomeView
         parent: abstract_view
 
     # action admin
-    app_action_admin_controller:
+    admin_controller:
         class:  AppBundle\Action\Admin\AdminController
         parent: abstract_controller
         arguments:
-          - '@app_action_admin_page_template'
+          - '@admin_page_template'
         
-    app_action_admin_page_template:
-        class: AppBundle\Action\Admin\AdminPageTemplate
+    admin_page_template:
+        class:  AppBundle\Action\Admin\AdminPageTemplate
         parent: app_page_template
 
 

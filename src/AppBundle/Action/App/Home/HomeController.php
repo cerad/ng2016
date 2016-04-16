@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Home;
+namespace AppBundle\Action\app\Home;
 
 use AppBundle\Action\AbstractController;
 
