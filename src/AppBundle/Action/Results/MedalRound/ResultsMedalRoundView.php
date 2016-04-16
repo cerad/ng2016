@@ -172,7 +172,7 @@ EOD;
     {   $html = <<<EOD
 <thead>
 <tr class="tbl-hdr">
-    <th class="text-center" colspan="12">Medal Round Results :
+    <th class="text-center" colspan="12">Medal Round Results : 
 EOD;
     $html .= str_replace('_', ' ', $game['level_key']);
     $html .= <<<EOD
