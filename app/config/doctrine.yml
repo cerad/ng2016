@@ -12,6 +12,14 @@ doctrine:
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
+            ayso:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name_ayso%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
             test:
                 driver:   %database_driver%
                 host:     %database_host%

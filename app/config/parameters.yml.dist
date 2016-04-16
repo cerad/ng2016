@@ -9,6 +9,7 @@ parameters:
     database_user:     root
     database_password: ~
 
+    database_name_ayso:    ayso
     database_name_test:    ng2016test
     database_name_users:   ng2014
     database_name_project: ng2014games

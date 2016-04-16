@@ -1,0 +1,14 @@
+services:
+
+    ayso_connection:
+        alias: doctrine.dbal.ayso_connection
+
+    ayso_repository:
+        class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
+        arguments: ['@ayso_connection']
+
+    ayso_load_command:
+        class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - '@ayso_connection'
