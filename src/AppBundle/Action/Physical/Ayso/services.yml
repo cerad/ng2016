@@ -4,7 +4,7 @@ services:
         alias: doctrine.dbal.ayso_connection
 
     ayso_repository:
-        class: AppBundle\Action\Physical\Ayso\AysoRepository
+        class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
         arguments: ['@ayso_connection']
 
     ayso_load_command:

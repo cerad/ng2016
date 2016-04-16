@@ -12,6 +12,7 @@ abstract class AbstractTestDatabase extends PHPUnit_Framework_TestCase
     /** @var  Connection */
     protected $conn;
     protected $params;
+    protected $schemaFile = 'schema2016.sql';
 
     public function setUp()
     {
@@ -42,10 +43,11 @@ abstract class AbstractTestDatabase extends PHPUnit_Framework_TestCase
     }
     protected function createDatabase(Connection $conn)
     {
-        $cmd = sprintf("mysql -u%s -p%s %s < schema2016.sql",
+        $cmd = sprintf("mysql -u%s -p%s %s < %s",
             $conn->getUsername(),
             $conn->getPassword(),
-            $conn->getDatabase()
+            $conn->getDatabase(),
+            $this->schemaFile
         );
         exec($cmd);
     }
