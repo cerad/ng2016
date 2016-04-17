@@ -19,6 +19,12 @@ user_create:
         _view:       user_create_view
         _controller: user_create_controller
 
+user_update:
+    path: /update
+    defaults:
+        _view:       user_update_view
+        _controller: user_update_controller
+
 # user password
 user_password_update:
     path: /password/update

@@ -21,3 +21,4 @@ services:
 
     ayso_region_to_sar_transformer:
         class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer
+        arguments: ['@ayso_repository']

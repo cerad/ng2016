@@ -68,6 +68,8 @@ services:
         parent: abstract_view
         arguments:
             - '@project_person_repository'
+            - '@ayso_volunteer_key_transformer'
+            - '@ayso_region_to_sar_transformer'
 
     # action admin
     admin_controller:

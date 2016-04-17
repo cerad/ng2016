@@ -42,6 +42,7 @@ CREATE TABLE users
 
 -- ===================================================================
 -- The main registration information
+DROP TABLE IF EXISTS projectPersonRoles;
 DROP TABLE IF EXISTS projectPersons;
 
 CREATE TABLE projectPersons
@@ -52,6 +53,7 @@ CREATE TABLE projectPersons
   personKey  VARCHAR( 40) NOT NULL,
   orgKey     VARCHAR( 40),
   fedKey     VARCHAR( 40),
+  regYear    VARCHAR( 20),
 
   registered BOOLEAN DEFAULT NULL,
   verified   BOOLEAN DEFAULT NULL, -- NULL implies information does not need to be verified
@@ -61,6 +63,7 @@ CREATE TABLE projectPersons
   phone      VARCHAR( 20),
   gender     VARCHAR(  1),
   age        INTEGER,
+  shirtSize  VARCHAR( 20),
 
   notes     LONGTEXT,
   notesUser LONGTEXT,
@@ -76,8 +79,6 @@ CREATE TABLE projectPersons
 
 -- ====================================================================
 -- Project specific roles
-DROP TABLE IF EXISTS projectPersonRoles;
-
 CREATE TABLE projectPersonRoles
 (
   id              INTEGER UNSIGNED AUTO_INCREMENT NOT NULL,

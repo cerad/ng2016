@@ -32,7 +32,7 @@ class ProjectPersonRepository
 
         $sql = <<<EOD
 UPDATE projectPersons SET
-orgKey = ?,     fedKey = ?,
+orgKey = ?,     fedKey = ?, regYear = ?,
 registered = ?, verified = ?,
 name   = ?,     email = ?, phone = ?,
 gender = ?,     age = ?, 
@@ -44,6 +44,7 @@ EOD;
         $stmt->execute([
             $projectPerson['orgKey'],
             $projectPerson['fedKey'],
+            $projectPerson['regYear'],
             $projectPerson['registered'],
             $projectPerson['verified'],
             $projectPerson['name'  ],
@@ -69,9 +70,9 @@ EOD;
         
         $sql = <<<EOD
 INSERT INTO projectPersons
-(projectKey,personKey,orgKey, fedKey,registered,verified, name,email,phone, gender,age,notes, notesUser,plans,avail)
+(projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age,notes,notesUser,plans,avail)
 VALUES
-(?,?,?, ?,?,?, ?,?,?, ?,?,?, ?)
+(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 EOD;
         $stmt = $this->conn->prepare(($sql));
         $stmt->execute([
@@ -79,6 +80,7 @@ EOD;
             $projectPerson['personKey'],
             $projectPerson['orgKey'],
             $projectPerson['fedKey'],
+            $projectPerson['regYear'],
             $projectPerson['registered'],
             $projectPerson['verified'],
             $projectPerson['name'],
@@ -95,24 +97,7 @@ EOD;
 
         return $projectPerson;
     }
-    public function find($projectKey,$personKey)
-    {
-        $qb = $this->createProjectPersonQueryBuilder();
-        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
-        $qb->setParameters([$projectKey,$personKey]);
-        
-        $stmt = $qb->execute();
-        $projectPerson = $stmt->fetch();
-        if (!$projectPerson) return null;
-
-        $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
-        $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
-
-        $projectPerson['roles'] = [];
-
-        return $projectPerson;
-    }
-    /** 
+    /**
      * @return QueryBuilder
      */
     private function createProjectPersonQueryBuilder()
@@ -120,15 +105,19 @@ EOD;
         $qb = $this->conn->createQueryBuilder();
         $qb->select([
             'projectPerson.id         AS id',
+
             'projectPerson.projectKey AS projectKey',
             'projectPerson.personKey  AS personKey',
             'projectPerson.orgKey     AS orgKey',
             'projectPerson.fedKey     AS fedKey',
+            'projectPerson.regYear    AS regYear',
+
             'projectPerson.name       AS name',
             'projectPerson.email      AS email',
             'projectPerson.phone      AS phone',
             'projectPerson.gender     AS gender',
             'projectPerson.age        AS age',
+
             'projectPerson.plans      AS plans',
             'projectPerson.avail      AS avail',
             'projectPerson.notes      AS notes',
@@ -149,15 +138,17 @@ EOD;
 
             'projectKey' => $projectKey,
             'personKey'  => $personKey,
-            'name'       => $name,
-            'email'      => $email,
             
-            'orgKey' => null,
-            'fedKey' => null,
-            'phone'  => null,
-            'gender' => null,
-            'age'    => null,
-            
+            'orgKey'     => null,
+            'fedKey'     => null,
+            'regYear'    => null,
+
+            'name'    => $name,
+            'email'   => $email,
+            'phone'   => null,
+            'gender'  => null,
+            'age'     => null,
+
             'verified'   => null,
             'registered' => null,
 
@@ -167,6 +158,23 @@ EOD;
             'plans' => null,
             'avail' => null,
         ];
+    }
+    public function find($projectKey,$personKey)
+    {
+        $qb = $this->createProjectPersonQueryBuilder();
+        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
+        $qb->setParameters([$projectKey,$personKey]);
+
+        $stmt = $qb->execute();
+        $projectPerson = $stmt->fetch();
+        if (!$projectPerson) return null;
+
+        $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
+        $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
+
+        $projectPerson['roles'] = [];
+
+        return $projectPerson;
     }
     /** @var  Statement */
     private $uniqueProjectNameStmt;

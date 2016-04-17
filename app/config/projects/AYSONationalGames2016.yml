@@ -373,19 +373,11 @@ parameters:
           transformer: ayso_volunteer_key_transformer
           constraints: ['aysoid_constraint'] # Maybe class name?
 
-      orgKey:
-          type:        integer # region
-          label:       AYSO Region Number
-          href:        eayso.org
-          placeHolder: 1-4 digit number
-          transformer: ayso_region_key_transformer
-          constraints: ['aysoid_constraint'] # Maybe class name?
+      shirtSize: {}
 
       willAttend:    { group: plans }
-      willVolunteer: { group: plans }
       willReferee:   { group: plans }
-      refereeBadge:  { group: plans }
-      tshirt:        { group: plans }
+      willVolunteer: { group: plans }
 
   app_project_controls:
 
@@ -404,7 +396,7 @@ parameters:
             type:    select
             label:   Will Volunteer
             default: no
-            choices: { no: No, yes: Yes, maybe: Not Sure }
+            choices: { no: No, yes: Yes (besides refereeing), maybe: Not Sure }
 
         willReferee:
             type:    select
@@ -427,7 +419,7 @@ parameters:
                 Assistant:    Assistant
                 U8Official:   U8 Official
 
-        tshirt:
+        shirtSize:
             type:    select
             label:   T-Shirt Size
             default: na
@@ -442,3 +434,11 @@ parameters:
                 adultlx:   Adult Large X
                 adultlxx:  Adult Large XX
                 adultlxxx: Adult Large XXX
+
+        orgKey:
+            type:        integer # region
+            label:       AYSO Region Number
+            href:        eayso.org
+            placeHolder: 1-4 digit number
+            transformer: ayso_region_key_transformer
+            constraints: ['aysoid_constraint'] # Maybe class name?

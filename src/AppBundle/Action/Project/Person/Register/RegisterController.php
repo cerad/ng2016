@@ -51,6 +51,15 @@ class RegisterController extends AbstractController
         if ($registerForm->isValid()) {
             $projectPersonOriginal = $projectPerson;
             $projectPerson = $registerForm->getData();
+
+            $fedKey = $projectPerson['fedKey'];
+
+            $vol = $this->aysoRepository->findVol($fedKey);
+            if ($vol) {
+                $projectPerson['orgKey']  = $vol['orgKey'];
+                $projectPerson['regYear'] = $vol['regYear'];
+                $projectPerson['gender']  = $vol['gender'];
+            }
             //dump($projectPerson);
             if ($registerForm->getSubmit() == 'nope') {
                 $projectPerson['registered'] = false;
