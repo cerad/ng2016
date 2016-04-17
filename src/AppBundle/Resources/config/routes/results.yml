@@ -22,4 +22,6 @@ app_results_sportsmanship:
 app_results_final:
     path: /final
     defaults:
-        _controller: app_action_results_final_controller
+        _format: html
+        _controller: results_final_controller
+        _view_html:  results_final_view_html
