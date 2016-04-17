@@ -60,7 +60,11 @@ EOD;
             $projectPerson['personKey'],
 
         ]);
-
+        foreach($projectPerson['roles'] as $roleKey => $projectPersonRole)
+        {
+            $projectPersonRole['projectPersonId'] = $projectPerson['id'];
+            $projectPerson['roles'][$roleKey] = $this->saveRole($projectPersonRole);
+        }
         return $projectPerson;
     }
     private function insert($projectPerson)
@@ -95,7 +99,60 @@ EOD;
         ]);
         $projectPerson['id'] = $this->conn->lastInsertId();
 
+        foreach($projectPerson['roles'] as $roleKey => $projectPersonRole) {
+            $projectPersonRole['projectPersonId'] = $projectPerson['id'];
+            $projectPerson['roles'][$roleKey] = $this->saveRole($projectPersonRole);
+        }
         return $projectPerson;
+    }
+    /* =======================================================
+     * Spelling out each and every file sis a real pain
+     * To use the array insert would require deingin an array of values somewhere
+     * Could the same array be used for updating and creating as well?
+     */
+    private function saveRole($projectPersonRole)
+    {
+        $row = $this->createRole('');
+
+        foreach(array_keys($row) as $key)
+        {
+            $row[$key] = isset($projectPersonRole[$key]) ? $projectPersonRole[$key] : $row[$key];
+        }
+        $id = $row['id'];
+        unset($row['id']);
+        if ($id) {
+            $this->conn->update('projectPersonRoles',$row,['id' => $id]);
+            return $projectPersonRole;
+        }
+        $this->conn->insert('projectPersonRoles',$row);
+        $row['id'] = $this->conn->lastInsertId();
+        return $row;
+
+        /*
+        $sql = <<<EOD
+INSERT INTO projectPersonRoles
+(projectPersonId,role,roleDate,active,approved,verified,ready,badge,badgeUser,badgeDate,misc,notes)
+VALUES
+(?,?,?,?, ?,?,?,?, ?,?,?,?)
+EOD;
+        $stmt = $this->conn->prepare(($sql));
+        $stmt->execute([
+            $projectPersonRole['projectPersonId'],
+            $projectPersonRole['role'],
+            $projectPersonRole['roleDate'],
+            $projectPersonRole['active'],
+            $projectPersonRole['approved'],
+            $projectPersonRole['verified'],
+            $projectPersonRole['ready'],
+            $projectPersonRole['badge'],
+            $projectPersonRole['badgeDate'],
+            $projectPersonRole['badgeUser'],
+            $projectPersonRole['misc'],
+            $projectPersonRole['notes'],
+        ]);
+        $projectPersonRole['id'] = $this->conn->lastInsertId();
+
+        return $projectPersonRole;*/
     }
     /**
      * @return QueryBuilder
@@ -157,23 +214,52 @@ EOD;
 
             'plans' => null,
             'avail' => null,
+            
+            'roles' => [],
+        ];
+    }
+    public function createRole($role, $badge = null, $badgeDate = null, $projectPersonId = null)
+    {
+        return [
+            'id'              => null,
+            'projectPersonId' => $projectPersonId,
+            'role'            => $role,
+            'roleDate'        => null,
+            'active'          => true,
+            'approved'        => false,
+            'verified'        => false,
+            'ready'           => true,
+            'badge'           => $badge,
+            'badgeUser'       => null,
+            'badgeDate'       => null,
+            'misc'            => null,
+            'notes'           => null,
         ];
     }
     public function find($projectKey,$personKey)
     {
+        $sql = 'SELECT * FROM projectPersons WHERE projectKey = ? AND personKey = ?';
+        $stmt = $this->conn->executeQuery($sql,[$projectKey,$personKey]);
+
+        /*
         $qb = $this->createProjectPersonQueryBuilder();
         $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
         $qb->setParameters([$projectKey,$personKey]);
-
         $stmt = $qb->execute();
+        */
         $projectPerson = $stmt->fetch();
         if (!$projectPerson) return null;
 
         $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
         $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
 
+        // Attach the roles
         $projectPerson['roles'] = [];
-
+        $sql = 'SELECT * FROM projectPersonRoles WHERE projectPersonId = ?';
+        $stmt = $this->conn->executeQuery($sql,[$projectPerson['id']]);
+        while($projectPersonRole = $stmt->fetch()) {
+            $projectPerson['roles'][$projectPersonRole['role']] = $projectPersonRole;
+        }
         return $projectPerson;
     }
     /** @var  Statement */

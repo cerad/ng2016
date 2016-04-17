@@ -45,10 +45,10 @@ EOT;
 {$this->renderError()}
 <form role="form" style="width: 400px;" action="{$loginCheckPath}" method="post">
   <div class="form-group">
-    <label for="user_login_email">Email</label>
+    <label for="user_login_username">Email</label>
     <input 
-      type="text"  id="user_login_name" class="form-control" required
-      name="email" value="{$lastUsername}" required placeholder="Zayso Email" />
+      type="text" id="user_login_username" class="form-control" required
+      name="username" value="{$lastUsername}" required placeholder="Zayso Email" />
   </div>
   <div class="form-group">
     <label for="user_login_password">Password</label>

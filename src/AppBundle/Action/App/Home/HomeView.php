@@ -82,7 +82,10 @@ EOD;
     }
     private function renderPlans()
     {
-        $plans = isset($this->projectPerson['plans'])   ? $this->projectPerson['plans'] : null;
+        $projectPerson = $this->projectPerson;
+
+        $plans = isset($projectPerson['plans'])   ? $projectPerson['plans'] : null;
+
         $willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown';
         $willReferee   = isset($plans['willReferee'])   ? $plans['willReferee']   : 'No';
         $willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
@@ -92,6 +95,15 @@ EOD;
         $willReferee   = ucfirst($willReferee);
         $willVolunteer = ucfirst($willVolunteer);
 
+        if ($willReferee != 'No') {
+            $badge =
+                isset($projectPerson['roles']['ROLE_REFEREE']) ?
+                    $projectPerson['roles']['ROLE_REFEREE']['badge'] :
+                    null;
+            if ($badge) {
+                $willReferee = sprintf('%s (%s)',$willReferee,$badge);
+            }
+        }
         return <<<EOD
 <table class="account-person-list app_table" border="1">
   <tr><th colspan="2">Tournament Plans</th></tr>

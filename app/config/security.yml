@@ -60,8 +60,8 @@ security:
                 check_path:          user_login_check
                 default_target_path: app_welcome
 
-                username_parameter:  _username
-                password_parameter:  _password
+                username_parameter:  username
+                password_parameter:  password
 
                 csrf_parameter:       _csrf_token
                 csrf_token_id:        authenticate

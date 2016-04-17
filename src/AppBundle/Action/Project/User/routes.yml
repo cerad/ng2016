@@ -2,7 +2,7 @@
 user_login:
     path: /login
     defaults:
-        _controller: app_action_index_controller
+        _controller: index_controller
 
 user_login_check:
     path:  /login-check

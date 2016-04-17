@@ -157,6 +157,7 @@ EOT;
         $html =
 <<<EOT
          <ul class="nav navbar-nav navbar-right">
+           {$this->renderHome()}
            {$this->renderRefereeSchedules()}
            {$this->renderMyAccount()}
 EOT;
@@ -257,26 +258,34 @@ EOT;
       return
 <<<EOT
         <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">HOME <span class="caret"></span></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="{$this->generateUrl('app_home')}">HOME PAGE</a></li>
           <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS</a></li>
-          <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
+          <li><a href="{$this->generateUrl('app_home')}">MY AYSO INFO</a></li>
           <li><a href="{$this->generateUrl('app_home')}">MY SCHEDULE</a></li>
         </ul>
 EOT;
     }
     
-    protected function renderAdmin()
+    protected function renderHome()
     {
       return
 <<<EOT
         <li>
+          <a href="{$this->generateUrl('app_home')}">HOME</a>
+        </li>
+EOT;
+    }
+    protected function renderAdmin()
+    {
+        return
+            <<<EOT
+                    <li>
           <a href="{$this->generateUrl('app_admin')}">ADMIN</a>
         </li>
 EOT;
     }
-    
+
     protected function renderScripts()
     {
         return
