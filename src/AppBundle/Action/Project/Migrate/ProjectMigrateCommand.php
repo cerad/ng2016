@@ -124,13 +124,18 @@ class ProjectMigrateCommand extends Command
             'physicalPerson.phone      AS phone',
             'physicalPerson.gender     AS gender',
             'physicalPerson.dob        AS dob',
+            
             'projectPerson.person_name AS name',
+            'projectPerson.basic       AS plans', // For shirt size
+            
             'fed.fed_key     AS fedKey',
             'fed.org_key     AS orgKey',
             'fed.mem_year    AS regYear',
-            'cert.badge      AS refereeBadge',
-            'cert.badge_user AS refereeBadgeUser',
-            'cert.upgrading  AS refereeUpgrading',
+            
+            'certReferee.badge      AS refereeBadge',
+            'certReferee.badge_user AS refereeBadgeUser',
+            'certReferee.upgrading  AS refereeUpgrading',
+            'certSafeHaven.badge    AS safeHavenBadge',
         ]);
         $qb->from('person_plans','projectPerson');
 
@@ -139,8 +144,11 @@ class ProjectMigrateCommand extends Command
         $qb->leftJoin('physicalPerson','person_feds','fed',
             'fed.person_id = projectPerson.id AND fed.fed_role = \'AYSOV\'');
 
-        $qb->leftJoin('fed','person_fed_certs','cert',
-            'cert.person_fed_id = fed.id AND cert.role = \'Referee\'');
+        $qb->leftJoin('fed','person_fed_certs','certReferee',
+            'certReferee.person_fed_id = fed.id AND certReferee.role = \'Referee\'');
+
+        $qb->leftJoin('fed','person_fed_certs','certSafeHaven',
+            'certSafeHaven.person_fed_id = fed.id AND certSafeHaven.role = \'SafeHaven\'');
 
         $retrieveStmt = $qb->execute();
 
@@ -166,7 +174,7 @@ EOD;
             $age = null;
             if ($row['dob']) {
                 $d1 = \DateTime::createFromFormat('Y-m-d', $row['dob']);
-                $d2 = \DateTime::createFromFormat('Y-m-d', '2014-07-02');
+                $d2 = \DateTime::createFromFormat('Y-m-d', '2014-07-01');
                 $age = $d1->diff($d2)->y;
             }
             $registered = true;

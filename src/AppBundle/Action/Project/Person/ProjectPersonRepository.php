@@ -1,8 +1,6 @@
 <?php
 namespace AppBundle\Action\Project\Person;
 
-use AppBundle\Action\Project\ProjectFactory;
-
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -12,16 +10,43 @@ class ProjectPersonRepository
     /** @var  Connection */
     private $conn;
 
-    /** @var ProjectFactory */
-    private $projectFactory;
-
-    public function __construct(Connection $conn, ProjectFactory $projectFactory = null)
+    public function __construct(Connection $conn)
     {
         $this->conn = $conn;
-        $this->projectFactory = $projectFactory;
     }
     public function save($projectPerson,$projectPersonOriginal = null)
     {
+        $row = $this->create('','','','');
+
+        foreach(array_keys($row) as $key)
+        {
+            $row[$key] = isset($projectPerson[$key]) ? $projectPerson[$key] : $row[$key];
+        }
+        $id = $row['id'];
+        unset($row['id']);
+
+        $row['plans'] = isset($row['plans']) ? serialize($row['plans']) : null;
+        $row['avail'] = isset($row['avail']) ? serialize($row['avail']) : null;
+
+        $roles = $row['roles'];
+        unset($row['roles']);
+
+        if ($id) {
+            $this->conn->update('projectPersons',$row,['id' => $id]);
+        }
+        else {
+            $this->conn->insert('projectPersons', $row);
+            $row['id'] = $this->conn->lastInsertId();
+        }
+        $row['roles'] = [];
+        foreach($roles as $roleKey => $role)
+        {
+            $role['projectPersonId'] = $row['id'];
+            $row['roles'][$roleKey] = $this->saveRole($role);
+        }
+        return $row;
+/*
+
         $id = $projectPerson['id'] ? : null;
         if (!$id) {
             return $this->insert($projectPerson);
@@ -60,12 +85,7 @@ EOD;
             $projectPerson['personKey'],
 
         ]);
-        foreach($projectPerson['roles'] as $roleKey => $projectPersonRole)
-        {
-            $projectPersonRole['projectPersonId'] = $projectPerson['id'];
-            $projectPerson['roles'][$roleKey] = $this->saveRole($projectPersonRole);
-        }
-        return $projectPerson;
+*/
     }
     private function insert($projectPerson)
     {
@@ -200,20 +220,25 @@ EOD;
             'fedKey'     => null,
             'regYear'    => null,
 
+            'registered' => null,
+            'verified'   => null,
+
             'name'    => $name,
             'email'   => $email,
             'phone'   => null,
             'gender'  => null,
+            'dob'     => null,
             'age'     => null,
 
-            'verified'   => null,
-            'registered' => null,
+            'shirtSize' => null,
 
             'notes'     => null,
             'notesUser' => null,
 
-            'plans' => null,
-            'avail' => null,
+            'plans' => [], // Maybe ProjectPersonPlan Entity
+            'avail' => [], // Should be a ProjectPersonRoleAvail Entity
+
+            'version' => 0,
             
             'roles' => [],
         ];
@@ -225,13 +250,14 @@ EOD;
             'projectPersonId' => $projectPersonId,
             'role'            => $role,
             'roleDate'        => null,
+            'badge'           => $badge,
+            'badgeUser'       => null,
+            'badgeDate'       => null,
+            'badgeExpires'    => null,
             'active'          => true,
             'approved'        => false,
             'verified'        => false,
             'ready'           => true,
-            'badge'           => $badge,
-            'badgeUser'       => null,
-            'badgeDate'       => null,
             'misc'            => null,
             'notes'           => null,
         ];

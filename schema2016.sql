@@ -93,9 +93,10 @@ CREATE TABLE projectPersonRoles
   role     VARCHAR(40) NOT NULL, -- ROLE_REFEREE, ROLE_SCORE_ENTRY etc
   roleDate DATE,
 
-  badge     VARCHAR(20),
-  badgeDate DATE,
-  badgeUser VARCHAR(20),
+  badge        VARCHAR(20),
+  badgeDate    DATE,
+  badgeUser    VARCHAR(20),
+  badgeExpires DATE,  -- USSF and maybe membership year?
 
   active   BOOLEAN NOT NULL DEFAULT TRUE,  -- Role is used by security
   approved BOOLEAN NOT NULL DEFAULT FALSE, -- Set by assignor
