@@ -5,39 +5,50 @@ use AppBundle\Action\Project\ProjectFactory;
 
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 
-use Symfony\Component\Yaml\Yaml;
-
-use Doctrine\DBAL\Connection;
 use Tests\AppBundle\AbstractTestDatabase;
 
 class ProjectPersonRepositoryTest extends AbstractTestDatabase
 {
-    /** @var  ProjectPersonRepository */
-    protected $projectPersonRepository;
-
-    public function setUp()
+    public function testFind()
     {
-        $this->databaseNameKey = 'database_name_users';
-
-        parent::setUp();
-
-        $this->projectPersonRepository = new ProjectPersonRepository($this->conn, new ProjectFactory());
-    }
-    public function testFindOfficials()
-    {
-        $officials = $this->projectPersonRepository->findOfficials('AYSONationalGames2014');
-
-        // 1314 registered, 1049 would referee, 762 actually refereed!
-        $this->assertCount(1049,$officials);
+        $this->resetDatabase($this->conn);
         
-        $official = $officials[9];
+        $projectPersonRepository = new ProjectPersonRepository($this->conn);
 
-        //var_dump($official);
+        $projectKey = 'ProjectKey';
+        $personKey  = 'zander-0001';
 
-        $this->assertEquals('Adrian Backer',$official['name']);
-        $this->assertEquals('2F1297A9-920E-44F1-8A75-3B52DFADA8F2',$official['personKey']);
-        $this->assertEquals('AYSOR0122',$official['orgKey']);
-        $this->assertEquals('Advanced', $official['badge']);
+        $projectPerson = $projectPersonRepository->create($projectKey,$personKey,'Zander Harris','Email');
+        $this->assertEquals($projectKey,$projectPerson['projectKey']);
+        $this->assertInternalType('array',$projectPerson['roles']);
 
+        $projectPerson = $projectPersonRepository->save($projectPerson);
+        $this->assertGreaterThan(0,$projectPerson['id']);
+
+        $projectPerson = $projectPersonRepository->find($projectKey,$personKey);
+        $this->assertEquals($personKey,$projectPerson['personKey']);
+    }
+    public function testRole()
+    {
+        $projectPersonRepository = new ProjectPersonRepository($this->conn);
+
+        $projectKey = 'ProjectKey';
+        $personKey  = 'willow-0001';
+
+        $projectPerson = $projectPersonRepository->create($projectKey,$personKey,'Willow Rosenburg','Email');
+        $this->assertEquals($projectKey,$projectPerson['projectKey']);
+        $this->assertInternalType('array',$projectPerson['roles']);
+
+        $projectPersonRole = $projectPersonRepository->createRole('ROLE_REFEREE','National X');
+        $projectPerson['roles']['ROLE_REFEREE'] = $projectPersonRole;
+
+        $projectPerson = $projectPersonRepository->save($projectPerson);
+        $this->assertGreaterThan(0,$projectPerson['id']);
+
+        $projectPerson = $projectPersonRepository->find($projectKey,$personKey);
+        $this->assertEquals($personKey,$projectPerson['personKey']);
+
+        $projectPersonRole = $projectPerson['roles']['ROLE_REFEREE'];
+        $this->assertEquals('National X',$projectPersonRole['badge']);
     }
 }

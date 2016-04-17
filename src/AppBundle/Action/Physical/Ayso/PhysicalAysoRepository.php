@@ -37,7 +37,16 @@ EOD;
         }
         $this->findVolStmt->execute([$fedKey]);
 
-        return $this->findVolStmt->fetch() ? : null;
+        $vol = $this->findVolStmt->fetch();
+        if (!$vol) {
+            return null;
+        }
+        // TOSO just add orgKey to record
+        $sarParts = explode('/',$vol['sar']);
+
+        $vol['orgKey'] = sprintf('AYSOR:%04d',$sarParts['2']);
+
+        return $vol;
     }
     public function findVolCert($fedKey,$role)
     {

@@ -42,6 +42,7 @@ CREATE TABLE users
 
 -- ===================================================================
 -- The main registration information
+DROP TABLE IF EXISTS projectPersonRoles;
 DROP TABLE IF EXISTS projectPersons;
 
 CREATE TABLE projectPersons
@@ -52,6 +53,7 @@ CREATE TABLE projectPersons
   personKey  VARCHAR( 40) NOT NULL,
   orgKey     VARCHAR( 40),
   fedKey     VARCHAR( 40),
+  regYear    VARCHAR( 20),
 
   registered BOOLEAN DEFAULT NULL,
   verified   BOOLEAN DEFAULT NULL, -- NULL implies information does not need to be verified
@@ -60,12 +62,19 @@ CREATE TABLE projectPersons
   email      VARCHAR(255) NOT NULL,
   phone      VARCHAR( 20),
   gender     VARCHAR(  1),
+  dob        DATE,          -- TODO
   age        INTEGER,
+  shirtSize  VARCHAR( 20),  -- TODO
 
   notes     LONGTEXT,
   notesUser LONGTEXT,
   plans     LONGTEXT,
   avail     LONGTEXT,
+
+  createdOn DATETIME   DEFAULT CURRENT_TIMESTAMP,
+  updatedOn DATETIME ON UPDATE CURRENT_TIMESTAMP,
+
+  version   INTEGER DEFAULT 0, -- Might ness around with this later
 
   CONSTRAINT projectPerson_primaryKey PRIMARY KEY(id),
 
@@ -76,27 +85,23 @@ CREATE TABLE projectPersons
 
 -- ====================================================================
 -- Project specific roles
-DROP TABLE IF EXISTS projectPersonRoles;
-
 CREATE TABLE projectPersonRoles
 (
   id              INTEGER UNSIGNED AUTO_INCREMENT NOT NULL,
-  projectPersonId INTEGER UNSIGNED, -- Parent
+  projectPersonId INTEGER UNSIGNED NOT NULL, -- Parent
 
--- projectKey VARCHAR(40) NOT NULL, -- Avoid the join?
--- personKey  VARCHAR(40) NOT NULL,
--- fedKey     VARCHAR(40), -- Player or Volunteer
+  role     VARCHAR(40) NOT NULL, -- ROLE_REFEREE, ROLE_SCORE_ENTRY etc
+  roleDate DATE,
 
-  role     VARCHAR(40), -- ROLE_REFEREE, ROLE_SCORE_ENTRY etc
+  badge        VARCHAR(20),
+  badgeDate    DATE,
+  badgeUser    VARCHAR(20),
+  badgeExpires DATE,  -- USSF and maybe membership year?
 
   active   BOOLEAN NOT NULL DEFAULT TRUE,  -- Role is used by security
   approved BOOLEAN NOT NULL DEFAULT FALSE, -- Set by assignor
   verified BOOLEAN NOT NULL DEFAULT FALSE, -- Set by verifier, might not be needed
   ready    BOOLEAN NOT NULL DEFAULT TRUE,  -- Set by user
-
-  badge     VARCHAR(20),
-  badgeUser VARCHAR(20),
-  badgeDate DATETIME,
 
   misc  LONGTEXT, -- upgrading, assessments, mentoring etc
   notes LONGTEXT,

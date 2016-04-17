@@ -2,7 +2,7 @@
 user_login:
     path: /login
     defaults:
-        _controller: app_action_index_controller
+        _controller: index_controller
 
 user_login_check:
     path:  /login-check
@@ -18,6 +18,12 @@ user_create:
     defaults:
         _view:       user_create_view
         _controller: user_create_controller
+
+user_update:
+    path: /update
+    defaults:
+        _view:       user_update_view
+        _controller: user_update_controller
 
 # user password
 user_password_update:

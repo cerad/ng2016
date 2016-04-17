@@ -40,40 +40,36 @@ EOT;
 
         $loginGoogle   = $this->router->generate('user_authen_connect',['providerName' => 'google']);
         $loginFacebook = $this->router->generate('user_authen_connect',['providerName' => 'facebook']);
-
-        $passwordReset = $this->router->generate('user_password_reset_request');
-        $userCreate    = $this->router->generate('user_create');
         
         return  <<<EOT
 {$this->renderError()}
-<form class="cerad_tourn_account_login cerad_common_form1 app_form" action="{$loginCheckPath}" method="post">
-    <div class="row col-xs-12">
-            <label class="form-label col-xs-2 vcenter" for="username"><span class="pull-right">Email</span></label>
-            <input class="form-control col-xs-1" type="text" id="username" name="_username" value="{$lastUsername}" /><br />
-    </div>
-    <div class="row col-xs-12">
-            <label class="form-label col-xs-2 vcenter" for="password"><span class="pull-right">Password</span></label>
-            <input class="form-control col-xs-1" type="password" id="password" name="_password" /><br />
-    </div>
-    <div class="row col-xs-12">
-        <label for="remember_me" style="display:none">Remember me</label>
-        <input type="checkbox" id="remember_me" name="_remember_me" style="display:none" />
-    
-        <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-    </div>
-    
-    <div class="row col-xs-12">
-          <button type="submit" class="btn btn-sm btn-primary submit"><span class="glyphicon glyphicon-edit"></span><span  style="padding-left:10px">Sign In</span></button>
-    </div>
-    
-    <div class="row col-xs-12 text-center">
-        <a href="{$loginGoogle}">Google</a> |
-        <a href="{$loginFacebook}">Facebook</a> |
-        <a href="{$passwordReset}">Reset Password</a> |
-        <a href="{$userCreate}">Create User</a>
-    </div>
+<form role="form" style="width: 400px;" action="{$loginCheckPath}" method="post">
+  <div class="form-group">
+    <label for="user_login_username">Email</label>
+    <input 
+      type="text" id="user_login_username" class="form-control" required
+      name="username" value="{$lastUsername}" required placeholder="Zayso Email" />
+  </div>
+  <div class="form-group">
+    <label for="user_login_password">Password</label>
+    <input 
+      type="password" id="user_login_password" class="form-control" required
+      name="password" value="" required placeholder="********" />
+  </div>
+  <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
+  <button type="submit" class="btn btn-sm btn-primary submit">
+    <span class="glyphicon glyphicon-edit"></span>
+    <span style="padding-left:10px">Sign In</span>
+  </button><br/><br/>
+  <a href="{$loginGoogle}" class="btn btn-small btn-primary" role="button">
+    <span class="glyphicon glyphicon-edit"></span> 
+    <span style="padding-left:10px">Sign In (Google)</span>
+  </a>
+  <a href="{$loginFacebook}" class="btn btn-small btn-primary" role="button">
+    <span class="glyphicon glyphicon-edit"></span> 
+    <span style="padding-left:10px">Sign In (Facebook)</span>
+  </a>
 </form>
-
 EOT;
     }
 }

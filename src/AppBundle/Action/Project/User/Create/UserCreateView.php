@@ -24,6 +24,7 @@ class UserCreateView extends AbstractView
 <br/>
 {$this->userCreateForm->render()}
 <br/><br />
+<!--
 <h4>Do you have a Google Account?</h4>
 <br/>
 <a href="#" class="btn btn-small btn-primary" role="button">
@@ -38,7 +39,8 @@ class UserCreateView extends AbstractView
   Sign up with Facebook
 </a>
 <br/><br/>
-<h4>Already have a Zayso account? <a href="#">Sign in.</a></h4>
+-->
+<h4>Already have a Zayso account? <a href="{$this->generateUrl('app_welcome')}">Sign In.</a></h4>
 EOD;
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();

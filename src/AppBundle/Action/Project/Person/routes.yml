@@ -6,3 +6,17 @@ project_person_register:
         _view:       project_person_register_view
         _controller: project_person_register_controller
 
+project_person_update:
+    path: /update
+    defaults:
+        _role:       ROLE_USER
+        _view:       project_person_register_view
+        _controller: project_person_register_controller
+
+project_person_update_fed:
+    path: /update-fed
+    defaults:
+        _role:       ROLE_USER
+        _view:       project_person_register_view
+        _controller: project_person_register_controller
+

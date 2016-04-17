@@ -1,8 +1,6 @@
 <?php
 namespace AppBundle\Action\Project\Person;
 
-use AppBundle\Action\Project\ProjectFactory;
-
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -12,16 +10,43 @@ class ProjectPersonRepository
     /** @var  Connection */
     private $conn;
 
-    /** @var ProjectFactory */
-    private $projectFactory;
-
-    public function __construct(Connection $conn, ProjectFactory $projectFactory = null)
+    public function __construct(Connection $conn)
     {
         $this->conn = $conn;
-        $this->projectFactory = $projectFactory;
     }
     public function save($projectPerson,$projectPersonOriginal = null)
     {
+        $row = $this->create('','','','');
+
+        foreach(array_keys($row) as $key)
+        {
+            $row[$key] = isset($projectPerson[$key]) ? $projectPerson[$key] : $row[$key];
+        }
+        $id = $row['id'];
+        unset($row['id']);
+
+        $row['plans'] = isset($row['plans']) ? serialize($row['plans']) : null;
+        $row['avail'] = isset($row['avail']) ? serialize($row['avail']) : null;
+
+        $roles = $row['roles'];
+        unset($row['roles']);
+
+        if ($id) {
+            $this->conn->update('projectPersons',$row,['id' => $id]);
+        }
+        else {
+            $this->conn->insert('projectPersons', $row);
+            $row['id'] = $this->conn->lastInsertId();
+        }
+        $row['roles'] = [];
+        foreach($roles as $roleKey => $role)
+        {
+            $role['projectPersonId'] = $row['id'];
+            $row['roles'][$roleKey] = $this->saveRole($role);
+        }
+        return $row;
+/*
+
         $id = $projectPerson['id'] ? : null;
         if (!$id) {
             return $this->insert($projectPerson);
@@ -32,7 +57,7 @@ class ProjectPersonRepository
 
         $sql = <<<EOD
 UPDATE projectPersons SET
-orgKey = ?,     fedKey = ?,
+orgKey = ?,     fedKey = ?, regYear = ?,
 registered = ?, verified = ?,
 name   = ?,     email = ?, phone = ?,
 gender = ?,     age = ?, 
@@ -44,6 +69,7 @@ EOD;
         $stmt->execute([
             $projectPerson['orgKey'],
             $projectPerson['fedKey'],
+            $projectPerson['regYear'],
             $projectPerson['registered'],
             $projectPerson['verified'],
             $projectPerson['name'  ],
@@ -59,8 +85,7 @@ EOD;
             $projectPerson['personKey'],
 
         ]);
-
-        return $projectPerson;
+*/
     }
     private function insert($projectPerson)
     {
@@ -69,9 +94,9 @@ EOD;
         
         $sql = <<<EOD
 INSERT INTO projectPersons
-(projectKey,personKey,orgKey, fedKey,registered,verified, name,email,phone, gender,age,notes, notesUser,plans,avail)
+(projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age,notes,notesUser,plans,avail)
 VALUES
-(?,?,?, ?,?,?, ?,?,?, ?,?,?, ?)
+(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 EOD;
         $stmt = $this->conn->prepare(($sql));
         $stmt->execute([
@@ -79,6 +104,7 @@ EOD;
             $projectPerson['personKey'],
             $projectPerson['orgKey'],
             $projectPerson['fedKey'],
+            $projectPerson['regYear'],
             $projectPerson['registered'],
             $projectPerson['verified'],
             $projectPerson['name'],
@@ -93,26 +119,62 @@ EOD;
         ]);
         $projectPerson['id'] = $this->conn->lastInsertId();
 
+        foreach($projectPerson['roles'] as $roleKey => $projectPersonRole) {
+            $projectPersonRole['projectPersonId'] = $projectPerson['id'];
+            $projectPerson['roles'][$roleKey] = $this->saveRole($projectPersonRole);
+        }
         return $projectPerson;
     }
-    public function find($projectKey,$personKey)
+    /* =======================================================
+     * Spelling out each and every file sis a real pain
+     * To use the array insert would require deingin an array of values somewhere
+     * Could the same array be used for updating and creating as well?
+     */
+    private function saveRole($projectPersonRole)
     {
-        $qb = $this->createProjectPersonQueryBuilder();
-        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
-        $qb->setParameters([$projectKey,$personKey]);
-        
-        $stmt = $qb->execute();
-        $projectPerson = $stmt->fetch();
-        if (!$projectPerson) return null;
+        $row = $this->createRole('');
 
-        $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
-        $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
+        foreach(array_keys($row) as $key)
+        {
+            $row[$key] = isset($projectPersonRole[$key]) ? $projectPersonRole[$key] : $row[$key];
+        }
+        $id = $row['id'];
+        unset($row['id']);
+        if ($id) {
+            $this->conn->update('projectPersonRoles',$row,['id' => $id]);
+            return $projectPersonRole;
+        }
+        $this->conn->insert('projectPersonRoles',$row);
+        $row['id'] = $this->conn->lastInsertId();
+        return $row;
 
-        $projectPerson['roles'] = [];
+        /*
+        $sql = <<<EOD
+INSERT INTO projectPersonRoles
+(projectPersonId,role,roleDate,active,approved,verified,ready,badge,badgeUser,badgeDate,misc,notes)
+VALUES
+(?,?,?,?, ?,?,?,?, ?,?,?,?)
+EOD;
+        $stmt = $this->conn->prepare(($sql));
+        $stmt->execute([
+            $projectPersonRole['projectPersonId'],
+            $projectPersonRole['role'],
+            $projectPersonRole['roleDate'],
+            $projectPersonRole['active'],
+            $projectPersonRole['approved'],
+            $projectPersonRole['verified'],
+            $projectPersonRole['ready'],
+            $projectPersonRole['badge'],
+            $projectPersonRole['badgeDate'],
+            $projectPersonRole['badgeUser'],
+            $projectPersonRole['misc'],
+            $projectPersonRole['notes'],
+        ]);
+        $projectPersonRole['id'] = $this->conn->lastInsertId();
 
-        return $projectPerson;
+        return $projectPersonRole;*/
     }
-    /** 
+    /**
      * @return QueryBuilder
      */
     private function createProjectPersonQueryBuilder()
@@ -120,15 +182,19 @@ EOD;
         $qb = $this->conn->createQueryBuilder();
         $qb->select([
             'projectPerson.id         AS id',
+
             'projectPerson.projectKey AS projectKey',
             'projectPerson.personKey  AS personKey',
             'projectPerson.orgKey     AS orgKey',
             'projectPerson.fedKey     AS fedKey',
+            'projectPerson.regYear    AS regYear',
+
             'projectPerson.name       AS name',
             'projectPerson.email      AS email',
             'projectPerson.phone      AS phone',
             'projectPerson.gender     AS gender',
             'projectPerson.age        AS age',
+
             'projectPerson.plans      AS plans',
             'projectPerson.avail      AS avail',
             'projectPerson.notes      AS notes',
@@ -149,24 +215,78 @@ EOD;
 
             'projectKey' => $projectKey,
             'personKey'  => $personKey,
-            'name'       => $name,
-            'email'      => $email,
             
-            'orgKey' => null,
-            'fedKey' => null,
-            'phone'  => null,
-            'gender' => null,
-            'age'    => null,
-            
-            'verified'   => null,
+            'orgKey'     => null,
+            'fedKey'     => null,
+            'regYear'    => null,
+
             'registered' => null,
+            'verified'   => null,
+
+            'name'    => $name,
+            'email'   => $email,
+            'phone'   => null,
+            'gender'  => null,
+            'dob'     => null,
+            'age'     => null,
+
+            'shirtSize' => null,
 
             'notes'     => null,
             'notesUser' => null,
 
-            'plans' => null,
-            'avail' => null,
+            'plans' => [], // Maybe ProjectPersonPlan Entity
+            'avail' => [], // Should be a ProjectPersonRoleAvail Entity
+
+            'version' => 0,
+            
+            'roles' => [],
         ];
+    }
+    public function createRole($role, $badge = null, $badgeDate = null, $projectPersonId = null)
+    {
+        return [
+            'id'              => null,
+            'projectPersonId' => $projectPersonId,
+            'role'            => $role,
+            'roleDate'        => null,
+            'badge'           => $badge,
+            'badgeUser'       => null,
+            'badgeDate'       => null,
+            'badgeExpires'    => null,
+            'active'          => true,
+            'approved'        => false,
+            'verified'        => false,
+            'ready'           => true,
+            'misc'            => null,
+            'notes'           => null,
+        ];
+    }
+    public function find($projectKey,$personKey)
+    {
+        $sql = 'SELECT * FROM projectPersons WHERE projectKey = ? AND personKey = ?';
+        $stmt = $this->conn->executeQuery($sql,[$projectKey,$personKey]);
+
+        /*
+        $qb = $this->createProjectPersonQueryBuilder();
+        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
+        $qb->setParameters([$projectKey,$personKey]);
+        $stmt = $qb->execute();
+        */
+        $projectPerson = $stmt->fetch();
+        if (!$projectPerson) return null;
+
+        $projectPerson['plans'] = isset($projectPerson['plans']) ? unserialize($projectPerson['plans']) : null;
+        $projectPerson['avail'] = isset($projectPerson['avail']) ? unserialize($projectPerson['avail']) : null;
+
+        // Attach the roles
+        $projectPerson['roles'] = [];
+        $sql = 'SELECT * FROM projectPersonRoles WHERE projectPersonId = ?';
+        $stmt = $this->conn->executeQuery($sql,[$projectPerson['id']]);
+        while($projectPersonRole = $stmt->fetch()) {
+            $projectPerson['roles'][$projectPersonRole['role']] = $projectPersonRole;
+        }
+        return $projectPerson;
     }
     /** @var  Statement */
     private $uniqueProjectNameStmt;
