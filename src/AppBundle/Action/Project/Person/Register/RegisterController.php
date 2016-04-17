@@ -49,27 +49,12 @@ class RegisterController extends AbstractController
         $registerForm->handleRequest($request);
         
         if ($registerForm->isValid()) {
+
             $projectPersonOriginal = $projectPerson;
+
             $projectPerson = $registerForm->getData();
 
-            $fedKey = $projectPerson['fedKey'];
-
-            $vol = $this->aysoRepository->findVol($fedKey);
-            if ($vol) {
-                $projectPerson['orgKey']  = $vol['orgKey'];
-                $projectPerson['regYear'] = $vol['regYear'];
-                $projectPerson['gender']  = $vol['gender'];
-            }
-            //dump($projectPerson);
-            if ($registerForm->getSubmit() == 'nope') {
-                $projectPerson['registered'] = false;
-                $projectPerson['verified']   = null;
-                $projectPersonRepository->save($projectPerson);
-                return $this->redirectToRoute('app_home');
-            }
-            // Need some notifications here
-            $projectPerson['registered'] = true;
-            $projectPersonRepository->save($projectPerson,$projectPersonOriginal);
+            $projectPerson = $this->process($registerForm->getSubmit(),$projectPerson,$projectPersonOriginal);
 
             return $this->redirectToRoute('project_person_register');
         }
@@ -77,5 +62,32 @@ class RegisterController extends AbstractController
         $request->attributes->set('projectPerson',$projectPerson);
         
         return null;
+    }
+    private function process($submit,$projectPerson,$projectPersonOriginal)
+    {
+        $fedKey = $projectPerson['fedKey'];
+
+        $vol = $this->aysoRepository->findVol($fedKey);
+        if ($vol) {
+            $projectPerson['orgKey']  = $vol['orgKey'];
+            $projectPerson['regYear'] = $vol['regYear'];
+            $projectPerson['gender']  = $vol['gender'];
+        }
+        //dump($projectPerson);
+        if ($submit == 'nope') {
+
+            $projectPerson['registered'] = false;
+            $projectPerson['verified']   = null;
+
+            $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
+
+            return $projectPerson;
+        }
+        // Need some notifications here?
+        $projectPerson['registered'] = true;
+
+        $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
+
+        return $projectPerson;
     }
 }
