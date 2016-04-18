@@ -51,7 +51,10 @@ EOT;
       name="username" value="{$lastUsername}" required placeholder="Zayso Email" />
   </div>
   <div class="form-group">
-    <label for="user_login_password">Password</label>
+    <label for="user_login_password" ">
+      Password
+      <a href="{$this->router->generate('user_password_reset_request')}">&nbsp;&nbsp;&nbsp;&nbsp;Forgot Zayso Password?</a>
+    </label>
     <input 
       type="password" id="user_login_password" class="form-control" required
       name="password" value="" required placeholder="********" />

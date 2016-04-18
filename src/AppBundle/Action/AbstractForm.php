@@ -35,8 +35,7 @@ abstract class AbstractForm implements ContainerAwareInterface
     }
     public function setData($formData)
     {
-        // TODO check for array handling
-        $this->formData = array_merge_recursive($this->$formData,$formData);
+        $this->formData = array_replace_recursive($this->formData, $formData);
     }
     public function getData()
     {

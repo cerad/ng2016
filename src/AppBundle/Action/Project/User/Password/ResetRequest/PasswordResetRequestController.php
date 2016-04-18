@@ -46,9 +46,9 @@ class PasswordResetRequestController extends AbstractController
 
             $this->sendEmail($user);
 
-            //return $this->redirectToRoute('user_password_reset_response');
+            return $this->redirectToRoute('user_password_reset_response');
         }
-        $request->attributes->set('form',$form);
+        return null;
     }
     private function sendEmail($user)
     {

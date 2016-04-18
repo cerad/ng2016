@@ -21,6 +21,13 @@ services:
         arguments:
             - '%cerad_user_master_password%'
 
+    user_login_user:
+        class:  AppBundle\Action\Project\User\ProjectUserLoginUser
+        arguments:
+            - 'main'
+            - '@event_dispatcher'
+            - '@security.token_storage'
+
     user_login_form:
         class: AppBundle\Action\Project\User\Login\UserLoginForm
         arguments:
@@ -79,8 +86,29 @@ services:
     user_password_reset_request_view:
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestView
         parent: abstract_view
+
+    user_password_reset_response_form:
+        class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseForm
+        parent: abstract_form
         arguments:
+            - '@user_password_reset_request_form'
+
+    user_password_reset_response_controller:
+        class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseController
+        parent: abstract_controller
+        arguments:
+            - '@user_encoder'
+            - '@user_provider'
+            - '@user_login_user'
             - '@user_repository'
+            - '@user_password_reset_response_form'
+            - 'app_home'
+
+    user_password_reset_response_view:
+        class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseView
+        parent: abstract_view
+        arguments:
+            - '@user_password_reset_response_form'
 
 
 # ==========================================================================

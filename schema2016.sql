@@ -32,11 +32,15 @@ CREATE TABLE users
 
   providerKey   VARCHAR(255), -- Social network
 
-  CONSTRAINT users_primary_key     PRIMARY KEY(id),
-  CONSTRAINT users_unique_username UNIQUE(username),
-  CONSTRAINT users_unique_email    UNIQUE(email),
-  CONSTRAINT users_unique_provider UNIQUE(providerKey),
-  INDEX      users_index_personKey (personKey)
+  CONSTRAINT users_primary_key PRIMARY KEY(id),
+
+  CONSTRAINT users_unique_username      UNIQUE(username),
+  CONSTRAINT users_unique_email         UNIQUE(email),
+  CONSTRAINT users_unique_provider      UNIQUE(providerKey),
+  CONSTRAINT users_unique_emailToken    UNIQUE(emailToken),
+  CONSTRAINT users_unique_passwordToken UNIQUE(passwordToken),
+
+  INDEX  users_index_personKey(personKey)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 

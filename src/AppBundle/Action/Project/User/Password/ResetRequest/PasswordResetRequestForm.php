@@ -4,7 +4,6 @@ namespace AppBundle\Action\Project\User\Password\ResetRequest;
 use AppBundle\Action\AbstractForm;
 
 use AppBundle\Action\Project\User\ProjectUserRepository;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -58,7 +57,7 @@ class PasswordResetRequestForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
-<form role="form" style="width: 300px;" action="{$this->generateUrl('user_password_reset_request')}" method="post" novalidate>
+<form role="form" style="width: 300px;" action="{$this->generateUrl('user_password_reset_request')}" method="post">
   <div class="form-group">
     <label for="user_password_reset_request_identifier">Zayso Email</label>
     <input 

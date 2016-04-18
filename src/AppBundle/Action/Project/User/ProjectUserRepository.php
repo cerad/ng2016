@@ -20,9 +20,13 @@ class ProjectUserRepository
     }
     public function find($identifier)
     {
-        $sql = 'SELECT * FROM users WHERE username = ? OR email = ? OR providerKey = ?';
-        $stmt = $this->conn->executeQuery($sql,[$identifier,$identifier,$identifier]);
+        $sql = 'SELECT * FROM users WHERE username = ? OR email = ? OR providerKey = ? OR passwordToken = ? OR emailToken = ?';
+        $stmt = $this->conn->executeQuery($sql,[$identifier,$identifier,$identifier,$identifier,$identifier]);
         $row = $stmt->fetch();
+        if (!$row) return null;
+        
+        $row['roles'] = explode(',',$row['roles']);
+        
         return $row ? : null;
     }
     public function save($projectUser)
@@ -33,6 +37,8 @@ class ProjectUserRepository
         {
             $row[$key] = isset($projectUser[$key]) ? $projectUser[$key] : $row[$key];
         }
+        $row['roles'] = implode(',',$projectUser['roles']);
+        
         $id = $row['id'];
         unset($row['id']);
         if ($id) {
@@ -63,7 +69,7 @@ class ProjectUserRepository
             'enabled' => true,
             'locked'  => false,
 
-            'roles' => 'ROLE_USER',
+            'roles' => ['ROLE_USER'],
 
             'providerKey' => null,
         ];
