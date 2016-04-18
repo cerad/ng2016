@@ -86,12 +86,14 @@ services:
     user_password_reset_request_view:
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestView
         parent: abstract_view
+        arguments:
+            - '@user_password_reset_request_form'
 
     user_password_reset_response_form:
         class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseForm
         parent: abstract_form
         arguments:
-            - '@user_password_reset_request_form'
+            - '@user_repository'
 
     user_password_reset_response_controller:
         class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseController
