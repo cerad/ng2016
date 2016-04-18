@@ -1,12 +1,16 @@
 <?php
 namespace AppBundle\Action\Project\User;
 
+use AppBundle\Common\TokenGeneratorTrait;
+
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
+//  Doctrine\DBAL\Query\QueryBuilder;
 
 class ProjectUserRepository
 {
+    use TokenGeneratorTrait;
+    
     /** @var  Connection */
     private $conn;
     
@@ -14,6 +18,59 @@ class ProjectUserRepository
     {
         $this->conn = $conn;
     }
+    public function find($identifier)
+    {
+        $sql = 'SELECT * FROM users WHERE username = ? OR email = ? OR providerKey = ?';
+        $stmt = $this->conn->executeQuery($sql,[$identifier,$identifier,$identifier]);
+        $row = $stmt->fetch();
+        return $row ? : null;
+    }
+    public function save($projectUser)
+    {
+        $row = $this->create(null,null,null,null);
+
+        foreach(array_keys($row) as $key)
+        {
+            $row[$key] = isset($projectUser[$key]) ? $projectUser[$key] : $row[$key];
+        }
+        $id = $row['id'];
+        unset($row['id']);
+        if ($id) {
+            $this->conn->update('users',$row,['id' => $id]);
+            return $projectUser;
+        }
+        $this->conn->insert('users',$row);
+        $row['id'] = $this->conn->lastInsertId();
+        return $row;
+    }
+    public function create($personKey,$name,$username,$email)
+    {
+        return [
+            'id' => null,
+
+            'name'      => $name,
+            'username'  => $username,
+            'personKey' => $personKey,
+            
+            'email'         => $email,
+            'emailToken'    => null,
+            'emailVerified' => false,
+
+            'salt'          => null,
+            'password'      => null,
+            'passwordToken' => null,
+
+            'enabled' => true,
+            'locked'  => false,
+
+            'roles' => 'ROLE_USER',
+
+            'providerKey' => null,
+        ];
+    }
+    /* ==========================================================
+     * Bunch of email username validation stuff
+     */
     public function isEmailUnique($email)
     {
         $sql = 'SELECT id FROM users WHERE email = ? OR username = ?';
@@ -56,41 +113,5 @@ class ProjectUserRepository
         $emailParts = explode('@',$email);
         $username   = $emailParts[0];
         return $this->generateUniqueUsername($username);
-    }
-
-    public function find($projectKey,$personKey)
-    {
-        $qb = $this->createProjectPersonQueryBuilder();
-        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
-        $qb->setParameters([$projectKey,$personKey]);
-        
-        $stmt = $qb->execute();
-        $projectPerson = $stmt->fetch();
-        if (!$projectPerson) return null;
-        
-        $projectPerson['roles'] = [];
-
-        return $projectPerson;
-    }
-    /** 
-     * @return QueryBuilder
-     */
-    private function createProjectPersonQueryBuilder()
-    {
-        $qb = $this->conn->createQueryBuilder();
-        $qb->select([
-            'projectPerson.id         AS id',
-            'projectPerson.projectKey AS projectKey',
-            'projectPerson.personKey  AS personKey',
-            'projectPerson.orgKey     AS orgKey',
-            'projectPerson.fedKey     AS fedKey',
-            'projectPerson.name       AS name',
-            'projectPerson.email      AS email',
-
-            'projectPerson.registered AS verified',
-            'projectPerson.registered AS registered',
-        ]);
-        $qb->from('projectPersons','projectPerson');
-        return $qb;
     }
 }

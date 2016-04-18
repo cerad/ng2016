@@ -5,31 +5,34 @@ use Tests\AppBundle\AbstractTestDatabase;
 
 use AppBundle\Action\Project\User\ProjectUserRepository;
 
-use AppBundle\Action\Project\Person\ProjectPersonRepository;
-use AppBundle\Action\Project\User\ProjectUser;
-use AppBundle\Action\Project\User\ProjectUserProvider;
-
-//  Doctrine\DBAL\Connection;
-
 class ProjectUserRepositoryTest extends AbstractTestDatabase
 {
+    public function testCreateSaveFind()
+    {
+        $conn = $this->conn;
+        $this->resetDatabase($conn);
+        
+        $projectUserRepository = new ProjectUserRepository($conn);
+        
+        $projectUser = $projectUserRepository->create('buffy-0001','Buffy Summers','buffy','buffy@sunnydale.tv');
+        $projectUser['salt'] = 'salted';
+        
+        $projectUser = $projectUserRepository->save($projectUser);
+        $this->assertGreaterThan(0,$projectUser['id']);
+
+        $projectUser = $projectUserRepository->find('buffy');
+        $this->assertEquals('salted',$projectUser['salt']);
+    }
     public function testUnique()
     {
         $conn = $this->conn;
         $this->resetDatabase($conn);
 
-        $sql = <<<EOD
-INSERT INTO users (name,email,username,personKey) VALUES(?,?,?,?);
-EOD;
-        $insertUserStmt = $conn->prepare($sql);
-        $insertUserStmt->execute([
-            'Buffy Summers',
-            'buffy@sunnydale.tv',
-            'buffy',
-            'buffy-0001',
-        ]);
-
         $projectUserRepository = new ProjectUserRepository($conn);
+
+        $projectUser = $projectUserRepository->create('buffy-0001','Buffy Summers','buffy','buffy@sunnydale.tv');
+        $projectUser = $projectUserRepository->save  ($projectUser);
+        $this->assertGreaterThan(0,$projectUser['id']);
 
         $this->assertTrue ($projectUserRepository->isEmailUnique('angel@la.tv'));
         $this->assertFalse($projectUserRepository->isEmailUnique('buffy@sunnydale.tv'));

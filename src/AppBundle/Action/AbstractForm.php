@@ -23,7 +23,7 @@ abstract class AbstractForm implements ContainerAwareInterface
     
     protected $submit;
     
-    protected $formData;
+    protected $formData       = [];
     protected $formDataErrors = [];
     
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
@@ -35,7 +35,8 @@ abstract class AbstractForm implements ContainerAwareInterface
     }
     public function setData($formData)
     {
-        $this->formData = $formData;
+        // TODO check for array handling
+        $this->formData = array_merge_recursive($this->$formData,$formData);
     }
     public function getData()
     {
