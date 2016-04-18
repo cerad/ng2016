@@ -57,8 +57,6 @@ class ResultsFinalView extends AbstractView
 <div id="layout-block">
 <h1 class="text-center" style="font-style:italic; font-size:1.5em;"><emphasis>Congratulations to all {$title} Teams!</emphasis></h1>
 <hr>
-
-<br />
 </div>
 {$this->renderStandings()}
 EOD;
@@ -77,23 +75,35 @@ EOD;
 
         if (!empty($this->standings)){
             foreach ($this->criteria['programs'] as $program) {
+                $html .= <<<EOD
+<legend class="float-right">Final Standings : {$program}</legend>
+<div class="container col-xs-8 col-xs-offset-2">
+EOD;
                 foreach ($this->standings[$program] as $div=>$teams) {
                     $html .= $this->renderDivision($div, $teams);                    
                 }
             }
         }
-        
+
+        $html .= <<<EOD
+        </div>
+EOD;
+    
         return $html;
+    
     }
     protected function renderDivision($div, $teams)
     {
+        $div = str_replace('_',' ',$div);
+
         $html = <<<EOD
 <div id="layout-block">
-<legend class="float-right">Final Standings : {$div} </legend>
+<legend class="float-right">{$div}</legend>
 
 <table class="standings" border = "1">
+    <col>
 <tr class="tbl-hdr">
-    <th class="text-center">Finish</th>
+    <th class="text-center" width="20%">Finish</th>
   <th class="text-center">Team</th>
 
 </tr>
