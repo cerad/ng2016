@@ -10,6 +10,10 @@ services:
     app_sportsmanship_calculator:
         class: AppBundle\Action\Results\Sportsmanship\Calculator\SportsmanshipCalculator
 
+    app_final_calculator:
+        class: AppBundle\Action\Results\FinalStandings\Calculator\FinalCalculator
+        arguments: ['@project_factory']
+
     app_action_results_repository:
         class: AppBundle\Action\Schedule\ScheduleRepository
         arguments: ['@project_connection']
@@ -35,6 +39,17 @@ services:
         arguments:
             - '@app_action_schedule_repository'
             - '@app_standings_calculator'
+
+    results_final_controller:
+        class: AppBundle\Action\Results\FinalStandings\ResultsFinalController
+        parent: app_action_abstract_controller
+
+    results_final_view_html:
+        class: AppBundle\Action\Results\FinalStandings\ResultsFinalView
+        parent: abstract_view
+        arguments:
+            - '@app_action_schedule_repository'
+            - '@app_final_calculator'
 
     results_sportsmanship_controller:
         class: AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipController
