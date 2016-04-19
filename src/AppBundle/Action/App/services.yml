@@ -36,6 +36,11 @@ services:
            - ['setBaseTemplate', ['@app_base_template']]
            - ['setProject', ['%app_project%']]
 
+    abstract_view2:
+        abstract: true
+        calls:
+           - ['setContainer', ['@service_container']]
+
     app_action_abstract_controller: # depreciated
         abstract: true
         calls: [[setContainer, ['@service_container']]]

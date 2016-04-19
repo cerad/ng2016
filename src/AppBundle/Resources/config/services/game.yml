@@ -9,8 +9,8 @@ services:
         parent: app_page_template
 
     game_report_update_controller:
-        class: AppBundle\Action\GameReport\Update\GameReportUpdateController
-        parent: app_action_abstract_controller
+        class:  AppBundle\Action\GameReport\Update\GameReportUpdateController
+        parent: abstract_controller
         arguments:
             - '@game_report_repository'
             - '@app_points_calculator'

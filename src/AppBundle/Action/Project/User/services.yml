@@ -65,27 +65,24 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@mailer'
-          #- '@swiftmailer.transport.real' # Not available in production with no spool set
             - '@user_repository'
 
     user_password_reset_request_form:
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestForm
         parent: abstract_form
         arguments:
-            - '@security.authentication_utils'
             - '@user_repository'
 
     user_password_reset_request_controller:
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestController
         parent: abstract_controller
         arguments:
-            - '@mailer'
             - '@user_repository'
             - '@user_password_reset_request_form'
 
     user_password_reset_request_view:
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestView
-        parent: abstract_view
+        parent: abstract_view2
         arguments:
             - '@user_password_reset_request_form'
 
@@ -108,7 +105,7 @@ services:
 
     user_password_reset_response_view:
         class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseView
-        parent: abstract_view
+        parent: abstract_view2
         arguments:
             - '@user_password_reset_response_form'
 
@@ -117,14 +114,14 @@ services:
 # Socal network authentication
 
     user_authen_connect_controller:
-        class: AppBundle\Action\Project\User\Authen\ConnectController
-        parent: app_action_abstract_controller
+        class:  AppBundle\Action\Project\User\Authen\ConnectController
+        parent: abstract_controller
         arguments:
             - '@user_authen_provider_factory'
 
     user_authen_callback_controller:
-        class: AppBundle\Action\Project\User\Authen\CallbackController
-        parent: app_action_abstract_controller
+        class:  AppBundle\Action\Project\User\Authen\CallbackController
+        parent: abstract_controller
         arguments:
             - '@user_authen_provider_factory'
             - '@user_provider'

@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\Project\User\Password\ResetResponse;
 
-use AppBundle\Action\AbstractController;
+use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Project\User\ProjectUserEncoder;
 use AppBundle\Action\Project\User\ProjectUserLoginUser;
@@ -10,7 +10,7 @@ use AppBundle\Action\Project\User\ProjectUserRepository;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class PasswordResetResponseController extends AbstractController
+class PasswordResetResponseController extends AbstractController2
 {
     /** @var  ProjectUserEncoder */
     private $userEncoder;
