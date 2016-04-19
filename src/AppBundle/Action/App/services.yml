@@ -82,6 +82,7 @@ services:
             - '@project_person_repository'
             - '@ayso_volunteer_key_transformer'
             - '@ayso_region_to_sar_transformer'
+            - '@project_person_will_referee_transformer'
 
     # action admin
     admin_controller:
@@ -93,5 +94,3 @@ services:
     admin_page_template:
         class:  AppBundle\Action\Admin\AdminPageTemplate
         parent: app_page_template
-
-

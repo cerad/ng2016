@@ -34,6 +34,7 @@ services:
             - '@ayso_volunteer_key_transformer'
             - '@ayso_region_to_sar_transformer'
             - '@phone_transformer'
+            - '@project_person_will_referee_transformer'
 
     project_person_register_form:
         class:  AppBundle\Action\Project\Person\Register\RegisterForm
@@ -43,3 +44,5 @@ services:
             - '%app_project_controls%'
             - '%app_project_registration_form_controls%'
 
+    project_person_will_referee_transformer:
+      class:  AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer

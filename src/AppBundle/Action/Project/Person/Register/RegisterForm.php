@@ -42,6 +42,9 @@ class RegisterForm extends AbstractForm
 
         foreach($data as $key => $value)
         {
+            if (!is_array($value)) {
+                $value = filter_var(trim($value), FILTER_SANITIZE_STRING);
+            }
             if (isset($this->formControls[$key])) {
                 $meta = $this->formControls[$key];
                 if (isset($meta['transformer'])) {
@@ -66,6 +69,8 @@ class RegisterForm extends AbstractForm
     {
         $csrfToken = 'TODO';
 
+        $submitLabel = $this->formData['id'] ? 'Update Registration Information' : 'Submit Registration';
+
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form 
@@ -84,7 +89,8 @@ class RegisterForm extends AbstractForm
   <div class="form-group"> 
     <div class="col-sm-offset-4 col-sm-8">
       <button type="submit" name="register" value="register" class="btn btn-sm btn-primary">
-        <span class="glyphicon glyphicon-edit"></span>Register
+        <span class="glyphicon glyphicon-edit"></span>
+        <span>{$submitLabel}</span>
       </button>
     </div>
   </div>

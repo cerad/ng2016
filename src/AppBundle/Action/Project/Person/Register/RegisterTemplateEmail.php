@@ -6,22 +6,27 @@ use AppBundle\Action\AbstractView2;
 use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer  as OrgKeyTransformer;
 use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer as FedKeyTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
+use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 
 class RegisterTemplateEmail extends AbstractView2
 {
     private $fedKeyTransformer;
     private $orgKeyTransformer;
     private $phoneTransformer;
-
+    private $willRefereeTransformer;
+    
     public function __construct(
         FedKeyTransformer $fedKeyTransformer,
         OrgKeyTransformer $orgKeyTransformer,
-        PhoneTransformer  $phoneTransformer
+        PhoneTransformer  $phoneTransformer,
+        WillRefereeTransformer $willRefereeTransformer
     )
     {
         $this->fedKeyTransformer = $fedKeyTransformer;
         $this->orgKeyTransformer = $orgKeyTransformer;
         $this->phoneTransformer  = $phoneTransformer;
+        
+        $this->willRefereeTransformer = $willRefereeTransformer;
     }
 
     public function renderHtml($person)
@@ -102,13 +107,15 @@ EOD;
         if ($willReferee != 'No' && $badge) {
             $willReferee = sprintf('%s (%s)',$willReferee,$badge);
         }
+        $willRefereeTransformer = $this->willRefereeTransformer;
+        
         return <<<EOD
 <table border="1">
   <tr><td>Name         </td><td>{$person['name']}</td></tr>
   <tr><td>Email        </td><td>{$person['email']}</td></tr>
   <tr><td>Phone        </td><td>{$this->phoneTransformer->transform($person['phone'])}</td></tr>
   <tr><td>Will Attend  </td><td>{$willAttend}</td></tr>
-  <tr><td>Will Referee </td><td>{$willReferee}</td></tr>
+  <tr><td>Will Referee </td><td>{$willRefereeTransformer($person)}</td></tr>
   <tr><td>AYSO ID      </td><td>{$this->fedKeyTransformer->transform($person['fedKey'])}</td></tr>
   <tr><td>Mem Year     </td><td>{$person['regYear']}</td></tr>
   <tr><td>Referee Badge</td><td>{$badge}</td></tr>

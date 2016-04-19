@@ -34,7 +34,12 @@ class RegisterController extends AbstractController2
     public function __invoke(Request $request)
     {
         $projectPerson = $this->findProjectPersonForUser($this->getUser());
-        
+
+        // Real hack here
+        $projectPerson['refereeBadge'] = isset($projectPerson['roles']['ROLE_REFEREE']) ?
+            $projectPerson['roles']['ROLE_REFEREE']['badgeUser'] :
+            null;
+
         $registerForm = $this->registerForm;
         $registerForm->setData($projectPerson);
         $registerForm->handleRequest($request);
@@ -55,8 +60,9 @@ class RegisterController extends AbstractController2
             $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
 
             // Careful about the id
-            $this->sendEmail($projectPerson);
-
+            if ($projectPerson['registered'] === true) {
+                $this->sendEmail($projectPerson);
+            }
             return $this->redirectToRoute($this->successRouteName);
         }
         $request->attributes->set('projectPerson',$projectPerson);
@@ -90,8 +96,15 @@ class RegisterController extends AbstractController2
             if ($cert) {
                 $projectPersonRole['roleDate']  = $cert['roleDate'];
                 $projectPersonRole['badge']     = $cert['badge'];
+                $projectPersonRole['badgeUser'] = $cert['badge'];
                 $projectPersonRole['badgeDate'] = $cert['badgeDate'];
                 $projectPersonRole['verified']  = true;
+            }
+            if ($projectPerson['refereeBadge']) {
+                $projectPersonRole['badgeUser'] = $projectPerson['refereeBadge'];
+                if (!$projectPersonRole['badge']) {
+                     $projectPersonRole['badge'] = $projectPerson['refereeBadge'];
+                }
             }
             $projectPerson['roles']['ROLE_REFEREE'] = $projectPersonRole;
         }

@@ -9,6 +9,7 @@ use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer;
 //  AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 
+use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,17 +22,22 @@ class HomeView extends AbstractView
 
     private $fedKeyTransformer;
     private $orgKeyTransformer;
+    private $willRefereeTransformer;
 
     public function __construct(
         ProjectPersonRepository $projectPersonRepository,
         VolunteerKeyTransformer $fedKeyTransformer,
-        RegionToSarTransformer  $orgKeyTransformer
+        RegionToSarTransformer  $orgKeyTransformer,
+        WillRefereeTransformer  $willRefereeTransformer
     )
     {
+        $this->projectPersonRepository = $projectPersonRepository;
+
         $this->fedKeyTransformer = $fedKeyTransformer;
         $this->orgKeyTransformer = $orgKeyTransformer;
-        $this->projectPersonRepository = $projectPersonRepository;
-    }
+
+        $this->willRefereeTransformer = $willRefereeTransformer;
+     }
     public function __invoke(Request $request)
     {
         $this->user = $user = $this->getUser();
@@ -69,9 +75,10 @@ EOD;
 
         return <<<EOD
 <table class="account-person-list app_table" border="1">
-  <tr><th colspan="2">Zayso Account Information</th></tr>
-  <tr><td>Name:   </td><td>{$user['name']}</td></tr>
-  <tr><td>Account:</td><td>{$user['email']}</td></tr>
+  <tr><th colspan="2" style="text-align: center;">Zayso Account Information</th></tr>
+  <tr><td>Name: </td><td>{$user['name']}</td></tr>
+  <tr><td>User: </td><td>{$user['username']}</td></tr>
+  <tr><td>Email:</td><td>{$user['email']}</td></tr>
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('user_update')}">
         Update My Zayso Account
@@ -84,37 +91,39 @@ EOD;
     {
         $projectPerson = $this->projectPerson;
 
-        $plans = isset($projectPerson['plans'])   ? $projectPerson['plans'] : null;
+        $plans = isset($projectPerson['plans']) ? $projectPerson['plans'] : null;
 
         $willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown';
-        $willReferee   = isset($plans['willReferee'])   ? $plans['willReferee']   : 'No';
         $willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
 
         // Should have transformers
         $willAttend    = ucfirst($willAttend);
-        $willReferee   = ucfirst($willReferee);
         $willVolunteer = ucfirst($willVolunteer);
+        
+        $willRefereeTransformer = $this->willRefereeTransformer;
 
-        $badge = null;
+        $avail = isset($projectPerson['avail']) ? $projectPerson['avail'] : null;
 
-        if ($willReferee != 'No') {
-            $badge =
-                isset($projectPerson['roles']['ROLE_REFEREE']) ?
-                    $projectPerson['roles']['ROLE_REFEREE']['badge'] :
-                    null;
-            if ($badge) {
-                $willReferee = sprintf('%s (%s)',$willReferee,$badge);
-            }
-        }
+        $availSatAfter = isset($avail['availSatAfter']) ? $avail['availSatAfter'] : 'No';
+        $availSunMorn  = isset($avail['availSunMorn' ]) ? $avail['availSunMorn' ] : 'No';
+        $availSunAfter = isset($avail['availSunAfter']) ? $avail['availSunAfter'] : 'No';
+
+        $availSatAfter = ucfirst($availSatAfter);
+        $availSunMorn  = ucfirst($availSunMorn );
+        $availSunAfter = ucfirst($availSunAfter);
+
         return <<<EOD
 <table class="account-person-list app_table" border="1">
-  <tr><th colspan="2">Tournament Plans</th></tr>
-  <tr><td>Will Attend:   </td><td>{$willAttend}   </td></tr>
-  <tr><td>Will Referee:  </td><td>{$willReferee}  </td></tr>
-  <tr><td>Will Volunteer:</td><td>{$willVolunteer}</td></tr>
+  <tr><th colspan="2" style="text-align: center;">Tournament Plans</th></tr>
+  <tr><td>Will Attend   </td><td>{$willAttend}</td></tr>
+  <tr><td>Will Referee  </td><td>{$willRefereeTransformer($projectPerson)}</td></tr>
+  <tr><td>Will Volunteer</td><td>{$willVolunteer}</td></tr>
+  <tr><td>Available Sat Afternoon(QF)</td><td>{$availSatAfter}</td></tr>
+  <tr><td>Available Sun Morning  (SF)</td><td>{$availSunMorn }</td></tr>
+  <tr><td>Available Sun Afternoon(FM)</td><td>{$availSunAfter}</td></tr>
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
-        Update My Plans
+        Update My Plans or Availability
     </a>
   </td></tr>
 </table>
@@ -138,17 +147,11 @@ EOD;
 
         return <<<EOD
 <table  class="account-person-list app_table" border="1" >
-  <tr><th colspan="2">AYSO Information</th></tr>
+  <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
   <tr><td>AYSO ID:</td>            <td>{$fedId}</td></tr>
   <tr><td>Membership Year:</td>    <td>{$regYear}</td></tr>
   <tr><td>Referee Badge:</td>      <td>{$badge}</td></tr>
   <tr><td>Section/Area/Region:</td><td>{$org}</td></tr>
-  <tr><td style="text-align: center;" colspan="2">
-    <a href="{$this->generateUrl('project_person_update_fed')}">
-        Update My AYSO Information
-    </a>
-  </td></tr>
-   
 </table>
 EOD;
     }
