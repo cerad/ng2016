@@ -63,6 +63,7 @@ OR click here:
 EOD;
         $mailer  = $this->getMailer();
 
+        /** @var \Swift_Message $message */
         $message = $mailer->createMessage();
 
         $message->setBody($body);
@@ -74,8 +75,7 @@ EOD;
         $message->setTo([$user['email'] => $user['name']]);
 
         $message->setBcc(['ahundiak@gmail.com' => 'Art Hundiak']);
-
-        /** @noinspection PhpParamsInspection */
+        
         $mailer->send($message);
     }
 }

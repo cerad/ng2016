@@ -33,6 +33,7 @@ class ProjectPersonRepository
 
         if ($id) {
             $this->conn->update('projectPersons',$row,['id' => $id]);
+            $row['id'] = $id;
         }
         else {
             $this->conn->insert('projectPersons', $row);

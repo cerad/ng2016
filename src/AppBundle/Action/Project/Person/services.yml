@@ -19,12 +19,21 @@ services:
             - '@project_person_repository'
             - '@ayso_repository'
             - '%app_home_route%'
+            - '@project_person_register_template_email'
 
     project_person_register_view:
         class:  AppBundle\Action\Project\Person\Register\RegisterView
         parent: abstract_view2
         arguments:
             - '@project_person_register_form'
+
+    project_person_register_template_email:
+        class:  AppBundle\Action\Project\Person\Register\RegisterTemplateEmail
+        parent: abstract_view2
+        arguments:
+            - '@ayso_volunteer_key_transformer'
+            - '@ayso_region_to_sar_transformer'
+            - '@phone_transformer'
 
     project_person_register_form:
         class:  AppBundle\Action\Project\Person\Register\RegisterForm

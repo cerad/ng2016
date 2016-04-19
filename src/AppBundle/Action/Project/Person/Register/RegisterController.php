@@ -14,12 +14,14 @@ class RegisterController extends AbstractController2
     private $projectPersonRepository;
 
     private $successRouteName;
-    
+    private $templateEmail;
+
     public function __construct(
         RegisterForm            $registerForm,
         ProjectPersonRepository $projectPersonRepository,
         PhysicalAysoRepository  $fedRepository,
-                                $successRouteName
+                                $successRouteName,
+        RegisterTemplateEmail   $templateEmail
     )
     {
         $this->registerForm            = $registerForm;
@@ -27,6 +29,7 @@ class RegisterController extends AbstractController2
         $this->projectPersonRepository = $projectPersonRepository;
         
         $this->successRouteName = $successRouteName;
+        $this->templateEmail = $templateEmail;
     }
     public function __invoke(Request $request)
     {
@@ -50,7 +53,10 @@ class RegisterController extends AbstractController2
                 $projectPerson['verified']   = null;
             }
             $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
-            
+
+            // Careful about the id
+            $this->sendEmail($projectPerson);
+
             return $this->redirectToRoute($this->successRouteName);
         }
         $request->attributes->set('projectPerson',$projectPerson);
@@ -91,7 +97,7 @@ class RegisterController extends AbstractController2
         }
         // Need some notifications here?
         $projectPerson['registered'] = true;
-        
+
         return $projectPerson;
     }
     private function findProjectPersonForUser($user)
@@ -151,5 +157,44 @@ class RegisterController extends AbstractController2
             $projectPerson['roles'][$roleKey] = $projectPersonRole;
         }
         return $projectPerson;
+    }
+    private function sendEmail($person)
+    {
+        $update = $person['id'] ? ' Update' : null;
+
+        $subject = sprintf('[NG2016] Registration%s for: %s',$update,$person['name']);
+
+        $html = $this->templateEmail->renderHtml($person);
+
+        $toms = [
+            'thomasbobadilla@ayso.org'  => 'Tom Bobadilla',
+            'spsoccerref@earthlink.net' => 'Tom Tobin',
+        ];
+
+        $mailer = $this->getMailer();
+
+        /** @var \Swift_Message $message */
+        $message = $mailer->createMessage();
+
+        $message->setBody($html,'text/html');
+
+        $message->setSubject($subject);
+
+        $message->setFrom(['noreply@zayso.org' => 'Zayso Admin']);
+
+        $message->setTo([$person['email'] => $person['name']]);
+        
+        $message->setCc($toms);
+
+        $message->setReplyTo($toms);
+
+        $message->setBcc([
+            'ahundiak@gmail.com' => 'Art Hundiak',
+            'ayso1sra@gmail.com' => 'Rick Roberts',
+        ]);
+
+        /**  noinspection PhpParamsInspection */
+        $mailer->send($message);
+
     }
 }
