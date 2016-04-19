@@ -65,7 +65,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@mailer'
-            - '@swiftmailer.transport.real'
+          #- '@swiftmailer.transport.real' # Not available in production with no spool set
             - '@user_repository'
 
     user_password_reset_request_form:

@@ -13,20 +13,20 @@ class PasswordResetRequestCommand extends Command
 {
     /** @var \Swift_Mailer */
     private $mailer;
-    private $transportReal;
+    //private $transportReal;
 
     /** @var ProjectUserRepository  */
     private $projectUserRepository;
 
     public function __construct(
         \Swift_Mailer    $mailer,
-        \Swift_Transport $transport,
+        //\Swift_Transport $transport, // Does not work in production with no spool set
         ProjectUserRepository $projectUserRepository)
     {
         parent::__construct();
         
         $this->mailer        = $mailer;
-        $this->transportReal = $transport;
+        //$this->transportReal = $transport;
         $this->projectUserRepository = $projectUserRepository;
     }
     protected function configure()
@@ -83,12 +83,11 @@ class PasswordResetRequestCommand extends Command
             echo sprintf("Not a spool memory\n");
             return;
         }
-        $spool->flushQueue($this->transportReal);
+        //$spool->flushQueue($this->transportReal);
 
-        echo sprintf("Message class %s %s %s %s %s %d\n",
+        echo sprintf("Message class %s %s %s %s %d\n",
             get_class($message),get_class($mailer),
-            get_class($spool),get_class($transport),get_class($this->transportReal),
+            get_class($spool),get_class($transport),
             $status);
-
     }
  }
