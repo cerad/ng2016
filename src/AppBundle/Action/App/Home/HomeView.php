@@ -95,6 +95,8 @@ EOD;
         $willReferee   = ucfirst($willReferee);
         $willVolunteer = ucfirst($willVolunteer);
 
+        $badge = null;
+
         if ($willReferee != 'No') {
             $badge =
                 isset($projectPerson['roles']['ROLE_REFEREE']) ?
@@ -130,12 +132,16 @@ EOD;
 
         $regYear = $projectPerson['regYear'];
 
+        $badge = isset($projectPerson['roles']['ROLE_REFEREE']) ?
+            $projectPerson['roles']['ROLE_REFEREE']['badge'] :
+            null;
+
         return <<<EOD
 <table  class="account-person-list app_table" border="1" >
   <tr><th colspan="2">AYSO Information</th></tr>
   <tr><td>AYSO ID:</td>            <td>{$fedId}</td></tr>
   <tr><td>Membership Year:</td>    <td>{$regYear}</td></tr>
-  <tr><td>Referee Badge:</td>      <td>Advanced</td></tr>
+  <tr><td>Referee Badge:</td>      <td>{$badge}</td></tr>
   <tr><td>Section/Area/Region:</td><td>{$org}</td></tr>
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('project_person_update_fed')}">

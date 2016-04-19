@@ -9,9 +9,11 @@ services:
     app_base_template:
         class: AppBundle\Action\BaseTemplate
         calls:
-           - ['setRouter',  ['@router']]
-           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
-           - ['setProject', ['%app_project%']]
+            - ['setRouter',  ['@router']]
+            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+            - ['setProject', ['%app_project%']]
+        arguments:
+            - '%show_header_image%'
 
     app_page_template: # Depreciated
         abstract: true

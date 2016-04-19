@@ -22,9 +22,12 @@ parameters:
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
+    mailer_disable_delivery: false
+    mailer_delivery_address: null # someplace@fake.com for development
 
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     cerad_user_master_password: zayso
 
-    secure_routes: true # If true, Process _role parameter in routes
+    secure_routes:     true # If true, Process _role parameter in routes
+    show_header_image: true

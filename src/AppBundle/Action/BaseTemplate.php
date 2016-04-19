@@ -6,6 +6,12 @@ class BaseTemplate extends AbstractTemplate
     protected $title = 'NG2016';
     protected $content = null;
 
+    private   $showHeaderImage;
+
+    public function __construct($showHeaderImage)
+    {
+        $this->showHeaderImage = $showHeaderImage;
+    }
     public function setContent($content)
     {
         $this->content = $content;
@@ -55,7 +61,7 @@ EOT;
     
     protected function renderHeader()
     {
-      if (is_null($this->project['show_header_image'])) {
+      if (!$this->showHeaderImage) {
         $html = 
 <<<EOT
     <div id="banner">
