@@ -1,27 +1,32 @@
 <?php
 namespace AppBundle\Action\Project\Person\Register;
 
-use AppBundle\Action\AbstractController;
+use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class RegisterController extends AbstractController
+class RegisterController extends AbstractController2
 {
     private $registerForm;
-    private $aysoRepository;
+    private $fedRepository;
     private $projectPersonRepository;
 
+    private $successRouteName;
+    
     public function __construct(
         RegisterForm            $registerForm,
-        PhysicalAysoRepository  $aysoRepository,
-        ProjectPersonRepository $projectPersonRepository
+        ProjectPersonRepository $projectPersonRepository,
+        PhysicalAysoRepository  $fedRepository,
+                                $successRouteName
     )
     {
         $this->registerForm            = $registerForm;
-        $this->aysoRepository          = $aysoRepository;
+        $this->fedRepository           = $fedRepository;
         $this->projectPersonRepository = $projectPersonRepository;
+        
+        $this->successRouteName = $successRouteName;
     }
     public function __invoke(Request $request)
     {
@@ -36,37 +41,36 @@ class RegisterController extends AbstractController
             $projectPersonOriginal = $projectPerson;
 
             $projectPerson = $registerForm->getData();
+            
+            $projectPerson = $this->process($projectPerson,$projectPersonOriginal);
 
-            /** @noinspection PhpUnusedLocalVariableInspection */
-            $projectPerson = $this->process($registerForm->getSubmit(),$projectPerson,$projectPersonOriginal);
-
-            return $this->redirectToRoute('app_home');
+            // Maybe reset referee info?
+            if ($registerForm->getSubmit() == 'nope') {
+                $projectPerson['registered'] = false;
+                $projectPerson['verified']   = null;
+            }
+            $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
+            
+            return $this->redirectToRoute($this->successRouteName);
         }
-        $request->attributes->set('registerForm', $registerForm);
         $request->attributes->set('projectPerson',$projectPerson);
         
         return null;
     }
-    private function process($submit,$projectPerson,$projectPersonOriginal)
+    private function process($projectPerson,$projectPersonOriginal)
     {
-        $fedKey = $projectPerson['fedKey'];
+        $projectPersonRepository = $this->projectPersonRepository;
 
-        $vol = $this->aysoRepository->findVol($fedKey);
+        $fedKey = $projectPerson['fedKey'];
+        $fedRepository = $this->fedRepository;
+        
+        $vol = $fedRepository->findVol($fedKey);
         if ($vol) {
             $projectPerson['orgKey']  = $vol['orgKey'];
             $projectPerson['regYear'] = $vol['regYear'];
             $projectPerson['gender']  = $vol['gender'];
         }
-        //dump($projectPerson);
-        if ($submit == 'nope') {
-
-            $projectPerson['registered'] = false;
-            $projectPerson['verified']   = null;
-
-            $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
-
-            return $projectPerson;
-        }
+        
         // Want to referee?
         $plans = $projectPerson['plans'];
         $willReferee = $plans['willReferee'] !== 'no' ? true : false;
@@ -74,9 +78,9 @@ class RegisterController extends AbstractController
              $projectPersonRole =
                 isset($projectPerson['roles']['ROLE_REFEREE']) ?
                       $projectPerson['roles']['ROLE_REFEREE'] :
-                      $this->projectPersonRepository->createRole('ROLE_REFEREE');
+                      $projectPersonRepository->createRole('ROLE_REFEREE');
             $projectPersonRole['projectPersonId'] = $projectPerson['id'];
-            $cert = $this->aysoRepository->findVolCert($fedKey,'ROLE_REFEREE');
+            $cert = $this->fedRepository->findVolCert($fedKey,'ROLE_REFEREE');
             if ($cert) {
                 $projectPersonRole['roleDate']  = $cert['roleDate'];
                 $projectPersonRole['badge']     = $cert['badge'];
@@ -87,35 +91,43 @@ class RegisterController extends AbstractController
         }
         // Need some notifications here?
         $projectPerson['registered'] = true;
-
-        $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
-
+        
         return $projectPerson;
     }
     private function findProjectPersonForUser($user)
     {
+        $projectPersonRepository = $this->projectPersonRepository;
+        
         $projectKey = $user['projectKey'];
         $personKey  = $user['personKey'];
 
         // Existing
-        $projectPerson = $this->projectPersonRepository->find($projectKey,$personKey);
+        $projectPerson = $projectPersonRepository->find($projectKey,$personKey);
         if ($projectPerson) {
+            dump($projectPerson);
             return $projectPerson;
         }
         // Clone from previous tournament
-        $projectPerson = $this->projectPersonRepository->find('AYSONationalGames2014',$personKey);
+        $projectPerson = $projectPersonRepository->find('AYSONationalGames2014',$personKey);
 
         if (!$projectPerson) {
-            return $this->projectPersonRepository->create($projectKey, $personKey, $user['name'], $user['email']);
+            $projectPerson = $projectPersonRepository->find('AYSONationalGames2012',$personKey);
+        }
+        
+        if (!$projectPerson) {
+            $projectPerson = $projectPersonRepository->create($projectKey, $personKey, $user['name'], $user['email']);
+            $projectPerson['name'] = $projectPersonRepository->generateUniqueName($projectKey,$projectPerson['name']);
+            return $projectPerson;
         }
         $projectPerson['id'] = null;
         $projectPerson['projectKey'] = $projectKey;
 
         $fedKey = $projectPerson['fedKey'];
+        $fedRepository = $this->fedRepository;
 
-        $vol = $this->aysoRepository->findVol($fedKey);
+        $vol = $fedRepository->findVol($fedKey);
         if ($vol) {
-            dump($vol);
+            //dump($vol);
             $projectPerson['orgKey']  = $vol['orgKey'];
             $projectPerson['regYear'] = $vol['regYear'];
             $projectPerson['gender']  = $vol['gender'];
@@ -128,7 +140,7 @@ class RegisterController extends AbstractController
 
             $projectPersonRole['id'] = null;
 
-            $cert = $this->aysoRepository->findVolCert($fedKey,$roleKey);
+            $cert = $fedRepository->findVolCert($fedKey,$roleKey);
 
             if ($cert) {
                 $projectPersonRole['roleDate']  = $cert['roleDate'];

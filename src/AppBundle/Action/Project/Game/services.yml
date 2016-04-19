@@ -2,7 +2,7 @@ services:
 
     game_report_repository:
         class: AppBundle\Action\GameReport\GameReportRepository
-        arguments: ['@project_connection','@project_factory']
+        arguments: ['@schedule_connection','@project_factory']
 
     game_report_update_view:
         class: AppBundle\Action\GameReport\Update\GameReportUpdateView

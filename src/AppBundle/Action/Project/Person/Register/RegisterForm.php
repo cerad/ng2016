@@ -3,21 +3,23 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractForm;
 
-use Doctrine\DBAL\Connection;
+use AppBundle\Action\Project\Person\ProjectPersonRepository;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterForm extends AbstractForm
 {
-    /** @var Connection  */
-    private $conn;
+    /** @var ProjectPersonRepository  */
+    private $projectPersonRepository;
+    
     private $projectControls;
 
     private $formControls = [];
 
-    public function __construct(Connection $conn, $projectControls, $formControls)
+    public function __construct(ProjectPersonRepository $projectPersonRepository, $projectControls, $formControls)
     {
-        $this->conn = $conn;
-        $this->projectPlans    = $projectControls;
+        $this->projectPersonRepository = $projectPersonRepository;
+        
         $this->projectControls = $projectControls;
 
         foreach($formControls as $key => $meta)
@@ -50,13 +52,13 @@ class RegisterForm extends AbstractForm
             $data[$key] = $value;
         }
         // Validate
-        $errors = [];
+        // $errors = [];
 
         //dump($data);
         unset($data['register']);
         unset($data['_csrf_token']);
 
-        $this->formData = array_replace_recursive($this->formData, $data);
+        $this->setData($data);
 
         return;
     }

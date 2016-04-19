@@ -99,30 +99,20 @@ class ProjectUserProvider implements UserProviderInterface
         $user['projectKey'] = $projectKey;
         $user['registered'] = null; // default value but okay to foc
 
-        $qb = $this->projectPersonConn->createQueryBuilder();
-        $qb->select([
-            'projectPerson.registered',
-            'projectPersonRole.role',
-            'projectPersonRole.active',
-        ]);
-        $qb->from('projectPersons','projectPerson');
-        $qb->leftJoin(
-            'projectPerson',
-            'projectPersonRoles',
-            'projectPersonRole',
-            'projectPersonRole.projectPersonId = projectPerson.id'
-        );
-        $qb->where('projectPerson.projectKey = ? AND projectPerson.personKey = ?');
-        $qb->setParameters([$projectKey,$personKey]);
+        // See if registered
+        $sql  = 'SELECT id,registered FROM projectPersons WHERE projectKey = ? AND personKey = ?';
+        $stmt = $this->projectPersonConn->executeQuery($sql,[$projectKey,$personKey]);
+        $row  = $stmt->fetch();
+        if (!$row) {
+            $user['roles'] = $roles;
+            return $user;
+        }
+        $user['registered'] = $row['registered'] ? true : false;
 
-        $stmt = $qb->execute();
-
+        // Grab any roles
+        $sql  = 'SELECT role,active FROM projectPersonRoles WHERE projectPersonId = ?';
+        $stmt = $this->projectPersonConn->executeQuery($sql,[$row['id']]);
         while($row  = $stmt->fetch()) {
-
-            // Preserve null,true,false - the query returns 0 or 1 when the value is set
-            if ($row ['registered'] !== null) {
-                $user['registered'] = $row['registered'] ? true : false;
-            }
             if ($row['active']) {
                 $role = $row['role'];
                 if (!in_array($role, $roles)) {

@@ -1,3 +1,8 @@
+parameters:
+    # Eventually want to be able to customize thid
+    app_home_route:    app_home
+    app_welcome_route: app_welcome
+
 services:
 
     app_kernel_listener:

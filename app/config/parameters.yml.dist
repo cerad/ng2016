@@ -12,8 +12,8 @@ parameters:
 
     database_name_ayso:    ayso
     database_name_test:    ng2016test
-    database_name_users:   ng2014
-    database_name_project: ng2014games
+#   database_name_users:   ng2014
+#   database_name_project: ng2014games
 
     database_name_ng2016:      ng2016
     database_name_ng2014:      ng2014
