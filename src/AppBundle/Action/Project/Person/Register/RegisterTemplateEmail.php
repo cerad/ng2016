@@ -91,35 +91,33 @@ EOD;
     {
         $plans = isset($person['plans'])   ? $person['plans'] : null;
 
-        $willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown';
-        $willReferee   = isset($plans['willReferee'])   ? $plans['willReferee']   : 'No';
-        //$willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
+        //$willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown'
+        $willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
 
         // Should have transformers
-        $willAttend    = ucfirst($willAttend);
-        $willReferee   = ucfirst($willReferee);
-        //$willVolunteer = ucfirst($willVolunteer);
+        //$willAttend    = ucfirst($willAttend);
+        $willVolunteer = ucfirst($willVolunteer);
 
         $badge = isset($person['roles']['ROLE_REFEREE']) ?
             $person['roles']['ROLE_REFEREE']['badge'] :
             null;
-
-        if ($willReferee != 'No' && $badge) {
-            $willReferee = sprintf('%s (%s)',$willReferee,$badge);
-        }
-        $willRefereeTransformer = $this->willRefereeTransformer;
         
+        $willRefereeTransformer = $this->willRefereeTransformer;
+
+        $notes = nl2br($this->escape($person['notesUser']));
+
         return <<<EOD
 <table border="1">
-  <tr><td>Name         </td><td>{$person['name']}</td></tr>
-  <tr><td>Email        </td><td>{$person['email']}</td></tr>
-  <tr><td>Phone        </td><td>{$this->phoneTransformer->transform($person['phone'])}</td></tr>
-  <tr><td>Will Attend  </td><td>{$willAttend}</td></tr>
-  <tr><td>Will Referee </td><td>{$willRefereeTransformer($person)}</td></tr>
-  <tr><td>AYSO ID      </td><td>{$this->fedKeyTransformer->transform($person['fedKey'])}</td></tr>
-  <tr><td>Mem Year     </td><td>{$person['regYear']}</td></tr>
-  <tr><td>Referee Badge</td><td>{$badge}</td></tr>
-  <tr><td>SAR          </td><td>{$this->orgKeyTransformer->transform($person['orgKey'])}</td></tr>
+  <tr><td>Name          </td><td>{$this->escape($person['name'])} </td></tr>
+  <tr><td>Email         </td><td>{$this->escape($person['email'])}</td></tr>
+  <tr><td>Phone         </td><td>{$this->phoneTransformer->transform($person['phone'])}</td></tr>
+  <tr><td>Will Referee  </td><td>{$willRefereeTransformer($person)}</td></tr>
+  <tr><td>Will Volunteer</td><td>{$willVolunteer}</td></tr>
+  <tr><td>AYSO ID       </td><td>{$this->fedKeyTransformer->transform($person['fedKey'])}</td></tr>
+  <tr><td>Mem Year      </td><td>{$person['regYear']}</td></tr>
+  <tr><td>Referee Badge </td><td>{$badge}</td></tr>
+  <tr><td>SAR           </td><td>{$this->orgKeyTransformer->transform($person['orgKey'])}</td></tr>
+  <tr><td>User Notes    </td><td>{$notes}</td></tr>
 </table>
 EOD;
     }

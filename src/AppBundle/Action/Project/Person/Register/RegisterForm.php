@@ -142,7 +142,13 @@ EOD;
         $type = $meta['type'];
 
         switch($type) {
-            case 'select': return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name);
+
+            case 'select':
+                return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name);
+
+            case 'textarea':
+                return $this->renderFormControlInputTextArea($meta,$value,$id,$name);
+
         }
         return $this->renderFormControlInputText($meta,$value,$id,$name);
     }
@@ -158,6 +164,22 @@ EOD;
 <input 
   type="{$meta['type']} id="{$id}" class="form-control" {$required}
   name="{$name}" value="{$value}" placeHolder="{$placeHolder}"} />
+EOD;
+    }
+    private function renderFormControlInputTextArea($meta,$value,$id,$name)
+    {
+        $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
+
+        $placeHolder = isset($meta['placeHolder']) ? $this->escape($meta['placeHolder']) : null;
+
+        $rows = isset($meta['rows']) ? $meta['rows'] : 5;
+
+        $value = $this->escape($value);
+
+        return  <<<EOD
+<textarea 
+  id="{$id}" class="form-control" rows="{$rows}" {$required}
+  name="{$name}" placeHolder="{$placeHolder}"} >{$value}</textarea>
 EOD;
     }
     private function renderFormControlInputSelect($choices,$value,$id,$name)

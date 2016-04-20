@@ -173,6 +173,11 @@ class RegisterController extends AbstractController2
     }
     private function sendEmail($person)
     {
+        $projectInfo = $this->getCurrentProjectInfo();
+        $support  = $projectInfo['support'];
+        $assignor = $projectInfo['assignor'];
+        $refAdmin = $projectInfo['administrator'];
+        
         $update = $person['id'] ? ' Update' : null;
 
         $subject = sprintf('[NG2016] Registration%s for: %s',$update,$person['name']);
@@ -180,8 +185,8 @@ class RegisterController extends AbstractController2
         $html = $this->templateEmail->renderHtml($person);
 
         $toms = [
-            'thomasbobadilla@ayso.org'  => 'Tom Bobadilla',
-            'spsoccerref@earthlink.net' => 'Tom Tobin',
+            $refAdmin['email'] => $refAdmin['name'], // Tom B
+            $assignor['email'] => $assignor['name'], // Tom T
         ];
 
         $mailer = $this->getMailer();
@@ -202,8 +207,8 @@ class RegisterController extends AbstractController2
         $message->setReplyTo($toms);
 
         $message->setBcc([
-            'ahundiak@gmail.com' => 'Art Hundiak',
-            'ayso1sra@gmail.com' => 'Rick Roberts',
+            $support['email'] => $support['name'],
+            'ayso1sra@gmail.com' => 'Rick Roberts', // ???
         ]);
 
         /**  noinspection PhpParamsInspection */

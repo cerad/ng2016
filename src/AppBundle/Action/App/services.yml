@@ -80,6 +80,7 @@ services:
         parent: abstract_view
         arguments:
             - '@project_person_repository'
+            - '@phone_transformer'
             - '@ayso_volunteer_key_transformer'
             - '@ayso_region_to_sar_transformer'
             - '@project_person_will_referee_transformer'
