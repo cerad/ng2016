@@ -50,5 +50,10 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
+
+    disable_delivery: '%mailer_disable_delivery%'
+    delivery_address: '%mailer_delivery_address%'
+    spool: { type: memory }
+
 #   spool:     { type: memory } # Commented out for monolog email
 #   spool: { type: file, path: %kernel.root_dir%/../var/spool }
