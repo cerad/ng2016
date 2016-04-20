@@ -43,7 +43,7 @@ EOT;
         
         return  <<<EOT
 {$this->renderError()}
-<form role="form" style="width: 400px;" action="{$loginCheckPath}" method="post">
+<form role="form" action="{$loginCheckPath}" method="post">
   <div class="form-group">
     <label for="user_login_username">Email</label>
     <input 
@@ -61,16 +61,15 @@ EOT;
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-edit"></span>
-    <span style="padding-left:10px">Sign In</span>
-  </button><br/><br/>
-  <a href="{$loginGoogle}" class="btn btn-small btn-primary" role="button">
-    <span class="glyphicon glyphicon-edit"></span> 
-    <span style="padding-left:10px">Sign In (Google)</span>
+    <span class="glyphicon glyphicon-edit"></span> Sign In
+  </button><br>
+  <a href="{$loginGoogle}" class="btn btn-sm btn-default" role="button">
+    <!--<span class="glyphicon glyphicon-edit"></span>-->
+    Sign In (Google)
   </a>
-  <a href="{$loginFacebook}" class="btn btn-small btn-primary" role="button">
-    <span class="glyphicon glyphicon-edit"></span> 
-    <span style="padding-left:10px">Sign In (Facebook)</span>
+  <a href="{$loginFacebook}" class="btn btn-sm btn-default" role="button">
+    <!--<span class="glyphicon glyphicon-edit"></span>-->
+    Sign In (Facebook)
   </a>
 </form>
 EOT;

@@ -21,7 +21,7 @@ class PasswordResetResponseView extends AbstractView2
     private function render()
     {
         $content = <<<EOD
-<h3>Reset Password</h3>
+<legend>Reset Password</legend>
 {$this->form->render()}
 EOD;
         return $this->renderBaseTemplate($content);

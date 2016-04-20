@@ -149,6 +149,7 @@ EOT;
         return 
 <<<EOT
        <ul class="nav navbar-nav">
+           {$this->renderHome()}
           {$this->renderTopMenuSchedules()}
           {$this->renderTopMenuResults()}
         </ul>
@@ -165,7 +166,6 @@ EOT;
         $html =
 <<<EOT
          <ul class="nav navbar-nav navbar-right">
-           {$this->renderHome()}
            {$this->renderRefereeSchedules()}
            {$this->renderMyAccount()}
 EOT;
@@ -183,7 +183,7 @@ EOT;
         } else {
             $html = $this->renderSignIn();
         }*/
-          $html = $this->renderSignIn();
+          $html = '';  //$this->renderSignIn();
       }
       return $html;
     }
@@ -289,9 +289,9 @@ EOT;
     
     protected function renderHome()
     {
-        if (!$this->showResultsMenu) {
-            return null;
-        }
+        //if (!$this->showResultsMenu) {
+        //    return null;
+        //}
         return
 <<<EOT
         <li>

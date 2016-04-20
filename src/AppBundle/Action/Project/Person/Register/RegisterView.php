@@ -23,7 +23,7 @@ class RegisterView extends AbstractView2
         $project = $this->getCurrentProjectInfo();
 
         $content = <<<EOD
-<h3>Register for {$this->escape($project['title'])}</h3><br/>
+<legend>Register for {$this->escape($project['title'])}</legend><br/>
 {$this->form->render()}
 EOD;
         return $this->renderBaseTemplate($content);

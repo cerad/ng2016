@@ -14,6 +14,8 @@
     clear: both;
  }
  
+ .container { min-width: 350px; }
+ 
  legend { font-size: 16px; font-weight:bold; margin-top: 1em; margin-left: -20px;}
  
  .entry { margin-left:5px; margin-top: 5px; margin-bottom: 5px;}
@@ -31,3 +33,5 @@
 }
 
 .width-90 { max-width: 90%; margin-left: auto; margin-right: auto; }
+
+.btn { margin-right: 8px; margin-bottom: 15px;}
