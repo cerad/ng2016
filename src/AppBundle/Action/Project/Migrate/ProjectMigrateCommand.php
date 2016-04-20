@@ -232,6 +232,7 @@ EOD;
                         true, // Active
                         true, // Verified
                     ]);
+                    echo sprintf("Badge Date %s %s\n",$name,$row['refereeBadgeDate']);
             }
             switch($row['safeHavenBadge']) {
                 case null:

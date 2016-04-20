@@ -163,6 +163,7 @@ class RegisterController extends AbstractController2
             if ($cert) {
                 $projectPersonRole['roleDate']  = $cert['roleDate'];
                 $projectPersonRole['badge']     = $cert['badge'];
+                $projectPersonRole['badgeUser'] = $cert['badge'];
                 $projectPersonRole['badgeDate'] = $cert['badgeDate'];
                 $projectPersonRole['verified']  = true;
             }
