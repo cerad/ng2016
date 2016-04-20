@@ -123,7 +123,6 @@ class RegisterController extends AbstractController2
         // Existing
         $projectPerson = $projectPersonRepository->find($projectKey,$personKey);
         if ($projectPerson) {
-            dump($projectPerson);
             return $projectPerson;
         }
         // Clone from previous tournament

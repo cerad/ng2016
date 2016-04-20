@@ -52,7 +52,6 @@ swiftmailer:
     password:  "%mailer_password%"
 
     disable_delivery: '%mailer_disable_delivery%'
-    delivery_address: '%mailer_delivery_address%'
     spool: { type: memory }
 
 #   spool:     { type: memory } # Commented out for monolog email

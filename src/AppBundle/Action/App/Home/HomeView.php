@@ -156,16 +156,23 @@ EOD;
 
         $regYear = $projectPerson['regYear'];
 
-        $badge = isset($projectPerson['roles']['ROLE_REFEREE']) ?
+        $refereeBadge = isset($projectPerson['roles']['ROLE_REFEREE']) ?
             $projectPerson['roles']['ROLE_REFEREE']['badge'] :
             null;
+
+        $safeHavenBadge = isset($projectPerson['roles']['ROLE_SAFE_HAVEN']) ?
+            $projectPerson['roles']['ROLE_SAFE_HAVEN']['badge'] :
+            null;
+        
+        $safeHavenBadge = $safeHavenBadge ? 'Yes' : 'TBD';
 
         return <<<EOD
 <table class="{$this->tableClass}" style="{$this->tableStyle}">
   <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
-  <tr><td>AYSO ID:</td>            <td>{$fedId}</td></tr>
-  <tr><td>Membership Year:</td>    <td>{$regYear}</td></tr>
-  <tr><td>Referee Badge:</td>      <td>{$badge}</td></tr>
+  <tr><td>AYSO ID</td>            <td>{$fedId}</td></tr>
+  <tr><td>Membership Year</td>    <td>{$regYear}</td></tr>
+  <tr><td>Referee Badge</td>      <td>{$refereeBadge}</td></tr>
+  <tr><td>Safe Haven</td>         <td>{$safeHavenBadge}</td></tr>
   <tr><td>Section/Area/Region:</td><td>{$org}</td></tr>
 </table>
 EOD;

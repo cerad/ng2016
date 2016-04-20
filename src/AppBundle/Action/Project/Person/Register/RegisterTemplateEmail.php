@@ -98,10 +98,16 @@ EOD;
         //$willAttend    = ucfirst($willAttend);
         $willVolunteer = ucfirst($willVolunteer);
 
-        $badge = isset($person['roles']['ROLE_REFEREE']) ?
+        $refereeBadge = isset($person['roles']['ROLE_REFEREE']) ?
             $person['roles']['ROLE_REFEREE']['badge'] :
             null;
-        
+
+        $safeHavenBadge = isset($projectPerson['roles']['ROLE_SAFE_HAVEN']) ?
+            $projectPerson['roles']['ROLE_SAFE_HAVEN']['badge'] :
+            null;
+
+        $safeHavenBadge = $safeHavenBadge ? 'Yes' : 'TBD';
+
         $willRefereeTransformer = $this->willRefereeTransformer;
 
         $notes = nl2br($this->escape($person['notesUser']));
@@ -115,7 +121,8 @@ EOD;
   <tr><td>Will Volunteer</td><td>{$willVolunteer}</td></tr>
   <tr><td>AYSO ID       </td><td>{$this->fedKeyTransformer->transform($person['fedKey'])}</td></tr>
   <tr><td>Mem Year      </td><td>{$person['regYear']}</td></tr>
-  <tr><td>Referee Badge </td><td>{$badge}</td></tr>
+  <tr><td>Referee Badge </td><td>{$refereeBadge}</td></tr>
+  <tr><td>Safe Haven    </td><td>{$safeHavenBadge}</td></tr>
   <tr><td>SAR           </td><td>{$this->orgKeyTransformer->transform($person['orgKey'])}</td></tr>
   <tr><td>User Notes    </td><td>{$notes}</td></tr>
 </table>
