@@ -16,7 +16,7 @@ services:
 
     app_action_results_repository:
         class: AppBundle\Action\Schedule\ScheduleRepository
-        arguments: ['@project_connection']
+        arguments: ['@schedule_connection']
 
     results_poolplay_controller:
         class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayController

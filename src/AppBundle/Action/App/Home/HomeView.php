@@ -6,9 +6,11 @@ use AppBundle\Action\AbstractView;
 
 use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer;
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+//  AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 
+use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,19 +21,27 @@ class HomeView extends AbstractView
     private $projectPerson;
     private $projectPersonRepository;
 
+    private $phoneTransformer;
     private $fedKeyTransformer;
     private $orgKeyTransformer;
+    private $willRefereeTransformer;
 
     public function __construct(
         ProjectPersonRepository $projectPersonRepository,
+        PhoneTransformer        $phoneTransformer,
         VolunteerKeyTransformer $fedKeyTransformer,
-        RegionToSarTransformer  $orgKeyTransformer
+        RegionToSarTransformer  $orgKeyTransformer,
+        WillRefereeTransformer  $willRefereeTransformer
     )
     {
+        $this->projectPersonRepository = $projectPersonRepository;
+
+        $this->phoneTransformer  = $phoneTransformer;
         $this->fedKeyTransformer = $fedKeyTransformer;
         $this->orgKeyTransformer = $orgKeyTransformer;
-        $this->projectPersonRepository = $projectPersonRepository;
-    }
+
+        $this->willRefereeTransformer = $willRefereeTransformer;
+     }
     public function __invoke(Request $request)
     {
         $this->user = $user = $this->getUser();
@@ -59,62 +69,76 @@ EOD;
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();
     }
+    // Sure wish I understood styling better, tried using <style> but no go
+    private $tableClass  = 'table table-bordered table=hover table-condensed';
+    private $tableStyle  = 'max-width: 400px; border: 2px solid black; margin-bottom: 0px;';
+    //private $tdStyleLeft = 'text-align: right; border: 1px solid gray;';
+
     /* ====================================================
      * Account Information
-     *
+     * TODO Move to own teamplate
      */
+
     private function renderAccountInformation()
     {
         $user = $this->user;
 
         return <<<EOD
-<table class="account-person-list app_table" border="1">
-  <tr><th colspan="2">Zayso Account Information</th></tr>
-  <tr><td>Name:   </td><td>{$user['name']}</td></tr>
-  <tr><td>Account:</td><td>{$user['email']}</td></tr>
+<table class="{$this->tableClass}" style="{$this->tableStyle}">
+  <tr><th colspan="2" style="text-align: center;">Zayso Account Information</th></tr>
+  <tr><td>Account Name </td><td>{$user['name']}</td></tr>
+  <tr><td>Account User </td><td>{$user['username']}</td></tr>
+  <tr><td>Account Email</td><td>{$user['email']}</td></tr>
+  <!--
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('user_update')}">
         Update My Zayso Account
     </a>
   </td></tr>
+  -->
 </table>
 EOD;
     }
     private function renderPlans()
     {
-        $projectPerson = $this->projectPerson;
+        $person = $this->projectPerson;
+        $phone  = $this->phoneTransformer->transform($person['phone']);
 
-        $plans = isset($projectPerson['plans'])   ? $projectPerson['plans'] : null;
+        $plans = isset($person['plans']) ? $person['plans'] : null;
 
-        $willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown';
-        $willReferee   = isset($plans['willReferee'])   ? $plans['willReferee']   : 'No';
+        //$willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown';
         $willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
 
         // Should have transformers
-        $willAttend    = ucfirst($willAttend);
-        $willReferee   = ucfirst($willReferee);
+        //$willAttend    = ucfirst($willAttend);
         $willVolunteer = ucfirst($willVolunteer);
+        
+        $willRefereeTransformer = $this->willRefereeTransformer;
 
-        $badge = null;
+        $avail = isset($person['avail']) ? $person['avail'] : null;
 
-        if ($willReferee != 'No') {
-            $badge =
-                isset($projectPerson['roles']['ROLE_REFEREE']) ?
-                    $projectPerson['roles']['ROLE_REFEREE']['badge'] :
-                    null;
-            if ($badge) {
-                $willReferee = sprintf('%s (%s)',$willReferee,$badge);
-            }
-        }
+        $availSatAfter = isset($avail['availSatAfter']) ? $avail['availSatAfter'] : 'No';
+        $availSunMorn  = isset($avail['availSunMorn' ]) ? $avail['availSunMorn' ] : 'No';
+        $availSunAfter = isset($avail['availSunAfter']) ? $avail['availSunAfter'] : 'No';
+
+        $availSatAfter = ucfirst($availSatAfter);
+        $availSunMorn  = ucfirst($availSunMorn );
+        $availSunAfter = ucfirst($availSunAfter);
+
         return <<<EOD
-<table class="account-person-list app_table" border="1">
-  <tr><th colspan="2">Tournament Plans</th></tr>
-  <tr><td>Will Attend:   </td><td>{$willAttend}   </td></tr>
-  <tr><td>Will Referee:  </td><td>{$willReferee}  </td></tr>
-  <tr><td>Will Volunteer:</td><td>{$willVolunteer}</td></tr>
+<table class="{$this->tableClass}" style="{$this->tableStyle}">
+  <tr><th colspan="2" style="text-align: center;">Registration Information</th></tr>
+  <tr><td>Registration Name </td><td>{$this->escape($person['name'])} </td></tr>
+  <tr><td>Registration Email</td><td>{$this->escape($person['email'])}</td></tr>
+  <tr><td>Registration Phone</td><td>{$this->escape($phone)}</td></tr>
+  <tr><td>Will Referee  </td><td>{$willRefereeTransformer($person)}</td></tr>
+  <tr><td>Will Volunteer</td><td>{$willVolunteer}</td></tr>
+  <tr><td>Available Sat Afternoon(QF)</td><td>{$availSatAfter}</td></tr>
+  <tr><td>Available Sun Morning  (SF)</td><td>{$availSunMorn }</td></tr>
+  <tr><td>Available Sun Afternoon(FM)</td><td>{$availSunAfter}</td></tr>
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
-        Update My Plans
+        Update My Plans or Availability
     </a>
   </td></tr>
 </table>
@@ -132,23 +156,24 @@ EOD;
 
         $regYear = $projectPerson['regYear'];
 
-        $badge = isset($projectPerson['roles']['ROLE_REFEREE']) ?
+        $refereeBadge = isset($projectPerson['roles']['ROLE_REFEREE']) ?
             $projectPerson['roles']['ROLE_REFEREE']['badge'] :
             null;
 
+        $safeHavenBadge = isset($projectPerson['roles']['ROLE_SAFE_HAVEN']) ?
+            $projectPerson['roles']['ROLE_SAFE_HAVEN']['badge'] :
+            null;
+        
+        $safeHavenBadge = $safeHavenBadge ? 'Yes' : 'TBD';
+
         return <<<EOD
-<table  class="account-person-list app_table" border="1" >
-  <tr><th colspan="2">AYSO Information</th></tr>
-  <tr><td>AYSO ID:</td>            <td>{$fedId}</td></tr>
-  <tr><td>Membership Year:</td>    <td>{$regYear}</td></tr>
-  <tr><td>Referee Badge:</td>      <td>{$badge}</td></tr>
+<table class="{$this->tableClass}" style="{$this->tableStyle}">
+  <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
+  <tr><td>AYSO ID</td>            <td>{$fedId}</td></tr>
+  <tr><td>Membership Year</td>    <td>{$regYear}</td></tr>
+  <tr><td>Referee Badge</td>      <td>{$refereeBadge}</td></tr>
+  <tr><td>Safe Haven</td>         <td>{$safeHavenBadge}</td></tr>
   <tr><td>Section/Area/Region:</td><td>{$org}</td></tr>
-  <tr><td style="text-align: center;" colspan="2">
-    <a href="{$this->generateUrl('project_person_update_fed')}">
-        Update My AYSO Information
-    </a>
-  </td></tr>
-   
 </table>
 EOD;
     }

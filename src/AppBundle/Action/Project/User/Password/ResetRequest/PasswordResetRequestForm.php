@@ -5,13 +5,9 @@ use AppBundle\Action\AbstractForm;
 
 use AppBundle\Action\Project\User\ProjectUserRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class PasswordResetRequestForm extends AbstractForm
 {
-    /** @var AuthenticationUtils  */
-    private $authUtils;
-    
     /** @var  ProjectUserRepository */
     private $projectUserRepository;
     
@@ -19,11 +15,9 @@ class PasswordResetRequestForm extends AbstractForm
         'identifier' => null,        
     ];
     public function __construct(
-        AuthenticationUtils $authUtils,
         ProjectUserRepository $projectUserRepository
     )
     {
-        $this->authUtils             = $authUtils;
         $this->projectUserRepository = $projectUserRepository;
     }
     public function handleRequest(Request $request)
@@ -52,7 +46,9 @@ class PasswordResetRequestForm extends AbstractForm
     public function render()
     {
         $formData = $this->formData;
-
+        
+        $identifier = $formData['identifier'] ? : $this->getAuthenticationUtils()->getLastUsername();
+        
         $csrfToken = 'TODO';
 
         $html = <<<EOD
@@ -62,7 +58,7 @@ class PasswordResetRequestForm extends AbstractForm
     <label for="user_password_reset_request_identifier">Zayso Email</label>
     <input 
       type="text" id="user_password_reset_request" class="form-control" required
-      name="identifier" value="{$formData['identifier']}" required placeholder="Zayso Email" />
+      name="identifier" value="{$this->escape($identifier)}" required placeholder="Zayso Email" />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">

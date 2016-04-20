@@ -1,14 +1,13 @@
 <?php
 namespace AppBundle\Action\App\Welcome;
 
-use AppBundle\Action\AbstractView;
+use AppBundle\Action\AbstractView2;
 
 use AppBundle\Action\Project\User\Login\UserLoginForm;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class WelcomeView extends AbstractView
+class WelcomeView extends AbstractView2
 {
     /** @var  UserLoginForm */
     private $userLoginForm;
@@ -19,7 +18,7 @@ class WelcomeView extends AbstractView
     }
     public function __invoke(Request $request)
     {
-        return new Response($this->render());
+        return $this->newResponse($this->render());
     }
     private function render()
     {
@@ -33,8 +32,7 @@ class WelcomeView extends AbstractView
   {$this->renderHelp()}      
 </div>
 EOT;
-        $this->baseTemplate->setContent($content);
-        return $this->baseTemplate->render();
+        return $this->renderBaseTemplate($content);
     }
     private function renderNotes()
     {
@@ -74,7 +72,7 @@ EOD;
             Forgot your ZAYSO account password?  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to recover your ZAYSO password.</a>
         </li>
       <li>
-            Need to create an account? Click "Create New Account" in the menu above to create an account.
+            Need to create an account? <a href="{$this->generateUrl('user_create')}">Click here to create a new Zayso account</a> .
       </li>
         <li>
             Once you create an account, you will be able to modify your information and availability.

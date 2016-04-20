@@ -1,3 +1,8 @@
+parameters:
+    # Eventually want to be able to customize thid
+    app_home_route:    app_home
+    app_welcome_route: app_welcome
+
 services:
 
     app_kernel_listener:
@@ -14,6 +19,7 @@ services:
             - ['setProject', ['%app_project%']]
         arguments:
             - '%show_header_image%'
+            - '%show_results_menu%'
 
     app_page_template: # Depreciated
         abstract: true
@@ -36,6 +42,11 @@ services:
            - ['setBaseTemplate', ['@app_base_template']]
            - ['setProject', ['%app_project%']]
 
+    abstract_view2:
+        abstract: true
+        calls:
+           - ['setContainer', ['@service_container']]
+
     app_action_abstract_controller: # depreciated
         abstract: true
         calls: [[setContainer, ['@service_container']]]
@@ -56,7 +67,7 @@ services:
 
     welcome_view:
         class:  AppBundle\Action\App\Welcome\WelcomeView
-        parent: abstract_view
+        parent: abstract_view2
         arguments:
             - '@user_login_form'
 
@@ -70,8 +81,10 @@ services:
         parent: abstract_view
         arguments:
             - '@project_person_repository'
+            - '@phone_transformer'
             - '@ayso_volunteer_key_transformer'
             - '@ayso_region_to_sar_transformer'
+            - '@project_person_will_referee_transformer'
 
     # action admin
     admin_controller:
@@ -83,5 +96,3 @@ services:
     admin_page_template:
         class:  AppBundle\Action\Admin\AdminPageTemplate
         parent: app_page_template
-
-

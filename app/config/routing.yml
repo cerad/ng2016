@@ -4,15 +4,15 @@ app_user:
     prefix: /user
 
 app_game:
-    resource: "@AppBundle/Resources/config/routes/game.yml"
+    resource: "@AppBundle/Action/Project/Game/routes.yml"
     prefix: /game
 
 app_schedule:
-    resource: "@AppBundle/Resources/config/routes/schedule.yml"
+    resource: "@AppBundle/Action/Schedule/routes.yml"
     prefix: /schedule
 
 app_results:
-    resource: "@AppBundle/Resources/config/routes/results.yml"
+    resource: "@AppBundle/Action/Results/routes.yml"
     prefix: /results
 
 app_project_person:

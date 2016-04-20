@@ -1,12 +1,11 @@
 <?php
 namespace AppBundle\Action\Project\User\Password\ResetResponse;
 
-use AppBundle\Action\AbstractView;
+use AppBundle\Action\AbstractView2;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class PasswordResetResponseView extends AbstractView
+class PasswordResetResponseView extends AbstractView2
 {
     /** @var  PasswordResetResponseForm */
     private $form;
@@ -17,9 +16,7 @@ class PasswordResetResponseView extends AbstractView
     }
     public function __invoke(Request $request)
     {
-        //$this->form = $request->attributes->get('form');
-
-        return new Response($this->render());
+        return $this->newResponse($this->render());
     }
     private function render()
     {
@@ -27,8 +24,6 @@ class PasswordResetResponseView extends AbstractView
 <h3>Reset Password</h3>
 {$this->form->render()}
 EOD;
-        $this->baseTemplate->setContent($content);
-        return $this->baseTemplate->render();
-
+        return $this->renderBaseTemplate($content);
     }
 }

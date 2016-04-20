@@ -3,21 +3,23 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractForm;
 
-use Doctrine\DBAL\Connection;
+use AppBundle\Action\Project\Person\ProjectPersonRepository;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterForm extends AbstractForm
 {
-    /** @var Connection  */
-    private $conn;
+    /** @var ProjectPersonRepository  */
+    private $projectPersonRepository;
+    
     private $projectControls;
 
     private $formControls = [];
 
-    public function __construct(Connection $conn, $projectControls, $formControls)
+    public function __construct(ProjectPersonRepository $projectPersonRepository, $projectControls, $formControls)
     {
-        $this->conn = $conn;
-        $this->projectPlans    = $projectControls;
+        $this->projectPersonRepository = $projectPersonRepository;
+        
         $this->projectControls = $projectControls;
 
         foreach($formControls as $key => $meta)
@@ -40,6 +42,9 @@ class RegisterForm extends AbstractForm
 
         foreach($data as $key => $value)
         {
+            if (!is_array($value)) {
+                $value = filter_var(trim($value), FILTER_SANITIZE_STRING);
+            }
             if (isset($this->formControls[$key])) {
                 $meta = $this->formControls[$key];
                 if (isset($meta['transformer'])) {
@@ -50,19 +55,21 @@ class RegisterForm extends AbstractForm
             $data[$key] = $value;
         }
         // Validate
-        $errors = [];
+        // $errors = [];
 
         //dump($data);
         unset($data['register']);
         unset($data['_csrf_token']);
 
-        $this->formData = array_replace_recursive($this->formData, $data);
+        $this->setData($data);
 
         return;
     }
     public function render()
     {
         $csrfToken = 'TODO';
+
+        $submitLabel = $this->formData['id'] ? 'Update Registration Information' : 'Submit Registration';
 
         $html = <<<EOD
 {$this->renderFormErrors()}
@@ -82,7 +89,8 @@ class RegisterForm extends AbstractForm
   <div class="form-group"> 
     <div class="col-sm-offset-4 col-sm-8">
       <button type="submit" name="register" value="register" class="btn btn-sm btn-primary">
-        <span class="glyphicon glyphicon-edit"></span>Register
+        <span class="glyphicon glyphicon-edit"></span>
+        <span>{$submitLabel}</span>
       </button>
     </div>
   </div>
@@ -134,7 +142,13 @@ EOD;
         $type = $meta['type'];
 
         switch($type) {
-            case 'select': return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name);
+
+            case 'select':
+                return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name);
+
+            case 'textarea':
+                return $this->renderFormControlInputTextArea($meta,$value,$id,$name);
+
         }
         return $this->renderFormControlInputText($meta,$value,$id,$name);
     }
@@ -150,6 +164,22 @@ EOD;
 <input 
   type="{$meta['type']} id="{$id}" class="form-control" {$required}
   name="{$name}" value="{$value}" placeHolder="{$placeHolder}"} />
+EOD;
+    }
+    private function renderFormControlInputTextArea($meta,$value,$id,$name)
+    {
+        $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
+
+        $placeHolder = isset($meta['placeHolder']) ? $this->escape($meta['placeHolder']) : null;
+
+        $rows = isset($meta['rows']) ? $meta['rows'] : 5;
+
+        $value = $this->escape($value);
+
+        return  <<<EOD
+<textarea 
+  id="{$id}" class="form-control" rows="{$rows}" {$required}
+  name="{$name}" placeHolder="{$placeHolder}"} >{$value}</textarea>
 EOD;
     }
     private function renderFormControlInputSelect($choices,$value,$id,$name)

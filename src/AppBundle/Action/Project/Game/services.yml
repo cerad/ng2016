@@ -2,15 +2,15 @@ services:
 
     game_report_repository:
         class: AppBundle\Action\GameReport\GameReportRepository
-        arguments: ['@project_connection','@project_factory']
+        arguments: ['@schedule_connection','@project_factory']
 
     game_report_update_view:
         class: AppBundle\Action\GameReport\Update\GameReportUpdateView
         parent: app_page_template
 
     game_report_update_controller:
-        class: AppBundle\Action\GameReport\Update\GameReportUpdateController
-        parent: app_action_abstract_controller
+        class:  AppBundle\Action\GameReport\Update\GameReportUpdateController
+        parent: abstract_controller
         arguments:
             - '@game_report_repository'
             - '@app_points_calculator'

@@ -7,12 +7,11 @@ parameters:
   app_project:
     info:
         key: AYSONationalGames2014 # For now until we migrate
-        slugs:
-            - natgames
-            - ng2016
-            
-        status:   Active
-        verified: Yes
+
+        slugs: [natgames, ng2016]
+
+        status: Active
+
         show_header_image: null
                 
         fedId:     AYSO
@@ -21,11 +20,8 @@ parameters:
         abbv:    "NG2016"
         title:   "AYSO National Games 2016"
         desc:    "AYSO National Games 2016 - Palm Beach County, Florida - July 5th to July 10th"
-        results: natgames
-        
-        submit:  "Emails your application to Art Hundiak and yourself."
-        prefix:   NatGames2016
-             
+        prefix:  'NatGames2016'
+
         support:
             name: "Art Hundiak"
             email: "ahundiak@gmail.com"
@@ -49,8 +45,8 @@ parameters:
             phone:  424-221-7980
 
         system:
-            name:  "AYSO National Games 2016"
-            email: "no.response.ng2016@gmail.com"
+            name:  "Zayso Admin"
+            email: "noreply@zayso.org"
             phone:  ""
 
         dates:
@@ -168,181 +164,8 @@ parameters:
 
         fields:
 
-
-    # ==================================================
-    # Basic volunteer plan
-    # This section is depreciated
-    # app_project_plans for 2016
-    plans:
-      venue:
-        type:    select
-        label:   I will work at
-        default: na
-        choices: 
-          na:    Not yet answered
-          core:  Torrance/Redondo Beach (CORE site)
-          extra: Riverside (EXTRA site)
-          other: Where needed (either site)
-           
-#     refLevelCR:
-#       type:    select
-#       label:   Level to center at
-#       default: na
-#       choices: { na: na, U10: U10, U12: U12, U14: U14, U16: U16, U19: U19
-             
-#     refLevelAR:
-#       type:    select
-#       label:   Level to assist at
-#       default: na
-#       choices: { na: na, U10: U10, U12: U12, U14: U14, U16: U16, U19: U19
-             
-      willInstruct:
-        type:    select
-        label:   I am certified Instructor
-        default: no
-        choices: { no: No, ri: Referee Instructor, ari: Advanced Referee Instructor, nri: National Referee Instructor}
-           
-      willAssess:
-        type:    select
-        label:   I am certified Assessor
-        default: no
-        choices: { no: No, ra: Referee Assessor, nra: National Referee Assessor}
-           
-      willMentor:
-        type:    select
-        label:   I will be available as a mentor
-        default: no
-        choices: { no: No, yes: Yes}
-           
-      wantMentor:
-        type:    select
-        label:   I would like to work with a mentor
-        default: no
-        choices: { no: No, yes: Yes}
-
-      coaching:
-        type:    select
-        label:   I will coach or manage a team
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure}
-
-           
-      playing:
-        type:    select
-        label:   I have (or am) a player in the games
-        default: no
-        choices: { no: No, yes: Yes, player: Yes - I am a player }
-           
-      opening:
-        type:    select
-        label:   I will attend the Tuesday Night Opening Ceremony?
-        default: no
-        choices: { no: No, yesRAL: Yes in Riverside, yesTOA: Yes in Torrance, maybe: Not Sure}
-        
-      tshirt:
-        type:    select
-        label:   T-Shirt Size
-        default: na
-        choices: 
-          na:        na
-          youthm:    Youth Medium 
-          youthl:    Youth Large
-          adults:    Adult Small
-          adultm:    Adult Medium
-          adultl:    Adult Large
-          adultlx:   Adult Large X
-          adultlxx:  Adult Large XX
-          adultlxxx: Adult Large XXX
-             
-      shuttle:
-        type:    select
-        label:   I need shuttle service during the games
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure}
-           
-      housing:
-        type:    select
-        label:   I would use low cost referee housing
-        default: no
-        choices: { no: No, yes: Yes, maybe: Not Sure}
-           
-      #hotel:
-      #  type:  text
-      #  label: Hotel staying at
-      #  size:  30
-      
-      availSatAfter:
-        type:    select
-        label:   Available Saturday Afternoon (Quarter Finals)
-        default: no
-        choices: { no: No, yes: Yes, maybe: Yes - If My Team Advances}
-        
-      availSunMorn:
-        type:    select
-        label:   Available Sunday Morning (Semi Finals)
-        default: no
-        choices: { no: No, yes: Yes, maybe: Yes - If My Team Advances}
-        
-      availSunAfter:
-        type:    select
-        label:   Available Sunday Afternoon (Finals)
-        default: no
-        choices: { no: No, yes: Yes, maybe: Yes - If My Team Advances}
-        
-      notes:
-        type:  textarea
-        label: Notes
-        rows:  5
-        cols:  40
-        
-    # Break out availability
-    avail:
-      
-      AvailWen:
-        type:    select
-        label:   Available Wednesday (Jamborees)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
-           
-      AvailThu:
-        type:    select
-        label:   Available Thursday (Pool Play)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
-
-      AvailFri:
-        type:    select
-        label:   Available Friday (Pool Play)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
-
-      AvailSatMorn:
-        type:    select
-        label:   Available Saturday Morning (Pool Play)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Not Sure}
-           
-      AvailSatAfter:
-        type:    select
-        label:   Available Saturday Afternoon (Quarter Finals)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
-
-      AvailSunMorn:
-        type:    select
-        label:   Available Sunday Morning (Semi-Finals)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
-
-      AvailSunAfter:
-        type:    select
-        label:   Available Sunday Afternoon (Finals)
-        default: no
-        choices: { no: No, yesAM: Yes in the Morning, yesPM: Yes in the afternoon, maybe: Yes - If My Team Advances}
-
-
-    # ==================================================
-    # Basic volunteer plan for the form
+  # ==================================================
+  # Basic volunteer plan for the form
   app_project_registration_form_controls:
 
       name:
@@ -365,19 +188,20 @@ parameters:
           required:    false
           transformer: phone_transformer
 
-      fedKey:
-          type:        integer # aysoid
-          label:       AYSO Volunteer ID
-          href:        eayso.org
-          placeHolder: 8 digit number
-          transformer: ayso_volunteer_key_transformer
-          constraints: ['aysoid_constraint'] # Maybe class name?
+      fedKey: {}
+      orgKey: {}
+      refereeBadge: {}
 
-      shirtSize: {}
-
-      willAttend:    { group: plans }
+    # willAttend:    { group: plans }
       willReferee:   { group: plans }
       willVolunteer: { group: plans }
+      shirtSize: {}
+
+      availSatAfter: { group: avail }
+      availSunMorn:  { group: avail }
+      availSunAfter: { group: avail }
+
+      notesUser: {}
 
   app_project_controls:
 
@@ -435,6 +259,20 @@ parameters:
                 adultlxx:  Adult Large XX
                 adultlxxx: Adult Large XXX
 
+        notesUser:
+          type:  textarea
+          label: Notes
+          rows:  5
+          cols:  40
+
+        fedKey:
+            type:        integer # aysoid
+            label:       AYSO Volunteer ID
+            href:        eayso.org
+            placeHolder: 8 digit number
+            transformer: ayso_volunteer_key_transformer
+            constraints: ['aysoid_constraint'] # Maybe class name?
+
         orgKey:
             type:        integer # region
             label:       AYSO Region Number
@@ -442,3 +280,21 @@ parameters:
             placeHolder: 1-4 digit number
             transformer: ayso_region_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
+
+        availSatAfter:
+            type:    select
+            label:   Available Saturday Afternoon (Qtr-Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe }
+
+        availSunMorn:
+            type:    select
+            label:   Available Sunday Morning (Semi-Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe }
+
+        availSunAfter:
+            type:    select
+            label:   Available Sunday Afternoon (Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}

@@ -26,7 +26,7 @@ class GameReportRepositoryTest extends \PHPUnit_Framework_TestCase
         $config = new \Doctrine\DBAL\Configuration();
 
         $connectionParams = array(
-            'dbname'   => $params['database_name_project'],
+            'dbname'   => $params['database_name_ng2014games'],
             'user'     => $params['database_user'],
             'password' => $params['database_password'],
             'host'     => $params['database_host'],

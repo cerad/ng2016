@@ -1,8 +1,11 @@
 services:
 
+    schedule_connection:
+        alias: doctrine.dbal.ng2014games_connection
+
     app_action_schedule_repository:
         class: AppBundle\Action\Schedule\ScheduleRepository
-        arguments: ['@doctrine.dbal.project_connection']
+        arguments: ['@schedule_connection']
 
     schedule_team_controller:
         class: AppBundle\Action\Schedule\Team\ScheduleTeamController

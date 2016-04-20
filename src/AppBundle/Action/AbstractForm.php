@@ -1,20 +1,14 @@
 <?php
 namespace AppBundle\Action;
 
-use AppBundle\Common\RenderEscapeTrait;
-
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class AbstractForm implements ContainerAwareInterface
 {
-    use RenderEscapeTrait;
-    use ContainerAwareTrait;
+    use AbstractActionTrait;
     
     /** @var  ContainerInterface */
     protected $container;
@@ -26,13 +20,6 @@ abstract class AbstractForm implements ContainerAwareInterface
     protected $formData       = [];
     protected $formDataErrors = [];
     
-    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
-        /** @var RouterInterface $router */
-        $router = $this->container->get('router');
-        
-        return $router->generate($route, $parameters, $referenceType);
-    }
     public function setData($formData)
     {
         $this->formData = array_replace_recursive($this->formData, $formData);

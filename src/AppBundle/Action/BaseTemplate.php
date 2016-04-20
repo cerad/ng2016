@@ -6,11 +6,13 @@ class BaseTemplate extends AbstractTemplate
     protected $title = 'NG2016';
     protected $content = null;
 
-    private   $showHeaderImage;
-
-    public function __construct($showHeaderImage)
+    private $showHeaderImage;
+    private $showResultsMenu;
+    
+    public function __construct($showHeaderImage,$showResultsMenu)
     {
         $this->showHeaderImage = $showHeaderImage;
+        $this->showResultsMenu = $showResultsMenu;
     }
     public function setContent($content)
     {
@@ -188,6 +190,9 @@ EOT;
     
     protected function renderTopMenuSchedules()
     {
+        if (!$this->showResultsMenu) {
+            return null;
+        }
         return
 <<<EOT
         <li class="dropdown">
@@ -202,6 +207,9 @@ EOT;
     
     protected function renderTopMenuResults()
     {
+        if (!$this->showResultsMenu) {
+            return null;
+        }
         return
 <<<EOT
         <li class="dropdown">
@@ -246,7 +254,10 @@ EOT;
     
     protected function renderRefereeSchedules()
     {
-      return
+        if (!$this->showResultsMenu) {
+            return null;
+        }
+        return
 <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
@@ -261,7 +272,10 @@ EOT;
 
     protected function renderMyAccount()
     {
-      return
+        if (!$this->showResultsMenu) {
+            return null;
+        }
+        return
 <<<EOT
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
@@ -275,7 +289,10 @@ EOT;
     
     protected function renderHome()
     {
-      return
+        if (!$this->showResultsMenu) {
+            return null;
+        }
+        return
 <<<EOT
         <li>
           <a href="{$this->generateUrl('app_home')}">HOME</a>
@@ -284,14 +301,12 @@ EOT;
     }
     protected function renderAdmin()
     {
-        return
-            <<<EOT
-                    <li>
-          <a href="{$this->generateUrl('app_admin')}">ADMIN</a>
-        </li>
+        return <<<EOT
+<li>
+  <a href="{$this->generateUrl('app_admin')}">ADMIN</a>
+</li>
 EOT;
     }
-
     protected function renderScripts()
     {
         return
