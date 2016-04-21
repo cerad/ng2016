@@ -46,6 +46,7 @@ services:
         abstract: true
         calls:
            - ['setContainer', ['@service_container']]
+           - ['setProject', ['%app_project%']]
 
     app_action_abstract_controller: # depreciated
         abstract: true
@@ -70,6 +71,7 @@ services:
         parent: abstract_view2
         arguments:
             - '@user_login_form'
+            - '%show_results_menu%'
 
     # action home
     home_controller:

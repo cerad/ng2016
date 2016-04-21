@@ -69,10 +69,6 @@ EOD;
         $this->baseTemplate->setContent($content);
         return $this->baseTemplate->render();
     }
-    // Sure wish I understood styling better, tried using <style> but no go
-    private $tableClass  = 'table table-bordered table=hover table-condensed';
-    private $tableStyle  = 'max-width: 400px; border: 2px solid black; margin-bottom: 0px;';
-    //private $tdStyleLeft = 'text-align: right; border: 1px solid gray;';
 
     /* ====================================================
      * Account Information
@@ -84,7 +80,7 @@ EOD;
         $user = $this->user;
 
         return <<<EOD
-<table class="{$this->tableClass}" style="{$this->tableStyle}">
+<table class="tableClass" >
   <tr><th colspan="2" style="text-align: center;">Zayso Account Information</th></tr>
   <tr><td>Account Name </td><td>{$user['name']}</td></tr>
   <tr><td>Account User </td><td>{$user['username']}</td></tr>
@@ -126,7 +122,7 @@ EOD;
         $availSunAfter = ucfirst($availSunAfter);
 
         return <<<EOD
-<table class="{$this->tableClass}" style="{$this->tableStyle}">
+<table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Registration Information</th></tr>
   <tr><td>Registration Name </td><td>{$this->escape($person['name'])} </td></tr>
   <tr><td>Registration Email</td><td>{$this->escape($person['email'])}</td></tr>
@@ -136,7 +132,7 @@ EOD;
   <tr><td>Available Sat Afternoon(QF)</td><td>{$availSatAfter}</td></tr>
   <tr><td>Available Sun Morning  (SF)</td><td>{$availSunMorn }</td></tr>
   <tr><td>Available Sun Afternoon(FM)</td><td>{$availSunAfter}</td></tr>
-  <tr><td style="text-align: center;" colspan="2">
+  <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
         Update My Plans or Availability
     </a>
@@ -167,7 +163,7 @@ EOD;
         $safeHavenBadge = $safeHavenBadge ? 'Yes' : 'TBD';
 
         return <<<EOD
-<table class="{$this->tableClass}" style="{$this->tableStyle}">
+<table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
   <tr><td>AYSO ID</td>            <td>{$fedId}</td></tr>
   <tr><td>Membership Year</td>    <td>{$regYear}</td></tr>
@@ -207,7 +203,7 @@ EOD;
     private function renderNotes()
     {
         return <<<EOD
-<div id="notes" class="????" style="width: 500px;">
+<div id="notes">
   <legend>Thank you for registering to Referee at the 2016 National Games!</legend>
   <p>
     Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games. 

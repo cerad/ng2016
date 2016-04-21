@@ -11,10 +11,12 @@ abstract class AbstractView2 implements ContainerAwareInterface
     
     /** @var  ContainerInterface */
     protected $container;
+    
+    protected $project;
 
     /** =============================================
      * In theory these template classes should only be in AbstractView
-     * Resist the temtation to render pages in the controller
+     * Resist the temptation to render pages in the controller
      *
      * @return BaseTemplate
      */
@@ -27,6 +29,10 @@ abstract class AbstractView2 implements ContainerAwareInterface
         $baseTemplate = $this->getBaseTemplate();
         $baseTemplate->setContent($content);
         return $baseTemplate->render();
+    }
+    public function setProject(array $project)
+    {
+        $this->project = $project['info'];
     }
 
     /** 
