@@ -35,16 +35,14 @@ class RegisterTemplateEmail extends AbstractView2
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <link rel="stylesheet" type="text/css" href="http://ng2016register.zayso.org/bundles/ceradapp/css/ng.css" media="all">
+  <link rel="stylesheet" type="text/css" href="http://ng2016register.zayso.org/css/ng.css" media="all">
   <title></title>
 </head>
 <body>
   <center>
     <div class="skHeader">
       <h1>
-        <a href="http://www.aysonationalgames.org/" target="_blank">
-          <img src="http://ng2016register.zayso.org/bundles/ceradapp/images/header-ipad_01.png" width="70%">
-        </a>
+          <img src="http://ng2016register.zayso.org/images/header-ipad_01.png" width="70%">
       </h1>
     </div>
     <p class="skFont">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</p>
