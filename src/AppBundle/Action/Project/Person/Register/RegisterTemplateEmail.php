@@ -35,7 +35,7 @@ class RegisterTemplateEmail extends AbstractView2
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <link rel="stylesheet" type="text/css" href="http://ng2016register.zayso.org/css/ng.css" media="all">
+  <link rel="stylesheet" type="text/css" href="http://ng2016register.zayso.org/css/zayso.css" media="all">
   <title></title>
 </head>
 <body>
