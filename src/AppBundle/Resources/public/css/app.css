@@ -465,3 +465,10 @@ padding:0;
 .seperator {
   margin: 3px auto;
 }
+
+body.email { width: inherit; }
+
+p.email {
+  font-size: 12px;
+  text-align: center;
+}
