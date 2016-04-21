@@ -5,7 +5,7 @@ use AppBundle\Common\ArrayAccessTrait;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
-class ProjectUser implements AdvancedUserInterface, \ArrayAccess
+class ProjectUser implements AdvancedUserInterface, \ArrayAccess, \Serializable
 {
     use ArrayAccessTrait;
 
@@ -67,5 +67,27 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess
     public function getAccountName()
     {
         return $this->name;
+    }
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,         // For refreshing
+            //$this->salt,
+            //$this->password,
+            $this->username,   // Debugging
+        ));
+    }
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        list(
+            $this->id,
+            //$this->salt,
+            //$this->password,
+            $this->username
+            ) = $data;
+
+        return;
     }
 }

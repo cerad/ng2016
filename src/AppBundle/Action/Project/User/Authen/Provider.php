@@ -56,14 +56,10 @@ class Provider
             ],
         ]);
         $data = $this->getResponseData($guzzleResponse); var_dump($data);
-        $keys = $this->params['keys'];
-        $userInfoData = [
-            'id'             => $data[$keys['id']],
-            'name'           => $data[$keys['name']],
-            'email'          => $data[$keys['email']],
-            'email_verified' => $data[$keys['email_verified']],
-            'gender'         => $data[$keys['gender']],
-        ];
+        $userInfoData = [];
+        foreach($this->params['keys'] as $key) {
+            $userInfoData[$key] = isset($data[$key]) ? $data[$key] : null;
+        }
         return $userInfoData;
     }
     // Return array from either json or name-value
