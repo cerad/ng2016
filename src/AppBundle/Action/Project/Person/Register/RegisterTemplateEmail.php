@@ -8,6 +8,8 @@ use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer as Fe
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 class RegisterTemplateEmail extends AbstractView2
 {
     private $fedKeyTransformer;
@@ -35,22 +37,25 @@ class RegisterTemplateEmail extends AbstractView2
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <link rel="stylesheet" type="text/css" href="http://ng2016register.zayso.org/css/zayso.css" media="all">
+  <link rel="stylesheet" type="text/css" href="{$this->generateUrl('app_css',array(),UrlGeneratorInterface::ABSOLUTE_URL)}/zayso.css" media="all">
   <title></title>
 </head>
-<body>
+<body class="email" >
   <center>
     <div class="skHeader">
       <h1>
-          <img src="http://ng2016register.zayso.org/images/header-ipad_01.png" width="70%">
+          <img src="{$this->generateUrl('app_images',array(),UrlGeneratorInterface::ABSOLUTE_URL)}/header-ipad_01.png" width="70%">
       </h1>
     </div>
-    <p class="skFont">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</p>
+    <br>
+    <p class="skFont email">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</p>
     <div class="clear-both"></div>
   </center>
   <hr>
-  <p>Thank you for registering to volunteer at the 2016 National Games!</p>
+  <p class="email">Thank you for registering to volunteer at the 2016 National Games!</p>
+  <br>
   {$this->renderHtmlPerson($person)}
+  <br>
   <p>
     As you might expect, we have a full calendar of soccer and related activities starting Tuesday July 5 and 
     running through Sunday July 10. 
@@ -73,7 +78,7 @@ class RegisterTemplateEmail extends AbstractView2
     </p>
 
     <p>I look forward to meeting you at the Games.</p>
-
+    <br>
     <p>Sincerely,</p>
     
     <p>Tom Bobadilla<br>
@@ -111,7 +116,7 @@ EOD;
         $notes = nl2br($this->escape($person['notesUser']));
 
         return <<<EOD
-<table border="1">
+<table class="tableClass">
   <tr><td>Name          </td><td>{$this->escape($person['name'])} </td></tr>
   <tr><td>Email         </td><td>{$this->escape($person['email'])}</td></tr>
   <tr><td>Phone         </td><td>{$this->phoneTransformer->transform($person['phone'])}</td></tr>

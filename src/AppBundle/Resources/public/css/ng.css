@@ -34,3 +34,7 @@
     font-weight: normal;
     color: rgb(124, 124, 124);
 }
+
+.skFont.email {
+  font-size: 14px;
+}
