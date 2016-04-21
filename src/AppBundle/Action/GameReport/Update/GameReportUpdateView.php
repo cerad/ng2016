@@ -1,17 +1,19 @@
 <?php
 namespace AppBundle\Action\GameReport\Update;
 
-use AppBundle\Action\AbstractTemplate;
+use AppBundle\Action\AbstractView2;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class GameReportUpdateView extends AbstractTemplate
+class GameReportUpdateView extends AbstractView2
 {
+    private $gameReport;
+
     private $gameStatuses;
     private $reportStatuses;
-    
-    private $scheduleURL;    
+
+    // TODO
+    private $scheduleURL = '#';
 
     public function __construct()
     {
@@ -33,28 +35,25 @@ class GameReportUpdateView extends AbstractTemplate
             'Verified'  => 'Verified',
             'Clear'     => 'Clear',
         ];
-        
-        if (!empty($_SESSION["RETURN_TO_URL"]) ) {
-            $this->scheduleURL = $_SESSION["RETURN_TO_URL"];
-        } else {
-            $this->scheduleURL = "#";
-        }
-
     }
     public function __invoke(Request $request)
     {
-        $gameReport = $request->attributes->get('gameReport');
+        $this->project = $this->getCurrentProjectInfo();
         
+        $this->gameReport = $request->attributes->get('gameReport');
+
+        return $this->newResponse($this->render());
+    }
+    private function render()
+    {
         $content = <<<EOD
-{$this->renderForm($gameReport)}
+{$this->renderForm($this->gameReport)}
 <br />
 {$this->renderScoringNotes()}
 EOD;
-        $this->baseTemplate->setContent($content);
-
-        return new Response($this->baseTemplate->render());
+        return $this->renderBaseTemplate($content);
     }
-    protected function renderForm($gameReport)
+    private function renderForm($gameReport)
     {
         $game = $gameReport['game'];
 
@@ -259,10 +258,8 @@ EOD;
     /* ====================================================
      * The help section
      */
-    protected function renderScoringNotes()
+    private function renderScoringNotes()
     {
-        include 'GameReportUpdateNotes.php';
-        
-        return $notes;
+        return include 'GameReportUpdateNotes.php';
     }
 }

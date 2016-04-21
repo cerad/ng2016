@@ -1,4 +1,5 @@
 <?php
+// TODO Make this a real template, not an include thing
 $notes = <<<EOT
     <legend class="text-left">Scoring Notes</legend>
 
