@@ -6,7 +6,7 @@ services:
 
     game_report_update_view:
         class: AppBundle\Action\GameReport\Update\GameReportUpdateView
-        parent: app_page_template
+        parent: abstract_view2
 
     game_report_update_controller:
         class:  AppBundle\Action\GameReport\Update\GameReportUpdateController

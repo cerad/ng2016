@@ -61,8 +61,6 @@ class GameReportUpdateController extends AbstractController
         $request->attributes->set('gameReport',$gameReport);
 
         return null;
-
-        //return new Response($this->pageTemplate->render($gameReport));
     }
     private function processGameReport($gameReportOriginal,$gameReportPosted)
     {

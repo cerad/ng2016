@@ -10,12 +10,16 @@ class PasswordResetResponseView extends AbstractView2
     /** @var  PasswordResetResponseForm */
     private $form;
 
+    private $project;
+    
     public function __construct(PasswordResetResponseForm $form)
     {
         $this->form = $form;
     }
     public function __invoke(Request $request)
     {
+        $this->project = $this->getCurrentProjectInfo();
+
         return $this->newResponse($this->render());
     }
     private function render()
