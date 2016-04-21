@@ -146,15 +146,25 @@ EOT;
      */
     protected function renderMenuForGuest()
     {
-        return 
-<<<EOT
-       <ul class="nav navbar-nav">
-           {$this->renderHome()}
-          {$this->renderTopMenuSchedules()}
-          {$this->renderTopMenuResults()}
-        </ul>
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $html = <<<EOT
+            <ul class="nav navbar-nav">
+               {$this->renderHome()}
+              {$this->renderTopMenuSchedules()}
+              {$this->renderTopMenuResults()}
+            </ul>
 EOT;
-
+        } else {
+            $html = <<<EOT
+            <ul class="nav navbar-nav">
+                {$this->renderWelcome()}
+               {$this->renderTopMenuSchedules()}
+               {$this->renderTopMenuResults()}
+             </ul>
+EOT;
+        }
+        
+        return $html;
     }
     
     /* ====================================================
@@ -299,7 +309,18 @@ EOT;
         </li>
 EOT;
     }
-    protected function renderAdmin()
+    protected function renderWelcome()
+    {
+        //if (!$this->showResultsMenu) {
+        //    return null;
+        //}
+        return
+<<<EOT
+        <li>
+          <a href="{$this->generateUrl('app_welcome')}">WELCOME</a>
+        </li>
+EOT;
+    }    protected function renderAdmin()
     {
         return <<<EOT
 <li>

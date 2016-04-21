@@ -53,7 +53,7 @@ EOT;
   <div class="form-group">
     <label for="user_login_password" ">
       Password
-      <a href="{$this->router->generate('user_password_reset_request')}">&nbsp;&nbsp;&nbsp;&nbsp;Forgot Zayso Password?</a>
+      <a href="{$this->router->generate('user_password_reset_request')}"><span style="padding-left: 80px;">Forgot Zayso Password?</a></span>
     </label>
     <input 
       type="password" id="user_login_password" class="form-control" required
@@ -63,11 +63,11 @@ EOT;
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-edit"></span> Sign In
   </button><br>
-  <a href="{$loginGoogle}" class="btn btn-sm btn-default" role="button">
+  <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
     <!--<span class="glyphicon glyphicon-edit"></span>-->
     Sign In (Google)
   </a>
-  <a href="{$loginFacebook}" class="btn btn-sm btn-default" role="button">
+  <a href="{$loginFacebook}" class="btn btn-sm btn-default btn-provider" role="button">
     <!--<span class="glyphicon glyphicon-edit"></span>-->
     Sign In (Facebook)
   </a>
