@@ -1,0 +1,49 @@
+# Project Person Admin Services
+services:
+
+    project_person_repository_v2:
+        class: AppBundle\Action\Project\Person\ProjectPersonRepositoryV2
+        arguments:
+            - '@project_person_connection'
+
+# ==========================================================================
+# Listing (List throws exception)
+
+    project_person_admin_listing_search_form:
+        class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingSearchForm
+        parent: abstract_form
+
+    project_person_admin_listing_controller:
+        class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingController
+        parent: abstract_controller
+        arguments:
+            - '@project_person_repository_v2'
+            - '@project_person_admin_listing_search_form'
+
+    project_person_admin_listing_view:
+        class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListView
+        parent: abstract_view2
+        arguments:
+            - '@project_person_repository_v2'
+            - '@project_person_admin_listing_search_form'
+
+# ==========================================================================
+# Update
+
+    project_person_admin_update_form:
+        class:  AppBundle\Action\Project\Person\Admin\Update\AdminUpdateForm
+        parent: abstract_form
+
+    project_person_admin_update_controller:
+        class:  AppBundle\Action\Project\Person\Admin\Update\AdminUpdateController
+        parent: abstract_controller
+        arguments:
+            - '@project_person_repository_v2'
+            - '@project_person_admin_update_form'
+
+    project_person_admin_update_view:
+        class:  AppBundle\Action\Project\Person\Admin\Update\AdminUpdateView
+        parent: abstract_view2
+        arguments:
+            - '@project_person_repository_v2'
+            - '@project_person_admin_update_form'

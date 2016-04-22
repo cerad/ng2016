@@ -1,0 +1,14 @@
+# Project Person Admin Routes
+project_person_admin_listing:
+    path: /listing
+    defaults:
+        _role:       ROLE_ASSIGNOR
+        _view:       project_person_admin_listing_view
+        _controller: project_person_admin_listing_controller
+
+project_person_admin_update:
+    path: /update
+    defaults:
+        _role:       ROLE_ASSIGNOR
+        _view:       project_person_admin_update_view
+        _controller: project_person_admin_update_controller
