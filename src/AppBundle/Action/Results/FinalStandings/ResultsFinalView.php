@@ -18,6 +18,7 @@ class ResultsFinalView extends AbstractView
     /** @var  StandingsCalculator */
     private $finalCalculator;
 
+    private $criteria = [];
     private $standings;
     private $level;
 
@@ -31,20 +32,18 @@ class ResultsFinalView extends AbstractView
     }
     public function __invoke(Request $request)
     {
-        $criteria = [];
-
         $this->project = $request->attributes->get('project');
-        $criteria = $request->attributes->get('criteria');
- 
-        $games = count($criteria) > 1 ? $this->scheduleRepository->findProjectGames($criteria) : [];
- 
+        $this->criteria = $request->attributes->get('criteria');
+
+        $games = count($this->criteria) > 1 ? $this->scheduleRepository->findProjectGames($this->criteria) : [];
+
         if (!empty($games)){
             $level = array_values($games)[0]['level_key'];
             $level = str_replace('_',' ',$level);
         }
 
-        $this->standings = $this->finalCalculator->generateStandings($games);
-   
+        $this->standings = $this->finalCalculator->generateStandings($this->criteria['programs'], $games);
+ 
         return new Response($this->renderPage());
     }
     /* ========================================================
@@ -58,8 +57,6 @@ class ResultsFinalView extends AbstractView
 <div id="layout-block">
 <h1 class="text-center" style="font-style:italic; font-size:1.5em;"><emphasis>Congratulations to all {$title} Teams!</emphasis></h1>
 <hr>
-
-<br />
 </div>
 {$this->renderStandings()}
 EOD;
@@ -77,25 +74,36 @@ EOD;
         $html = null;
 
         if (!empty($this->standings)){
-            foreach ($this->standings['Core'] as $div=>$teams) {
-                $html .= $this->renderDivision($div, $teams);                    
-            }
-            foreach ($this->standings['Extra'] as $div=>$teams) {
-                $html .= $this->renderDivision($div, $teams);                    
+            foreach ($this->criteria['programs'] as $program) {
+                $html .= <<<EOD
+<legend class="float-right">Final Standings : {$program}</legend>
+<div class="container col-xs-8 col-xs-offset-2">
+EOD;
+                foreach ($this->standings[$program] as $div=>$teams) {
+                    $html .= $this->renderDivision($div, $teams);                    
+                }
             }
         }
-        
+
+        $html .= <<<EOD
+        </div>
+EOD;
+    
         return $html;
+    
     }
     protected function renderDivision($div, $teams)
     {
+        $div = str_replace('_',' ',$div);
+
         $html = <<<EOD
 <div id="layout-block">
-<legend class="float-right">Final Standings : {$div} </legend>
+<legend class="float-right">{$div}</legend>
 
 <table class="standings" border = "1">
+    <col>
 <tr class="tbl-hdr">
-    <th class="text-center">Finish</th>
+    <th class="text-center" width="20%">Finish</th>
   <th class="text-center">Team</th>
 
 </tr>

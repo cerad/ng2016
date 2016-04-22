@@ -20,7 +20,7 @@ class FinalCalculator
      * Chops up games into medalRounds
      *
      */
-    public function generateStandings(array $games)
+    public function generateStandings(array $programs, array $games)
     {
         $this->games = $games;
         $this->medalRounds = [];
@@ -29,9 +29,9 @@ class FinalCalculator
             $this->medalRoundGame($game);
         }
         
-        ksort($this->medalRounds['Core'], SORT_STRING);
-
-        ksort($this->medalRounds['Extra'], SORT_STRING);
+        foreach ($programs as $program){
+            ksort($this->medalRounds[$program], SORT_STRING);            
+        }
 
         return $this->medalRounds;
     }
