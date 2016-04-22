@@ -33,10 +33,13 @@ class AdminListingController extends AbstractController
         $searchForm->handleRequest($request);
         if ($searchForm->isValid()) {
 
-            //$searchData = $searchForm->getData();
+            $searchData = $searchForm->getData();
             
-            return $this->redirectToRoute('project_person_admin_listing');
+            //return $this->redirectToRoute('project_person_admin_listing');
         }
+        $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name']);
+        
+        $request->attributes->set('projectPersons',$projectPersons);
         
         return null;
     }

@@ -12,6 +12,48 @@ class ProjectPersonRepositoryV2
     {
         $this->conn = $conn;
     }
+
+    /**
+     * @param  $projectKey string
+     * @param  $name       string|null
+     * @return ProjectPerson[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findByProjectKey($projectKey, $name = null)
+    {
+        $params = [$projectKey];
+
+        // Grab the persons
+        $sql = 'SELECT * FROM projectPersons WHERE projectKey = ?';
+        if ($name) {
+            $params[] = '%' . $name . '%';
+            $sql .= ' AND name LIKE ?';
+        }
+        $stmt = $this->conn->executeQuery($sql,$params);
+        $personRows = [];
+        while($personRow = $stmt->fetch()) {
+
+            $personRow['plans'] = isset($personRow['plans']) ? unserialize($personRow['plans']) : null;
+            $personRow['avail'] = isset($personRow['avail']) ? unserialize($personRow['avail']) : null;
+            $personRow['roles'] = [];
+            $personRows[$personRow['id']] = $personRow;
+        }
+        // Merge roles
+        $personIds = array_keys($personRows);
+        $sql = 'SELECT * from projectPersonRoles WHERE projectPersonId IN (?)';
+        $stmt = $this->conn->executeQuery($sql,[$personIds],[Connection::PARAM_INT_ARRAY]);
+        while($roleRow = $stmt->fetch()) {
+            $personRows[$roleRow['projectPersonId']]['roles'][$roleRow['role']] = $roleRow;
+        }
+        // Make objects
+        $persons = [];
+        foreach($personRows as $personRow)
+        {
+            $person = new ProjectPerson();
+            $persons[] = $person->fromArray($personRow);
+        }
+        return $persons;
+    }
     public function find($projectKey,$personKey)
     {
         $sql = 'SELECT * FROM projectPersons WHERE projectKey = ? AND personKey = ?';

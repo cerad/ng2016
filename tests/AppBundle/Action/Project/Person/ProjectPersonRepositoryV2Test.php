@@ -44,4 +44,33 @@ class ProjectPersonRepositoryV2Test extends AbstractTestDatabase
         $name = $repo->generateUniqueName($projectKey,'Zander Harris');
         $this->assertEquals('Zander Harris(2)',$name);
     }
+    public function testFindByProjectKey()
+    {
+        $this->resetDatabase($this->conn);
+
+        $repo = new ProjectPersonRepositoryV2($this->conn);
+
+        $projectKey = 'ProjectKey';
+
+        // Fixtures
+        $person = $repo->create($projectKey,'zander-0001','Zander Harris','Email');
+        $repo->save($person);
+
+        $person = $repo->create($projectKey,'buffy-0001','Buffy Summers','Email');
+        $personRole = $repo->createRole('ROLE_VAMPIRE_SLAYER','Chosen');
+        $person->addRole($personRole);
+
+        $repo->save($person);
+        $person = $repo->create($projectKey,'willow-0001','Willow Rosenburg','Email');
+        $repo->save($person);
+        
+        $persons = $repo->findByProjectKey($projectKey);
+        $this->assertCount(3,$persons);
+
+        $this->assertEquals('Chosen',$persons[1]->getRole('ROLE_VAMPIRE_SLAYER')->badge);
+
+        $persons = $repo->findByProjectKey($projectKey,'Willow');
+        $this->assertCount(1,$persons);
+
+    }
 }
