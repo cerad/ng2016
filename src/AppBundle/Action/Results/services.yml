@@ -20,7 +20,7 @@ services:
 
     results_poolplay_controller:
         class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayController
-        parent: app_action_abstract_controller
+        parent: abstract_controller
 
     results_poolplay_view_html:
         class: AppBundle\Action\Results\PoolPlay\ResultsPoolPlayView
@@ -31,7 +31,7 @@ services:
 
     results_medalround_controller:
         class: AppBundle\Action\Results\MedalRound\ResultsMedalRoundController
-        parent: app_action_abstract_controller
+        parent: abstract_controller
 
     results_medalround_view_html:
         class: AppBundle\Action\Results\MedalRound\ResultsMedalRoundView
@@ -42,7 +42,7 @@ services:
 
     results_final_controller:
         class: AppBundle\Action\Results\FinalStandings\ResultsFinalController
-        parent: app_action_abstract_controller
+        parent: abstract_controller
 
     results_final_view_html:
         class: AppBundle\Action\Results\FinalStandings\ResultsFinalView
@@ -53,7 +53,7 @@ services:
 
     results_sportsmanship_controller:
         class: AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipController
-        parent: app_action_abstract_controller
+        parent: abstract_controller
 
     results_sportsmanship_view_html:
         class: AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipView

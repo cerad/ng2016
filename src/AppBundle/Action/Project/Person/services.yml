@@ -8,6 +8,14 @@ services:
         arguments:
             - '@project_person_connection'
 
+    project_person_view_decorator:
+        class: AppBundle\Action\Project\Person\ProjectPersonViewDecorator
+        arguments:
+            - '@phone_transformer'
+            - '@ayso_volunteer_key_transformer'
+            - '@ayso_region_to_sar_transformer'
+            - '@project_person_will_referee_transformer'
+
 # ==========================================================================
 # Register
 

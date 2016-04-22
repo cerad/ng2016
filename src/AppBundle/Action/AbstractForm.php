@@ -66,4 +66,22 @@ EOD;
         $html .= '</div>' . "\n";
         return $html;
     }
+    protected function renderFormControlInputSelect($choices,$value,$id,$name)
+    {
+        $html = <<<EOD
+<select id="{$id}" name="{$name}" class="form-control">
+EOD;
+        foreach($choices as $choiceContent => $choiceValue)
+        {
+            $selected = ($value === $choiceValue) ? ' selected' : null;
+            $html .= <<<EOD
+  <option value="{$choiceValue}"{$selected}>{$this->escape($choiceContent)}</option>
+  
+EOD;
+        }
+        $html .= <<<EOD
+<select>
+EOD;
+        return $html;
+    }
 }

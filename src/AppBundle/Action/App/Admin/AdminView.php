@@ -175,7 +175,7 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">View Registered People</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing')}">View Registered People</a></li>
       <li><a href="#">Export Registered People (Excel)</a></li>
 EOT;
       
