@@ -21,7 +21,7 @@ services:
             - '@project_person_admin_listing_search_form'
 
     project_person_admin_listing_view:
-        class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListView
+        class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingView
         parent: abstract_view2
         arguments:
             - '@project_person_repository_v2'
