@@ -41,7 +41,7 @@ EOD;
             Check your spam or junk mail folder.
         </li>
         <li>
-            If you still need help, request support by <a href="{$this->project['support']['email']}?subject=Password%20Reset%20Help" target="_top">clicking here</a>.
+            If you still need help, request support by <a href="mailto:{$this->project['support']['email']}?subject=Password%20Reset%20Help" target="_top">clicking here</a>.
         </li>
      </ul>
     </div>
