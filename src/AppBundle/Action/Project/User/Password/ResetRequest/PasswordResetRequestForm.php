@@ -34,7 +34,7 @@ class PasswordResetRequestForm extends AbstractForm
         if (!$this->projectUserRepository->find($identifier)) {
             $errors['identifier'][] = [
                 'name' => 'identifier',
-                'msg' => 'The email does not match any Zayso accounts.'
+                'msg' => 'The email does not match any zAYSO accounts.'
             ];
 
         }
@@ -55,15 +55,15 @@ class PasswordResetRequestForm extends AbstractForm
 {$this->renderFormErrors()}
 <form role="form" style="width: 300px;" action="{$this->generateUrl('user_password_reset_request')}" method="post">
   <div class="form-group">
-    <label for="user_password_reset_request_identifier">Zayso Email</label>
+    <label for="user_password_reset_request_identifier">zAYSO Email</label>
     <input 
       type="text" id="user_password_reset_request" class="form-control" required
-      name="identifier" value="{$this->escape($identifier)}" required placeholder="Zayso Email" />
+      name="identifier" value="{$this->escape($identifier)}" required placeholder="zAYSO Email" />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-plus"></span>
-    <span>Reset My Zayso Password</span>
+    <span>Reset My zAYSO Password</span>
   </button>
 </form>
 EOD;

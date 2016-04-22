@@ -48,10 +48,10 @@ class PasswordResetRequestController extends AbstractController2
     {
         $token = $user['passwordToken'];
 
-        $subject = sprintf('[ZaysoAdmin] Password Reset Request for: %s',$user['name']);
+        $subject = sprintf('[zAYSOAdmin] Password Reset Request for: %s',$user['name']);
 
         $body = <<<EOD
-A Zayso password reset request has been made.
+A zAYSO password reset request has been made.
 
 Your password reset token is: {$token}
 
@@ -70,7 +70,7 @@ EOD;
 
         $message->setSubject($subject);
 
-        $message->setFrom(['noreply@zayso.org' => 'Zayso Admin']);
+        $message->setFrom(['noreply@zayso.org' => 'zAYSO Admin']);
 
         $message->setTo([$user['email'] => $user['name']]);
 

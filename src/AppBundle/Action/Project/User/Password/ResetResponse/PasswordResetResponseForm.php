@@ -35,7 +35,7 @@ class PasswordResetResponseForm extends AbstractForm
         if (!$this->projectUserRepository->find($token)) {
             $errors['token'][] = [
                 'name' => 'token',
-                'msg'  => 'The token does not match any Zayso accounts.'
+                'msg'  => 'The token does not match any zAYSO accounts.'
             ];
         }
         $password = filter_var(trim($data['password']), FILTER_SANITIZE_STRING);
@@ -61,7 +61,7 @@ class PasswordResetResponseForm extends AbstractForm
 {$this->renderFormErrors()}
 <form role="form" style="width: 400px;" action="{$this->generateUrl('user_password_reset_response')}" method="post">
   <div class="form-group">
-    <label for="user_password_reset_response_token">Zayso Password Reset Token</label>
+    <label for="user_password_reset_response_token">zAYSO Password Reset Token</label>
     <input 
       type="text" id="user_password_reset_response" class="form-control" required
       name="token" value="{$this->escape($formData['token'])}" required placeholder="Password Reset Token" />
@@ -75,7 +75,7 @@ class PasswordResetResponseForm extends AbstractForm
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-plus"></span>
-    <span>Reset My Zayso Password</span>
+    <span>Reset My zAYSO Password</span>
   </button>
 </form>
 EOD;

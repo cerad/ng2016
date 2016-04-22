@@ -48,12 +48,12 @@ EOT;
     <label for="user_login_username">Email</label>
     <input 
       type="text" id="user_login_username" class="form-control" required
-      name="username" value="{$lastUsername}" required placeholder="Zayso Email" />
+      name="username" value="{$lastUsername}" required placeholder="zAYSO Email" />
   </div>
   <div class="form-group">
     <label for="user_login_password" ">
       Password
-      <a href="{$this->router->generate('user_password_reset_request')}"><span style="padding-left: 80px;">Forgot Zayso Password?</a></span>
+      <a href="{$this->router->generate('user_password_reset_request')}"><span style="padding-left: 80px;">Forgot zAYSO Password?</a></span>
     </label>
     <input 
       type="password" id="user_login_password" class="form-control" required
