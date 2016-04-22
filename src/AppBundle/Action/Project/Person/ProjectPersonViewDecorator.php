@@ -66,6 +66,37 @@ class ProjectPersonViewDecorator
                 }
                 return 'Yes';
 
+            case 'willCoach':
+            case 'willAttend':
+            case 'willReferee':
+            case 'willVolunteer':
+                $will = isset($person->plans[$name]) ? $person->plans[$name] : null;
+                return ucfirst(strtolower($will));
+            
+            case 'availWed':
+            case 'availThu':
+            case 'availFri':
+            case 'availSatMorn':
+            case 'availSatAfter':
+            case 'availSunMorn':
+            case 'availSunAfter':
+                $will = isset($person->avail[$name]) ? $person->avail[$name] : null;
+                return ucfirst(strtolower($will));
+            
+            case 'shirtSize':
+                $size = strtolower($person->shirtSize);dump($size);
+                switch($size) {
+                    case 'youths':    return 'Youth S';
+                    case 'youthm':    return 'Youth M';
+                    case 'youthl':    return 'Youth L';
+                    case 'adults':    return 'Adult S';
+                    case 'adultm':    return 'Adult M';
+                    case 'adultl':    return 'Adult L';
+                    case 'adultlx':   return 'Adult XL';
+                    case 'adultlxx':  return 'Adult XXL';
+                    case 'adultlxxx': return 'Adult XXXL';
+                }
+                return 'na';
         }
         return $person->$name;
     }

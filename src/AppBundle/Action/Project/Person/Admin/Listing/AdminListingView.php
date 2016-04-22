@@ -59,6 +59,9 @@ EOD;
   <th>User Information</th>
   <th>Registration Information</th>
   <th>AYSO Information</th>
+  <th>Roles</th>
+  <th>Plans</th>
+  <th>Availability</th>
 </tr>
 EOD;
 
@@ -82,6 +85,9 @@ EOD;
   <td>{$this->renderUserInfo        ($person,$personView)}</td>
   <td>{$this->renderRegistrationInfo($person,$personView)}</td>
   <td>{$this->renderAysoInfo        ($person,$personView)}</td>
+  <td>{$this->renderRoles           ($person,$personView)}</td>
+  <td>{$this->renderPlansInfo       ($person,$personView)}</td>
+  <td>{$this->renderAvailInfo       ($person,$personView)}</td>
 </tr>
 EOD;
     }
@@ -89,13 +95,14 @@ EOD;
     {
         $href = $this->generateUrl('project_person_admin_update',['projectPersonKey' => $person->getKey()]);
 
+        $gage = $personView->gender . $personView->age;
         return <<<EOD
 <table>
-  <tr><td>Name  </td><td><a href="{$href}">{$this->escape($person->name)}</a></td></tr>
-  <tr><td>Email </td><td>{$this->escape($person->email)} </td></tr>
+  <tr><td>Name  </td><td><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
+  <tr><td>Email </td><td>{$this->escape($personView->email)} </td></tr>
   <tr><td>Phone </td><td>{$this->escape($personView->phone)} </td></tr>
-  <tr><td>Gender</td><td>{$this->escape($person->gender)}</td></tr>
-  <tr><td>Age   </td><td>{$this->escape($person->age)}   </td></tr>
+  <tr><td>G Age</td><td> {$this->escape($gage)}</td></tr>
+  <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
 </table>
 EOD;
 
@@ -104,27 +111,75 @@ EOD;
     {
         return <<<EOD
 <table>
-  <tr><td>AYSO ID   </td><td>{$this->escape($personView->fedKey)}</td></tr>
+  <tr><td>AYSO ID   </td><td>{$this->escape($personView->fedKey)} </td></tr>
   <tr><td>Mem Year  </td><td>{$this->escape($personView->regYear)}</td></tr>
-  <tr><td>SAR       </td><td>{$this->escape($personView->orgKey)}</td></tr>
+  <tr><td>SAR       </td><td>{$this->escape($personView->orgKey)} </td></tr>
   <tr><td>Referee   </td><td>{$this->escape($personView->refereeBadge)}</td></tr>
   <tr><td>Safe Haven</td><td>{$this->escape($personView->safeHavenCertified)}</td></tr>
   <tr><td>Concussion</td><td>{$this->escape($personView->concussionTrained)}</td></tr>
 </table>
 EOD;
     }
+    private function renderPlansInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    {
+        $notesUser = $personView->notesUser;
+        if (strlen($notesUser) > 75) {
+            $notesUser = substr($notesUser, 0, 75) . '...';
+        }
+        $notesUser = $this->escape($notesUser);
+
+        return <<<EOD
+<table>
+  <tr><td>Will  Referee  </td><td>{$personView->willReferee}  </td></tr>
+  <tr><td>Will  Volunteer</td><td>{$personView->willVolunteer}</td></tr>
+  <tr><td>Will  Coach    </td><td>{$personView->willCoach}    </td></tr>
+  <tr><td colspan="2" style="max-width: 150px; ">{$notesUser}</td></tr>
+</table>
+EOD;
+
+    }
+    private function renderAvailInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    {
+
+        return <<<EOD
+<table>
+  <tr><td>Avail Wednesday</td><td>{$personView->availWed}     </td></tr>
+  <tr><td>Avail Thursday </td><td>{$personView->availThu}     </td></tr>
+  <tr><td>Avail Friday   </td><td>{$personView->availFri}     </td></tr>
+  <tr><td>Avail Sat Morn </td><td>{$personView->availSatMorn} </td></tr>
+  <tr><td>Avail Sat After</td><td>{$personView->availSatAfter}</td></tr>
+  <tr><td>Avail Sun Morn </td><td>{$personView->availSunMorn} </td></tr>
+  <tr><td>Avail Sun After</td><td>{$personView->availSunAfter}</td></tr>
+</table>
+EOD;
+
+    }
+    private function renderRoles(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    {
+        $html = <<<EOD
+<table>
+EOD;
+        foreach($person['roles'] as $role) {
+
+            $html .= <<<EOD
+<tr><td>{$role->role}</td></tr>   
+EOD;
+        }
+        $html .= <<<EOD
+</table>
+EOD;
+        return $html;
+    }
     private function renderUserInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
     {
-        dump($person->personKey);
         $user = $this->projectUserRepository->find($person->personKey);
-        dump($user);
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
         return <<<EOD
 <table>
-  <tr><td>Name   </td><td>{$this->escape($user['name'])}</a></td></tr>
-  <tr><td>Email  </td><td>{$this->escape($user['email'])}</a></td></tr>
-  <tr><td>User   </td><td>{$this->escape($user['username'])}</a></td></tr>
-  <tr><td>Enabled</td><td>{$enabled}</a></td></tr>
+  <tr><td>Name   </td><td>{$this->escape($user['name'])}    </td></tr>
+  <tr><td>Email  </td><td>{$this->escape($user['email'])}   </td></tr>
+  <tr><td>User   </td><td>{$this->escape($user['username'])}</td></tr>
+  <tr><td>Enabled</td><td>{$enabled}</td></tr>
 </table>
 EOD;
 
