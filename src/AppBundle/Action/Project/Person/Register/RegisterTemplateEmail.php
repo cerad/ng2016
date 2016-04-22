@@ -37,14 +37,14 @@ class RegisterTemplateEmail extends AbstractView2
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <link rel="stylesheet" type="text/css" href="{$this->generateUrl('app_css',array(),UrlGeneratorInterface::ABSOLUTE_URL)}/zayso.css" media="all">
+  <link rel="stylesheet" type="text/css" href="http://ng2016register.zayso.org/css/zayso.css" media="all">
   <title></title>
 </head>
 <body class="email" >
   <center>
     <div class="skHeader">
       <h1>
-          <img src="{$this->generateUrl('app_images',array(),UrlGeneratorInterface::ABSOLUTE_URL)}/header-ipad_01.png" width="70%">
+          <img src="http://ng2016register.zayso.org/images/header-ipad_01.png" width="70%">
       </h1>
     </div>
     <br>
