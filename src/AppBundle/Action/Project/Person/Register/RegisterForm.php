@@ -182,7 +182,7 @@ EOD;
   name="{$name}" placeHolder="{$placeHolder}"} >{$value}</textarea>
 EOD;
     }
-    private function renderFormControlInputSelect($choices,$value,$id,$name)
+    protected function renderFormControlInputSelect($choices,$value,$id,$name)
     {
         $html = <<<EOD
 <select id="{$id}" name="{$name}" class="form-control">
