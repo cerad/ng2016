@@ -88,7 +88,7 @@ EOD;
   <!--
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('user_update')}">
-        Update My Zayso Account
+        Update My zAYSO Account
     </a>
   </td></tr>
   -->

@@ -50,7 +50,7 @@ class PasswordResetRequestCommand extends Command
     {
         $mailer = $this->mailer;
 
-        $subject = sprintf('[Zayso) Password reset request for %s',$username);
+        $subject = sprintf('[zAYSO) Password reset request for %s',$username);
         
         $message = $mailer->createMessage()
             ->setSubject($subject)

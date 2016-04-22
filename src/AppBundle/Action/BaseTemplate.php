@@ -95,7 +95,7 @@ EOT;
     <div class="cerad-footer">
       <br />
       <hr>
-      <p> ZAYSO - For assistance contact {$this->project['support']['name']} at
+      <p> zAYSO - For assistance contact {$this->project['support']['name']} at
       <a href="mailto:{$this->project['support']['email']}?subject={$this->project['support']['subject']}">{$this->project['support']['email']}</a>
       or {$this->project['support']['phone']} </p>
     </div>
