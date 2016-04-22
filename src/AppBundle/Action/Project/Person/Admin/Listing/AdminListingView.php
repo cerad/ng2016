@@ -7,6 +7,7 @@ use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
 use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
+use AppBundle\Action\Project\User\ProjectUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminListingView extends AbstractView2
@@ -16,17 +17,21 @@ class AdminListingView extends AbstractView2
     /** @var  ProjectPerson[] */
     private $projectPersons;
 
+    private $projectUserRepository;
+
     private $projectPersonRepository;
 
     private $projectPersonViewDecorator;
 
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
+        ProjectUserRepository      $projectUserRepository,
         AdminListingSearchForm     $searchForm,
         ProjectPersonViewDecorator $projectPersonViewDecorator
     )
     {
         $this->searchForm = $searchForm;
+        $this->projectUserRepository      = $projectUserRepository;
         $this->projectPersonRepository    = $projectPersonRepository;
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
     }
@@ -51,6 +56,7 @@ EOD;
         $html = <<<EOD
 <table class='table'>
 <tr>
+  <th>User Information</th>
   <th>Registration Information</th>
   <th>AYSO Information</th>
 </tr>
@@ -73,6 +79,7 @@ EOD;
 
         return <<<EOD
 <tr id="project-person-{$person->getKey()}">
+  <td>{$this->renderUserInfo        ($person,$personView)}</td>
   <td>{$this->renderRegistrationInfo($person,$personView)}</td>
   <td>{$this->renderAysoInfo        ($person,$personView)}</td>
 </tr>
@@ -106,4 +113,21 @@ EOD;
 </table>
 EOD;
     }
+    private function renderUserInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    {
+        dump($person->personKey);
+        $user = $this->projectUserRepository->find($person->personKey);
+        dump($user);
+        $enabled = $user['enabled'] ? 'Yes' : 'NO';
+        return <<<EOD
+<table>
+  <tr><td>Name   </td><td>{$this->escape($user['name'])}</a></td></tr>
+  <tr><td>Email  </td><td>{$this->escape($user['email'])}</a></td></tr>
+  <tr><td>User   </td><td>{$this->escape($user['username'])}</a></td></tr>
+  <tr><td>Enabled</td><td>{$enabled}</a></td></tr>
+</table>
+EOD;
+
+    }
+
 }
