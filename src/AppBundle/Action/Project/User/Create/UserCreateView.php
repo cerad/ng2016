@@ -20,7 +20,7 @@ class UserCreateView extends AbstractView
     private function render()
     {
         $content = <<<EOD
-<legend>Create a Zayso Account</legend>
+<legend>Create a zAYSO Account</legend>
 {$this->userCreateForm->render()}
 <br/><br />
 <!--

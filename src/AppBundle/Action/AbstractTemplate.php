@@ -6,7 +6,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-abstract class AbstractTemplate //implements AbstractTemplateInterface
+abstract class AbstractTemplate
 {
     /** @var  BaseTemplate */
     protected $baseTemplate;

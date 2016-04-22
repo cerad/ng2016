@@ -20,8 +20,8 @@ class ProjectUserRepository
     }
     public function find($identifier)
     {
-        $sql = 'SELECT * FROM users WHERE username = ? OR email = ? OR providerKey = ? OR passwordToken = ? OR emailToken = ?';
-        $stmt = $this->conn->executeQuery($sql,[$identifier,$identifier,$identifier,$identifier,$identifier]);
+        $sql = 'SELECT * FROM users WHERE username = ? OR email = ? OR personKey = ? OR providerKey = ? OR passwordToken = ? OR emailToken = ?';
+        $stmt = $this->conn->executeQuery($sql,[$identifier,$identifier,$identifier,$identifier,$identifier,$identifier]);
         $row = $stmt->fetch();
         if (!$row) return null;
         

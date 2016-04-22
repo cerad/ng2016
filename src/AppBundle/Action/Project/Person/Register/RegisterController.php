@@ -198,7 +198,7 @@ class RegisterController extends AbstractController2
 
         $message->setSubject($subject);
 
-        $message->setFrom(['noreply@zayso.org' => 'Zayso Admin']);
+        $message->setFrom(['noreply@zayso.org' => 'zAYSO Admin']);
 
         $message->setTo([$person['email'] => $person['name']]);
         
