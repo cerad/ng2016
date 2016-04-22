@@ -7,7 +7,7 @@ project_person_admin_listing:
         _controller: project_person_admin_listing_controller
 
 project_person_admin_update:
-    path: /update
+    path: /update/{projectPersonKey}
     defaults:
         _role:       ROLE_ASSIGNOR
         _view:       project_person_admin_update_view

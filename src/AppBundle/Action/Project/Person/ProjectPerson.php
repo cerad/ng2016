@@ -77,6 +77,10 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         $this->name       = $name;
         $this->email      = $email;
     }
+    public function getKey()
+    {
+        return sprintf('%s.%s',$this->projectKey,$this->personKey);
+    }
     public function addRole(ProjectPersonRole $personRole)
     {
         $this->roles[$personRole->role] = $personRole;

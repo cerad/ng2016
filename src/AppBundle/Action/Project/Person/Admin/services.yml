@@ -26,6 +26,7 @@ services:
         arguments:
             - '@project_person_repository_v2'
             - '@project_person_admin_listing_search_form'
+            - '@project_person_view_decorator'
 
 # ==========================================================================
 # Update
