@@ -84,7 +84,7 @@ class ProjectPersonViewDecorator
                 return ucfirst(strtolower($will));
             
             case 'shirtSize':
-                $size = strtolower($person->shirtSize);dump($size);
+                $size = strtolower($person->shirtSize);
                 switch($size) {
                     case 'youths':    return 'Youth S';
                     case 'youthm':    return 'Youth M';
