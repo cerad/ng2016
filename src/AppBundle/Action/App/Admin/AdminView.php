@@ -213,10 +213,9 @@ EOT;
 <div class="app_help">
   <ul class="cerad-common-help">
     <ul class="ul_bullets">
-      <li>For help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>
-      <li>For help with Referee Assignments, contact {$this->project['assignor']['name']} at <a href="mailto:{$this->project['assignor']['email']}">{$this->project['assignor']['email']}</a> or at {$this->project['assignor']['phone']}</li>
+      <li>For help with Referee Assignments, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>
       <li>For help with Account Management,  contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
-      <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a> or at {$this->project['schedules']['phone']}</li>
+      <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a></li>
     </ul>
   </ul>
 </div>
