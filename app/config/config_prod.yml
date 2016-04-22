@@ -13,15 +13,42 @@ imports:
 #        result_cache_driver: apc
 #        query_cache_driver: apc
 
+#monolog:
+#    handlers:
+#        main:
+#            type:         fingers_crossed
+#            action_level: error
+#            handler:      nested
+#        nested:
+#            type:  stream
+#            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+#            level: debug
+#        console:
+#            type:  console
+
+# =======================================================
+# 12 June 2014 - Revamped the error logger for 2.3
 monolog:
     handlers:
         main:
             type:         fingers_crossed
             action_level: error
-            handler:      nested
-        nested:
+            handler:      grouped
+        grouped:
+            type:    group
+            members: [streamed, buffered]
+        streamed:
             type:  stream
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: admin@zayso.org
+            to_email:   ahundiak@gmail.com
+            subject:   '[NG2016] Site Error'
+            level:      debug
         console:
             type:  console

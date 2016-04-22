@@ -5,7 +5,7 @@ A controller service is linked to a route via the _controller property
 The Symfony kernel calls Controller::__invoke when the route is matched.
 Controller::__invoke returns either a Response object or null if a view is defined.
 
-Views (aka PageTemplates)
+Views
 
 If a controller returns null the the Symfony kernel will send a Kernel::View event.
 

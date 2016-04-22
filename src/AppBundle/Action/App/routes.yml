@@ -20,4 +20,12 @@ app_home:
 app_admin:
     path: /admin
     defaults:
+        _role:       ROLE_STAFF
+        _view:       admin_view
         _controller: admin_controller
+
+app_css:
+    path: /css
+    
+app_images:
+    path: /images

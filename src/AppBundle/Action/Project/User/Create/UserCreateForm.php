@@ -23,8 +23,6 @@ class UserCreateForm extends AbstractForm
         $data = $request->request->all();
         $errors = [];
 
-        $role = filter_var(trim($data['role']), FILTER_SANITIZE_STRING);
-
         $name = filter_var(trim($data['name']), FILTER_SANITIZE_STRING);
         if (strlen($name) === 0) {
             $errors['name'][] = [
@@ -32,7 +30,6 @@ class UserCreateForm extends AbstractForm
                 'msg'  => 'Name cannot be blank.'
             ];
         }
-
         $email  = filter_var(trim($data['email']), FILTER_SANITIZE_EMAIL);
         $errors = $this->validateEmail($email,$errors);
 
@@ -44,7 +41,6 @@ class UserCreateForm extends AbstractForm
             ];
         }
         $this->formData = array_merge($this->formData,[
-            'role'     => $role,
             'name'     => $name,
             'email'    => $email,
             'password' => $password,
@@ -106,12 +102,6 @@ class UserCreateForm extends AbstractForm
     <input 
       type="password" id="user_create_password" class="form-control" required
       name="password" value="" required placeholder="********" />
-  </div>
-  <div class="form-group">
-    <label for="user_create_role">Role</label>
-    <input 
-      type="text" id="user_create_role" class="form-control" required
-      name="role" value="{$formData['role']}" required placeholder="ROLE_..." />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">

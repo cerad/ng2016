@@ -1,21 +1,26 @@
 <?php
 
-namespace AppBundle\Action\Admin;
+namespace AppBundle\Action\App\Admin;
 
-use AppBundle\Action\PageTemplate;
+use AppBundle\Action\AbstractView2;
 
-class AdminPageTemplate extends PageTemplate
+use Symfony\Component\HttpFoundation\Request;
+
+class AdminView extends AbstractView2
 {
-    protected $project = null;
-    
-    
-    /* Admin Page content */
-    public function render($params = [])
+    private $project = null;
+
+    public function __invoke(Request $request)
     {
-        $this->project = $params['project'];
-    
-        $content =
-<<<EOT
+        $this->project = $this->getCurrentProjectInfo();
+
+        return $this->newResponse($this->render());
+    }
+
+    /* Admin Page content */
+    protected function render()
+    {
+        $content = <<<EOT
 <div class="container no-disc">
 <h3>Administrative Functions</h3>
 EOT;
@@ -29,26 +34,20 @@ EOT;
   
         $content .= $this->renderAccountManagement();
           
-        $content .=  
-<<<EOT
+        $content .=  <<<EOT
 <div class="panel-float-clear"></div>
 EOT;
 
         $content .= $this->renderAdminHelp();
-<<<EOT
-</div>  <!-- .container -->
-EOT;
 
-        $this->baseTemplate->setContent($content);
-        return $this->baseTemplate->render();
+        return $this->renderBaseTemplate($content);
     }
     
     /* Match Reporting content */
     protected function renderMatchReporting()
     {
       if ($this->isGranted('ROLE_SCORE_ENTRY')) {
-        $html =
-<<<EOT
+        $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
     <h1>Match Reporting</h1>
@@ -78,8 +77,7 @@ EOT;
 
     protected function renderScheduleManagement()
     {
-        $html =
-<<<EOT
+        $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
     <h1>Schedule Management</h1>
@@ -92,8 +90,7 @@ EOT;
       <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'extra'])}">Export Extra Game Schedule (Excel)</a></li>
 EOT;
       if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-        $html .=
-<<<EOT
+        $html .= <<<EOT
      <li><a href="#">Import Game Schedule (Excel)</a></li> 
 EOT;
       }
@@ -110,8 +107,7 @@ EOT;
 
     protected function renderTeamManagement()
     {
-        $html =
-<<<EOT
+        $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
     <h1>Team Management</h1>
@@ -122,14 +118,12 @@ EOT;
       <li><a href="#">Export Teams (Excel)</a></li>
 EOT;
       if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-        $html .=
-<<<EOT
+        $html .= <<<EOT
       <li><a href="#">Import/Update/Link Teams (Excel)</a></li>
 EOT;
       }
 
-      $html .=
-<<<EOT
+      $html .= <<<EOT
     </ul>
   </div>
 </div>
@@ -141,8 +135,7 @@ EOT;
     protected function renderRefereeManagement()
     {
       if ($this->isGranted('ROLE_ASSIGNOR')) {
-        $html =
-<<<EOT
+        $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
     <h1>Referee Assignments</h1>
@@ -155,8 +148,7 @@ EOT;
 EOT;
 
       if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-        $html .=
-<<<EOT
+        $html .= <<<EOT
       <li><a href="#">Import Referee Assignments (Excel)</a></li>
       <li><a href="#">View Unregistered Referee List</a></li>
 EOT;
@@ -165,8 +157,7 @@ EOT;
       $html = "";
     }
 
-        $html .=
-<<<EOT
+        $html .= <<<EOT
     </ul>
   </div>
 </div>
@@ -177,41 +168,36 @@ EOT;
 
     protected function renderAccountManagement()
     {
-        $html =
-<<<EOT
+        $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
     <h1>Account Management</h1>
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">View Registered People</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing')}">View Registered People</a></li>
       <li><a href="#">Export Registered People (Excel)</a></li>
 EOT;
       
       if ($this->isGranted('ROLE_ADMIN')) {
-        $html .=
-<<<EOT
+        $html .= <<<EOT
       <li><a href="#">View Unverified Registered People</a></li>
       <li><a href="#">Export Unverified Registered People (Excel)</a></li>
 EOT;
       }
       
       if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-        $html .=
-<<<EOT
+        $html .= <<<EOT
       <li><a href="#">Sync eAYSO Information</a></li>
       <li><a href="#">Import AYSO Information</a></li>
 EOT;
       }
       
-      $html .=
-<<<EOT
+      $html .= <<<EOT
       <li><a href="#">View Staff Roles</a></li>
 EOT;
     
-        $html .= 
-<<<EOT
+        $html .= <<<EOT
     </ul>
   </div>
 </div>
@@ -222,19 +208,17 @@ EOT;
 
     protected function renderAdminHelp()
     {
-      return
-<<<EOT
-    <legend>Need help?</legend>
-    <div class="app_help">
-    <ul class="cerad-common-help">
-      <ul class="ul_bullets">
-        <li>For help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>
-        <li>For help with Referee Assignments, contact {$this->project['assignor']['name']} at <a href="mailto:{$this->project['assignor']['email']}">{$this->project['assignor']['email']}</a> or at {$this->project['assignor']['phone']}</li>
-        <li>For help with Account Management, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
-        <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a> or at {$this->project['schedules']['phone']}</li>
-      </ul>
+      return <<<EOT
+<legend>Need help?</legend>
+<div class="app_help">
+  <ul class="cerad-common-help">
+    <ul class="ul_bullets">
+      <li>For help with Referee Assignments, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>
+      <li>For help with Account Management,  contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
+      <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a></li>
     </ul>
-    </div>
+  </ul>
+</div>
 EOT;
     }
 }

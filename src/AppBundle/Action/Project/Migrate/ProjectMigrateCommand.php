@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 class ProjectMigrateCommand extends Command
 {
-    private $maxCnt = 100;
+    private $maxCnt = 10000;
 
     private $ng2014Conn;
     private $ng2016Conn;
@@ -87,14 +87,23 @@ class ProjectMigrateCommand extends Command
         $retrieveStmt = $qb->execute();
         $cnt = 0;
         while(($row = $retrieveStmt->fetch()) && ($cnt++ < $this->maxCnt)) {
-
+/*
             $roles = unserialize($row['roles']);
 
             if (!in_array('ROLE_USER',$roles)) {
                 $roles[] = 'ROLE_USER';
             }
             $roles = implode(',',$roles);
-
+*/
+            switch($row['email']) {
+                case 'ahundiak@gmail.com':
+                case 'ayso1sra@gmail.com':
+                case 'spsoccerref@earthlink.net':
+                    $roles = 'ROLE_ADMIN';
+                    break;
+                default:
+                    $roles = 'ROLE_USER';
+            }
             $username = $row['username'];
             if ($username === $row['email']) {
                 $username = $this->projectUserRepository->generateUniqueUsernameFromEmail($row['email']);
@@ -131,11 +140,16 @@ class ProjectMigrateCommand extends Command
             'fed.fed_key     AS fedKey',
             'fed.org_key     AS orgKey',
             'fed.mem_year    AS regYear',
-            
+
+            'certReferee.role_date  AS refereeRoleDate',
             'certReferee.badge      AS refereeBadge',
+            'certReferee.badge_date AS refereeBadgeDate',
             'certReferee.badge_user AS refereeBadgeUser',
             'certReferee.upgrading  AS refereeUpgrading',
-            'certSafeHaven.badge    AS safeHavenBadge',
+
+            'certSafeHaven.role_date  AS safeHavenRoleDate',
+            'certSafeHaven.badge      AS safeHavenBadge',
+            'certSafeHaven.badge_date AS safeHavenBadgeDate',
         ]);
         $qb->from('person_plans','projectPerson');
 
@@ -161,8 +175,8 @@ EOD;
 
         $sql = <<<EOD
 INSERT INTO projectPersonRoles
-(projectPersonId,role,badge)
-VALUES(?,?,?)
+(projectPersonId,role,roleDate,badge,badgeDate,active,verified)
+VALUES(?,?,?,?,?,?,?)
 EOD;
         $insertProjectPersonRoleStmt = $this->ng2016Conn->prepare($sql);
 
@@ -204,11 +218,37 @@ EOD;
             ]);
             $projectPersonId = $this->ng2016Conn->lastInsertId();
 
-            $insertProjectPersonRoleStmt->execute([
-                $projectPersonId,
-                'ROLE_REFEREE',
-                $row['refereeBadge'],
-            ]);
+            switch($row['refereeBadge']) {
+                case null:
+                case 'None':
+                    break;
+                default:
+                    $insertProjectPersonRoleStmt->execute([
+                        $projectPersonId,
+                        'ROLE_REFEREE',
+                        $row['refereeRoleDate'],
+                        $row['refereeBadge'],
+                        $row['refereeBadgeDate'],
+                        true, // Active
+                        true, // Verified
+                    ]);
+                    //echo sprintf("Badge Date %s %s\n",$name,$row['refereeBadgeDate']);
+            }
+            switch($row['safeHavenBadge']) {
+                case null:
+                case 'None':
+                    break;
+                default:
+                    $insertProjectPersonRoleStmt->execute([
+                        $projectPersonId,
+                        'ROLE_SAFE_HAVEN',
+                        $row['safeHavenRoleDate'],
+                        $row['safeHavenBadge'],
+                        $row['safeHavenBadgeDate'],
+                        false, // Active
+                        true,  // Verified
+                    ]);
+            }
         }
     }
 }

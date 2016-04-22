@@ -43,31 +43,33 @@ EOT;
         
         return  <<<EOT
 {$this->renderError()}
-<form role="form" style="width: 400px;" action="{$loginCheckPath}" method="post">
+<form role="form" action="{$loginCheckPath}" method="post">
   <div class="form-group">
     <label for="user_login_username">Email</label>
     <input 
       type="text" id="user_login_username" class="form-control" required
-      name="username" value="{$lastUsername}" required placeholder="Zayso Email" />
+      name="username" value="{$lastUsername}" required placeholder="zAYSO Email" />
   </div>
   <div class="form-group">
-    <label for="user_login_password">Password</label>
+    <label for="user_login_password" ">
+      Password
+      <a href="{$this->router->generate('user_password_reset_request')}"><span style="padding-left: 80px;">Forgot zAYSO Password?</a></span>
+    </label>
     <input 
       type="password" id="user_login_password" class="form-control" required
       name="password" value="" required placeholder="********" />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-edit"></span>
-    <span style="padding-left:10px">Sign In</span>
-  </button><br/><br/>
-  <a href="{$loginGoogle}" class="btn btn-small btn-primary" role="button">
-    <span class="glyphicon glyphicon-edit"></span> 
-    <span style="padding-left:10px">Sign In (Google)</span>
+    <span class="glyphicon glyphicon-edit"></span> Sign In
+  </button><br>
+  <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
+    <!--<span class="glyphicon glyphicon-edit"></span>-->
+    Sign In (Google)
   </a>
-  <a href="{$loginFacebook}" class="btn btn-small btn-primary" role="button">
-    <span class="glyphicon glyphicon-edit"></span> 
-    <span style="padding-left:10px">Sign In (Facebook)</span>
+  <a href="{$loginFacebook}" class="btn btn-sm btn-default btn-provider" role="button">
+    <!--<span class="glyphicon glyphicon-edit"></span>-->
+    Sign In (Facebook)
   </a>
 </form>
 EOT;

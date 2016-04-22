@@ -1,14 +1,15 @@
 <?php
-namespace AppBundle\Action\Project\User\PasswordResetRequest;
+
+namespace AppBundle\Action\App\Admin;
 
 use AppBundle\Action\AbstractController;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class PasswordResetRequestController extends AbstractController
+class AdminController extends AbstractController
 {
     public function __invoke(Request $request)
     {
-
+        return null;
     }
 }

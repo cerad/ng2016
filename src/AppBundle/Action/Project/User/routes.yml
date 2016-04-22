@@ -38,8 +38,9 @@ user_password_reset_request:
         _controller: user_password_reset_request_controller
 
 user_password_reset_response:
-    path: /password/reset-response/{userId}/{token}
+    path: /password/reset-response/{token}
     defaults:
+        token:       null
         _view:       user_password_reset_response_view
         _controller: user_password_reset_response_controller
 

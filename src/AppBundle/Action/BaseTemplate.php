@@ -6,6 +6,14 @@ class BaseTemplate extends AbstractTemplate
     protected $title = 'NG2016';
     protected $content = null;
 
+    private $showHeaderImage;
+    private $showResultsMenu;
+    
+    public function __construct($showHeaderImage,$showResultsMenu)
+    {
+        $this->showHeaderImage = $showHeaderImage;
+        $this->showResultsMenu = $showResultsMenu;
+    }
     public function setContent($content)
     {
         $this->content = $content;
@@ -55,7 +63,7 @@ EOT;
     
     protected function renderHeader()
     {
-      if (is_null($this->project['show_header_image'])) {
+      if (!$this->showHeaderImage) {
         $html = 
 <<<EOT
     <div id="banner">
@@ -87,7 +95,7 @@ EOT;
     <div class="cerad-footer">
       <br />
       <hr>
-      <p> ZAYSO - For assistance contact {$this->project['support']['name']} at
+      <p> zAYSO - For assistance contact {$this->project['support']['name']} at
       <a href="mailto:{$this->project['support']['email']}?subject={$this->project['support']['subject']}">{$this->project['support']['email']}</a>
       or {$this->project['support']['phone']} </p>
     </div>
@@ -138,14 +146,25 @@ EOT;
      */
     protected function renderMenuForGuest()
     {
-        return 
-<<<EOT
-       <ul class="nav navbar-nav">
-          {$this->renderTopMenuSchedules()}
-          {$this->renderTopMenuResults()}
-        </ul>
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $html = <<<EOT
+            <ul class="nav navbar-nav">
+               {$this->renderHome()}
+              {$this->renderTopMenuSchedules()}
+              {$this->renderTopMenuResults()}
+            </ul>
 EOT;
-
+        } else {
+            $html = <<<EOT
+            <ul class="nav navbar-nav">
+                {$this->renderWelcome()}
+               {$this->renderTopMenuSchedules()}
+               {$this->renderTopMenuResults()}
+             </ul>
+EOT;
+        }
+        
+        return $html;
     }
     
     /* ====================================================
@@ -157,7 +176,6 @@ EOT;
         $html =
 <<<EOT
          <ul class="nav navbar-nav navbar-right">
-           {$this->renderHome()}
            {$this->renderRefereeSchedules()}
            {$this->renderMyAccount()}
 EOT;
@@ -175,13 +193,16 @@ EOT;
         } else {
             $html = $this->renderSignIn();
         }*/
-          $html = $this->renderSignIn();
+          $html = '';  //$this->renderSignIn();
       }
       return $html;
     }
     
     protected function renderTopMenuSchedules()
     {
+        if (!$this->showResultsMenu) {
+            return null;
+        }
         return
 <<<EOT
         <li class="dropdown">
@@ -196,6 +217,9 @@ EOT;
     
     protected function renderTopMenuResults()
     {
+        if (!$this->showResultsMenu) {
+            return null;
+        }
         return
 <<<EOT
         <li class="dropdown">
@@ -240,7 +264,10 @@ EOT;
     
     protected function renderRefereeSchedules()
     {
-      return
+        if (!$this->showResultsMenu) {
+            return null;
+        }
+        return
 <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
@@ -255,7 +282,10 @@ EOT;
 
     protected function renderMyAccount()
     {
-      return
+        if (!$this->showResultsMenu) {
+            return null;
+        }
+        return
 <<<EOT
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
@@ -269,23 +299,35 @@ EOT;
     
     protected function renderHome()
     {
-      return
+        //if (!$this->showResultsMenu) {
+        //    return null;
+        //}
+        return
 <<<EOT
         <li>
           <a href="{$this->generateUrl('app_home')}">HOME</a>
         </li>
 EOT;
     }
-    protected function renderAdmin()
+    protected function renderWelcome()
     {
+        //if (!$this->showResultsMenu) {
+        //    return null;
+        //}
         return
-            <<<EOT
-                    <li>
-          <a href="{$this->generateUrl('app_admin')}">ADMIN</a>
+<<<EOT
+        <li>
+          <a href="{$this->generateUrl('app_welcome')}">WELCOME</a>
         </li>
 EOT;
+    }    protected function renderAdmin()
+    {
+        return <<<EOT
+<li>
+  <a href="{$this->generateUrl('app_admin')}">ADMIN</a>
+</li>
+EOT;
     }
-
     protected function renderScripts()
     {
         return

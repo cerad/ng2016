@@ -397,6 +397,7 @@ padding:10px;
 
 #welcome {
   margin: 10px;
+  text-align: center;
 }
 
 div#layout-content {
@@ -463,4 +464,11 @@ padding:0;
 
 .seperator {
   margin: 3px auto;
+}
+
+body.email { width: inherit; }
+
+p.email {
+  font-size: 12px;
+  text-align: center;
 }

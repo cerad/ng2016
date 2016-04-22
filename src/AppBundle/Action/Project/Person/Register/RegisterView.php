@@ -1,32 +1,31 @@
 <?php
 namespace AppBundle\Action\Project\Person\Register;
 
-use AppBundle\Action\AbstractView;
+use AppBundle\Action\AbstractView2;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class RegisterView extends AbstractView
+class RegisterView extends AbstractView2
 {
     /** @var  RegisterForm */
-    private $registerForm ;
+    private $form ;
 
-    private $projectPerson;
-
+    public function __construct(RegisterForm $form)
+    {
+        $this->form = $form;
+    }
     public function __invoke(Request $request)
     {
-        $this->projectPerson = $request->attributes->get('projectPerson');
-        $this->registerForm  = $request->attributes->get('registerForm');
-
-        return new Response($this->render());
+        return $this->newResponse($this->render());
     }
     private function render()
     {
+        $project = $this->getCurrentProjectInfo();
+
         $content = <<<EOD
-<h3>Register for {$this->project['title']}</h3><br/>
-{$this->registerForm->render()}
+<legend>Register for {$this->escape($project['title'])}</legend><br/>
+{$this->form->render()}
 EOD;
-        $this->baseTemplate->setContent($content);
-        return $this->baseTemplate->render();
+        return $this->renderBaseTemplate($content);
     }
 }

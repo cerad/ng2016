@@ -1,3 +1,8 @@
+parameters:
+    # Eventually want to be able to customize thid
+    app_home_route:    app_home
+    app_welcome_route: app_welcome
+
 services:
 
     app_kernel_listener:
@@ -9,17 +14,12 @@ services:
     app_base_template:
         class: AppBundle\Action\BaseTemplate
         calls:
-           - ['setRouter',  ['@router']]
-           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
-           - ['setProject', ['%app_project%']]
-
-    app_page_template: # Depreciated
-        abstract: true
-        calls:
-           - ['setRouter',  ['@router']]
-           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
-           - ['setBaseTemplate', ['@app_base_template']]
-           - ['setProject', ['%app_project%']]
+            - ['setRouter',  ['@router']]
+            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+            - ['setProject', ['%app_project%']]
+        arguments:
+            - '%show_header_image%'
+            - '%show_results_menu%'
 
     abstract_form:
         abstract: true
@@ -34,9 +34,10 @@ services:
            - ['setBaseTemplate', ['@app_base_template']]
            - ['setProject', ['%app_project%']]
 
-    app_action_abstract_controller: # depreciated
+    abstract_view2:
         abstract: true
-        calls: [[setContainer, ['@service_container']]]
+        calls:
+           - ['setContainer', ['@service_container']]
 
     abstract_controller:
         abstract: true
@@ -54,9 +55,10 @@ services:
 
     welcome_view:
         class:  AppBundle\Action\App\Welcome\WelcomeView
-        parent: abstract_view
+        parent: abstract_view2
         arguments:
             - '@user_login_form'
+            - '%show_results_menu%'
 
     # action home
     home_controller:
@@ -68,18 +70,16 @@ services:
         parent: abstract_view
         arguments:
             - '@project_person_repository'
+            - '@phone_transformer'
             - '@ayso_volunteer_key_transformer'
             - '@ayso_region_to_sar_transformer'
+            - '@project_person_will_referee_transformer'
 
     # action admin
     admin_controller:
-        class:  AppBundle\Action\Admin\AdminController
+        class:  AppBundle\Action\App\Admin\AdminController
         parent: abstract_controller
-        arguments:
-          - '@admin_page_template'
         
-    admin_page_template:
-        class:  AppBundle\Action\Admin\AdminPageTemplate
-        parent: app_page_template
-
-
+    admin_view:
+        class:  AppBundle\Action\App\Admin\AdminView
+        parent: abstract_view2

@@ -14,6 +14,8 @@
     clear: both;
  }
  
+ .container { min-width: 350px; }
+ 
  legend { font-size: 16px; font-weight:bold; margin-top: 1em; margin-left: -20px;}
  
  .entry { margin-left:5px; margin-top: 5px; margin-bottom: 5px;}
@@ -31,3 +33,17 @@
 }
 
 .width-90 { max-width: 90%; margin-left: auto; margin-right: auto; }
+
+.btn { margin-right: 8px; margin-bottom: 15px;}
+
+.btn-provider { color: #000; background-color: #f5f5f5; }
+
+.tableClass {
+  width: 400px;
+  border: 2px solid black;
+  margin-bottom: 0px;
+}
+
+tr.trAction { border: 1px solid black;}
+
+legend { padding-bottom: 10px; }
