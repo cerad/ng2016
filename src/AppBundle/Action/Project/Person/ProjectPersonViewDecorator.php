@@ -14,6 +14,8 @@ class ProjectPersonViewDecorator
     private $phoneTransformer;
     private $fedKeyTransformer;
     private $orgKeyTransformer;
+    
+    /** @var WillRefereeTransformer */
     private $willRefereeTransformer;
 
     public function __construct(
@@ -38,29 +40,44 @@ class ProjectPersonViewDecorator
         $person = $this->person;
         
         switch($name) {
-            case 'phone':  return $this->phoneTransformer->transform($person->phone);
-            case 'fedKey': return $this->fedKeyTransformer->transform($person->fedKey);
-            case 'orgKey': return $this->orgKeyTransformer->transform($person->orgKey);
+            
+            case 'phone':  
+                return $this->phoneTransformer->transform($person->phone);
+            
+            case 'fedId':
+            case 'fedKey': 
+                return $this->fedKeyTransformer->transform($person->fedKey);
+            
+            case 'sar':
+            case 'orgKey': 
+                return $this->orgKeyTransformer->transform($person->orgKey);
 
             case 'refereeBadge':
                 $role = $person->getRole('ROLE_REFEREE');
                 return $role ? $role->badge : null;
+            
+            case 'refereeBadgeUser':
+                $role = $person->getRole('ROLE_REFEREE');
+                return $role ? $role->badgeUser : null;
 
             case 'safeHavenCertified':
                 $role = $person->getRole('ROLE_SAFE_HAVEN');
                 if (!$role) return null;
                 switch(strtolower($role->badge)) {
-                    case null:
+                    case  null:
+                    case 'no':
                     case 'none':
                         return null;
                 }
                 return 'Yes';
 
+            case 'concussionAware':
             case 'concussionTrained':
                 $role = $person->getRole('ROLE_CONCUSSION');
                 if (!$role) return null;
                 switch(strtolower($role->badge)) {
-                    case null:
+                    case  null:
+                    case 'no':
                     case 'none':
                         return null;
                 }
@@ -72,6 +89,10 @@ class ProjectPersonViewDecorator
             case 'willVolunteer':
                 $will = isset($person->plans[$name]) ? $person->plans[$name] : null;
                 return ucfirst(strtolower($will));
+            
+            case 'willRefereeBadge':
+                $willRefereeTransformer = $this->willRefereeTransformer;
+                return $willRefereeTransformer($person);
             
             case 'availWed':
             case 'availThu':

@@ -183,7 +183,7 @@ parameters:
 
       phone:
           type:        phone
-          label:       Phone Number
+          label:       Mobile Phone
           placeHolder: Your Phone Number
           required:    false
           transformer: phone_transformer
@@ -195,8 +195,13 @@ parameters:
     # willAttend:    { group: plans }
       willReferee:   { group: plans }
       willVolunteer: { group: plans }
+      willCoach:     { group: plans }
       shirtSize: {}
 
+      availWed:      { group: avail }
+      availThu:      { group: avail }
+      availFri:      { group: avail }
+      availSatMorn:  { group: avail }
       availSatAfter: { group: avail }
       availSunMorn:  { group: avail }
       availSunAfter: { group: avail }
@@ -221,6 +226,12 @@ parameters:
             label:   Will Volunteer
             default: no
             choices: { no: No, yes: Yes (besides refereeing), maybe: Not Sure }
+
+        willCoach:
+            type:    select
+            label:   Will Coach
+            default: no
+            choices: { no: No, yes: Yes (or assist), maybe: Not Sure }
 
         willReferee:
             type:    select
@@ -281,6 +292,12 @@ parameters:
             transformer: ayso_region_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
+        availSatMorn:
+            type:    select
+            label:   Available Saturday Morning (Pool Play)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe }
+
         availSatAfter:
             type:    select
             label:   Available Saturday Afternoon (Qtr-Finals)
@@ -296,5 +313,23 @@ parameters:
         availSunAfter:
             type:    select
             label:   Available Sunday Afternoon (Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
+        availWed:
+            type:    select
+            label:   Available Wednesday (Soccerfest)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
+        availThu:
+            type:    select
+            label:   Available Thursday (Pool Play)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
+        availFri:
+            type:    select
+            label:   Available Friday (Pool Play)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
