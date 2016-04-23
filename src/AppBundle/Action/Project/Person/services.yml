@@ -39,10 +39,7 @@ services:
         class:  AppBundle\Action\Project\Person\Register\RegisterTemplateEmail
         parent: abstract_view2
         arguments:
-            - '@ayso_volunteer_key_transformer'
-            - '@ayso_region_to_sar_transformer'
-            - '@phone_transformer'
-            - '@project_person_will_referee_transformer'
+            - '@project_person_view_decorator'
 
     project_person_register_form:
         class:  AppBundle\Action\Project\Person\Register\RegisterForm

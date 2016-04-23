@@ -3,36 +3,27 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractView2;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer  as OrgKeyTransformer;
-use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer as FedKeyTransformer;
-use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
-use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
-
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use AppBundle\Action\Project\Person\ProjectPerson;
+use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 
 class RegisterTemplateEmail extends AbstractView2
 {
-    private $fedKeyTransformer;
-    private $orgKeyTransformer;
-    private $phoneTransformer;
-    private $willRefereeTransformer;
-    
+    private $projectPersonViewDecorator;
+
     public function __construct(
-        FedKeyTransformer $fedKeyTransformer,
-        OrgKeyTransformer $orgKeyTransformer,
-        PhoneTransformer  $phoneTransformer,
-        WillRefereeTransformer $willRefereeTransformer
+        ProjectPersonViewDecorator $projectPersonViewDecorator
     )
     {
-        $this->fedKeyTransformer = $fedKeyTransformer;
-        $this->orgKeyTransformer = $orgKeyTransformer;
-        $this->phoneTransformer  = $phoneTransformer;
-        
-        $this->willRefereeTransformer = $willRefereeTransformer;
+        $this->projectPersonViewDecorator = $projectPersonViewDecorator;
     }
 
-    public function renderHtml($person)
+    public function renderHtml($personArray)
     {
+        $person = new ProjectPerson();
+        $person = $person->fromArray($personArray);
+        $personView = $this->projectPersonViewDecorator;
+        $personView->setProjectPerson($person);
+
         return <<<EOD
 <html>
 <head>
@@ -54,7 +45,7 @@ class RegisterTemplateEmail extends AbstractView2
   <hr>
   <p class="email">Thank you for registering to volunteer at the 2016 National Games!</p>
   <br>
-  {$this->renderHtmlPerson($person)}
+  {$this->renderHtmlPerson($personView)}
   <br>
   <p>
     As you might expect, we have a full calendar of soccer and related activities starting Tuesday July 5 and 
@@ -90,44 +81,28 @@ class RegisterTemplateEmail extends AbstractView2
 </html>
 EOD;
     }
-    private function renderHtmlPerson($person)
+    private function renderHtmlPerson(ProjectPersonViewDecorator $personView)
     {
-        $plans = isset($person['plans'])   ? $person['plans'] : null;
-
-        //$willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown'
-        $willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
-
-        // Should have transformers
-        //$willAttend    = ucfirst($willAttend);
-        $willVolunteer = ucfirst($willVolunteer);
-
-        $refereeBadge = isset($person['roles']['ROLE_REFEREE']) ?
-            $person['roles']['ROLE_REFEREE']['badge'] :
-            null;
-
-        $safeHavenBadge = isset($projectPerson['roles']['ROLE_SAFE_HAVEN']) ?
-            $projectPerson['roles']['ROLE_SAFE_HAVEN']['badge'] :
-            null;
-
-        $safeHavenBadge = $safeHavenBadge ? 'Yes' : 'TBD';
-
-        $willRefereeTransformer = $this->willRefereeTransformer;
-
-        $notes = nl2br($this->escape($person['notesUser']));
+        $href = $this->generateUrlAbsoluteUrl('app_welcome');
+        
+        $notes = nl2br($this->escape($personView->notesUser));
 
         return <<<EOD
 <table class="tableClass">
-  <tr><td>Name          </td><td>{$this->escape($person['name'])} </td></tr>
-  <tr><td>Email         </td><td>{$this->escape($person['email'])}</td></tr>
-  <tr><td>Phone         </td><td>{$this->phoneTransformer->transform($person['phone'])}</td></tr>
-  <tr><td>Will Referee  </td><td>{$willRefereeTransformer($person)}</td></tr>
-  <tr><td>Will Volunteer</td><td>{$willVolunteer}</td></tr>
-  <tr><td>AYSO ID       </td><td>{$this->fedKeyTransformer->transform($person['fedKey'])}</td></tr>
-  <tr><td>Mem Year      </td><td>{$person['regYear']}</td></tr>
-  <tr><td>Referee Badge </td><td>{$refereeBadge}</td></tr>
-  <tr><td>Safe Haven    </td><td>{$safeHavenBadge}</td></tr>
-  <tr><td>SAR           </td><td>{$this->orgKeyTransformer->transform($person['orgKey'])}</td></tr>
+  <tr><td>Name          </td><td>{$this->escape($personView->name)} </td></tr>
+  <tr><td>Email         </td><td>{$this->escape($personView->email)}</td></tr>
+  <tr><td>Phone         </td><td>{$personView->phone}</td></tr>
+  <tr><td>Will Referee  </td><td>{$personView->willRefereeBadge}</td></tr>
+  <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}</td></tr>
+  <tr><td>Will Coach    </td><td>{$personView->willCoach}</td></tr>
+  <tr><td>AYSO ID       </td><td>{$personView->fedId}</td></tr>
+  <tr><td>Mem Year      </td><td>{$personView->regYear}</td></tr>
+  <tr><td>Referee Badge </td><td>{$personView->refereeBadge}</td></tr>
+  <tr><td>Safe Haven    </td><td>{$personView->safeHavenCertified}</td></tr>
+  <tr><td>Concussion    </td><td>{$personView->concussionAware}</td></tr>
+  <tr><td>SAR           </td><td>{$personView->sar}</td></tr>
   <tr><td>User Notes    </td><td>{$notes}</td></tr>
+  <tr><td colspan="2"><a href="{$href}">Update Tournament Plans or Availability</a></td></tr>
 </table>
 EOD;
     }

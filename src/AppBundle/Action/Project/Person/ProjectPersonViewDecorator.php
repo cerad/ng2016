@@ -55,6 +55,10 @@ class ProjectPersonViewDecorator
             case 'refereeBadge':
                 $role = $person->getRole('ROLE_REFEREE');
                 return $role ? $role->badge : null;
+            
+            case 'refereeBadgeUser':
+                $role = $person->getRole('ROLE_REFEREE');
+                return $role ? $role->badgeUser : null;
 
             case 'safeHavenCertified':
                 $role = $person->getRole('ROLE_SAFE_HAVEN');
