@@ -50,7 +50,7 @@ class RegisterController extends AbstractController2
 
             $projectPerson = $registerForm->getData();
             
-            $projectPerson = $this->process($projectPerson,$projectPersonOriginal);
+            $projectPerson = $this->process($projectPerson);
 
             // Maybe reset referee info?
             if ($registerForm->getSubmit() == 'nope') {
@@ -69,14 +69,11 @@ class RegisterController extends AbstractController2
         
         return null;
     }
-    private function process($projectPerson,$projectPersonOriginal)
+    private function process($projectPerson)
     {
-        $projectPersonRepository = $this->projectPersonRepository;
-
         $fedKey = $projectPerson['fedKey'];
-        $fedRepository = $this->fedRepository;
-        
-        $vol = $fedRepository->findVol($fedKey);
+
+        $vol = $this->fedRepository->findVol($fedKey);
         if ($vol) {
             $projectPerson['orgKey']  = $vol['orgKey'];
             $projectPerson['regYear'] = $vol['regYear'];
@@ -84,33 +81,83 @@ class RegisterController extends AbstractController2
         }
         
         // Want to referee?
-        $plans = $projectPerson['plans'];
-        $willReferee = $plans['willReferee'] !== 'no' ? true : false;
-        if ($willReferee) {
-             $projectPersonRole =
-                isset($projectPerson['roles']['ROLE_REFEREE']) ?
-                      $projectPerson['roles']['ROLE_REFEREE'] :
-                      $projectPersonRepository->createRole('ROLE_REFEREE');
-            $projectPersonRole['projectPersonId'] = $projectPerson['id'];
-            $cert = $this->fedRepository->findVolCert($fedKey,'ROLE_REFEREE');
-            if ($cert) {
-                $projectPersonRole['roleDate']  = $cert['roleDate'];
-                $projectPersonRole['badge']     = $cert['badge'];
-                $projectPersonRole['badgeUser'] = $cert['badge'];
-                $projectPersonRole['badgeDate'] = $cert['badgeDate'];
-                $projectPersonRole['verified']  = true;
-            }
-            if ($projectPerson['refereeBadge']) {
-                $projectPersonRole['badgeUser'] = $projectPerson['refereeBadge'];
-                if (!$projectPersonRole['badge']) {
-                     $projectPersonRole['badge'] = $projectPerson['refereeBadge'];
-                }
-            }
-            $projectPerson['roles']['ROLE_REFEREE'] = $projectPersonRole;
-        }
+        $projectPerson = $this->processReferee($projectPerson);
+
         // Need some notifications here?
         $projectPerson['registered'] = true;
 
+        return $projectPerson;
+    }
+    private function processReferee($projectPerson)
+    {
+        // Only do this if they said they would referee
+        $plans = $projectPerson['plans'];
+        $willReferee = $plans['willReferee'] !== 'no' ? true : false;
+        if (!$willReferee) return $projectPerson;
+
+        $fedKey = $projectPerson['fedKey'];
+        $projectPersonRepository = $this->projectPersonRepository;
+
+        $refereeRole =
+            isset($projectPerson['roles']['ROLE_REFEREE']) ?
+                $projectPerson  ['roles']['ROLE_REFEREE'] :
+                $projectPersonRepository->createRole('ROLE_REFEREE');
+
+        $refereeRole['projectPersonId'] = $projectPerson['id'];
+
+        $cert = $this->fedRepository->findVolCert($fedKey,'ROLE_REFEREE');
+
+        if ($cert) {
+            $refereeRole['roleDate']  = $cert['roleDate'];
+            $refereeRole['badge']     = $cert['badge'];
+            $refereeRole['badgeUser'] = $cert['badge'];
+            $refereeRole['badgeDate'] = $cert['badgeDate'];
+            $refereeRoleRole['verified']  = true;
+        }
+        if ($projectPerson['refereeBadge']) {
+            $refereeRole['badgeUser'] = $projectPerson['refereeBadge'];
+            if (!$refereeRole['badge']) {
+                 $refereeRole['badge'] = $projectPerson['refereeBadge'];
+            }
+        }
+        $projectPerson['roles']['ROLE_REFEREE'] = $refereeRole;
+
+        // Safe Haven
+        $certKey = 'ROLE_SAFE_HAVEN';
+        $safeHavenRole =
+            isset($projectPerson['roles'][$certKey]) ?
+                $projectPerson  ['roles'][$certKey] :
+                $projectPersonRepository->createRole($certKey);
+
+        $safeHavenRole['active'] = false;
+        $safeHavenRole['projectPersonId'] = $projectPerson['id'];
+
+        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+
+        if ($cert) {
+            $safeHavenRole['badge'] = $cert['badge'];
+            $safeHavenRole['verified'] = true;
+        }
+        $projectPerson['roles'][$certKey] = $safeHavenRole;
+
+        // Concussion Awareness
+        $certKey = 'CERT_CONCUSSION';
+        $concCert = isset($projectPerson['roles'][$certKey]) ?
+            $projectPerson  ['roles'][$certKey] :
+            $projectPersonRepository->createRole($certKey);
+
+        $concCert['active'] = false;
+        $concCert['projectPersonId'] = $projectPerson['id'];
+
+        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+
+        if ($cert) {
+            $concCert['badge'] = $cert['badge'];
+            $concCert['verified'] = true;
+        }
+        $projectPerson['roles'][$certKey] = $concCert;
+
+        // Done
         return $projectPerson;
     }
     private function findProjectPersonForUser($user)
