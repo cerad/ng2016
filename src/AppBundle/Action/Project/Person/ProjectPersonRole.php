@@ -58,6 +58,11 @@ class ProjectPersonRole implements ArrayableInterface,\ArrayAccess
         $this->role  = $role;
         $this->badge = $badge;
     }
+    public function clearId()
+    {
+        $this->id = null;
+        return $this;
+    }
     // Arrayable Interface
     public function toArray()
     {

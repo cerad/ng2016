@@ -77,26 +77,63 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         $this->name       = $name;
         $this->email      = $email;
     }
+    public function clearId() // Need for cloning
+    {
+        $this->id = null;
+        return $this;
+    }
     public function getKey()
     {
         return sprintf('%s.%s',$this->projectKey,$this->personKey);
     }
+
+    /**
+     * @param ProjectPersonRole $personRole
+     * @return ProjectPerson
+     */
     public function addRole(ProjectPersonRole $personRole)
     {
         $this->roles[$personRole->role] = $personRole;
+
         return $this;
     }
     public function hasRole($role)
     {
         return isset($this->roles[$role]) ? true : false;
     }
-    public function getRole($role)
+
+    /**
+     * @param $role
+     * @param bool $create
+     * @return ProjectPersonRole|null
+     */
+    public function getRole($roleKey,$create = false)
     {
-        return isset($this->roles[$role]) ? $this->roles[$role] : null;
+        if (isset( $this->roles[$roleKey])) {
+            return $this->roles[$roleKey];
+        }
+        if (!$create) {
+            return null;
+        }
+        $role = new ProjectPersonRole();
+        $role->role = $roleKey;
+        return $role;
+    }
+
+    /**
+     * @return ProjectPersonRole[]
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
     public function getRefereeBadge()
     {
         return isset($this->roles['ROLE_REFEREE']) ? $this->roles['ROLE_REFEREE']->badge : null;
+    }
+    public function getRefereeBadgeUser()
+    {
+        return isset($this->roles['ROLE_REFEREE']) ? $this->roles['ROLE_REFEREE']->badgeUser : null;
     }
     public function isReferee()
     {
@@ -159,6 +196,14 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         return $this;
     }
     public function offsetGet($offset) {
+        switch($offset) {
+            
+            case 'refereeBadge':
+                return $this->getRefereeBadge();
+            
+            case 'refereeBadgeUser':
+                return $this->getRefereeBadgeUser();
+        }
         if (!isset($this->propertyKeys[$offset])) {
             throw new \InvalidArgumentException('ProjectGame::get ' . $offset);
         }
