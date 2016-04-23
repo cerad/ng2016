@@ -69,11 +69,8 @@ services:
         class:  AppBundle\Action\App\Home\HomeView
         parent: abstract_view
         arguments:
-            - '@project_person_repository'
-            - '@phone_transformer'
-            - '@ayso_volunteer_key_transformer'
-            - '@ayso_region_to_sar_transformer'
-            - '@project_person_will_referee_transformer'
+            - '@project_person_repository_v2'
+            - '@project_person_view_decorator'
 
     # action admin
     admin_controller:

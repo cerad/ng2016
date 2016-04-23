@@ -4,44 +4,33 @@ namespace AppBundle\Action\App\Home;
 
 use AppBundle\Action\AbstractView;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
-use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer;
-//  AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
-use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
-use AppBundle\Action\Project\Person\ProjectPersonRepository;
+use AppBundle\Action\Project\Person\ProjectPerson;
+use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
+use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 
-use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeView extends AbstractView
 {
     private $user;
+
+    /** @var  ProjectPerson */
     private $projectPerson;
+
+    /** @var ProjectPersonRepositoryV2  */
     private $projectPersonRepository;
 
-    private $phoneTransformer;
-    private $fedKeyTransformer;
-    private $orgKeyTransformer;
-    private $willRefereeTransformer;
+    private $projectPersonViewDecorator;
 
     public function __construct(
-        ProjectPersonRepository $projectPersonRepository,
-        PhoneTransformer        $phoneTransformer,
-        VolunteerKeyTransformer $fedKeyTransformer,
-        RegionToSarTransformer  $orgKeyTransformer,
-        WillRefereeTransformer  $willRefereeTransformer
+        ProjectPersonRepositoryV2  $projectPersonRepository,
+        ProjectPersonViewDecorator $projectPersonViewDecorator
     )
     {
-        $this->projectPersonRepository = $projectPersonRepository;
-
-        $this->phoneTransformer  = $phoneTransformer;
-        $this->fedKeyTransformer = $fedKeyTransformer;
-        $this->orgKeyTransformer = $orgKeyTransformer;
-
-        $this->willRefereeTransformer = $willRefereeTransformer;
-     }
+        $this->projectPersonRepository    = $projectPersonRepository;
+        $this->projectPersonViewDecorator = $projectPersonViewDecorator;
+    }
     public function __invoke(Request $request)
     {
         $this->user = $user = $this->getUser();
@@ -51,8 +40,10 @@ class HomeView extends AbstractView
         $this->projectPerson = $this->projectPersonRepository->find($projectKey,$personKey);
 
         if (!$this->projectPerson) {
-            throw new InternalErrorException('No project person in the home view for ' . $user['name']);
+            throw new \LogicException('No project person in the home view for ' . $user['name']);
         }
+        $this->projectPersonViewDecorator->setProjectPerson($this->projectPerson);
+
         return new Response($this->renderPage());
     }
     protected function renderPage()
@@ -61,8 +52,9 @@ class HomeView extends AbstractView
 {$this->renderNotes()}<br />
 <div class="account-person-list">
 {$this->renderAccountInformation()}
-{$this->renderPlans()}
+{$this->renderRegistration()}
 {$this->renderAysoInformation()}
+{$this->renderAvailability()}
 </div>
 EOD;
 
@@ -95,43 +87,45 @@ EOD;
 </table>
 EOD;
     }
-    private function renderPlans()
+    private function renderRegistration()
     {
-        $person = $this->projectPerson;
-        $phone  = $this->phoneTransformer->transform($person['phone']);
-
-        $plans = isset($person['plans']) ? $person['plans'] : null;
-
-        //$willAttend    = isset($plans['willAttend'])    ? $plans['willAttend']    : 'Unknown';
-        $willVolunteer = isset($plans['willVolunteer']) ? $plans['willVolunteer'] : 'No';
-
-        // Should have transformers
-        //$willAttend    = ucfirst($willAttend);
-        $willVolunteer = ucfirst($willVolunteer);
-        
-        $willRefereeTransformer = $this->willRefereeTransformer;
-
-        $avail = isset($person['avail']) ? $person['avail'] : null;
-
-        $availSatAfter = isset($avail['availSatAfter']) ? $avail['availSatAfter'] : 'No';
-        $availSunMorn  = isset($avail['availSunMorn' ]) ? $avail['availSunMorn' ] : 'No';
-        $availSunAfter = isset($avail['availSunAfter']) ? $avail['availSunAfter'] : 'No';
-
-        $availSatAfter = ucfirst($availSatAfter);
-        $availSunMorn  = ucfirst($availSunMorn );
-        $availSunAfter = ucfirst($availSunAfter);
+        $personView = $this->projectPersonViewDecorator;
 
         return <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Registration Information</th></tr>
-  <tr><td>Registration Name </td><td>{$this->escape($person['name'])} </td></tr>
-  <tr><td>Registration Email</td><td>{$this->escape($person['email'])}</td></tr>
-  <tr><td>Registration Phone</td><td>{$this->escape($phone)}</td></tr>
-  <tr><td>Will Referee  </td><td>{$willRefereeTransformer($person)}</td></tr>
-  <tr><td>Will Volunteer</td><td>{$willVolunteer}</td></tr>
-  <tr><td>Available Sat Afternoon(QF)</td><td>{$availSatAfter}</td></tr>
-  <tr><td>Available Sun Morning  (SF)</td><td>{$availSunMorn }</td></tr>
-  <tr><td>Available Sun Afternoon(FM)</td><td>{$availSunAfter}</td></tr>
+  <tr><td>Registration Name </td><td>{$this->escape($personView->name) }</td></tr>
+  <tr><td>Registration Email</td><td>{$this->escape($personView->email)}</td></tr>
+  <tr><td>Registration Phone</td><td>{$this->escape($personView->phone)}</td></tr>
+  <tr><td>Will Referee  </td><td>{$personView->willRefereeBadge}</td></tr>
+  <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}   </td></tr>
+  <tr><td>Will Coach    </td><td>{$personView->willCoach}       </td></tr>
+  <tr class="trAction"><td class="text-center" colspan="2">
+    <a href="{$this->generateUrl('project_person_update')}">
+        Update My Plans or Availability
+    </a>
+  </td></tr>
+</table>
+EOD;
+    }
+    private function renderAvailability()
+    {
+        $person = $this->projectPerson;
+        if (!$person->isReferee()) {
+            return null;
+        }
+        $personView = $this->projectPersonViewDecorator;
+        
+        return <<<EOD
+<table class="tableClass">
+  <tr><th colspan="2" style="text-align: center;">Availability Information</th></tr>
+  <tr><td>Available Wed (Soccerfest) </td><td>{$personView->availWed}     </td></tr>
+  <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}     </td></tr>
+  <tr><td>Available Fri (Pool Play)  </td><td>{$personView->availFri}     </td></tr>
+  <tr><td>Available Sat Morning  (PP)</td><td>{$personView->availSatMorn} </td></tr>
+  <tr><td>Available Sat Afternoon(QF)</td><td>{$personView->availSatAfter}</td></tr>
+  <tr><td>Available Sun Morning  (SF)</td><td>{$personView->availSunMorn }</td></tr>
+  <tr><td>Available Sun Afternoon(FM)</td><td>{$personView->availSunAfter}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
         Update My Plans or Availability
@@ -142,34 +136,17 @@ EOD;
     }
     private function renderAysoInformation()
     {
-        $projectPerson = $this->projectPerson;
-
-        $fedKey = isset($projectPerson['fedKey']) ? $projectPerson['fedKey'] : null;
-        $fedId  = $this->fedKeyTransformer->transform($fedKey);
-
-        $orgKey = $projectPerson['orgKey'];
-        $org = $this->orgKeyTransformer->transform($orgKey);
-
-        $regYear = $projectPerson['regYear'];
-
-        $refereeBadge = isset($projectPerson['roles']['ROLE_REFEREE']) ?
-            $projectPerson['roles']['ROLE_REFEREE']['badge'] :
-            null;
-
-        $safeHavenBadge = isset($projectPerson['roles']['ROLE_SAFE_HAVEN']) ?
-            $projectPerson['roles']['ROLE_SAFE_HAVEN']['badge'] :
-            null;
-        
-        $safeHavenBadge = $safeHavenBadge ? 'Yes' : 'TBD';
+        $personView = $this->projectPersonViewDecorator;
 
         return <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
-  <tr><td>AYSO ID</td>            <td>{$fedId}</td></tr>
-  <tr><td>Membership Year</td>    <td>{$regYear}</td></tr>
-  <tr><td>Referee Badge</td>      <td>{$refereeBadge}</td></tr>
-  <tr><td>Safe Haven</td>         <td>{$safeHavenBadge}</td></tr>
-  <tr><td>Section/Area/Region:</td><td>{$org}</td></tr>
+  <tr><td>AYSO ID</td>            <td>{$personView->fedId}</td></tr>
+  <tr><td>Membership Year</td>    <td>{$personView->regYear}</td></tr>
+  <tr><td>Referee Badge</td>      <td>{$personView->refereeBadge}</td></tr>
+  <tr><td>Safe Haven</td>         <td>{$personView->safeHavenCertified}</td></tr>
+  <tr><td>Concussion Aware   </td><td>{$personView->concussionAware}</td></tr>
+  <tr><td>Section/Area/Region</td><td>{$personView->sar}</td></tr>
 </table>
 EOD;
     }

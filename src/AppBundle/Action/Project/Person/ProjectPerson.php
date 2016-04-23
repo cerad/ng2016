@@ -98,6 +98,11 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
     {
         return isset($this->roles['ROLE_REFEREE']) ? $this->roles['ROLE_REFEREE']->badge : null;
     }
+    public function isReferee()
+    {
+        // Might need to refine later
+        return isset($this->roles['ROLE_REFEREE']) ? true : false;
+    }
     // Arrayable Interface
     public function toArray()
     {
