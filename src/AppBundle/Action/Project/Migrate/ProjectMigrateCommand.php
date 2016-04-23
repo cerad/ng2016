@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 class ProjectMigrateCommand extends Command
 {
-    private $maxCnt = 100; //10000;
+    private $maxCnt = 10; //10000;
 
     private $ng2014Conn;
     private $ng2016Conn;

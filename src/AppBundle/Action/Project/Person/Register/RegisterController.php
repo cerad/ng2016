@@ -4,7 +4,9 @@ namespace AppBundle\Action\Project\Person\Register;
 use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
-use AppBundle\Action\Project\Person\ProjectPersonRepository;
+use AppBundle\Action\Project\Person\ProjectPerson;
+use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterController extends AbstractController2
@@ -16,12 +18,14 @@ class RegisterController extends AbstractController2
     private $successRouteName;
     private $templateEmail;
 
+    private $refereeBadgeUser;
+
     public function __construct(
-        RegisterForm            $registerForm,
-        ProjectPersonRepository $projectPersonRepository,
-        PhysicalAysoRepository  $fedRepository,
-                                $successRouteName,
-        RegisterTemplateEmail   $templateEmail
+        RegisterForm              $registerForm,
+        ProjectPersonRepositoryV2 $projectPersonRepository,
+        PhysicalAysoRepository    $fedRepository,
+                                  $successRouteName,
+        RegisterTemplateEmail     $templateEmail
     )
     {
         $this->registerForm            = $registerForm;
@@ -35,29 +39,33 @@ class RegisterController extends AbstractController2
     {
         $projectPerson = $this->findProjectPersonForUser($this->getUser());
 
+        $projectPersonArray = $projectPerson->toArray();
+
         // Real hack here
-        $projectPerson['refereeBadge'] = isset($projectPerson['roles']['ROLE_REFEREE']) ?
-            $projectPerson['roles']['ROLE_REFEREE']['badgeUser'] :
-            null;
+        $projectPersonArray['refereeBadge'] = $projectPerson->getRefereeBadgeUser();
 
         $registerForm = $this->registerForm;
-        $registerForm->setData($projectPerson);
+        $registerForm->setData($projectPersonArray);
         $registerForm->handleRequest($request);
         
         if ($registerForm->isValid()) {
 
-            $projectPersonOriginal = $projectPerson;
+            //$projectPersonOriginal = $projectPerson;
 
-            $projectPerson = $registerForm->getData();
+            $projectPersonArray = $registerForm->getData();
+
+            $this->refereeBadgeUser = $projectPersonArray['refereeBadge'];
+
+            $projectPerson = (new ProjectPerson)->fromArray($projectPersonArray);
             
             $projectPerson = $this->process($projectPerson);
 
             // Maybe reset referee info?
             if ($registerForm->getSubmit() == 'nope') {
-                $projectPerson['registered'] = false;
-                $projectPerson['verified']   = null;
+                $projectPerson->registered = false;
+                $projectPerson->verified   = null;
             }
-            $this->projectPersonRepository->save($projectPerson,$projectPersonOriginal);
+            $this->projectPersonRepository->save($projectPerson);
 
             // Careful about the id
             if ($projectPerson['registered'] === true) {
@@ -65,98 +73,91 @@ class RegisterController extends AbstractController2
             }
             return $this->redirectToRoute($this->successRouteName);
         }
-        $request->attributes->set('projectPerson',$projectPerson);
-        
         return null;
     }
-    private function process($projectPerson)
+    private function process(ProjectPerson $projectPerson)
     {
-        $fedKey = $projectPerson['fedKey'];
+        $fedKey = $projectPerson->fedKey;
 
+        // Probably only want to do this if aysoid has changed
         $vol = $this->fedRepository->findVol($fedKey);
         if ($vol) {
-            $projectPerson['orgKey']  = $vol['orgKey'];
-            $projectPerson['regYear'] = $vol['regYear'];
-            $projectPerson['gender']  = $vol['gender'];
+            $projectPerson->orgKey  = $vol['orgKey'];
+            $projectPerson->regYear = $vol['regYear'];
+            $projectPerson->gender  = $vol['gender'];
         }
         
         // Want to referee?
         $projectPerson = $this->processReferee($projectPerson);
 
         // Need some notifications here?
-        $projectPerson['registered'] = true;
+        $projectPerson->registered = true;
 
         return $projectPerson;
     }
-    private function processReferee($projectPerson)
+
+    /**
+     * @param ProjectPerson $projectPerson
+     * @return ProjectPerson
+     */
+    private function processReferee(ProjectPerson $projectPerson)
     {
         // Only do this if they said they would referee
-        $plans = $projectPerson['plans'];
-        $willReferee = $plans['willReferee'] !== 'no' ? true : false;
+        $willReferee = strtolower($projectPerson->plans['willReferee']) !== 'no' ? true : false;
         if (!$willReferee) return $projectPerson;
 
-        $fedKey = $projectPerson['fedKey'];
-        $projectPersonRepository = $this->projectPersonRepository;
+        $fedKey = $projectPerson->fedKey;
 
-        $refereeRole =
-            isset($projectPerson['roles']['ROLE_REFEREE']) ?
-                $projectPerson  ['roles']['ROLE_REFEREE'] :
-                $projectPersonRepository->createRole('ROLE_REFEREE');
+        $roleKey = 'ROLE_REFEREE';
+        $refereeRole = $projectPerson->getRole($roleKey,true);
 
-        $refereeRole['projectPersonId'] = $projectPerson['id'];
-
-        $cert = $this->fedRepository->findVolCert($fedKey,'ROLE_REFEREE');
+        $cert = $this->fedRepository->findVolCert($fedKey,$roleKey);
 
         if ($cert) {
-            $refereeRole['roleDate']  = $cert['roleDate'];
-            $refereeRole['badge']     = $cert['badge'];
-            $refereeRole['badgeUser'] = $cert['badge'];
-            $refereeRole['badgeDate'] = $cert['badgeDate'];
-            $refereeRoleRole['verified']  = true;
+            $refereeRole->roleDate  = $cert['roleDate'];
+            $refereeRole->badge     = $cert['badge'];
+            $refereeRole->badgeUser = $cert['badge'];
+            $refereeRole->badgeDate = $cert['badgeDate'];
+            $refereeRole->verified  = true;
         }
-        if ($projectPerson['refereeBadge']) {
-            $refereeRole['badgeUser'] = $projectPerson['refereeBadge'];
-            if (!$refereeRole['badge']) {
-                 $refereeRole['badge'] = $projectPerson['refereeBadge'];
+        // User selected badge on registration form
+        if ($this->refereeBadgeUser) {
+            $refereeRole->badgeUser = $this->refereeBadgeUser;
+            if (!$refereeRole->badge) {
+                 $refereeRole->badge = $this->refereeBadgeUser;
             }
         }
-        $projectPerson['roles']['ROLE_REFEREE'] = $refereeRole;
+        $projectPerson->addRole($refereeRole);
 
         // Safe Haven
         $certKey = 'ROLE_SAFE_HAVEN';
-        $safeHavenRole =
-            isset($projectPerson['roles'][$certKey]) ?
-                $projectPerson  ['roles'][$certKey] :
-                $projectPersonRepository->createRole($certKey);
+        $safeHavenCert = $projectPerson->getRole($certKey,true);
 
-        $safeHavenRole['active'] = false;
-        $safeHavenRole['projectPersonId'] = $projectPerson['id'];
+        $safeHavenCert->active = false;
 
         $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
 
         if ($cert) {
-            $safeHavenRole['badge'] = $cert['badge'];
-            $safeHavenRole['verified'] = true;
+            $safeHavenCert->badge = $cert['badge'];
+            $safeHavenCert->verified = true;
         }
-        $projectPerson['roles'][$certKey] = $safeHavenRole;
+        $projectPerson->addRole($safeHavenCert);
 
         // Concussion Awareness
         $certKey = 'CERT_CONCUSSION';
-        $concCert = isset($projectPerson['roles'][$certKey]) ?
-            $projectPerson  ['roles'][$certKey] :
-            $projectPersonRepository->createRole($certKey);
+        $concCert = $projectPerson->getRole($certKey,true);
 
-        $concCert['active'] = false;
-        $concCert['projectPersonId'] = $projectPerson['id'];
+        $concCert->active = false;
 
         $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
 
         if ($cert) {
-            $concCert['badge'] = $cert['badge'];
-            $concCert['verified'] = true;
+            $concCert->badge = $cert['badge'];
+            $concCert->verified = true;
         }
-        $projectPerson['roles'][$certKey] = $concCert;
-
+        $projectPerson->addRole($concCert);
+        dump($concCert);
+        dump($projectPerson);
         // Done
         return $projectPerson;
     }
@@ -181,40 +182,38 @@ class RegisterController extends AbstractController2
         
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->create($projectKey, $personKey, $user['name'], $user['email']);
-            $projectPerson['name'] = $projectPersonRepository->generateUniqueName($projectKey,$projectPerson['name']);
+            $projectPerson->name = $projectPersonRepository->generateUniqueName($projectKey,$projectPerson->name);
             return $projectPerson;
         }
-        $projectPerson['id'] = null;
-        $projectPerson['projectKey'] = $projectKey;
+        $projectPerson->clearId();
+        $projectPerson->projectKey = $projectKey;
 
-        $fedKey = $projectPerson['fedKey'];
+        $fedKey = $projectPerson->fedKey;
         $fedRepository = $this->fedRepository;
 
         $vol = $fedRepository->findVol($fedKey);
         if ($vol) {
-            //dump($vol);
-            $projectPerson['orgKey']  = $vol['orgKey'];
-            $projectPerson['regYear'] = $vol['regYear'];
-            $projectPerson['gender']  = $vol['gender'];
+            $projectPerson->orgKey  = $vol['orgKey'];
+            $projectPerson->regYear = $vol['regYear'];
+            $projectPerson->gender  = $vol['gender'];
         }
-        if (isset($projectPerson['age'])) {
-            $projectPerson['age'] += 2;
+        if ($projectPerson->age) {
+            $projectPerson->age += 2;
         }
-        // Update cert info
-        foreach($projectPerson['roles'] as $roleKey => $projectPersonRole) {
+        foreach($projectPerson->getRoles() as $roleKey => $projectPersonRole) {
 
-            $projectPersonRole['id'] = null;
+            $projectPersonRole->clearId();
 
             $cert = $fedRepository->findVolCert($fedKey,$roleKey);
 
             if ($cert) {
-                $projectPersonRole['roleDate']  = $cert['roleDate'];
-                $projectPersonRole['badge']     = $cert['badge'];
-                $projectPersonRole['badgeUser'] = $cert['badge'];
-                $projectPersonRole['badgeDate'] = $cert['badgeDate'];
-                $projectPersonRole['verified']  = true;
+                $projectPersonRole->roleDate  = $cert['roleDate'];
+                $projectPersonRole->badge     = $cert['badge'];
+                $projectPersonRole->badgeUser = $cert['badge'];
+                $projectPersonRole->badgeDate = $cert['badgeDate'];
+                $projectPersonRole->verified  = true;
             }
-            $projectPerson['roles'][$roleKey] = $projectPersonRole;
+            $projectPerson->addRole($projectPersonRole);
         }
         return $projectPerson;
     }

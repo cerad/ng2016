@@ -3,23 +3,16 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractForm;
 
-use AppBundle\Action\Project\Person\ProjectPersonRepository;
-
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterForm extends AbstractForm
 {
-    /** @var ProjectPersonRepository  */
-    private $projectPersonRepository;
-    
     private $projectControls;
 
     private $formControls = [];
 
-    public function __construct(ProjectPersonRepository $projectPersonRepository, $projectControls, $formControls)
+    public function __construct($projectControls, $formControls)
     {
-        $this->projectPersonRepository = $projectPersonRepository;
-        
         $this->projectControls = $projectControls;
 
         foreach($formControls as $key => $meta)
