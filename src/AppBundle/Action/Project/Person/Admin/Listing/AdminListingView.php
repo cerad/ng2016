@@ -13,9 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 class AdminListingView extends AbstractView2
 {
     private $searchForm;
+    private $displayKey;
 
     /** @var  ProjectPerson[] */
     private $projectPersons;
+    private $projectPersonsCount;
 
     private $projectUserRepository;
 
@@ -37,7 +39,9 @@ class AdminListingView extends AbstractView2
     }
     public function __invoke(Request $request)
     {
+        $this->displayKey     = $request->attributes->get('displayKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
+        $this->projectPersonsCount = count($this->projectPersons);
 
         return $this->newResponse($this->render());
     }
@@ -53,17 +57,44 @@ EOD;
     }
     private function renderProjectPersons()
     {
+        $count = $this->projectPersonsCount;
+
         $html = <<<EOD
 <table class='table'>
 <tr>
-  <th>User Information</th>
-  <th>Registration Information</th>
+EOD;
+        switch($this->displayKey) {
+
+            case 'Plans':
+                $html .= <<<EOD
+  <th>Registration Information ({$count})</th>
   <th>AYSO Information</th>
   <th>Roles</th>
   <th>Plans</th>
+</tr>
+EOD;
+                break;
+
+            case 'User':
+                $html .= <<<EOD
+  <th>Registration Information ({$count})</th>
+  <th>User Information</th>
+  <th>AYSO Information</th>
+  <th>Roles</th>
+</tr>
+EOD;
+                break;
+
+            case 'Avail':
+                $html .= <<<EOD
+  <th>Registration Information ({$count})</th>
+  <th>AYSO Information</th>
+  <th>Roles</th>
   <th>Availability</th>
 </tr>
 EOD;
+            break;
+        }
 
         foreach($this->projectPersons as $projectPerson) {
             $html .= $this->renderProjectPerson($projectPerson);
@@ -80,16 +111,45 @@ EOD;
         $personView = $this->projectPersonViewDecorator;
         $personView->setProjectPerson($person);
 
-        return <<<EOD
+        $html = <<<EOD
 <tr id="project-person-{$person->getKey()}">
-  <td>{$this->renderUserInfo        ($person,$personView)}</td>
+EOD;
+        switch($this->displayKey) {
+
+            case 'Plans':
+                $html .= <<<EOD
+<tr id="project-person-{$person->getKey()}">
   <td>{$this->renderRegistrationInfo($person,$personView)}</td>
-  <td>{$this->renderAysoInfo        ($person,$personView)}</td>
-  <td>{$this->renderRoles           ($person,$personView)}</td>
-  <td>{$this->renderPlansInfo       ($person,$personView)}</td>
-  <td>{$this->renderAvailInfo       ($person,$personView)}</td>
+  <td>{$this->renderAysoInfo        ($personView)}</td>
+  <td>{$this->renderRoles           ($person)}</td>
+  <td>{$this->renderPlansInfo       ($personView)}</td>
 </tr>
 EOD;
+                break;
+
+            case 'User':
+                $html .= <<<EOD
+<tr id="project-person-{$person->getKey()}">
+  <td>{$this->renderRegistrationInfo($person,$personView)}</td>
+  <td>{$this->renderUserInfo        ($person)}</td>
+  <td>{$this->renderAysoInfo        ($personView)}</td>
+  <td>{$this->renderRoles           ($person)}</td>
+</tr>
+EOD;
+                break;
+            
+            case 'Avail':
+                $html .= <<<EOD
+<tr id="project-person-{$person->getKey()}">
+  <td>{$this->renderRegistrationInfo($person,$personView)}</td>
+  <td>{$this->renderAysoInfo        ($personView)}</td>
+  <td>{$this->renderRoles           ($person)}</td>
+  <td>{$this->renderAvailInfo       ($personView)}</td>
+</tr>
+EOD;
+                break;
+        }
+        return $html;
     }
     private function renderRegistrationInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
     {
@@ -107,7 +167,7 @@ EOD;
 EOD;
 
     }
-    private function renderAysoInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
         return <<<EOD
 <table>
@@ -120,7 +180,7 @@ EOD;
 </table>
 EOD;
     }
-    private function renderPlansInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    private function renderPlansInfo(ProjectPersonViewDecorator $personView)
     {
         $notesUser = $personView->notesUser;
         if (strlen($notesUser) > 75) {
@@ -138,7 +198,7 @@ EOD;
 EOD;
 
     }
-    private function renderAvailInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    private function renderAvailInfo(ProjectPersonViewDecorator $personView)
     {
 
         return <<<EOD
@@ -154,7 +214,7 @@ EOD;
 EOD;
 
     }
-    private function renderRoles(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    private function renderRoles(ProjectPerson $person)
     {
         $html = <<<EOD
 <table>
@@ -170,7 +230,7 @@ EOD;
 EOD;
         return $html;
     }
-    private function renderUserInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    private function renderUserInfo(ProjectPerson $person)
     {
         $user = $this->projectUserRepository->find($person->personKey);
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
