@@ -98,7 +98,7 @@ class ProjectMigrateCommand extends Command
             switch($row['email']) {
                 case 'ahundiak@gmail.com':
                 case 'ayso1sra@gmail.com':
-                case 'spsoccerref@earthlink.net':
+                //case 'spsoccerref@earthlink.net':
                     $roles = 'ROLE_ADMIN';
                     break;
                 default:
@@ -135,7 +135,7 @@ class ProjectMigrateCommand extends Command
             'physicalPerson.dob        AS dob',
             
             'projectPerson.person_name AS name',
-            'projectPerson.basic       AS plans', // For shirt size
+            'projectPerson.basic       AS plans',
             
             'fed.fed_key     AS fedKey',
             'fed.org_key     AS orgKey',
@@ -168,8 +168,8 @@ class ProjectMigrateCommand extends Command
 
         $sql = <<<EOD
 INSERT INTO projectPersons 
-(projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age) 
-VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+(projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age,shirtSize,plans,avail) 
+VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 EOD;
         $insertProjectPersonStmt = $this->ng2016Conn->prepare($sql);
 
@@ -202,6 +202,34 @@ EOD;
             if ($orgKey) {
                 $orgKey = 'AYSOR:' . substr($orgKey,5);
             }
+            $plans = isset($row['plans']) ? @unserialize($row['plans']) : [];
+
+            $shirtSize = isset($plans['tshirt']) ? $plans['tshirt'] : null;
+
+            // Transfer plans
+            $plansXfer = [
+                'willCoach'     => 'coaching',
+                'willReferee'   => 'refereeing',
+                'willVolunteer' => 'volunteering',
+                'willAttend'    => 'attending',
+                'willPlay'      => 'playing',
+                'wantMentor'    => 'wantMentor'
+
+            ];
+            $plansNew = [];
+            foreach($plansXfer as $keyNew => $key) {
+                $plansNew[$keyNew] = isset($plans[$key]) ? $plans[$key] : 'no';
+            }
+            // Transfer availability
+            $availXfer = [
+                'availSatAfter' => 'availSatAfter',
+                'availSunMorn'  => 'availSunMorn',
+                'availSunAfter' => 'availSunAfter',
+            ];
+            $availNew = [];
+            foreach($availXfer as $keyNew => $key) {
+                $availNew[$keyNew] = isset($plans[$key]) ? $plans[$key] : 'no';
+            }
             $insertProjectPersonStmt->execute([
                 $row['projectKey'],
                 $row['personKey'],
@@ -215,6 +243,9 @@ EOD;
                 $row['phone'],
                 $row['gender'],
                 $age,
+                $shirtSize,
+                serialize($plansNew),
+                serialize($availNew),
             ]);
             $projectPersonId = $this->ng2016Conn->lastInsertId();
 
@@ -232,7 +263,16 @@ EOD;
                         true, // Active
                         true, // Verified
                     ]);
-                    //echo sprintf("Badge Date %s %s\n",$name,$row['refereeBadgeDate']);
+                    $insertProjectPersonRoleStmt->execute([
+                        $projectPersonId,
+                        'CERT_REFEREE',
+                        $row['refereeRoleDate'],
+                        $row['refereeBadge'],
+                        $row['refereeBadgeDate'],
+                        false, // Active
+                        true, // Verified
+                    ]);
+                //echo sprintf("Badge Date %s %s\n",$name,$row['refereeBadgeDate']);
             }
             switch($row['safeHavenBadge']) {
                 case null:
@@ -241,7 +281,7 @@ EOD;
                 default:
                     $insertProjectPersonRoleStmt->execute([
                         $projectPersonId,
-                        'ROLE_SAFE_HAVEN',
+                        'CERT_SAFE_HAVEN',
                         $row['safeHavenRoleDate'],
                         $row['safeHavenBadge'],
                         $row['safeHavenBadgeDate'],

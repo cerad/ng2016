@@ -53,15 +53,15 @@ class ProjectPersonViewDecorator
                 return $this->orgKeyTransformer->transform($person->orgKey);
 
             case 'refereeBadge':
-                $role = $person->getRole('ROLE_REFEREE');
+                $role = $person->getRole('CERT_REFEREE');
                 return $role ? $role->badge : null;
             
             case 'refereeBadgeUser':
-                $role = $person->getRole('ROLE_REFEREE');
+                $role = $person->getRole('CERT_REFEREE');
                 return $role ? $role->badgeUser : null;
 
             case 'safeHavenCertified':
-                $role = $person->getRole('ROLE_SAFE_HAVEN');
+                $role = $person->getRole('CERT_SAFE_HAVEN');
                 if (!$role) return null;
                 switch(strtolower($role->badge)) {
                     case  null:

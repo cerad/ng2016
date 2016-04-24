@@ -69,7 +69,7 @@ EOD;
                 $html .= <<<EOD
   <th>Registration Information ({$count})</th>
   <th>AYSO Information</th>
-  <th>Roles</th>
+  <th>Roles / Certs</th>
   <th>Plans</th>
 </tr>
 EOD;
@@ -80,7 +80,7 @@ EOD;
   <th>Registration Information ({$count})</th>
   <th>User Information</th>
   <th>AYSO Information</th>
-  <th>Roles</th>
+  <th>Roles / Certs</th>
 </tr>
 EOD;
                 break;
@@ -89,7 +89,7 @@ EOD;
                 $html .= <<<EOD
   <th>Registration Information ({$count})</th>
   <th>AYSO Information</th>
-  <th>Roles</th>
+  <th>Roles / Certs</th>
   <th>Availability</th>
 </tr>
 EOD;
@@ -219,10 +219,24 @@ EOD;
         $html = <<<EOD
 <table>
 EOD;
-        foreach($person['roles'] as $role) {
+        foreach($person->getRoles() as $role) {
+
+            if ($role->approved) {
+                $class = 'bg-success';
+            }
+            else {
+                $class = $role->verified ? 'bg-warning' : 'bg-danger';
+            }
+            $html .= <<<EOD
+<tr><td class="{$class}">{$role->role}</td></tr>   
+EOD;
+        }
+        foreach($person->getCerts() as $cert) {
+
+            $class = $cert->verified ? 'bg-success' : 'bg-danger';
 
             $html .= <<<EOD
-<tr><td>{$role->role}</td></tr>   
+<tr><td class="{$class}">{$cert->role}</td></tr>   
 EOD;
         }
         $html .= <<<EOD

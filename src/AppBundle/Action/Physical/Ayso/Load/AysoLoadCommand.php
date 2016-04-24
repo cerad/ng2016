@@ -71,7 +71,7 @@ EOD;
         $filename = $input->getArgument('filename');
 
         echo sprintf("Loading AYSO File: %s...\n",$filename);
-        //$this->load($filename);
+        $this->load($filename);
         $this->processOrgs();
     }
     /** @var  Statement */
@@ -171,32 +171,32 @@ EOD;
     }
     private $certMetas = [
         'Regional Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'Regional',
             'sort'  => 10,
         ],
         'Intermediate Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'Intermediate',
             'sort'  => 20,
         ],
         'Advanced Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'Advanced',
             'sort'  => 30,
         ],
         'National Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'National',
             'sort'  => 90,
         ],
         'National 1 Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'National 1',
             'sort'  => 80,
         ],
         'National 2 Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'National 2',
             'sort'  => 70,
         ],
