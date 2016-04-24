@@ -39,7 +39,7 @@ class UserCreateView extends AbstractView
 </a>
 <br/><br/>
 -->
-<legend>Already have a Zayso account? </legend>
+<legend>Already have a zAYSO account? </legend>
 <a href="{$this->generateURL('app_welcome')}" class="btn btn-sm btn-primary" role="button">
   <span class="glyphicon glyphicon-edit"></span> 
   Sign in

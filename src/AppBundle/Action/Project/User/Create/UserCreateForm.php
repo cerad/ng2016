@@ -105,7 +105,7 @@ class UserCreateForm extends AbstractForm
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-plus"></span> Create New Zayso Account
+    <span class="glyphicon glyphicon-plus"></span> Create New zAYSO Account
   </button>
 </form>
 
