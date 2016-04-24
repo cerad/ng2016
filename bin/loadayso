@@ -14,4 +14,4 @@ bin/console ayso:load  "var/ayso/data20160414/S11 Referees 20160414.xls"
 bin/console ayso:load  "var/ayso/data20160414/S12 Referees 20160414.xls"
 bin/console ayso:load  "var/ayso/data20160414/S13 Referees 20160414.xls"
 bin/console ayso:load  "var/ayso/data20160414/S14 Referees 20160414.xls"
-
+bin/console ayso:load  "var/ayso/SafeHavenS05_20160424.csv"
