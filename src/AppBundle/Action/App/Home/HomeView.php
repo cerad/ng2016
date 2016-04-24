@@ -56,6 +56,9 @@ class HomeView extends AbstractView
 {$this->renderAysoInformation()}
 {$this->renderAvailability()}
 </div>
+<div>
+{$this->renderHotelInformation()}
+</div>
 EOD;
 
         $this->baseTemplate->setContent($content);
@@ -185,12 +188,30 @@ EOD;
   <p>
     Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games. 
     Update your plans and availability at any time.
-  </p><br/>  
-  <p>Discounted hotel reservations are now available for the AYSO National Games 2016!  
-    Information on accommodations is available on the National Site by 
-    <a href="http://www.aysonationalgames.org/Default.aspx?tabid=730869" target="_blank">clicking here</a>.
+  <br/>  
+  Discounted hotel reservations are now available for the AYSO National Games 2016!  See below for information on Referee Hotel discounts.
+  <br/>
+  Additional information on booking discounted travel can be found at <a href="http://aysonationalgames.org/book-travel/" target="_blank">http://aysonationalgames.org/book-travel/</a>
   </p>
 </div>
 EOD;
+    }
+    private function renderHotelInformation()
+    {
+        return <<<EOT
+<legend>Referee Hotel Discounts</legend>
+<p>Discounted hotel reservations are now available for the AYSO National Games 2016!</p>
+<ul class="cerad-common-help ul_bullets">
+<li><a href="http://www.innatboyntonbeach.com/" target="_blank">Inn at Boynton Beach</a> at $65/night using the code AYSO1660008. This hotel will feature complimentary breakfast.</li>
+<li><a href="http://www.hipalmbeachairport.com/" target="_blank">Holiday Inn West Palm Beach Airport</a> at $93 per night plus tax using the code AYSO1660008.</li>
+</ul>
+<br>
+<p>Make your reservations through Global JBS. Contact Information:</p>
+<div style="margin:5px 20px">
+<p>Trina King<br>
+Phone: (561) 290-0587<br>
+Email: <a href="mailto:trina@globaljbs.com">trina@globaljbs.com</a><br>
+Reservation link: <a href="http://www.globaljbs.com/event/AYSO16" target="_blank">http://www.globaljbs.com/event/AYSO16</a></p>
+EOT;
     }
 }
