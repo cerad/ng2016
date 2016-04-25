@@ -11,9 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
+
 class ProjectMigrateCommand extends Command
 {
-    private $maxCnt = 10; //10000;
+    private $maxCnt = 10000; //10000;
 
     private $ng2014Conn;
     private $ng2016Conn;
@@ -127,6 +128,10 @@ class ProjectMigrateCommand extends Command
         $qb = $this->ng2014Conn->createQueryBuilder();
 
         $qb->select([
+            'projectPerson.id  AS projectPersonId',
+            'physicalPerson.id AS physicalPersonId',
+            'fed.id            AS fedId',
+
             'projectPerson.project_id  AS projectKey',
             'physicalPerson.guid       AS personKey',
             'physicalPerson.email      AS email',
@@ -156,7 +161,7 @@ class ProjectMigrateCommand extends Command
         $qb->leftJoin('projectPerson','persons','physicalPerson','physicalPerson.id = projectPerson.person_id');
 
         $qb->leftJoin('physicalPerson','person_feds','fed',
-            'fed.person_id = projectPerson.id AND fed.fed_role = \'AYSOV\'');
+            'fed.person_id = physicalPerson.id AND fed.fed_role = \'AYSOV\'');
 
         $qb->leftJoin('fed','person_fed_certs','certReferee',
             'certReferee.person_fed_id = fed.id AND certReferee.role = \'Referee\'');

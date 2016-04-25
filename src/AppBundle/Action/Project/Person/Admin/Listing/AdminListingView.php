@@ -248,12 +248,14 @@ EOD;
     {
         $user = $this->projectUserRepository->find($person->personKey);
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
+        $roles = implode(',',$user['roles']);
         return <<<EOD
 <table>
   <tr><td>Name   </td><td>{$this->escape($user['name'])}    </td></tr>
   <tr><td>Email  </td><td>{$this->escape($user['email'])}   </td></tr>
   <tr><td>User   </td><td>{$this->escape($user['username'])}</td></tr>
   <tr><td>Enabled</td><td>{$enabled}</td></tr>
+  <tr><td>Roles  </td><td>{$roles}  </td></tr>
 </table>
 EOD;
 

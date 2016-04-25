@@ -241,6 +241,16 @@ EOD;
             'badge' => 'AYSO',
             'sort'  => 90,
         ],
+        'Safe Haven Referee' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'Referee',
+            'sort'  => 70,
+        ],
+        'Z-Online Safe Haven Referee' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'Referee',
+            'sort'  => 70,
+        ],
         'Safe Haven Update' => [
             'role'  => null,
         ],
@@ -266,6 +276,7 @@ EOD;
         if (substr($regYear,0,2) !== 'MY') return;
 
         $certDescs = explode(',',$row[9]); //"CertificationDesc"
+        $certDescs = str_replace(' & ',',',$certDescs);
         
         foreach($certDescs as $certDesc) {
             $this->loadCert($row,trim($certDesc));
@@ -280,7 +291,7 @@ EOD;
             var_dump($row);
             die('Missing cert: ' . $certDesc);
         }
-
+//if (1) return;
         $role  = $certMeta['role'];
         if (!$role) {
             return;
