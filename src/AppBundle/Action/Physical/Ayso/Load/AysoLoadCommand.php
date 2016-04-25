@@ -42,6 +42,13 @@ VALUES (?,?,?,?,?,?,?)
 EOD;
         $this->insertVolStmt = $this->conn->prepare($sql);
 
+        $sql = <<<EOD
+UPDATE vols SET 
+  name = ?, email = ?, phone = ?, gender = ?, sar = ?, regYear = ?
+WHERE fedKey = ?
+EOD;
+        $this->updateVolStmt = $this->conn->prepare($sql);
+
         $sql = 'SELECT regYear FROM vols WHERE fedKey = ?';
         $this->checkVolStmt = $this->conn->prepare($sql);
 
@@ -63,7 +70,9 @@ EOD;
         // Mess with badge list
         $badgeSorts = [];
         foreach($this->certMetas as $certMeta) {
-            $badgeSorts[$certMeta['badge']] = $certMeta['sort'];
+            if ($certMeta['role']) {
+                $badgeSorts[$certMeta['badge']] = $certMeta['sort'];
+            }
         }
         $this->badgeSorts = $badgeSorts;
 
@@ -76,6 +85,9 @@ EOD;
     }
     /** @var  Statement */
     private $insertVolStmt;
+
+    /** @var  Statement */
+    private $updateVolStmt;
 
     /** @var  Statement */
     private $checkVolStmt;
@@ -110,8 +122,8 @@ EOD;
         for($row = 2; $row < $rowMax; $row++) {
             $range = sprintf('A%d:%s%d',$row,$colMax,$row);
             $data = $ws->rangeToArray($range,null,false,false,false)[0];
-            $this->loadVol ($data);
-            $this->loadCert($data);
+            $this->loadVol  ($data);
+            $this->loadCerts($data);
             if (($row % 100) === 0) {
                 echo sprintf("\rProcessed %4d of %d",$row,$rowMax - 1);
             }
@@ -145,6 +157,7 @@ EOD;
         $fedKey = 'AYSOV:' . (string)$row[0]; // "AYSOID";
 
         $regYear = $row[19]; // "Membership Year"
+        if (substr($regYear,0,2) !== 'MY') return;
 
         $item = [
             $fedKey,
@@ -166,54 +179,123 @@ EOD;
         if ($regYear <= $vol['regYear']) {
             return;
         }
-        // TODO Update operation
-        var_dump($item); die();
+        $item = [
+            $row[ 1], // "Name"
+            $row[ 8], // "Email"
+            $row[ 6], // "HomePhone"
+            $row[10], // "Gender M or F
+            $row[11], // "SectionAreaRegion"
+            $row[19], // "Membership Year"
+            $fedKey,
+        ];
+        $this->updateVolStmt->execute($item);
     }
     private $certMetas = [
         'Regional Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'Regional',
             'sort'  => 10,
         ],
         'Intermediate Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'Intermediate',
             'sort'  => 20,
         ],
         'Advanced Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'Advanced',
             'sort'  => 30,
         ],
         'National Referee' => [
-            'role'  => 'ROLE_REFEREE',
+            'role'  => 'CERT_REFEREE',
             'badge' => 'National',
             'sort'  => 90,
         ],
         'National 1 Referee' => [
-            'role'  => 'ROLE_REFEREE',
-            'badge' => 'National 1',
+            'role'  => 'CERT_REFEREE',
+            'badge' => 'National_1',
             'sort'  => 80,
         ],
         'National 2 Referee' => [
-            'role'  => 'ROLE_REFEREE',
-            'badge' => 'National 2',
+            'role'  => 'CERT_REFEREE',
+            'badge' => 'National_2',
             'sort'  => 70,
+        ],
+        'Z-Online AYSOs Safe Haven' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'AYSO',
+            'sort'  => 90,
+        ],
+        'AYSOs Safe Haven' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'AYSO',
+            'sort'  => 90,
+        ],
+        'Webinar-AYSOs Safe Haven' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'AYSO',
+            'sort'  => 90,
+        ],
+        'Z-Online Refugio Seguro de AYSO' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'AYSO',
+            'sort'  => 90,
+        ],
+        'Safe Haven Referee' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'Referee',
+            'sort'  => 70,
+        ],
+        'Z-Online Safe Haven Referee' => [
+            'role'  => 'CERT_SAFE_HAVEN',
+            'badge' => 'Referee',
+            'sort'  => 70,
+        ],
+        'Safe Haven Update' => [
+            'role'  => null,
+        ],
+        'Webinar-Safe Haven Update' => [
+            'role'  => null,
+        ],
+        'Z-Online CDC Concussion Awareness Training' => [
+            'role'  => 'CERT_CONCUSSION',
+            'badge' => 'CDC Concussion',
+            'sort'  => 90,
+        ],
+        'CDC Online Concussion Awareness Training' => [
+            'role'  => 'CERT_CONCUSSION',
+            'badge' => 'CDC Concussion',
+            'sort'  => 90,
         ],
     ];
     private $badgeSorts = [];
 
-    private function loadCert($row)
+    private function loadCerts($row)
+    {
+        $regYear = $row[19]; // "Membership Year"
+        if (substr($regYear,0,2) !== 'MY') return;
+
+        $certDescs = explode(',',$row[9]); //"CertificationDesc"
+        $certDescs = str_replace(' & ',',',$certDescs);
+        
+        foreach($certDescs as $certDesc) {
+            $this->loadCert($row,trim($certDesc));
+        }
+    }
+    private function loadCert($row,$certDesc)
     {
         $fedKey = 'AYSOV:' . (string)$row[0]; // "AYSOID";
-
-        $certDesc = $row[9];                  //"CertificationDesc"
+        
         $certMeta = isset($this->certMetas[$certDesc]) ? $this->certMetas[$certDesc] : null;
         if (!$certMeta) {
+            var_dump($row);
             die('Missing cert: ' . $certDesc);
         }
-
+//if (1) return;
         $role  = $certMeta['role'];
+        if (!$role) {
+            return;
+        }
         $badge = $certMeta['badge'];
 
         $badgeDate = $row[12];
@@ -274,9 +356,9 @@ EOD;
             die('sar region number error: ' . $sar);
         }
         $orgKey = sprintf('AYSOR:%04d',$region);
-        //die(sprintf('%s %s',$sar,$orgKey));
-        $row = $this->checkOrgStmt->execute([$orgKey]);
-        if ($row) {
+
+        $this->checkOrgStmt->execute([$orgKey]);
+        if ($this->checkOrgStmt->fetch()) {
             return;
         }
         $this->insertOrgStmt->execute([$orgKey,$sar]);

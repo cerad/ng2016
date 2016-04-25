@@ -88,23 +88,69 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
     }
 
     /**
-     * @param ProjectPersonRole $personRole
+     * @param  ProjectPersonRole $role
      * @return ProjectPerson
      */
-    public function addRole(ProjectPersonRole $personRole)
+    public function addRole(ProjectPersonRole $role)
     {
-        $this->roles[$personRole->role] = $personRole;
+        $this->roles[$role->role] = $role;
 
         return $this;
     }
-    public function hasRole($role)
+    public function addCert(ProjectPersonRole $cert)
     {
-        return isset($this->roles[$role]) ? true : false;
+        $this->roles[$cert->role] = $cert;
+
+        return $this;
+    }
+    public function removeRole($roleKey)
+    {
+        $roleKey = is_object($roleKey) ? $roleKey->role : $roleKey;
+
+        if (isset($this->roles[$roleKey])) {
+            unset($this->roles[$roleKey]);
+        }
+        return $this;
+    }
+    public function removeCert($certKey)
+    {
+        $certKey = is_object($certKey) ? $certKey->role : $certKey;
+
+        if (isset($this->roles[$certKey])) {
+            unset($this->roles[$certKey]);
+        }
+        return $this;
+    }
+    public function hasRole($roleKey)
+    {
+        return isset($this->roles[$roleKey]) ? true : false;
+    }
+    public function hasCert($certKey)
+    {
+        return isset($this->roles[$certKey]) ? true : false;
     }
 
     /**
-     * @param $role
-     * @param bool $create
+     * @param  string $certKey
+     * @param  bool   $create
+     * @return ProjectPersonRole|null
+     */
+    public function getCert($certKey,$create = false)
+    {
+        if (isset( $this->roles[$certKey])) {
+            return $this->roles[$certKey];
+        }
+        if (!$create) {
+            return null;
+        }
+        $cert = new ProjectPersonRole();
+        $cert->active = false;
+        $cert->role = $certKey;
+        return $cert;
+    }
+    /**
+     * @param  string $roleKey
+     * @param  bool   $create
      * @return ProjectPersonRole|null
      */
     public function getRole($roleKey,$create = false)
@@ -125,15 +171,34 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
      */
     public function getRoles()
     {
-        return $this->roles;
+        $roles = [];
+        foreach($this->roles as $roleKey => $role) {
+            if (substr($roleKey,0,5) === 'ROLE_') {
+                $roles[$roleKey] = $role;
+            }
+        }
+        return $roles;
+    }
+    /**
+     * @return ProjectPersonRole[]
+     */
+    public function getCerts()
+    {
+        $certs = [];
+        foreach($this->roles as $certKey => $cert) {
+            if (substr($certKey,0,5) === 'CERT_') {
+                $certs[$certKey] = $cert;
+            }
+        }
+        return $certs;
     }
     public function getRefereeBadge()
     {
-        return isset($this->roles['ROLE_REFEREE']) ? $this->roles['ROLE_REFEREE']->badge : null;
+        return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badge : null;
     }
     public function getRefereeBadgeUser()
     {
-        return isset($this->roles['ROLE_REFEREE']) ? $this->roles['ROLE_REFEREE']->badgeUser : null;
+        return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badgeUser : null;
     }
     public function isReferee()
     {

@@ -6,7 +6,7 @@ parameters:
 
   app_project:
     info:
-        key: AYSONationalGames2014 # For now until we migrate
+        key: AYSONationalGames2014 # For now until we migrate games
 
         slugs: [natgames, ng2016]
 
@@ -21,6 +21,8 @@ parameters:
         title:   "AYSO National Games 2016"
         desc:    "AYSO National Games 2016 - Palm Beach County, Florida - July 5th to July 10th"
         prefix:  'NatGames2016'
+
+        regYear: 'MY2015'
 
         support:
             name: "Art Hundiak"
@@ -244,7 +246,7 @@ parameters:
             label:   AYSO Referee Badge
             default: na
             choices:
-                None:         None
+                None:         NA
                 Regional:     Regional
                 Intermediate: Intermediate
                 Advanced:     Advanced

@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Project\Person\Admin\Listing;
+namespace AppBundle\Action\Project\Person\Admin\Update;
 
 use AppBundle\Action\AbstractView2;
 
@@ -10,9 +10,9 @@ use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 use AppBundle\Action\Project\User\ProjectUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminListingView extends AbstractView2
+class AdminUpdateView extends AbstractView2
 {
-    private $searchForm;
+    private $updateForm;
     private $displayKey;
 
     /** @var  ProjectPerson[] */
@@ -28,30 +28,29 @@ class AdminListingView extends AbstractView2
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectUserRepository      $projectUserRepository,
-        AdminListingSearchForm     $searchForm,
+        AdminUpdateForm            $updateForm,
         ProjectPersonViewDecorator $projectPersonViewDecorator
     )
     {
-        $this->searchForm = $searchForm;
+        $this->updateForm = $updateForm;
         $this->projectUserRepository      = $projectUserRepository;
         $this->projectPersonRepository    = $projectPersonRepository;
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
     }
     public function __invoke(Request $request)
     {
-        $this->displayKey     = $request->attributes->get('displayKey');
-        $this->projectPersons = $request->attributes->get('projectPersons');
-        $this->projectPersonsCount = count($this->projectPersons);
+        //$this->displayKey     = $request->attributes->get('displayKey');
+        //$this->projectPersons = $request->attributes->get('projectPersons');
+        //$this->projectPersonsCount = count($this->projectPersons);
 
         return $this->newResponse($this->render());
     }
     private function render()
     {
         $content = <<<EOD
-<legend>Registered Person Listing</legend>
-{$this->searchForm->render()}
+<legend>Update Person</legend>
+{$this->updateForm->render()}
 <br/>
-{$this->renderProjectPersons()}
 EOD;
         return $this->renderBaseTemplate($content);
     }
@@ -169,18 +168,14 @@ EOD;
     }
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
-        $projectRegYear = $this->getCurrentProjectInfo()['regYear'];
-        $personRegYear  = $personView->regYear;
-        $classRegYear = ($personRegYear >= $projectRegYear) ? 'bg-success' : 'bg-danger';
-
-        $sar = $personView->orgKey;
-        $classSar = ($sar && substr($sar,0,1) !== 'A') ? 'bg-success' : 'bg-danger';
-
         return <<<EOD
 <table>
-  <tr><td>AYSO ID  </td><td>{$personView->fedKey}</td></tr>
-  <tr><td>Mem Year </td><td class="{$classRegYear}">{$personRegYear}</td></tr>
-  <tr><td>SAR      </td><td class="{$classSar}"    >{$sar}</td></tr>
+  <tr><td>AYSO ID   </td><td>{$this->escape($personView->fedKey)} </td></tr>
+  <tr><td>Mem Year  </td><td>{$this->escape($personView->regYear)}</td></tr>
+  <tr><td>SAR       </td><td>{$this->escape($personView->orgKey)} </td></tr>
+  <tr><td>Referee   </td><td>{$this->escape($personView->refereeBadge)}</td></tr>
+  <tr><td>Safe Haven</td><td>{$this->escape($personView->safeHavenCertified)}</td></tr>
+  <tr><td>Concussion</td><td>{$this->escape($personView->concussionTrained)}</td></tr>
 </table>
 EOD;
     }
@@ -237,18 +232,10 @@ EOD;
         }
         foreach($person->getCerts() as $cert) {
 
-            $certRole = $cert->role;
-            if ($certRole === 'CERT_REFEREE') {
-                $badge     = $cert->badge;
-                $badgeUser = $cert->badgeUser;
-                $certRole = ($badge === $badgeUser) ?
-                    sprintf('%s (%s)',   $certRole,$badge) :
-                    sprintf('%s (%s/%s)',$certRole,$badge,$badgeUser);
-            }
             $class = $cert->verified ? 'bg-success' : 'bg-danger';
 
             $html .= <<<EOD
-<tr><td class="{$class}">{$certRole}</td></tr>   
+<tr><td class="{$class}">{$cert->role}</td></tr>   
 EOD;
         }
         $html .= <<<EOD
@@ -260,14 +247,12 @@ EOD;
     {
         $user = $this->projectUserRepository->find($person->personKey);
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
-        $roles = implode(',',$user['roles']);
         return <<<EOD
 <table>
   <tr><td>Name   </td><td>{$this->escape($user['name'])}    </td></tr>
   <tr><td>Email  </td><td>{$this->escape($user['email'])}   </td></tr>
   <tr><td>User   </td><td>{$this->escape($user['username'])}</td></tr>
   <tr><td>Enabled</td><td>{$enabled}</td></tr>
-  <tr><td>Roles  </td><td>{$roles}  </td></tr>
 </table>
 EOD;
 

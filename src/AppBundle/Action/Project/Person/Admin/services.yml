@@ -48,4 +48,6 @@ services:
         parent: abstract_view2
         arguments:
             - '@project_person_repository_v2'
+            - '@user_repository'
             - '@project_person_admin_update_form'
+            - '@project_person_view_decorator'

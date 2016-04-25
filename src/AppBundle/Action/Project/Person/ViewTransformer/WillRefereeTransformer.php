@@ -3,6 +3,7 @@ namespace AppBundle\Action\Project\Person\ViewTransformer;
 
 class WillRefereeTransformer
 {
+    // TODO - Person should be an object
     public function __invoke($person)
     {
         $willReferee = isset($person['plans']['willReferee']) ? $person['plans']['willReferee'] : 'no';
@@ -20,11 +21,11 @@ class WillRefereeTransformer
                 $willRefereeView = 'No';
         }
         $badge = isset($person['roles']['ROLE_REFEREE']) ?
-            $person['roles']['ROLE_REFEREE']['badge'] :
+            $person['roles']['CERT_REFEREE']['badge'] :
             null;
 
         $badgeUser = isset($person['roles']['ROLE_REFEREE']) ?
-            $person['roles']['ROLE_REFEREE']['badgeUser'] :
+            $person['roles']['CERT_REFEREE']['badgeUser'] :
             null;
 
         if ($willReferee !== 'no') {

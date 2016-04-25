@@ -11,9 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
+
 class ProjectMigrateCommand extends Command
 {
-    private $maxCnt = 10; //10000;
+    private $maxCnt = 10000; //10000;
 
     private $ng2014Conn;
     private $ng2016Conn;
@@ -98,7 +99,7 @@ class ProjectMigrateCommand extends Command
             switch($row['email']) {
                 case 'ahundiak@gmail.com':
                 case 'ayso1sra@gmail.com':
-                case 'spsoccerref@earthlink.net':
+                //case 'spsoccerref@earthlink.net':
                     $roles = 'ROLE_ADMIN';
                     break;
                 default:
@@ -127,6 +128,10 @@ class ProjectMigrateCommand extends Command
         $qb = $this->ng2014Conn->createQueryBuilder();
 
         $qb->select([
+            'projectPerson.id  AS projectPersonId',
+            'physicalPerson.id AS physicalPersonId',
+            'fed.id            AS fedId',
+
             'projectPerson.project_id  AS projectKey',
             'physicalPerson.guid       AS personKey',
             'physicalPerson.email      AS email',
@@ -135,7 +140,7 @@ class ProjectMigrateCommand extends Command
             'physicalPerson.dob        AS dob',
             
             'projectPerson.person_name AS name',
-            'projectPerson.basic       AS plans', // For shirt size
+            'projectPerson.basic       AS plans',
             
             'fed.fed_key     AS fedKey',
             'fed.org_key     AS orgKey',
@@ -156,7 +161,7 @@ class ProjectMigrateCommand extends Command
         $qb->leftJoin('projectPerson','persons','physicalPerson','physicalPerson.id = projectPerson.person_id');
 
         $qb->leftJoin('physicalPerson','person_feds','fed',
-            'fed.person_id = projectPerson.id AND fed.fed_role = \'AYSOV\'');
+            'fed.person_id = physicalPerson.id AND fed.fed_role = \'AYSOV\'');
 
         $qb->leftJoin('fed','person_fed_certs','certReferee',
             'certReferee.person_fed_id = fed.id AND certReferee.role = \'Referee\'');
@@ -168,8 +173,8 @@ class ProjectMigrateCommand extends Command
 
         $sql = <<<EOD
 INSERT INTO projectPersons 
-(projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age) 
-VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+(projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age,shirtSize,plans,avail) 
+VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 EOD;
         $insertProjectPersonStmt = $this->ng2016Conn->prepare($sql);
 
@@ -202,6 +207,34 @@ EOD;
             if ($orgKey) {
                 $orgKey = 'AYSOR:' . substr($orgKey,5);
             }
+            $plans = isset($row['plans']) ? @unserialize($row['plans']) : [];
+
+            $shirtSize = isset($plans['tshirt']) ? $plans['tshirt'] : null;
+
+            // Transfer plans
+            $plansXfer = [
+                'willCoach'     => 'coaching',
+                'willReferee'   => 'refereeing',
+                'willVolunteer' => 'volunteering',
+                'willAttend'    => 'attending',
+                'willPlay'      => 'playing',
+                'wantMentor'    => 'wantMentor'
+
+            ];
+            $plansNew = [];
+            foreach($plansXfer as $keyNew => $key) {
+                $plansNew[$keyNew] = isset($plans[$key]) ? $plans[$key] : 'no';
+            }
+            // Transfer availability
+            $availXfer = [
+                'availSatAfter' => 'availSatAfter',
+                'availSunMorn'  => 'availSunMorn',
+                'availSunAfter' => 'availSunAfter',
+            ];
+            $availNew = [];
+            foreach($availXfer as $keyNew => $key) {
+                $availNew[$keyNew] = isset($plans[$key]) ? $plans[$key] : 'no';
+            }
             $insertProjectPersonStmt->execute([
                 $row['projectKey'],
                 $row['personKey'],
@@ -215,6 +248,9 @@ EOD;
                 $row['phone'],
                 $row['gender'],
                 $age,
+                $shirtSize,
+                serialize($plansNew),
+                serialize($availNew),
             ]);
             $projectPersonId = $this->ng2016Conn->lastInsertId();
 
@@ -232,7 +268,16 @@ EOD;
                         true, // Active
                         true, // Verified
                     ]);
-                    //echo sprintf("Badge Date %s %s\n",$name,$row['refereeBadgeDate']);
+                    $insertProjectPersonRoleStmt->execute([
+                        $projectPersonId,
+                        'CERT_REFEREE',
+                        $row['refereeRoleDate'],
+                        $row['refereeBadge'],
+                        $row['refereeBadgeDate'],
+                        false, // Active
+                        true, // Verified
+                    ]);
+                //echo sprintf("Badge Date %s %s\n",$name,$row['refereeBadgeDate']);
             }
             switch($row['safeHavenBadge']) {
                 case null:
@@ -241,7 +286,7 @@ EOD;
                 default:
                     $insertProjectPersonRoleStmt->execute([
                         $projectPersonId,
-                        'ROLE_SAFE_HAVEN',
+                        'CERT_SAFE_HAVEN',
                         $row['safeHavenRoleDate'],
                         $row['safeHavenBadge'],
                         $row['safeHavenBadgeDate'],

@@ -16,19 +16,26 @@ class ProjectPersonRepositoryV2
     /**
      * @param  $projectKey string
      * @param  $name       string|null
+     * @param  $registered boolean|null
      * @return ProjectPerson[]
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function findByProjectKey($projectKey, $name = null)
+    public function findByProjectKey($projectKey, $name = null, $registered = true)
     {
         $params = [$projectKey];
 
-        // Grab the persons
-        $sql = 'SELECT * FROM projectPersons WHERE projectKey = ?';
+        // Grab the persons, TODO use a query builder object here
+        $sql = 'SELECT * FROM projectPersons WHERE projectKey = ? ';
         if ($name) {
             $params[] = '%' . $name . '%';
             $sql .= ' AND name LIKE ?';
         }
+        if ($registered !== null) {
+            $params[] = $registered;
+            $sql .= ' AND registered = ?';
+        }
+        $sql .= ' ORDER BY name';
+
         $stmt = $this->conn->executeQuery($sql,$params);
         $personRows = [];
         while($personRow = $stmt->fetch()) {

@@ -50,13 +50,13 @@ EOD;
         $insertCertStmt = $conn->prepare($sql);
         $insertCertStmt->execute([
             $fedKey,
-            'ROLE_REFEREE',
+            'CERT_REFEREE',
             '2001-02-03',
             'National Supreme',
             '2010-06-05',
         ]);
 
-        $cert = $aysoRepository->findVolCert($fedKey,'ROLE_REFEREE');
+        $cert = $aysoRepository->findVolCert($fedKey,'CERT_REFEREE');
 
         $this->assertEquals('National Supreme',$cert['badge']);
         $this->assertEquals('2010-06-05',$cert['badgeDate']);

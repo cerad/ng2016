@@ -25,8 +25,13 @@ class AdminListingController extends AbstractController
 
         $searchData = [
             'projectKey' => $this->getCurrentProjectKey(),
-            'name'       =>  'Hun',//null,
+            'displayKey' => 'Plans',
+            'name'       =>  null,
         ];
+        $session = $request->getSession();
+        if ($session->has('project_person_admin_listing_search_data')) {
+            $searchData = array_merge($searchData,$session->get('project_person_admin_listing_search_data'));
+        };
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);
         
@@ -34,12 +39,16 @@ class AdminListingController extends AbstractController
         if ($searchForm->isValid()) {
 
             $searchData = $searchForm->getData();
-            
-            //return $this->redirectToRoute('project_person_admin_listing');
+
+            $session->set('project_person_admin_listing_search_data',$searchData);
+
+            return $this->redirectToRoute('project_person_admin_listing');
         }
         $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name']);
         
         $request->attributes->set('projectPersons',$projectPersons);
+        
+        $request->attributes->set('displayKey',$searchData['displayKey']);
         
         return null;
     }

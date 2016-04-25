@@ -1,11 +1,11 @@
 <?php
-namespace AppBundle\Action\Project\Person\Admin\Listing;
+namespace AppBundle\Action\Project\Person\Admin\Update;
 
 use AppBundle\Action\AbstractForm;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminListingSearchForm extends AbstractForm
+class AdminUpdateForm extends AbstractForm
 {
     public function handleRequest(Request $request)
     {
@@ -27,6 +27,10 @@ class AdminListingSearchForm extends AbstractForm
         $this->formDataErrors = $errors;
     }
     public function render()
+    {
+        return null;
+    }
+    public function renderx()
     {
 
         $projectKey = $this->formData['projectKey'];

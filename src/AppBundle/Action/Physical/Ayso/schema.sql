@@ -1,4 +1,8 @@
 
+DROP DATABASE   ayso;
+CREATE DATABASE ayso;
+USE             ayso;
+
 DROP TABLE IF EXISTS vols;
 
 CREATE TABLE vols
@@ -28,6 +32,8 @@ CREATE TABLE certs
   CONSTRAINT aysoCerts_primaryKey PRIMARY KEY(fedKey,role)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS orgs;
 
 CREATE TABLE orgs
 (
