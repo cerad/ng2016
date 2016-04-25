@@ -80,7 +80,7 @@ EOD;
         $filename = $input->getArgument('filename');
 
         echo sprintf("Loading AYSO File: %s...\n",$filename);
-        $this->load($filename);
+        //$this->load($filename);
         $this->processOrgs();
     }
     /** @var  Statement */
@@ -213,12 +213,12 @@ EOD;
         ],
         'National 1 Referee' => [
             'role'  => 'CERT_REFEREE',
-            'badge' => 'National 1',
+            'badge' => 'National_1',
             'sort'  => 80,
         ],
         'National 2 Referee' => [
             'role'  => 'CERT_REFEREE',
-            'badge' => 'National 2',
+            'badge' => 'National_2',
             'sort'  => 70,
         ],
         'Z-Online AYSOs Safe Haven' => [
@@ -356,9 +356,9 @@ EOD;
             die('sar region number error: ' . $sar);
         }
         $orgKey = sprintf('AYSOR:%04d',$region);
-        //die(sprintf('%s %s',$sar,$orgKey));
-        $row = $this->checkOrgStmt->execute([$orgKey]);
-        if ($row) {
+
+        $this->checkOrgStmt->execute([$orgKey]);
+        if ($this->checkOrgStmt->fetch()) {
             return;
         }
         $this->insertOrgStmt->execute([$orgKey,$sar]);

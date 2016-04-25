@@ -169,14 +169,18 @@ EOD;
     }
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
+        $projectRegYear = $this->getCurrentProjectInfo()['regYear'];
+        $personRegYear  = $personView->regYear;
+        $classRegYear = ($personRegYear >= $projectRegYear) ? 'bg-success' : 'bg-danger';
+
+        $sar = $personView->orgKey;
+        $classSar = ($sar && substr($sar,0,1) !== 'A') ? 'bg-success' : 'bg-danger';
+
         return <<<EOD
 <table>
-  <tr><td>AYSO ID   </td><td>{$this->escape($personView->fedKey)} </td></tr>
-  <tr><td>Mem Year  </td><td>{$this->escape($personView->regYear)}</td></tr>
-  <tr><td>SAR       </td><td>{$this->escape($personView->orgKey)} </td></tr>
-  <tr><td>Referee   </td><td>{$this->escape($personView->refereeBadge)}</td></tr>
-  <tr><td>Safe Haven</td><td>{$this->escape($personView->safeHavenCertified)}</td></tr>
-  <tr><td>Concussion</td><td>{$this->escape($personView->concussionTrained)}</td></tr>
+  <tr><td>AYSO ID  </td><td>{$personView->fedKey}</td></tr>
+  <tr><td>Mem Year </td><td class="{$classRegYear}">{$personRegYear}</td></tr>
+  <tr><td>SAR      </td><td class="{$classSar}"    >{$sar}</td></tr>
 </table>
 EOD;
     }
@@ -233,10 +237,18 @@ EOD;
         }
         foreach($person->getCerts() as $cert) {
 
+            $certRole = $cert->role;
+            if ($certRole === 'CERT_REFEREE') {
+                $badge     = $cert->badge;
+                $badgeUser = $cert->badgeUser;
+                $certRole = ($badge === $badgeUser) ?
+                    sprintf('%s (%s)',   $certRole,$badge) :
+                    sprintf('%s (%s/%s)',$certRole,$badge,$badgeUser);
+            }
             $class = $cert->verified ? 'bg-success' : 'bg-danger';
 
             $html .= <<<EOD
-<tr><td class="{$class}">{$cert->role}</td></tr>   
+<tr><td class="{$class}">{$certRole}</td></tr>   
 EOD;
         }
         $html .= <<<EOD

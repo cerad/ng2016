@@ -55,7 +55,9 @@ class RegisterController extends AbstractController2
             $projectPersonArray = $registerForm->getData();
 
             $this->refereeBadgeUser = $projectPersonArray['refereeBadge'];
-
+            if ($this->refereeBadgeUser === 'None') {
+                $this->refereeBadgeUser = null;
+            }
             $projectPerson = (new ProjectPerson)->fromArray($projectPersonArray);
             
             $projectPerson = $this->process($projectPerson);
@@ -90,6 +92,9 @@ class RegisterController extends AbstractController2
         // Want to referee?
         $projectPerson = $this->processReferee($projectPerson);
 
+        // Want to volunteer
+        $projectPerson = $this->processVolunteer($projectPerson);
+
         // Need some notifications here?
         $projectPerson->registered = true;
 
@@ -107,7 +112,7 @@ class RegisterController extends AbstractController2
         if (!$willReferee) return $projectPerson;
 
         $fedKey = $projectPerson->fedKey;
-        
+
         $roleKey = 'ROLE_REFEREE';
         $refereeRole = $projectPerson->getRole($roleKey,true);
         $projectPerson->addRole($refereeRole);
@@ -162,6 +167,39 @@ class RegisterController extends AbstractController2
             $concCert->verified = true;
         }
         $projectPerson->addCert($concCert);
+
+        // Done
+        return $projectPerson;
+    }
+    /**
+     * @param ProjectPerson $projectPerson
+     * @return ProjectPerson
+     */
+    private function processVolunteer(ProjectPerson $projectPerson)
+    {
+        // Only do this if they said they would referee
+        $willVolunteer = strtolower($projectPerson->plans['willVolunteer']) !== 'no' ? true : false;
+        if (!$willVolunteer) return $projectPerson;
+
+        $fedKey = $projectPerson->fedKey;
+
+        $roleKey = 'ROLE_VOLUNTEER';
+        $volunteerRole = $projectPerson->getRole($roleKey,true);
+        $projectPerson->addRole($volunteerRole);
+
+        // Safe Haven
+        $certKey = 'CERT_SAFE_HAVEN';
+        $safeHavenCert = $projectPerson->getRole($certKey,true);
+
+        $safeHavenCert->active = false;
+
+        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+
+        if ($cert) {
+            $safeHavenCert->badge = $cert['badge'];
+            $safeHavenCert->verified = true;
+        }
+        $projectPerson->addRole($safeHavenCert);
         
         // Done
         return $projectPerson;
@@ -178,7 +216,7 @@ class RegisterController extends AbstractController2
         if ($projectPerson) {
             return $projectPerson;
         }
-        // Clone from previous tournament
+        // Search previous tournaments
         $projectPerson = $projectPersonRepository->find('AYSONationalGames2014',$personKey);
 
         if (!$projectPerson) {
@@ -186,10 +224,12 @@ class RegisterController extends AbstractController2
         }
         
         if (!$projectPerson) {
+            // Brand new entry
             $projectPerson = $projectPersonRepository->create($projectKey, $personKey, $user['name'], $user['email']);
             $projectPerson->name = $projectPersonRepository->generateUniqueName($projectKey,$projectPerson->name);
             return $projectPerson;
         }
+        // Clone from previous machines
         $projectPerson->clearId();
         $projectPerson->projectKey = $projectKey;
         $projectPerson->plans = [];

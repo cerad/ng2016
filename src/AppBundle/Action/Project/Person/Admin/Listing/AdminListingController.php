@@ -26,7 +26,7 @@ class AdminListingController extends AbstractController
         $searchData = [
             'projectKey' => $this->getCurrentProjectKey(),
             'displayKey' => 'Plans',
-            'name'       => 'Hun',//null,
+            'name'       =>  null,
         ];
         $session = $request->getSession();
         if ($session->has('project_person_admin_listing_search_data')) {
