@@ -64,12 +64,12 @@ class ProjectPersonRepositoryV2Test extends AbstractTestDatabase
         $person = $repo->create($projectKey,'willow-0001','Willow Rosenburg','Email');
         $repo->save($person);
         
-        $persons = $repo->findByProjectKey($projectKey);
+        $persons = $repo->findByProjectKey($projectKey,null,null);
         $this->assertCount(3,$persons);
 
-        $this->assertEquals('Chosen',$persons[1]->getRole('ROLE_VAMPIRE_SLAYER')->badge);
+        $this->assertEquals('Chosen',$persons[0]->getRole('ROLE_VAMPIRE_SLAYER')->badge);
 
-        $persons = $repo->findByProjectKey($projectKey,'Willow');
+        $persons = $repo->findByProjectKey($projectKey,'Willow',null);
         $this->assertCount(1,$persons);
 
     }

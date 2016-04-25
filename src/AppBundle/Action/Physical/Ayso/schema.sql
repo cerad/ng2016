@@ -1,7 +1,7 @@
 
-DROP DATABASE   ayso;
-CREATE DATABASE ayso;
-USE             ayso;
+-- DROP DATABASE   ayso;
+-- CREATE DATABASE ayso;
+-- USE             ayso;
 
 DROP TABLE IF EXISTS vols;
 
