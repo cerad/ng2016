@@ -163,8 +163,7 @@ EOD;
     When it's done, your records will be updated and you'll be ready to join us at the National Games.
 </p>
 <p style="{$this->styleP}">
-    Please notify the referee administrator if your eAYSO information does not match the above information.
-    I will update zAYSO accordingly.
+    Please notify me if your eAYSO information does not match the above information and I will update zAYSO accordingly.
 </p>
 EOD;
     }
