@@ -35,7 +35,65 @@ class ProjectPersonViewDecorator
     {
         $this->person = $person;
     }
-    public function __get($name)
+    public function getKey()
+    {
+        return $this->person->getKey();
+    }
+    public function getRoles() {
+        return $this->person->getRoles();
+    }
+    public function getCerts() {
+        return $this->person->getCerts();
+    }
+    //private $infoClass    = 'bg-info';
+    private $dangerClass  = 'bg-danger';
+    private $warningClass = 'bg-warning';
+    private $successClass = 'bg-success';
+
+    // Don't really like having to use methods here
+    public function getRegYearClass($regYearProject)
+    {
+        return $this->regYear >= $regYearProject ? $this->successClass : $this->dangerClass;
+    }
+    public function getRegYear($regYearProject)
+    {
+        return $this->regYear >= $regYearProject ? $this->regYear : $this->regYear . ' ***';
+    }
+    public function getOrgKeyClass()
+    {
+        $sar = $this->orgKey;
+        return ($sar && substr($sar,0,1) !== 'A') ? $this->successClass : $this->dangerClass;
+    }
+    public function getCertClass($certKey)
+    {
+        if (!$this->person->hasCert($certKey)) {
+            return null;
+        };
+        return $this->person->getCert($certKey)->verified ? $this->successClass : $this->dangerClass;
+    }
+    public function getCertBadge($certKey)
+    {
+        if (!$this->person->hasCert($certKey)) {
+            return null;
+        };
+        $cert = $this->person->getCert($certKey);
+        $suffix = $cert->verified ? null : ' ***';
+        if ($certKey !== 'CERT_REFEREE') {
+            return $cert->verified ? 'Yes' : 'No' . $suffix;
+        }    
+        if ((!$cert->badgeUser) || $cert->badge === $cert->badgeUser) {
+            return $cert->badge . $suffix;
+        }
+        return $cert->badge . '/' . $cert->badgeUser . $suffix;
+    }
+    public function getRoleClass($role)
+    {
+        if ($role->approved) {
+            return $this->successClass;
+        } 
+        return $role->verified ? $this->warningClass : $this->dangerClass;
+    }
+public function __get($name)
     {
         $person = $this->person;
         
@@ -73,8 +131,14 @@ class ProjectPersonViewDecorator
 
             case 'concussionAware':
             case 'concussionTrained':
-                $role = $person->getRole('ROLE_CONCUSSION');
-                if (!$role) return null;
+            case 'concussionCertified':
+                $role = $person->getRole('CERT_CONCUSSION');
+                if (!$role) {
+                    return null;
+                }
+                if ($role->verified) {
+                    return 'Yes';
+                }
                 switch(strtolower($role->badge)) {
                     case  null:
                     case 'no':

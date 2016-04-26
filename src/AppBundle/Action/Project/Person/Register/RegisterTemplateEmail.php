@@ -79,6 +79,8 @@ EOD;
     }
     private function renderHtmlPerson(ProjectPersonViewDecorator $personView)
     {
+        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
+
         $href = $this->generateUrlAbsoluteUrl('app_welcome');
         
         $notes = nl2br($this->escape($personView->notesUser));
@@ -91,15 +93,35 @@ EOD;
   <tr><td>Will Referee  </td><td>{$personView->willRefereeBadge}</td></tr>
   <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}</td></tr>
   <tr><td>Will Coach    </td><td>{$personView->willCoach}</td></tr>
-  <tr><td>AYSO ID       </td><td>{$personView->fedId}</td></tr>
-  <tr><td>Mem Year      </td><td>{$personView->regYear}</td></tr>
-  <tr><td>Referee Badge </td><td>{$personView->refereeBadge}</td></tr>
-  <tr><td>Safe Haven    </td><td>{$personView->safeHavenCertified}</td></tr>
-  <tr><td>Concussion    </td><td>{$personView->concussionAware}</td></tr>
-  <tr><td>SAR           </td><td>{$personView->sar}</td></tr>
-  <tr><td>User Notes    </td><td>{$notes}</td></tr>
+  <tr>
+    <td>AYSO ID</td>
+    <td>{$personView->fedId}</td>
+  </tr><tr>
+    <td>Section/Area/Region</td>
+    <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
+  </tr><tr>
+    <td>Membership Year</td>
+    <td class="{$personView->getRegYearClass($regYearProject)}">{$personView->getRegYear($regYearProject)}</td>
+  </tr><tr>
+    <td>Safe Haven</td>
+    <td class="{$personView->getCertClass('CERT_SAFE_HAVEN')}">{$personView->getCertBadge('CERT_SAFE_HAVEN')}</td>
+  </tr><tr>
+    <td>Referee Badge</td>
+    <td class="{$personView->getCertClass('CERT_REFEREE')}">{$personView->getCertBadge('CERT_REFEREE')}</td>
+  </tr><tr>
+    <td>Concussion Aware</td>
+    <td class="{$personView->getCertClass('CERT_CONCUSSION')}">{$personView->getCertBadge('CERT_CONCUSSION')}</td>
+  </tr>
+  <tr><td>User Notes</td><td>{$notes}</td></tr>
   <tr><td colspan="2"><a href="{$href}">Update Tournament Plans or Availability</a></td></tr>
 </table>
+<br>
+<p>
+  If you plan to referee (or volunteer) then please ensure your eAYSO information is up to date.
+  Anything above that is marked with <span class="bg-danger">***</span> needs action.
+  Please notify the referee administrator if your eAYSO information does not match the above information.
+  The administrator will update zAYSO accordingly.
+</p>
 EOD;
     }
 }

@@ -2,16 +2,15 @@
 
 namespace AppBundle\Action\App\Home;
 
-use AppBundle\Action\AbstractView;
+use AppBundle\Action\AbstractView2;
 
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class HomeView extends AbstractView
+class HomeView extends AbstractView2
 {
     private $user;
 
@@ -44,7 +43,7 @@ class HomeView extends AbstractView
         }
         $this->projectPersonViewDecorator->setProjectPerson($this->projectPerson);
 
-        return new Response($this->renderPage());
+        return $this->newResponse($this->renderPage());
     }
     protected function renderPage()
     {
@@ -60,9 +59,7 @@ class HomeView extends AbstractView
 {$this->renderHotelInformation()}
 </div>
 EOD;
-
-        $this->baseTemplate->setContent($content);
-        return $this->baseTemplate->render();
+        return $this->renderBaseTemplate($content);
     }
 
     /* ====================================================
@@ -137,19 +134,35 @@ EOD;
 </table>
 EOD;
     }
+    // TODO Key this off of roles
     private function renderAysoInformation()
     {
         $personView = $this->projectPersonViewDecorator;
 
+        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
+
         return <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
-  <tr><td>AYSO ID</td>            <td>{$personView->fedId}</td></tr>
-  <tr><td>Membership Year</td>    <td>{$personView->regYear}</td></tr>
-  <tr><td>Referee Badge</td>      <td>{$personView->refereeBadge}</td></tr>
-  <tr><td>Safe Haven</td>         <td>{$personView->safeHavenCertified}</td></tr>
-  <tr><td>Concussion Aware   </td><td>{$personView->concussionAware}</td></tr>
-  <tr><td>Section/Area/Region</td><td>{$personView->sar}</td></tr>
+  <tr>
+    <td>AYSO ID</td>
+    <td>{$personView->fedId}</td>
+  </tr><tr>
+    <td>Section/Area/Region</td>
+    <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
+  </tr><tr>
+    <td>Membership Year</td>
+    <td class="{$personView->getRegYearClass($regYearProject)}">{$personView->getRegYear($regYearProject)}</td>
+  </tr><tr>
+    <td>Safe Haven</td>
+    <td class="{$personView->getCertClass('CERT_SAFE_HAVEN')}">{$personView->getCertBadge('CERT_SAFE_HAVEN')}</td>
+  </tr><tr>
+    <td>Referee Badge</td>
+    <td class="{$personView->getCertClass('CERT_REFEREE')}">{$personView->getCertBadge('CERT_REFEREE')}</td>
+  </tr><tr>
+    <td>Concussion Aware</td>
+    <td class="{$personView->getCertClass('CERT_CONCUSSION')}">{$personView->getCertBadge('CERT_CONCUSSION')}</td>
+  </tr>
 </table>
 EOD;
     }
