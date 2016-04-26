@@ -45,6 +45,11 @@ class RegisterTemplateEmail extends AbstractView2
         font-size: 14px;
         font-weight: bold;
     ';
+    protected $styleTd = '
+        height: 2em;
+        text-align: center;
+        vertical-align: middle;
+    ';
 
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator
@@ -149,7 +154,7 @@ EOD;
     <td style="{$personView->getCertStyle('CERT_CONCUSSION')}">{$personView->getCertBadge('CERT_CONCUSSION')}</td>
   </tr>
   <tr><td>User Notes</td><td>{$notes}</td></tr>
-  <tr><td colspan="2"><a href="{$href}">Update Tournament Plans or Availability</a></td></tr>
+  <tr><td style="{$this->styleTd}" colspan="2" ><a href="{$href}">Update Tournament Plans or Availability</a></td></tr>
 </table>
 <br>
   <p style="{$this->stylePStrong}">
