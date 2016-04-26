@@ -159,7 +159,7 @@ EOD;
     with your eAYSO ID and last name. Then you can access the AYSO CDD Concussion Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
 </p>
 <p style="{$this->styleP}">
-    These training modules takes about 30 minutes each.  If your record is Please take a time today and complete this training.
+    These training modules takes about 30 minutes each.  If your certification records need action, please take time today and complete this training.
     When it's done, your records will be updated and you'll be ready to join us at the National Games.
 </p>
 <p style="{$this->styleP}">
