@@ -48,7 +48,7 @@ class AdminListingView extends AbstractView2
     private function render()
     {
         $content = <<<EOD
-<legend>Registered Person Listing</legend>
+<legend>Person Listing, Count: {$this->projectPersonsCount}</legend>
 {$this->searchForm->render()}
 <br/>
 {$this->renderProjectPersons()}
@@ -57,8 +57,6 @@ EOD;
     }
     private function renderProjectPersons()
     {
-        $count = $this->projectPersonsCount;
-
         $html = <<<EOD
 <table class='table'>
 <tr>
@@ -67,7 +65,7 @@ EOD;
 
             case 'Plans':
                 $html .= <<<EOD
-  <th>Registration Information ({$count})</th>
+  <th>Registration Information</th>
   <th>AYSO Information</th>
   <th>Roles / Certs</th>
   <th>Plans</th>
@@ -77,7 +75,7 @@ EOD;
 
             case 'User':
                 $html .= <<<EOD
-  <th>Registration Information ({$count})</th>
+  <th>Registration Information</th>
   <th>User Information</th>
   <th>AYSO Information</th>
   <th>Roles / Certs</th>
@@ -87,17 +85,23 @@ EOD;
 
             case 'Avail':
                 $html .= <<<EOD
-  <th>Registration Information ({$count})</th>
+  <th>Registration Information</th>
   <th>AYSO Information</th>
   <th>Roles / Certs</th>
   <th>Availability</th>
 </tr>
 EOD;
-            break;
+                break;
         }
 
-        foreach($this->projectPersons as $projectPerson) {
-            $html .= $this->renderProjectPerson($projectPerson);
+        foreach($this->projectPersons as $person) {
+
+            // Should this be a private variable to be consistent?
+            $personView = $this->projectPersonViewDecorator;
+
+            $personView->setProjectPerson($person);
+
+            $html .= $this->renderProjectPerson($personView);
         }
         $html .= <<<EOD
 </table>
@@ -106,22 +110,17 @@ EOD;
 
         return $html;
     }
-    private function renderProjectPerson(ProjectPerson $person)
+    private function renderProjectPerson(ProjectPersonViewDecorator $personView)
     {
-        $personView = $this->projectPersonViewDecorator;
-        $personView->setProjectPerson($person);
-
-        $html = <<<EOD
-<tr id="project-person-{$person->getKey()}">
-EOD;
+        $html = null;
         switch($this->displayKey) {
 
             case 'Plans':
                 $html .= <<<EOD
-<tr id="project-person-{$person->getKey()}">
-  <td>{$this->renderRegistrationInfo($person,$personView)}</td>
+<tr id="project-person-{$personView->getKey()}">
+  <td>{$this->renderRegistrationInfo($personView)}</td>
   <td>{$this->renderAysoInfo        ($personView)}</td>
-  <td>{$this->renderRoles           ($person)}</td>
+  <td>{$this->renderRoles           ($personView)}</td>
   <td>{$this->renderPlansInfo       ($personView)}</td>
 </tr>
 EOD;
@@ -129,21 +128,21 @@ EOD;
 
             case 'User':
                 $html .= <<<EOD
-<tr id="project-person-{$person->getKey()}">
-  <td>{$this->renderRegistrationInfo($person,$personView)}</td>
-  <td>{$this->renderUserInfo        ($person)}</td>
+<tr id="project-person-{$personView->getKey()}">
+  <td>{$this->renderRegistrationInfo($personView)}</td>
+  <td>{$this->renderUserInfo        ($personView)}</td>
   <td>{$this->renderAysoInfo        ($personView)}</td>
-  <td>{$this->renderRoles           ($person)}</td>
+  <td>{$this->renderRoles           ($personView)}</td>
 </tr>
 EOD;
                 break;
             
             case 'Avail':
                 $html .= <<<EOD
-<tr id="project-person-{$person->getKey()}">
-  <td>{$this->renderRegistrationInfo($person,$personView)}</td>
+<tr id="project-person-{$personView->getKey()}">
+  <td>{$this->renderRegistrationInfo($personView)}</td>
   <td>{$this->renderAysoInfo        ($personView)}</td>
-  <td>{$this->renderRoles           ($person)}</td>
+  <td>{$this->renderRoles           ($personView)}</td>
   <td>{$this->renderAvailInfo       ($personView)}</td>
 </tr>
 EOD;
@@ -151,9 +150,9 @@ EOD;
         }
         return $html;
     }
-    private function renderRegistrationInfo(ProjectPerson $person, ProjectPersonViewDecorator $personView)
+    private function renderRegistrationInfo(ProjectPersonViewDecorator $personView)
     {
-        $href = $this->generateUrl('project_person_admin_update',['projectPersonKey' => $person->getKey()]);
+        $href = $this->generateUrl('project_person_admin_update',['projectPersonKey' => $personView->getKey()]);
 
         $gage = $personView->gender . $personView->age;
         return <<<EOD
@@ -167,20 +166,23 @@ EOD;
 EOD;
 
     }
+    // TODO Pull ayso name,email,phone if available
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
-        $projectRegYear = $this->getCurrentProjectInfo()['regYear'];
-        $personRegYear  = $personView->regYear;
-        $classRegYear = ($personRegYear >= $projectRegYear) ? 'bg-success' : 'bg-danger';
-
-        $sar = $personView->orgKey;
-        $classSar = ($sar && substr($sar,0,1) !== 'A') ? 'bg-success' : 'bg-danger';
+        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
 
         return <<<EOD
 <table>
-  <tr><td>AYSO ID  </td><td>{$personView->fedKey}</td></tr>
-  <tr><td>Mem Year </td><td class="{$classRegYear}">{$personRegYear}</td></tr>
-  <tr><td>SAR      </td><td class="{$classSar}"    >{$sar}</td></tr>
+  <tr>
+    <td>AYSO ID</td>
+    <td>{$personView->fedId}</td>
+  </tr><tr>
+    <td>SAR</td>
+    <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
+  </tr><tr>
+    <td>Mem Year</td>
+    <td class="{$personView->getRegYearClass($regYearProject)}">{$personView->getRegYear($regYearProject)}</td>
+  </tr>
 </table>
 EOD;
     }
@@ -218,37 +220,23 @@ EOD;
 EOD;
 
     }
-    private function renderRoles(ProjectPerson $person)
+    private function renderRoles(ProjectPersonViewDecorator $personView)
     {
         $html = <<<EOD
 <table>
 EOD;
-        foreach($person->getRoles() as $role) {
+        foreach($personView->getRoles() as $role) {
 
-            if ($role->approved) {
-                $class = 'bg-success';
-            }
-            else {
-                $class = $role->verified ? 'bg-warning' : 'bg-danger';
-            }
             $html .= <<<EOD
-<tr><td class="{$class}">{$role->role}</td></tr>   
+<tr><td class="{$personView->getRoleClass($role)}">{$role->role}</td></tr>   
 EOD;
         }
-        foreach($person->getCerts() as $cert) {
+        foreach($personView->getCerts() as $cert) {
 
-            $certRole = $cert->role;
-            if ($certRole === 'CERT_REFEREE') {
-                $badge     = $cert->badge;
-                $badgeUser = $cert->badgeUser;
-                $certRole = ($badge === $badgeUser) ?
-                    sprintf('%s (%s)',   $certRole,$badge) :
-                    sprintf('%s (%s/%s)',$certRole,$badge,$badgeUser);
-            }
-            $class = $cert->verified ? 'bg-success' : 'bg-danger';
+            $certKey = $cert->role;
 
             $html .= <<<EOD
-<tr><td class="{$class}">{$certRole}</td></tr>   
+<tr><td class="{$personView->getCertClass($certKey)}">{$personView->getCertBadge($certKey)}</td></tr>   
 EOD;
         }
         $html .= <<<EOD
@@ -256,9 +244,9 @@ EOD;
 EOD;
         return $html;
     }
-    private function renderUserInfo(ProjectPerson $person)
+    private function renderUserInfo(ProjectPersonViewDecorator $personView)
     {
-        $user = $this->projectUserRepository->find($person->personKey);
+        $user = $this->projectUserRepository->find($personView->personKey);
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
         $roles = implode(',',$user['roles']);
         return <<<EOD
