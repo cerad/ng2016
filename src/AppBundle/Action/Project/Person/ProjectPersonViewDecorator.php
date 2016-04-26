@@ -50,10 +50,18 @@ class ProjectPersonViewDecorator
     private $warningClass = 'bg-warning';
     private $successClass = 'bg-success';
 
+    //public $infoStyle    = 'background-color: #d9edf7';
+    public $dangerStyle  = 'background-color: #f2dede';
+    public $warningStyle = 'background-color: #fcf8e3';
+    public $successStyle = 'background-color: #dff0d8';
     // Don't really like having to use methods here
     public function getRegYearClass($regYearProject)
     {
         return $this->regYear >= $regYearProject ? $this->successClass : $this->dangerClass;
+    }
+    public function getRegYearStyle($regYearProject)
+    {
+        return $this->regYear >= $regYearProject ? $this->successStyle : $this->dangerStyle;
     }
     public function getRegYear($regYearProject)
     {
@@ -64,12 +72,24 @@ class ProjectPersonViewDecorator
         $sar = $this->orgKey;
         return ($sar && substr($sar,0,1) !== 'A') ? $this->successClass : $this->dangerClass;
     }
+    public function getOrgKeyStyle()
+    {
+        $sar = $this->orgKey;
+        return ($sar && substr($sar,0,1) !== 'A') ? $this->successStyle : $this->dangerStyle;
+    }
     public function getCertClass($certKey)
     {
         if (!$this->person->hasCert($certKey)) {
             return null;
         };
         return $this->person->getCert($certKey)->verified ? $this->successClass : $this->dangerClass;
+    }
+    public function getCertStyle($certKey)
+    {
+        if (!$this->person->hasCert($certKey)) {
+            return null;
+        };
+        return $this->person->getCert($certKey)->verified ? $this->successStyle : $this->dangerStyle;
     }
     public function getCertBadge($certKey)
     {
@@ -93,7 +113,14 @@ class ProjectPersonViewDecorator
         } 
         return $role->verified ? $this->warningClass : $this->dangerClass;
     }
-public function __get($name)
+    public function getRoleStyle($role)
+    {
+        if ($role->approved) {
+            return $this->successClass;
+        } 
+        return $role->verified ? $this->warningStyle : $this->dangerStyle;
+    }
+    public function __get($name)
     {
         $person = $this->person;
         
