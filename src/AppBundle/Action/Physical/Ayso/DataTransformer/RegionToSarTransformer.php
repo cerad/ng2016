@@ -26,7 +26,8 @@ class RegionToSarTransformer implements DataTransformerInterface
 
         $org = $this->aysoRepository->findOrg($orgKey);
         if ($org) {
-            return $org['sar'];
+            $state = $org['state'] ? : '??';
+            return $org['sar'] . '/' . $state;
         }
         return $orgKey; // Unknown or invalid, maybe toss exception
     }
@@ -39,7 +40,7 @@ class RegionToSarTransformer implements DataTransformerInterface
         if (!$sar) return null;
         
         $sarParts = explode('/',$sar);
-        if (count($sarParts) != 3) {
+        if (count($sarParts) < 3) {
             die('sar error: ' . $sar);
         }
         $region = (int)$sarParts[2];

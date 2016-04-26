@@ -7,11 +7,16 @@ services:
         class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
         arguments: ['@ayso_connection']
 
-    ayso_load_command:
+    ayso_load_eayso_command:
         class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
         tags: [{ name: console.command }]
         arguments:
             - '@ayso_connection'
+
+    ayso_load_tom_command:
+        class: AppBundle\Action\Physical\Ayso\Load\LoadTomCommand
+        tags: [{ name: console.command }]
+        arguments: ['@ayso_connection']
 
     ayso_region_key_transformer:
         class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer

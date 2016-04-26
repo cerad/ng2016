@@ -66,7 +66,7 @@ EOD;
     {
         if (!$this->findOrgStmt) {
             $sql = <<<EOD
-SELECT orgKey,sar FROM orgs WHERE orgKey = ?
+SELECT orgKey,sar,state FROM orgs WHERE orgKey = ?
 EOD;
             $this->findOrgStmt = $this->conn->prepare($sql);
         }

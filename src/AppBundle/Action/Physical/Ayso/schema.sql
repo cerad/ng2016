@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS vols;
 
 CREATE TABLE vols
 (
-  fedKey  VARCHAR( 20),
+  fedKey  VARCHAR( 20) NOT NULL,
   name    VARCHAR(255),
   email   VARCHAR(255),
   phone   VARCHAR(255),
@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS certs;
 
 CREATE TABLE certs
 (
-  fedKey    VARCHAR( 20),
-  role      VARCHAR( 20),
+  fedKey    VARCHAR( 20) NOT NULL,
+  role      VARCHAR( 20) NOT NULL,
   roleDate  DATE,
   badge     VARCHAR( 20),
   badgeDate DATE,
@@ -37,9 +37,25 @@ DROP TABLE IF EXISTS orgs;
 
 CREATE TABLE orgs
 (
-  orgKey VARCHAR( 20),
-  sar    VARCHAR( 20),
+  orgKey VARCHAR(20) NOT NULL,
+  sar    VARCHAR(20) NOT NULL,
+  state  VARCHAR( 4),
 
   CONSTRAINT aysoOrgs_primaryKey PRIMARY KEY(orgKey)
+
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+-- ALTER TABLE orgs ADD state VARCHAR(4);
+
+DROP TABLE IF EXISTS orgStates;
+
+CREATE TABLE orgStates
+(
+  orgKey VARCHAR(20) NOT NULL,
+  state  VARCHAR( 4) NOT NULL,
+
+  CONSTRAINT aysoOrgs_primaryKey PRIMARY KEY(orgKey,state),
+
+  INDEX  ayso_orgStates_state(state)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
