@@ -31,7 +31,7 @@ class RegisterTemplateEmail extends AbstractView2
     ';
     protected $styleBodyEmail = 'width: inherit;';
     protected $stylePEmail = '
-        font-size: 12px;
+        font-size: 14px;
         text-align: center;
     ';
     protected $styleP = '
@@ -39,6 +39,11 @@ class RegisterTemplateEmail extends AbstractView2
     ';
     protected $styleClearBoth = '
         clear: both
+    ';
+    protected $stylePStrong = '
+        text-decoration: underline;
+        font-size: 14px;
+        font-weight: bold;
     ';
 
     public function __construct(
@@ -76,6 +81,9 @@ class RegisterTemplateEmail extends AbstractView2
   <br>
   {$this->renderHtmlPerson($personView)}
 
+  <p style="{$this->stylePStrong}">
+    General Information
+  </p>
   <p style="{$this->styleP}">
     As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 5 and 
     running through Sunday, July 10. 
@@ -144,6 +152,9 @@ EOD;
   <tr><td colspan="2"><a href="{$href}">Update Tournament Plans or Availability</a></td></tr>
 </table>
 <br>
+  <p style="{$this->stylePStrong}">
+    Please Review Your Certifications
+  </p>
 <p style="{$this->styleP}">
     If you plan to referee (or volunteer) then please ensure your eAYSO information is up to date.
     Anything above that is marked with <span style="{$personView->dangerStyle}">***</span> needs action.
@@ -154,12 +165,12 @@ EOD;
     with your eAYSO ID and last name. Then you can access the AYSO Safe Haven Training Course at <a href="https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven" target="_blank">https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven</a>.
 </p>
 <p style="{$this->styleP}">
-    By Florida law, all participating referees and coaches are required to have completed CDC Concussion training.
+    By Florida law, all participating referees and coaches are required to have completed CDC Concussion Awareness training.
     If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
-    with your eAYSO ID and last name. Then you can access the AYSO CDD Concussion Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
+    with your eAYSO ID and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
 </p>
 <p style="{$this->styleP}">
-    These training modules takes about 30 minutes each.  If your certification records need action, please take time today and complete this training.
+    These training modules take about 30 minutes each.  If your certification records need action, please take time today and complete this training.
     When it's done, your records will be updated and you'll be ready to join us at the National Games.
 </p>
 <p style="{$this->styleP}">
