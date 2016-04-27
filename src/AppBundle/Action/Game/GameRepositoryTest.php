@@ -42,7 +42,7 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
     {
         $this->resetDatabase($this->conn,$this->schemaFile);
 
-        $repo = new GameRepository($this->conn);
+        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
 
         $projectKey = 'WorldCup2016';
         $gameNumber = 999;
@@ -59,19 +59,73 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Played',   $game->state);
         
     }
+    public function testSaveTeam()
+    {
+        $projectKey = 'WorldCup2016';
+        $gameNumber = 888;
+
+        // Create Pools
+        $poolTeamRepository = new PoolTeamRepository($this->conn);
+
+        $poolTeam1 = new PoolTeam($projectKey,'U10B PP A1','U10B PP','PP');
+        $poolTeam2 = new PoolTeam($projectKey,'U10B PP A2','U10B PP','PP');
+
+        $poolTeamRepository->save($poolTeam1);
+        $poolTeamRepository->save($poolTeam2);
+
+        // Create Games
+        $gameRepository = new GameRepository($this->conn,$poolTeamRepository);
+
+        $game = new Game($projectKey,$gameNumber);
+
+        $game->fieldName = 'John Hunt 3';
+
+        $homeTeam = new GameTeam($projectKey,$gameNumber,1);
+        $homeTeam->name  = 'Home Team';
+        $homeTeam->score = 3;
+        $homeTeam->setPoolTeam($poolTeam1);
+
+        $awayTeam = new GameTeam($projectKey,$gameNumber,2);
+        $awayTeam->name  = 'Visitors';
+        $awayTeam->score = 1;
+        $awayTeam->setPoolTeam($poolTeam2);
+
+        $game->addTeam($homeTeam);
+        $game->addTeam($awayTeam);
+
+        $gameRepository->save($game);
+    }
     public function testFind()
     {
-        $repo = new GameRepository($this->conn);
+        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
 
         $projectKey = 'WorldCup2016';
         $gameNumber = 999;
 
         $gameId = new GameId($projectKey,$gameNumber);
-        
+
         $game = $repo->find($gameId);
-        
+
         $this->assertEquals($gameNumber,    $game->gameNumber);
         $this->assertInternalType('integer',$game->gameNumber);
-        
+
+    }
+    public function testFindTeam()
+    {
+        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
+
+        $projectKey = 'WorldCup2016';
+        $gameNumber = 888;
+
+        $gameId = new GameId($projectKey,$gameNumber);
+
+        $game = $repo->find($gameId);
+
+        $this->assertEquals($gameNumber,    $game->gameNumber);
+        $this->assertInternalType('integer',$game->gameNumber);
+
+        $this->assertEquals('Home Team',  $game->homeTeam->name);
+        $this->assertEquals('John Hunt 3',$game->awayTeam->game->fieldName);
+        $this->assertEquals('U10B PP A2', $game->awayTeam->poolTeam->poolTeamKey);
     }
 }

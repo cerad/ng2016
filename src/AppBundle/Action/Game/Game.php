@@ -4,6 +4,9 @@ namespace AppBundle\Action\Game;
 /**
  * @property-read string $projectKey
  * @property-read string $gameNumber
+ * 
+ * @property-read GameTeam $homeTeam
+ * @property-read GameTeam $awayTeam
  */
 class Game
 {
@@ -17,7 +20,7 @@ class Game
     public $state  = 'Published';
     public $status = 'Normal';
 
-    private $teams = [];
+    private $teams = []; // Just because some stuff need some code
 
     private $keys = [
         'fieldName'  => 'ProjectFieldName',
@@ -36,9 +39,7 @@ class Game
         $this->teams[$team->slot] = $team;
 
         // How much do we really need here?  How much could the repo add
-        $team->game       = $this;
-        $team->projectKey = $this->projectKey;
-        $team->gameNumber = $this->gameNumber;
+        $team->game = $this;
     }
     public function hasTeam($slot) { return isset($this->teams[$slot]) ? true : false; }
     public function getTeam($slot) { return $this->teams[$slot]; }
@@ -50,20 +51,20 @@ class Game
     public function __get($name)
     {
         switch($name) {
+            case 'projectKey': return $this->id->projectKey;
+            case 'gameNumber': return $this->id->gameNumber;
 
-            case 'projectKey':
-                return $this->id->projectKey;
-
-            case 'gameNumber':
-                return $this->id->gameNumber;
+            case 'homeTeam':   return $this->teams[1];
+            case 'awayTeam':   return $this->teams[2];
         }
         throw new \InvalidArgumentException('Game::__get ' . $name);
     }
+    
     // Arrayable Interface
     public function toArray()
     {
         $data = [
-            'id' => $this->id,
+            'id'         => $this->id->id,
             'projectKey' => $this->id->projectKey,
             'gameNumber' => $this->id->gameNumber,
         ];
@@ -88,6 +89,10 @@ class Game
             if (isset($data[$key]) || array_key_exists($key,$data)) {
                 $game->$key = $data[$key];
             }
+        }
+        foreach($data['teams'] as $teamData) {
+            $gameTeam = GameTeam::fromArray(($teamData));
+            $game->addTeam($gameTeam);
         }
         return $game;
     }

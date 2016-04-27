@@ -1,19 +1,29 @@
 <?php
 namespace AppBundle\Action\Game;
 
+/**
+ * @property-read string $projectKey
+ * @property-read string $gameNumber
+ * @property-read string $slot
+ *
+ * @property-read PoolTeam $poolTeam
+ */
 class GameTeam
 {
-    public $projectKey;
-    public $gameNumber;
-    
-    public $slot;
+    /** @var  GameTeamId */
+    public $id;
+
     public $name; // Sync with ProjectTeam?
+
     public $score;
-    
-    public $orgKey; // Useful for seasonal schedule
+    public $sportsmanship;
+
+    public $misconduct;
+
+    public $orgId; // Useful for seasonal schedule
 
     /** @var  PoolTeam */
-    public $poolTeam;
+    private $poolTeamPrivate;
     
     /** @var  ProjectTeam */
     public $projectTeam;
@@ -22,36 +32,74 @@ class GameTeam
     public $game; // Reference, do we need it? Or GameId?
     
     private $keys = [
-        'projectKey' => 'ProjectKey',
-        'gameNumber' => 'ProjectGameNumber',
-        
-        'slot'   => 'integer', // 1 = Home, 2 = Away
-        'name'   => 'string',
-        'score'  => 'integer|null',
-        
-        'orgKey' => 'PhysicalOrgKey', // Could be part of project team
+
+        'name' => 'string',
+
+        'score'         => 'integer|null',
+        'sportsmanship' => 'integer|null',
+        'misconduct'    => 'array',
+
+        'orgId' => 'PhysicalOrgId', // Could be part of project team
     ];
-    
+    public function __construct($projectKey,$gameNumber,$slot)
+    {
+        $this->id = new GameTeamId($projectKey,$gameNumber,$slot);
+    }
+    public function setPoolTeam(PoolTeam $poolTeam)
+    {
+        $this->poolTeamPrivate = $poolTeam;
+    }
+    public function __get($name)
+    {
+        switch($name) {
+            case 'projectKey': return $this->id->projectKey;
+            case 'gameNumber': return $this->id->gameNumber;
+            case 'slot':       return $this->id->slot;
+
+            case 'poolTeam':
+                return $this->poolTeamPrivate ? : new PoolTeam(null,null);
+        }
+        throw new \InvalidArgumentException('GameTeam::__get ' . $name);
+    }
+
     // Arrayable Interface
     public function toArray()
     {
-        $data = [];
+        $data = [
+            'id'         => $this->id->id,
+            'projectKey' => $this->id->projectKey,
+            'gameNumber' => $this->id->gameNumber,
+            'slot'       => $this->id->slot,
+        ];
         foreach(array_keys($this->keys) as $key) {
             $data[$key] = $this->$key;
         }
+        // Not sure I need the complete pool team data here
+        $data['poolTeam'] = isset($this->poolTeamPrivate) ? $this->poolTeamPrivate->toArray() : null;
+        
+        $data['poolTeamId'] = isset($this->poolTeamPrivate) ? $this->poolTeamPrivate->id->id : null;
+        
+        // Want gameId??? or any game data?
+        $data['gameId'] = $this->game->id->id;
+        
         return $data;
     }
-    /** 
+    /**
      * @param array $data
-     * @return Game
+     * @return GameTeam
      */
-    public function fromArray($data)
+    static public function fromArray($data)
     {
-        foreach(array_keys($this->keys) as $key) {
+        $gameTeam = new GameTeam($data['projectKey'],$data['gameNumber'],$data['slot']);
+
+        foreach(array_keys($gameTeam->keys) as $key) {
             if (isset($data[$key]) || array_key_exists($key,$data)) {
-                $this->$key = $data[$key];
+                $gameTeam->$key = $data[$key];
             }
         }
-        return $this;
+        if ($data['poolTeam']) {
+            $gameTeam->poolTeamPrivate = PoolTeam::fromArray($data['poolTeam']);
+        }
+        return $gameTeam;
     }
 }

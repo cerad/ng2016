@@ -72,7 +72,7 @@ class PoolTeam
     public function toArray()
     {
         $data = [
-            'id'          => $this->id,
+            'id'          => $this->id->id,
             'projectKey'  => $this->id->projectKey,
             'poolTeamKey' => $this->id->poolTeamKey,
         ];

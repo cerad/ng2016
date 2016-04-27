@@ -113,7 +113,7 @@ class PoolTeamRepositoryTest extends PHPUnit_Framework_TestCase
 
         $criteria = [
             'projectKeys' => ['WorldCup2016'],
-            'poolKeys'     => ['U14GPPC','U12BPPA'],
+            'poolKeys'    => ['U14GPPC','U12BPPA'],
         ];
         $poolTeams = $repo->findBy($criteria);
         $this->assertCount(12,$poolTeams);
