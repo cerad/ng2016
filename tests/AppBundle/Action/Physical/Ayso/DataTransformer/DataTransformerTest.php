@@ -50,7 +50,7 @@ class DataTransformerTest extends AbstractTestDatabase
         $transformer = new RegionToSarTransformer($aysoRepository);
 
         $sar = $transformer->transform('AYSOR:0894');
-        $this->assertEquals('5/C/0894',$sar);
+        $this->assertEquals('5/C/0894/AL',$sar);
 
         $orgKey = $transformer->reverseTransform('5/C/0498');
         $this->assertEquals('AYSOR:0498',$orgKey);

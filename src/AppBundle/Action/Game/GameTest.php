@@ -28,6 +28,14 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($gameNumber,$game->gameNumber);
         $this->assertEquals('Played',$game->status);
     }
+    public function testNewPoolTeam()
+    {
+        $projectKey  = 'WorldCup2016';
+        $poolTeamKey = 'U10B Core PP A1';
+        $poolTeam = new PoolTeam($projectKey,$poolTeamKey);
+
+        $this->assertEquals($poolTeamKey,$poolTeam->poolTeamKey);
+    }
     public function testNewGameTeams()
     {
         $projectKey = 'WorldCup2016';
