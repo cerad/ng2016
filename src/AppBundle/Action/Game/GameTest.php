@@ -1,37 +1,39 @@
 <?php
-namespace Tests\AppBundle\Action\Game;
-
-use AppBundle\Action\Game\Game;
-use AppBundle\Action\Game\GameTeam;
+namespace AppBundle\Action\Game;
 
 class GameTest extends \PHPUnit_Framework_TestCase
 {
     public function testNewGame()
     {
-        $game = new Game();
-        $game->projectKey = 'WorldCup';
-        $game->gameNumber = 999;
+        $projectKey = 'WorldCup2016';
+        $gameNumber = 999;
 
-        $this->assertEquals('WorldCup',$game->projectKey);
-        $this->assertEquals(999,       $game->gameNumber);
-        
+        $gameId = new GameId($projectKey,$gameNumber);
+        $this->assertEquals('WorldCup2016:999',$gameId->id);
+        $this->assertEquals('WorldCup2016:999',$gameId);
+
+        $game = new Game($projectKey,$gameNumber);
+        $this->assertEquals('WorldCup2016:999',$game->id);
+        $this->assertEquals($projectKey,$game->projectKey);
+        $this->assertEquals($gameNumber,$game->gameNumber);
+        $this->assertEquals('Published',$game->state);
+
         $gameArray = $game->toArray();
-        $this->assertEquals('WorldCup',$gameArray['projectKey']);
-        
+        $this->assertEquals($projectKey,$gameArray['projectKey']);
+        $this->assertEquals('Normal',   $gameArray['status']);
+
         $gameArray['status'] = 'Played';
-        $game = $game->fromArray($gameArray);
+
+        $game = Game::fromArray($gameArray);
+        $this->assertEquals($gameNumber,$game->gameNumber);
         $this->assertEquals('Played',$game->status);
-        
-        $this->assertEquals('WorldCup:999',$game->GameId);
     }
     public function testNewGameTeams()
     {
         $projectKey = 'WorldCup2016';
         $gameNumber = 999;
         
-        $game = new Game();
-        $game->projectKey = $projectKey;
-        $game->gameNumber = $gameNumber;
+        $game = new Game($projectKey,$gameNumber);
 
         $homeTeam = new GameTeam();
         $homeTeam->slot  = 1;

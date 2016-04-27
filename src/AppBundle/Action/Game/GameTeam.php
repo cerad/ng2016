@@ -19,7 +19,7 @@ class GameTeam
     public $projectTeam;
 
     /** @var  Game */
-    public $game; // Reference, do we need it?
+    public $game; // Reference, do we need it? Or GameId?
     
     private $keys = [
         'projectKey' => 'ProjectKey',

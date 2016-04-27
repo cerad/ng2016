@@ -1,13 +1,15 @@
 <?php
 namespace AppBundle\Action\Game;
 
-/** 
- * @property-read string $GameId
+/**
+ * @property-read string $projectKey
+ * @property-read string $gameNumber
  */
 class Game
 {
-    public $projectKey;
-    public $gameNumber;
+    /** @var GameId  */
+    public $id;
+
     public $fieldName;
     public $venueName;
     public $start;
@@ -18,8 +20,6 @@ class Game
     private $teams = [];
 
     private $keys = [
-        'projectKey' => 'ProjectKey',
-        'gameNumber' => 'ProjectGameNumber',
         'fieldName'  => 'ProjectFieldName',
         'venueName'  => 'ProjectVenueName',
         'start'      => 'datetime',
@@ -27,6 +27,10 @@ class Game
         'state'      => 'string', // Pending, Published, InProgress, Played, Reported. Verified, Closed
         'status'     => 'string', // Normal, Played, Forfeited, Cancelled, Weather, Delayed, ToBeRescheduled
     ];
+    public function __construct($projectKey,$gameNumber)
+    {
+        $this->id = new GameId($projectKey,$gameNumber);
+    }
     public function addTeam(GameTeam $team)
     {
         $this->teams[$team->slot] = $team;
@@ -42,19 +46,27 @@ class Game
     public function getAwayTeam()  { return $this->teams[2]; }
     public function getTeams()     { return $this->teams;    }
     public function getTeamSlots() { return array_keys($this->teams); }
-    
+
     public function __get($name)
     {
         switch($name) {
-            case 'GameId':
-                return $this->projectKey . ':' . $this->gameNumber;
+
+            case 'projectKey':
+                return $this->id->projectKey;
+
+            case 'gameNumber':
+                return $this->id->gameNumber;
         }
         throw new \InvalidArgumentException('Game::__get ' . $name);
     }
     // Arrayable Interface
     public function toArray()
     {
-        $data = [];
+        $data = [
+            'id' => $this->id,
+            'projectKey' => $this->id->projectKey,
+            'gameNumber' => $this->id->gameNumber,
+        ];
         foreach(array_keys($this->keys) as $key) {
             $data[$key] = $this->$key;
         }
@@ -68,13 +80,15 @@ class Game
      * @param array $data
      * @return Game
      */
-    public function fromArray($data)
+    static public function fromArray($data)
     {
-        foreach(array_keys($this->keys) as $key) {
+        $game = new Game($data['projectKey'],$data['gameNumber']);
+        
+        foreach(array_keys($game->keys) as $key) {
             if (isset($data[$key]) || array_key_exists($key,$data)) {
-                $this->$key = $data[$key];
+                $game->$key = $data[$key];
             }
         }
-        return $this;
+        return $game;
     }
 }
