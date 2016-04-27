@@ -41,6 +41,13 @@ class GameRepository
         $stmt = $this->conn->executeQuery('SELECT * FROM projectGameTeams WHERE gameId = ?',[$gameId]);
         $poolTeamIds = [];
         while($gameTeamRow = $stmt->fetch()) {
+
+            $gameTeamRow['gameNumber'] = (integer)$gameTeamRow['gameNumber'];
+            $gameTeamRow['slot']       = (integer)$gameTeamRow['slot'];
+
+            $gameTeamRow['score']         = $gameTeamRow['score']         !== null ? (integer)$gameTeamRow['score'] :         null;
+            $gameTeamRow['sportsmanship'] = $gameTeamRow['sportsmanship'] !== null ? (integer)$gameTeamRow['sportsmanship'] : null;
+
             $gameTeamRow['poolTeam'] = null;
             $gameArray['teams'][$gameTeamRow['slot']] = $gameTeamRow;
             if ($gameTeamRow['poolTeamId']) {
@@ -49,7 +56,7 @@ class GameRepository
         }
         // Load the pool teams, very screwy look indeed
         if (count($poolTeamIds)) {
-            $poolTeams = $this->poolTeamRepository->findBy(['ids' => array_keys($poolTeamIds)]);
+            $poolTeams = $this->poolTeamRepository->findBy(['poolTeamIds' => array_keys($poolTeamIds)]);
             foreach($poolTeams as $poolTeam) {
                 $poolTeamId  = $poolTeam->id->id;
                 $gameTeamRow = $poolTeamIds[$poolTeamId];
@@ -79,14 +86,24 @@ class GameRepository
         
         // Does it exist (update/create)
         $stmt = $this->conn->executeQuery('SELECT id FROM projectGames WHERE id = ?',[$gameId]);
-        if ($stmt->fetch()) {
-            unset($gameArray['id']);
-            $this->conn->update('projectGames',$gameArray,[$gameId]);
-            $gameArray['id'] = $gameId;
-        }
-        else {
+        if (!$stmt->fetch()) {
             $this->conn->insert('projectGames',$gameArray);
         }
+        else {    
+            $projectKey = $gameArray['projectKey'];
+            $gameNumber = $gameArray['gameNumber'];
+
+            unset($gameArray['id']);
+            unset($gameArray['projectKey']);
+            unset($gameArray['gameNumber']);
+            
+            $this->conn->update('projectGames',$gameArray,['id' => $gameId]);
+
+            $gameArray['id']         = $gameId;
+            $gameArray['projectKey'] = $projectKey;
+            $gameArray['gameNumber'] = $gameNumber;
+        }
+        
         $gameArray['teams'] = [];
         foreach($gameTeamsArray as $slot => $gameTeamArray)
         {
@@ -97,7 +114,6 @@ class GameRepository
 
             $gameArray['teams'][$slot] = $gameTeamArray;
         }
-
         // Done
         return Game::fromArray($gameArray);
     }
@@ -112,15 +128,27 @@ class GameRepository
         
         // Does it exist (update/create)
         $stmt = $this->conn->executeQuery('SELECT id FROM projectGameTeams WHERE id = ?',[$gameTeamId]);
-        if ($stmt->fetch()) {
-            unset($gameTeamArray['id']);
-            $this->conn->update('projectGameTeams',$gameTeamArray,[$gameTeamId]);
-            $gameTeamArray['id'] = $gameTeamId;
+        if (!$stmt->fetch()) {
+            $this->conn->insert('projectGameTeams', $gameTeamArray);
         }
         else {
-            $this->conn->insert('projectGameTeams',$gameTeamArray);
-        }
+            
+            $projectKey = $gameTeamArray['projectKey'];
+            $gameNumber = $gameTeamArray['gameNumber'];
+            $slot       = $gameTeamArray['slot'];
 
+            unset($gameTeamArray['id']);
+            unset($gameTeamArray['projectKey']);
+            unset($gameTeamArray['gameNumber']);
+            unset($gameTeamArray['slot']);
+            
+            $this->conn->update('projectGameTeams',$gameTeamArray,['id' => $gameTeamId]);
+
+            $gameTeamArray['id']         = $gameTeamId;
+            $gameTeamArray['projectKey'] = $projectKey;
+            $gameTeamArray['gameNumber'] = $gameNumber;
+            $gameTeamArray['slot']       = $slot;
+        }
         // var_dump($gameTeamArray); die();
     }
 }

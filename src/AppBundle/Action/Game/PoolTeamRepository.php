@@ -28,8 +28,10 @@ class PoolTeamRepository
         $values = [];
         $types  = [];
 
+        $criteria['ids'] = isset($criteria['poolTeamIds']) ? $criteria['poolTeamIds'] : null;
+
         $columns = [
-            'id','projectKey',
+            'ids','projectKey',
             'poolTeamKey','poolKey','poolType',
             'program','gender','age','division',
         ];
@@ -78,20 +80,31 @@ class PoolTeamRepository
     {
         $poolTeamArray = $poolTeam->toArray();
 
-        // Pull the id
-        $poolTeamId = $poolTeamArray['id'];
-        
         // Does it exist (update/create)
+        $poolTeamId  = $poolTeamArray['id'];
         $stmt = $this->conn->executeQuery('SELECT id FROM projectPoolTeams WHERE id = ?',[$poolTeamId]);
-        if ($stmt->fetch()) {
-            unset($poolTeamArray['id']);
-            $this->conn->update('projectPoolTeams',$poolTeamArray,[$poolTeamId]);
-            $poolTeamArray['id'] = $poolTeamId;
+        if (!$stmt->fetch()) {
+            $this->conn->insert('projectPoolTeams', $poolTeamArray);
         }
         else {
-            $this->conn->insert('projectPoolTeams',$poolTeamArray);
+            // These are value objects, do we really want to update?
+            // Better to delete then reinsert
+            // Especially without foriegn key constraints
+            $poolTeamId  = $poolTeamArray['id'];
+            $projectKey  = $poolTeamArray['projectKey'];
+            $poolTeamKey = $poolTeamArray['poolTeamKey'];
+
+            unset($poolTeamArray['id']);
+            unset($poolTeamArray['projectKey']);
+            unset($poolTeamArray['poolTeamKey']);
+
+            $this->conn->update('projectPoolTeams',$poolTeamArray,['id' => $poolTeamId]);
+
+            $poolTeamArray['id']          = $poolTeamId;
+            $poolTeamArray['projectKey']  = $projectKey;
+            $poolTeamArray['poolTeamKey'] = $poolTeamKey;
         }
-        
+
         // Done
         return PoolTeam::fromArray($poolTeamArray);
     }

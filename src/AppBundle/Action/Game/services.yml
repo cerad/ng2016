@@ -1,29 +1,22 @@
 services:
 
-    ayso_connection:
-        alias: doctrine.dbal.ayso_connection
+    pool_connection:
+        alias: doctrine.dbal.ng2016games_connection
 
-    ayso_repository:
-        class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
-        arguments: ['@ayso_connection']
+    pool_team_repository:
+        class: AppBundle\Action\Game\PoolTeamRepository
+        arguments: ['@pool_connection']
 
-    ayso_load_eayso_command:
-        class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
+    game_connection:
+        alias: doctrine.dbal.ng2016games_connection
+
+    game_repository:
+        class: AppBundle\Action\Game\GameRepository
+        arguments: ['@game_connection','@pool_team_repository']
+
+    game_migrate_ng2014_command:
+        class: AppBundle\Action\Game\Migrate\MigrateGames2014Command
         tags: [{ name: console.command }]
         arguments:
-            - '@ayso_connection'
-
-    ayso_load_tom_command:
-        class: AppBundle\Action\Physical\Ayso\Load\LoadTomCommand
-        tags: [{ name: console.command }]
-        arguments: ['@ayso_connection']
-
-    ayso_region_key_transformer:
-        class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer
-
-    ayso_volunteer_key_transformer:
-        class:  AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer
-
-    ayso_region_to_sar_transformer:
-        class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer
-        arguments: ['@ayso_repository']
+            - '@doctrine.dbal.ng2014games_connection'
+            - '@doctrine.dbal.ng2016games_connection'

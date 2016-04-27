@@ -25,6 +25,7 @@ class AppExtension extends Extension
         $actionLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Action'));
 
         $actionLoader->load('App/services.yml');
+        $actionLoader->load('Game/services.yml');
         $actionLoader->load('Results/services.yml');
         $actionLoader->load('Schedule/services.yml');
         $actionLoader->load('Project/services.yml');
