@@ -4,11 +4,14 @@ namespace AppBundle\Action\Schedule2016\Game;
 
 use AppBundle\Action\AbstractView2;
 
+use AppBundle\Action\Schedule2016\ScheduleGame;
 use Symfony\Component\HttpFoundation\Request;
 
 class ScheduleGameView extends AbstractView2
 {
+    /** @var  ScheduleGame[] */
     private $games;
+    
     private $project;
     private $search;
     private $searchControls;
@@ -147,48 +150,34 @@ EOD;
     }
     protected function renderScheduleRows()
     {
-
         $html = null;
+
         foreach($this->games as $game) {
 
-            $homeTeam = $game['teams'][1];
-            $awayTeam = $game['teams'][2];
+            $homeTeam = $game->homeTeam;
+            $awayTeam = $game->awayTeam;
 
-            // Calc the pool view
-            $homePoolView = $homeTeam['poolView'];
-            $awayPoolView = $homeTeam['poolView'];
-            if ($homePoolView === $awayPoolView) {
-                $poolView = $homePoolView;
-            }
-            else {
-                $poolView = sprintf('%s<hr class="separator">%s',$homePoolView,$awayPoolView);
-            }
-            // Date time view
-            $start = \DateTime::createFromFormat('Y-m-d H:i:s',$game['start']);
-            $dow  = $start ? $start->format('D')     : '???';
-            $time = $start ? $start->format('g:i A') : '???';
-
-            $trId = 'schedule-' . $game['id'];
+            $trId = 'schedule-' . $game->id;
 
             // Link for editing game
-            $gameNumber = $game['gameNumber'];
+            $gameNumber = $game->gameNumber;
             if ($this->isGranted('ROLE_USER')) {
                 $params = [
-                    'gameNumber' => $game['id'],
+                    'gameNumber' => $game->id,
                     'back' => $this->generateUrl($this->currentRouteName) . '#' . $trId,
                 ];
                 $url = $this->generateUrl('game_report_update',$params);
                 $gameNumber = sprintf('<a href="%s">%s</a>',$url,$gameNumber);
             }
             $html .= <<<EOD
-<tr id="{$trId}" class="game-status-{$game['status']}">
+<tr id="{$trId}" class="game-status-{$game->status}">
   <td class="schedule-game" >{$gameNumber}</td>
-  <td class="schedule-dow"  >{$dow}</td>
-  <td class="schedule-time" >{$time}</td>
-  <td class="schedule-field">{$game['fieldName']}</td>
-  <td class="schedule-group">{$poolView}</td>
-  <td>{$homeTeam['poolTeamSlotView']}<hr class="separator">{$awayTeam['poolTeamSlotView']}</td>
-  <td class="text-left">{$homeTeam['name']}<hr class="separator">{$awayTeam['name']}</td>
+  <td class="schedule-dow"  >{$game->dow}</td>
+  <td class="schedule-time" >{$game->time}</td>
+  <td class="schedule-field">{$game->fieldName}</td>
+  <td class="schedule-group">{$game->poolView}</td>
+  <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
+  <td class="text-left">{$homeTeam->name}<hr class="separator">{$awayTeam->name}</td>
 </tr>
 EOD;
         }

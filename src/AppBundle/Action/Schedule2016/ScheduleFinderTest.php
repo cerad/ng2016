@@ -30,11 +30,22 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
             'poolTypes'   => ['PP'],
             'dates'       => ['2014-07-03'],
         ];
-        $games = $finder->findGames($criteria);
+        $games = $finder->findGames($criteria,true);
 
         $this->assertInternalType('array',$games);
         $this->assertCount(24,$games);
 
-        //var_dump($games[20]);
+        $game = $games[8];
+        $this->assertInternalType('object',$game);
+        $this->assertEquals('FD3',$game->fieldName);
+
+        $this->assertEquals('Thu',            $game->dow);
+        $this->assertEquals('11:45 AM',       $game->time);
+        $this->assertEquals('U14-B Core PP C',$game->poolView);
+
+        $this->assertEquals('#15 01-U-0624 Nunez',$game->homeTeam->name);
+        
+        $this->assertEquals('C6',$game->awayTeam->poolTeamSlotView);
+
     }
 }

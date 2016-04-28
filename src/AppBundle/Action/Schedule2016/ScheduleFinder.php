@@ -17,7 +17,13 @@ class ScheduleFinder
         $this->gameConn = $gameConn;
         $this->poolConn = $poolConn;
     }
-    public function findGames(array $criteria)
+
+    /**
+     * @param  array $criteria
+     * @param  bool $objects
+     * @return ScheduleGame[]
+     */
+    public function findGames(array $criteria, $objects = false)    
     {
         // First we need pool teams
         $poolTeams = $this->findPoolTeams($criteria);
@@ -33,8 +39,16 @@ class ScheduleFinder
         // Load the teams
         $games = $this->joinTeamsToGames($games,$poolTeams);
 
+        // Convert to objects
+        if (!$objects) {
+            return array_values($games);
+        }
+        $gameObjects = [];
+        foreach($games as $game) {
+            $gameObjects[] = ScheduleGame::fromArray($game);
+        }
         // Done
-        return array_values($games);
+        return $gameObjects;
     }
     private function joinTeamsToGames(array $games, array $poolTeams)
     {
@@ -86,8 +100,7 @@ class ScheduleFinder
         
         $qb->where('game.id IN (?)');
 
-        $qb->addOrderBy('game.start');
-        $qb->addOrderBy('game.fieldName');
+        $qb->addOrderBy('game.gameNumber');
 
         $stmt = $conn->executeQuery($qb->getSQL(),[$gameIds],[Connection::PARAM_STR_ARRAY]);
         $games = [];

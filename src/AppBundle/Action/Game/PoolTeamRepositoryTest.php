@@ -122,13 +122,13 @@ class PoolTeamRepositoryTest extends PHPUnit_Framework_TestCase
             'ids' => ['WorldCup2016:U14GPPB5','WorldCup2016:U14GPPB6'],
         ];
         $poolTeams = $repo->findBy($criteria);
-        $this->assertCount(2,$poolTeams);
+        $this->assertCount(96,$poolTeams);
 
         $poolTeam = $poolTeams[1];
 
-        $this->assertEquals('U14-G PP B', $poolTeam->poolView);
-        $this->assertEquals('U14-G PP B6',$poolTeam->poolTeamView);
-        $this->assertEquals('B6',         $poolTeam->poolTeamSlotView);
+        $this->assertEquals('U12-B PP A', $poolTeam->poolView);
+        $this->assertEquals('U12-B PP A2',$poolTeam->poolTeamView);
+        $this->assertEquals('A2',         $poolTeam->poolTeamSlotView);
 
     }
 }
