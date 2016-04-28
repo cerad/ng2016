@@ -74,7 +74,7 @@ class RegisterTemplateEmail extends AbstractView2
   <center>
     <div style="{$this->styleSkHeader}">
       <h1>
-          <img src="http://ng2016register.zayso.org/images/header-ipad_01.png" width="70%">
+          <img src="http://ng2016.zayso.org/images/header-ipad_01.png" width="70%">
       </h1>
     </div>
     <br>
