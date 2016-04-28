@@ -28,6 +28,7 @@ class AppExtension extends Extension
         $actionLoader->load('Game/services.yml');
         $actionLoader->load('Results/services.yml');
         $actionLoader->load('Schedule/services.yml');
+        $actionLoader->load('Schedule2016/services.yml');
         $actionLoader->load('Project/services.yml');
         $actionLoader->load('Project/Game/services.yml');
         $actionLoader->load('Project/User/services.yml');

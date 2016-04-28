@@ -463,7 +463,10 @@ padding:0;
 }
 
 .seperator {
-  margin: 3px auto;
+    margin: 3px auto;
+}
+.separator {
+    margin: 3px auto;
 }
 
 body.email { width: inherit; }

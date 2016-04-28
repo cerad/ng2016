@@ -1,0 +1,19 @@
+services:
+
+    schedule_finder_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleFinder
+        arguments:
+            - '@doctrine.dbal.ng2016games_connection'
+            - '@doctrine.dbal.ng2016games_connection'
+
+    schedule_game_controller_2016:
+        class:  AppBundle\Action\Schedule2016\Game\ScheduleGameController
+        parent: abstract_controller
+        arguments:
+            - '@schedule_finder_2016'
+
+    schedule_game_view_html_2016:
+        class:  AppBundle\Action\Schedule2016\Game\ScheduleGameView
+        parent: abstract_view2
+        arguments:
+            - '@schedule_finder_2016'
