@@ -38,8 +38,10 @@ CREATE TABLE projectGameTeams
 
   name VARCHAR(99),
 
-  score         integer,
-  sportsmanship integer,
+  results       VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
+  goalsScored   INTEGER,
+  goalsAllowed  INTEGER,
+  sportsmanship INTEGER,
   misconduct    LONGTEXT, -- array
 
   gameId        VARCHAR(99) NOT NULL,
@@ -67,9 +69,8 @@ CREATE TABLE projectPoolTeams
   id          VARCHAR(99) NOT NULL,
   projectKey  VARCHAR(40) NOT NULL,
   poolTeamKey VARCHAR(40) NOT NULL,
-
-  poolKey   VARCHAR(40) NOT NULL,
-  poolType  VARCHAR(20) NOT NULL,
+  poolKey     VARCHAR(40) NOT NULL,
+  poolType    VARCHAR(20) NOT NULL,
 
   poolView         VARCHAR(40),
   poolTypeView     VARCHAR(20),
@@ -84,10 +85,41 @@ CREATE TABLE projectPoolTeams
   age      VARCHAR(20),
   division VARCHAR(20),
 
+  projectTeamId VARCHAR(99), -- Maybe
+
   CONSTRAINT projectPoolTeams_primaryKey PRIMARY KEY(id),
 
   CONSTRAINT projectPoolTeams_unique_poolTeamKey UNIQUE(projectKey,poolTeamKey),
 
   INDEX      projectPoolTeams_index_poolKey(projectKey,poolKey)
+
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+-- ======================================================================
+-- Project Team
+--
+DROP TABLE IF EXISTS projectTeams;
+
+CREATE TABLE projectTeams
+(
+  id         VARCHAR(99) NOT NULL,
+  projectKey VARCHAR(40) NOT NULL,
+  teamKey    VARCHAR(40) NOT NULL,
+  teamNumber INTEGER     NOT NULL,
+
+  name       VARCHAR(99) NOT NULL,
+  coach      VARCHAR(99),
+  points     INTEGER,
+  status     VARCHAR(40) NOT NULL DEFAULT 'Active',
+  orgKey     VARCHAR(40),
+
+  program    VARCHAR(20),
+  gender     VARCHAR(20),
+  age        VARCHAR(20),
+  division   VARCHAR(20),
+
+  CONSTRAINT projectTeams_primaryKey PRIMARY KEY(id),
+
+  CONSTRAINT projectTeams_unique_teamKey UNIQUE(projectKey,teamKey)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
