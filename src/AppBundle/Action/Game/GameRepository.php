@@ -45,7 +45,8 @@ class GameRepository
             $gameTeamRow['gameNumber'] = (integer)$gameTeamRow['gameNumber'];
             $gameTeamRow['slot']       = (integer)$gameTeamRow['slot'];
 
-            $gameTeamRow['score']         = $gameTeamRow['score']         !== null ? (integer)$gameTeamRow['score'] :         null;
+            $gameTeamRow['goalsScored']   = $gameTeamRow['goalsScored']   !== null ? (integer)$gameTeamRow['goalsScored'] :   null;
+            $gameTeamRow['goalsAllowed']  = $gameTeamRow['goalsAllowed']  !== null ? (integer)$gameTeamRow['goalsAllowed'] :  null;
             $gameTeamRow['sportsmanship'] = $gameTeamRow['sportsmanship'] !== null ? (integer)$gameTeamRow['sportsmanship'] : null;
 
             $gameTeamRow['poolTeam'] = null;

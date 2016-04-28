@@ -46,13 +46,13 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game->fieldName = 'John Hunt 1';
 
         $homeTeam = new GameTeam($projectKey,$gameNumber,1);
-        $homeTeam->name  = 'Home Team';
-        $homeTeam->score = 3;
+        $homeTeam->name = 'Home Team';
+        $homeTeam->goalsScored = 3;
         $homeTeam->setPoolTeam(new PoolTeam($projectKey,'U10B PP A1','U10B PP','PP'));
         
         $awayTeam = new GameTeam($projectKey,$gameNumber,2);
-        $awayTeam->name  = 'Visitors';
-        $awayTeam->score = 1;
+        $awayTeam->name = 'Visitors';
+        $awayTeam->goalsScored = 1;
         $awayTeam->setPoolTeam(new PoolTeam($projectKey,'U10B PP A2','U10B PP','PP'));
 
         $game->addTeam($homeTeam);
@@ -60,7 +60,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $gameArray = $game->toArray();
 
-        $this->assertEquals(3,         $gameArray['teams'][1]['score']);
+        $this->assertEquals(3,         $gameArray['teams'][1]['goalsScored']);
         $this->assertEquals('Visitors',$gameArray['teams'][2]['name']);
 
         $game = Game::fromArray($gameArray);

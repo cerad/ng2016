@@ -15,7 +15,8 @@ class GameTeam
 
     public $name; // Sync with ProjectTeam?
 
-    public $score;
+    public $goalsScored;
+    public $goalsAllowed;
     public $sportsmanship;
 
     public $misconduct;
@@ -35,7 +36,8 @@ class GameTeam
 
         'name' => 'string',
 
-        'score'         => 'integer|null',
+        'goalsScored'   => 'integer|null',
+        'goalsAllowed'  => 'integer|null',
         'sportsmanship' => 'integer|null',
         'misconduct'    => 'array',
 

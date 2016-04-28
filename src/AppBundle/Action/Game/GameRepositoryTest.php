@@ -82,12 +82,12 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
 
         $homeTeam = new GameTeam($projectKey,$gameNumber,1);
         $homeTeam->name  = 'Home Team';
-        $homeTeam->score = 3;
+        $homeTeam->goalsScored = 3;
         $homeTeam->setPoolTeam($poolTeam1);
 
         $awayTeam = new GameTeam($projectKey,$gameNumber,2);
         $awayTeam->name  = 'Visitors';
-        $awayTeam->score = 1;
+        $awayTeam->goalsScored = 1;
         $awayTeam->setPoolTeam($poolTeam2);
 
         $game->addTeam($homeTeam);
@@ -147,7 +147,7 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('John Hunt 3',$game->awayTeam->game->fieldName);
         $this->assertEquals('U10B PP A2', $game->awayTeam->poolTeam->poolTeamKey);
 
-        $this->assertInternalType('integer',$game->awayTeam->score);
+        $this->assertInternalType('integer',$game->awayTeam->goalsScored);
 
     }
     public function testUpdate()
@@ -161,16 +161,16 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
 
         $game = $repo->find($gameId);
         $this->assertEquals(777,$game->gameNumber);
-        $this->assertInternalType('null',$game->awayTeam->score);
+        $this->assertInternalType('null',$game->awayTeam->goalsScored);
 
-        $game->homeTeam->score = 5;
-        $game->awayTeam->score = 6;
+        $game->homeTeam->goalsScored = 5;
+        $game->awayTeam->goalsScored = 6;
 
         $repo->save($game);
 
         $game = $repo->find($gameId);
         $this->assertEquals(777,$game->gameNumber);
-        $this->assertInternalType('integer',$game->awayTeam->score);
-        $this->assertEquals(5,$game->homeTeam->score);
+        $this->assertInternalType('integer',$game->awayTeam->goalsScored);
+        $this->assertEquals(5,$game->homeTeam->goalsScored);
     }
 }
