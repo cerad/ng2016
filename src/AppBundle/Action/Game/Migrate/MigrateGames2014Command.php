@@ -1,12 +1,6 @@
 <?php
 namespace AppBundle\Action\Game\Migrate;
 
-use AppBundle\Action\Game\Game;
-use AppBundle\Action\Game\GameRepository;
-use AppBundle\Action\Game\GameTeam;
-use AppBundle\Action\Game\PoolTeam;
-use AppBundle\Action\Game\PoolTeamRepository;
-
 use AppBundle\Common\DatabaseTrait;
 
 use AppBundle\Common\DirectoryTrait;
@@ -30,9 +24,6 @@ class MigrateGames2014Command extends Command
     private $poolConn;
     private $projectTeamConn;
 
-    private $gameRepository;
-    private $poolTeamRepository;
-
     public function __construct(Connection $ng2014GamesConn, Connection $ng2016GamesConn)
     {
         parent::__construct();
@@ -43,9 +34,6 @@ class MigrateGames2014Command extends Command
         $this->gameConn        = $ng2016GamesConn;
         $this->poolConn        = $ng2016GamesConn;
         $this->projectTeamConn = $ng2016GamesConn;
-
-        $this->poolTeamRepository = new PoolTeamRepository($ng2016GamesConn);
-        $this->gameRepository     = new GameRepository($ng2016GamesConn,$this->poolTeamRepository);
     }
     protected function configure()
     {
@@ -65,7 +53,9 @@ class MigrateGames2014Command extends Command
 
         $this->migratePoolTeams(true);
 
-        $this->migrateGames(false);
+        $this->migrateGames(true);
+
+        $this->migrateGameTeams(true);
 
         echo sprintf("Migrate Games NG2014 Completed.\n");
     }
@@ -75,8 +65,6 @@ class MigrateGames2014Command extends Command
     public function migrateProjectTeams($commit)
     {
         if (!$commit) return;
-
-        $conn = $this->projectTeamConn;
 
         $sql = <<<EOD
 SELECT 
@@ -127,8 +115,8 @@ EOD;
                 'age'      => $age,
                 'division' => $division,
             ];
-            $conn->delete('projectTeams',['id' => $projectTeamId]);
-            $conn->insert('projectTeams',$item);
+            $this->projectTeamConn->delete('projectTeams',['id' => $projectTeamId]);
+            $this->projectTeamConn->insert('projectTeams',$item);
 
             $projectTeams[] = $item;
 
@@ -137,7 +125,8 @@ EOD;
             }
         }
         echo sprintf("\rMigrated Project Teams %5d      \n",$projectTeamCount);
-        file_put_contents('var/project_teams.yml',Yaml::dump($projectTeams,1));
+
+        file_put_contents('var/project_teams.yml',Yaml::dump($projectTeams,9));
     }
     /* ==============================================================
      * Create all the pool teams
@@ -146,8 +135,6 @@ EOD;
     private function migratePoolTeams($commit)
     {
         if (!$commit) return;
-
-        $conn = $this->poolConn;
 
         $sql = <<<EOD
 SELECT DISTINCT 
@@ -207,8 +194,8 @@ EOD;
             $poolTeams[] = $item;
 
             // Note: AYSONationalGames2014:U14G-Extra-PP-A5 dup
-            $conn->delete('projectPoolTeams',['id' => $poolTeamId]);
-            $conn->insert('projectPoolTeams',$item);
+            $this->poolConn->delete('projectPoolTeams',['id' => $poolTeamId]);
+            $this->poolConn->insert('projectPoolTeams',$item);
 
             if (($poolTeamCount % 100) === 0) {
                 echo sprintf("\rMigrating Pool Teams %5d",$poolTeamCount);
@@ -216,7 +203,7 @@ EOD;
         }
         echo sprintf("\rMigrated Pool Teams %5d      \n",$poolTeamCount);
 
-        file_put_contents('var/pool_teams.yml',Yaml::dump($poolTeams,1));
+        file_put_contents('var/pool_teams.yml',Yaml::dump($poolTeams,9));
     }
     /* ===================================================================
      * Load up the games with teams
@@ -228,7 +215,6 @@ EOD;
         // The games
         $sql = <<<EOD
 SELECT
-  id         AS gameId,
   projectKey AS projectKey,
   num        AS gameNumber,
   venueName  AS venueName,
@@ -237,14 +223,45 @@ SELECT
   dtEnd      AS finish,
   status     AS status,
   report     AS report
-FROM games WHERE projectKey = 'AYSONationalGames2014'
+FROM games WHERE projectKey = 'AYSONationalGames2014' ORDER BY gameNumber
 EOD;
         $stmt = $this->ng2014GamesConn->executeQuery($sql);
         $games = [];
-        while ($gameRow = $stmt->fetch()) {
-            $gameRow['teams'] = [];
-            $games[$gameRow['gameId']] = Game::createFromArray($gameRow);;
+        $gameCount = 0;
+        while ($row = $stmt->fetch()) {
+
+            $gameCount++;
+
+            $row['id'] = sprintf('%s:%s',$row['projectKey'],$row['gameNumber']);
+
+            $report = isset($row['report']) ? unserialize($row['report']) : [];
+            $report = is_array($report) ? $report : [];
+            $report = array_merge(['status' => null, 'text' => null],$report);
+
+            unset($row['report']);
+            $row['reportText']  = $report['text'];
+            $row['reportState'] = $report['status'] ? : 'Unknown';
+
+            $this->gameConn->delete('projectGames',['id' => $row['id']]);
+            $this->gameConn->insert('projectGames',$row);
+
+            $games[] = $row;
+
+            if (($gameCount % 100) === 0) {
+                echo sprintf("\rMigrating Games %5d",$gameCount);
+            }
         }
+        echo sprintf("\rMigrated Games %5d      \n",$gameCount);
+
+        file_put_contents('var/games.yml',Yaml::dump($games,9));
+    }
+    /* ===================================================================
+     * Load up the games with teams
+     */
+    private function migrateGameTeams($commit)
+    {
+        if (!$commit) return;
+
         // The teams
         $sql = <<<EOD
 SELECT 
@@ -258,43 +275,93 @@ LEFT JOIN games   AS game ON game.id = team.gameId
 ORDER BY gameNumber,team.slot
 EOD;
         $stmt = $this->ng2014GamesConn->executeQuery($sql);
-        while($teamRow = $stmt->fetch()) {
+        $gameTeams = [];
+        while($row = $stmt->fetch()) {
 
-            $projectKey = $teamRow['projectKey'];
+            // Need a pool team key
+            list($program,$gender,$age,$division) = $this->parseLevelKey($row['levelKey']);
 
-            // Need a pool team
-            $levelKey = $teamRow['levelKey'];  // AYSO_U10B_Core
-            $poolType = $teamRow['groupType']; // PP
-            $poolName = $teamRow['groupName']; // F
-            $poolSlot = $teamRow['groupSlot']; // F6
+            $poolInfo = $this->generatePoolInfo(
+                $program,$gender,$age,$division,
+                $row['groupType'],$row['groupName'],$row['groupSlot']
+            );
+            $poolTeamKey = $poolInfo[2];
 
-            $poolTeamKey = sprintf('%s_%s_%s',$levelKey,$poolType,$poolSlot);
+            $projectKey = $row['projectKey'];
+            $gameNumber = (integer)$row['gameNumber'];
+            $slot       = (integer)$row['slot'];
 
-            if ($poolType == 'SOF') {
-                $poolTeamKey = sprintf('%s_%s_%s_%s',$levelKey,$poolType,$poolName,$poolSlot);
+            $poolTeamId = $projectKey . ':' . $poolTeamKey;
+            $gameId     = $projectKey . ':' . $gameNumber;
+            $gameTeamId = $gameId .     ':' . $slot;
+
+            $gameTeam = [
+                'id'         => $gameTeamId,
+                'projectKey' => $projectKey,
+                'gameNumber' => $gameNumber,
+                'slot'       => $slot,
+                'name'       => $row['teamName'],
+
+                'gameId'     => $gameId,
+                'poolTeamId' => $poolTeamId,
+            ];
+            $report = isset($row['report']) ? unserialize($row['report']) : [];
+            $report = is_array($report) ? $report : [];
+
+            $metas = [
+                'pointsScored'   => 'goalsScored',
+                'pointsAllowed'  => 'goalsAllowed',
+                'pointsEarned'   => 'pointsEarned',
+                'pointsDeducted' => 'pointsMinus',  // From misconduct
+                'sportsmanship'  => 'sportsmanship',
+                'injuries'       => 'injuries',
+            ];
+            foreach($metas as $key2016 => $key2014) {
+                $gameTeam[$key2016] = isset($report[$key2014]) ? (integer)$report[$key2014] : null;
             }
-            $poolTeam = new PoolTeam($projectKey,$poolTeamKey);
+            $pointsScored  = $gameTeam['pointsScored'];
+            $pointsAllowed = $gameTeam['pointsAllowed'];
+            if ($pointsScored !== null && $pointsAllowed !== null) {
+                if ($pointsScored > $pointsAllowed) {
+                    $gameTeam['results']       = 1;
+                    $gameTeam['resultsDetail'] = 'Won';
+                }
+                if ($pointsScored < $pointsAllowed) {
+                    $gameTeam['results']       = 2;
+                    $gameTeam['resultsDetail'] = 'Lost';
+                }
+                if ($pointsScored === $pointsAllowed) {
+                    $gameTeam['results']       = 3;
+                    $gameTeam['resultsDetail'] = 'Tied';
+                }
+            }
+            // Misconduct
+            $metas = [
+                'playerWarnings', 'playerEjections',
+                'coachWarnings',  'coachEjections',
+                'benchWarnings',  'benchEjections',
+                'specWarnings',   'specEjections',
+            ];
+            $misconduct = [];
+            foreach($metas as $key) {
+                if (isset($report[$key]))
+                {
+                    $misconduct[$key] = (integer)$report[$key];
+                }
+            }
+            $gameTeam['misconduct'] = count($misconduct) ? serialize($misconduct) : null;
 
-            $gameTeam = new GameTeam($projectKey,$teamRow['gameNumber'],$teamRow['slot']);
-            $gameTeam->setPoolTeam($poolTeam);
-            $gameTeam->name = $teamRow['teamName'];
+            $this->gameConn->delete('projectGameTeams',['id' => $gameTeam['id']]);
+            $this->gameConn->insert('projectGameTeams',$gameTeam);
 
-            $games[$teamRow['gameId']]->addTeam($gameTeam);
+            $gameTeams[] = $gameTeam;
 
-            //var_dump($teamRow); die();
-        }
-        // And save them
-        $gameCount = 0;
-        foreach($games as $game) {
-
-            $gameCount++;
-
-            $this->gameRepository->save($game);
-
-            if (($gameCount % 100) === 0) {
-                echo sprintf("\rMigrating Games %5d",$gameCount);
+            if ((count($gameTeams) % 100) === 0) {
+                echo sprintf("\rMigrating Game Teams %5d",count($gameTeams));
             }
         }
-        echo sprintf("\rMigrated Games %5d      \n",$gameCount);
+        echo sprintf("\rMigrated Game Teams %5d      \n",count($gameTeams));
+
+        file_put_contents('var/game_teams.yml',Yaml::dump($gameTeams,9));
     }
 }

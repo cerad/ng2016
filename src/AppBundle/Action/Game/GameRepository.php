@@ -43,9 +43,15 @@ class GameRepository
         while($gameTeamRow = $stmt->fetch()) {
             
             // Like to have real integers
-            foreach(['slot','gameNumber','result','pointsScored','pointsAllowed','sportsmanship'] as $key) {
+            $metas = [
+                'slot','gameNumber','result',
+                'pointsScored','pointsAllowed','pointsEarned','ppointsDeducted',
+                'sportsmanship','injuries'];
+            foreach([$metas] as $key) {
                 $gameTeamRow[$key] = $gameTeamRow[$key] !== null ? (integer)$gameTeamRow[$key] : null;
             }
+            // Do something similar for misconduct
+            
             $gameTeamRow['poolTeam'] = null;
             $gameArray['teams'][$gameTeamRow['slot']] = $gameTeamRow;
             if ($gameTeamRow['poolTeamId']) {

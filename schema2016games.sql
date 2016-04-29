@@ -18,6 +18,9 @@ CREATE TABLE projectGames
   state   VARCHAR(40) NOT NULL DEFAULT 'Published',
   status  VARCHAR(40) NOT NULL DEFAULT 'Normal',
 
+  reportText  LONGTEXT,
+  reportState VARCHAR(40) NOT NULL DEFAULT 'Initial',
+
   CONSTRAINT projectGames_primaryKey PRIMARY KEY(id),
 
   CONSTRAINT projectGames_unique_gameNumber UNIQUE(projectKey,gameNumber)
@@ -38,16 +41,22 @@ CREATE TABLE projectGameTeams
 
   name       VARCHAR(99),
 
-  result         INTEGER,     -- 1 => Won, 2 => Lost, 3 => Tied, 4 => Not Played etc
-  resultDetail   VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
+  results        INTEGER,     -- 1 => Won, 2 => Lost, 3 => Tied, 4 => Not Played etc
+  resultsDetail  VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
 
   pointsScored   INTEGER,     -- Usually goals but try a more generic term
   pointsAllowed  INTEGER,
+
+  pointsEarned   INTEGER,
+  pointsDeducted INTEGER,
+
   sportsmanship  INTEGER,
+  injuries       INTEGER,
+
   misconduct     LONGTEXT, -- array
 
   gameId        VARCHAR(99) NOT NULL,
-  poolTeamId    VARCHAR(99),
+  poolTeamId    VARCHAR(99) NOT NULL,
   projectTeamId VARCHAR(99),
   orgKey        VARCHAR(99),
 
