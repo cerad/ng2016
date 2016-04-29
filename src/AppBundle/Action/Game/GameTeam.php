@@ -15,12 +15,15 @@ class GameTeam
 
     public $name; // Sync with ProjectTeam?
 
-    public $result;
-    public $resultDetail;
-    
+    public $results;
+    public $resultsDetail;
+
     public $pointsScored;
     public $pointsAllowed;
+    public $pointsEarned;
+    public $pointsDeducted;
     public $sportsmanship;
+    public $injuries;
 
     public $misconduct;
 
@@ -39,13 +42,16 @@ class GameTeam
 
         'name' => 'string',
 
-        'result'        => 'integer|null',
-        'resultDetail'  => 'string|null',
-        
-        'pointsScored'  => 'integer|null',
-        'pointsAllowed' => 'integer|null',
-        'sportsmanship' => 'integer|null',
-        'misconduct'    => 'array',
+        'results'        => 'integer|null',
+        'resultsDetail'  => 'string|null',
+
+        'pointsScored'   => 'integer|null',
+        'pointsAllowed'  => 'integer|null',
+        'pointsEarned'   => 'integer|null',
+        'pointsDeducted' => 'integer|null',
+        'sportsmanship'  => 'integer|null',
+        'injuries'       => 'integer|null',
+        'misconduct'     => 'array',
 
         'orgKey' => 'PhysicalOrgId', // Could be part of project team
     ];

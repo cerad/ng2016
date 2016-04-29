@@ -349,12 +349,14 @@ EOD;
                     $misconduct[$key] = (integer)$report[$key];
                 }
             }
+            $gameTeam['misconduct'] = $misconduct;
+            
+            $gameTeams[] = $gameTeam; // For yaml
+            
             $gameTeam['misconduct'] = count($misconduct) ? serialize($misconduct) : null;
 
             $this->gameConn->delete('projectGameTeams',['id' => $gameTeam['id']]);
             $this->gameConn->insert('projectGameTeams',$gameTeam);
-
-            $gameTeams[] = $gameTeam;
 
             if ((count($gameTeams) % 100) === 0) {
                 echo sprintf("\rMigrating Game Teams %5d",count($gameTeams));

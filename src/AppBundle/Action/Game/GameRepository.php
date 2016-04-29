@@ -44,10 +44,11 @@ class GameRepository
             
             // Like to have real integers
             $metas = [
-                'slot','gameNumber','result',
-                'pointsScored','pointsAllowed','pointsEarned','ppointsDeducted',
-                'sportsmanship','injuries'];
-            foreach([$metas] as $key) {
+                'slot','gameNumber','results',
+                'pointsScored','pointsAllowed','pointsEarned','pointsDeducted',
+                'sportsmanship','injuries'
+            ];
+            foreach($metas as $key) {
                 $gameTeamRow[$key] = $gameTeamRow[$key] !== null ? (integer)$gameTeamRow[$key] : null;
             }
             // Do something similar for misconduct
