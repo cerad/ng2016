@@ -236,7 +236,7 @@ EOD;
             $certKey = $cert->role;
 
             $html .= <<<EOD
-<tr><td class="{$personView->getCertClass($certKey)}">{$personView->getCertBadge($certKey)}</td></tr>   
+<tr><td class="{$personView->getCertClass($certKey)}">{$certKey}: {$personView->getCertBadge($certKey)}</td></tr>   
 EOD;
         }
         $html .= <<<EOD
