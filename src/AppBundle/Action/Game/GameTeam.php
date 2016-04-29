@@ -15,13 +15,16 @@ class GameTeam
 
     public $name; // Sync with ProjectTeam?
 
-    public $goalsScored;
-    public $goalsAllowed;
+    public $result;
+    public $resultDetail;
+    
+    public $pointsScored;
+    public $pointsAllowed;
     public $sportsmanship;
 
     public $misconduct;
 
-    public $orgId; // Useful for seasonal schedule
+    public $orgKey; // Useful for seasonal schedule
 
     /** @var  PoolTeam */
     private $poolTeamPrivate;
@@ -36,12 +39,15 @@ class GameTeam
 
         'name' => 'string',
 
-        'goalsScored'   => 'integer|null',
-        'goalsAllowed'  => 'integer|null',
+        'result'        => 'integer|null',
+        'resultDetail'  => 'string|null',
+        
+        'pointsScored'  => 'integer|null',
+        'pointsAllowed' => 'integer|null',
         'sportsmanship' => 'integer|null',
         'misconduct'    => 'array',
 
-        'orgId' => 'PhysicalOrgId', // Could be part of project team
+        'orgKey' => 'PhysicalOrgId', // Could be part of project team
     ];
     public function __construct($projectKey,$gameNumber,$slot)
     {
@@ -90,7 +96,7 @@ class GameTeam
      * @param array $data
      * @return GameTeam
      */
-    static public function fromArray($data)
+    static public function createFromArray($data)
     {
         $gameTeam = new GameTeam($data['projectKey'],$data['gameNumber'],$data['slot']);
 
@@ -100,7 +106,7 @@ class GameTeam
             }
         }
         if ($data['poolTeam']) {
-            $gameTeam->poolTeamPrivate = PoolTeam::fromArray($data['poolTeam']);
+            $gameTeam->poolTeamPrivate = PoolTeam::createFromArray($data['poolTeam']);
         }
         return $gameTeam;
     }

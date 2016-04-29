@@ -85,7 +85,7 @@ class PoolTeam
      * @param  array $data
      * @return PoolTeam
      */
-    static public function fromArray($data)
+    static public function createFromArray($data)
     {
         $poolTeam = new PoolTeam($data['projectKey'],$data['poolTeamKey']);
 

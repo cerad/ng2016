@@ -49,7 +49,7 @@ class PoolTeamRepository
         $stmt = $this->conn->executeQuery($qb->getSQL(),$values,$types);
         $poolTeams = [];
         while($poolTeamRow = $stmt->fetch()) {
-            $poolTeams[] = PoolTeam::fromArray($poolTeamRow);
+            $poolTeams[] = PoolTeam::createFromArray($poolTeamRow);
         }
         return $poolTeams;
     }
@@ -69,7 +69,7 @@ class PoolTeamRepository
         $poolTeamArray = $poolTeamRow;
 
         // Done
-        return PoolTeam::fromArray($poolTeamArray);
+        return PoolTeam::createFromArray($poolTeamArray);
     }
     /** ==========================================================
      * @param  PoolTeam $poolTeam
@@ -106,6 +106,6 @@ class PoolTeamRepository
         }
 
         // Done
-        return PoolTeam::fromArray($poolTeamArray);
+        return PoolTeam::createFromArray($poolTeamArray);
     }
 }

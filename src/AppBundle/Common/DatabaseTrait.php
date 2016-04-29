@@ -4,7 +4,7 @@ namespace AppBundle\Common;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Yaml\Yaml;
 
-trait DatabaseInitTrait
+trait DatabaseTrait
 {
     protected $conns = [];
 
@@ -70,5 +70,4 @@ trait DatabaseInitTrait
         $this->dropDatabase  ($conn);
         $this->createDatabase($conn,$schemaFile);
     }
-
 }

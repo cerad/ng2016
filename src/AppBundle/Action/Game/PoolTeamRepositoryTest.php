@@ -1,7 +1,9 @@
 <?php
 namespace AppBundle\Action\Game;
 
-use AppBundle\Common\DatabaseInitTrait;
+use AppBundle\Common\DatabaseTrait;
+use AppBundle\Common\DirectoryTrait;
+
 use Symfony\Component\Yaml\Yaml;
 
 use Doctrine\DBAL\Connection;
@@ -10,39 +12,30 @@ use PHPUnit_Framework_TestCase;
 
 class PoolTeamRepositoryTest extends PHPUnit_Framework_TestCase
 {
-    use DatabaseInitTrait;
+    use DatabaseTrait;
+    use DirectoryTrait;
+    
+    private $poolDatabaseKey = 'database_name_test';
 
-    /** @var  Connection */
-    protected $conn;
-    protected $params;
-    protected $schemaFile      = './src/AppBundle/Action/Game/schema.sql';
-    protected $databaseNameKey = 'database_name_test';
+    private $poolConn;
 
-    public function setUp()
+    private function createPoolTeamRepository()
     {
-        $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../app/config/parameters.yml'));
-        $this->params = $params = $params['parameters'];
-
-        /** @noinspection PhpInternalEntityUsedInspection */
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $config = new \Doctrine\DBAL\Configuration();
-
-        $connectionParams = array(
-            'dbname'   => $params[$this->databaseNameKey],
-            'user'     => $params['database_user'],
-            'password' => $params['database_password'],
-            'host'     => $params['database_host'],
-            'port'     => $params['database_port'],
-            'driver'   => $params['database_driver'],
-        );
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $this->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        if (!$this->poolConn) {
+            $this->poolConn = $this->getConnection($this->poolDatabaseKey);
+        }
+        return new PoolTeamRepository($this->poolConn);
     }
+
     public function testSave()
     {
-        $this->resetDatabase($this->conn, $this->schemaFile);
+        $this->poolConn = $conn = $this->getConnection($this->poolDatabaseKey);
 
-        $repo = new PoolTeamRepository($this->conn);
+        $schemaFile = $this->getRootDirectory() . '/schema2016games.sql';
+
+        $this->resetDatabase($conn,$schemaFile);
+
+        $repo = $this->createPoolTeamRepository();
 
         $projectKey = 'WorldCup2016';
 
@@ -78,7 +71,7 @@ class PoolTeamRepositoryTest extends PHPUnit_Framework_TestCase
     }
     public function testFind()
     {
-        $repo = new PoolTeamRepository($this->conn);
+        $repo = $this->createPoolTeamRepository();
 
         $poolTeamId = new PoolTeamId('WorldCup2016','U14GPPC3');
 
@@ -88,7 +81,7 @@ class PoolTeamRepositoryTest extends PHPUnit_Framework_TestCase
     }
     public function testFindBy()
     {
-        $repo = new PoolTeamRepository($this->conn);
+        $repo = $this->createPoolTeamRepository();
 
         $criteria = [
             'projectKeys' => ['WorldCup2016'],

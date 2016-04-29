@@ -1,48 +1,48 @@
 <?php
 namespace AppBundle\Action\Game;
 
-use AppBundle\Common\DatabaseInitTrait;
-use Symfony\Component\Yaml\Yaml;
+use AppBundle\Common\DatabaseTrait;
+use AppBundle\Common\DirectoryTrait;
+//  Symfony\Component\Yaml\Yaml;
 
-use Doctrine\DBAL\Connection;
+//  Doctrine\DBAL\Connection;
 
 use PHPUnit_Framework_TestCase;
 
 class GameRepositoryTest extends PHPUnit_Framework_TestCase
 {
-    use DatabaseInitTrait;
+    use DatabaseTrait;
+    use DirectoryTrait;
+    
+    private $gameDatabaseKey = 'database_name_test';
+    private $poolDatabaseKey = 'database_name_test';
 
-    /** @var  Connection */
-    protected $conn;
-    protected $params;
-    protected $schemaFile      = './src/AppBundle/Action/Game/schema.sql';
-    protected $databaseNameKey = 'database_name_test';
+    private $gameConn;
+    private $poolConn;
 
-    public function setUp()
+    private function createPoolTeamRepository()
     {
-        $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../app/config/parameters.yml'));
-        $this->params = $params = $params['parameters'];
-
-        /** @noinspection PhpInternalEntityUsedInspection */
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $config = new \Doctrine\DBAL\Configuration();
-
-        $connectionParams = array(
-            'dbname'   => $params[$this->databaseNameKey],
-            'user'     => $params['database_user'],
-            'password' => $params['database_password'],
-            'host'     => $params['database_host'],
-            'port'     => $params['database_port'],
-            'driver'   => $params['database_driver'],
-        );
-        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $this->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        if (!$this->poolConn) {
+             $this->poolConn = $this->getConnection($this->poolDatabaseKey);
+        }
+        return new PoolTeamRepository($this->poolConn);
+    }
+    private function createGameRepository()
+    {
+        if (!$this->gameConn) {
+             $this->gameConn = $this->getConnection($this->gameDatabaseKey);
+        }
+        return new GameRepository($this->gameConn,$this->createPoolTeamRepository());
     }
     public function testSave()
     {
-        $this->resetDatabase($this->conn,$this->schemaFile);
+        $this->gameConn = $conn = $this->getConnection($this->gameDatabaseKey);
+        
+        $schemaFile = $this->getRootDirectory() . '/schema2016games.sql';
+        
+        $this->resetDatabase($conn,$schemaFile);
 
-        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
+        $repo = $this->createGameRepository();
 
         $projectKey = 'WorldCup2016';
         $gameNumber = 999;
@@ -57,7 +57,6 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
         $game = $repo->save($game);
         $this->assertEquals($gameNumber,$game->gameNumber);
         $this->assertEquals('Played',   $game->state);
-        
     }
     public function testSaveTeam()
     {
@@ -65,7 +64,7 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
         $gameNumber = 888;
 
         // Create Pools
-        $poolTeamRepository = new PoolTeamRepository($this->conn);
+        $poolTeamRepository = $this->createPoolTeamRepository();
 
         $poolTeam1 = new PoolTeam($projectKey,'U10B PP A1','U10B PP','PP');
         $poolTeam2 = new PoolTeam($projectKey,'U10B PP A2','U10B PP','PP');
@@ -74,20 +73,20 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
         $poolTeamRepository->save($poolTeam2);
 
         // Create Games
-        $gameRepository = new GameRepository($this->conn,$poolTeamRepository);
+        $gameRepository = $this->createGameRepository();
 
         $game = new Game($projectKey,$gameNumber);
 
         $game->fieldName = 'John Hunt 3';
 
         $homeTeam = new GameTeam($projectKey,$gameNumber,1);
-        $homeTeam->name  = 'Home Team';
-        $homeTeam->goalsScored = 3;
+        $homeTeam->name = 'Home Team';
+        $homeTeam->pointsScored = 3;
         $homeTeam->setPoolTeam($poolTeam1);
 
         $awayTeam = new GameTeam($projectKey,$gameNumber,2);
-        $awayTeam->name  = 'Visitors';
-        $awayTeam->goalsScored = 1;
+        $awayTeam->name = 'Visitors';
+        $awayTeam->pointsScored = 1;
         $awayTeam->setPoolTeam($poolTeam2);
 
         $game->addTeam($homeTeam);
@@ -116,7 +115,7 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
     }
     public function testFind()
     {
-        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
+        $repo = $this->createGameRepository();
 
         $projectKey = 'WorldCup2016';
         $gameNumber = 999;
@@ -131,7 +130,7 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
     }
     public function testFindTeam()
     {
-        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
+        $repo = $this->createGameRepository();
 
         $projectKey = 'WorldCup2016';
         $gameNumber = 888;
@@ -147,12 +146,12 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('John Hunt 3',$game->awayTeam->game->fieldName);
         $this->assertEquals('U10B PP A2', $game->awayTeam->poolTeam->poolTeamKey);
 
-        $this->assertInternalType('integer',$game->awayTeam->goalsScored);
+        $this->assertInternalType('integer',$game->awayTeam->pointsScored);
 
     }
     public function testUpdate()
     {
-        $repo = new GameRepository($this->conn, new PoolTeamRepository($this->conn));
+        $repo = $this->createGameRepository();
 
         $projectKey = 'WorldCup2016';
         $gameNumber = 777;
@@ -161,16 +160,16 @@ class GameRepositoryTest extends PHPUnit_Framework_TestCase
 
         $game = $repo->find($gameId);
         $this->assertEquals(777,$game->gameNumber);
-        $this->assertInternalType('null',$game->awayTeam->goalsScored);
+        $this->assertInternalType('null',$game->awayTeam->pointsScored);
 
-        $game->homeTeam->goalsScored = 5;
-        $game->awayTeam->goalsScored = 6;
+        $game->homeTeam->pointsScored = 5;
+        $game->awayTeam->pointsScored = 6;
 
         $repo->save($game);
 
         $game = $repo->find($gameId);
         $this->assertEquals(777,$game->gameNumber);
-        $this->assertInternalType('integer',$game->awayTeam->goalsScored);
-        $this->assertEquals(5,$game->homeTeam->goalsScored);
+        $this->assertInternalType('integer',$game->awayTeam->pointsScored);
+        $this->assertEquals(5,$game->homeTeam->pointsScored);
     }
 }

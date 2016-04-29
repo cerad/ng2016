@@ -81,7 +81,7 @@ class Game
      * @param array $data
      * @return Game
      */
-    static public function fromArray($data)
+    static public function createFromArray($data)
     {
         $game = new Game($data['projectKey'],$data['gameNumber']);
         
@@ -91,7 +91,7 @@ class Game
             }
         }
         foreach($data['teams'] as $teamData) {
-            $gameTeam = GameTeam::fromArray(($teamData));
+            $gameTeam = GameTeam::createFromArray(($teamData));
             $game->addTeam($gameTeam);
         }
         return $game;

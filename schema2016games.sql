@@ -36,18 +36,20 @@ CREATE TABLE projectGameTeams
   gameNumber INTEGER     NOT NULL,
   slot       INTEGER     NOT NULL,
 
-  name VARCHAR(99),
+  name       VARCHAR(99),
 
-  results       VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
-  goalsScored   INTEGER,
-  goalsAllowed  INTEGER,
-  sportsmanship INTEGER,
-  misconduct    LONGTEXT, -- array
+  result         INTEGER,     -- 1 => Won, 2 => Lost, 3 => Tied, 4 => Not Played etc
+  resultDetail   VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
+
+  pointsScored   INTEGER,     -- Usually goals but try a more generic term
+  pointsAllowed  INTEGER,
+  sportsmanship  INTEGER,
+  misconduct     LONGTEXT, -- array
 
   gameId        VARCHAR(99) NOT NULL,
   poolTeamId    VARCHAR(99),
   projectTeamId VARCHAR(99),
-  orgId         VARCHAR(99),
+  orgKey        VARCHAR(99),
 
   CONSTRAINT projectGameTeams_primaryKey PRIMARY KEY(id),
 

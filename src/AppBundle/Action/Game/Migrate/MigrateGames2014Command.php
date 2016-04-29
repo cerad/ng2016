@@ -7,7 +7,7 @@ use AppBundle\Action\Game\GameTeam;
 use AppBundle\Action\Game\PoolTeam;
 use AppBundle\Action\Game\PoolTeamRepository;
 
-use AppBundle\Common\DatabaseInitTrait;
+use AppBundle\Common\DatabaseTrait;
 
 use Symfony\Component\Console\Command\Command;
 //  Symfony\Component\Console\Input\InputArgument;
@@ -22,7 +22,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class MigrateGames2014Command extends Command
 {
-    use DatabaseInitTrait;
+    use DatabaseTrait;
 
     //private $maxCnt = 10000; //10000;
 
@@ -189,7 +189,7 @@ EOD;
         $games = [];
         while ($gameRow = $stmt->fetch()) {
             $gameRow['teams'] = [];
-            $games[$gameRow['gameId']] = Game::fromArray($gameRow);;
+            $games[$gameRow['gameId']] = Game::createFromArray($gameRow);;
         }
         // The teams
         $sql = <<<EOD

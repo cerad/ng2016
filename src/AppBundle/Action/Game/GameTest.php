@@ -24,7 +24,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $gameArray['status'] = 'Played';
 
-        $game = Game::fromArray($gameArray);
+        $game = Game::createFromArray($gameArray);
         $this->assertEquals($gameNumber,$game->gameNumber);
         $this->assertEquals('Played',$game->status);
     }
@@ -47,12 +47,12 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $homeTeam = new GameTeam($projectKey,$gameNumber,1);
         $homeTeam->name = 'Home Team';
-        $homeTeam->goalsScored = 3;
+        $homeTeam->pointsScored = 3;
         $homeTeam->setPoolTeam(new PoolTeam($projectKey,'U10B PP A1','U10B PP','PP'));
         
         $awayTeam = new GameTeam($projectKey,$gameNumber,2);
         $awayTeam->name = 'Visitors';
-        $awayTeam->goalsScored = 1;
+        $awayTeam->pointsScored = 1;
         $awayTeam->setPoolTeam(new PoolTeam($projectKey,'U10B PP A2','U10B PP','PP'));
 
         $game->addTeam($homeTeam);
@@ -60,10 +60,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $gameArray = $game->toArray();
 
-        $this->assertEquals(3,         $gameArray['teams'][1]['goalsScored']);
+        $this->assertEquals(3,         $gameArray['teams'][1]['pointsScored']);
         $this->assertEquals('Visitors',$gameArray['teams'][2]['name']);
 
-        $game = Game::fromArray($gameArray);
+        $game = Game::createFromArray($gameArray);
         $this->assertEquals('Home Team',  $game->getTeam(1)->name);
         $this->assertEquals('Home Team',  $game->homeTeam->name);
         $this->assertEquals('John Hunt 1',$game->awayTeam->game->fieldName);

@@ -1,13 +1,13 @@
 <?php
 namespace AppBundle\Action\Schedule2016;
 
-use AppBundle\Common\DatabaseInitTrait;
+use AppBundle\Common\DatabaseTrait;
 
 use PHPUnit_Framework_TestCase;
 
 class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 {
-    use DatabaseInitTrait;
+    use DatabaseTrait;
 
     private $gameDatabaseKey = 'database_name_ng2016games';
     private $poolDatabaseKey = 'database_name_ng2016games';

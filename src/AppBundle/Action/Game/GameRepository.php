@@ -41,14 +41,11 @@ class GameRepository
         $stmt = $this->conn->executeQuery('SELECT * FROM projectGameTeams WHERE gameId = ?',[$gameId]);
         $poolTeamIds = [];
         while($gameTeamRow = $stmt->fetch()) {
-
-            $gameTeamRow['gameNumber'] = (integer)$gameTeamRow['gameNumber'];
-            $gameTeamRow['slot']       = (integer)$gameTeamRow['slot'];
-
-            $gameTeamRow['goalsScored']   = $gameTeamRow['goalsScored']   !== null ? (integer)$gameTeamRow['goalsScored'] :   null;
-            $gameTeamRow['goalsAllowed']  = $gameTeamRow['goalsAllowed']  !== null ? (integer)$gameTeamRow['goalsAllowed'] :  null;
-            $gameTeamRow['sportsmanship'] = $gameTeamRow['sportsmanship'] !== null ? (integer)$gameTeamRow['sportsmanship'] : null;
-
+            
+            // Like to have real integers
+            foreach(['slot','gameNumber','result','pointsScored','pointsAllowed','sportsmanship'] as $key) {
+                $gameTeamRow[$key] = $gameTeamRow[$key] !== null ? (integer)$gameTeamRow[$key] : null;
+            }
             $gameTeamRow['poolTeam'] = null;
             $gameArray['teams'][$gameTeamRow['slot']] = $gameTeamRow;
             if ($gameTeamRow['poolTeamId']) {
@@ -67,7 +64,7 @@ class GameRepository
         }
         //var_dump($gameArray);
         // Done
-        return Game::fromArray($gameArray);
+        return Game::createFromArray($gameArray);
     }
     /** ==========================================================
      * @param  Game $game
@@ -116,7 +113,7 @@ class GameRepository
             $gameArray['teams'][$slot] = $gameTeamArray;
         }
         // Done
-        return Game::fromArray($gameArray);
+        return Game::createFromArray($gameArray);
     }
     private function saveGameTeamArray(array $gameTeamArray)
     {
