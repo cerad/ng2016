@@ -9,26 +9,24 @@ use AppBundle\Action\Game\PoolTeamRepository;
 
 use AppBundle\Common\DatabaseTrait;
 
+use AppBundle\Common\DirectoryTrait;
 use Symfony\Component\Console\Command\Command;
-//  Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-//  Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Yaml\Yaml;
 
-//  Symfony\Component\Yaml\Yaml;
-
 class MigrateGames2014Command extends Command
 {
     use DatabaseTrait;
-
-    //private $maxCnt = 10000; //10000;
+    use DirectoryTrait;
+    use MigrateGames2014Trait;
 
     private $ng2014GamesConn;
     private $ng2016GamesConn;
 
+    private $gameConn;
     private $poolConn;
     private $projectTeamConn;
 
@@ -42,6 +40,7 @@ class MigrateGames2014Command extends Command
         $this->ng2014GamesConn = $ng2014GamesConn;
         $this->ng2016GamesConn = $ng2016GamesConn;
 
+        $this->gameConn        = $ng2016GamesConn;
         $this->poolConn        = $ng2016GamesConn;
         $this->projectTeamConn = $ng2016GamesConn;
 
@@ -56,7 +55,9 @@ class MigrateGames2014Command extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->resetDatabase($this->ng2016GamesConn, __DIR__ . '/../schema.sql');
+        $schemaFile = $this->getRootDirectory() . '/schema2016games.sql';
+
+        $this->resetDatabase($this->ng2016GamesConn,$schemaFile);
 
         echo sprintf("Migrate Games NG2014 ...\n");
 
@@ -68,8 +69,79 @@ class MigrateGames2014Command extends Command
 
         echo sprintf("Migrate Games NG2014 Completed.\n");
     }
+    /* ======================================================================
+     * Migrate Project Teams
+    */
+    public function migrateProjectTeams($commit)
+    {
+        if (!$commit) return;
+
+        $conn = $this->projectTeamConn;
+
+        $sql = <<<EOD
+SELECT 
+  keyx       AS keyx,    -- AYSONationalGames2014:AYSO_U10B_Core:01
+  orgKey     AS orgKey,  -- 10-W-68
+  name       AS name,
+  coach      AS coach,
+  points     AS points,
+  status     AS status
+FROM teams ORDER BY keyx
+EOD;
+        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $projectTeams = [];
+        $projectTeamCount = 0;
+        while($row = $stmt->fetch()) {
+
+            $projectTeamCount++;
+
+            $parts     = explode(':',$row['keyx']);
+            $projectKey = $parts[0];
+            $levelKey   = $parts[1];
+            $teamNumber = (integer)$parts[2];
+
+            list($program,$gender,$age,$division) = $this->parseLevelKey($levelKey);
+
+            $parts = explode('-',$row['orgKey']);
+            $regionNumber = (integer)$parts[2];
+            $orgKey = sprintf('AYSOR:%04d',$regionNumber);
+
+            $teamKey = sprintf('%s-%s-%02d',$division,$program,$teamNumber);
+
+            $projectTeamId = $projectKey . ':' . $teamKey;
+
+            $item = [
+                'id'         => $projectTeamId,
+                'projectKey' => $projectKey,
+                'teamKey'    => $teamKey,
+                'teamNumber' => $teamNumber,
+
+                'name'   => $row['name'],
+                'coach'  => $row['coach'],
+                'points' => $row['points'],
+                'status' => $row['status'],
+                'orgKey' => $orgKey,
+
+                'program'  => $program,
+                'gender'   => $gender,
+                'age'      => $age,
+                'division' => $division,
+            ];
+            $conn->delete('projectTeams',['id' => $projectTeamId]);
+            $conn->insert('projectTeams',$item);
+
+            $projectTeams[] = $item;
+
+            if (($projectTeamCount % 100) === 0) {
+                echo sprintf("\rMigrating Project Teams %5d",$projectTeamCount);
+            }
+        }
+        echo sprintf("\rMigrated Project Teams %5d      \n",$projectTeamCount);
+        file_put_contents('var/project_teams.yml',Yaml::dump($projectTeams,1));
+    }
     /* ==============================================================
      * Create all the pool teams
+     * SELECT poolKey,poolTeamKey,division,projectTeamId FROM projectPoolTeams WHERE program = 'Core' AND division = 'U14B';
      */
     private function migratePoolTeams($commit)
     {
@@ -96,52 +168,34 @@ EOD;
 
             $poolTeamCount++;
 
-            $levelKey = $row['levelKey'];  // AYSO_U10B_Core
-            $poolType = $row['groupType']; // PP
-            $poolName = $row['groupName']; // F
-            $poolSlot = $row['groupSlot']; // F6
+            list($program,$gender,$age,$division) = $this->parseLevelKey($row['levelKey']);
 
-            $levelKeyParts = explode('_',$levelKey);
-
-            $division = $levelKeyParts[1];
-            $program  = $levelKeyParts[2];
-            $gender   = substr($division,3,1);
-            $age      = substr($division,0,3);
-
-            switch($poolType) {
-                case 'FM':  $poolType = 'TF'; break;
-                case 'SOF': $poolType = 'ZZ'; break;
-            }
-            $poolView     = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolType,$poolName);
-            $poolTeamView = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolType,$poolSlot);
-
-            $poolKey     = sprintf('%s-%s-%s-%s',$division,$program,$poolType,$poolName);
-            $poolTeamKey = sprintf('%s-%s-%s-%s',$division,$program,$poolType,$poolSlot);
-            if ($poolType == 'ZZ') {
-                $poolTeamKey = sprintf('%s-%s-%s-%s-%s',$division,$program,$poolType,$poolName,$poolSlot);
-            }
+            list(
+                $poolType,$poolKey,$poolTeamKey,
+                $poolTypeView,$poolView,$poolTeamView,$poolTeamSlotView
+                ) = $this->generatePoolInfo(
+                    $program,$gender,$age,$division,
+                    $row['groupType'],$row['groupName'],$row['groupSlot']
+            );
 
             $projectKey = $row['projectKey'];
-            $projectTeamId = null;
-            if (isset($row['teamKey'])) {
-                $parts = explode(':', $row['teamKey']);
-                $teamNumber = (integer)$parts[2];
-                $projectTeamId = sprintf('%s:%s-%s-%02d',$projectKey,$division,$program,$teamNumber);
-            }
-            $id = $projectKey . ':' . $poolTeamKey;
+            $poolTeamId = $projectKey . ':' . $poolTeamKey;
+
+            $projectTeamId = $this->generateProjectTeamId($projectKey,$row['teamKey'],$program,$division);
 
             $item = [
-                'id' => $id,
+                'id' => $poolTeamId,
 
                 'projectKey'   => $projectKey,
+
                 'poolType'     => $poolType,
                 'poolKey'      => $poolKey,
                 'poolTeamKey'  => $poolTeamKey,
 
                 'poolView'         => $poolView,
-                'poolTypeView'     => $poolType,
+                'poolTypeView'     => $poolTypeView,
                 'poolTeamView'     => $poolTeamView,
-                'poolTeamSlotView' => $poolSlot,
+                'poolTeamSlotView' => $poolTeamSlotView,
 
                 'program'  => $program,
                 'gender'   => $gender,
@@ -153,7 +207,7 @@ EOD;
             $poolTeams[] = $item;
 
             // Note: AYSONationalGames2014:U14G-Extra-PP-A5 dup
-            $conn->delete('projectPoolTeams',['id' => $id]);
+            $conn->delete('projectPoolTeams',['id' => $poolTeamId]);
             $conn->insert('projectPoolTeams',$item);
 
             if (($poolTeamCount % 100) === 0) {
@@ -242,79 +296,5 @@ EOD;
             }
         }
         echo sprintf("\rMigrated Games %5d      \n",$gameCount);
-    }
-    /* ======================================================================
-     * Migrate Project Teams
-     */
-    public function migrateProjectTeams($commit)
-    {
-        if (!$commit) return;
-
-        $conn = $this->projectTeamConn;
-
-        $sql = <<<EOD
-SELECT 
-  keyx       AS keyx,    -- AYSONationalGames2014:AYSO_U10B_Core:01
-  orgKey     AS orgKey,  -- 10-W-68
-  name       AS name,
-  coach      AS coach,
-  points     AS points,
-  status     AS status
-FROM teams ORDER BY keyx
-EOD;
-        $stmt = $this->ng2014GamesConn->executeQuery($sql);
-        $projectTeams = [];
-        $projectTeamCount = 0;
-        while($row = $stmt->fetch()) {
-
-            $projectTeamCount++;
-
-            $parts     = explode(':',$row['keyx']);
-            $projectKey = $parts[0];
-            $levelKey   = $parts[1];
-            $teamNumber = (integer)$parts[2];
-
-            $parts    = explode('_',$levelKey);
-            $program  = $parts[2];
-            $division = $parts[1];
-            $gender   = substr($division,3,1);
-            $age      = substr($division,0,3);
-
-            $parts = explode('-',$row['orgKey']);
-            $regionNumber = (integer)$parts[2];
-            $orgKey = sprintf('AYSOR:%04d',$regionNumber);
-
-            $teamKey = sprintf('%s-%s-%02d',$division,$program,$teamNumber);
-
-            $id = $projectKey . ':' . $teamKey;
-
-            $item = [
-                'id'         => $id,
-                'projectKey' => $projectKey,
-                'teamKey'    => $teamKey,
-                'teamNumber' => $teamNumber,
-
-                'name'   => $row['name'],
-                'coach'  => $row['coach'],
-                'points' => $row['points'],
-                'status' => $row['status'],
-                'orgKey' => $orgKey,
-
-                'program'  => $program,
-                'gender'   => $gender,
-                'age'      => $age,
-                'division' => $division,
-            ];
-            $conn->delete('projectTeams',['id' => $id]);
-            $conn->insert('projectTeams',$item);
-
-            $projectTeams[] = $item;
-
-            if (($projectTeamCount % 100) === 0) {
-                echo sprintf("\rMigrating Project Teams %5d",$projectTeamCount);
-            }
-        }
-        echo sprintf("\rMigrated Project Teams %5d      \n",$projectTeamCount);
-        file_put_contents('var/project_teams.yml',Yaml::dump($projectTeams,1));
     }
 }
