@@ -134,3 +134,32 @@ CREATE TABLE projectTeams
   CONSTRAINT projectTeams_unique_teamKey UNIQUE(projectKey,teamKey)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+-- ======================================================================
+-- Project Game Official
+--
+DROP TABLE IF EXISTS projectGameOfficials;
+
+CREATE TABLE projectGameOfficials
+(
+  id         VARCHAR(99) NOT NULL, -- projectKey:gameNumber:slot
+  projectKey VARCHAR(40) NOT NULL,
+  gameNumber INTEGER     NOT NULL,
+  slot       INTEGER     NOT NULL,
+  name       VARCHAR(99),
+
+  assignRole   VARCHAR(40) DEFAULT 'ROLE_REFEREE',
+  assignState  VARCHAR(40),
+
+  gameId          VARCHAR(99) NOT NULL,
+  projectPersonId VARCHAR(99),
+
+  CONSTRAINT projectGameOfficials_primaryKey PRIMARY KEY(id),
+
+  CONSTRAINT projectGameOfficials_unique_gameNumberSlot UNIQUE(projectKey,gameNumber,slot),
+
+  INDEX      projectGameOfficials_index_gameId(gameId),
+
+  INDEX      projectGameOfficials_index_projectPersonId(projectPersonId)
+
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;

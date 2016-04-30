@@ -48,14 +48,16 @@ class MigrateGames2014Command extends Command
         $this->resetDatabase($this->ng2016GamesConn,$schemaFile);
 
         echo sprintf("Migrate Games NG2014 ...\n");
+        if (1) {
+            $this->migrateProjectTeams(true);
 
-        $this->migrateProjectTeams(true);
+            $this->migratePoolTeams(true);
 
-        $this->migratePoolTeams(true);
+            $this->migrateGames(true);
 
-        $this->migrateGames(true);
-
-        $this->migrateGameTeams(true);
+            $this->migrateGameTeams(true);
+        }
+        $this->migrateGameOfficials(true);
 
         echo sprintf("Migrate Games NG2014 Completed.\n");
     }
@@ -124,6 +126,7 @@ EOD;
                 echo sprintf("\rMigrating Project Teams %5d",$projectTeamCount);
             }
         }
+
         echo sprintf("\rMigrated Project Teams %5d      \n",$projectTeamCount);
 
         file_put_contents('var/project_teams.yml',Yaml::dump($projectTeams,9));
@@ -350,9 +353,9 @@ EOD;
                 }
             }
             $gameTeam['misconduct'] = $misconduct;
-            
+
             $gameTeams[] = $gameTeam; // For yaml
-            
+
             $gameTeam['misconduct'] = count($misconduct) ? serialize($misconduct) : null;
 
             $this->gameConn->delete('projectGameTeams',['id' => $gameTeam['id']]);
@@ -365,5 +368,67 @@ EOD;
         echo sprintf("\rMigrated Game Teams %5d      \n",count($gameTeams));
 
         file_put_contents('var/game_teams.yml',Yaml::dump($gameTeams,9));
+    }
+    /* ===================================================================
+     * Load Game Officials
+     */
+    private function migrateGameOfficials($commit)
+    {
+        if (!$commit) return;
+
+        // The teams
+        $sql = <<<EOD
+SELECT 
+  official.slot           AS slot,
+  official.assignRole     AS assignRole,
+  official.assignState    AS assignState,
+  official.personNameFull AS name,
+  official.personGuid     AS personKey,
+  game.projectKey         AS projectKey,
+  game.num                AS gameNumber
+FROM game_officials AS official
+LEFT JOIN games AS game ON game.id = official.gameId
+ORDER BY gameNumber,official.slot
+EOD;
+        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $gameOfficials = [];
+        while($row = $stmt->fetch()) {
+
+            $projectKey = $row['projectKey'];
+            $gameNumber = (integer)$row['gameNumber'];
+            $slot       = (integer)$row['slot'];
+
+            $gameId          = $projectKey . ':' . $gameNumber;
+            $gameOfficialId  = $gameId .     ':' . $slot;
+            $projectPersonId = $projectKey . ':' . $row['personKey'];
+
+            $assignRole = $row['assignRole'];
+            $assignRole = $assignRole === 'ROLE_USER' ? 'ROLE_REFEREE' : $assignRole;
+
+            $gameOfficial = [
+                'id'          => $gameOfficialId,
+                'projectKey'  => $projectKey,
+                'gameNumber'  => $gameNumber,
+                'slot'        => $slot,
+                'name'        => $row['name'],
+                'assignRole'  => $assignRole,
+                'assignState' => $row['assignState'],
+
+                'gameId'          => $gameId,
+                'projectPersonId' => $projectPersonId,
+            ];
+
+            $gameOfficials[] = $gameOfficial;
+
+            $this->gameConn->delete('projectGameOfficials',['id' => $gameOfficialId]);
+            $this->gameConn->insert('projectGameOfficials',$gameOfficial);
+
+            if ((count($gameOfficials) % 100) === 0) {
+                echo sprintf("\rMigrating Game Officials %5d",count($gameOfficials));
+            }
+        }
+        echo sprintf("\rMigrated Game Officials %5d      \n",count($gameOfficials));
+
+        file_put_contents('var/game_officials.yml',Yaml::dump($gameOfficials,9));
     }
 }
