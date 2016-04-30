@@ -20,3 +20,9 @@ services:
         arguments:
             - '@doctrine.dbal.ng2014games_connection'
             - '@doctrine.dbal.ng2016games_connection'
+
+    game_init_ng2016_command:
+        class: AppBundle\Action\Game\Migrate\InitGames2016Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '@doctrine.dbal.ng2016games_connection'
