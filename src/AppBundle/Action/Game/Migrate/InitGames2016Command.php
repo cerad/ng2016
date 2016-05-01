@@ -85,17 +85,17 @@ class InitGames2016Command extends Command
         $projectTeamId = $projectKey . ':' . $teamKey;
 
         $item = [
-            'id' => $projectTeamId,
+            'id'         => $projectTeamId,
             'projectKey' => $projectKey,
-            'teamKey' => $teamKey,
+            'teamKey'    => $teamKey,
             'teamNumber' => $teamNumber,
 
-            'name' => sprintf('#%02d ', $teamNumber),
+            'name'   => sprintf('#%02d', $teamNumber),
             'status' => 'Active',
 
-            'program' => $program,
-            'gender' => $gender,
-            'age' => $age,
+            'program'  => $program,
+            'gender'   => $gender,
+            'age'      => $age,
             'division' => $division,
         ];
         $this->projectTeamConn->insert('projectTeams', $item);

@@ -1,21 +1,30 @@
 <?php
 namespace AppBundle\Action\Schedule2016;
 
+use AppBundle\Common\QueryBuilderTrait;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 class ScheduleFinder
 {
+    use QueryBuilderTrait;
+
     /** @var  Connection */
     private $gameConn;
-    
+
     /** @var  Connection */
     private $poolConn;
+    
+    /** @var  Connection */
+    private $teamConn;
 
-    public function __construct(Connection $gameConn, Connection $poolConn)
+    public function __construct(
+        Connection $gameConn, 
+        Connection $poolConn,
+        Connection $teamConn)
     {
         $this->gameConn = $gameConn;
         $this->poolConn = $poolConn;
+        $this->teamConn = $teamConn;
     }
 
     /**
@@ -138,7 +147,7 @@ class ScheduleFinder
         return $gameIds;
     }
     // It is possible that this might be moved into a shared pool team finder
-    private function findPoolTeams(array $criteria)
+    public function findPoolTeams(array $criteria)
     {
         $poolTeams = [];
 
@@ -170,18 +179,29 @@ class ScheduleFinder
         }
         return $poolTeams;
     }
-    private function addWhere(QueryBuilder $qb, array $metas, array $criteria)
+    // It is possible that this might be moved into a shared project team finder
+    public function findProjectTeams(array $criteria, $objects = true)
     {
-        $values = [];
-        $types  = [];
+        $conn = $this->teamConn;
         
-        foreach($metas as $key => $col) {
-            if (isset($criteria[$key]) && count($criteria[$key])) {
-                $qb->andWhere($col . ' IN (?)');
-                $values[] = $criteria[$key];
-                $types[]  = Connection::PARAM_STR_ARRAY;
-            }
+        $qb = $conn->createQueryBuilder();
+
+        // Just grab everything for now
+        $qb->select('*')->from('projectTeams')->orderBy('id');
+
+        $whereMeta = [
+            'projectKeys' => 'projectKey',
+            'programs'    => 'program',
+            'genders'     => 'gender',
+            'ages'        => 'age',
+            'divisions'   => 'division',
+        ];
+        list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
+        $stmt = $conn->executeQuery($qb->getSQL(),$values,$types);
+        $teams = [];
+        while($team = $stmt->fetch()) {
+            $teams[$team['id']] = $objects ? ScheduleTeam::createFromArray($team) : $team;
         }
-        return [$values,$types];
+        return $teams;
     }
 }

@@ -10,7 +10,7 @@ abstract class AbstractView2 implements ContainerAwareInterface
     use AbstractActionTrait;
     
     /** @var  ContainerInterface */
-    protected $container;
+    //protected $container;
 
     /** =============================================
      * In theory these template classes should only be in AbstractView

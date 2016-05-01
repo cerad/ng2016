@@ -11,15 +11,17 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
     private $gameDatabaseKey = 'database_name_ng2016games';
     private $poolDatabaseKey = 'database_name_ng2016games';
+    private $teamDatabaseKey = 'database_name_ng2016games';
 
     private function createFinder()
     {
         $gameConn = $this->getConnection($this->gameDatabaseKey);
         $poolConn = $this->getConnection($this->poolDatabaseKey);
+        $teamConn = $this->getConnection($this->teamDatabaseKey);
 
-        return new ScheduleFinder($gameConn,$poolConn);
+        return new ScheduleFinder($gameConn,$poolConn,$teamConn);
     }
-    public function test1()
+    public function testFindGames()
     {
         $finder = $this->createFinder();
         
@@ -47,5 +49,22 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('C6',$game->awayTeam->poolTeamSlotView);
 
+    }
+    public function testFindProjectTeams()
+    {
+        $finder = $this->createFinder();
+
+        $criteria = [
+            'projectKeys' => ['AYSONationalGames2016'],
+            'programs'    => ['Core'],
+            'divisions'   => ['U14B'],
+        ];
+        $teams = $finder->findProjectTeams($criteria);
+        $teams = array_values($teams);
+
+        $this->assertCount(24,$teams);
+
+        $team = $teams[2];
+        $this->assertEquals('#03',trim($team->name));
     }
 }

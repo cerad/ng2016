@@ -13,7 +13,5 @@ class ScheduleGameTest extends WebTestCase
         $crawler = $client->request('GET', '/schedule2016/game');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
-        
     }
 }
