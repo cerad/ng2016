@@ -1,0 +1,18 @@
+# Pretend that this is a database and the app supports multiple projects
+parameters:
+
+    project_choices:
+        NG2016 : AYSONationalGames2016
+        NG2014 : AYSONationalGames2014
+
+    projects:
+
+        AYSONationalGames2016:
+            programs:
+                Core: Core
+
+        AYSONationalGames2014:
+            programs:
+                Core:  Core
+                Extra: Extra
+                VIP:   VIP

@@ -15,6 +15,12 @@ class ScheduleGameTeam
     public $slot;
 
     public $name;
+    public $points;
+    
+    public $program;
+    public $gender;
+    public $age;
+    public $division;
 
     public $score;
     public $sportsmanship;
@@ -34,7 +40,8 @@ class ScheduleGameTeam
         'gameNumber' => 'integer',
         'slot'       => 'integer',
 
-        'name' => 'string',
+        'name'   => 'string',
+        'points' => 'integer',
 
         'score'         => 'integer|null',
         'sportsmanship' => 'integer|null',
@@ -46,6 +53,11 @@ class ScheduleGameTeam
         'poolTeamSlotView' => 'string',
 
         'orgKey' => 'PhysicalOrgId', // Could be part of project team
+
+        'program'  => 'string',
+        'gender'   => 'string',
+        'agw'      => 'string',
+        'division' => 'string',
     ];
 
     public function __get($name)

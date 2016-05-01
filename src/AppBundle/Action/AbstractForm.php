@@ -10,9 +10,6 @@ abstract class AbstractForm implements ContainerAwareInterface
 {
     use AbstractActionTrait;
     
-    /** @var  ContainerInterface */
-    protected $container;
-    
     protected $isPost = false;
     
     protected $submit;
@@ -66,14 +63,21 @@ EOD;
         $html .= '</div>' . "\n";
         return $html;
     }
-    protected function renderFormControlInputSelect($choices,$value,$id,$name)
+    protected function renderFormControlInputSelect($choices,$value,$id,$name,$size=null)
     {
+        $size = $size ? sprintf(' size="%d"',$size) : null;
+
+        $multiple = is_array($value) ? ' multiple' : null;
+
+        $values   = is_array($value) ? $value : [$value];
+
         $html = <<<EOD
-<select id="{$id}" name="{$name}" class="form-control">
+<select id="{$id}" name="{$name}"{$multiple}{$size} class="form-control">
 EOD;
         foreach($choices as $choiceContent => $choiceValue)
         {
-            $selected = ($value === $choiceValue) ? ' selected' : null;
+            $selected = in_array($choiceValue,$values) ? ' selected' : null;;
+
             $html .= <<<EOD
   <option value="{$choiceValue}"{$selected}>{$this->escape($choiceContent)}</option>
   

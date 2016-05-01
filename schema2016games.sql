@@ -39,7 +39,7 @@ CREATE TABLE projectGameTeams
   gameNumber INTEGER     NOT NULL,
   slot       INTEGER     NOT NULL,
 
-  name       VARCHAR(99),
+  name       VARCHAR(99), -- Move to pool team?
 
   results        INTEGER,     -- 1 => Won, 2 => Lost, 3 => Tied, 4 => Not Played etc
   resultsDetail  VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
@@ -58,7 +58,7 @@ CREATE TABLE projectGameTeams
   gameId        VARCHAR(99) NOT NULL,
   poolTeamId    VARCHAR(99) NOT NULL,
   projectTeamId VARCHAR(99),
-  orgKey        VARCHAR(99),
+  orgKey        VARCHAR(99), -- move to pool team?
 
   CONSTRAINT projectGameTeams_primaryKey PRIMARY KEY(id),
 
@@ -98,6 +98,10 @@ CREATE TABLE projectPoolTeams
 
   projectTeamId VARCHAR(99), -- Maybe
 
+  -- name From projectTeam aka registeredTeam
+  -- points
+  -- orgKey,orgView
+
   CONSTRAINT projectPoolTeams_primaryKey PRIMARY KEY(id),
 
   CONSTRAINT projectPoolTeams_unique_poolTeamKey UNIQUE(projectKey,poolTeamKey),
@@ -123,6 +127,7 @@ CREATE TABLE projectTeams
   points     INTEGER,
   status     VARCHAR(40) NOT NULL DEFAULT 'Active',
   orgKey     VARCHAR(40),
+  -- orgKeyView
 
   program    VARCHAR(20),
   gender     VARCHAR(20),
@@ -147,12 +152,12 @@ CREATE TABLE projectGameOfficials
   gameNumber INTEGER     NOT NULL,
   slot       INTEGER     NOT NULL,
   name       VARCHAR(99),
-
+  -- details about the official
   assignRole   VARCHAR(40) DEFAULT 'ROLE_REFEREE',
   assignState  VARCHAR(40),
 
   gameId          VARCHAR(99) NOT NULL,
-  projectPersonId VARCHAR(99),
+  projectPersonId VARCHAR(99), -- aka RegisteredPersonId along with PhysicalPersonKey
 
   CONSTRAINT projectGameOfficials_primaryKey PRIMARY KEY(id),
 
