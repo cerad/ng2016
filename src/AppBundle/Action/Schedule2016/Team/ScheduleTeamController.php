@@ -31,7 +31,7 @@ class ScheduleTeamController extends AbstractController2
         ];
         $session = $request->getSession();
         if ($session->has('schedule_team_search_data_2016')) {
-            $searchData = array_merge($searchData,$session->get('schedule_team_search_data_2016'));
+            $searchData = array_replace($searchData,$session->get('schedule_team_search_data_2016'));
         };
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);

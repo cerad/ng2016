@@ -7,19 +7,32 @@ services:
             - '@doctrine.dbal.ng2016games_connection' # poolTeamConn
             - '@doctrine.dbal.ng2016games_connection' # projectTeamConn
 
+    schedule_template_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleTemplate
+        calls: [['setContainer', ['@service_container']]]
+
     # ===============================================================
     # Schedule Game
+    schedule_game_search_form_2016:
+        class:  AppBundle\Action\Schedule2016\Game\ScheduleGameSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+
     schedule_game_controller_2016:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameController
         parent: abstract_controller
         arguments:
+            - '@schedule_game_search_form_2016'
             - '@schedule_finder_2016'
 
     schedule_game_view_html_2016:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameView
         parent: abstract_view2
         arguments:
-            - '@schedule_finder_2016'
+            - '@schedule_game_search_form_2016'
+            - '@schedule_template_2016'
 
     # ===============================================================
     # Schedule Team
@@ -43,4 +56,4 @@ services:
         parent: abstract_view2
         arguments:
             - '@schedule_team_search_form_2016'
-            - '@schedule_finder_2016'
+            - '@schedule_template_2016'
