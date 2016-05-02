@@ -1,0 +1,30 @@
+schedule_team_2016:
+    path: /team.{_format}
+    defaults:
+        _format: html
+        _controller: schedule_team_controller_2016
+        _view_html:  schedule_team_view_html_2016
+        _view_xls:   schedule_team_view_xls
+        _view_csv:   schedule_team_view_csv
+
+schedule_official_2016:
+    path: /official.{_format}
+    defaults:
+        _format: html
+        _controller: schedule_official_controller_2016
+        _view_html:  schedule_official_view_html_2016
+        _view_xls:   schedule_official_view_xls
+        _view_csv:   schedule_official_view_csv
+
+schedule_game_2016:
+    path: /game.{_format}
+    defaults:
+        _format: html
+        _controller: schedule_game_controller_2016
+        _view_html:  schedule_game_view_html_2016
+        _view_xls:   schedule_game_view_xls
+        _view_csv:   schedule_game_view_csv
+        _view_pdf:   schedule_game_view_pdf
+        _view_json:  schedule_game_view_json
+        _view_core:  schedule_game_core_xls
+        _view_extra: schedule_game_extra_xls

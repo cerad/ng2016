@@ -1,0 +1,57 @@
+# Pretend that this is a database and the app supports multiple projects
+parameters:
+
+    project_choices:
+        AYSONationalGames2016 : NG2016
+        AYSONationalGames2014 : NG2014
+
+    projects:
+
+        AYSONationalGames2016:
+            programs:
+                Core: Core
+                VIP:  VIP
+            genders:
+                B:  B
+                G:  G
+            ages:
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+            dates:
+                '2016-07-06': Wed # Soccerfest
+                '2016-07-07': Thu # Pool Play
+                '2016-07-08': Fri # Pool Play
+                '2016-07-09': Sat # Pool Play and Quarter Finals
+                '2016-07-10': Sun # Semi and Finals
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'
+                3: 'Game Number'
+
+        AYSONationalGames2014:
+            programs:
+                Core:  Core
+                Extra: Extra
+                VIP:   VIP
+            genders:
+                B:  B
+                G:  G
+            ages:
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+            dates:
+                '2014-07-02': Wed # Soccerfest
+                '2014-07-03': Thu # Pool Play
+                '2014-07-04': Fri # Pool Play
+                '2014-07-05': Sat # Pool Play and Quarter Finals
+                '2014-07-06': Sun # Semi and Finals
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'
+                3: 'Game Number'

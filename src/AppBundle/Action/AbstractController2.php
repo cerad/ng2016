@@ -11,7 +11,7 @@ abstract class AbstractController2 implements ContainerAwareInterface
     use AbstractActionTrait;
     
     /** @var  ContainerInterface */
-    protected $container;
+    //protected $container;
     
     /** Copied directly from SymfonyFramework Base Controller
      * Returns a RedirectResponse to the given URL.

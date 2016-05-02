@@ -11,6 +11,10 @@ app_schedule:
     resource: "@AppBundle/Action/Schedule/routes.yml"
     prefix: /schedule
 
+schedule_2016:
+    resource: "@AppBundle/Action/Schedule2016/routes.yml"
+    prefix: /schedule2016
+
 app_results:
     resource: "@AppBundle/Action/Results/routes.yml"
     prefix: /results

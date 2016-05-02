@@ -3,6 +3,7 @@ namespace AppBundle\Action;
 
 // Better name
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -41,6 +42,13 @@ trait AbstractActionTrait
         $router = $this->container->get('router');
 
         return $router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+    protected function getCurrentRouteName()
+    {
+        /** @var RequestStack $requestStack */
+        $requestStack = $this->container->get('request_stack');
+        $request = $requestStack->getMasterRequest();
+        return $request->attributes->get('_route');
     }
     /** ================================================================
      * TODO This is an infrequently used light weight object, does it really belong here?
