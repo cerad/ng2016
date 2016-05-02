@@ -52,7 +52,7 @@ abstract class LoadAbstractCommand extends Command
 
         $this->conn = $conn;
 
-        $this->initConnections($conn);
+        $this->initStatements($conn);
 
         $this->initCerts();
     }
@@ -67,7 +67,7 @@ abstract class LoadAbstractCommand extends Command
     }
     abstract protected function load($filename);
     
-    protected function initConnections(Connection $conn)
+    protected function initStatements(Connection $conn)
     {
         $sql = <<<EOD
 INSERT INTO vols

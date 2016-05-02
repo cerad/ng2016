@@ -30,9 +30,11 @@ class LoadTomCommand extends LoadAbstractCommand
 
                 $fedKey = 'AYSOV:' . (string)trim($row[0]); // "AYSOID";
 
-                $this->loadVol     ($fedKey,$regYear,$row);
-                $this->loadCerts   ($fedKey,$row);
-                $this->loadOrg     (trim($row[6]),trim($row[10]));
+                //$this->loadVol  ($fedKey,$regYear,$row);
+                //$this->loadCerts($fedKey,trim($row[2]),trim($row[3])); // Referee
+                //$this->loadCerts($fedKey,trim($row[4]),null);          // Concussion
+                //$this->loadCerts($fedKey,trim($row[5]),null);          // Safe Haven
+                //$this->loadOrg     (trim($row[6]),trim($row[10]));
                 $this->loadOrgState(trim($row[6]),trim($row[10]));
             }
             if (($rowCount % 100) === 0) {
@@ -50,7 +52,7 @@ class LoadTomCommand extends LoadAbstractCommand
             trim($row[ 7]),  // "Name"
             trim($row[13]),  // "Email"
             trim($row[12]),  // "HomePhone"
-            null,      // "Gender M or F
+            null,            // "Gender M or F
             trim($row[ 6]),  // "SectionAreaRegion"
             $regYear,
         ];
@@ -59,6 +61,7 @@ class LoadTomCommand extends LoadAbstractCommand
         $vol = $this->checkVolStmt->fetch();
         if (!$vol) {
             $this->insertVolStmt->execute($item);
+            //echo sprintf("Inserted Vol: %s,%s\n",$fedKey,$row[7]);
             return;
         }
         if ($regYear <= $vol['regYear']) {
@@ -70,21 +73,24 @@ class LoadTomCommand extends LoadAbstractCommand
 
         $this->updateVolStmt->execute($item);
     }
-    private function loadCerts($fedKey,$row)
+    private function loadCerts($fedKey,$certDescs,$certDate)
     {
-        $certDescs = explode(',',trim($row[2])); //"CertificationDesc"
         $certDescs = str_replace(' & ',',',$certDescs);
+        $certDescs = explode(',',$certDescs);
 
         foreach($certDescs as $certDesc) {
-            $this->loadCert($fedKey,trim($certDesc),$row);
+            $this->loadCert($fedKey,trim($certDesc),$certDate);
         }
     }
-    private function loadCert($fedKey,$certDesc,$row)
+    private function loadCert($fedKey,$certDesc,$certDate)
     {
+        // Safe haven and concussion
+        if (!$certDesc || $certDesc === 'No') {
+            return;
+        }
         $certMeta = isset($this->certMetas[$certDesc]) ? $this->certMetas[$certDesc] : null;
         if (!$certMeta) {
-            var_dump($row);
-            die('Missing cert: ' . $certDesc);
+            die('Missing cert: ' . $fedKey . ' ' . $certDesc);
         }
 //if (1) return;
         $role  = $certMeta['role'];
@@ -93,7 +99,7 @@ class LoadTomCommand extends LoadAbstractCommand
         }
         $badge = $certMeta['badge'];
 
-        $badgeDate = \DateTime::createFromFormat('d-M-y',trim($row[3])); // 04-Feb-06
+        $badgeDate = \DateTime::createFromFormat('d-M-y',$certDate); // 04-Feb-06
         if ($badgeDate) {
             $badgeDate = $badgeDate->format('Y-m-d');
             if (!$badgeDate) {

@@ -24,10 +24,11 @@ DROP TABLE IF EXISTS certs;
 CREATE TABLE certs
 (
   fedKey    VARCHAR( 20) NOT NULL,
-  role      VARCHAR( 20) NOT NULL,
+  role      VARCHAR( 40) NOT NULL,
   roleDate  DATE,
-  badge     VARCHAR( 20),
+  badge     VARCHAR( 40),
   badgeDate DATE,
+  badgeSort INTEGER,
 
   CONSTRAINT aysoCerts_primaryKey PRIMARY KEY(fedKey,role)
 
