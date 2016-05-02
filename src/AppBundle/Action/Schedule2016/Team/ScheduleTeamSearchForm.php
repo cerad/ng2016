@@ -26,24 +26,13 @@ class ScheduleTeamSearchForm extends AbstractForm
         
         $data = $request->request->all();
         $errors = [];
-        
-        $projectKey = filter_var(trim($data['projectKey']), FILTER_SANITIZE_STRING);
-        $program    = filter_var(trim($data['program']),    FILTER_SANITIZE_STRING);
-        $name       = filter_var(trim($data['name']),       FILTER_SANITIZE_STRING);
 
-        $dataTeams = isset($data['teams']) ? $data['teams'] : [];
-        $teams = [];
-        foreach($dataTeams as $team) {
-            $team = filter_var(trim($team),FILTER_SANITIZE_STRING);
-            if ($team) {
-                $teams[] = $team;
-            }
-        }
-        $this->formData = array_merge($this->formData,[
-            'projectKey' => $projectKey,
-            'program'    => $program,
-            'teams'      => $teams,
-            'name'       => $name,
+        $this->formData = array_replace($this->formData,[
+            'projectKey' => $this->filterScalar($data,'projectKey'),
+            'program'    => $this->filterScalar($data,'program'),
+            'name'       => $this->filterScalar($data,'name'),
+            'teams'      => $this->filterArray ($data,'teams'),
+            'sortBy'     => $this->filterScalar($data,'sortBy',true),
         ]);
         $this->formDataErrors = $errors;
     }
@@ -52,20 +41,21 @@ class ScheduleTeamSearchForm extends AbstractForm
         $formData = $this->formData;
 
         $projectKey = $formData['projectKey'];
+        $project    = $this->projects[$projectKey];
 
         $program = $formData['program'];
-        $programChoices = $this->projects[$projectKey]['programs'];
-
+        
         $teamIds = $formData['teams'];
         $criteria = [
             'projectKeys' => [$projectKey],
             'programs'    => [$program],
         ];
+        // findProjectTeamChoices ???
         $teams = $this->finder->findProjectTeams($criteria,true);
-        $teamChoices = ['Select Team(s)' => null];
+        $teamChoices = [null => 'Select Team(s)'];
         foreach($teams as $team) {
-            $teamLabel = sprintf('%s %s',$team->division,$team->name);
-            $teamChoices[$teamLabel] = $team->id;
+            $teamContent = sprintf('%s %s',$team->division,$team->name);
+            $teamChoices[$team->id] = $teamContent;
         }
 
         $name = $this->formData['name'];
@@ -74,18 +64,18 @@ class ScheduleTeamSearchForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
-<form role="form" class="form-inline" style="width: 760px;" action="{$this->generateUrl('schedule_team_2016')}" method="post">
+<form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl('schedule_team_2016')}" method="post">
   <div class="form-group">
     <label for="projectKey">Project</label>
-    {$this->renderFormControlInputSelect($this->projectChoices,$projectKey,'projectKey','projectKey')}
+    {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey')}
   </div>
   <div class="form-group">
     <label for="program">Program</label>
-    {$this->renderFormControlInputSelect($programChoices,$program,'program','program')}
+    {$this->renderInputSelect($project['programs'],$program,'program')}
   </div>
   <div class="form-group">
-    <label for="teams">Teams</label>
-    {$this->renderFormControlInputSelect($teamChoices,$teamIds,'teams','teams[]',10)}
+    <label for="sortBy">Sort By</label>
+    {$this->renderInputSelect($project['sortBy'],$formData['sortBy'],'sortBy')}
   </div>
   <div class="form-group">
     <label for="name">Name</label>
@@ -93,6 +83,10 @@ class ScheduleTeamSearchForm extends AbstractForm
       type="text" id="name" class="form-control"
       name="name" value="{$name}" placeholder="Filter By Name" />
   </div>
+  <div class="form-group">
+    {$this->renderInputSelect($teamChoices,$teamIds,'teams[]','teams',10)}
+  </div>
+  <br/><br />
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span> 

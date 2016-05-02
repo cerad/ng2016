@@ -26,6 +26,8 @@ services:
         arguments:
             - '@schedule_game_search_form_2016'
             - '@schedule_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
 
     schedule_game_view_html_2016:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameView
@@ -50,6 +52,8 @@ services:
         arguments:
             - '@schedule_team_search_form_2016'
             - '@schedule_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
 
     schedule_team_view_html_2016:
         class:  AppBundle\Action\Schedule2016\Team\ScheduleTeamView

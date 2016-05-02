@@ -32,7 +32,7 @@ class ScheduleFinder
      * @param  bool $objects
      * @return ScheduleGame[]
      */
-    public function findGames(array $criteria, $objects = false)    
+    public function findGames(array $criteria, $objects = true)
     {
         // First we need pool teams
         $poolTeamIds = $this->findPoolTeamIds($criteria);
@@ -55,6 +55,9 @@ class ScheduleFinder
         $gameObjects = [];
         foreach($games as $game) {
             $gameObjects[] = ScheduleGame::fromArray($game);
+        }
+        if (isset($criteria['sortBy'])) {
+            $gameObjects = $this->sortGames($gameObjects,$criteria['sortBy']);
         }
         // Done
         return $gameObjects;
@@ -238,5 +241,46 @@ EOD;
             $teams[$team['id']] = $objects ? ScheduleTeam::createFromArray($team) : $team;
         }
         return $teams;
+    }
+    // Predefined sorts
+    protected function sortGames($games,$sortBy)
+    {
+        if ($sortBy === 1) {
+            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
+
+                if ($game1->start > $game2->start) return  1;
+                if ($game1->start < $game2->start) return -1;
+
+                if ($game1->poolView > $game2->poolView) return  1;
+                if ($game1->poolView < $game2->poolView) return -1;
+
+                if ($game1->fieldName > $game2->fieldName) return  1;
+                if ($game1->fieldName < $game2->fieldName) return -1;
+
+                return 0;
+            });
+            return $games;
+        }
+        if ($sortBy === 2) {
+            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
+
+                $date1 = substr($game1->start,0,10);
+                $date2 = substr($game1->start,0,10);
+                if ($date1 > $date2) return  1;
+                if ($date1 < $date2) return -1;
+
+                if ($game1->fieldName > $game2->fieldName) return  1;
+                if ($game1->fieldName < $game2->fieldName) return -1;
+
+                $time1 = substr($game1->start,11); // 2016-07-07 08:00:00
+                $time2 = substr($game2->start,11);
+                if ($time1 > $time2) return  1;
+                if ($time1 < $time2) return -1;
+
+                return 0;
+            });
+            return $games;
+        }
+        return $games;
     }
 }

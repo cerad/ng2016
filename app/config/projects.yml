@@ -2,8 +2,8 @@
 parameters:
 
     project_choices:
-        NG2016 : AYSONationalGames2016
-        NG2014 : AYSONationalGames2014
+        AYSONationalGames2016 : NG2016
+        AYSONationalGames2014 : NG2014
 
     projects:
 
@@ -11,12 +11,6 @@ parameters:
             programs:
                 Core: Core
                 VIP:  VIP
-            dates: # Left is label, right is value
-                Wed: '2016-07-06' # Wed Soccerfest
-                Thu: '2016-07-07' # Thu Pool Play
-                Fri: '2016-07-08' # Fri Pool Play
-                Sat: '2016-07-09' # Sat Pool Play and Quarter Finals
-                Sun: '2016-07-10' # Sun Semi and Finals
             genders:
                 B:  B
                 G:  G
@@ -26,18 +20,21 @@ parameters:
                 U14: U14
                 U16: U16
                 U19: U19
+            dates:
+                '2016-07-06': Wed # Soccerfest
+                '2016-07-07': Thu # Pool Play
+                '2016-07-08': Fri # Pool Play
+                '2016-07-09': Sat # Pool Play and Quarter Finals
+                '2016-07-10': Sun # Semi and Finals
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'
 
         AYSONationalGames2014:
             programs:
                 Core:  Core
                 Extra: Extra
                 VIP:   VIP
-            dates:
-                Wed: '2014-07-02' # Wed Soccerfest
-                Thu: '2014-07-03' # Thu Pool Play
-                Fri: '2014-07-04' # Fri Pool Play
-                Sat: '2014-07-05' # Sat Pool Play and Quarter Finals
-                Sun: '2014-07-06' # Sun Semi and Finals
             genders:
                 B:  B
                 G:  G
@@ -47,3 +44,12 @@ parameters:
                 U14: U14
                 U16: U16
                 U19: U19
+            dates:
+                '2014-07-02': Wed # Soccerfest
+                '2014-07-03': Thu # Pool Play
+                '2014-07-04': Fri # Pool Play
+                '2014-07-05': Sat # Pool Play and Quarter Finals
+                '2014-07-06': Sun # Semi and Finals
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'

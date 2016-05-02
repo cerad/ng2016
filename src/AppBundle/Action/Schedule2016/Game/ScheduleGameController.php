@@ -4,38 +4,56 @@ namespace AppBundle\Action\Schedule2016\Game;
 
 use AppBundle\Action\AbstractController2;
 
-use AppBundle\Action\Schedule2016\ScheduleGame;
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 
 use Symfony\Component\HttpFoundation\Request;
 
 class ScheduleGameController extends AbstractController2
 {
-    private $finder;
     private $searchForm;
-    
+    private $scheduleFinder;
+
+    private $projects;
+    private $projectChoices;
+
     public function __construct(
         ScheduleGameSearchForm $searchForm,
-        ScheduleFinder $finder
+        ScheduleFinder         $scheduleFinder,
+        array $projectChoices,
+        array $projects
     )
     {
-        $this->finder = $finder;
-        $this->searchForm = $searchForm;
+        $this->searchForm     = $searchForm;
+        $this->scheduleFinder = $scheduleFinder;
+
+        $this->projects       = $projects;
+        $this->projectChoices = $projectChoices;
     }
     public function __invoke(Request $request)
     {
+        // First project in list
+        $projectKey = array_keys($this->projectChoices)[0];
+
+        // Second date in project
+        $date = array_keys($this->projects[$projectKey]['dates'])[1];
+
         $searchData = [
-            'projectKey' => $this->getCurrentProjectKey(),
+            'projectKey' => $projectKey,
             'programs'   => ['Core'],
             'genders'    => ['G'],
             'ages'       => ['U14'],
-            'dates'      => ['2016-07-07'], // Pull from projects for current project
+            'dates'      => [$date],
             'sortBy'     => 1,
         ];
         // Save selected teams in session
-        $session = $request->getSession();
-        if ($session->has('schedule_game_search_data_2016')) {
-            $searchData = array_replace($searchData,$session->get('schedule_game_search_data_2016'));
+        $session    = $request->getSession();
+        $sessionKey = 'schedule_game_search_data_2016';
+
+        if ($request->query->has('reset')) {
+            $session->remove($sessionKey);
+        }
+        if ($session->has($sessionKey)) {
+            $searchData = array_replace($searchData,$session->get($sessionKey));
         }
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);
@@ -45,62 +63,36 @@ class ScheduleGameController extends AbstractController2
 
             $searchDataNew = $searchForm->getData();
             if ($searchData['projectKey'] !== $searchDataNew['projectKey']) {
+
+                // Getting way too tricky here but match dates by dow
+                $dates = $this->projects[$searchData['projectKey']]['dates'];
+                $dows = [];
+                foreach($searchDataNew['dates'] as $date) {
+                    $dows[] = $dates[$date];
+                }
+                $dates = $this->projects[$searchDataNew['projectKey']]['dates'];
+                $datesNew = [];
+                foreach($dates as $date => $dow) {
+                    if (in_array($dow,$dows)) {
+                        $datesNew[] = $date;
+                    }
+                }
+                // Suppose something similiar for Core could be done as well but bored now
                 $searchDataNew = array_replace($searchDataNew,[
-                    'programs' => ['Core'], // Rest should be okay, could merge the dates but oh well
+                    'programs' => ['Core'],
+                    'dates'    => $datesNew,
                 ]);
             }
-            // TODO Some way to clear this
-            $session->set('schedule_game_search_data_2016',$searchDataNew);
+            $session->set($sessionKey,$searchDataNew);
 
-            return $this->redirectToRoute('schedule_game_2016');
+            return $this->redirectToRoute($request->attributes->get('_route'));
         }
-        
-        $games = $this->finder->findGames($searchData,true);
+        // For now, restrict to one project
+        $searchData['projectKeys'] = [$searchData['projectKey']];
 
-        $games = $this->sortGames($games,$searchData['sortBy']);
+        $games = $this->scheduleFinder->findGames($searchData,true);
 
         $request->attributes->set('games', $games);
         return null;
-    }
-    // Move this to ScheduleSorter
-    protected function sortGames($games,$sortBy)
-    {
-        if ($sortBy === 1) {
-            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
-
-                if ($game1->start > $game2->start) return  1;
-                if ($game1->start < $game2->start) return -1;
-
-                if ($game1->poolView > $game2->poolView) return  1;
-                if ($game1->poolView < $game2->poolView) return -1;
-
-                if ($game1->fieldName > $game2->fieldName) return  1;
-                if ($game1->fieldName < $game2->fieldName) return -1;
-
-                return 0;
-            });
-            return $games;
-        }
-        if ($sortBy === 2) {
-            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
-
-                $date1 = substr($game1->start,0,10);
-                $date2 = substr($game1->start,0,10);
-                if ($date1 > $date2) return  1;
-                if ($date1 < $date2) return -1;
-
-                if ($game1->fieldName > $game2->fieldName) return  1;
-                if ($game1->fieldName < $game2->fieldName) return -1;
-
-                $time1 = substr($game1->start,11); // 2016-07-07 08:00:00
-                $time2 = substr($game2->start,11);
-                if ($time1 > $time2) return  1;
-                if ($time1 < $time2) return -1;
-
-                return 0;
-            });
-            return $games;
-        }
-        return $games;
     }
 }

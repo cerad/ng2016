@@ -57,7 +57,7 @@ CREATE TABLE projectGameTeams
 
   gameId        VARCHAR(99) NOT NULL,
   poolTeamId    VARCHAR(99) NOT NULL,
-  projectTeamId VARCHAR(99),
+  projectTeamId VARCHAR(99), -- not currently being used
   orgKey        VARCHAR(99), -- move to pool team?
 
   CONSTRAINT projectGameTeams_primaryKey PRIMARY KEY(id),

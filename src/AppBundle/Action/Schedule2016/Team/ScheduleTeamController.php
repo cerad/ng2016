@@ -13,25 +13,42 @@ class ScheduleTeamController extends AbstractController2
     private $searchForm;
     private $scheduleFinder;
     
+    private $projects;
+    private $projectChoices;
+
     public function __construct(
         ScheduleTeamSearchForm $searchForm,
-        ScheduleFinder         $scheduleFinder
+        ScheduleFinder         $scheduleFinder,
+        array $projectChoices,
+        array $projects
     )
     {
         $this->searchForm     = $searchForm;
         $this->scheduleFinder = $scheduleFinder;
+
+        $this->projects       = $projects;
+        $this->projectChoices = $projectChoices;
     }
-    public function __invoke(Request $request)
+   public function __invoke(Request $request)
     {
+        // First project in list
+        $projectKey = array_keys($this->projectChoices)[0];
+
         $searchData = [
-            'projectKey' => $this->getCurrentProjectKey(),
+            'projectKey' => $projectKey,
             'program'    => 'Core',
             'name'       =>  null,
             'teams'      => [],
+            'sortBy'     => 1,
         ];
         $session = $request->getSession();
-        if ($session->has('schedule_team_search_data_2016')) {
-            $searchData = array_replace($searchData,$session->get('schedule_team_search_data_2016'));
+        $sessionKey = 'schedule_team_search_data_2016';
+
+        if ($request->query->has('reset')) {
+            $session->remove($sessionKey);
+        }
+        if ($session->has($sessionKey)) {
+            $searchData = array_replace($searchData,$session->get($sessionKey));
         };
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);
@@ -47,10 +64,9 @@ class ScheduleTeamController extends AbstractController2
             if ($searchData['program'] !== $searchDataNew['program']) {
                 $searchDataNew['teams'] = [];
             }
-            // TODO Some way to clear this
-            $session->set('schedule_team_search_data_2016',$searchDataNew);
+            $session->set($sessionKey,$searchDataNew);
 
-            return $this->redirectToRoute('schedule_team_2016');
+            return $this->redirectToRoute($request->attributes->get('_route'));
         }
         if (!count($searchData['teams'])) {
             $request->attributes->set('games',[]);
