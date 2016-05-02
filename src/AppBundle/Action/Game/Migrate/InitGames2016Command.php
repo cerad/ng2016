@@ -6,7 +6,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class InitGames2016Command extends Command
 {
@@ -324,8 +323,8 @@ class InitGames2016Command extends Command
 
             [1, 'Sat', '10:30', 'A3', 'A2', 'B'], [2, 'Sat', '10:30', 'A1', 'A6', 'B'], [3, 'Sat', '10:30', 'A4', 'A5', 'B'],
             [4, 'Sat', '10:30', 'C3', 'C2', 'B'], [5, 'Sat', '10:30', 'C1', 'C6', 'B'], [6, 'Sat', '10:30', 'C4', 'C5', 'B'],
-            [1, 'Sat', '11:45', 'D3', 'D2', 'B'], [2, 'Sat', '11:45', 'D1', 'A6', 'B'], [3, 'Sat', '11:45', 'D4', 'D5', 'B'],
-            [4, 'Sat', '11:45', 'B3', 'B2', 'B'], [5, 'Sat', '11:45', 'D1', 'C6', 'B'], [6, 'Sat', '11:45', 'B4', 'B5', 'B'],
+            [1, 'Sat', '11:45', 'D3', 'D2', 'B'], [2, 'Sat', '11:45', 'D1', 'D6', 'B'], [3, 'Sat', '11:45', 'D4', 'D5', 'B'],
+            [4, 'Sat', '11:45', 'B3', 'B2', 'B'], [5, 'Sat', '11:45', 'B1', 'B6', 'B'], [6, 'Sat', '11:45', 'B4', 'B5', 'B'],
 
             [3, 'Sat', '13:00', 'QF1X', 'QF1Y', 'G'],
             [4, 'Sat', '13:00', 'QF2X', 'QF2Y', 'G'],

@@ -7,7 +7,7 @@ namespace AppBundle\Action\Schedule2016;
  * @property-read string $slot
  *
  */
-class ScheduleTeam
+class ScheduleRegTeam
 {
     public $id;
     public $projectKey;
@@ -48,16 +48,17 @@ class ScheduleTeam
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('ProjectTeam::__get ' . $name);
+        throw new \InvalidArgumentException('RegTeam::__get ' . $name);
     }
 
     /**
      * @param  array $data
-     * @return ScheduleTeam
+     * @return ScheduleRegTeam
      */
     static public function createFromArray($data)
     {
-        $team = new ScheduleTeam();
+        //$team = new ScheduleRegTeam();
+        $team = new static();
 
         foreach(array_keys($team->keys) as $key) {
             if (isset($data[$key]) || array_key_exists($key,$data)) {

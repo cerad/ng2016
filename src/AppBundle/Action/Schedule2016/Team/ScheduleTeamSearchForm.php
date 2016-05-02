@@ -51,7 +51,7 @@ class ScheduleTeamSearchForm extends AbstractForm
             'programs'    => [$program],
         ];
         // findProjectTeamChoices ???
-        $teams = $this->finder->findProjectTeams($criteria,true);
+        $teams = $this->finder->findRegTeams($criteria,true);
         $teamChoices = [null => 'Select Team(s)'];
         foreach($teams as $team) {
             $teamContent = sprintf('%s %s',$team->division,$team->name);
