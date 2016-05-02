@@ -2,82 +2,148 @@
 namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Common\DatabaseTrait;
+use AppBundle\Common\DirectoryTrait;
+
+use Doctrine\DBAL\Connection;
 
 use PHPUnit_Framework_TestCase;
 
 class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 {
     use DatabaseTrait;
+    use DirectoryTrait;
 
-    private $gameDatabaseKey = 'database_name_ng2016games';
-    private $poolDatabaseKey = 'database_name_ng2016games';
-    private $teamDatabaseKey = 'database_name_ng2016games';
+    private $gameDatabaseKey = 'database_name_test';
+    private $poolDatabaseKey = 'database_name_test';
+    private $teamDatabaseKey = 'database_name_test'; // Registered teams
 
-    private function createFinder()
+    /** @var  Connection */
+    private $gameConn;
+
+    /** @var  Connection */
+    private $poolConn;
+
+    /** @var  Connection */
+    private $teamConn;
+
+    private $projectKey = 'OlympicsFootball2016';
+
+    private function createScheduleFinder()
     {
-        $gameConn = $this->getConnection($this->gameDatabaseKey);
-        $poolConn = $this->getConnection($this->poolDatabaseKey);
-        $teamConn = $this->getConnection($this->teamDatabaseKey);
-
-        return new ScheduleFinder($gameConn, $poolConn, $teamConn);
+        if (!$this->gameConn) {
+             $this->gameConn = $this->getConnection($this->gameDatabaseKey);
+        }
+        if (!$this->poolConn) {
+             $this->poolConn = $this->getConnection($this->poolDatabaseKey);
+        }
+        if (!$this->teamConn) {
+             $this->teamConn = $this->getConnection($this->teamDatabaseKey);
+        }
+        return new ScheduleFinder($this->gameConn,$this->poolConn,$this->teamConn);
     }
-
-    public function testFindGames()
+    public function testLoad()
     {
-        $finder = $this->createFinder();
+        // Just to create the connections
+        $this->createScheduleFinder();
 
-        $criteria = [
-            'projectKeys' => ['AYSONationalGames2014'],
-            'programs' => ['Core'],
-            'divisions' => ['U14B'],
-            'poolTypes' => ['PP'],
-            'dates' => ['2014-07-03'],
-        ];
-        $games = $finder->findGames($criteria, true);
+        $schemaFile = $this->getRootDirectory() . '/schema2016games.sql';
 
-        $this->assertInternalType('array', $games);
-        $this->assertCount(24, $games);
+        $this->resetDatabase($this->gameConn, $schemaFile);
 
-        $game = $games[8];
-        $this->assertInternalType('object', $game);
-        $this->assertEquals('FD3', $game->fieldName);
+        $projectKey = $this->projectKey;
 
-        $this->assertEquals('Thu', $game->dow);
-        $this->assertEquals('11:45 AM', $game->time);
-        $this->assertEquals('U14-B Core PP C', $game->poolView);
+        // Create some registered teams
+        $programs = ['Core'];
+        $genders  = ['B','G'];
+        $ages     = ['U12','U14'];
+        foreach($programs as $program) {
+            foreach($ages as $age) {
+                foreach($genders as $gender) {
+                    $division = $age . $gender;
+                    foreach([1,2,3,4,5,6] as $teamNumber) {
+                        $teamKey = sprintf('%s%s#%02d',$division,$program,$teamNumber);
+                        $teamId  = $projectKey . ':' . $teamKey;
+                        $name    = sprintf('#%02d',$teamNumber);
+                        $regTeam = [
+                            'id'         => $teamId,
+                            'projectKey' => $projectKey,
+                            'teamKey'    => $teamKey,
+                            'teamNumber' => $teamNumber,
+                            'name'       => $name,
+                            'status'     => 'Active',
+                            'program'    => $program,
+                            'gender'     => $gender,
+                            'age'        => $age,
+                            'division'   => $division,
+                        ];
+                        $this->teamConn->insert('projectTeams',$regTeam);
+                    }
+                }
+            }
+        }
+        // Create some pool teams
+        foreach($programs as $program) {
+            foreach ($ages as $age) {
+                foreach ($genders as $gender) {
+                    $division = $age . $gender;
+                    $teamNumber = 0;
+                    $poolType = 'PP';
+                    foreach(['A','B'] as $poolName) {
+                        foreach([1,2,3] as $poolTeamNumber) {
 
-        $this->assertEquals('U14B', $game->homeTeam->division);
+                            $poolKey =  sprintf('%s%s%s%s%s',    $age,$gender,$program,$poolType,$poolName);
+                            $poolView = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolType,$poolName);
 
-        $this->assertEquals('#15 01-U-0624 Nunez', $game->homeTeam->name);
+                            $poolTeamKey =  sprintf('%s%s%s%s%s%s',    $age,$gender,$program,$poolType,$poolName,$poolTeamNumber);
+                            $poolTeamView = sprintf('%s-%s %s %s %s%s',$age,$gender,$program,$poolType,$poolName,$poolTeamNumber);
 
-        $this->assertEquals('C6', $game->awayTeam->poolTeamSlotView);
+                            $poolTeamId = $projectKey . ':' . $poolTeamKey;
 
+                            $teamNumber++;
+                            $teamKey = sprintf('%s%s#%02d',$division,$program,$teamNumber);
+                            $regTeamId  = $projectKey . ':' . $teamKey;
+
+                            $poolTeam = [
+                                'id'          => $poolTeamId,
+                                'projectKey'  => $projectKey,
+
+                                'poolKey'     => $poolKey,
+                                'poolType'    => $poolType,
+                                'poolTeamKey' => $poolTeamKey,
+
+                                'poolView'     => $poolView,
+                                'poolTypeView' => $poolType,
+                                'poolTeamView' => $poolTeamView,
+                                'poolTeamSlotView' => $poolName . $poolTeamNumber,
+
+                                'program'    => $program,
+                                'gender'     => $gender,
+                                'age'        => $age,
+                                'division'   => $division,
+
+                                'projectTeamId' => $regTeamId,
+                            ];
+                            $this->teamConn->insert('projectPoolTeams',$poolTeam);
+                        }
+                    }
+                }
+            }
+        }
     }
-
-    public function testFindProjectTeams()
+    public function testFindRegTeams()
     {
-        $finder = $this->createFinder();
-
+        $finder = $this->createScheduleFinder();
         $criteria = [
-            'projectKeys' => ['AYSONationalGames2016'],
-            'programs' => ['Core'],
-            'divisions' => ['U14B'],
+            'projectKeys' => [$this->projectKey],
+            'genders' => ['G'],
         ];
-        $teams = $finder->findProjectTeams($criteria);
-        $teams = array_values($teams);
+        $regTeams = $finder->findRegTeams($criteria);
+        $this->assertCount(12,$regTeams);
 
-        $this->assertCount(24, $teams);
-
-        $team = $teams[2];
-        $this->assertEquals('#03', trim($team->name));
-    }
-
-    public function testFindGamesByProjectTeamIds()
-    {
-        $finder = $this->createFinder();
-        $criteria = [
-          'projectTeamIds' => ['AYSONationalGames2014:U10B-Extra-06','AYSONationalGames2014:U10B-Extra-08'],
-        ];
-        $games = $finder->findGames($criteria,true);
+        /** @var ScheduleTeam[] $regTeams */
+        $regTeams = array_values($regTeams);
+        $regTeam = $regTeams[3];
+        $this->assertEquals('G',  $regTeam->gender);
+        $this->assertEquals('#04',$regTeam->name);
     }
 }

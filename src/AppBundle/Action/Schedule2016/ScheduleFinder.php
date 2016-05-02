@@ -216,7 +216,23 @@ EOD;
         }
         return $poolTeamIds;
     }
-    // It is possible that this might be moved into a shared project team finder
+
+    /** ===========================================================================
+     * @param  array $criteria
+     * @param  bool $objects
+     * @return ScheduleTeam[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findRegTeams(array $criteria)
+    {
+        return $this->findProjectTeams($criteria,true);
+    }
+    /** ===========================================================================
+     * @param  array $criteria
+     * @param  bool $objects
+     * @return ScheduleTeam[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function findProjectTeams(array $criteria, $objects = true)
     {
         $conn = $this->teamConn;
@@ -242,7 +258,10 @@ EOD;
         }
         return $teams;
     }
-    // Predefined sorts
+    /* =======================================================================
+     * Sort after the load to avoid joins
+     * Plus it is a bit more flexible and readable
+     */
     protected function sortGames($games,$sortBy)
     {
         if ($sortBy === 1) {
