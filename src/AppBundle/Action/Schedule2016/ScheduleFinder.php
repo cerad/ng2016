@@ -63,7 +63,8 @@ SELECT
   gameTeam.gameNumber,
   gameTeam.slot,
   
-  poolTeam.teamName,
+  poolTeam.regTeamId,
+  poolTeam.regTeamName,
   poolTeam.division,
   
   poolTeam.poolView,

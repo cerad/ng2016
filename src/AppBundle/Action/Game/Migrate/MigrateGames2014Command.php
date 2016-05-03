@@ -44,7 +44,7 @@ class MigrateGames2014Command extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $all = false;
+        $all = true;
 
         $schemaFile = $this->getRootDirectory() . '/schema2016games.sql';
 
@@ -199,9 +199,9 @@ EOD;
                 'age'      => $age,
                 'division' => $division,
 
-                'regTeamId'  => $regTeamId,
-                'teamName'   => $row['teamName'],
-                'teamPoints' => (integer)$row['teamPoints'],
+                'regTeamId'     => $regTeamId,
+                'regTeamName'   => $row['teamName'],
+                'regTeamPoints' => (integer)$row['teamPoints'],
             ];
             $poolTeams[$poolTeamId] = $poolTeam;
 

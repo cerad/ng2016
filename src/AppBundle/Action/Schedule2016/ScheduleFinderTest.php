@@ -34,7 +34,7 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         }
         return new ScheduleFinder($this->gameConn,$this->regTeamConn);
     }
-    public function sestLoad()
+    public function testLoad()
     {
         // Just to create the connections
         $this->createScheduleFinder();
@@ -117,7 +117,7 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
                                 'division'   => $division,
 
                                 'regTeamId'  => $regTeamId,
-                                'teamName'   => $teamName,
+                                'regTeamName'   => $teamName,
                             ];
                             $this->gameConn->insert('poolTeams',$poolTeam);
                         }
@@ -203,7 +203,8 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         ];
         foreach([1,2,3] as $slot) {
             $gameOfficial['gameOfficialId'] = $gameId . ':' . $slot;
-            $gameOfficial['slot'] = $slot;
+            $gameOfficial['slot']           = $slot;
+            $gameOfficial['regPersonName']  = 'Name ' . $slot;
             $this->gameConn->insert('gameOfficials',$gameOfficial);
         }
         // Game Teams
@@ -243,22 +244,6 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('U12G',$regTeam->division);
         $this->assertEquals('#04', $regTeam->teamName);
     }
-    public function sestFindPoolTeams()
-    {
-        $finder = $this->createScheduleFinder();
-        $criteria = [
-            'projectIds' => [$this->projectId],
-            'poolKeys'   => ['U14BCorePPA','U14BCorePPB'],
-        ];
-        $poolTeams = $finder->findPoolTeams($criteria);
-        $this->assertCount(6,$poolTeams);
-
-        /** @var SchedulePoolTeam[] $regTeams */
-        $poolTeam = $poolTeams[3];
-        $this->assertEquals('B',               $poolTeam->gender);
-        $this->assertEquals('U14-B Core PP B1',$poolTeam->poolTeamView);
-        $this->assertEquals('#04',             $poolTeam->name);
-    }
     public function testFindGames()
     {
         $finder = $this->createScheduleFinder();
@@ -275,7 +260,7 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
         $homeTeam = $game->homeTeam;
         $this->assertEquals('U14B',$homeTeam->division);
-        $this->assertEquals('#02', $homeTeam->teamName);
+        $this->assertEquals('#02', $homeTeam->regTeamName);
         $this->assertEquals('U14-B Core PP A',$homeTeam->poolView);
     }
 }

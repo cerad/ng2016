@@ -28,11 +28,11 @@ class ScheduleTeamSearchForm extends AbstractForm
         $errors = [];
 
         $this->formData = array_replace($this->formData,[
-            'projectId' => $this->filterScalar($data,'projectId'),
-            'program'   => $this->filterScalar($data,'program'),
-            'teamName'  => $this->filterScalar($data,'teamName'),
-            'regTeams'  => $this->filterArray ($data,'regTeams'),
-            'sortBy'    => $this->filterScalar($data,'sortBy',true),
+            'projectId'   => $this->filterScalar($data,'projectId'),
+            'program'     => $this->filterScalar($data,'program'),
+            'regTeamName' => $this->filterScalar($data,'regTeamName'),
+            'regTeams'    => $this->filterArray ($data,'regTeams'),
+            'sortBy'      => $this->filterScalar($data,'sortBy',true),
         ]);
         $this->formDataErrors = $errors;
     }
@@ -58,7 +58,7 @@ class ScheduleTeamSearchForm extends AbstractForm
             $regTeamChoices[$regTeam->regTeamId] = $regTeamContent;
         }
 
-        $teamName = $this->formData['teamName'];
+        $regTeamName = $this->formData['regTeamName'];
 
         $csrfToken = 'TODO';
 
@@ -78,10 +78,10 @@ class ScheduleTeamSearchForm extends AbstractForm
     {$this->renderInputSelect($project['sortBy'],$formData['sortBy'],'sortBy')}
   </div>
   <div class="form-group">
-    <label for="teamName">Name</label>
+    <label for="regTeamName">Name</label>
     <input 
-      type="text" id="teamName" class="form-control"
-      name="name" value="{$teamName}" placeholder="Filter By Name" />
+      type="text" id="regTeamName" class="form-control"
+      name="name" value="{$regTeamName}" placeholder="Filter By Name" />
   </div>
   <div class="form-group">
     {$this->renderInputSelect($regTeamChoices,$regTeamIds,'regTeams[]','regTeams',10)}

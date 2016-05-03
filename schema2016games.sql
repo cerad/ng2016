@@ -92,9 +92,9 @@ CREATE TABLE poolTeams
   age      VARCHAR(20),
   division VARCHAR(20),
 
-  regTeamId  VARCHAR(99),
-  teamName   VARCHAR(99), -- Sync with RegTeam
-  teamPoints INTEGER,     -- Sync with RegTeam
+  regTeamId     VARCHAR(99),
+  regTeamName   VARCHAR(99), -- Sync with RegTeam
+  regTeamPoints INTEGER,     -- Sync with RegTeam
 
   CONSTRAINT poolTeams_primaryKey PRIMARY KEY(poolTeamId),
 
@@ -102,6 +102,37 @@ CREATE TABLE poolTeams
 
   INDEX      poolTeams_index_poolKey    (projectId,poolKey),
   INDEX      poolTeams_index_poolTypeKey(projectId,poolTypeKey)
+
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+-- ======================================================================
+-- Game Official
+--
+DROP TABLE IF EXISTS gameOfficials;
+
+CREATE TABLE gameOfficials
+(
+  gameOfficialId VARCHAR(99) NOT NULL, -- projectId:gameNumber:slot
+  projectId      VARCHAR(99) NOT NULL,
+  gameId         VARCHAR(99) NOT NULL,
+  gameNumber     INTEGER     NOT NULL,
+  slot           INTEGER     NOT NULL,
+
+  phyPersonId    VARCHAR(99), -- Physical Person (for conflicts?)
+  regPersonId    VARCHAR(99),
+  regPersonName  VARCHAR(99), -- Sync with Registered Person
+
+  assignRole   VARCHAR(40) DEFAULT 'ROLE_REFEREE',
+  assignState  VARCHAR(40),
+
+  CONSTRAINT gameOfficials_primaryKey PRIMARY KEY(gameOfficialId),
+
+  CONSTRAINT gameOfficials_unique_gameNumberSlot UNIQUE(projectId,gameNumber,slot),
+
+  INDEX      gameOfficials_index_gameId(gameId),
+
+  INDEX      gameOfficials_index_regPersonId(regPersonId),
+  INDEX      gameOfficials_index_phyPersonId(phyPersonId)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
@@ -131,36 +162,5 @@ CREATE TABLE regTeams
   CONSTRAINT regTeams_primaryKey PRIMARY KEY(regTeamId),
 
   CONSTRAINT regTeams_unique_teamKey UNIQUE(projectId,teamKey)
-
-) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-
--- ======================================================================
--- Game Official
---
-DROP TABLE IF EXISTS gameOfficials;
-
-CREATE TABLE gameOfficials
-(
-  gameOfficialId VARCHAR(99) NOT NULL, -- projectId:gameNumber:slot
-  projectId      VARCHAR(99) NOT NULL,
-  gameId         VARCHAR(99) NOT NULL,
-  gameNumber     INTEGER     NOT NULL,
-  slot           INTEGER     NOT NULL,
-
-  phyPersonId    VARCHAR(99), -- Physical Person (for conflicts)
-  regPersonId    VARCHAR(99),
-  regPersonName  VARCHAR(99), -- Sync with Registered Person
-
-  assignRole   VARCHAR(40) DEFAULT 'ROLE_REFEREE',
-  assignState  VARCHAR(40),
-
-  CONSTRAINT gameOfficials_primaryKey PRIMARY KEY(gameOfficialId),
-
-  CONSTRAINT gameOfficials_unique_gameNumberSlot UNIQUE(projectId,gameNumber,slot),
-
-  INDEX      gameOfficials_index_gameId(gameId),
-
-  INDEX      gameOfficials_index_regPersonId(regPersonId),
-  INDEX      gameOfficials_index_phyPersonId(phyPersonId)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;

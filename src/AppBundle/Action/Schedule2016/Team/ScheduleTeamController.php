@@ -34,11 +34,11 @@ class ScheduleTeamController extends AbstractController2
         $projectId = array_keys($this->projectChoices)[0];
 
         $searchData = [
-            'projectId' => $projectId,
-            'program'   => 'Core',
-            'teamName'  =>  null,
-            'regTeams'  => [],
-            'sortBy'    => 1,
+            'projectId'    => $projectId,
+            'program'      => 'Core',
+            'regTeamName'  =>  null,
+            'regTeams'     => [],
+            'sortBy'       => 1,
         ];
         $session = $request->getSession();
         $sessionKey = 'schedule_team_search_data_2016';

@@ -75,7 +75,7 @@ EOD;
   <td class="schedule-field">{$game->fieldName}</td>
   <td class="schedule-group">{$game->poolView}</td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
-  <td class="text-left">{$homeTeam->teamName}<hr class="separator">{$awayTeam->teamName}</td>
+  <td class="text-left">{$homeTeam->regTeamName}<hr class="separator">{$awayTeam->regTeamName}</td>
 </tr>
 EOD;
         }

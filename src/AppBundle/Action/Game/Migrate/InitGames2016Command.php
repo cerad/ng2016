@@ -30,7 +30,7 @@ class InitGames2016Command extends Command
     {
         echo sprintf("Init Games NG2016 ...\n");
 
-        $commit = false;
+        $commit = true;
 
         $this->initRegTeams($commit || false);
 
@@ -38,7 +38,7 @@ class InitGames2016Command extends Command
 
         $this->assignRegTeamsToPoolPlayTeams($commit || false);
 
-        $this->initGames($commit || true);
+        $this->initGames($commit || false);
 
         echo sprintf("Init Games NG2016 Completed.\n");
     }
@@ -239,7 +239,7 @@ class InitGames2016Command extends Command
                             if (!isset($poolTeams[$random]['regTeamId'])) {
 
                                 $this->gameConn->update('poolTeams',
-                                    ['regTeamId'  => $regTeamId, 'teamName' => $regTeam['teamName']],
+                                    ['regTeamId'  => $regTeamId, 'regTeamName' => $regTeam['teamName']],
                                     ['poolTeamId' => $poolTeams[$random]['poolTeamId']]
                                 );
                                 $poolTeams[$random]['regTeamId'] = $regTeamId;
@@ -366,7 +366,7 @@ class InitGames2016Command extends Command
                     break;
             }
             foreach ($this->ages as $age) {
-                $fieldNumberStart = substr($age,1) * 10;
+                //$fieldNumberStart = substr($age,1) * 10;
                 foreach ($this->genders as $gender) {
 
                     $gameNumber = $gameNumberProgram + (substr($age, 1) * 100);
