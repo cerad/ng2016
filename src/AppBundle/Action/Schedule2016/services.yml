@@ -4,8 +4,7 @@ services:
         class: AppBundle\Action\Schedule2016\ScheduleFinder
         arguments:
             - '@doctrine.dbal.ng2016games_connection' # gameConn
-            - '@doctrine.dbal.ng2016games_connection' # poolTeamConn
-            - '@doctrine.dbal.ng2016games_connection' # projectTeamConn
+            - '@doctrine.dbal.ng2016games_connection' # regTeamConn
 
     schedule_template_2016:
         class: AppBundle\Action\Schedule2016\ScheduleTemplate

@@ -10,8 +10,8 @@ namespace AppBundle\Action\Schedule2016;
  */
 class ScheduleGame
 {
-    public $id;
-    public $projectKey;
+    public $gameId;
+    public $projectId;
     public $gameNumber;
     
     public $fieldName;
@@ -25,8 +25,8 @@ class ScheduleGame
     private $teams = [];
     
     private $keys = [
-        'id'         => 'ProjectGameId',
-        'projectKey' => 'ProjectId',
+        'gameId'     => 'GameId',
+        'projectId'  => 'ProjectId',
         'gameNumber' => 'integer',
         
         'fieldName'  => 'ProjectFieldName',
@@ -41,8 +41,8 @@ class ScheduleGame
     {
         switch($name) {
             
-            case 'homeTeam':   return $this->teams[1];
-            case 'awayTeam':   return $this->teams[2];
+            case 'homeTeam': return $this->teams[1];
+            case 'awayTeam': return $this->teams[2];
 
             case 'dow':
                 $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
@@ -65,12 +65,12 @@ class ScheduleGame
     }
     
     /** 
-     * @param array $data
+     * @param  array $data
      * @return ScheduleGame
      */
-    static public function fromArray($data)
+    static public function createFromArray($data)
     {
-        $game = new ScheduleGame();
+        $game = new static();
         
         foreach(array_keys($game->keys) as $key) {
             if (isset($data[$key]) || array_key_exists($key,$data)) {
@@ -78,7 +78,7 @@ class ScheduleGame
             }
         }
         foreach($data['teams'] as $teamData) {
-            $game->teams[$teamData['slot']] = ScheduleGameTeam::fromArray($teamData);
+            $game->teams[$teamData['slot']] = ScheduleGameTeam::createFromArray($teamData);
         }
         return $game;
     }

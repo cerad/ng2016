@@ -29,7 +29,8 @@ parameters:
             sortBy:
                 1: 'Date, Time, Group, Field'
                 2: 'Date, Field, Time'
-                3: 'Game Number'
+                3: 'Field, Date, Time'
+                4: 'Game Number'
 
         AYSONationalGames2014:
             programs:
@@ -54,4 +55,5 @@ parameters:
             sortBy:
                 1: 'Date, Time, Group, Field'
                 2: 'Date, Field, Time'
-                3: 'Game Number'
+                3: 'Field, Date, Time'
+                4: 'Game Number'

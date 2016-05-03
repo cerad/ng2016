@@ -3,9 +3,8 @@ namespace AppBundle\Action\Schedule2016\Team;
 
 use AppBundle\Action\AbstractController2;
 
-use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
-
 use AppBundle\Action\Schedule2016\ScheduleFinder;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class ScheduleTeamController extends AbstractController2
@@ -32,14 +31,14 @@ class ScheduleTeamController extends AbstractController2
    public function __invoke(Request $request)
     {
         // First project in list
-        $projectKey = array_keys($this->projectChoices)[0];
+        $projectId = array_keys($this->projectChoices)[0];
 
         $searchData = [
-            'projectKey' => $projectKey,
-            'program'    => 'Core',
-            'name'       =>  null,
-            'teams'      => [],
-            'sortBy'     => 1,
+            'projectId' => $projectId,
+            'program'   => 'Core',
+            'teamName'  =>  null,
+            'regTeams'  => [],
+            'sortBy'    => 1,
         ];
         $session = $request->getSession();
         $sessionKey = 'schedule_team_search_data_2016';
@@ -57,25 +56,24 @@ class ScheduleTeamController extends AbstractController2
         if ($searchForm->isValid()) {
 
             $searchDataNew = $searchForm->getData();
-            if ($searchData['projectKey'] !== $searchDataNew['projectKey']) {
-                $searchDataNew['program'] = 'Core';
-                $searchDataNew['teams']   = [];
+            if ($searchData['projectId'] !== $searchDataNew['projectId']) {
+                $searchDataNew['program' ] = 'Core';
+                $searchDataNew['regTeams'] = [];
             }
             if ($searchData['program'] !== $searchDataNew['program']) {
-                $searchDataNew['teams'] = [];
+                $searchDataNew['regTeams'] = [];
             }
             $session->set($sessionKey,$searchDataNew);
 
             return $this->redirectToRoute($request->attributes->get('_route'));
         }
-        if (!count($searchData['teams'])) {
+        if (!count($searchData['regTeams'])) {
             $request->attributes->set('games',[]);
             return null;
         }
         $criteria = [
-            //'projectKeys' => [$searchData['projectKey']],
-            //'programs'    => [$searchData['program'   ]],
-            'projectTeamIds' => $searchData['teams'],
+            'regTeamIds' => $searchData['regTeams' ],
+            'sortBy'     => $searchData['sortBy'],
         ];
         
         $games = $this->scheduleFinder->findGames($criteria,true);

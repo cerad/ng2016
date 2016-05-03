@@ -12,19 +12,12 @@ class ScheduleFinder
     private $gameConn;
 
     /** @var  Connection */
-    private $poolConn;
-    
-    /** @var  Connection */
-    private $teamConn;
+    private $regTeamConn;
 
-    public function __construct(
-        Connection $gameConn, 
-        Connection $poolConn,
-        Connection $teamConn)
+    public function __construct(Connection $gameConn, Connection $regTeamConn)
     {
-        $this->gameConn = $gameConn;
-        $this->poolConn = $poolConn;
-        $this->teamConn = $teamConn;
+        $this->gameConn    = $gameConn;
+        $this->regTeamConn = $regTeamConn;
     }
 
     /**
@@ -34,11 +27,6 @@ class ScheduleFinder
      */
     public function findGames(array $criteria, $objects = true)
     {
-        // First we need pool teams
-        $poolTeamIds = $this->findPoolTeamIds($criteria);
-
-        $criteria['poolTeamIds'] = $poolTeamIds;
-
         // Now find unique game ids
         $gameIds = $this->findGameIds($criteria);
 
@@ -54,7 +42,7 @@ class ScheduleFinder
         }
         $gameObjects = [];
         foreach($games as $game) {
-            $gameObjects[] = ScheduleGame::fromArray($game);
+            $gameObjects[] = ScheduleGame::createFromArray($game);
         }
         if (isset($criteria['sortBy'])) {
             $gameObjects = $this->sortGames($gameObjects,$criteria['sortBy']);
@@ -67,31 +55,32 @@ class ScheduleFinder
         if (!count($games)) {
             return [];
         }
-        // Add game teams
-        $sql  = 'SELECT * FROM projectGameTeams WHERE gameId IN (?)';
-        $stmt = $this->gameConn->executeQuery($sql,[array_keys($games)],[Connection::PARAM_STR_ARRAY]);
-        $poolTeamIds = [];
-        while($gameTeam = $stmt->fetch()) {
+        $sql = <<<EOD
+SELECT 
 
-            $gameTeam['name'] = null; // Should come from regTeam
+  gameTeam.gameTeamId,
+  gameTeam.gameId,
+  gameTeam.gameNumber,
+  gameTeam.slot,
+  
+  poolTeam.teamName,
+  poolTeam.division,
+  
+  poolTeam.poolView,
+  poolTeam.poolTypeView,
+  poolTeam.poolTeamView,
+  poolTeam.poolTeamSlotView
+  
+FROM      gameTeams AS gameTeam
+LEFT JOIN poolTeams AS poolTeam ON poolTeam.poolTeamId = gameTeam.poolTeamId
+WHERE gameTeam.gameId IN (?)
+ORDER BY gameNumber,slot
+EOD;
+        $stmt = $this->gameConn->executeQuery($sql,[array_keys($games)],[Connection::PARAM_STR_ARRAY]);
+        while($gameTeam = $stmt->fetch()) {
 
             $gameId = $gameTeam['gameId'];
             $games[$gameId]['teams'][$gameTeam['slot']] = $gameTeam;
-
-            $poolTeamId = $gameTeam['poolTeamId'];
-            $poolTeamIds[$poolTeamId][] = $gameTeam;
-        }
-        // Merge pool teams
-        $poolTeams = $this->findPoolTeams(['poolTeamIds' => array_keys($poolTeamIds)],false);
-        foreach($poolTeamIds as $poolTeamId => $gameTeamLinks) {
-            foreach($gameTeamLinks as $gameTeam) {
-                $poolTeam = $poolTeams[$poolTeamId];
-                unset($poolTeam['id']);
-                unset($poolTeam['projectKey']);
-                $gameTeam = array_replace($gameTeam,$poolTeam);
-                $gameId = $gameTeam['gameId'];
-                $games[$gameId]['teams'][$gameTeam['slot']] = $gameTeam;
-            }
         }
         return $games;
     }
@@ -100,85 +89,48 @@ class ScheduleFinder
         if (!count($gameIds)) {
             return [];
         }
-        
-        $conn = $this->gameConn;
-
-        $qb = $conn->createQueryBuilder();
-
-        $qb->select('*');
-
-        $qb->from('projectGames','game');
-        
-        $qb->where('game.id IN (?)');
-
-        $qb->addOrderBy('game.gameNumber');
-
-        $stmt = $conn->executeQuery($qb->getSQL(),[$gameIds],[Connection::PARAM_STR_ARRAY]);
+        $sql = 'SELECT * FROM games WHERE gameId IN (?) ORDER BY gameNumber';
+        $stmt = $this->gameConn->executeQuery($sql,[$gameIds],[Connection::PARAM_STR_ARRAY]);
         $games = [];
         while($game = $stmt->fetch()) {
             $game['teams'] = [];
             $game['gameNumber'] = (integer)$game['gameNumber'];
-            $games[$game['id']] = $game;
+            $games[$game['gameId']] = $game;
         }
         return $games;
     }
     private function findGameIds(array $criteria)
     {
-        $gameIds = [];
-
-        $conn = $this->gameConn;
-
-        $qb = $conn->createQueryBuilder();
-
-        $qb->select('DISTINCT game.id');
-
-        $qb->from('projectGames','game');
-        
-        $qb->leftJoin('game','projectGameTeams','team','team.gameId = game.id');
-        
-        $qb->orderBy ('game.id');
+        $qb = $this->gameConn->createQueryBuilder();
+        $qb->select('DISTINCT game.gameId');
+        $qb->from('games','game');
+        $qb->leftJoin('game',    'gameTeams','gameTeam','gameTeam.gameId = game.gameId');
+        $qb->leftJoin('gameTeam','poolTeams','poolTeam','poolTeam.poolTeamId = gameTeam.poolTeamId');
+        $qb->orderBy ('game.gameId');
 
         $whereMeta = [
+            'projectIds'  => 'game.projectId',
             'dates'       => 'DATE(game.start)',
-            'poolTeamIds' => 'team.poolTeamId',
-        ];
-        $info = $this->addWhere($qb,$whereMeta,$criteria);
-        $stmt = $conn->executeQuery($qb->getSQL(),$info[0],$info[1]);
-        while($gameId = $stmt->fetch()) {
-            $gameIds[] = $gameId['id'];
-        }
-        return $gameIds;
-    }
-    
-    // It is possible that this might be moved into a shared pool team finder
-    public function findPoolTeamIds(array $criteria)
-    {
-        $qb = $this->poolConn->createQueryBuilder();
-
-        $qb->select('distinct id')->from('projectPoolTeams');
-
-        $whereMeta = [
-            'projectKeys'    => 'projectKey',
-            'programs'       => 'program',
-            'genders'        => 'gender',
-            'ages'           => 'age',
-            'divisions'      => 'division',
-            'poolTypes'      => 'poolType',
-            'projectTeamIds' => 'projectTeamId',
+            'programs'    => 'program',
+            'genders'     => 'gender',
+            'ages'        => 'age',
+            'divisions'   => 'division',
+            'poolTypes'   => 'poolTypeKey',
+            'poolTeamIds' => 'poolTeam.poolTeamId',
+            'regTeamIds'  => 'regTeamId',
         ];
         list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
-
         if (!count($values)) {
             //return [];
         }
         $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
-
-        $poolTeamIds = [];
-        while($row = $stmt->fetch()) {
-            $poolTeamIds[] = $row['id'];
+        $gameIds = [];
+        while($gameId = $stmt->fetch()) {
+            $gameIds[] = $gameId['gameId'];
         }
-        return $poolTeamIds;
+        return $gameIds;
     }
+    
     /* =======================================================================
      * Sort after the load to avoid joins
      * Plus it is a bit more flexible and readable
@@ -224,8 +176,24 @@ class ScheduleFinder
         if ($sortBy === 3) {
             usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
 
-                if ($game1->projectKey > $game2->projectKey) return  1;
-                if ($game1->projectKey < $game2->projectKey) return -1;
+                if ($game1->venueName > $game2->venueName) return  1;
+                if ($game1->venueName < $game2->venueName) return -1;
+
+                if ($game1->fieldName > $game2->fieldName) return  1;
+                if ($game1->fieldName < $game2->fieldName) return -1;
+
+                if ($game1->start > $game2->start) return  1;
+                if ($game1->start < $game2->start) return -1;
+
+                return 0;
+            });
+            return $games;
+        }
+        if ($sortBy === 4) {
+            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
+
+                if ($game1->projectId > $game2->projectId) return  1;
+                if ($game1->projectId < $game2->projectId) return -1;
 
                 if ($game1->gameNumber > $game2->gameNumber) return  1;
                 if ($game1->gameNumber < $game2->gameNumber) return -1;
@@ -236,77 +204,9 @@ class ScheduleFinder
         }
         return $games;
     }
+
     /** ===========================================================================
-     * This might be moved to it's own finder?
-     *
-     * @param  array $criteria
-     * @param  bool  $objects
-     * @return SchedulePoolTeam[]|array
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function findPoolTeams(array $criteria, $objects = true)
-    {
-        $qb = $this->poolConn->createQueryBuilder();
-
-        // Just grab everything for now
-        $qb->select('*')->from('projectPoolTeams')->orderBy('id');
-
-        $whereMeta = [
-            'poolTeamIds' => 'id',
-            'regTeamIds'  => 'projectTeamId',
-            'projectKeys' => 'projectKey',
-
-            'poolKeys'     => 'poolKey',
-            'poolTypes'    => 'poolType',
-            'poolTeamKeys' => 'poolTeamKey',
-
-            'programs'    => 'program',
-            'genders'     => 'gender',
-            'ages'        => 'age',
-            'divisions'   => 'division',
-        ];
-        list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
-        $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
-        $poolTeams  = [];
-        $regTeamIds = [];
-        while($poolTeam = $stmt->fetch()) {
-
-            $poolTeams[$poolTeam['id']] = $poolTeam;
-
-            $regTeamId = $poolTeam['projectTeamId'];
-            if ($regTeamId) {
-                $regTeamIds[$regTeamId][] = $poolTeam;
-            }
-        }
-        // Link Reg Teams
-        $criteria = ['regTeamIds' => array_keys($regTeamIds)];
-        $regTeams = $this->findRegTeams($criteria,false);
-        foreach($regTeamIds as $regTeamId => $poolTeamLinks) {
-            foreach($poolTeamLinks as $poolTeam) {
-                $regTeam = $regTeams[$regTeamId];
-                unset($regTeam['id']);
-                unset($regTeam['projectKey']);
-                unset($regTeam['status']);
-                unset($regTeam['program']);
-                unset($regTeam['gender']);
-                unset($regTeam['age']);
-                unset($regTeam['division']);
-                $poolTeam = array_replace($poolTeam,$regTeam);
-                $poolTeams[$poolTeam['id']] = $poolTeam;
-            }
-        }
-        // Convert to objects
-        if (!$objects) {
-            return $poolTeams;
-        }
-        $poolTeamObjects = [];
-        foreach($poolTeams as $poolTeam) {
-            $poolTeamObjects[] = SchedulePoolTeam::createFromArray($poolTeam);
-        }
-        return $poolTeamObjects;
-    }
-    /** ===========================================================================
-     * This might be moved to it's own finder?
+     * For the team schedule choices, maybe just make it choices
      *
      * @param  array $criteria
      * @param  bool  $objects
@@ -315,14 +215,14 @@ class ScheduleFinder
      */
     public function findRegTeams(array $criteria, $objects = true)
     {
-        $qb = $this->teamConn->createQueryBuilder();
+        $qb = $this->regTeamConn->createQueryBuilder();
 
         // Just grab everything for now
-        $qb->select('*')->from('projectTeams')->orderBy('id');
+        $qb->select('regTeamId,teamName,division')->from('regTeams')->orderBy('regTeamId');
 
         $whereMeta = [
             'regTeamIds'  => 'id',
-            'projectKeys' => 'projectKey',
+            'projectIds'  => 'projectId',
             'programs'    => 'program',
             'genders'     => 'gender',
             'ages'        => 'age',
@@ -330,10 +230,11 @@ class ScheduleFinder
         ];
         list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
         $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
-        $teams = [];
-        while($team = $stmt->fetch()) {
-            $teams[$team['id']] = $objects ? ScheduleRegTeam::createFromArray($team) : $team;
+        $regTeams = [];
+        while($regTeam = $stmt->fetch()) {
+            $regTeams[$regTeam['regTeamId']] = $objects ? ScheduleRegTeam::createFromArray($regTeam) : $regTeam;
         }
-        return $teams;
+        // Keep the object flag for now though I don't think it is needed
+        return $objects ? array_values($regTeams) : $regTeams;
     }
 }

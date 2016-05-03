@@ -54,13 +54,13 @@ EOD;
             $homeTeam = $game->homeTeam;
             $awayTeam = $game->awayTeam;
 
-            $trId = 'schedule-' . $game->id;
+            $trId = 'schedule-' . $game->gameId;
 
             // Link for editing game
             $gameNumber = $game->gameNumber;
             if ($this->isGranted('ROLE_USER')) {
                 $params = [
-                    'gameNumber' => $game->id,
+                    'gameNumber' => $game->gameId,
                     'back' => $this->generateUrl($this->getCurrentRouteName()) . '#' . $trId,
                 ];
                 $url = $this->generateUrl('game_report_update',$params);
@@ -75,7 +75,7 @@ EOD;
   <td class="schedule-field">{$game->fieldName}</td>
   <td class="schedule-group">{$game->poolView}</td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
-  <td class="text-left">{$homeTeam->name}<hr class="separator">{$awayTeam->name}</td>
+  <td class="text-left">{$homeTeam->teamName}<hr class="separator">{$awayTeam->teamName}</td>
 </tr>
 EOD;
         }

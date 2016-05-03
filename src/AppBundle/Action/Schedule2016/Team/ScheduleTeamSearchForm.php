@@ -28,11 +28,11 @@ class ScheduleTeamSearchForm extends AbstractForm
         $errors = [];
 
         $this->formData = array_replace($this->formData,[
-            'projectKey' => $this->filterScalar($data,'projectKey'),
-            'program'    => $this->filterScalar($data,'program'),
-            'name'       => $this->filterScalar($data,'name'),
-            'teams'      => $this->filterArray ($data,'teams'),
-            'sortBy'     => $this->filterScalar($data,'sortBy',true),
+            'projectId' => $this->filterScalar($data,'projectId'),
+            'program'   => $this->filterScalar($data,'program'),
+            'teamName'  => $this->filterScalar($data,'teamName'),
+            'regTeams'  => $this->filterArray ($data,'regTeams'),
+            'sortBy'    => $this->filterScalar($data,'sortBy',true),
         ]);
         $this->formDataErrors = $errors;
     }
@@ -40,25 +40,25 @@ class ScheduleTeamSearchForm extends AbstractForm
     {
         $formData = $this->formData;
 
-        $projectKey = $formData['projectKey'];
-        $project    = $this->projects[$projectKey];
+        $projectId = $formData['projectId'];
+        $project    = $this->projects[$projectId];
 
         $program = $formData['program'];
         
-        $teamIds = $formData['teams'];
+        $regTeamIds = $formData['regTeams'];
         $criteria = [
-            'projectKeys' => [$projectKey],
-            'programs'    => [$program],
+            'projectIds' => [$projectId],
+            'programs'   => [$program],
         ];
         // findProjectTeamChoices ???
-        $teams = $this->finder->findRegTeams($criteria,true);
-        $teamChoices = [null => 'Select Team(s)'];
-        foreach($teams as $team) {
-            $teamContent = sprintf('%s %s',$team->division,$team->name);
-            $teamChoices[$team->id] = $teamContent;
+        $regTeams = $this->finder->findRegTeams($criteria,true);
+        $regTeamChoices = [null => 'Select Team(s)'];
+        foreach($regTeams as $regTeam) {
+            $regTeamContent = sprintf('%s %s',$regTeam->division,$regTeam->teamName);
+            $regTeamChoices[$regTeam->regTeamId] = $regTeamContent;
         }
 
-        $name = $this->formData['name'];
+        $teamName = $this->formData['teamName'];
 
         $csrfToken = 'TODO';
 
@@ -66,8 +66,8 @@ class ScheduleTeamSearchForm extends AbstractForm
 {$this->renderFormErrors()}
 <form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl('schedule_team_2016')}" method="post">
   <div class="form-group">
-    <label for="projectKey">Project</label>
-    {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey')}
+    <label for="projectId">Project</label>
+    {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
   </div>
   <div class="form-group">
     <label for="program">Program</label>
@@ -78,13 +78,13 @@ class ScheduleTeamSearchForm extends AbstractForm
     {$this->renderInputSelect($project['sortBy'],$formData['sortBy'],'sortBy')}
   </div>
   <div class="form-group">
-    <label for="name">Name</label>
+    <label for="teamName">Name</label>
     <input 
-      type="text" id="name" class="form-control"
-      name="name" value="{$name}" placeholder="Filter By Name" />
+      type="text" id="teamName" class="form-control"
+      name="name" value="{$teamName}" placeholder="Filter By Name" />
   </div>
   <div class="form-group">
-    {$this->renderInputSelect($teamChoices,$teamIds,'teams[]','teams',10)}
+    {$this->renderInputSelect($regTeamChoices,$regTeamIds,'regTeams[]','regTeams',10)}
   </div>
   <br/><br />
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
@@ -93,7 +93,6 @@ class ScheduleTeamSearchForm extends AbstractForm
     <span>Search</span>
   </button>
 </form>
-
 EOD;
         return $html;
     }
