@@ -12,6 +12,7 @@ services:
     project_person_admin_listing_search_form:
         class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingSearchForm
         parent: abstract_form
+        arguments: ['%project_choices%']
 
     project_person_admin_listing_controller:
         class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingController

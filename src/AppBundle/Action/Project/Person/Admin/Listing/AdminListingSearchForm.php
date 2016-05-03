@@ -7,6 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AdminListingSearchForm extends AbstractForm
 {
+    private $projectChoices;
+    
+    public function __construct(array $projectChoices)
+    {
+        $this->projectChoices = $projectChoices;
+    }
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) return;
@@ -30,10 +36,7 @@ class AdminListingSearchForm extends AbstractForm
     {
 
         $projectKey = $this->formData['projectKey'];
-        $projectChoices = [
-            'NG2016' => 'AYSONationalGames2016',
-            'NG2014' => 'AYSONationalGames2014'
-        ];
+        
         $displayKey = $this->formData['displayKey'];
         $displayChoices = [
             'Plans'        => 'Plans',
@@ -49,11 +52,11 @@ class AdminListingSearchForm extends AbstractForm
 <form role="form" class="form-inline" style="width: 760px;" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
   <div class="form-group">
     <label for="projectKey">Project</label>
-    {$this->renderFormControlInputSelect($projectChoices,$projectKey,'projectKey','projectKey')}
+    {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey','projectKey')}
   </div>
   <div class="form-group">
     <label for="displayKey">Display</label>
-    {$this->renderFormControlInputSelect($displayChoices,$displayKey,'displayKey','displayKey')}
+    {$this->renderInputSelect($displayChoices,$displayKey,'displayKey','displayKey')}
   </div>
   <div class="form-group">
     <label for="name">Name</label>
