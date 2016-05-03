@@ -29,8 +29,8 @@ trait MigrateGames2014Trait
             case 'FM':  $poolType = 'TF'; break;
             case 'SOF': $poolType = 'ZZ'; break;
         }
-        $poolView     = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolType,$poolName);
-        $poolTeamView = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolType,$poolSlot);
+        $poolView     = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolTypeView,$poolName);
+        $poolTeamView = sprintf('%s-%s %s %s %s',$age,$gender,$program,$poolTypeView,$poolSlot);
 
         $poolKey     = sprintf('%s-%s-%s-%s',$division,$program,$poolType,$poolName);
         $poolTeamKey = sprintf('%s-%s-%s-%s',$division,$program,$poolType,$poolSlot);
@@ -41,13 +41,13 @@ trait MigrateGames2014Trait
 
         return [$poolType,$poolKey,$poolTeamKey,$poolTypeView,$poolView,$poolTeamView,$poolTeamSlotView];
     }
-    protected function generateProjectTeamId($projectKey,$teamKey,$program,$division)
+    protected function generateRegTeamId($projectId,$teamKey,$program,$division)
     {
         if (!$teamKey) {
             return null;   
         }
         $parts = explode(':', $teamKey);
         $teamNumber = (integer)$parts[2];
-        return sprintf('%s:%s-%s-%02d',$projectKey,$division,$program,$teamNumber);
+        return sprintf('%s:%s-%s-%02d',$projectId,$division,$program,$teamNumber);
     }
 }

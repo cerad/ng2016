@@ -1,12 +1,12 @@
 -- ======================================================================
--- Project Game
+-- Game
 --
-DROP TABLE IF EXISTS projectGames;
+DROP TABLE IF EXISTS games;
 
-CREATE TABLE projectGames
+CREATE TABLE games
 (
-  id         VARCHAR(99) NOT NULL,
-  projectKey VARCHAR(40) NOT NULL,
+  gameId     VARCHAR(99) NOT NULL,
+  projectId  VARCHAR(99) NOT NULL,
   gameNumber INTEGER     NOT NULL,
 
   fieldName  VARCHAR(99),
@@ -21,25 +21,26 @@ CREATE TABLE projectGames
   reportText  LONGTEXT,
   reportState VARCHAR(40) NOT NULL DEFAULT 'Initial',
 
-  CONSTRAINT projectGames_primaryKey PRIMARY KEY(id),
+  CONSTRAINT games_primaryKey PRIMARY KEY(gameId),
 
-  CONSTRAINT projectGames_unique_gameNumber UNIQUE(projectKey,gameNumber)
+  CONSTRAINT games_unique_gameNumber UNIQUE(projectId,gameNumber)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 -- ======================================================================
--- Project Game Team
+-- Game Team
 --
-DROP TABLE IF EXISTS projectGameTeams;
+DROP TABLE IF EXISTS gameTeams;
 
-CREATE TABLE projectGameTeams
+CREATE TABLE gameTeams
 (
-  id         VARCHAR(99) NOT NULL,
-  projectKey VARCHAR(40) NOT NULL,
-  gameNumber INTEGER     NOT NULL,
-  slot       INTEGER     NOT NULL,
+  gameTeamId  VARCHAR(99) NOT NULL,
+  projectId   VARCHAR(99) NOT NULL,
+  gameId      VARCHAR(99) NOT NULL,
+  gameNumber  INTEGER     NOT NULL,
+  slot        INTEGER     NOT NULL,
 
-  name       VARCHAR(99), -- Move to pool team?
+  poolTeamId  VARCHAR(99) NOT NULL, -- Required
 
   results        INTEGER,     -- 1 => Won, 2 => Lost, 3 => Tied, 4 => Not Played etc
   resultsDetail  VARCHAR(40), -- Won/Lost/Tied, Won By Forfeit, Won in Extra Time, Won by KFTM, Not Played
@@ -55,36 +56,31 @@ CREATE TABLE projectGameTeams
 
   misconduct     LONGTEXT, -- array
 
-  gameId        VARCHAR(99) NOT NULL,
-  poolTeamId    VARCHAR(99) NOT NULL,
-  projectTeamId VARCHAR(99), -- not currently being used
-  orgKey        VARCHAR(99), -- move to pool team?
+  CONSTRAINT gameTeams_primaryKey PRIMARY KEY(gameTeamId),
 
-  CONSTRAINT projectGameTeams_primaryKey PRIMARY KEY(id),
+  CONSTRAINT gameTeams_unique_gameNumberSlot UNIQUE(projectId,gameNumber,slot),
 
-  CONSTRAINT projectGameTeams_unique_gameNumberSlot UNIQUE(projectKey,gameNumber,slot),
-
-  INDEX      projectGameTeams_index_gameId       (gameId),
-  INDEX      projectGameTeams_index_poolTeamId   (poolTeamId),
-  INDEX      projectGameTeams_index_projectTeamId(projectTeamId)
+  INDEX      gameTeams_index_gameId    (gameId),
+  INDEX      gameTeams_index_poolTeamId(poolTeamId)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 -- ======================================================================
--- Project Pool Team
+-- Pool Team
 --
-DROP TABLE IF EXISTS projectPoolTeams;
+DROP TABLE IF EXISTS poolTeams;
 
-CREATE TABLE projectPoolTeams
+CREATE TABLE poolTeams
 (
-  id          VARCHAR(99) NOT NULL,
-  projectKey  VARCHAR(40) NOT NULL,
-  poolTeamKey VARCHAR(40) NOT NULL,
+  poolTeamId  VARCHAR(99) NOT NULL,
+  projectId   VARCHAR(99) NOT NULL,
+
   poolKey     VARCHAR(40) NOT NULL,
-  poolType    VARCHAR(20) NOT NULL,
+  poolTypeKey VARCHAR(40) NOT NULL,
+  poolTeamKey VARCHAR(40) NOT NULL,
 
   poolView         VARCHAR(40),
-  poolTypeView     VARCHAR(20),
+  poolTypeView     VARCHAR(40),
   poolTeamView     VARCHAR(40),
   poolTeamSlotView VARCHAR(40),
 
@@ -96,75 +92,75 @@ CREATE TABLE projectPoolTeams
   age      VARCHAR(20),
   division VARCHAR(20),
 
-  projectTeamId VARCHAR(99), -- Maybe
+  regTeamId  VARCHAR(99),
+  teamName   VARCHAR(99), -- Sync with RegTeam
+  teamPoints INTEGER,     -- Sync with RegTeam
 
-  -- name From projectTeam aka registeredTeam
-  -- points
-  -- orgKey,orgView
+  CONSTRAINT poolTeams_primaryKey PRIMARY KEY(poolTeamId),
 
-  CONSTRAINT projectPoolTeams_primaryKey PRIMARY KEY(id),
+  CONSTRAINT poolTeams_unique_poolTeamKey UNIQUE(projectId,poolTeamKey),
 
-  CONSTRAINT projectPoolTeams_unique_poolTeamKey UNIQUE(projectKey,poolTeamKey),
-
-  INDEX      projectPoolTeams_index_poolKey(projectKey,poolKey)
+  INDEX      poolTeams_index_poolKey    (projectId,poolKey),
+  INDEX      poolTeams_index_poolTypeKey(projectId,poolTypeKey)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 -- ======================================================================
--- Project Team
+-- Registered Team
 --
-DROP TABLE IF EXISTS projectTeams;
+DROP TABLE IF EXISTS regTeams;
 
-CREATE TABLE projectTeams
+CREATE TABLE regTeams
 (
-  id         VARCHAR(99) NOT NULL,
-  projectKey VARCHAR(40) NOT NULL,
+  regTeamId  VARCHAR(99) NOT NULL,
+  projectId  VARCHAR(99) NOT NULL,
+
   teamKey    VARCHAR(40) NOT NULL,
   teamNumber INTEGER     NOT NULL,
+  teamName   VARCHAR(99) NOT NULL,
+  teamPoints INTEGER,
 
-  name       VARCHAR(99) NOT NULL,
-  coach      VARCHAR(99),
-  points     INTEGER,
-  status     VARCHAR(40) NOT NULL DEFAULT 'Active',
-  orgKey     VARCHAR(40),
-  -- orgKeyView
+  orgId      VARCHAR(99),
+  orgView    VARCHAR(40), -- Maybe to avoid hitting ayso
 
   program    VARCHAR(20),
   gender     VARCHAR(20),
   age        VARCHAR(20),
   division   VARCHAR(20),
 
-  CONSTRAINT projectTeams_primaryKey PRIMARY KEY(id),
+  CONSTRAINT regTeams_primaryKey PRIMARY KEY(regTeamId),
 
-  CONSTRAINT projectTeams_unique_teamKey UNIQUE(projectKey,teamKey)
+  CONSTRAINT regTeams_unique_teamKey UNIQUE(projectId,teamKey)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 -- ======================================================================
--- Project Game Official
+-- Game Official
 --
-DROP TABLE IF EXISTS projectGameOfficials;
+DROP TABLE IF EXISTS gameOfficials;
 
-CREATE TABLE projectGameOfficials
+CREATE TABLE gameOfficials
 (
-  id         VARCHAR(99) NOT NULL, -- projectKey:gameNumber:slot
-  projectKey VARCHAR(40) NOT NULL,
-  gameNumber INTEGER     NOT NULL,
-  slot       INTEGER     NOT NULL,
-  name       VARCHAR(99),
-  -- details about the official
+  gameOfficialId VARCHAR(99) NOT NULL, -- projectId:gameNumber:slot
+  projectId      VARCHAR(99) NOT NULL,
+  gameId         VARCHAR(99) NOT NULL,
+  gameNumber     INTEGER     NOT NULL,
+  slot           INTEGER     NOT NULL,
+
+  phyPersonId    VARCHAR(99), -- Physical Person (for conflicts)
+  regPersonId    VARCHAR(99),
+  regPersonName  VARCHAR(99), -- Sync with Registered Person
+
   assignRole   VARCHAR(40) DEFAULT 'ROLE_REFEREE',
   assignState  VARCHAR(40),
 
-  gameId          VARCHAR(99) NOT NULL,
-  projectPersonId VARCHAR(99), -- aka RegisteredPersonId along with PhysicalPersonKey
+  CONSTRAINT gameOfficials_primaryKey PRIMARY KEY(gameOfficialId),
 
-  CONSTRAINT projectGameOfficials_primaryKey PRIMARY KEY(id),
+  CONSTRAINT gameOfficials_unique_gameNumberSlot UNIQUE(projectId,gameNumber,slot),
 
-  CONSTRAINT projectGameOfficials_unique_gameNumberSlot UNIQUE(projectKey,gameNumber,slot),
+  INDEX      gameOfficials_index_gameId(gameId),
 
-  INDEX      projectGameOfficials_index_gameId(gameId),
-
-  INDEX      projectGameOfficials_index_projectPersonId(projectPersonId)
+  INDEX      gameOfficials_index_regPersonId(regPersonId),
+  INDEX      gameOfficials_index_phyPersonId(phyPersonId)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
