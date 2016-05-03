@@ -22,7 +22,6 @@ class MigrateGames2014Command extends Command
     private $ng2016GamesConn;
 
     private $gameConn;
-    private $poolConn;
     private $regTeamConn;
     private $projectTeamConn;
 
@@ -34,7 +33,6 @@ class MigrateGames2014Command extends Command
         $this->ng2016GamesConn = $ng2016GamesConn;
 
         $this->gameConn        = $ng2016GamesConn;
-        $this->poolConn        = $ng2016GamesConn;
         $this->regTeamConn     = $ng2016GamesConn;
         $this->projectTeamConn = $ng2016GamesConn;
     }
@@ -61,7 +59,7 @@ class MigrateGames2014Command extends Command
 
         $this->migrateGames($all || false);
 
-        $this->migrateGameTeams($all || true);
+        $this->migrateGameTeams($all || false);
 
         $this->migrateGameOfficials($all || false);
 
