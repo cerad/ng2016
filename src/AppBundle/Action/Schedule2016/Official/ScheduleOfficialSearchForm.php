@@ -25,12 +25,12 @@ class ScheduleOfficialSearchForm extends AbstractForm
         $errors = [];
         
         $this->formData = array_replace($this->formData,[
-            'projectKey' => $this->filterScalar($data,'projectKey'),
-            'programs'   => $this->filterArray ($data,'programs'),
-            'genders'    => $this->filterArray ($data,'genders'),
-            'ages'       => $this->filterArray ($data,'ages'),
-            'dates'      => $this->filterArray ($data,'dates'),
-            'sortBy'     => $this->filterScalar($data,'sortBy',true),
+            'projectId' => $this->filterScalar($data,'projectId'),
+            'programs'  => $this->filterArray ($data,'programs'),
+            'genders'   => $this->filterArray ($data,'genders'),
+            'ages'      => $this->filterArray ($data,'ages'),
+            'dates'     => $this->filterArray ($data,'dates'),
+            'sortBy'    => $this->filterScalar($data,'sortBy',true),
         ]);
         $this->formDataErrors = $errors;
     }
@@ -38,8 +38,8 @@ class ScheduleOfficialSearchForm extends AbstractForm
     {
         $formData = $this->formData;
 
-        $projectKey = $formData['projectKey'];
-        $project    = $this->projects[$projectKey];
+        $projectId = $formData['projectId'];
+        $project   = $this->projects[$projectId];
 
         $action = $this->generateUrl($this->getCurrentRouteName());
 
@@ -49,8 +49,8 @@ class ScheduleOfficialSearchForm extends AbstractForm
 {$this->renderFormErrors()}
 <form role="form" class="form-inline" style="width: 760px;" action="{$action}" method="post">
   <div class="form-group">
-    <label for="projectKey">Project</label>
-    {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey')}
+    <label for="projectId">Project</label>
+    {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
   </div>
   <div class="form-group">
     <label for="sortBy">Sort By</label>

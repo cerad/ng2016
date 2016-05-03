@@ -10,6 +10,11 @@ services:
         class: AppBundle\Action\Schedule2016\ScheduleTemplate
         calls: [['setContainer', ['@service_container']]]
 
+    schedule_template_show_officials_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleTemplate
+        calls: [['setContainer', ['@service_container']]]
+        arguments: [true]
+
     # ===============================================================
     # Schedule Game
     schedule_game_search_form_2016:
@@ -59,7 +64,7 @@ services:
         parent: abstract_view2
         arguments:
             - '@schedule_official_search_form_2016'
-            - '@schedule_template_2016'
+            - '@schedule_template_show_officials_2016'
 
     # ===============================================================
     # Schedule Team

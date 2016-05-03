@@ -8,6 +8,12 @@ class ScheduleTemplate
 {
     use AbstractActionTrait;
 
+    protected $showOfficials;
+
+    public function __construct($showOfficials = false)
+    {
+        $this->showOfficials = $showOfficials;
+    }
     /**
      * @param  ScheduleGame[] $games
      * @return string
@@ -16,7 +22,7 @@ class ScheduleTemplate
     {
         $gameCount = count($games);
 
-        return <<<EOD
+        $html =  <<<EOD
 <div id="layout-block">
 <div class="schedule-games-list">
 <table id="schedule" class="schedule" border="1">
@@ -30,6 +36,13 @@ class ScheduleTemplate
       <th class="schedule-group">Group</th>
       <th class="schedule-slot" >Slot</th>
       <th class="schedule-teams">Home / Away</th>
+EOD;
+        if ($this->showOfficials) {
+            $html .= <<<EOD
+      <th class="schedule-officials">Officials</th>
+EOD;
+        }
+        $html .= <<<EOD
     </tr>
   </thead>
   <tbody>
@@ -40,6 +53,7 @@ class ScheduleTemplate
 <br />
 </div
 EOD;
+        return $html;
     }
     /**
      * @param  ScheduleGame[] $games
@@ -76,6 +90,17 @@ EOD;
   <td class="schedule-group">{$game->poolView}</td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
   <td class="text-left">{$homeTeam->regTeamName}<hr class="separator">{$awayTeam->regTeamName}</td>
+EOD;
+            if ($this->showOfficials) {
+                $html .= <<<EOD
+  <td class="text-left">
+    {$game->referee->slotView} {$game->referee->regPersonName}<hr class="separator">
+    {$game->ar1->slotView    } {$game->ar1->regPersonName    }<hr class="separator">
+    {$game->ar2->slotView    } {$game->ar2->regPersonName    }
+  </td>
+EOD;
+            }
+            $html .= <<<EOD
 </tr>
 EOD;
         }

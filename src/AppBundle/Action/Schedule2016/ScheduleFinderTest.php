@@ -34,7 +34,7 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         }
         return new ScheduleFinder($this->gameConn,$this->regTeamConn);
     }
-    public function testLoad()
+    public function sestLoad()
     {
         // Just to create the connections
         $this->createScheduleFinder();
@@ -262,5 +262,9 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('U14B',$homeTeam->division);
         $this->assertEquals('#02', $homeTeam->regTeamName);
         $this->assertEquals('U14-B Core PP A',$homeTeam->poolView);
+
+        $referee = $game->referee;
+        $this->assertEquals('Name 1',$referee->regPersonName);
+        
     }
 }

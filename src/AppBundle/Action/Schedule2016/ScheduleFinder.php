@@ -34,8 +34,15 @@ class ScheduleFinder
         $games = $this->findGamesForIds($gameIds);
 
         // Load the teams
-        $games = $this->joinTeamsToGames($games);
-
+        $wantTeams = isset($criteria['wantTeams']) ? $criteria['wantTeams'] : true;
+        if ($wantTeams) {
+            $games = $this->joinTeamsToGames($games);
+        }
+        // Load the officials
+        $wantOfficials = isset($criteria['wantOfficials']) ? $criteria['wantOfficials'] : true;
+        if ($wantOfficials) {
+            $games = $this->joinOfficialsToGames($games);
+        }
         // Convert to objects
         if (!$objects) {
             return $games;
@@ -79,9 +86,26 @@ ORDER BY gameNumber,slot
 EOD;
         $stmt = $this->gameConn->executeQuery($sql,[array_keys($games)],[Connection::PARAM_STR_ARRAY]);
         while($gameTeam = $stmt->fetch()) {
-
             $gameId = $gameTeam['gameId'];
             $games[$gameId]['teams'][$gameTeam['slot']] = $gameTeam;
+        }
+        return $games;
+    }
+    private function joinOfficialsToGames(array $games)
+    {
+        if (!count($games)) {
+            return [];
+        }
+        $sql = <<<EOD
+SELECT * 
+FROM  gameOfficials AS gameOfficial
+WHERE gameOfficial.gameId IN (?)
+ORDER BY gameNumber,slot
+EOD;
+        $stmt = $this->gameConn->executeQuery($sql,[array_keys($games)],[Connection::PARAM_STR_ARRAY]);
+        while($gameOfficial = $stmt->fetch()) {
+            $gameId = $gameOfficial['gameId'];
+            $games[$gameId]['officials'][$gameOfficial['slot']] = $gameOfficial;
         }
         return $games;
     }
@@ -94,7 +118,8 @@ EOD;
         $stmt = $this->gameConn->executeQuery($sql,[$gameIds],[Connection::PARAM_STR_ARRAY]);
         $games = [];
         while($game = $stmt->fetch()) {
-            $game['teams'] = [];
+            $game['teams']     = [];
+            $game['officials'] = [];
             $game['gameNumber'] = (integer)$game['gameNumber'];
             $games[$game['gameId']] = $game;
         }
