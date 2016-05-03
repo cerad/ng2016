@@ -2,7 +2,6 @@
 namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractActionTrait;
-use AppBundle\Action\Schedule2016\ScheduleGame;
 
 class ScheduleTemplate
 {
