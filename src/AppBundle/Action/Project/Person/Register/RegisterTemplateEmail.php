@@ -25,7 +25,7 @@ class RegisterTemplateEmail extends AbstractView2
         table-layout: fixed;
         margin-left: auto;
         margin-right: auto;
-        width: 400px;
+        width: 600px;
         border: 2px solid black;
         margin-bottom: 0px;
     ';
