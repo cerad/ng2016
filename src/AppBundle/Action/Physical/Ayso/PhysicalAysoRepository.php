@@ -25,8 +25,10 @@ class PhysicalAysoRepository
 
     public function findVol($fedKey)
     {
-        //if (!$fedKey) return null; // Otherwise we get false
-
+        // Transform fedKey
+        if (strlen($fedKey) === 8) {
+            $fedKey = 'AYSOV:' . $fedKey;
+        }
         if (!$this->findVolStmt) {
             $sql = <<<EOD
 SELECT fedKey,name,email,phone,gender,sar,regYear
@@ -50,6 +52,11 @@ EOD;
     }
     public function findVolCert($fedKey,$role)
     {
+        // Transform fedKey
+        if (strlen($fedKey) === 8) {
+            $fedKey = 'AYSOV:' . $fedKey;
+        }
+
         if (!$this->findVolCertStmt) {
             $sql = <<<EOD
 SELECT fedKey,role,roleDate,badge,badgeDate
