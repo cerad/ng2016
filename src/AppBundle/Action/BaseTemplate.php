@@ -24,14 +24,12 @@ class BaseTemplate extends AbstractTemplate
         {$this->renderHead()}
         {$this->renderHeader()}
         <body>
-          <div id="layout-body">
             <div id="layout-topmenu">
               {$this->renderTopMenu()}
             </div>
             <div class="container">
               {$this->content}
             </div>
-          </div>
       {$this->renderScripts()}
 
       {$this->renderFooter()}

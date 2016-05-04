@@ -1,26 +1,20 @@
 strong { font-weight: bold }
-
 em { font-style: italic }
-
 #banner {
     width: 100%;
-    margin: 20px;
+    margin: 20px 0;
     text-align: center;
 }
-
 .newsletter-box {
     background-color: #c32526;
     margin-top: 0.2em;
 }
-
 #newsletter-box {
     margin-top: 0.5em;
     height: 1.8em;
     padding: 0.3em;
 }
-
 #mobile-newsletter-box { display: none }
-
 #newsletter-email {
     width: 12em;
     -webkit-transition: all 1s;
@@ -29,58 +23,45 @@ em { font-style: italic }
     -ms-transition: width 1s;
     transition: width 1s;
 }
-
 #newsletter-email:focus { width: 17em }
-
 ul.menu-list {
     list-style-type: none;
     padding: 0;
     margin: 1em 0em;
     text-align: center;
 }
-
 li.menu-item {
     display: inline;
     margin: 0em 1.5em;
 }
-
 a.menu-item-link {
-    font-family: "Bebas Neue",Calibri,Arial,Helvetica,sans-serif;
+    font-family: "Bebas Neue", Calibri, Arial, Helvetica, sans-serif;
     font-size: 1.3em;
     text-decoration: none;
     color: #c31f05;
     position: relative;
 }
-
 a.menu-item-link:hover { color: #000000 }
-
 a.menu-item-link:active {
     top: 0.1em;
     left: 0.1em;
 }
-
 #menu-selectstrong { font-weight: bold }
-
 em { font-style: italic }
-
 #banner {
     width: 100%;
     margin-top: 0.2em;
 }
-
 .newsletter-box {
     background-color: #c32526;
     margin-top: 0.2em;
 }
-
 #newsletter-box {
     margin-top: 0.5em;
     height: 1.8em;
     padding: 0.3em;
 }
-
 #mobile-newsletter-box { display: none }
-
 #newsletter-email {
     width: 12em;
     -webkit-transition: all 1s;
@@ -89,184 +70,193 @@ em { font-style: italic }
     -ms-transition: width 1s;
     transition: width 1s;
 }
-
 #newsletter-email:focus { width: 17em }
-
 ul.menu-list {
     list-style-type: none;
     padding: 0;
     margin: 1em 0em;
     text-align: center;
 }
-
 li.menu-item {
     display: inline;
     margin: 0em 1.5em;
 }
-
 a.menu-item-link {
-    font-family: "Bebas Neue",Calibri,Arial,Helvetica,sans-serif;
+    font-family: "Bebas Neue", Calibri, Arial, Helvetica, sans-serif;
     font-size: 1.3em;
     text-decoration: none;
     color: #c31f05;
     position: relative;
 }
-
 a.menu-item-link:hover { color: #000000 }
-
 a.menu-item-link:active {
     top: 0.1em;
     left: 0.1em;
 }
-
 #menu-select { display: none }
-
 body {
     margin: 0 auto;
-    font-family: "Cwmagic",Calibri,Arial,Helvetica,sans-serif;
+    font-family: "Cwmagic", Calibri, Arial, Helvetica, sans-serif;
     background-color: #ffffff;
     line-height: 1.5em;
 }
-
-body, .container { background-image: none }
-
+body,
+.container { background-image: none }
 img { border: 0em }
-
-h1, h2, h3 { font-weight: bold }
-
-td.contact, .contact {
+h1,
+h2,
+h3 { font-weight: bold }
+td.contact,
+.contact {
     padding: 5px 20px;
     border-top: 1px solid;
     border-bottom: 1px solid;
 }
-
-    td.contact > h3 {
-        padding: 0;
-        margin-top: 5px;
-        margin-bottom: 0px;
-    }
-
-    td.contact > a { margin-left: 20px }
-
+td.contact > h3 {
+    padding: 0;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+td.contact > a { margin-left: 20px }
 div#contents > table {
     width: 100%;
     border-spacing: 0;
     border-collapse: collapse;
 }
-
 .float-left { float: left }
-
 .float-right { float: right }
-
 .clear-both { clear: both }
-
 .shadow {
     -webkit-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
-    -moz-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
     -o-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
     -ms-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
     box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
     margin-right: 0.4em !important;
 }
-
-.long-box, .small-box {
+.long-box,
+.small-box {
     background-color: #cdcdcd;
     padding: 0em 0.3em;
     margin: 0em;
     margin-bottom: 1em;
 }
-
 .small-box { width: 47% }
-
 p {
     margin-top: 0;
     margin-bottom: 0.5em;
 }
-
 #main-footer {
     background-color: #c32526;
     text-align: center;
 }
-
 .social-bar a {
     text-decoration: none;
     margin-right: 3em;
 }
-
 /*
  ***********************************
     FONT FOR INTERNET EXPLORER
  ***********************************
 */
-
 /*
  ***********************************
      FONT FOR OTHER BROWSERS
  ***********************************
 */
-
-@font-face { font-family: "Bebas Neue"; src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf"); }
-
-@font-face { font-family: "Palatino Linotype"; src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf"); }
-
+@font-face {
+    font-family: "Bebas Neue";
+    src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf");
+}
+@font-face {
+    font-family: "Palatino Linotype";
+    src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf");
+}
 /************************************
   END FONT FOR...
 ************************************/
-
- { display: none; }
-
-body { margin: 0 auto; font-family: "Cwmagic",Calibri,Arial,Helvetica,sans-serif; background-color: #ffffff; line-height: 1.5em; }
-
-img { border: 0em; }
-
-h1, h2, h3 { font-weight: bold; }
-
-td.contact, .contact { padding: 5px 20px; border-top: 1px solid; border-bottom: 1px solid; }
-
-    td.contact > h3 { padding: 0; margin-top: 5px; margin-bottom: 0px; }
-
-    td.contact > a { margin-left: 20px; }
-
-div#contents > table { width: 100%; border-spacing:0; border-collapse:collapse; }
-
-.float-left { float: left; }
-
-.float-right { float: right; }
-
-.clear-both { clear: both; }
-
-.shadow { -webkit-box-shadow: 0.4em 0.4em 0.2em #5C5B5B; -moz-box-shadow: 0.4em 0.4em 0.2em #5C5B5B; -o-box-shadow: 0.4em 0.4em 0.2em #5C5B5B; -ms-box-shadow: 0.4em 0.4em 0.2em #5C5B5B; box-shadow: 0.4em 0.4em 0.2em #5C5B5B; margin-right: 0.4em !important; }
-
-.long-box, .small-box { background-color: #cdcdcd; padding: 0em 0.3em; margin: 0em; margin-bottom: 1em; }
-
-.small-box { width: 47%; }
-
-p { margin-top: 0; margin-bottom: 0.5em; }
-
-#main-footer { background-color: #c32526; text-align: center; }
-
-.social-bar a { text-decoration: none; margin-right: 3em; }
-
+body {
+    margin: 0 auto;
+    font-family: "Cwmagic", Calibri, Arial, Helvetica, sans-serif;
+    background-color: #ffffff;
+    line-height: 1.5em;
+}
+img { border: 0em }
+h1,
+h2,
+h3 { font-weight: bold }
+td.contact,
+.contact {
+    padding: 5px 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+td.contact > h3 {
+    padding: 0;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+td.contact > a { margin-left: 20px }
+div#contents > table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.float-left { float: left }
+.float-right { float: right }
+.clear-both { clear: both }
+.shadow {
+    -webkit-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
+    -o-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
+    -ms-box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
+    box-shadow: 0.4em 0.4em 0.2em #5C5B5B;
+    margin-right: 0.4em !important;
+}
+.long-box,
+.small-box {
+    background-color: #cdcdcd;
+    padding: 0em 0.3em;
+    margin: 0em;
+    margin-bottom: 1em;
+}
+.small-box { width: 47% }
+p {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+}
+#main-footer {
+    background-color: #c32526;
+    text-align: center;
+}
+.social-bar a {
+    text-decoration: none;
+    margin-right: 3em;
+}
 /*
  ***********************************
     FONT FOR INTERNET EXPLORER
  ***********************************
 */
-
-@font-face { font-family: "Bebas Neue"; src: url(../css/bebasneue.eot); }
-
-@font-face { font-family: "Palatino Linotype"; src: url(../css/pala.eot); }
-
+@font-face {
+    font-family: "Bebas Neue";
+    src: url(../css/bebasneue.eot);
+}
+@font-face {
+    font-family: "Palatino Linotype";
+    src: url(../css/pala.eot);
+}
 /*
  ***********************************
      FONT FOR OTHER BROWSERS
  ***********************************
 */
-
-@font-face { font-family: "Bebas Neue"; src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf"); }
-
-@font-face { font-family: "Palatino Linotype"; src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf"); }
-
+@font-face {
+    font-family: "Bebas Neue";
+    src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf");
+}
+@font-face {
+    font-family: "Palatino Linotype";
+    src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf");
+}
 /************************************
   END FONT FOR...
 ************************************/

@@ -14,9 +14,9 @@
     clear: both;
  }
  
- .container { min-width: 350px; }
+ .container { min-width: 300px; }
  
- legend { font-size: 16px; font-weight:bold; margin-top: 1em; margin-left: -20px;}
+ legend { font-size: 16px; font-weight:bold; margin-top: 1em; }
  
  .entry { margin-left:5px; margin-top: 5px; margin-bottom: 5px;}
  
@@ -26,7 +26,9 @@
 
 .no-disc li { list-style: none }
 
-.form-control { width: 300px; }
+form { width: 100%; margin-left:auto; margin-right: auto; }
+
+.form-control { max-width: 300px; }
 
 .vcenter {
     margin-top: 0.5em;
@@ -34,12 +36,13 @@
 
 .width-90 { max-width: 90%; margin-left: auto; margin-right: auto; }
 
-.btn { margin-right: 8px; margin-bottom: 15px;}
+.btn { margin: 10px 10px 10px 0;}
 
 .btn-provider { color: #000; background-color: #f5f5f5; }
 
 .tableClass {
   width: 400px;
+  max-width: 100%;
   border: 2px solid black;
   margin-bottom: 0px;
 }
@@ -59,4 +62,42 @@ legend { padding-bottom: 10px; }
 }
 .bg-danger {
     background-color: #f2dede;
+}
+.form-group {
+    margin-right: 20px;
+}
+@media only screen and (max-width: 1024px){
+    
+    .panel-float-left {
+        width: 300px;
+        margin: 5px;
+    }
+}
+
+form.cerad_common_form1 fieldset div.col-xs-10 {
+    padding: 0;
+}
+@media only screen and (max-width: 768px){
+    
+    .panel-float-left {
+        width: 320px;
+        margin: 5px;
+    }
+}
+@media only screen and (max-width: 667px){
+    
+    .panel-float-left {
+        width: 270px;
+        margin: 5px;
+    }
+}
+@media only screen and (max-width:375px) {
+    
+    .tableClass {
+        width: 100%;
+    }
+    
+    .container {
+        padding: 0;
+    }
 }

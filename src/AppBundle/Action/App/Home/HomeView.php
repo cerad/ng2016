@@ -73,7 +73,7 @@ EOD;
 
         return <<<EOD
 <table class="tableClass" >
-  <tr><th colspan="2" style="text-align: center;">Zayso Account Information</th></tr>
+  <tr><th colspan="2" style="text-align: center;">zAYSO Account Information</th></tr>
   <tr><td>Account Name </td><td>{$user['name']}</td></tr>
   <tr><td>Account User </td><td>{$user['username']}</td></tr>
   <tr><td>Account Email</td><td>{$user['email']}</td></tr>

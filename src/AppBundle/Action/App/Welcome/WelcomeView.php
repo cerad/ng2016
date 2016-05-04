@@ -27,14 +27,12 @@ class WelcomeView extends AbstractView2
     private function render()
     {
         $content = <<<EOT
-<div class="container">
-  <div id="welcome">
-    <legend>Welcome to the AYSO National Games 2016 Site</legend>
-  </div>
-  {$this->renderNotes()}      
-  {$this->renderUser()}
-  {$this->renderHelp()}      
-</div>
+    <div id="welcome">
+        <legend>Welcome to the AYSO 2016 National Games</legend>
+    </div>
+    {$this->renderNotes()}      
+    {$this->renderUser()}
+    {$this->renderHelp()}      
 EOT;
         return $this->renderBaseTemplate($content);
     }
