@@ -64,7 +64,6 @@ class RegisterTemplateEmail extends AbstractView2
         $person = $person->fromArray($personArray);
         $personView = $this->projectPersonViewDecorator;
         $personView->setProjectPerson($person);
-
         return <<<EOD
 <html>
 <head>
@@ -86,19 +85,8 @@ class RegisterTemplateEmail extends AbstractView2
   <br>
   {$this->renderHtmlPerson($personView)}
 
-  <p style="{$this->stylePStrong}">
-    General Information
-  </p>
-  <p style="{$this->styleP}">
-    As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 5 and 
-    running through Sunday, July 10. 
-    On Tuesday, July 5, 2016, we will have a mandatory meeting for Coaches and Referees at the 
-    <a href="http://www3.hilton.com/en/hotels/florida/hilton-west-palm-beach-PBIWPHH/index.html" target="_blank">Hilton West Palm Beach</a> 
-    to provide information to all coaches and referees on how to have a successful National Games. 
-    We will review important roles, procedures, safety and more! You will also receive your coach and referee bags at this meeting.
-    A full calendar may be viewed at <a href="http://aysonationalgames.org/schedule-of-events/" target="_blank">National Games Calendar</a>.
-    General information about the Games can be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>.
-    </p>
+  {$this->renderHtmlGeneralInformation($personView)}
+    
     <p style="{$this->styleP}">
       I will provide additional updates in the coming weeks. 
       Please drop me a note if you have any questions about officiating at the Games or with suggestions you have on how we can 
@@ -118,6 +106,23 @@ class RegisterTemplateEmail extends AbstractView2
 </html>
 EOD;
     }
+    private function renderHtmlGeneralInformation($personView) {
+        return <<<EOT
+  <p style="{$this->stylePStrong}">
+    General Information
+  </p>
+  <p style="{$this->styleP}">
+    As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 5 and 
+    running through Sunday, July 10. 
+    On Tuesday, July 5, 2016, we will have a mandatory meeting for Coaches and Referees at the 
+    <a href="http://www3.hilton.com/en/hotels/florida/hilton-west-palm-beach-PBIWPHH/index.html" target="_blank">Hilton West Palm Beach</a> 
+    to provide information to all coaches and referees on how to have a successful National Games. 
+    We will review important roles, procedures, safety and more! You will also receive your coach and referee bags at this meeting.
+    A full calendar may be viewed at <a href="http://aysonationalgames.org/schedule-of-events/" target="_blank">National Games Calendar</a>.
+    General information about the Games can be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>.
+    </p>
+EOT;
+    } 
     private function renderHtmlPerson(ProjectPersonViewDecorator $personView)
     {
         $regYearProject = $this->getCurrentProjectInfo()['regYear'];
@@ -126,7 +131,7 @@ EOD;
         
         $notes = nl2br($this->escape($personView->notesUser));
         
-        return <<<EOD
+        $msg = <<<EOD
 <table style="{$this->tableClass}">
   <tr><td>Name          </td><td>{$this->escape($personView->name)} </td></tr>
   <tr><td>Email         </td><td>{$this->escape($personView->email)}</td></tr>
@@ -157,30 +162,56 @@ EOD;
   <tr><td style="{$this->styleTd}" colspan="2" ><a href="{$href}">Update Tournament Plans or Availability</a></td></tr>
 </table>
 <br>
+EOD;
+
+    if ($personView->person->needsCerts()) {
+        $msg .= <<<EOT
   <p style="{$this->stylePStrong}">
     Please Review Your Certifications
   </p>
+
 <p style="{$this->styleP}">
     If you plan to referee (or volunteer) then please ensure your eAYSO information is up to date.
-    Anything above that is marked with <span style="{$personView->dangerStyle}">***</span> needs action.
+    Anything above that is marked with <span style="{$personView->dangerStyle}">***</span> requires your action.
 </p>
-<p style="{$this->styleP}">
-    AYSO requires all participating referees and coaches to have completed AYSO Safe Haven training.
-    If you have yet to complete training, the AYSO Safe Haven Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
-    with your eAYSO ID and last name. Then you can access the AYSO Safe Haven Training Course at <a href="https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven" target="_blank">https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven</a>.
-</p>
-<p style="{$this->styleP}">
-    By Florida law, all participating referees and coaches are required to have completed CDC Concussion Awareness training.
-    If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
-    with your eAYSO ID and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
-</p>
-<p style="{$this->styleP}">
-    These training modules take about 30 minutes each.  If your certification records need action, please take time today and complete this training.
-    When it's done, your records will be updated and you'll be ready to join us at the National Games.
-</p>
+
 <p style="{$this->styleP}">
     Please notify me if your eAYSO information does not match the above information and I will update zAYSO accordingly.
 </p>
-EOD;
+
+<p style="{$this->styleP}">
+    This training takes about 30-60 minutes.  Please take time today and complete this training.
+    When it's done, your records will be updated and you'll be ready to join us at the National Games.
+</p>
+EOT;
+    }
+    
+    if ($personView->person->needsCertSafeHaven()) {
+        $msg .= <<<EOT
+  <p style="{$this->stylePStrong}">
+    AYSO Safe Haven
+  </p>
+<p style="{$this->styleP}">
+    AYSO requires all participating referees and coaches to have completed <strong>the most current</strong> AYSO Safe Haven training.
+    If you have yet to complete the latest version of this training, the AYSO Safe Haven Training Course MT-02 is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
+    with your eAYSO ID {$personView->fedId} and your last name. You can then access the AYSO Safe Haven Training Course at <a href="https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven" target="_blank">https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven</a>.
+</p>
+EOT;
+    }
+    
+    if ($personView->person->needsCertConcussion()) {
+        $msg .= <<<EOT
+  <p style="{$this->stylePStrong}">
+    AYSO Concussion Awareness
+  </p>
+<p style="{$this->styleP}">
+    By Florida law, all participating referees and coaches are required to have completed CDC Concussion Awareness training.
+    If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
+    with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
+</p>
+EOT;
+    }
+    
+    return $msg;
     }
 }
