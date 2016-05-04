@@ -10,18 +10,15 @@ use Doctrine\DBAL\Connection;
 class InitGames2016Command extends Command
 {
     private $gameConn;
-    private $poolConn;
-    private $projectTeamConn;
+    private $regTeamConn;
 
     public function __construct(Connection $ng2016GamesConn)
     {
         parent::__construct();
 
-        $this->gameConn = $ng2016GamesConn;
-        $this->poolConn = $ng2016GamesConn;
-        $this->projectTeamConn = $ng2016GamesConn;
+        $this->gameConn    = $ng2016GamesConn;
+        $this->regTeamConn = $ng2016GamesConn;
     }
-
     protected function configure()
     {
         $this
@@ -33,71 +30,73 @@ class InitGames2016Command extends Command
     {
         echo sprintf("Init Games NG2016 ...\n");
 
-        $commit = false;
+        $commit = true;
 
-        $this->initProjectTeams($commit);
+        $this->initRegTeams($commit || false);
 
-        $this->initPoolTeams($commit);
+        $this->initPoolTeams($commit || false);
 
-        $this->assignProjectTeamsToPoolPlayTeams($commit);
+        $this->assignRegTeamsToPoolPlayTeams($commit || false);
 
-        $this->initGames(true);
+        $this->initGames($commit || false);
 
         echo sprintf("Init Games NG2016 Completed.\n");
     }
 
-    private $projectKey = 'AYSONationalGames2016';
-    private $programs = ['Core'];
-    private $genders = ['B', 'G'];
-    private $ages = ['U10', 'U12', 'U14', 'U16', 'U19'];
+    private $projectId = 'AYSONationalGames2016';
+    private $programs  = ['Core'];
+    private $genders   = ['B', 'G'];
+    private $ages      = ['U10', 'U12', 'U14', 'U16', 'U19'];
 
-    private function initProjectTeams($commit)
+    private function initRegTeams($commit)
     {
         if (!$commit) {
             return;
         }
-        $count = 0;
-        $this->projectTeamConn->delete('projectTeams', ['projectKey' => $this->projectKey]);
+        $this->regTeamConn->delete('regTeams', ['projectId' => $this->projectId]);
 
+        $count = 0;
         foreach ($this->programs as $program) {
             foreach ($this->ages as $age) {
                 foreach ($this->genders as $gender) {
                     for ($teamNumber = 1; $teamNumber <= 24; $teamNumber++) {
-                        $this->initProjectTeam($this->projectKey, $program, $age, $gender, $teamNumber);
+                        $this->initRegTeam($this->projectId, $program, $age, $gender, $teamNumber);
                         $count++;
                         if (($count % 100) === 0) {
-                            echo sprintf("\rLoading Project Teams %5d", $count);
+                            echo sprintf("\rLoading Registration Teams %5d", $count);
                         }
                     }
                 }
             }
         }
-        echo sprintf("\rLoaded Project Teams %5d      \n", $count);
+        echo sprintf("\rLoaded Registration Teams %5d      \n", $count);
     }
 
-    private function initProjectTeam($projectKey, $program, $age, $gender, $teamNumber)
+    private function initRegTeam($projectId, $program, $age, $gender, $teamNumber)
     {
         $division = $age . $gender;
 
         $teamKey = sprintf('%s-%s-%02d', $division, $program, $teamNumber);
 
-        $projectTeamId = $projectKey . ':' . $teamKey;
+        $regTeamId = $projectId . ':' . $teamKey;
 
-        $item = [
-            'id'         => $projectTeamId,
-            'projectKey' => $projectKey,
+        $regTeam = [
+            'regTeamId'  => $regTeamId,
+            'projectId'  => $projectId,
             'teamKey'    => $teamKey,
             'teamNumber' => $teamNumber,
-
-            'name'   => sprintf('#%02d', $teamNumber),
-            'status' => 'Active',
-
+            'teamName'   => sprintf('#%02d', $teamNumber),
+            'teamPoints' => null,
+            
+            'orgId'    => null,
+            'orgView'  => null,
+            
             'program'  => $program,
             'gender'   => $gender,
             'age'      => $age,
             'division' => $division,
         ];
-        $this->projectTeamConn->insert('projectTeams', $item);
+        $this->regTeamConn->insert('regTeams', $regTeam);
     }
 
     private function initPoolTeams($commit)
@@ -106,15 +105,15 @@ class InitGames2016Command extends Command
             return;
         }
         $count = 0;
-        $projectKey = $this->projectKey;
-        $this->poolConn->delete('projectPoolTeams', ['projectKey' => $projectKey]);
+        $projectId = $this->projectId;
+        $this->gameConn->delete('poolTeams', ['projectId' => $projectId]);
         foreach ($this->programs as $program) {
             foreach ($this->ages as $age) {
                 foreach ($this->genders as $gender) {
                     foreach (['A', 'B', 'C', 'D'] as $poolName) {
                         foreach ([1, 2, 3, 4, 5, 6] as $poolTeamName) {
                             $poolTeamSlot = $poolName . $poolTeamName;
-                            $this->initPoolTeam($projectKey, 'PP', $poolName, $poolTeamName, $poolTeamSlot, $program, $age, $gender);
+                            $this->initPoolTeam($projectId, 'PP', $poolName, $poolTeamName, $poolTeamSlot, $program, $age, $gender);
                             $count++;
                             if (($count % 100) === 0) {
                                 echo sprintf("\rLoading Pool Teams %5d", $count);
@@ -148,7 +147,7 @@ class InitGames2016Command extends Command
                     foreach ($medalRoundPools as $poolType => $pools) {
                         foreach ($pools as $poolName => $poolTeams) {
                             foreach ($poolTeams as $poolTeam) {
-                                $this->initPoolTeam($projectKey, $poolType, $poolName, $poolTeam['name'], $poolTeam['slot'], $program, $age, $gender);
+                                $this->initPoolTeam($projectId, $poolType, $poolName, $poolTeam['name'], $poolTeam['slot'], $program, $age, $gender);
                                 $count++;
                                 if (($count % 100) === 0) {
                                     echo sprintf("\rLoading Pool Teams %5d", $count);
@@ -162,7 +161,7 @@ class InitGames2016Command extends Command
         echo sprintf("\rLoaded Pool Teams %5d      \n", $count);
     }
 
-    private function initPoolTeam($projectKey, $poolType, $poolName, $poolTeamName, $poolSlot, $program, $age, $gender)
+    private function initPoolTeam($projectId, $poolType, $poolName, $poolTeamName, $poolSlot, $program, $age, $gender)
     {
         $division = $age . $gender;
 
@@ -176,77 +175,74 @@ class InitGames2016Command extends Command
                 $poolTypeView = 'SOF';
                 break;
         }
-        $poolView = sprintf('%s-%s %s %s %s', $age, $gender, $program, $poolTypeView, $poolName);
+        $poolView     = sprintf('%s-%s %s %s %s', $age, $gender, $program, $poolTypeView, $poolName);
         $poolTeamView = sprintf('%s-%s %s %s %s', $age, $gender, $program, $poolTypeView, $poolSlot);
 
-        $poolKey = sprintf('%s%s%s%s', $division, $program, $poolType, $poolName);
+        $poolKey     = sprintf('%s%s%s%s',   $division, $program, $poolType, $poolName);
         $poolTeamKey = sprintf('%s%s%s%s%s', $division, $program, $poolType, $poolName, $poolTeamName);
 
-        $poolTeamId = $projectKey . ':' . $poolTeamKey;
+        $poolTeamId = $projectId . ':' . $poolTeamKey;
 
-        $item = [
-            'id' => $poolTeamId,
+        $poolTeam = [
+            'poolTeamId' => $poolTeamId,
+            'projectId'  => $projectId,
 
-            'projectKey' => $projectKey,
-
-            'poolType' => $poolType,
-            'poolKey' => $poolKey,
+            'poolKey'     => $poolKey,
+            'poolTypeKey' => $poolType,
             'poolTeamKey' => $poolTeamKey,
 
-            'poolView' => $poolView,
+            'poolView'     => $poolView,
             'poolTypeView' => $poolTypeView,
             'poolTeamView' => $poolTeamView,
             'poolTeamSlotView' => $poolSlot,
 
-            'program' => $program,
-            'gender' => $gender,
-            'age' => $age,
+            'program'  => $program,
+            'gender'   => $gender,
+            'age'      => $age,
             'division' => $division,
 
-            'projectTeamId' => null,
+            'regTeamId' => null,
         ];
-
-        $this->poolConn->insert('projectPoolTeams', $item);
+        $this->gameConn->insert('poolTeams', $poolTeam);
     }
 
-    private function assignProjectTeamsToPoolPlayTeams($commit)
+    private function assignRegTeamsToPoolPlayTeams($commit)
     {
         if (!$commit) {
             return;
         }
         $count = 0;
-        $projectKey = $this->projectKey;
-
+        $projectId = $this->projectId;
         foreach ($this->programs as $program) {
             foreach ($this->ages as $age) {
                 foreach ($this->genders as $gender) {
 
-                    // Fetch the project teams
-                    $sql = 'SELECT id,orgKey FROM projectTeams WHERE projectKey = ? AND program = ? AND age = ? AND gender = ?';
-                    $stmt = $this->projectTeamConn->executeQuery($sql, [$projectKey, $program, $age, $gender]);
-                    $projectTeams = $stmt->fetchAll();
+                    // Fetch the reg teams
+                    $sql = 'SELECT regTeamId,teamName FROM regTeams WHERE projectId = ? AND program = ? AND age = ? AND gender = ?';
+                    $stmt = $this->regTeamConn->executeQuery($sql, [$projectId, $program, $age, $gender]);
+                    $regTeams = $stmt->fetchAll();
 
                     // Fetch the pool teams
-                    $sql = 'SELECT id FROM projectPoolTeams WHERE projectKey = ? AND program = ? AND age = ? AND gender = ? AND poolType = \'PP\'';
-                    $stmt = $this->poolConn->executeQuery($sql, [$projectKey, $program, $age, $gender]);
+                    $sql = 'SELECT poolTeamId FROM poolTeams WHERE projectId = ? AND program = ? AND age = ? AND gender = ? AND poolTypeKey = \'PP\'';
+                    $stmt = $this->gameConn->executeQuery($sql, [$projectId, $program, $age, $gender]);
                     $poolTeams = $stmt->fetchAll();
 
-                    if (count($projectTeams) !== count($poolTeams)) {
-                        die('ProjectTeam PoolTeam count mismatch');
+                    if (count($regTeams) !== count($poolTeams)) {
+                        die('RegTeam PoolTeam count mismatch');
                     }
-                    $teamCount = count($projectTeams);
-                    foreach ($projectTeams as $projectTeam) {
-                        $projectTeamId = $projectTeam['id'];
+                    $teamCount = count($regTeams);
+                    foreach ($regTeams as $regTeam) {
+                        $regTeamId = $regTeam['regTeamId'];
                         $tryAgain = true;
                         while ($tryAgain) {
                             $random = rand(0, $teamCount - 1);
-                            if (!isset($poolTeams[$random]['projectTeamId'])) {
+                            if (!isset($poolTeams[$random]['regTeamId'])) {
 
-                                $this->poolConn->update('projectPoolTeams',
-                                    ['projectTeamId' => $projectTeamId],
-                                    ['id' => $poolTeams[$random]['id']]
+                                $this->gameConn->update('poolTeams',
+                                    ['regTeamId'  => $regTeamId, 'regTeamName' => $regTeam['teamName']],
+                                    ['poolTeamId' => $poolTeams[$random]['poolTeamId']]
                                 );
-                                $poolTeams[$random]['projectTeamId'] = $projectTeamId;
+                                $poolTeams[$random]['regTeamId'] = $regTeamId;
                                 $tryAgain = false;
 
                                 $count++;
@@ -318,8 +314,8 @@ class InitGames2016Command extends Command
 
             [1, 'Sat', '08:00', 'A3', 'A2', 'G'], [2, 'Sat', '08:00', 'A1', 'A6', 'G'], [3, 'Sat', '08:00', 'A4', 'A5', 'G'],
             [4, 'Sat', '08:00', 'C3', 'C2', 'G'], [5, 'Sat', '08:00', 'C1', 'C6', 'G'], [6, 'Sat', '08:00', 'C4', 'C5', 'G'],
-            [1, 'Sat', '09:15', 'D3', 'D2', 'G'], [2, 'Sat', '09:15', 'D1', 'A6', 'G'], [3, 'Sat', '09:15', 'D4', 'D5', 'G'],
-            [4, 'Sat', '09:15', 'B3', 'B2', 'G'], [5, 'Sat', '09:15', 'D1', 'C6', 'G'], [6, 'Sat', '09:15', 'B4', 'B5', 'G'],
+            [1, 'Sat', '09:15', 'D3', 'D2', 'G'], [2, 'Sat', '09:15', 'D1', 'D6', 'G'], [3, 'Sat', '09:15', 'D4', 'D5', 'G'],
+            [4, 'Sat', '09:15', 'B3', 'B2', 'G'], [5, 'Sat', '09:15', 'B1', 'B6', 'G'], [6, 'Sat', '09:15', 'B4', 'B5', 'G'],
 
             [1, 'Sat', '10:30', 'A3', 'A2', 'B'], [2, 'Sat', '10:30', 'A1', 'A6', 'B'], [3, 'Sat', '10:30', 'A4', 'A5', 'B'],
             [4, 'Sat', '10:30', 'C3', 'C2', 'B'], [5, 'Sat', '10:30', 'C1', 'C6', 'B'], [6, 'Sat', '10:30', 'C4', 'C5', 'B'],
@@ -356,10 +352,10 @@ class InitGames2016Command extends Command
             [5, 'Sun', '15:00', 'TF3X', 'TF3Y', 'G'],
             [6, 'Sun', '15:00', 'TF4X', 'TF4Y', 'G'],
         ];
-        $projectKey = $this->projectKey;
-        $this->gameConn->delete('projectGames',         ['projectKey' => $projectKey]);
-        $this->gameConn->delete('projectGameTeams',     ['projectKey' => $projectKey]);
-        $this->gameConn->delete('projectGameOfficials', ['projectKey' => $projectKey]);
+        $projectId = $this->projectId;
+        $this->gameConn->delete('games',         ['projectId' => $projectId]);
+        $this->gameConn->delete('gameTeams',     ['projectId' => $projectId]);
+        $this->gameConn->delete('gameOfficials', ['projectId' => $projectId]);
 
         $count = 0;
         foreach ($this->programs as $program) {
@@ -370,7 +366,7 @@ class InitGames2016Command extends Command
                     break;
             }
             foreach ($this->ages as $age) {
-                $fieldNumberStart = substr($age,1) * 10;
+                //$fieldNumberStart = substr($age,1) * 10;
                 foreach ($this->genders as $gender) {
 
                     $gameNumber = $gameNumberProgram + (substr($age, 1) * 100);
@@ -380,9 +376,9 @@ class InitGames2016Command extends Command
                     foreach ($fieldSlots as $fieldSlot) {
                         list($fieldNumber, $dow, $time, $home, $away, $fieldSlotGender) = $fieldSlot;
                         if ($fieldSlotGender === $gender) {
-                            $fieldNumber = $fieldNumberStart + $fieldNumber;
+                            //$fieldNumber = $fieldNumberStart + $fieldNumber;
                             $gameNumber++;
-                            $this->initGame($projectKey, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away);
+                            $this->initGame($projectId, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away);
 
                             $count++;
                             if (($count % 100) === 0) {
@@ -398,7 +394,7 @@ class InitGames2016Command extends Command
         }
         echo sprintf("\rLoaded Games %5d      \n",$count);
     }
-    private function initGame($projectKey, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away)
+    private function initGame($projectId, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away)
     {
         $dates = [
             'Wed' => '2016-07-06',
@@ -421,12 +417,12 @@ class InitGames2016Command extends Command
         $interval = sprintf('PT%dM',$lengths[$age]);
         $finishDateTime->add(new \DateInterval($interval));
 
-        $gameId = $projectKey . ':' . $gameNumber;
+        $gameId = $projectId . ':' . $gameNumber;
         $game = [
-            'id'         => $gameId,
-            'projectKey' => $projectKey,
+            'gameId'     => $gameId,
+            'projectId'  => $projectId,
             'gameNumber' => $gameNumber,
-            'fieldName'  => $age . ' ' . $fieldNumber,
+            'fieldName'  => $age . ' -  ' . $fieldNumber,
             'venueName'  => 'Polo',
 
             'start'  => $start,
@@ -436,29 +432,28 @@ class InitGames2016Command extends Command
             'status'      => 'Normal',
             'reportState' => 'Initial',
         ];
-        $this->gameConn->insert('projectGames',$game);
+        $this->gameConn->insert('games',$game);
 
-        // Game officials are easy
+        // Game officials
         $isMedalRound = in_array(substr($home,0,2),['QF','SF','TF']);
         $gameOfficial = [
-            'projectKey'  => $projectKey,
+            'projectId'   => $projectId,
+            'gameId'      => $gameId,
             'gameNumber'  => $gameNumber,
             'assignRole'  => $isMedalRound ? 'ROLE_ASSIGNOR' : 'ROLE_REFEREE',
             'assignState' => 'Open',
-            'gameId'      => $gameId,
         ];
         foreach([1,2,3] as $slot) {
-            $gameOfficial['id']   = $gameId . ':' . $slot;
+            $gameOfficial['gameOfficialId']   = $gameId . ':' . $slot;
             $gameOfficial['slot'] = $slot;
-            $this->gameConn->insert('projectGameOfficials',$gameOfficial);
+            $this->gameConn->insert('gameOfficials',$gameOfficial);
         }
-        // Teams need a bit more work
+        // Game Teams
         $gameTeam = [
-            'gameId'      => $gameId,
-            'projectKey'  => $projectKey,
-            'gameNumber'  => $gameNumber,
-            'name'        => null,
-            'poolTeamId'  => null,
+            'projectId'  => $projectId,
+            'gameId'     => $gameId,
+            'gameNumber' => $gameNumber,
+            'poolTeamId' => null,
         ];
         foreach([1,2] as $slot)
         {
@@ -466,30 +461,12 @@ class InitGames2016Command extends Command
 
             $poolTeamName = $isMedalRound ? $team : 'PP' . $team;
 
-            $poolTeamId = sprintf('%s:%s%s%s%s', $projectKey, $age, $gender, $program, $poolTeamName);
+            $poolTeamId = sprintf('%s:%s%s%s%s', $projectId, $age, $gender, $program, $poolTeamName);
 
-            $sql = 'SELECT projectTeamId FROM projectPoolTeams WHERE id = ?';
-            $stmt = $this->poolConn->executeQuery($sql,[$poolTeamId]);
-            $row = $stmt->fetch();
-            if (!$row) {
-                echo sprintf("No Pool Team For: %s\n",$poolTeamId);
-                die();
-            }
-            $projectTeamId = $row['projectTeamId'];
-            if ($projectTeamId) {
-                $sql = 'SELECT name FROM projectTeams WHERE id = ?';
-                $stmt = $this->poolConn->executeQuery($sql,[$projectTeamId]);
-                $row = $stmt->fetch();
-                if (!$row) {
-                    echo sprintf("No Project Team For: %s\n",$projectTeamId);
-                    die();
-                }
-                $gameTeam['name'] = $row['name'];
-            }
-            $gameTeam['id']   = $gameId . ':' . $slot;
-            $gameTeam['slot'] = $slot;
+            $gameTeam['gameTeamId'] = $gameId . ':' . $slot;
+            $gameTeam['slot']       = $slot;
             $gameTeam['poolTeamId'] = $poolTeamId;
-            $this->gameConn->insert('projectGameTeams',$gameTeam);
+            $this->gameConn->insert('gameTeams',$gameTeam);
         }
     }
 }

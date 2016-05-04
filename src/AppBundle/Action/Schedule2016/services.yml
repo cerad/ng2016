@@ -4,12 +4,16 @@ services:
         class: AppBundle\Action\Schedule2016\ScheduleFinder
         arguments:
             - '@doctrine.dbal.ng2016games_connection' # gameConn
-            - '@doctrine.dbal.ng2016games_connection' # poolTeamConn
-            - '@doctrine.dbal.ng2016games_connection' # projectTeamConn
+            - '@doctrine.dbal.ng2016games_connection' # regTeamConn
 
     schedule_template_2016:
         class: AppBundle\Action\Schedule2016\ScheduleTemplate
         calls: [['setContainer', ['@service_container']]]
+
+    schedule_template_show_officials_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleTemplate
+        calls: [['setContainer', ['@service_container']]]
+        arguments: [true]
 
     # ===============================================================
     # Schedule Game
@@ -60,7 +64,7 @@ services:
         parent: abstract_view2
         arguments:
             - '@schedule_official_search_form_2016'
-            - '@schedule_template_2016'
+            - '@schedule_template_show_officials_2016'
 
     # ===============================================================
     # Schedule Team

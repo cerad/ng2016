@@ -9,48 +9,16 @@ namespace AppBundle\Action\Schedule2016;
  */
 class ScheduleRegTeam
 {
-    public $id;
-    public $projectKey;
-    public $teamNumber;
-    public $teamKey;
-    public $orgKey;
-
-    public $name;
-    public $points;
-    public $coach;
-    public $status;
-    
-    public $program;
-    public $gender;
-    public $age;
+    public $regTeamId;
+    public $teamName;
     public $division;
  
     private $keys = [
-        'id'         => 'ProjectTeamId',
-        'projectKey' => 'ProjectId',
-        'teamNumber' => 'integer',
-        'teamKey'    => 'ProjectTeamKey',
-        'orgKey'     => 'PhysicalOrgId',
-
-        'name'   => 'string',
-        'points' => 'integer|null',
-        'coach'  => 'string',
-        'status' => 'string',
-        
-        'program'  => 'string',
-        'gender'   => 'string',
-        'agw'      => 'string',
-        'division' => 'string',
+        'regTeamId' => 'RegTeamId',
+        'teamName'  => 'string',
+        'division'  => 'string',
     ];
-
-    public function __get($name)
-    {
-        switch($name) {
-            
-        }
-        throw new \InvalidArgumentException('RegTeam::__get ' . $name);
-    }
-
+    
     /**
      * @param  array $data
      * @return ScheduleRegTeam

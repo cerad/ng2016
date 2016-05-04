@@ -14,34 +14,27 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
     use DirectoryTrait;
 
     private $gameDatabaseKey = 'database_name_test';
-    private $poolDatabaseKey = 'database_name_test';
-    private $teamDatabaseKey = 'database_name_test'; // Registered teams
+    private $regTeamDatabaseKey = 'database_name_test'; // Registered teams
 
     /** @var  Connection */
     private $gameConn;
 
     /** @var  Connection */
-    private $poolConn;
+    private $regTeamConn;
 
-    /** @var  Connection */
-    private $teamConn;
-
-    private $projectKey = 'OlympicsFootball2016';
+    private $projectId = 'OlympicsFootball2016';
 
     private function createScheduleFinder()
     {
         if (!$this->gameConn) {
              $this->gameConn = $this->getConnection($this->gameDatabaseKey);
         }
-        if (!$this->poolConn) {
-             $this->poolConn = $this->getConnection($this->poolDatabaseKey);
+        if (!$this->regTeamConn) {
+             $this->regTeamConn = $this->getConnection($this->regTeamDatabaseKey);
         }
-        if (!$this->teamConn) {
-             $this->teamConn = $this->getConnection($this->teamDatabaseKey);
-        }
-        return new ScheduleFinder($this->gameConn,$this->poolConn,$this->teamConn);
+        return new ScheduleFinder($this->gameConn,$this->regTeamConn);
     }
-    public function testLoad()
+    public function sestLoad()
     {
         // Just to create the connections
         $this->createScheduleFinder();
@@ -50,33 +43,34 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
         $this->resetDatabase($this->gameConn, $schemaFile);
 
-        $projectKey = $this->projectKey;
+        $projectId = $this->projectId;
 
         // Create some registered teams
         $programs = ['Core'];
         $genders  = ['B','G'];
         $ages     = ['U12','U14'];
+        $regTeams = [];
         foreach($programs as $program) {
             foreach($ages as $age) {
                 foreach($genders as $gender) {
                     $division = $age . $gender;
                     foreach([1,2,3,4,5,6] as $teamNumber) {
-                        $teamKey = sprintf('%s%s#%02d',$division,$program,$teamNumber);
-                        $teamId  = $projectKey . ':' . $teamKey;
-                        $name    = sprintf('#%02d',$teamNumber);
+                        $teamKey   = sprintf('%s%s#%02d',$division,$program,$teamNumber);
+                        $teamName  = sprintf('#%02d',$teamNumber);
+                        $regTeamId = $projectId . ':' . $teamKey;
                         $regTeam = [
-                            'id'         => $teamId,
-                            'projectKey' => $projectKey,
+                            'regTeamId'  => $regTeamId,
+                            'projectId'  => $projectId,
                             'teamKey'    => $teamKey,
                             'teamNumber' => $teamNumber,
-                            'name'       => $name,
-                            'status'     => 'Active',
+                            'teamName'   => $teamName,
                             'program'    => $program,
                             'gender'     => $gender,
                             'age'        => $age,
                             'division'   => $division,
                         ];
-                        $this->teamConn->insert('projectTeams',$regTeam);
+                        $regTeams[$regTeamId] = $regTeam;
+                        $this->regTeamConn->insert('regTeams',$regTeam);
                     }
                 }
             }
@@ -97,18 +91,19 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
                             $poolTeamKey =  sprintf('%s%s%s%s%s%s',    $age,$gender,$program,$poolType,$poolName,$poolTeamNumber);
                             $poolTeamView = sprintf('%s-%s %s %s %s%s',$age,$gender,$program,$poolType,$poolName,$poolTeamNumber);
 
-                            $poolTeamId = $projectKey . ':' . $poolTeamKey;
+                            $poolTeamId = $projectId . ':' . $poolTeamKey;
 
                             $teamNumber++;
-                            $teamKey = sprintf('%s%s#%02d',$division,$program,$teamNumber);
-                            $regTeamId  = $projectKey . ':' . $teamKey;
+                            $teamKey   = sprintf('%s%s#%02d',$division,$program,$teamNumber);
+                            $teamName  = sprintf('#%02d',$teamNumber);
+                            $regTeamId = $projectId . ':' . $teamKey;
 
                             $poolTeam = [
-                                'id'          => $poolTeamId,
-                                'projectKey'  => $projectKey,
+                                'poolTeamId'  => $poolTeamId,
+                                'projectId'   => $projectId,
 
                                 'poolKey'     => $poolKey,
-                                'poolType'    => $poolType,
+                                'poolTypeKey' => $poolType,
                                 'poolTeamKey' => $poolTeamKey,
 
                                 'poolView'     => $poolView,
@@ -121,9 +116,10 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
                                 'age'        => $age,
                                 'division'   => $division,
 
-                                'projectTeamId' => $regTeamId,
+                                'regTeamId'  => $regTeamId,
+                                'regTeamName'   => $teamName,
                             ];
-                            $this->teamConn->insert('projectPoolTeams',$poolTeam);
+                            $this->gameConn->insert('poolTeams',$poolTeam);
                         }
                     }
                 }
@@ -148,15 +144,15 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
                         list($fieldNumber, $dow, $time, $home, $away, $fieldSlotGender) = $fieldSlot;
                         if ($fieldSlotGender === $gender) {
                             $gameNumber++;
-                            $this->initGame($projectKey, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away);
+                            $this->initGame($projectId, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away);
                         }
                     }
                 }
             }
         }
     }
-    /** Copied from the init program */
-    private function initGame($projectKey, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away)
+    /* Copied from the init program */
+    private function initGame($projectId, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away)
     {
         $dates = [
             'Wed' => '2016-07-06',
@@ -179,10 +175,10 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         $interval = sprintf('PT%dM',$lengths[$age]);
         $finishDateTime->add(new \DateInterval($interval));
 
-        $gameId = $projectKey . ':' . $gameNumber;
+        $gameId = $projectId . ':' . $gameNumber;
         $game = [
-            'id'         => $gameId,
-            'projectKey' => $projectKey,
+            'gameId'     => $gameId,
+            'projectId'  => $projectId,
             'gameNumber' => $gameNumber,
             'fieldName'  => $age . ' ' . $fieldNumber,
             'venueName'  => 'Rio',
@@ -194,28 +190,28 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
             'status'      => 'Normal',
             'reportState' => 'Initial',
         ];
-        $this->gameConn->insert('projectGames',$game);
+        $this->gameConn->insert('games',$game);
 
-        // Game officials are easy
+        // Game officials
         $isMedalRound = in_array(substr($home,0,2),['QF','SF','TF']);
         $gameOfficial = [
-            'projectKey'  => $projectKey,
+            'projectId'   => $projectId,
             'gameNumber'  => $gameNumber,
             'assignRole'  => $isMedalRound ? 'ROLE_ASSIGNOR' : 'ROLE_REFEREE',
             'assignState' => 'Open',
             'gameId'      => $gameId,
         ];
         foreach([1,2,3] as $slot) {
-            $gameOfficial['id']   = $gameId . ':' . $slot;
-            $gameOfficial['slot'] = $slot;
-            $this->gameConn->insert('projectGameOfficials',$gameOfficial);
+            $gameOfficial['gameOfficialId'] = $gameId . ':' . $slot;
+            $gameOfficial['slot']           = $slot;
+            $gameOfficial['regPersonName']  = 'Name ' . $slot;
+            $this->gameConn->insert('gameOfficials',$gameOfficial);
         }
-        // Teams need a bit more work
+        // Game Teams
         $gameTeam = [
             'gameId'      => $gameId,
-            'projectKey'  => $projectKey,
+            'projectId'   => $projectId,
             'gameNumber'  => $gameNumber,
-            'name'        => null,
             'poolTeamId'  => null,
         ];
         foreach([1,2] as $slot)
@@ -224,12 +220,12 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
             $poolTeamName = $isMedalRound ? $team : 'PP' . $team;
 
-            $poolTeamId = sprintf('%s:%s%s%s%s', $projectKey, $age, $gender, $program, $poolTeamName);
+            $poolTeamId = sprintf('%s:%s%s%s%s', $projectId, $age, $gender, $program, $poolTeamName);
 
-            $gameTeam['id']   = $gameId . ':' . $slot;
-            $gameTeam['slot'] = $slot;
+            $gameTeam['gameTeamId'] = $gameId . ':' . $slot;
+            $gameTeam['slot']       = $slot;
             $gameTeam['poolTeamId'] = $poolTeamId;
-            $this->gameConn->insert('projectGameTeams',$gameTeam);
+            $this->gameConn->insert('gameTeams',$gameTeam);
         }
     }
     
@@ -237,41 +233,24 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
     {
         $finder = $this->createScheduleFinder();
         $criteria = [
-            'projectKeys' => [$this->projectKey],
-            'genders' => ['G'],
+            'projectIds' => [$this->projectId],
+            'genders'    => ['G'],
         ];
         $regTeams = $finder->findRegTeams($criteria);
         $this->assertCount(12,$regTeams);
 
         /** @var ScheduleRegTeam[] $regTeams */
-        $regTeams = array_values($regTeams);
         $regTeam = $regTeams[3];
-        $this->assertEquals('G',  $regTeam->gender);
-        $this->assertEquals('#04',$regTeam->name);
-    }
-    public function testFindPoolTeams()
-    {
-        $finder = $this->createScheduleFinder();
-        $criteria = [
-            'projectKeys' => [$this->projectKey],
-            'poolKeys'    => ['U14BCorePPA','U14BCorePPB'],
-        ];
-        $poolTeams = $finder->findPoolTeams($criteria);
-        $this->assertCount(6,$poolTeams);
-
-        /** @var SchedulePoolTeam[] $regTeams */
-        $poolTeam = $poolTeams[3];
-        $this->assertEquals('B',               $poolTeam->gender);
-        $this->assertEquals('U14-B Core PP B1',$poolTeam->poolTeamView);
-        $this->assertEquals('#04',             $poolTeam->name);
+        $this->assertEquals('U12G',$regTeam->division);
+        $this->assertEquals('#04', $regTeam->teamName);
     }
     public function testFindGames()
     {
         $finder = $this->createScheduleFinder();
 
         $criteria = [
-            'projectKeys' => [$this->projectKey],
-            'divisions'   => ['U14B'],
+            'projectIds' => [$this->projectId],
+            'divisions'  => ['U14B'],
         ];
         $games = $finder->findGames($criteria);
         $this->assertCount(6,$games);
@@ -281,7 +260,11 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
         $homeTeam = $game->homeTeam;
         $this->assertEquals('U14B',$homeTeam->division);
-        $this->assertEquals('#02', $homeTeam->name);
+        $this->assertEquals('#02', $homeTeam->regTeamName);
         $this->assertEquals('U14-B Core PP A',$homeTeam->poolView);
+
+        $referee = $game->referee;
+        $this->assertEquals('Name 1',$referee->regPersonName);
+        
     }
 }

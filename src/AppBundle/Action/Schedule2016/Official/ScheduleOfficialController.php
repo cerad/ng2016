@@ -32,13 +32,13 @@ class ScheduleOfficialController extends AbstractController2
     public function __invoke(Request $request)
     {
         // First project in list
-        $projectKey = array_keys($this->projectChoices)[0];
+        $projectId = array_keys($this->projectChoices)[0];
 
         // Second date in project
-        $date = array_keys($this->projects[$projectKey]['dates'])[1];
+        $date = array_keys($this->projects[$projectId]['dates'])[1];
 
         $searchData = [
-            'projectKey' => $projectKey,
+            'projectId' => $projectId,
             'programs'   => ['Core'],
             'genders'    => ['G'],
             'ages'       => ['U14'],
@@ -62,22 +62,21 @@ class ScheduleOfficialController extends AbstractController2
         if ($searchForm->isValid()) {
 
             $searchDataNew = $searchForm->getData();
-            if ($searchData['projectKey'] !== $searchDataNew['projectKey']) {
+            if ($searchData['projectId'] !== $searchDataNew['projectId']) {
 
                 // Getting way too tricky here but match dates by dow
-                $dates = $this->projects[$searchData['projectKey']]['dates'];
+                $dates = $this->projects[$searchData['projectId']]['dates'];
                 $dows = [];
                 foreach($searchDataNew['dates'] as $date) {
                     $dows[] = $dates[$date];
                 }
-                $dates = $this->projects[$searchDataNew['projectKey']]['dates'];
+                $dates = $this->projects[$searchDataNew['projectId']]['dates'];
                 $datesNew = [];
                 foreach($dates as $date => $dow) {
                     if (in_array($dow,$dows)) {
                         $datesNew[] = $date;
                     }
                 }
-                // Suppose something similiar for Core could be done as well but bored now
                 $searchDataNew = array_replace($searchDataNew,[
                     'programs' => ['Core'],
                     'dates'    => $datesNew,
@@ -88,7 +87,7 @@ class ScheduleOfficialController extends AbstractController2
             return $this->redirectToRoute($request->attributes->get('_route'));
         }
         // For now, restrict to one project
-        $searchData['projectKeys'] = [$searchData['projectKey']];
+        $searchData['projectIds'] = [$searchData['projectId']];
         $searchData['wantOfficials'] = true;
         
         $games = $this->scheduleFinder->findGames($searchData,true);

@@ -9,55 +9,35 @@ namespace AppBundle\Action\Schedule2016;
  */
 class ScheduleGameTeam
 {
-    public $id;
-    public $projectKey;
+    public $gameTeamId;
+    public $gameId;
     public $gameNumber;
     public $slot;
 
-    public $name;
-    public $points;
-    
-    public $program;
-    public $gender;
-    public $age;
+    public $regTeamId;
+    public $regTeamName;
     public $division;
-
-    public $score;
-    public $sportsmanship;
-    public $misconduct;
 
     public $poolView;
     public $poolTypeView;
     public $poolTeamView;
     public $poolTeamSlotView;
-
-    public $orgKey;
-
+    
     private $keys = [
 
-        'id'         => 'ProjectGameId',
-        'projectKey' => 'ProjectId',
+        'gameTeamId' => 'GameTeamId',
+        'gameId'     => 'GameId',
         'gameNumber' => 'integer',
         'slot'       => 'integer',
 
-        'name'   => 'string',
-        'points' => 'integer',
-
-        'score'         => 'integer|null',
-        'sportsmanship' => 'integer|null',
-        'misconduct'    => 'array',
-
+        'regTeamId'   => 'RegTeamId',
+        'regTeamName' => 'string',
+        'division'    => 'string',
+        
         'poolView'         => 'string',
         'poolTypeView'     => 'string',
         'poolTeamView'     => 'string',
         'poolTeamSlotView' => 'string',
-
-        'orgKey' => 'PhysicalOrgId', // Could be part of project team
-
-        'program'  => 'string',
-        'gender'   => 'string',
-        'agw'      => 'string',
-        'division' => 'string',
     ];
 
     public function __get($name)
@@ -72,9 +52,9 @@ class ScheduleGameTeam
      * @param  array $data
      * @return ScheduleGameTeam
      */
-    static public function fromArray($data)
+    static public function createFromArray($data)
     {
-        $gameTeam = new ScheduleGameTeam();
+        $gameTeam = new static();
 
         foreach(array_keys($gameTeam->keys) as $key) {
             if (isset($data[$key]) || array_key_exists($key,$data)) {

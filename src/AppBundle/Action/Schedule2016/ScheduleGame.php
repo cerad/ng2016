@@ -4,14 +4,19 @@ namespace AppBundle\Action\Schedule2016;
 /**
  * @property-read ScheduleGameTeam homeTeam
  * @property-read ScheduleGameTeam awayTeam
+ * 
+ * @property-read ScheduleGameOfficial referee
+ * @property-read ScheduleGameOfficial ar1
+ * @property-read ScheduleGameOfficial ar2
+ * 
  * @property-read string dow
  * @property-read string time
  * @property-read string poolView
  */
 class ScheduleGame
 {
-    public $id;
-    public $projectKey;
+    public $gameId;
+    public $projectId;
     public $gameNumber;
     
     public $fieldName;
@@ -24,9 +29,12 @@ class ScheduleGame
     /** @var ScheduleGameTeam[] */
     private $teams = [];
     
+    /** @var ScheduleGameOfficial[] */
+    private $officials = [];
+
     private $keys = [
-        'id'         => 'ProjectGameId',
-        'projectKey' => 'ProjectId',
+        'gameId'     => 'GameId',
+        'projectId'  => 'ProjectId',
         'gameNumber' => 'integer',
         
         'fieldName'  => 'ProjectFieldName',
@@ -40,9 +48,14 @@ class ScheduleGame
     public function __get($name)
     {
         switch($name) {
-            
-            case 'homeTeam':   return $this->teams[1];
-            case 'awayTeam':   return $this->teams[2];
+
+            case 'homeTeam': return $this->teams[1];
+            case 'awayTeam': return $this->teams[2];
+
+            case 'referee':   return $this->officials[1];
+            case 'ar1':       return $this->officials[2];
+            case 'ar2':       return $this->officials[3];
+            case 'officials': return $this->officials;
 
             case 'dow':
                 $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
@@ -65,12 +78,12 @@ class ScheduleGame
     }
     
     /** 
-     * @param array $data
+     * @param  array $data
      * @return ScheduleGame
      */
-    static public function fromArray($data)
+    static public function createFromArray($data)
     {
-        $game = new ScheduleGame();
+        $game = new static();
         
         foreach(array_keys($game->keys) as $key) {
             if (isset($data[$key]) || array_key_exists($key,$data)) {
@@ -78,7 +91,10 @@ class ScheduleGame
             }
         }
         foreach($data['teams'] as $teamData) {
-            $game->teams[$teamData['slot']] = ScheduleGameTeam::fromArray($teamData);
+            $game->teams[$teamData['slot']] = ScheduleGameTeam::createFromArray($teamData);
+        }
+        foreach($data['officials'] as $officialData) {
+            $game->officials[$officialData['slot']] = ScheduleGameOfficial::createFromArray($officialData);
         }
         return $game;
     }
