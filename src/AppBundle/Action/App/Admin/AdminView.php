@@ -35,6 +35,7 @@ EOT;
         $content .= $this->renderAccountManagement();
           
         $content .=  <<<EOT
+</div> <!-- class="container no-disc" -->
 <div class="panel-float-clear"></div>
 EOT;
 
@@ -157,15 +158,15 @@ EOT;
       <li><a href="#">View Unregistered Referee List</a></li>
 EOT;
       }
-    } else {
-      $html = "";
-    }
-
         $html .= <<<EOT
     </ul>
   </div>
 </div>
 EOT;
+
+    } else {
+      $html = "";
+    }
 
       return $html;      
     }
