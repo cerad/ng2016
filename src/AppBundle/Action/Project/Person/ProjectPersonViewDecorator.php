@@ -9,7 +9,7 @@ use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 class ProjectPersonViewDecorator
 {
     /** @var  ProjectPerson */
-    private $person;
+    protected $person;
 
     private $phoneTransformer;
     private $fedKeyTransformer;
@@ -209,6 +209,9 @@ class ProjectPersonViewDecorator
                     case 'adultlxxx': return 'Adult XXXL';
                 }
                 return 'na';
+            
+            case 'person':
+                return $person;
         }
         return $person->$name;
     }

@@ -197,13 +197,16 @@ EOD;
     {
         return <<<EOD
 <div id="notes">
-  <legend>Thank you for registering to Referee at the 2016 National Games!</legend>
+  <legend>Thank you for registering to Volunteer at the 2016 National Games!</legend>
   <p>
     Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games. 
     Update your plans and availability at any time.
-  <br/>  
-  Discounted hotel reservations are now available for the AYSO National Games 2016!  See below for information on Referee Hotel discounts.
-  <br/>
+    </p>  
+  <p>
+    Discounted hotel reservations are now available for the AYSO National Games 2016!  See below for information on Referee Hotel discounts.
+    </p>
+  
+  <p>
   Additional information on booking discounted travel can be found at <a href="http://aysonationalgames.org/book-travel/" target="_blank">http://aysonationalgames.org/book-travel/</a>
   </p>
 </div>
