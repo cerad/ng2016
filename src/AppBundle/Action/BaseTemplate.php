@@ -206,8 +206,9 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('app_schedule_game')}">GAME SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('app_schedule_team')}">TEAM SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_game_2016'    )}">GAME    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_team_2016'    )}">TEAM    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
           </ul>
         </li>
 EOT;

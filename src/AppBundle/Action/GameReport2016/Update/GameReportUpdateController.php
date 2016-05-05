@@ -1,52 +1,42 @@
 <?php
 
-namespace AppBundle\Action\GameReport\Update;
+namespace AppBundle\Action\GameReport2016\Update;
 
-use AppBundle\Action\AbstractController;
-use AppBundle\Action\Project\ProjectFactory;
-use AppBundle\Action\GameReport\GameReportRepository;
-use AppBundle\Action\Results\PoolPlay\Calculator\PointsCalculator;
+use AppBundle\Action\AbstractController2;
+
+use AppBundle\Action\GameReport2016\GameReportRepository;
+use AppBundle\Action\GameReport2016\GameReportPointsCalculator;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class GameReportUpdateController extends AbstractController
+class GameReportUpdateController extends AbstractController2
 {
     /** @var GameReportRepository  */
     private $gameReportRepository;
 
-    /** @var  PointsCalculator */
+    /** @var  GameReportPointsCalculator */
     private $pointsCalculator;
-
-    /** @var  ProjectFactory */
-    private $projectFactory;
-
+    
     private $project;
 
     public function __construct(
         GameReportRepository $gameReportRepository,
-        PointsCalculator     $pointsCalculator,
-        ProjectFactory       $projectFactory
+        GameReportPointsCalculator     $pointsCalculator
     )
     {
-        $this->projectFactory       = $projectFactory;
         $this->pointsCalculator     = $pointsCalculator;
         $this->gameReportRepository = $gameReportRepository;
     }
-    public function __invoke(Request $request, $gameNumber)
+    public function __invoke(Request $request, $projectId, $gameNumber)
     {
-        $this->project = $project = $this->getCurrentProject()['info'];
-
-        // Make sure signed in
-        if (!$this->isGranted('ROLE_SCORE_ENTRY')) {
-            //return $this->redirectToRoute('app_welcome');
-        }
         // Get the report
-        $gameReport = $this->gameReportRepository->find($project['key'],$gameNumber);
+        $gameReport = $this->gameReportRepository->findGameReport($projectId,$gameNumber);
         if (!$gameReport) {
             return $this->redirectToRoute('app_home');
         }
+        // Should probably verify permissions based on project
+        
         if ($request->isMethod('POST')) {
-            // Check permissions
             
             // Posted data
             $gameReportPosted = $request->request->get('gameReport');
