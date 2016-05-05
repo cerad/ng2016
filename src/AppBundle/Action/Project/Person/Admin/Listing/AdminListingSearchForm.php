@@ -49,7 +49,7 @@ class AdminListingSearchForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
-<form role="form" class="form-inline" style="width: 760px;" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
+<form role="form" class="form-inline" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
   <div class="form-group">
     <label for="projectKey">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey','projectKey')}
@@ -69,6 +69,8 @@ class AdminListingSearchForm extends AbstractForm
     <span class="glyphicon glyphicon-search"></span> 
     <span>Search</span>
   </button>
+<a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+<a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>   
 </form>
 
 EOD;

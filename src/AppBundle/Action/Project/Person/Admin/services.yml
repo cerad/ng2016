@@ -21,7 +21,7 @@ services:
             - '@project_person_repository_v2'
             - '@project_person_admin_listing_search_form'
 
-    project_person_admin_listing_view:
+    project_person_admin_listing_view_html:
         class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingView
         parent: abstract_view2
         arguments:
@@ -29,6 +29,20 @@ services:
             - '@user_repository'
             - '@project_person_admin_listing_search_form'
             - '@project_person_view_decorator'
+    
+    project_person_admin_listing_view_xls:
+        class: AppBundle\Action\Project\Person\Admin\Listing\AdminListingViewFile
+        parent: abstract_view
+        arguments:
+            - '@project_person_view_decorator'
+            - '@abstract_exporter_xls'
+
+    project_person_admin_listing_view_csv:
+        class: AppBundle\Action\Project\Person\Admin\Listing\AdminListingViewFile
+        parent: abstract_view
+        arguments:
+            - '@project_person_view_decorator'
+            - '@abstract_exporter_csv'
 
 # ==========================================================================
 # Update
