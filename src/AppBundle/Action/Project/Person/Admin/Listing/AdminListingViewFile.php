@@ -48,7 +48,7 @@ class AdminListingViewFile extends AbstractView
         //set the header labels
         $data =   array(
             array ('AYSO ID','Name', 'eMail','Phone','Age',
-                   'MY','S/A/R/State','Safe Haven','Concussion Aware',
+                   'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
                    'Shirt Size','Notes',
                    'Will Coach', 'Will Referee', 'Will Volunteer',
             )
@@ -67,6 +67,7 @@ class AdminListingViewFile extends AbstractView
                 $personView->age,
                 $personView->regYear,
                 $personView->sar,
+                $personView->refereeBadge,
                 $personView->safeHavenCertified,
                 $personView->concussionTrained,
                 $personView->shirtSize,

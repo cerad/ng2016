@@ -177,7 +177,7 @@ EOD;
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
   </tr><tr>
-    <td>SAR</td>
+    <td>SAR/St</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
   </tr><tr>
     <td>Mem Year</td>
