@@ -15,6 +15,8 @@ class WelcomeView extends AbstractView2
     /** @var  %show_results_menu% */
     private $showResultsMenu;
     
+    private $project;
+    
     public function __construct(UserLoginForm $userLoginForm,$showResultsMenu)
     {
         $this->userLoginForm = $userLoginForm;
@@ -22,6 +24,8 @@ class WelcomeView extends AbstractView2
     }
     public function __invoke(Request $request)
     {
+        $this->project = $this->getCurrentProjectInfo();
+
         return $this->newResponse($this->render());
     }
     private function render()
@@ -29,7 +33,7 @@ class WelcomeView extends AbstractView2
         $content = <<<EOT
 <div class="container">
   <div id="welcome">
-    <legend>Welcome to the AYSO National Games 2016 Site</legend>
+    <legend>Welcome to the AYSO National Games 2016</legend>
   </div>
   {$this->renderNotes()}      
   {$this->renderUser()}
@@ -52,16 +56,22 @@ EOT;
 }
         $html .= <<<EOT
 <p>
-  To volunteer to officiate, you will need to create a zAYSO account.  
+  To volunteer, you will need to create a zAYSO account.  
   If you officiated at the 2012 National Games in Tennesee or 2014 National Games in Southern California, 
   you can simply sign in below and update your plans for the 2016 National Games.
   If you need help remembering your password, 
   you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.
-</p><br/><p>
+</p>
+<br/>
+<p>
   If this is your first time to the National Games (you are in for a treat), 
   <a href="{$this->generateUrl('user_create')}">click here to create a new zAYSO account</a> 
   and start the registration process to referee or volunteer.
 </p>
+<br/>
+<p>
+    If you have previously registered on Blue Sombrero or WooFoo, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_create')}">Click here to reset your zAYSO password</a>.
+    If you still need help, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a>.
 </div>
 EOT;
 
