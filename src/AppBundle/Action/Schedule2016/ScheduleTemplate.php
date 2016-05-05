@@ -73,7 +73,8 @@ EOD;
             $gameNumber = $game->gameNumber;
             if ($this->isGranted('ROLE_USER')) {
                 $params = [
-                    'gameNumber' => $game->gameId,
+                    'projectId'  => $game->projectId,
+                    'gameNumber' => $game->gameNumber,
                     'back' => $this->generateUrl($this->getCurrentRouteName()) . '#' . $trId,
                 ];
                 $url = $this->generateUrl('game_report_update',$params);

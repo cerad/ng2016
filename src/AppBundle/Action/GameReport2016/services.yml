@@ -1,0 +1,16 @@
+services:
+
+    game_report_repository:
+        class: AppBundle\Action\GameReport2016\GameReportRepository
+        arguments: ['@game_connection']
+
+    game_report_update_view:
+        class: AppBundle\Action\GameReport2016\Update\GameReportUpdateView
+        parent: abstract_view2
+
+    game_report_update_controller:
+        class:  AppBundle\Action\GameReport2016\Update\GameReportUpdateController
+        parent: abstract_controller
+        arguments:
+            - '@game_report_repository'
+            - '@app_points_calculator'
