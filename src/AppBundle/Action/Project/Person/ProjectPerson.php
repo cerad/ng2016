@@ -192,6 +192,18 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         }
         return $certs;
     }
+    public function needsCerts()
+    {
+        return $this->needsCertSafeHaven() OR $this->needsCertConcussion();
+    }
+    public function needsCertSafeHaven()
+    {
+        return !(bool) $this->getCert('CERT_SAFE_HAVEN')['verified'];
+    }
+    public function needsCertConcussion()
+    {
+        return !(bool) $this->getCert('CERT_CONCUSSION')['verified'];
+    }
     public function getRefereeBadge()
     {
         return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badge : null;
