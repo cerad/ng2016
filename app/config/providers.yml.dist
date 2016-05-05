@@ -1,9 +1,9 @@
 parameters:
-    provider_google_client_id:     '598858148500-66np3bunhlmgnl3fc5t9rd3ln7humlmj.apps.googleusercontent.com'
-    provider_google_client_secret: 'pnzR-8jNO3UQDuszif3Tq1cE'
+    provider_google_client_id:     ''
+    provider_google_client_secret: ''
 
-    provider_facebook_client_id:     '1419454721704661'
-    provider_facebook_client_secret: '281f1de04a075872671cff6d30172248'
+    provider_facebook_client_id:     ''
+    provider_facebook_client_secret: ''
 
     user_authen_providers:
 

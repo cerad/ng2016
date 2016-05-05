@@ -6,6 +6,17 @@ services:
         arguments:
             - '@project_person_connection'
 
+    # reg stands for registered
+    reg_person_import_sombero_command:
+        class: AppBundle\Action\Project\Person\Admin\Sombero\ImportSomberoCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - '@user_manager'
+            - '@project_person_connection'
+            - '@project_person_repository_v2'
+            - '@ayso_repository'
+            - '@phone_transformer'
+
 # ==========================================================================
 # Listing (List throws exception)
 

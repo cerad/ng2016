@@ -261,16 +261,17 @@ parameters:
             label:   T-Shirt Size
             default: na
             choices:
-                na:        na
-                youths:    Youth Small
-                youthm:    Youth Medium
-                youthl:    Youth Large
-                adults:    Adult Small
-                adultm:    Adult Medium
-                adultl:    Adult Large
-                adultlx:   Adult Large X
-                adultlxx:  Adult Large XX
-                adultlxxx: Adult Large XXX
+                na:         na
+                youths:     Youth Small
+                youthm:     Youth Medium
+                youthl:     Youth Large
+                adults:     Adult Small
+                adultm:     Adult Medium
+                adultl:     Adult Large
+                adultlx:    Adult Large X
+                adultlxx:   Adult Large XX
+                adultlxxx:  Adult Large XXX
+                adultlxxxx: Adult Large XXXX
 
         notesUser:
           type:  textarea

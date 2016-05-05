@@ -20,7 +20,7 @@ class ProjectPersonRepositoryV2
      * @return ProjectPerson[]
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function findByProjectKey($projectKey, $name = null, $registered = true)
+    public function findByProjectKey($projectKey, $name = null, $registered = null)
     {
         $params = [$projectKey];
 
