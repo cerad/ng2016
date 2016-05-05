@@ -18,13 +18,13 @@ project_person_admin_update:
         _view:       project_person_admin_update_view
         _controller: project_person_admin_update_controller
 
-#project_person_admin_listing:    
-#    path: /listing.{_format}
-#    defaults:
-#        _format: html
-#        _controller: project_person_admin_listing_controller
-#        _view_html:  project_person_admin_listing_view_html
-#        _view_xls:   project_person_admin_listing_view_xls
-#        _view_csv:   project_person_admin_listing_view_csv
-#        _view_pdf:   project_person_admin_listing_view_pdf
-#        _view_json:  project_person_admin_listing_view_json
+project_person_admin_listing_unverified:    
+    path: /unverified.{_format}
+    defaults:
+        _format: html
+        _controller: project_person_admin_listing_unverified_controller
+        _view_html:  project_person_admin_listing_unverified_view_html
+        _view_xls:   project_person_admin_listing_unverified_view_xls
+        _view_csv:   project_person_admin_listing_unverified_view_csv
+        _view_pdf:   project_person_admin_listing_unverified_view_pdf
+        _view_json:  project_person_admin_listing_unverified_view_json
