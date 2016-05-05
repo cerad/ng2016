@@ -107,7 +107,10 @@ class ProjectUserProvider implements UserProviderInterface
             $user['roles'] = $roles;
             return $user;
         }
-        $user['registered'] = $row['registered'] ? true : false;
+        // The ternary values are just an accident waiting to happen
+        if (isset($row['registered'])) {
+            $user['registered'] = $row['registered'] ? true : false;
+        }
 
         // Grab any roles
         $sql  = 'SELECT role,active FROM projectPersonRoles WHERE projectPersonId = ?';
