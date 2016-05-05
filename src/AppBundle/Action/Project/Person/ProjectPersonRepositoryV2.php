@@ -20,7 +20,7 @@ class ProjectPersonRepositoryV2
      * @return ProjectPerson[]
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function findByProjectKey($projectKey, $name = null, $registered = true, $verfied = false)
+    public function findByProjectKey($projectKey, $name = null, $registered = true, $verified = true)
     {
         $params = [$projectKey];
 
@@ -34,8 +34,8 @@ class ProjectPersonRepositoryV2
             $params[] = $registered;
             $sql .= ' AND registered = ?';
         }
-        if ($verfied !== null) {
-            $params[] = $verfied;
+        if ($verified !== null) {
+            $params[] = $verified;
             $sql .= ' AND verified = ?';
         }
         $sql .= ' ORDER BY name';
