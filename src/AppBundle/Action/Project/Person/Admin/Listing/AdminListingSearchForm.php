@@ -49,7 +49,7 @@ class AdminListingSearchForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
-<form role="form" class="form-inline" style="width: 760px;" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
+<form role="form" class="form-inline" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
   <div class="form-group">
     <label for="projectKey">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey','projectKey')}

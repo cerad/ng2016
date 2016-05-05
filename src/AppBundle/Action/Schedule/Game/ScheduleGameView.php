@@ -61,20 +61,22 @@ EOD;
     protected function renderSearchForm()
     {
         $html = <<<EOD
-<div class="container">
+
 <form method="post" action="{$this->generateUrl('app_schedule_game')}" class="cerad_common_form1">
 <fieldset><table id="schedule-select"><tr>
 EOD;
         foreach($this->project['search_controls'] as $key => $params) {
-            $label = $params['label'];
-            $html .= <<<EOD
-  <td>{$this->renderSearchCheckbox($key, $label, $this->project[$key], $this->search[$key])}</td>
+            if ($params['label'] != 'Programs'){
+                $label = $params['label'];
+                $html .= <<<EOD
+      <td>{$this->renderSearchCheckbox($key, $label, $this->project[$key], $this->search[$key])}</td>
 EOD;
+            }
         }
         $html .= <<<EOD
   </tr>
   </table>
-          <div class="col-xs-10">
+          <div class="col-xs-12">
           <div class="row float-right">
       <button type="submit" id="form_search" class="btn btn-sm btn-primary submit">Search</button>
 <a href="{$this->generateUrl('app_schedule_game',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
@@ -83,7 +85,6 @@ EOD;
       </div>
       <div class="clear-both"></div>
       <br/>
-      <legend></legend>
 
 </fieldset>
 </form>
