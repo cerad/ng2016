@@ -68,8 +68,7 @@ class RegisterForm extends AbstractForm
 {$this->renderFormErrors()}
 <form 
   action="{$this->generateUrl('project_person_register')}" method="post" 
-  role="form" class="form-horizontal" style="width: 500px;" novalidate
->
+  role="form" class="form-horizontal" novalidate>
   <div class="form-group"> 
     <div class="col-sm-offset-4 col-sm-8">
       <button type="submit" name="register" value="nope" class="btn btn-sm btn-primary">
