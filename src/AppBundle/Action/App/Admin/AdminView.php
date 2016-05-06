@@ -35,6 +35,7 @@ EOT;
         $content .= $this->renderAccountManagement();
           
         $content .=  <<<EOT
+</div> <!-- class="container no-disc" -->
 <div class="panel-float-clear"></div>
 EOT;
 
@@ -89,7 +90,7 @@ EOT;
       <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'core'])}">Export Core Game Schedule (Excel)</a></li>
       <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'extra'])}">Export Extra Game Schedule (Excel)</a></li>
 EOT;
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
      <li><a href="#">Import Game Schedule (Excel)</a></li> 
 EOT;
@@ -117,7 +118,7 @@ EOT;
       <li><a href="#">View Teams</a></li>
       <li><a href="#">Export Teams (Excel)</a></li>
 EOT;
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">Import/Update/Link Teams (Excel)</a></li>
 EOT;
@@ -144,24 +145,28 @@ EOT;
     <ul>
       <li><a href="#">View Referee Assignments</a></li>
       <li><a href="#">Export Core Referee Assignments (Excel)</a></li>
-      <li><a href="#">Export Extra Referee Assignments (Excel)</a></li>
 EOT;
 
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">Import Referee Assignments (Excel)</a></li>
+EOT;
+      }
+
+      if ($this->isGranted('ROLE_REFEREE_ADMIN')) {
+        $html .= <<<EOT
       <li><a href="#">View Unregistered Referee List</a></li>
 EOT;
       }
-    } else {
-      $html = "";
-    }
-
         $html .= <<<EOT
     </ul>
   </div>
 </div>
 EOT;
+
+    } else {
+      $html = "";
+    }
 
       return $html;      
     }
@@ -179,14 +184,14 @@ EOT;
       <li><a href="#">Export Registered People (Excel)</a></li>
 EOT;
       
-      if ($this->isGranted('ROLE_ADMIN')) {
+      if ($this->isGranted('ROLE_REFEREE_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">View Unverified Registered People</a></li>
       <li><a href="#">Export Unverified Registered People (Excel)</a></li>
 EOT;
       }
       
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">Sync eAYSO Information</a></li>
       <li><a href="#">Import AYSO Information</a></li>
