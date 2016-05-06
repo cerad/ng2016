@@ -127,6 +127,7 @@ EOD;
     /* ======================================================================
      * Filter / sanitize inputs
      * Setting the integer flag will return an integer
+     * @depreciated
      */
     protected function filterScalar($data,$name,$integer=false)
     {
@@ -135,7 +136,25 @@ EOD;
         $itemData = filter_var(trim($itemData), $filter);
         return $integer ? (integer)$itemData : $itemData;
     }
-    // Could these two be combined?
+    protected function filterScalarString($data,$name)
+    {
+        $itemData = isset($data[$name]) ? $data[$name] : null;
+        $itemData = filter_var(trim($itemData), FILTER_SANITIZE_STRING );
+        if ($itemData === null || strlen($itemData) < 1) {
+            return null;
+        }
+        return $itemData;
+    }
+    protected function filterScalarInteger($data,$name)
+    {
+        $itemData = isset($data[$name]) ? $data[$name] : null;
+        $itemData = filter_var(trim($itemData), FILTER_SANITIZE_NUMBER_INT );
+        if ($itemData === null || strlen($itemData) < 1) {
+            return null;
+        }
+        return (integer)$itemData;
+    }
+    // Could these two be combined? TODO Handle nulls better
     protected function filterArray($data,$name,$integer=false)
     {
         $itemData = isset($data[$name]) ? $data[$name] : [];

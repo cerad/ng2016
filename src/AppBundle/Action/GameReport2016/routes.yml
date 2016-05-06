@@ -1,8 +1,8 @@
 
 game_report_update:
-    path: /report/update/{projectId}/{gameNumber}
+    path: /update/{projectId}/{gameNumber}
     defaults:
         _controller: game_report_update_controller
         _view:       game_report_update_view
-        _role:       ROLE_SCORE_ENTRY
+        _rolex:       ROLE_SCORE_ENTRY
 

@@ -32,6 +32,11 @@ class GameReportTeam
     public $poolTypeKey;
     public $poolTeamKey;
     
+    public $poolView;
+    public $poolTypeView;
+    public $poolTeamView;
+    public $poolTeamSlotView;
+    
     /** @var  GameReportTeamMisconduct */
     public $misconduct;
     
@@ -59,6 +64,11 @@ class GameReportTeam
         'poolKey'     => 'string',
         'poolTypeKey' => 'string',
         'poolTeamKey' => 'string',
+
+        'poolView'         => 'string',
+        'poolTypeView'     => 'string',
+        'poolTeamView'     => 'string',
+        'poolTeamSlotView' => 'string',
     ];
 
     public function __get($name)

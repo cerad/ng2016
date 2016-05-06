@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Action\GameReport2016\Update;
 
 use AppBundle\Action\AbstractController2;
@@ -11,19 +10,22 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GameReportUpdateController extends AbstractController2
 {
+    /** @var  GameReportUpdateForm */
+    private $form;
+
     /** @var GameReportRepository  */
     private $gameReportRepository;
 
     /** @var  GameReportPointsCalculator */
     private $pointsCalculator;
-    
-    private $project;
 
     public function __construct(
-        GameReportRepository $gameReportRepository,
-        GameReportPointsCalculator     $pointsCalculator
+        GameReportUpdateForm       $form,
+        GameReportRepository       $gameReportRepository,
+        GameReportPointsCalculator $pointsCalculator
     )
     {
+        $this->form                 = $form;
         $this->pointsCalculator     = $pointsCalculator;
         $this->gameReportRepository = $gameReportRepository;
     }
@@ -34,19 +36,30 @@ class GameReportUpdateController extends AbstractController2
         if (!$gameReport) {
             return $this->redirectToRoute('app_home');
         }
+        //dump($gameReport);
         // Should probably verify permissions based on project
-        
-        if ($request->isMethod('POST')) {
-            
-            // Posted data
-            $gameReportPosted = $request->request->get('gameReport');
 
+        $form = $this->form;
+        $form->setGameReport($gameReport);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            
+            $gameReport = $form->getGameReport();
+
+            $pointsCalculator = $this->pointsCalculator;
+            $gameReport = $pointsCalculator($gameReport);
+
+            $this->gameReportRepository->updateGameReport($gameReport);
+
+/*
             $this->processGameReport($gameReport,$gameReportPosted);
 
             if ($request->request->has('next')) {
                 $gameNumber = $request->request->get('nextGameNumber');
             }
             return $this->redirectToRoute('game_report_update',['gameNumber' => $gameNumber]);
+*/
         }
         $request->attributes->set('gameReport',$gameReport);
 

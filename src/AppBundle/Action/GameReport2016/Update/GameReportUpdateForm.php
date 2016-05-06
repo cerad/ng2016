@@ -1,12 +1,15 @@
 <?php
-namespace AppBundle\Action\GameReport\Update;
+namespace AppBundle\Action\GameReport2016\Update;
 
 use AppBundle\Action\AbstractForm;
+
+use AppBundle\Action\GameReport2016\GameReport;
 
 use Symfony\Component\HttpFoundation\Request;
 
 class GameReportUpdateForm extends AbstractForm
 {
+    /** @var  GameReport */
     private $gameReport;
 
     private $gameStatuses;
@@ -30,236 +33,262 @@ class GameReportUpdateForm extends AbstractForm
             'HeatedOut'         => 'Heated Out',
         ];
         $this->reportStatuses = [
+            'Initial'   => 'Initial',  // Have a process to move to pending based on start time
             'Pending'   => 'Pending',
             'Submitted' => 'Submitted',
             'Verified'  => 'Verified',
             'Clear'     => 'Clear',
         ];
     }
-    public function __invoke(Request $request)
+    public function setGameReport(GameReport $gameReport)
     {
-        $this->project = $this->getCurrentProjectInfo();
-        
-        $this->gameReport = $request->attributes->get('gameReport');
-
-        return $this->newResponse($this->render());
+        $this->gameReport = $gameReport;
     }
-    private function render()
+
+    /**
+     * @return GameReport
+     */
+    public function getGameReport()
     {
-        $content = <<<EOD
-{$this->renderForm($this->gameReport)}
-<br />
-{$this->renderScoringNotes()}
-EOD;
-        return $this->renderBaseTemplate($content);
+        return $this->gameReport;
     }
-    private function renderForm($gameReport)
+    public function handleRequest(Request $request)
     {
-        $game = $gameReport['game'];
+        if (!$request->isMethod('POST')) {
+            return;
+        }
+        $this->isPost = true;
 
-        $gameNumber     = $game['number'];
-        $gameNumberNext = $gameNumber + 1;
-        
-        $gameReportUpdateUrl = $this->generateUrl('game_report_update',['gameNumber' => $gameNumber]);
+        $errors = [];
 
-        $homeTeamReport = $gameReport['teamReports'][1];
-        $awayTeamReport = $gameReport['teamReports'][2];
+        $data = $request->request->all();
 
-        $homeTeam = $homeTeamReport['team'];
-        $awayTeam = $awayTeamReport['team'];
+        $homeTeamData = $data['gameReport']['homeTeam'];
+        $awayTeamData = $data['gameReport']['awayTeam'];
 
-        $homeTeamReportPrefix = 'gameReport[teamReports][1]';
-        $awayTeamReportPrefix = 'gameReport[teamReports][2]';
-        
+        $gameReport = $this->gameReport;
+
+        $homeTeam = $gameReport->homeTeam;
+        $awayTeam = $gameReport->awayTeam;
+
+        // Keep it simple for now
+        $homeTeam->pointsAllowed = $this->filterScalarInteger($awayTeamData,'goalsScored');
+        $homeTeam->pointsScored  = $this->filterScalarInteger($homeTeamData,'goalsScored');
+        $homeTeam->sportsmanship = $this->filterScalarInteger($homeTeamData,'sportsmanship');
+        $homeTeam->injuries      = $this->filterScalarInteger($homeTeamData,'injuries');
+
+        $homeTeam->misconduct->playerWarnings  = $this->filterScalarInteger($homeTeamData,'playerWarnings');
+        $homeTeam->misconduct->playerEjections = $this->filterScalarInteger($homeTeamData,'playerEjections');
+        $homeTeam->misconduct->coachEjections  = $this->filterScalarInteger($homeTeamData, 'coachEjections');
+        $homeTeam->misconduct->benchEjections  = $this->filterScalarInteger($homeTeamData, 'benchEjections');
+        $homeTeam->misconduct->specEjections   = $this->filterScalarInteger($homeTeamData, 'specEjections');
+
+        $awayTeam->pointsAllowed = $this->filterScalarInteger($homeTeamData,'goalsScored');
+        $awayTeam->pointsScored  = $this->filterScalarInteger($awayTeamData,'goalsScored');
+        $awayTeam->sportsmanship = $this->filterScalarInteger($awayTeamData,'sportsmanship');
+
+        $awayTeam->misconduct->playerWarnings  = $this->filterScalarInteger($awayTeamData,'playerWarnings');
+        $awayTeam->misconduct->playerEjections = $this->filterScalarInteger($awayTeamData,'playerEjections');
+        $awayTeam->misconduct->coachEjections  = $this->filterScalarInteger($awayTeamData, 'coachEjections');
+        $awayTeam->misconduct->benchEjections  = $this->filterScalarInteger($awayTeamData, 'benchEjections');
+        $awayTeam->misconduct->specEjections   = $this->filterScalarInteger($awayTeamData, 'specEjections');
+
+        // Misc stuff
+        $gameReport->status      = $this->filterScalarString($data,'gameStatus');
+        $gameReport->reportText  = $this->filterScalarString($data,'gameReportText');
+        $gameReport->reportState = $this->filterScalarString($data,'gameReportState');
+
+        // Require scores
+        if ($homeTeam->pointsScored === null || $awayTeam->pointsScored === null)
+        {
+            $errors['scores'][] = [
+                'name' => 'scores',
+                'msg'  => 'Scores must be entered.'
+            ];
+        }
+        $this->formDataErrors = $errors;
+    }
+
+    public function render()
+    {
+        $gameReport = $this->gameReport;
+
+        $projectId      = $gameReport->projectId;
+        $gameNumber     = $gameReport->gameNumber;
+        $gameNumberNext = $gameNumber + 1; // TODO Verify exists
+
+        // Game Report #11207: AYSO_U12B_Core, Thu, 10:30 AM on LL3
+        $gameReportDescription = sprintf('Game Report #%d: %s, %s, %s On %s',
+            $gameReport->gameNumber,
+            $gameReport->homeTeam->poolView,
+            $gameReport->dow,
+            $gameReport->time,
+            $gameReport->fieldName
+        );
+        $gameReportDescription = $this->escape($gameReportDescription);
+
+        $gameReportUpdateUrl = $this->generateUrl('game_report_update',['projectId' => $projectId,'gameNumber' => $gameNumber]);
+
+        $homeTeam = $gameReport->homeTeam;
+        $awayTeam = $gameReport->awayTeam;
+
+        $homeTeamMisconduct = $homeTeam->misconduct;
+        $awayTeamMisconduct = $awayTeam->misconduct;
+
         $html = <<<EOD
 <div class="container">
-<form method="post" action="{$gameReportUpdateUrl}" class="cerad_common_form1 form-horizontal">
-      <fieldset>
-        <legend class="text-center">{$this->escape($gameReport['desc'])}</legend> <!-- Game Report -->
+<form method="post" action="{$gameReportUpdateUrl}" class="form-horizontal">
+<fieldset>
+  <legend class="text-center">{$this->escape($gameReportDescription)}</legend> <!-- Game Report -->
+  
+  <div class="form-group">
+    <div class="col-xs-2">
+    <!-- required for floating -->
+    <!-- Nav tabs -->
 
-        <div class="form-group">
-          <div class="col-xs-2">
-            <!-- required for floating -->
-            <!-- Nav tabs -->
+      <ul class="nav nav-tabs tabs-left">
+        <li class="active"><a href="#score" data-toggle="tab">Score</a></li>
+        <li><a href="#misconduct" data-toggle="tab">Misconduct</a></li>
+        <li><a href="#injuries" data-toggle="tab">Injuries</a></li>
+        <li><a href="#notes" data-toggle="tab">Notes</a></li>
+      </ul>
+    </div>
 
-            <ul class="nav nav-tabs tabs-left">
-              <li class="active"><a href="#score" data-toggle="tab">Score</a></li>
-
-              <li><a href="#misconduct" data-toggle="tab">Misconduct</a></li>
-
-              <li><a href="#injuries" data-toggle="tab">Injuries</a></li>
-
-              <li><a href="#notes" data-toggle="tab">Notes</a></li>
-
-              <li><a href="#showAll" data-toggle="tab">Show All</a></li>
-            </ul>
-          </div>
-
-          <div class="col-xs-10">
-            <!-- Tab panes -->
-
-            <div class="tab-content">          
-                
-              <div class="tab-pane active" id="score">
-                  
-                    <div class="row">
-                        <div class="col-xs-4"></div> 
-                        <label class="col-xs-3 control-label text-center" >Home: {$homeTeam['groupSlot']}<br/>{$homeTeam['name']}</label> 
-                        <label class="col-xs-3 control-label text-center" >Away: {$awayTeam['groupSlot']}<br/>{$awayTeam['name']}</label> 
-                    </div>      
-        
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Goals Scored</label>
-                        <input type="number" name="{$homeTeamReportPrefix}[goalsScored]" value="{$homeTeamReport['goalsScored']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[goalsScored]" value="{$awayTeamReport['goalsScored']}" placeholder="0" class="col-xs-3 entry">
-                    </div>
-        
-                    <div class="row">
-                      <label class="col-xs-4 control-label">Sportsmanship</label>
-                      <input type="number" name="{$homeTeamReportPrefix}[sportsmanship]" value="{$homeTeamReport['sportsmanship']}" placeholder="40" class="col-xs-3 entry">
-                      <input type="number" name="{$awayTeamReportPrefix}[sportsmanship]" value="{$awayTeamReport['sportsmanship']}" placeholder="40" class="col-xs-3 entry">
-                    </div>
-                  
-                    <div class="row">
-                      <label class="col-xs-4 control-label">Points Earned</label>
-                      <input type="number" name="{$homeTeamReportPrefix}[pointsEarned]" value="{$homeTeamReport['pointsEarned']}" readonly="readonly" class="col-xs-3 entry">
-                      <input type="number" name="{$awayTeamReportPrefix}[pointsEarned]" value="{$awayTeamReport['pointsEarned']}" readonly="readonly" class="col-xs-3 entry">
-                    </div>
-        
-                    <div class="row">
-                      <label class="col-xs-4 control-label">Points Minus</label>
-                      <input type="number" name="{$homeTeamReportPrefix}[pointsMinus]" value="{$homeTeamReport['pointsMinus']}" readonly="readonly" class="col-xs-3 entry">
-                      <input type="number" name="{$awayTeamReportPrefix}[pointsMinus]" value="{$awayTeamReport['pointsMinus']}" readonly="readonly" class="col-xs-3 entry">
-                    </div>
-                </div>
-        
-                <div class="tab-pane" id="misconduct">
-                    <div class="row">
-                        <div class="col-xs-4"></div> 
-                        <label class="col-xs-3 control-label text-center" >Home: {$homeTeam['groupSlot']}<br/>{$homeTeam['name']}</label> 
-                        <label class="col-xs-3 control-label text-center" >Away: {$awayTeam['groupSlot']}<br/>{$awayTeam['name']}</label> 
-                    </div>      
-        
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Player Cautions</label>            
-                        <input type="number" name="{$homeTeamReportPrefix}[playerWarnings]" value="{$homeTeamReport['playerWarnings']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[playerWarnings]" value="{$awayTeamReport['playerWarnings']}" placeholder="0" class="col-xs-3 entry">
-                    </div>
-                    
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Player Send-Offs</label>
-                        <input type="number" name="{$homeTeamReportPrefix}[playerEjections]" value="{$homeTeamReport['playerEjections']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[playerEjections]" value="{$awayTeamReport['playerEjections']}" placeholder="0" class="col-xs-3 entry">
-                    </div>
-                    
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Coach Ejections</label>
-                        <input type="number" name="{$homeTeamReportPrefix}[coachEjections]" value="{$homeTeamReport['coachEjections']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[coachEjections]" value="{$awayTeamReport['coachEjections']}" placeholder="0" class="col-xs-3 entry">
-                    </div>
-                    
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Substitute Ejections</label>
-                        <input type="number" name="{$homeTeamReportPrefix}[benchEjections]" value="{$homeTeamReport['benchEjections']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[benchEjections]" value="{$awayTeamReport['benchEjections']}" placeholder="0" class="col-xs-3 entry">
-                    </div>
-                    
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Spectator Ejections</label>
-                        <input type="number" name="{$homeTeamReportPrefix}[specEjections]" value="{$homeTeamReport['specEjections']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[specEjections]" value="{$awayTeamReport['specEjections']}" placeholder="0" class="col-xs-3 entry">
-                    </div>
-                </div>
-        
-                <div class="tab-pane" id="injuries">
-                    <div class="row">
-                        <div class="col-xs-4"></div> 
-                        <label class="col-xs-3 control-label text-center" >Home: {$homeTeam['groupSlot']}<br/>{$homeTeam['name']}</label> 
-                        <label class="col-xs-3 control-label text-center" >Away: {$awayTeam['groupSlot']}<br/>{$awayTeam['name']}</label> 
-                    </div>      
-        
-                    <div class="row">
-                        <label class="col-xs-4 control-label">Serious Injuries</label>
-                        <input type="number" name="{$homeTeamReportPrefix}[injuries]" value="{$homeTeamReport['injuries']}" placeholder="0" class="col-xs-3 entry">
-                        <input type="number" name="{$awayTeamReportPrefix}[injuries]" value="{$awayTeamReport['injuries']}" placeholder="0" class="col-xs-3 entry">            
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="notes">
-                  <div class="row">
-                    <label class="col-xs-4 control-label">Notes</label> 
-                    <textarea name="gameReport[notes]" rows="10" cols="48" wrap="hard" class="textarea">{$this->escape($gameReport['notes'])}</textarea>
-                  </div>
-                </div>
-        
-                <div class="tab-pane" id="showAll">
-                  <p>Maybe have a tab to show everything ??</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <legend></legend>
-          <div class="col-xs-11">
-          <div class="row float-right">
-                  <button type="submit" name="save" class="btn btn-sm btn-primary submit" ><span class="glyphicon glyphicon-save"></span> Save</button>
-                  <button type="submit" name="next" class="btn btn-sm btn-primary submit active"><span class="glyphicon glyphicon-arrow-right"></span> Save Then Next</button>
-                  <a href="{$this->scheduleURL}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share-alt"></span> Return to Schedule</a>
-          </div>
+    <div class="col-xs-10">
+      <!-- Tab panes -->
+      <div class="tab-content">                  
+        <div class="tab-pane active" id="score">
+          {$this->renderPairHeaderRow()}
+          {$this->renderPairRow('Goals Scored',   'goalsScored',   $homeTeam->pointsScored,  $awayTeam->pointsScored)}
+          {$this->renderPairRow('Sportsmanship',  'sportsmanship', $homeTeam->sportsmanship, $awayTeam->sportsmanship,'40')}
+          {$this->renderPairRow('Points Earned',  'pointsEarned',  $homeTeam->pointsEarned,  $awayTeam->pointsEarned,  null,true)}
+          {$this->renderPairRow('Points Deducted','pointsDeducted',$homeTeam->pointsDeducted,$awayTeam->pointsDeducted,null,true)}
         </div>
-        <div class="col-xs-10">
-        <div class="col-xs-8 col-xs-offset-7">
+        <div class="tab-pane" id="misconduct">
+          {$this->renderPairHeaderRow()}
+          {$this->renderPairRow('Player Cautions',     'playerWarnings', $homeTeamMisconduct->playerWarnings, $awayTeamMisconduct->playerWarnings)}
+          {$this->renderPairRow('Player Send-Offs',    'playerEjections',$homeTeamMisconduct->playerEjections,$awayTeamMisconduct->playerEjections)}
+          {$this->renderPairRow('Coach Ejections',     'coachEjections', $homeTeamMisconduct->coachEjections, $awayTeamMisconduct->coachEjections)}
+          {$this->renderPairRow('Substitute Ejections','benchEjections', $homeTeamMisconduct->benchEjections, $awayTeamMisconduct->benchEjections)}
+          {$this->renderPairRow('Spectator  Ejections','specEjections',  $homeTeamMisconduct->specEjections,  $awayTeamMisconduct->specEjections)}
+        </div>
+        <div class="tab-pane" id="injuries">
+          {$this->renderPairHeaderRow()}
+          {$this->renderPairRow('Serious Injuries','injuries',$homeTeam->injuries,$awayTeam->injuries)}
+        </div>
+        <div class="tab-pane" id="notes">
           <div class="row">
-                <label class="col-xs-4 control-label">Next Match Number</label> 
-              <input class="col-xs-3 entry" type="number" name="nextGameNumber" value="{$gameNumberNext}" />
-            </div>
+            <label class="col-xs-4 control-label">Notes</label> 
+            <textarea name="gameReportText" rows="10" cols="48" wrap="hard" class="textarea">{$this->escape($gameReport->reportText)}</textarea>
+          </div>
         </div>
-        </div>
-          <div class="clear-both"></div>       
-      </fieldset>
-
-      <fieldset>
-           <div class="form-group">
-          <div class="col-xs-12">
-              <div class="row">
-                  <label class="col-xs-2 control-label" for="gameStatus">Game Status</label>
-                  <select class="col-xs-3 entry" id="gameStatus" name="gameReport[game][status]">
+      </div>
+    </div>
+  </div>
+  <legend></legend>
+  <div class="col-xs-11">
+    <div class="row float-right">
+      <button type="submit" name="save" class="btn btn-sm btn-primary submit" >
+        <span class="glyphicon glyphicon-save"></span> Save
+      </button>
+      <button type="submit" name="next" class="btn btn-sm btn-primary submit active">
+        <span class="glyphicon glyphicon-arrow-right"></span> Save Then Next
+      </button>
+      <a href="{$this->scheduleURL}" class="btn btn-sm btn-primary">
+        <span class="glyphicon glyphicon-share-alt"></span> Return to Schedule
+      </a>
+    </div>
+  </div>
+  <div class="col-xs-10">
+    <div class="col-xs-8 col-xs-offset-7">
+      <div class="row">
+        <label class="col-xs-4 control-label">Next Match Number</label> 
+        <input class="col-xs-3 entry" type="number" name="nextGameNumber" value="{$gameNumberNext}" />
+      </div>
+    </div>
+  </div>
+  <div class="clear-both"></div>       
+</fieldset>
+<fieldset>
+  <div class="form-group">
+    <div class="col-xs-12">
+      <div class="row">
+        <label class="col-xs-2 control-label" for="gameStatus">Game Status</label>
+        <select class="col-xs-3 entry" id="gameStatus" name="gameStatus">
 EOD;
-        $status = $game['status'];
+        $status = $gameReport->status;
         foreach($this->gameStatuses as $value => $text) {
             $selected = $status == $value ? ' selected' : null;
             $html .= <<<EOD
-      <option{$selected} value="{$value}">{$text}</option>
+          <option{$selected} value="{$value}">{$text}</option>
 EOD;
         }
         $html .= <<<EOD
-      </select>
-               
-                  <label class="col-xs-2 control-label" for="gameReportStatus">Report Status</label> 
-    <select class="col-xs-3 entry" id="gameReportStatus" name="gameReport[status]">
+        </select>     
+        <label class="col-xs-2 control-label" for="gameReportState">Report Status</label> 
+        <select class="col-xs-3 entry" id="gameReportState" name="gameReportState">
 EOD;
-        $status = $gameReport['status'];
+        $status = $gameReport->reportState;
         foreach($this->reportStatuses as $value => $text) {
             $selected = $status == $value ? ' selected' : null;
             $html .= <<<EOD
-      <option{$selected} value="{$value}">{$text}</option>
+          <option{$selected} value="{$value}">{$text}</option>
 EOD;
         }
         $html .= <<<EOD
-      </select>
-               </div>
-          </div>
-          </div>
-        </fieldset>      
+        </select>
+      </div>
+    </div>
+  </div>
+</fieldset>      
 </form>
 </div> <!-- .container -->
 EOD;
         return $html;
     }
-    /* ====================================================
-     * The help section
-     */
-    private function renderScoringNotes()
+
+    private function renderPairHeaderRow()
     {
-        return include 'GameReportUpdateNotes.php';
+        $homeTeam = $this->gameReport->homeTeam;
+        $awayTeam = $this->gameReport->awayTeam;
+
+        $homeTeamName = $this->escape($homeTeam->regTeamName);
+        $awayTeamName = $this->escape($awayTeam->regTeamName);
+
+        $homeTeamSlotView = $this->escape($homeTeam->poolTeamView);
+        $awayTeamSlotView = $this->escape($awayTeam->poolTeamView);
+
+        return <<<EOD
+<div class="row">
+  <div class="col-xs-4"></div> 
+  <label class="col-xs-3 control-label text-center">Home<br/>{$homeTeamSlotView}<br/>{$homeTeamName}</label> 
+  <label class="col-xs-3 control-label text-center">Away<br/>{$awayTeamSlotView}<br/>{$awayTeamName}</label> 
+</div>
+EOD;
+    }
+    /**
+     * @param  $label 'Goals Scored'
+     * @param  $name  'goalsScored'
+     * @param  $homeTeamValue integer|null
+     * @param  $awayTeamValue integer|null
+     * @param  $placeHolder   string
+     * @param  $readOnly      boolean
+     * @return string
+     */
+    private function renderPairRow($label,$name,$homeTeamValue,$awayTeamValue,$placeHolder = '0',$readOnly = false)
+    {
+        $homeTeamName = sprintf('gameReport[homeTeam][%s]',$name);
+        $awayTeamName = sprintf('gameReport[awayTeam][%s]',$name);
+
+        $placeHolder = $readOnly ? 'readonly' : sprintf('placeholder="%s"',$placeHolder);
+
+        return <<<EOD
+<div class="row">
+  <label class="col-xs-4 control-label">{$label}</label>
+  <input type="number" name="{$homeTeamName}" value="{$homeTeamValue}" {$placeHolder} class="col-xs-3 entry">
+  <input type="number" name="{$awayTeamName}" value="{$awayTeamValue}" {$placeHolder} class="col-xs-3 entry">
+</div>
+EOD;
+
     }
 }

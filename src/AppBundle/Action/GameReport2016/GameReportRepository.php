@@ -43,7 +43,7 @@ class GameReportRepository
             $this->gameConn->update('gameTeams',$gameReportTeamRow,['gameTeamId' => $gameTeamId]);
         }
     }
-    /**
+    /** =======================================================================
      * @param  $projectId
      * @param  $gameNumber
      * @return GameReport|null
@@ -67,6 +67,10 @@ SELECT
   poolTeam.poolKey,
   poolTeam.poolTypeKey,
   poolTeam.poolTeamKey,
+  poolTeam.poolView,
+  poolTeam.poolTypeView,
+  poolTeam.poolTeamView,
+  poolTeam.poolTeamSlotView,
   
   poolTeam.regTeamName,
   poolTeam.regTeamPoints
