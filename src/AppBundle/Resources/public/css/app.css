@@ -484,4 +484,10 @@ p.email {
   font-size: 12px;
   text-align: center;
 }
-
+td.admin-listing {
+    width: 100px;
+    display: inline-block;
+    overflow: visible;
+    white-space: nowrap;
+    margin:0;
+}

@@ -21,14 +21,16 @@ class AdminListingSearchForm extends AbstractForm
         $data = $request->request->all();
         $errors = [];
 
-        $displayKey = filter_var(trim($data['displayKey']), FILTER_SANITIZE_STRING);
         $projectKey = filter_var(trim($data['projectKey']), FILTER_SANITIZE_STRING);
+        $displayKey = filter_var(trim($data['displayKey']), FILTER_SANITIZE_STRING);
+        $reportKey = filter_var(trim($data['reportKey']), FILTER_SANITIZE_STRING);
         $name       = filter_var(trim($data['name']),       FILTER_SANITIZE_STRING);
         
         $this->formData = array_merge($this->formData,[
-            'displayKey' => $displayKey,
-            'projectKey' => $projectKey,
-            'name'       => $name,
+            'projectKey'    => $projectKey,
+            'displayKey'    => $displayKey,
+            'reportKey'     => $reportKey,
+            'name'          => $name,
         ]);
         $this->formDataErrors = $errors;
     }
@@ -43,6 +45,17 @@ class AdminListingSearchForm extends AbstractForm
             'Availability' => 'Avail',
             'User'         => 'User',
         ];
+        
+        $reportKey = $this->formData['reportKey'];
+        $reportChoices = [
+            'All'           =>  'All',
+            'Verified'      =>  'Verified',
+            'Unverified'    =>  'Unverified',
+            'Unapproved'    =>  'Unapproved',
+            'Issues'        =>  'Volunteers with Issues',
+            'FL Residents'  =>  'FL Residents'
+        ];
+        
         $name = $this->formData['name'];
 
         $csrfToken = 'TODO';
@@ -59,6 +72,10 @@ class AdminListingSearchForm extends AbstractForm
     {$this->renderInputSelect($displayChoices,$displayKey,'displayKey','displayKey')}
   </div>
   <div class="form-group">
+    <label for="reportKey">Report</label>
+    {$this->renderInputSelect($reportChoices,$reportKey,'reportKey','reportKey')}
+  </div>
+  <div class="form-group">
     <label for="name">Name</label>
     <input 
       type="text" id="name" class="form-control"
@@ -70,7 +87,6 @@ class AdminListingSearchForm extends AbstractForm
     <span>Search</span>
   </button>
 <a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
-<a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>   
 </form>
 
 EOD;

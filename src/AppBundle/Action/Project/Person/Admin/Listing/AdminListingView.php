@@ -40,6 +40,7 @@ class AdminListingView extends AbstractView2
     public function __invoke(Request $request)
     {
         $this->displayKey     = $request->attributes->get('displayKey');
+        $this->reportKey     = $request->attributes->get('reportKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
         $this->projectPersonsCount = count($this->projectPersons);
 
@@ -61,6 +62,7 @@ EOD;
 <table class='table'>
 <tr>
 EOD;
+
         switch($this->displayKey) {
 
             case 'Plans':
@@ -76,14 +78,15 @@ EOD;
             case 'User':
                 $html .= <<<EOD
   <th>Registration Information</th>
-  <th>User Information</th>
   <th>AYSO Information</th>
+  <th>User Information</th>
   <th>Roles / Certs</th>
 </tr>
 EOD;
                 break;
 
             case 'Avail':
+            case 'Availability':
                 $html .= <<<EOD
   <th>Registration Information</th>
   <th>AYSO Information</th>
@@ -113,6 +116,7 @@ EOD;
     private function renderProjectPerson(ProjectPersonViewDecorator $personView)
     {
         $html = null;
+
         switch($this->displayKey) {
 
             case 'Plans':
@@ -130,8 +134,8 @@ EOD;
                 $html .= <<<EOD
 <tr id="project-person-{$personView->getKey()}">
   <td>{$this->renderRegistrationInfo($personView)}</td>
-  <td>{$this->renderUserInfo        ($personView)}</td>
   <td>{$this->renderAysoInfo        ($personView)}</td>
+  <td>{$this->renderUserInfo        ($personView)}</td>
   <td>{$this->renderRoles           ($personView)}</td>
 </tr>
 EOD;
@@ -157,8 +161,8 @@ EOD;
         $gage = $personView->gender . $personView->age;
         return <<<EOD
 <table>
-  <tr><td>Name  </td><td><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
-  <tr><td>Email </td><td>{$this->escape($personView->email)} </td></tr>
+  <tr><td>Name  </td><td  class="admin-listing"><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
+  <tr><td>Email </td><td  class="admin-listing">{$this->escape($personView->email)} </td></tr>
   <tr><td>Phone </td><td>{$this->escape($personView->phone)} </td></tr>
   <tr><td>G Age</td><td> {$this->escape($gage)}</td></tr>
   <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
@@ -173,6 +177,14 @@ EOD;
 
         return <<<EOD
 <table>
+  <tr>
+    <td >Name</td>
+    <td  class="admin-listing">{$personView->name}</td>
+  </tr><tr>
+  <tr>
+    <td class="admin-listing">Email</td>
+    <td>{$personView->email}</td>
+  </tr><tr>
   <tr>
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
@@ -247,12 +259,19 @@ EOD;
     private function renderUserInfo(ProjectPersonViewDecorator $personView)
     {
         $user = $this->projectUserRepository->find($personView->personKey);
+        
+        if (empty($user)) {
+            return null;
+        }
+
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
+        
         $roles = implode(',',$user['roles']);
+
         return <<<EOD
 <table>
-  <tr><td>Name   </td><td>{$this->escape($user['name'])}    </td></tr>
-  <tr><td>Email  </td><td>{$this->escape($user['email'])}   </td></tr>
+  <tr><td>Name   </td><td class="admin-listing">{$this->escape($user['name'])}    </td></tr>
+  <tr><td>Email  </td><td class="admin-listing">{$this->escape($user['email'])}   </td></tr>
   <tr><td>User   </td><td>{$this->escape($user['username'])}</td></tr>
   <tr><td>Enabled</td><td>{$enabled}</td></tr>
   <tr><td>Roles  </td><td>{$roles}  </td></tr>
