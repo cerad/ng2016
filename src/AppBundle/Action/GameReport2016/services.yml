@@ -10,6 +10,7 @@ services:
     game_report_update_form:
         class: AppBundle\Action\GameReport2016\Update\GameReportUpdateForm
         parent: abstract_form
+        arguments: ['@game_report_repository']
 
     game_report_update_view:
         class: AppBundle\Action\GameReport2016\Update\GameReportUpdateView

@@ -37,6 +37,12 @@ class GameReportTeam
     public $poolTeamView;
     public $poolTeamSlotView;
     
+    // Future
+    public $pointsScoredOvertime;
+    public $pointsAllowedOvertime;
+    public $pointsScoredKftm;
+    public $pointsAllowedKftm;
+    
     /** @var  GameReportTeamMisconduct */
     public $misconduct;
     
@@ -69,8 +75,24 @@ class GameReportTeam
         'poolTypeView'     => 'string',
         'poolTeamView'     => 'string',
         'poolTeamSlotView' => 'string',
+        
     ];
+    public function clearReport()
+    {
+        $this->results       = null;
+        $this->resultsDetail = null;
 
+        $this->pointsScored   = null;
+        $this->pointsAllowed  = null;
+        $this->pointsEarned   = null;
+        $this->pointsDeducted = null;
+        $this->sportsmanship  = null;
+        $this->injuries       = null;
+        
+        if ($this->misconduct) {
+            $this->misconduct->clearReport();
+        }
+    }
     public function __get($name)
     {
         switch($name) {

@@ -52,9 +52,8 @@ class GameReportRepository
     public function findGameReport($projectId,$gameNumber)
     {
         // Load the game
-        $gameId = $projectId . ':' . $gameNumber;
-        $sql  = 'SELECT * FROM games WHERE gameId = ?';
-        $stmt = $this->gameConn->executeQuery($sql,[$gameId]);
+        $sql  = 'SELECT * FROM games WHERE projectId = ? AND gameNumber = ?';
+        $stmt = $this->gameConn->executeQuery($sql,[$projectId,$gameNumber]);
         $game = $stmt->fetch();
         if (!$game) {
             return null;
@@ -80,12 +79,19 @@ LEFT JOIN poolTeams AS poolTeam ON poolTeam.poolTeamId = gameTeam.poolTeamId
 WHERE gameTeam.gameId = ?
 ORDER BY gameNumber,slot
 EOD;
-        $stmt = $this->gameConn->executeQuery($sql,[$gameId]);
+        $stmt = $this->gameConn->executeQuery($sql,[$game['gameId']]);
         while($gameTeam = $stmt->fetch()) {
-            // Turn all the scores to integers?
             $gameTeam['misconduct'] = isset($gameTeam['misconduct']) ? unserialize($gameTeam['misconduct']) : [];
             $game['teams'][$gameTeam['slot']] = $gameTeam;
         }
         return GameReport::createFromArray($game);
+    }
+    public function doesGameExist($projectId,$gameNumber)
+    {
+        // Load the game
+        $sql = 'SELECT gameId FROM games WHERE projectId = ? AND gameNumber = ?';
+        $stmt = $this->gameConn->executeQuery($sql, [$projectId, $gameNumber]);
+        $game = $stmt->fetch();
+        return $game ? true : false;
     }
 }

@@ -5,6 +5,7 @@ use AppBundle\Action\AbstractForm;
 
 use AppBundle\Action\GameReport2016\GameReport;
 
+use AppBundle\Action\GameReport2016\GameReportRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class GameReportUpdateForm extends AbstractForm
@@ -12,39 +13,43 @@ class GameReportUpdateForm extends AbstractForm
     /** @var  GameReport */
     private $gameReport;
 
-    private $gameStatuses;
-    private $reportStatuses;
+    private $gameReportFinder;
 
-    // TODO
-    private $scheduleURL = '#';
+    private $backRouteName;
 
-    public function __construct()
+    private $gameStatuses = [
+        'Normal'            => 'Normal',
+        'InProgress'        => 'In Progress',
+        'Played'            => 'Played',
+        'ForfeitByHomeTeam' => 'Forfeit By Home Team',
+        'ForfeitByAwayTeam' => 'Forfeit By Away Team',
+        'Cancelled'         => 'Cancelled',
+        'Suspended'         => 'Suspended',
+        'Terminated'        => 'Terminated',
+        'StormedOut'        => 'Stormed Out',
+        'HeatedOut'         => 'Heated Out',
+    ];
+
+    private $reportStates = [
+        'Initial'   => 'Initial',  // Have a process to move to pending based on start time
+        'Pending'   => 'Pending',
+        'Submitted' => 'Submitted',
+        'Verified'  => 'Verified',
+        'Clear'     => 'Clear',
+    ];
+
+    public function __construct(GameReportRepository $gameReportFinder)
     {
-        $this->gameStatuses = [
-            'Normal'            => 'Normal',
-            'InProgress'        => 'In Progress',
-            'Played'            => 'Played',
-            'ForfeitByHomeTeam' => 'Forfeit By Home Team',
-            'ForfeitByAwayTeam' => 'Forfeit By Away Team',
-            'Cancelled'         => 'Cancelled',
-            'Suspended'         => 'Suspended',
-            'Terminated'        => 'Terminated',
-            'StormedOut'        => 'Stormed Out',
-            'HeatedOut'         => 'Heated Out',
-        ];
-        $this->reportStatuses = [
-            'Initial'   => 'Initial',  // Have a process to move to pending based on start time
-            'Pending'   => 'Pending',
-            'Submitted' => 'Submitted',
-            'Verified'  => 'Verified',
-            'Clear'     => 'Clear',
-        ];
+        $this->gameReportFinder = $gameReportFinder;
     }
     public function setGameReport(GameReport $gameReport)
     {
         $this->gameReport = $gameReport;
     }
-
+    public function setBackRouteName($backRouteName)
+    {
+        $this->backRouteName = $backRouteName;
+    }
     /**
      * @return GameReport
      */
@@ -99,8 +104,7 @@ class GameReportUpdateForm extends AbstractForm
         $gameReport->reportState = $this->filterScalarString($data,'gameReportState');
 
         // Require scores
-        if ($homeTeam->pointsScored === null || $awayTeam->pointsScored === null)
-        {
+        if (!$gameReport->hasScores()) {
             $errors['scores'][] = [
                 'name' => 'scores',
                 'msg'  => 'Scores must be entered.'
@@ -113,9 +117,10 @@ class GameReportUpdateForm extends AbstractForm
     {
         $gameReport = $this->gameReport;
 
-        $projectId      = $gameReport->projectId;
-        $gameNumber     = $gameReport->gameNumber;
-        $gameNumberNext = $gameNumber + 1; // TODO Verify exists
+        $projectId  = $gameReport->projectId;
+        $gameNumber = $gameReport->gameNumber;
+
+        $gameNumberNext = $this->gameReportFinder->doesGameExist($projectId,$gameNumber + 1) ? $gameNumber + 1 : $gameNumber;
 
         // Game Report #11207: AYSO_U12B_Core, Thu, 10:30 AM on LL3
         $gameReportDescription = sprintf('Game Report #%d: %s, %s, %s On %s',
@@ -127,7 +132,12 @@ class GameReportUpdateForm extends AbstractForm
         );
         $gameReportDescription = $this->escape($gameReportDescription);
 
-        $gameReportUpdateUrl = $this->generateUrl('game_report_update',['projectId' => $projectId,'gameNumber' => $gameNumber]);
+        $gameReportUpdateUrl = $this->generateUrl(
+            $this->getCurrentRouteName(),
+            ['projectId' => $projectId,'gameNumber' => $gameNumber]
+        );
+        $backUrl  = $this->generateUrl($this->backRouteName);
+        $backUrl .= '#game-' . $gameReport->gameId;
 
         $homeTeam = $gameReport->homeTeam;
         $awayTeam = $gameReport->awayTeam;
@@ -185,7 +195,6 @@ class GameReportUpdateForm extends AbstractForm
       </div>
     </div>
   </div>
-  <legend></legend>
   <div class="col-xs-11">
     <div class="row float-right">
       <button type="submit" name="save" class="btn btn-sm btn-primary submit" >
@@ -194,7 +203,7 @@ class GameReportUpdateForm extends AbstractForm
       <button type="submit" name="next" class="btn btn-sm btn-primary submit active">
         <span class="glyphicon glyphicon-arrow-right"></span> Save Then Next
       </button>
-      <a href="{$this->scheduleURL}" class="btn btn-sm btn-primary">
+      <a href="{$backUrl}" class="btn btn-sm btn-primary">
         <span class="glyphicon glyphicon-share-alt"></span> Return to Schedule
       </a>
     </div>
@@ -228,9 +237,9 @@ EOD;
         <label class="col-xs-2 control-label" for="gameReportState">Report Status</label> 
         <select class="col-xs-3 entry" id="gameReportState" name="gameReportState">
 EOD;
-        $status = $gameReport->reportState;
-        foreach($this->reportStatuses as $value => $text) {
-            $selected = $status == $value ? ' selected' : null;
+        $state = $gameReport->reportState;
+        foreach($this->reportStates as $value => $text) {
+            $selected = $state == $value ? ' selected' : null;
             $html .= <<<EOD
           <option{$selected} value="{$value}">{$text}</option>
 EOD;

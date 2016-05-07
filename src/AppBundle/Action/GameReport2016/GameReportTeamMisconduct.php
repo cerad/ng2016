@@ -21,7 +21,13 @@ class GameReportTeamMisconduct
         'benchEjections'  => 'integer',
         'specEjections'   => 'integer',
     ];
-
+    public function clearReport()
+    {
+        $this->playerWarnings = $this->playerEjections = null;
+        $this->coachWarnings  = $this->coachEjections  = null;
+        $this->benchWarnings  = $this->benchEjections  = null;
+        $this->specWarnings   = $this->specEjections   = null;
+    }
     public function __get($name)
     {
         switch($name) {

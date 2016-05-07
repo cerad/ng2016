@@ -43,6 +43,26 @@ class GameReport
         'reportState' => 'string',
     ];
 
+    public function clearReport()
+    {
+        $this->reportText  = null;
+        $this->reportState = 'Pending'; // Or initial based on start time
+        $this->status      = 'Normal';
+        
+        $this->teams[1]->clearReport();
+        $this->teams[2]->clearReport();
+    }
+    public function hasScores()
+    {
+        if ($this->teams[1]->pointsAllowed === null) return false;
+        if ($this->teams[2]->pointsAllowed === null) return false;
+        return true;
+    }
+    public function getReportState()
+    {
+        // Todo Calculate pending
+        return $this->reportState;
+    }
     public function __get($name)
     {
         switch($name) {

@@ -67,7 +67,7 @@ EOD;
             $homeTeam = $game->homeTeam;
             $awayTeam = $game->awayTeam;
 
-            $trId = 'schedule-' . $game->gameId;
+            $trId = 'game-' . $game->gameId;
 
             // Link for editing game
             $gameNumber = $game->gameNumber;
@@ -75,7 +75,7 @@ EOD;
                 $params = [
                     'projectId'  => $game->projectId,
                     'gameNumber' => $game->gameNumber,
-                    'back' => $this->generateUrl($this->getCurrentRouteName()) . '#' . $trId,
+                    'back' => $this->getCurrentRouteName(), // $this->generateUrl($this->getCurrentRouteName()) . '#' . $trId,
                 ];
                 $url = $this->generateUrl('game_report_update',$params);
                 
