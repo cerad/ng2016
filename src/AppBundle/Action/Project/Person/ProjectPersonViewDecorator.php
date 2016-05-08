@@ -116,7 +116,7 @@ class ProjectPersonViewDecorator
     public function getRoleStyle($role)
     {
         if ($role->approved) {
-            return $this->successClass;
+            return $this->successStyle;
         } 
         return $role->verified ? $this->warningStyle : $this->dangerStyle;
     }

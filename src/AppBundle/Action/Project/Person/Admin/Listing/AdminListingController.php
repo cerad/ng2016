@@ -46,6 +46,9 @@ class AdminListingController extends AbstractController
             return $this->redirectToRoute('project_person_admin_listing');
         }
 
+        $registered = null;
+        $verified = null;
+
         switch ($searchData['reportKey']) {
             case 'Verified':
                 $verified = true;
@@ -55,9 +58,10 @@ class AdminListingController extends AbstractController
                 break;
             default:
                 $verified = null;
+                break;
         }   
         
-        $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name'],null,$verified);
+        $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name'],$registered,$verified);
         
         $request->attributes->set('projectPersons',$projectPersons);
         

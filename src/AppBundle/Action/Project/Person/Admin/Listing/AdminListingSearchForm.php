@@ -53,7 +53,7 @@ class AdminListingSearchForm extends AbstractForm
             'Unverified'    =>  'Unverified',
             'Unapproved'    =>  'Unapproved',
             'Issues'        =>  'Volunteers with Issues',
-            'FL Residents'  =>  'FL Residents'
+            'FL'            =>  'FL Residents'
         ];
         
         $name = $this->formData['name'];

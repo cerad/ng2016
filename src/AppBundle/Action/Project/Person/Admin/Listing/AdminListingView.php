@@ -42,6 +42,34 @@ class AdminListingView extends AbstractView2
         $this->displayKey     = $request->attributes->get('displayKey');
         $this->reportKey     = $request->attributes->get('reportKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
+
+        foreach ($this->projectPersons as $person) {
+            switch ($this->reportKey) {
+                case 'Unapproved':
+                    if (isset($person['roles']['ROLE_REFEREE'])) {
+                        if (!$person['roles']['ROLE_REFEREE']['approved'] AND $person['roles']['ROLE_REFEREE']['verified']) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+                case 'FL':
+                    $personView = $this->projectPersonViewDecorator;
+
+                    $personView->setProjectPerson($person);
+                    
+                    $stateArr = explode('/',$personView->orgKey);
+                    
+                    if (strpos($personView->orgKey, '/FL')) {
+                        $listPersons[] = $person;                        
+                    }
+                    break;
+                default:
+                    $listPersons[] = $person;
+            }
+        }
+        
+        $this->projectPersons = $listPersons;
+
         $this->projectPersonsCount = count($this->projectPersons);
 
         return $this->newResponse($this->render());
@@ -79,8 +107,8 @@ EOD;
                 $html .= <<<EOD
   <th>Registration Information</th>
   <th>AYSO Information</th>
-  <th>User Information</th>
   <th>Roles / Certs</th>
+  <th>User Information</th>
 </tr>
 EOD;
                 break;
@@ -98,17 +126,17 @@ EOD;
         }
 
         foreach($this->projectPersons as $person) {
-
+            
             // Should this be a private variable to be consistent?
             $personView = $this->projectPersonViewDecorator;
 
-            $personView->setProjectPerson($person);
+            $personView->setProjectPerson($person);                    
 
             $html .= $this->renderProjectPerson($personView);
+
         }
         $html .= <<<EOD
 </table>
-
 EOD;
 
         return $html;
@@ -135,8 +163,8 @@ EOD;
 <tr id="project-person-{$personView->getKey()}">
   <td>{$this->renderRegistrationInfo($personView)}</td>
   <td>{$this->renderAysoInfo        ($personView)}</td>
-  <td>{$this->renderUserInfo        ($personView)}</td>
   <td>{$this->renderRoles           ($personView)}</td>
+  <td>{$this->renderUserInfo        ($personView)}</td>
 </tr>
 EOD;
                 break;
@@ -189,7 +217,7 @@ EOD;
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
   </tr><tr>
-    <td>SAR/St</td>
+    <td>S/A/R/St</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
   </tr><tr>
     <td>Mem Year</td>
