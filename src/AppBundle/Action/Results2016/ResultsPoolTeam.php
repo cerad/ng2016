@@ -1,6 +1,13 @@
 <?php
 namespace AppBundle\Action\Results2016;
-
+/**
+ * @property-read double winPercent
+ * @property-read string winPercentView
+ * 
+ * @property-read double sportsmanshipPercent
+ * @property-read double pointsScoredPercent
+ * @property-read double pointsAgainstPercent
+ */
 class ResultsPoolTeam
 {
     public $poolKey;
@@ -15,7 +22,6 @@ class ResultsPoolTeam
     public $regTeamPoints;
     
     public $pointsEarned;
-    public $winPercent;
     public $standing;
     
     public $gamesTotal;
@@ -40,8 +46,54 @@ class ResultsPoolTeam
         'poolTeamSlotView' => 'string',
     
         'regTeamName'   => 'string',
-        'regTeamPoints' => 'string',
+        'regTeamPoints' => 'integer',
     ];
+    public function mergeGameTeam(ResultsGameTeam $gameTeam)
+    {
+        $this->gamesTotal++;
+        if ($gameTeam->results === null) {
+            return;
+        }
+        $this->gamesPlayed++;
+        if ($gameTeam->results === 1) {
+            $this->gamesWon++;
+        }
+        $this->pointsEarned  += $gameTeam->pointsEarned;
+        $this->pointsScored  += $gameTeam->pointsScored;
+        $this->pointsAllowed += $gameTeam->pointsAllowed;
+        $this->sportsmanship += $gameTeam->sportsmanship;
+    }
+    public function __get($name)
+    {
+        switch($name) {
+            case 'winPercent':
+            case 'winPercentView':
+                if ($this->gamesPlayed === null) {
+                    return null;
+                }
+                $winPercent = (($this->pointsEarned + $this->regTeamPoints) * 1.0) / (($this->gamesPlayed * 10.0) + 6.0);
+                if ($name === 'winPercent') {
+                    return $winPercent;
+                }
+                return sprintf("%.02f",$winPercent * 100.0);
+
+            case 'sportsmanshipPercent':
+                if ($this->gamesPlayed === null) {
+                    return null;
+                }
+                return ($this->sportsmanship * 1.0) / ($this->gamesPlayed * 40.0);
+
+            case 'pointsScoredPercent':
+            case 'pointsAgainstPercent':
+                if ($this->gamesPlayed === null) {
+                    return null;
+                }
+                return ($this->pointsScored * 1.0) / ($this->gamesPlayed * 1.0);
+            
+        }
+        throw new \InvalidArgumentException('ResultsPoolTeam::__get ' . $name);
+    }
+
     /**
      * @param  $data array
      * @return ResultsPoolTeam

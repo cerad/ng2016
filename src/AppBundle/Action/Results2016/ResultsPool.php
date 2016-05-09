@@ -11,6 +11,8 @@ class ResultsPool
     
     /** @var ResultsPoolTeam[]  */
     private $teams = []; // Teams in the pool
+    
+    /** @var ResultsGame[] */
     private $games = []; // Games in the pool
 
     private $keys = [
@@ -19,6 +21,9 @@ class ResultsPool
         'poolView'     => 'string',
         'poolTypeView' => 'PoolTypeKey',
     ];
+    public function setPoolTeams(array $poolTeams) {
+        $this->teams = $poolTeams;
+    }
     public function addPoolTeam(ResultsPoolTeam $poolTeam)
     {
         $this->teams[$poolTeam->poolTeamId] = $poolTeam;
@@ -26,6 +31,18 @@ class ResultsPool
     public function getPoolTeams()
     {
         return $this->teams;
+    }
+    public function addPoolGame(ResultsGame $game)
+    {
+        // For the schedule display
+        $this->games[] = $game;
+        
+        // Summarize results
+        foreach($game->getTeams() as $gameTeam)
+        {
+            $poolTeam = $this->teams[$gameTeam->poolTeamId];
+            $poolTeam->mergeGameTeam($gameTeam);
+        }
     }
     public function getGames()
     {
