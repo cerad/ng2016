@@ -30,3 +30,8 @@ parameters:
             name:  Admin(x)
             role:  ROLE_ADMIN
             email: admin@fake.com
+        refadminx:
+            id:    -7
+            name:  RefAdmin(x)
+            role:  ROLE_REFEREE_ADMIN
+            email: refadmin@fake.com

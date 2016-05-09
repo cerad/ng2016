@@ -116,7 +116,7 @@ class ProjectPersonViewDecorator
     public function getRoleStyle($role)
     {
         if ($role->approved) {
-            return $this->successClass;
+            return $this->successStyle;
         } 
         return $role->verified ? $this->warningStyle : $this->dangerStyle;
     }
@@ -126,6 +126,14 @@ class ProjectPersonViewDecorator
         
         switch($name) {
             
+            case 'approved':
+                $role = $person->getRole('ROLE_REFEREE');
+                return $role ? ($role['approved'] ? 'Yes': '') : null;
+                
+            case 'verified':
+                $role = $person->getRole('ROLE_REFEREE');
+                return $role ? ($role['verified'] ? 'Yes' : '') : null;
+                
             case 'phone':  
                 return $this->phoneTransformer->transform($person->phone);
             
@@ -137,6 +145,9 @@ class ProjectPersonViewDecorator
             case 'orgKey': 
                 return $this->orgKeyTransformer->transform($person->orgKey);
 
+            case 'personKey':
+                return $person->personKey;
+            
             case 'refereeBadge':
                 $role = $person->getRole('CERT_REFEREE');
                 return $role ? $role->badge : null;
@@ -212,6 +223,13 @@ class ProjectPersonViewDecorator
             
             case 'person':
                 return $person;
+            
+            case 'notes':
+                return $person->notes;
+            
+            case 'notesUser':
+                return $person->notesUser;
+            
         }
         return $person->$name;
     }

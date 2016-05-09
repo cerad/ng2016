@@ -24,9 +24,10 @@ class AdminListingController extends AbstractController
     {
 
         $searchData = [
-            'projectKey' => $this->getCurrentProjectKey(),
-            'displayKey' => 'Plans',
-            'name'       =>  null,
+            'projectKey'    => $this->getCurrentProjectKey(),
+            'displayKey'    => 'Plans',
+            'reportKey'     =>  null,
+            'name'          =>  null,
         ];
         $session = $request->getSession();
         if ($session->has('project_person_admin_listing_search_data')) {
@@ -44,11 +45,29 @@ class AdminListingController extends AbstractController
 
             return $this->redirectToRoute('project_person_admin_listing');
         }
-        $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name']);
+
+        $registered = null;
+        $verified = null;
+
+        switch ($searchData['reportKey']) {
+            case 'Verified':
+                $verified = true;
+                break;
+            case 'Unverified':
+                $verified = false;
+                break;
+            default:
+                $verified = null;
+                break;
+        }   
+        
+        $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name'],$registered,$verified);
         
         $request->attributes->set('projectPersons',$projectPersons);
         
         $request->attributes->set('displayKey',$searchData['displayKey']);
+        
+        $request->attributes->set('reportKey',$searchData['reportKey']);
         
         return null;
     }

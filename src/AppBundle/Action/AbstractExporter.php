@@ -23,6 +23,7 @@ class AbstractExporter
     
     public $fileExtension;
     public $contentType;
+    private $options;
     
     public function __construct($format) 
     {
@@ -40,8 +41,10 @@ class AbstractExporter
                 break;
         }
     }
-    public function export($content)
+    public function export($content, $options = null)
     {
+        $this->options = $options;
+        
         switch ($this->format) {
             case 'csv': return $this->exportCSV ($content);
             case 'xls': return $this->exportXLSX($content);
@@ -86,6 +89,18 @@ class AbstractExporter
         $ws = $this->objPHPExcel->getActiveSheet();
         
         $ws->fromArray($content, NULL, 'A1');
+        
+        foreach(range('A',$ws->getHighestDataColumn()) as $col) {
+            $ws->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        if (isset($this->options['hideCols'])){
+            // Hide sheet columns.
+            $cols = $this->options['hideCols'];
+            foreach ($cols as $name) {
+                $ws->getColumnDimension($name)->setVisible(FALSE);
+            }
+        }
 
         return;
 
