@@ -35,6 +35,7 @@ EOT;
         $content .= $this->renderAccountManagement();
           
         $content .=  <<<EOT
+</div> <!-- class="container no-disc" -->
 <div class="panel-float-clear"></div>
 EOT;
 
@@ -86,9 +87,9 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('app_schedule_game')}">View Game Schedule</a></li>
       <li><a href="{$this->generateUrl('app_schedule_team')}">View Team Schedule</a></li>
-      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'core'])}">Export Game Schedule (Excel)</a></li>
+      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
 EOT;
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
      <li><a href="#">Import Game Schedule (Excel)</a></li> 
 EOT;
@@ -116,7 +117,7 @@ EOT;
       <li><a href="#">View Teams</a></li>
       <li><a href="#">Export Teams (Excel)</a></li>
 EOT;
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">Import/Update/Link Teams (Excel)</a></li>
 EOT;
@@ -145,21 +146,26 @@ EOT;
       <li><a href="#">Export Referee Assignments (Excel)</a></li>
 EOT;
 
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+      if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">Import Referee Assignments (Excel)</a></li>
+EOT;
+      }
+
+      if ($this->isGranted('ROLE_REFEREE_ADMIN')) {
+        $html .= <<<EOT
       <li><a href="#">View Unregistered Referee List</a></li>
 EOT;
       }
-    } else {
-      $html = "";
-    }
-
         $html .= <<<EOT
     </ul>
   </div>
 </div>
 EOT;
+
+    } else {
+      $html = "";
+    }
 
       return $html;      
     }
@@ -173,28 +179,17 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('project_person_admin_listing')}">View Registered People</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
       <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People (Excel)</a></li>
 EOT;
       
       if ($this->isGranted('ROLE_ADMIN')) {
-        $html .= <<<EOT
-      <li><a href="{$this->generateUrl('project_person_admin_listing_unverified')}">View Unverified Registered People</a></li>
-      <li><a href="{$this->generateUrl('project_person_admin_listing_unverified',['_format' => 'xls'])}">Export Unverified Registered People (Excel)</a></li>
-EOT;
-      }
-      
-      if ($this->isGranted('ROLE_SUPER_ADMIN')) {
         $html .= <<<EOT
       <li><a href="#">Sync eAYSO Information</a></li>
       <li><a href="#">Import AYSO Information</a></li>
 EOT;
       }
       
-      $html .= <<<EOT
-      <li><a href="#">View Staff Roles</a></li>
-EOT;
-    
         $html .= <<<EOT
     </ul>
   </div>

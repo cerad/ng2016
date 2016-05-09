@@ -56,44 +56,6 @@ services:
             - '@abstract_exporter_csv'
 
 # ==========================================================================
-# Listing Unverified (List throws exception)
-
-    project_person_admin_listing_unverified_search_form:
-        class:  AppBundle\Action\Project\Person\Admin\ListingUnverified\AdminListingUnverifiedSearchForm
-        parent: abstract_form
-        arguments: ['%project_choices%']
-
-    project_person_admin_listing_unverified_controller:
-        class:  AppBundle\Action\Project\Person\Admin\ListingUnverified\AdminListingUnverifiedController
-        parent: abstract_controller
-        arguments:
-            - '@project_person_repository_v2'
-            - '@project_person_admin_listing_unverified_search_form'
-
-    project_person_admin_listing_unverified_view_html:
-        class:  AppBundle\Action\Project\Person\Admin\ListingUnverified\AdminListingUnverifiedView
-        parent: abstract_view2
-        arguments:
-            - '@project_person_repository_v2'
-            - '@user_repository'
-            - '@project_person_admin_listing_unverified_search_form'
-            - '@project_person_view_decorator'
-    
-    project_person_admin_listing_unverified_view_xls:
-        class: AppBundle\Action\Project\Person\Admin\ListingUnverified\AdminListingUnverifiedViewFile
-        parent: abstract_view
-        arguments:
-            - '@project_person_view_decorator'
-            - '@abstract_exporter_xls'
-
-    project_person_admin_listing_unverified_view_csv:
-        class: AppBundle\Action\Project\Person\Admin\ListingUnverified\AdminListingUnverifiedViewFile
-        parent: abstract_view
-        arguments:
-            - '@project_person_view_decorator'
-            - '@abstract_exporter_csv'
-
-# ==========================================================================
 # Update
 
     project_person_admin_update_form:

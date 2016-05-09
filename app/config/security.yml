@@ -21,27 +21,20 @@ security:
         ROLE_SCORE_ADMIN:    [ROLE_STAFF, ROLE_SCORE_ENTRY]
 
         ROLE_ASSIGNOR:       [ROLE_STAFF]
-        ROLE_ASSIGNOR_KAC:   [ROLE_ASSIGNOR]
-        ROLE_ASSIGNOR_CORE:  [ROLE_ASSIGNOR]
-        ROLE_ASSIGNOR_EXTRA: [ROLE_ASSIGNOR]
 
         ROLE_ASSIGNOR_ADMIN:
           - ROLE_ASSIGNOR
-          - ROLE_ASSIGNOR_KAC
-          - ROLE_ASSIGNOR_CORE
-          - ROLE_ASSIGNOR_EXTRA
 
-        ROLE_DEVELOPER: [ROLE_USER]
+        ROLE_REFEREE_ADMIN:
+          - ROLE_STAFF
+          - ROLE_ASSIGNOR_ADMIN
+          - ROLE_SCORE
 
         ROLE_ADMIN:
           - ROLE_STAFF
           - ROLE_ASSIGNOR_ADMIN
           - ROLE_SCORE_ADMIN
-          - ROLE_ALLOWED_TO_SWITCH
-
-        ROLE_SUPER_ADMIN:
-          - ROLE_ADMIN
-          - ROLE_DEVELOPER
+          - ROLE_REFEREE_ADMIN
           - ROLE_ALLOWED_TO_SWITCH
 
     firewalls:

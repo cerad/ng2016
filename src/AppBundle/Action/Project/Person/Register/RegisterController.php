@@ -306,7 +306,7 @@ class RegisterController extends AbstractController2
 
         $message->setBcc([
             $support['email'] => $support['name'],
-            'ayso1sra@gmail.com' => 'Rick Roberts', // ???
+            'web.ng2016@gmail.com' => 'Rick Roberts', // ???
         ]);
 
         /**  noinspection PhpParamsInspection */

@@ -35,7 +35,9 @@ class AdminListingViewFile extends AbstractView
 
         $response = new Response();
 
-        $response->setContent($this->exporter->export($content));
+        $options['hideCols'] = array('B','C');
+        
+        $response->setContent($this->exporter->export($content, $options));
 
         $response->headers->set('Content-Type', $this->exporter->contentType);
 
@@ -47,10 +49,11 @@ class AdminListingViewFile extends AbstractView
     {        
         //set the header labels
         $data =   array(
-            array ('AYSO ID','Name', 'eMail','Phone','Age',
+            array ('AYSO ID','projectKey','personKey','Name','eMail','Phone','Age',
+                   'Approved','Verified',
                    'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
                    'Shirt Size','Notes',
-                   'Will Coach', 'Will Referee', 'Will Volunteer',
+                   'Will Coach', 'Will Referee', 'Will Volunteer', 'User Notes', 'Notes'
             )
         );
 
@@ -61,10 +64,14 @@ class AdminListingViewFile extends AbstractView
 //var_dump($this->personView);die();
             $data[] = array(
                 $personView->fedId,
+                $personView->projectKey,
+                $personView->personKey,
                 $personView->name,
                 $personView->email,
                 $personView->phone,
                 $personView->age,
+                $personView->approved,
+                $personView->verified,
                 $personView->regYear,
                 $personView->sar,
                 $personView->refereeBadge,
@@ -75,6 +82,8 @@ class AdminListingViewFile extends AbstractView
                 $personView->willCoach,
                 $personView->willReferee,
                 $personView->willVolunteer,
+                $personView->notesUser,
+                $personView->notes,
             );
         }
         return $data;
