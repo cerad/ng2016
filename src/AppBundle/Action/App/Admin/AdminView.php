@@ -89,8 +89,7 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('app_schedule_game')}">View Game Schedule</a></li>
       <li><a href="{$this->generateUrl('app_schedule_team')}">View Team Schedule</a></li>
-      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'core'])}">Export Core Game Schedule (Excel)</a></li>
-      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'extra'])}">Export Extra Game Schedule (Excel)</a></li>
+      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
@@ -146,7 +145,7 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="#">View Referee Assignments</a></li>
-      <li><a href="#">Export Core Referee Assignments (Excel)</a></li>
+      <li><a href="#">Export Referee Assignments (Excel)</a></li>
 EOT;
 
       if ($this->isGranted('ROLE_ADMIN')) {
@@ -182,16 +181,9 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('project_person_admin_listing')}">View Registered People</a></li>
-      <li><a href="#">Export Registered People (Excel)</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People (Excel)</a></li>
 EOT;
-      
-      if ($this->isGranted('ROLE_REFEREE_ADMIN')) {
-        $html .= <<<EOT
-      <li><a href="#">View Unverified Registered People</a></li>
-      <li><a href="#">Export Unverified Registered People (Excel)</a></li>
-EOT;
-      }
       
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
@@ -200,10 +192,6 @@ EOT;
 EOT;
       }
       
-      $html .= <<<EOT
-      <li><a href="#">View Staff Roles</a></li>
-EOT;
-    
         $html .= <<<EOT
     </ul>
   </div>

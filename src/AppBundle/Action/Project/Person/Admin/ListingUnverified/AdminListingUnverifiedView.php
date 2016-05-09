@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Project\Person\Admin\Listing;
+namespace AppBundle\Action\Project\Person\Admin\ListingUnverified;
 
 use AppBundle\Action\AbstractView2;
 
@@ -10,7 +10,7 @@ use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 use AppBundle\Action\Project\User\ProjectUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminListingView extends AbstractView2
+class AdminListingUnverifiedView extends AbstractView2
 {
     private $searchForm;
     private $displayKey;
@@ -28,7 +28,7 @@ class AdminListingView extends AbstractView2
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectUserRepository      $projectUserRepository,
-        AdminListingSearchForm     $searchForm,
+        AdminListingUnverifiedSearchForm     $searchForm,
         ProjectPersonViewDecorator $projectPersonViewDecorator
     )
     {
@@ -40,47 +40,7 @@ class AdminListingView extends AbstractView2
     public function __invoke(Request $request)
     {
         $this->displayKey     = $request->attributes->get('displayKey');
-        $this->reportKey     = $request->attributes->get('reportKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
-
-        foreach ($this->projectPersons as &$person) {
-            switch ($this->reportKey) {
-                case 'Unapproved':
-                    if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$person['roles']['ROLE_REFEREE']['approved'] AND $person['roles']['ROLE_REFEREE']['verified']) {
-                            $listPersons[] = $person;
-                        }
-                    }
-                    break;
-                case 'FL':
-                    $personView = $this->projectPersonViewDecorator;
-
-                    $personView->setProjectPerson($person);
-                    
-                    $stateArr = explode('/',$personView->orgKey);
-                    
-                    if (strpos($personView->orgKey, '/FL')) {
-                        // Background check for FL residents
-                        if (!$person->hasCert('CERT_BACKGROUND_CHECK')) {
-                            $certKey = 'CERT_BACKGROUND_CHECK';
-                            $concCert = $person->getCert($certKey,true);
-                    
-                            $concCert->active = false;
-                    
-                            $person->addCert($concCert);
-                        }
-
-                        $listPersons[] = $person;                        
-                    }
-                    
-                    break;
-                default:
-                    $listPersons[] = $person;
-            }
-        }
-        
-        $this->projectPersons = $listPersons;
-
         $this->projectPersonsCount = count($this->projectPersons);
 
         return $this->newResponse($this->render());
@@ -88,7 +48,7 @@ class AdminListingView extends AbstractView2
     private function render()
     {
         $content = <<<EOD
-<legend>Person Listing, Count: {$this->projectPersonsCount}</legend>
+<legend>Unverified Person Listing, Count: {$this->projectPersonsCount}</legend>
 {$this->searchForm->render()}
 <br/>
 {$this->renderProjectPersons()}
@@ -101,7 +61,6 @@ EOD;
 <table class='table'>
 <tr>
 EOD;
-
         switch($this->displayKey) {
 
             case 'Plans':
@@ -117,15 +76,14 @@ EOD;
             case 'User':
                 $html .= <<<EOD
   <th>Registration Information</th>
+  <th>User Information</th>
   <th>AYSO Information</th>
   <th>Roles / Certs</th>
-  <th>User Information</th>
 </tr>
 EOD;
                 break;
 
             case 'Avail':
-            case 'Availability':
                 $html .= <<<EOD
   <th>Registration Information</th>
   <th>AYSO Information</th>
@@ -137,17 +95,17 @@ EOD;
         }
 
         foreach($this->projectPersons as $person) {
-            
+
             // Should this be a private variable to be consistent?
             $personView = $this->projectPersonViewDecorator;
 
-            $personView->setProjectPerson($person);                    
+            $personView->setProjectPerson($person);
 
             $html .= $this->renderProjectPerson($personView);
-
         }
         $html .= <<<EOD
 </table>
+
 EOD;
 
         return $html;
@@ -155,7 +113,6 @@ EOD;
     private function renderProjectPerson(ProjectPersonViewDecorator $personView)
     {
         $html = null;
-
         switch($this->displayKey) {
 
             case 'Plans':
@@ -173,9 +130,9 @@ EOD;
                 $html .= <<<EOD
 <tr id="project-person-{$personView->getKey()}">
   <td>{$this->renderRegistrationInfo($personView)}</td>
+  <td>{$this->renderUserInfo        ($personView)}</td>
   <td>{$this->renderAysoInfo        ($personView)}</td>
   <td>{$this->renderRoles           ($personView)}</td>
-  <td>{$this->renderUserInfo        ($personView)}</td>
 </tr>
 EOD;
                 break;
@@ -200,8 +157,8 @@ EOD;
         $gage = $personView->gender . $personView->age;
         return <<<EOD
 <table>
-  <tr><td>Name  </td><td  class="admin-listing"><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
-  <tr><td>Email </td><td  class="admin-listing">{$this->escape($personView->email)} </td></tr>
+  <tr><td>Name  </td><td><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
+  <tr><td>Email </td><td>{$this->escape($personView->email)} </td></tr>
   <tr><td>Phone </td><td>{$this->escape($personView->phone)} </td></tr>
   <tr><td>G Age</td><td> {$this->escape($gage)}</td></tr>
   <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
@@ -217,18 +174,10 @@ EOD;
         return <<<EOD
 <table>
   <tr>
-    <td >Name</td>
-    <td  class="admin-listing">{$personView->name}</td>
-  </tr><tr>
-  <tr>
-    <td class="admin-listing">Email</td>
-    <td>{$personView->email}</td>
-  </tr><tr>
-  <tr>
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
   </tr><tr>
-    <td>S/A/R/St</td>
+    <td>SAR/St</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
   </tr><tr>
     <td>Mem Year</td>
@@ -298,19 +247,12 @@ EOD;
     private function renderUserInfo(ProjectPersonViewDecorator $personView)
     {
         $user = $this->projectUserRepository->find($personView->personKey);
-        
-        if (empty($user)) {
-            return null;
-        }
-
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
-        
         $roles = implode(',',$user['roles']);
-
         return <<<EOD
 <table>
-  <tr><td>Name   </td><td class="admin-listing">{$this->escape($user['name'])}    </td></tr>
-  <tr><td>Email  </td><td class="admin-listing">{$this->escape($user['email'])}   </td></tr>
+  <tr><td>Name   </td><td>{$this->escape($user['name'])}    </td></tr>
+  <tr><td>Email  </td><td>{$this->escape($user['email'])}   </td></tr>
   <tr><td>User   </td><td>{$this->escape($user['username'])}</td></tr>
   <tr><td>Enabled</td><td>{$enabled}</td></tr>
   <tr><td>Roles  </td><td>{$roles}  </td></tr>

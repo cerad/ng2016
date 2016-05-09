@@ -17,10 +17,11 @@ class ProjectPersonRepositoryV2
      * @param  $projectKey string
      * @param  $name       string|null
      * @param  $registered boolean|null
+     * @param  $verified   boolean|null
      * @return ProjectPerson[]
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function findByProjectKey($projectKey, $name = null, $registered = null)
+    public function findByProjectKey($projectKey, $name = null, $registered = null, $verified = null)
     {
         $params = [$projectKey];
 
@@ -33,6 +34,10 @@ class ProjectPersonRepositoryV2
         if ($registered !== null) {
             $params[] = $registered;
             $sql .= ' AND registered = ?';
+        }
+        if ($verified !== null) {
+            $params[] = $verified;
+            $sql .= ' AND verified = ?';
         }
         $sql .= ' ORDER BY name';
 
