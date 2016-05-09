@@ -219,8 +219,12 @@ EOD;
         $homeTotalEjections = $homePlayerEjections;
         $awayTotalEjections = $awayPlayerEjections;
 
+        $projectId  = $this->project['key'];
         $gameNumber = $game['number'];
-        $gameReportUpdateUrl = $this->generateUrl('game_report_update',['gameNumber' => $gameNumber]);
+        $gameReportUpdateUrl = $this->generateUrl('game_report_update',[
+            'projectId'  => $projectId,
+            'gameNumber' => $gameNumber,
+        ]);
 
         return <<<EOD
 <tr id="results-poolplay-games-{$gameNumber}" class="game-status-{$game['status']}">

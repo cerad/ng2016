@@ -8,11 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AdminView extends AbstractView2
 {
-    private $project = null;
+    private $project;
+    private $projectId;
 
     public function __invoke(Request $request)
     {
         $this->project = $this->getCurrentProjectInfo();
+        $this->projectId = $this->getCurrentProjectKey();
 
         return $this->newResponse($this->render());
     }
@@ -55,7 +57,7 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('game_report_update',['gameNumber' => 11001])}">Enter Match Results</a></li>
+      <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
 
       <li><a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a></li>
 

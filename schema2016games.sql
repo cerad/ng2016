@@ -8,7 +8,7 @@ CREATE TABLE games
   gameId     VARCHAR(99) NOT NULL,
   projectId  VARCHAR(99) NOT NULL,
   gameNumber INTEGER     NOT NULL,
-
+  role       VARCHAR(20) NOT NULL DEFAULT 'game', -- kftm, scrimmage
   fieldName  VARCHAR(99),
   venueName  VARCHAR(99),
 
