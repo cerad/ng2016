@@ -1,0 +1,9 @@
+results_poolplay_2016:
+    path: /poolplay
+    defaults:
+        _format: html
+        _controller: results_poolplay_controller_2016
+        _view_html:  results_poolplay_view_html_2016
+        _view_xls:   schedule_team_view_xls
+        _view_csv:   schedule_team_view_csv
+

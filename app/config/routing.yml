@@ -19,6 +19,10 @@ app_results:
     resource: "@AppBundle/Action/Results/routes.yml"
     prefix: /results
 
+app_results_2016:
+    resource: "@AppBundle/Action/Results2016/routes.yml"
+    prefix: /results2016
+
 app_project_person:
     resource: "@AppBundle/Action/Project/Person/routes.yml"
     prefix: /project/person

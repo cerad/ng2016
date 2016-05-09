@@ -1,0 +1,37 @@
+services:
+
+    results_standings_calculator_2016:
+        class: AppBundle\Action\Results2016\ResultsStandingsCalculator
+        arguments:
+            - '@game_connection'
+
+    results_finder_2016:
+        class: AppBundle\Action\Results2016\ResultsFinder
+        arguments:
+            - '@game_connection'
+            - '@results_standings_calculator_2016'
+
+    # ===============================================================
+    # Pool Play Results
+    results_poolplay_search_form_2016:
+        class:  AppBundle\Action\Results2016\PoolPlay\ResultsPoolPlaySearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+            - '@game_connection'
+
+    results_poolplay_controller_2016:
+        class:  AppBundle\Action\Results2016\PoolPlay\ResultsPoolPlayController
+        parent: abstract_controller
+        arguments:
+            - '@results_poolplay_search_form_2016'
+            - '@results_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
+
+    results_poolplay_view_html_2016:
+        class:  AppBundle\Action\Results2016\PoolPlay\ResultsPoolPlayView
+        parent: abstract_view2
+        arguments:
+            - '@results_poolplay_search_form_2016'
