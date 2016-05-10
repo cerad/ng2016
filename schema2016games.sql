@@ -79,7 +79,7 @@ CREATE TABLE poolTeams
   poolTypeKey VARCHAR(40) NOT NULL,
   poolTeamKey VARCHAR(40) NOT NULL,
 
-  poolView         VARCHAR(40),
+  poolView         VARCHAR(40), -- Need something with A,B,C,D for results search, poolViewName?
   poolTypeView     VARCHAR(40),
   poolTeamView     VARCHAR(40),
   poolTeamSlotView VARCHAR(40),
@@ -88,7 +88,7 @@ CREATE TABLE poolTeams
   sourcePoolSlot integer,
 
   program  VARCHAR(20),
-  gender   VARCHAR(20),
+  gender   VARCHAR(20), -- Something to convert to Boys/Girls label, but also want just B,G for some things
   age      VARCHAR(20),
   division VARCHAR(20),
 

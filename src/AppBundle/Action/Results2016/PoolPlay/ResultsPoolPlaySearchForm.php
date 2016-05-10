@@ -55,94 +55,84 @@ class ResultsPoolPlaySearchForm extends AbstractForm
     <label for="program">Program</label>
     {$this->renderInputSelect($project['programs'],$program,'program')}
   </div>
-  <br/><br />
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span> 
     <span>Change Project/Program</span>
   </button>
 </form>
+<br/>
+{$this->renderPoolLinks()}
 EOD;
         return $html;
     }
-    protected function renderPoolLinks()
+    private function renderPoolLinks()
     {
         // Query all the relevant pool teams
-        $program   = $this->formData['program'];
+        $program = $this->formData['program'];
         $projectId = $this->formData['projectId'];
 
         $sql = <<<EOD
-SELECT poolKey,poolTeamKey,gender,age,division
+SELECT poolKey,poolTeamKey,program,gender,age,division
 FROM  poolTeams
-WHERE poolTypeKey = 'PP AND projectId = ? and program = ?
-ORDER BY gender,age
+WHERE poolTypeKey = 'PP' AND projectId = ? and program = ?
+ORDER BY program,gender,age
 EOD;
-        $projectKey     = $this->project['key'];
-        $poolChoices    = $this->project['choices']['pools'];
-        $genderChoices  = $this->project['choices']['genders'];
-        $programChoices = $this->project['choices']['programs'];
-
+        $stmt = $this->conn->executeQuery($sql, [$projectId, $program]);
+        $pools = [];
+        while ($pool = $stmt->fetch()) {
+            $pools[$pool['program']][$pool['gender']][$pool['age']][$pool['poolKey']] = $pool;
+        }
+        $routeName = $this->getCurrentRouteName();
         $html = null;
-
-        // Add Table for each program
-        foreach($poolChoices as $programKey => $genders) {
-
-            $programLabel = $programChoices[$programKey];
-
+        
+        // Keep the idea of multiple programs for now
+        foreach ($pools as $program => $genders) {
             $html .= <<<EOD
 <table>
   <tr>
-    <td class="row-hdr" rowspan="2" style="border: 1px solid black;">{$programLabel}</td>
+    <td class="row-hdr" rowspan="2" style="border: 1px solid black;">{$program}</td>
 EOD;
-            // Add columns for each gender
-            foreach($genders as $genderKey => $ages) {
-
-                $genderLabel = $genderChoices[$genderKey];
-
+            foreach ($genders as $gender => $ages) {
+                // Should be a transformer of some sort
+                $genderLabel = $gender === 'B' ? 'Boys' : 'Girls';
                 $html .= <<<EOD
     <td class="row-hdr" style="border: 1px solid black;">{$genderLabel}</td>
 EOD;
-                // Add column for division
-                foreach($ages as $age => $poolNames) {
-                    $div = $age . $genderKey;
+                foreach ($ages as $age => $poolsForAge) {
+
+                    $division = array_values($poolsForAge)[0]['division'];
                     $linkParams = [
-                        //'div'     => $div,
-                        'project'  => $projectKey,
-                        'ages'     => $age,
-                        'genders'  => $genderKey,
-                        'programs' => $programKey
+                        //'projectId' => $projectId,
+                        //'program'   => $program,  // Have no id for program/division
+                        'division'  => $division,
                     ];
                     $html .= <<<EOD
     <td style="border: 1px solid black;">
-      <a href="{$this->generateUrl('app_results_poolplay',$linkParams)}">{$div}</a>
+      <a href="{$this->generateUrl($routeName,$linkParams)}">{$age}{$gender}</a>
 EOD;
-                    // Add link for each pool
-                    foreach($poolNames as $poolName)
-                    {
-                        $linkParams['pools'] = $poolName;
-                        //$linkParams['pool'] = [$poolName,'X','Y','Z'];
+
+                    foreach ($poolsForAge as $poolKey => $pool) {
+                        $linkParams = [
+                            //'projectId' => $projectId,
+                            'poolKey'   => $poolKey, // This is unique within a project
+                        ];
+                        // Need a short pool name view
+                        $poolName = $pool['poolKey'];
+                        $poolName = substr($poolName,strlen($poolName)-1);
 
                         $html .= <<<EOD
-      <a href="{$this->generateUrl('app_results_poolplay',$linkParams)}">{$poolName}</a>
+      <a href="{$this->generateUrl($routeName,$linkParams)}">{$poolName}</a>
 EOD;
                     }
                     // Finish division column
-                    $html .= <<<EOD
-    </td>
-EOD;
-
+                    $html .= sprintf("    </td>\n");
                 }
                 // Force a row shift foreach gender column
-                $html .= <<<EOD
-    </tr>
-EOD;
+                $html .= sprintf("</tr>\n");
             }
             // Finish the program table
-            $html .= <<<EOD
-  </tr>
-</table>
-
-EOD;
+            $html .= sprintf("</tr></table>\n");
         }
         return $html;
     }

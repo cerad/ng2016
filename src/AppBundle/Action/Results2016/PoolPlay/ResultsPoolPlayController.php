@@ -30,12 +30,11 @@ class ResultsPoolPlayController extends AbstractController2
     }
     public function __invoke(Request $request)
     {
-        // Search data is just for switching between projects and programs
-        $projectId = array_keys($this->projectChoices)[0];
-        $program   = array_keys($this->projects[$projectId]['programs'])[0];
+        // Support multiple projects
+        $projectId = $this->getDefaultProjectId();
         $searchData = [
             'projectId' => $projectId,
-            'program'   => $program,
+            'program'   => $this->getDefaultProgramForProject($projectId),
         ];
         // Override from session
         $session = $request->getSession();
@@ -43,19 +42,60 @@ class ResultsPoolPlayController extends AbstractController2
         if ($session->has($sessionKey)) {
             $searchData = array_replace($searchData,$session->get($sessionKey));
         }
-        
         // The form
         $this->searchForm->setData($searchData);
         $this->searchForm->handleRequest($request);
         if ($this->searchForm->isValid()) {
-            $searchData = $this->searchForm->getData();
-            $session->set('results_search_data_2016',$searchData);
-            return $this->redirectToRoute($this->getCurrentRouteName(),[
-                'projectId'   => $projectId,
-                'poolKey'     => $poolKey,
-                'poolTeamKey' => $poolTeamKey,
-            ]);
+            // Need a better way for this nonsense
+            $searchDataNew = $this->searchForm->getData();
+            if ($searchDataNew['projectId'] !== $searchData['projectId']) {
+                $projectId = $searchDataNew['projectId'];
+                $searchDataNew['program'] = $this->getDefaultProgramForProject($projectId);
+            }
+            $session->set('results_search_data_2016',$searchDataNew);
+            return $this->redirectToRoute($this->getCurrentRouteName());
         }
-        $request->attributes->set('pools',[]);
+        // Deal with query parameters
+        if ($request->query->has('division')) {
+            $searchData['division'] = $request->query->get('division');
+            $searchData['poolKey']  = null;
+            $session->set('results_search_data_2016', $searchData);
+            return $this->redirectToRoute($this->getCurrentRouteName());
+        }
+        if ($request->query->has('poolKey')) {
+            $searchData['poolKey'] = $request->query->get('poolKey');
+            $searchData['division']  = null;
+            $session->set('results_search_data_2016', $searchData);
+            return $this->redirectToRoute($this->getCurrentRouteName());
+        }
+        $pools = [];
+        if (isset($searchData['division'])) {
+            $criteria = [
+                'projectIds' => [$searchData['projectId']],
+                'programs'   => [$searchData['program']],
+                'divisions'  => [$searchData['division']],
+            ];
+            $pools = $this->resultsFinder->findPools($criteria);
+        }
+        if (isset($searchData['poolKey'])) {
+            $criteria = [
+                'projectIds' => [$searchData['projectId']],
+                'programs'   => [$searchData['program']],
+                'poolKeys'   => [$searchData['poolKey']],
+            ];
+            $pools = $this->resultsFinder->findPools($criteria);
+        }
+        // Get the pools if needed
+        dump($pools);
+        $request->attributes->set('pools',$pools);
+        return null;
+    }
+    private function getDefaultProjectId()
+    {
+        return array_keys($this->projectChoices)[0];
+    }
+    private function getDefaultProgramForProject($projectId)
+    {
+        return  array_keys($this->projects[$projectId]['programs'])[0];
     }
 }
