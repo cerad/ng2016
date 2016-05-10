@@ -79,10 +79,11 @@ CREATE TABLE poolTeams
   poolTypeKey VARCHAR(40) NOT NULL,
   poolTeamKey VARCHAR(40) NOT NULL,
 
-  poolView         VARCHAR(40), -- Need something with A,B,C,D for results search, poolViewName?
-  poolTypeView     VARCHAR(40),
-  poolTeamView     VARCHAR(40),
-  poolTeamSlotView VARCHAR(40),
+  poolView         VARCHAR(40), -- U-10B Core A
+  poolSlotView     VARCHAR(40), -- A,B,C,D
+  poolTypeView     VARCHAR(40), -- PP, FM
+  poolTeamView     VARCHAR(40), -- U-10B A1
+  poolTeamSlotView VARCHAR(40), -- A1,A2 ...
 
   sourcePoolKeys VARCHAR(255),
   sourcePoolSlot integer,
