@@ -14,6 +14,7 @@ class AdminListingView extends AbstractView2
 {
     private $searchForm;
     private $displayKey;
+    private $reportKey;
 
     /** @var  ProjectPerson[] */
     private $projectPersons;
@@ -42,12 +43,14 @@ class AdminListingView extends AbstractView2
         $this->displayKey     = $request->attributes->get('displayKey');
         $this->reportKey     = $request->attributes->get('reportKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
+        
+        $listPersons = [];
 
-        foreach ($this->projectPersons as &$person) {
+        foreach ($this->projectPersons as $person) {
             switch ($this->reportKey) {
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$person['roles']['ROLE_REFEREE']['approved'] AND $person['roles']['ROLE_REFEREE']['verified']) {
+                        if (!$person->approved AND $person->verified) {
                             $listPersons[] = $person;
                         }
                     }
