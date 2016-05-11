@@ -70,9 +70,7 @@ class AdminListingView extends AbstractView2
                             $certKey = 'CERT_BACKGROUND_CHECK';
                             $concCert = $person->getCert($certKey,true);
                     
-                            $concCert->active = 1;
-                            $concCert->approved = 0;
-                            $concCert->verified = 0;
+                            $concCert->active = true;
                     
                             $person->addCert($concCert);
 
