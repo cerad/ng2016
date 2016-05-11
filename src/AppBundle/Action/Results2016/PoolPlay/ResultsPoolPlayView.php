@@ -4,7 +4,9 @@ namespace AppBundle\Action\Results2016\PoolPlay;
 
 use AppBundle\Action\AbstractView2;
 
+use AppBundle\Action\Results2016\ResultsGame;
 use AppBundle\Action\Results2016\ResultsPool;
+use AppBundle\Action\Results2016\ResultsPoolTeam;
 use Symfony\Component\HttpFoundation\Request;
 
 class ResultsPoolPlayView extends AbstractView2
@@ -34,84 +36,11 @@ class ResultsPoolPlayView extends AbstractView2
         $content = <<<EOD
 <div id="layout-block">
 {$this->searchForm->render()}
-<br />
+{$this->renderLegend()}
+{$this->renderPools()}
 </div>
 EOD;
         return $this->renderBaseTemplate($content);
-    }
-    /* ==================================================================
-     * Render Search Form
-     */
-    protected function renderPoolLinks()
-    {
-        $projectKey     = $this->project['key'];
-        $poolChoices    = $this->project['choices']['pools'];
-        $genderChoices  = $this->project['choices']['genders'];
-        $programChoices = $this->project['choices']['programs'];
-
-        $html = null;
-
-        // Add Table for each program
-        foreach($poolChoices as $programKey => $genders) {
-
-            $programLabel = $programChoices[$programKey];
-
-            $html .= <<<EOD
-<table>
-  <tr>
-    <td class="row-hdr" rowspan="2" style="border: 1px solid black;">{$programLabel}</td>
-EOD;
-            // Add columns for each gender
-            foreach($genders as $genderKey => $ages) {
-
-                $genderLabel = $genderChoices[$genderKey];
-
-                $html .= <<<EOD
-    <td class="row-hdr" style="border: 1px solid black;">{$genderLabel}</td>
-EOD;
-                // Add column for division
-                foreach($ages as $age => $poolNames) {
-                    $div = $age . $genderKey;
-                    $linkParams = [
-                        //'div'     => $div,
-                        'project'  => $projectKey,
-                        'ages'     => $age,
-                        'genders'  => $genderKey,
-                        'programs' => $programKey
-                    ];
-                    $html .= <<<EOD
-    <td style="border: 1px solid black;">
-      <a href="{$this->generateUrl('app_results_poolplay',$linkParams)}">{$div}</a>
-EOD;
-                    // Add link for each pool
-                    foreach($poolNames as $poolName)
-                    {
-                        $linkParams['pools'] = $poolName;
-                        //$linkParams['pool'] = [$poolName,'X','Y','Z'];
-
-                        $html .= <<<EOD
-      <a href="{$this->generateUrl('app_results_poolplay',$linkParams)}">{$poolName}</a>
-EOD;
-                    }
-                    // Finish division column
-                    $html .= <<<EOD
-    </td>
-EOD;
-
-                }
-                // Force a row shift foreach gender column
-                $html .= <<<EOD
-    </tr>
-EOD;
-            }
-            // Finish the program table
-            $html .= <<<EOD
-  </tr>
-</table>
-
-EOD;
-        }
-        return $html;
     }
     /* =======================================================================
      * Render the legend
@@ -127,7 +56,7 @@ EOD;
   <br/>
   TE=Total Ejections, PE=Points Earned, TPE=Points Earned, WP=Winning Percent
   <br/>
-  GT=Games Total, GP=Games Played, GW=Games Won, GS=Goals Scored, GA=Goals Against, SF=SoccerFest
+  GT=Games Total, GP=Games Played, GW=Games Won, GS=Goals Scored, GA=Goals Allowed, SF=SoccerFest
   </h2>
   </div>
 </div>
@@ -141,17 +70,24 @@ EOD;
     protected function renderPools()
     {
         $html = null;
-        foreach($this->pools as $poolKey => $pool) {
-            $html .= $this->renderPoolTeams($poolKey,$pool['teams']);
-            $html .= $this->renderPoolGames($poolKey,$pool['games']);
+        foreach($this->pools as $pool) {
+            $poolView = $pool->poolView;
+            $html .= $this->renderPoolTeams($poolView,$pool->getPoolTeams());
+            $html .= $this->renderPoolGames($poolView,$pool->getGames());
         }
         return $html;
     }
-    protected function renderPoolTeams($poolKey,$poolTeams)
+
+    /**
+     * @param  string $poolView
+     * @param  ResultsPoolTeam[] $poolTeams
+     * @return string
+     */
+    protected function renderPoolTeams($poolView,$poolTeams)
     {
         $html = <<<EOD
 <div id="layout-block">
-<legend class="float-right">Pool Team Standings : {$poolKey}</legend>
+<legend class="float-right">Pool Team Standings : {$poolView}</legend>
 
 <table class="standings" border = "1">
 <tr class="tbl-hdr">
@@ -171,8 +107,8 @@ EOD;
   <th class="text-center">SF</th>
 </tr>
 EOD;
-        foreach($poolTeams as $poolTeamReport) {
-            $html .= $this->renderPoolTeamReport($poolTeamReport);
+        foreach($poolTeams as $poolTeam) {
+            $html .= $this->renderPoolTeam($poolTeam);
         }
         $html .= <<<EOD
 </table>
@@ -182,30 +118,24 @@ EOD;
 
         return $html;
     }
-    protected function renderPoolTeamReport($poolTeamReport)
+    protected function renderPoolTeam(ResultsPoolTeam $poolTeam)
     {
-        $gameTeam = $poolTeamReport['team'];
-        $totalEjections =
-            $poolTeamReport['playerEjections'] +
-            $poolTeamReport['coachEjections']  +
-            $poolTeamReport['benchEjections']  +
-            $poolTeamReport['specEjections'];
         return <<<EOD
 <tr>
-  <td>{$gameTeam['group_slot']}</td>
-  <td class="text-left">{$gameTeam['name']}</td>
-  <td class="text-center">{$poolTeamReport['pointsEarned']}</td>
-  <td class="text-center">{$poolTeamReport['winPercent']}</td>
-  <td class="text-center">{$poolTeamReport['gamesTotal']}</td>
-  <td class="text-center">{$poolTeamReport['gamesPlayed']}</td>
-  <td class="text-center">{$poolTeamReport['gamesWon']}</td>
-  <td class="text-center">{$poolTeamReport['goalsScored']}</td>
-  <td class="text-center">{$poolTeamReport['goalsAllowed']}</td>
-  <td class="text-center">{$poolTeamReport['playerWarnings']}</td>
-  <td class="text-center">{$poolTeamReport['playerEjections']}</td>
-  <td class="text-center">{$totalEjections}</td>
-  <td class="text-center">{$poolTeamReport['sportsmanship']}</td>
-  <td class="text-center">{$gameTeam['points']}</td>
+  <td>{$poolTeam->poolTeamSlotView}</td>
+  <td class="text-left">  {$poolTeam->regTeamName}</td>
+  <td class="text-center">{$poolTeam->pointsEarned}</td>
+  <td class="text-center">{$poolTeam->winPercentView}</td>
+  <td class="text-center">{$poolTeam->gamesTotal}</td>
+  <td class="text-center">{$poolTeam->gamesPlayed}</td>
+  <td class="text-center">{$poolTeam->gamesWon}</td>
+  <td class="text-center">{$poolTeam->pointsScored}</td>
+  <td class="text-center">{$poolTeam->pointsAllowed}</td>
+  <td class="text-center">{$poolTeam->playerWarnings}</td>
+  <td class="text-center">{$poolTeam->playerEjections}</td>
+  <td class="text-center">{$poolTeam->totalEjections}</td>
+  <td class="text-center">{$poolTeam->sportsmanship}</td>
+  <td class="text-center">{$poolTeam->regTeamPoints}</td>
 </tr>
 EOD;
     }
@@ -213,13 +143,13 @@ EOD;
      * List the pool games
      *
      */
-    protected function renderPoolGames($poolKey,$games)
+    protected function renderPoolGames($poolView,$games)
     {
         $html = <<<EOD
 <div id="layout-block">
 <table class="results" border = "1">
 <thead>
-<!-- <tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolKey}</th></tr> -->
+<!-- <tr class="tbl-title"><th colspan="16">Pool Games Results : {$poolView}</th></tr> -->
 <tr class="tbl-hdr">
   <th class="text-center">Game</th>
   <th class="text-center">Report</th>
@@ -248,49 +178,43 @@ EOD;
 EOD;
         return $html;
     }
-    protected function renderPoolGame($game)
+    protected function renderPoolGame(ResultsGame $game)
     {
-        $gameStart = sprintf('%s %8s',$game['dow'],$game['time']);
+        $gameStart = sprintf('%s %8s',$game->dow,$game->time);
 
-        $homeTeam = $game['teams'][1];
-        $awayTeam = $game['teams'][2];
+        $homeTeam = $game->homeTeam;
+        $awayTeam = $game->awayTeam;
 
-        $homeTeamReport = $homeTeam['report'];
-        $awayTeamReport = $awayTeam['report'];
+        // TODO Investigate layout quirk, maybe a min height or something
+        $space = '&nbsp;';
+        $homeTeamPlayerWarnings  = $homeTeam->playerWarnings  ? : $space;
+        $awayTeamPlayerWarnings  = $awayTeam->playerWarnings  ? : $space;
+        $homeTeamPlayerEjections = $homeTeam->playerEjections ? : $space;
+        $awayTeamPlayerEjections = $awayTeam->playerEjections ? : $space;
+        $homeTeamTotalEjections  = $homeTeam->totalEjections  ? : $space;
+        $awayTeamTotalEjections  = $awayTeam->totalEjections  ? : $space;
 
-        $homeSportsmanship = isset($homeTeamReport['sportsmanship']) ? $homeTeamReport['sportsmanship'] : null;
-        $awaySportsmanship = isset($awayTeamReport['sportsmanship']) ? $awayTeamReport['sportsmanship'] : null;
-
-        $homePlayerWarnings = isset($homeTeamReport['playerWarnings']) ? $homeTeamReport['playerWarnings'] : null;
-        $awayPlayerWarnings = isset($awayTeamReport['playerWarnings']) ? $awayTeamReport['playerWarnings'] : null;
-
-        $homePlayerEjections = isset($homeTeamReport['playerEjections']) ? $homeTeamReport['playerEjections'] : null;
-        $awayPlayerEjections = isset($awayTeamReport['playerEjections']) ? $awayTeamReport['playerEjections'] : null;
-
-        $homeTotalEjections = $homePlayerEjections;
-        $awayTotalEjections = $awayPlayerEjections;
-
-        $projectId  = $this->project['key'];
-        $gameNumber = $game['number'];
         $gameReportUpdateUrl = $this->generateUrl('game_report_update',[
-            'projectId'  => $projectId,
-            'gameNumber' => $gameNumber,
+            'projectId'  => $game->projectId,
+            'gameNumber' => $game->gameNumber,
+            'back'       => $this->getCurrentRouteName(),
         ]);
+        $hr = '<hr class="separator"/>';
 
         return <<<EOD
-<tr id="results-poolplay-games-{$gameNumber}" class="game-status-{$game['status']}">
-  <td><a href="{$gameReportUpdateUrl}">{$gameNumber}</a></td>
-  <td>{$game['report']['status']}</td>
+<tr id="game-{$game->gameId}" class="game-status-{$game->status}">
+  <td><a href="{$gameReportUpdateUrl}">{$game->gameNumber}</a></td>
+  <td>{$game->reportState}</td>
   <td>{$gameStart}</td>
-  <td><a href="">{$game['field_name']}</a></td>
-  <td>{$homeTeam['group_slot']}<hr class="seperator"/>{$awayTeam['group_slot']}</td>
-  <td class="text-left">{$this->escape($homeTeam['name'])}<hr class="seperator"/>{$this->escape($awayTeam['name'])}</td>
-  <td>{$homeTeamReport['goalsScored']}<hr class="seperator"/>{$awayTeamReport['goalsScored']}</td>
-  <td>{$homeTeamReport['pointsEarned']}<hr class="seperator"/>{$awayTeamReport['pointsEarned']}</td>
-  <td>{$homeSportsmanship}<hr class="seperator"/>{$awaySportsmanship}</td>
-  <td>{$homePlayerWarnings}<hr class="seperator"/>{$awayPlayerWarnings}</td>
-  <td>{$homePlayerEjections}<hr class="seperator"/>{$awayPlayerEjections}</td>
-  <td>{$homeTotalEjections}<hr class="seperator"/>{$awayTotalEjections}</td>
+  <td><a href="">{$game->fieldName}</a></td>
+  <td>{$homeTeam->poolTeamSlotView}{$hr}{$awayTeam->poolTeamSlotView}</td>
+  <td class="text-left">{$this->escape($homeTeam->regTeamName)}{$hr}{$this->escape($awayTeam->regTeamName)}</td>
+  <td>{$homeTeam->pointsScored} {$hr}{$awayTeam->pointsScored} </td>
+  <td>{$homeTeam->pointsEarned} {$hr}{$awayTeam->pointsEarned} </td>
+  <td>{$homeTeam->sportsmanship}{$hr}{$awayTeam->sportsmanship}</td>
+  <td>{$homeTeamPlayerWarnings} {$hr}{$awayTeamPlayerWarnings} </td>
+  <td>{$homeTeamPlayerEjections}{$hr}{$awayTeamPlayerEjections}</td>
+  <td>{$homeTeamTotalEjections} {$hr}{$awayTeamTotalEjections} </td>
 </tr>
 EOD;
 

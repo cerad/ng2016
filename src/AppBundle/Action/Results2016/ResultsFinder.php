@@ -120,7 +120,9 @@ SELECT
   poolTeam.poolKey,
   poolTeam.poolTypeKey,
   poolTeam.poolTeamKey,
-  poolTeam.poolTeamSlotView
+  poolTeam.poolTeamSlotView,
+  
+  poolTeam.regTeamName
   
 FROM gameTeams AS gameTeam
 LEFT JOIN games AS game ON game.gameId = gameTeam.gameId

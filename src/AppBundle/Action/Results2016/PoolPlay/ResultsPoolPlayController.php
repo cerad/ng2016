@@ -69,24 +69,21 @@ class ResultsPoolPlayController extends AbstractController2
             return $this->redirectToRoute($this->getCurrentRouteName());
         }
         $pools = [];
+        $criteria = [
+            'poolTypeKeys' => ['PP'],
+            'projectIds'   => [$searchData['projectId']],
+            'programs'     => [$searchData['program']],
+        ];
         if (isset($searchData['division'])) {
-            $criteria = [
-                'projectIds' => [$searchData['projectId']],
-                'programs'   => [$searchData['program']],
-                'divisions'  => [$searchData['division']],
-            ];
+            $criteria['divisions'] = [$searchData['division']];
             $pools = $this->resultsFinder->findPools($criteria);
         }
         if (isset($searchData['poolKey'])) {
-            $criteria = [
-                'projectIds' => [$searchData['projectId']],
-                'programs'   => [$searchData['program']],
-                'poolKeys'   => [$searchData['poolKey']],
-            ];
+            $criteria['poolKeys'] = [$searchData['poolKey']];
             $pools = $this->resultsFinder->findPools($criteria);
         }
         // Get the pools if needed
-        dump($pools);
+        // dump($pools);
         $request->attributes->set('pools',$pools);
         return null;
     }

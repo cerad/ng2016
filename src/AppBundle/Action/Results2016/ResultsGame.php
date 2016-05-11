@@ -15,6 +15,7 @@ class ResultsGame
     public $reportState;
     public $start;
     public $fieldName;
+    public $status;
     
     private $teams = [];
     
@@ -25,6 +26,7 @@ class ResultsGame
         'reportState' => 'GameReportState',
         'start'       => 'datetime',
         'fieldName'   => 'string',
+        'status'      => 'GameStatus',
     ];
     public function addTeam(ResultsGameTeam $team)
     {

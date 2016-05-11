@@ -62,6 +62,10 @@ class ResultsPoolTeam
         $this->pointsScored  += $gameTeam->pointsScored;
         $this->pointsAllowed += $gameTeam->pointsAllowed;
         $this->sportsmanship += $gameTeam->sportsmanship;
+
+        $this->playerWarnings  += $gameTeam->playerWarnings;
+        $this->playerEjections += $gameTeam->playerEjections;
+        $this->totalEjections  += $gameTeam->totalEjections;
     }
     public function __get($name)
     {
@@ -71,7 +75,9 @@ class ResultsPoolTeam
                 if ($this->gamesPlayed === null) {
                     return null;
                 }
-                $winPercent = (($this->pointsEarned + $this->regTeamPoints) * 1.0) / (($this->gamesPlayed * 10.0) + 6.0);
+                // pointsEarned already has soccerfest points
+                $winPercent = ($this->pointsEarned * 1.0) / (($this->gamesPlayed * 10.0) + 6.0);
+            //  $winPercent = (($this->pointsEarned + $this->regTeamPoints) * 1.0) / (($this->gamesPlayed * 10.0) + 6.0);
                 if ($name === 'winPercent') {
                     return $winPercent;
                 }
@@ -107,6 +113,9 @@ class ResultsPoolTeam
                 $poolTeam->$key = $data[$key];
             }
         }
+        // Apply soccerfest points right from the start
+        $poolTeam->pointsEarned = $poolTeam->regTeamPoints;
+
         return $poolTeam;
     }
 }
