@@ -41,7 +41,7 @@ class ResultsPoolTeam
         'poolTypeKey' => 'PoolTeamKey',
         'poolTeamKey' => 'PoolTeamKey',
         'poolTeamId'  => 'PoolTeamId',
-        
+
         'poolTeamView'     => 'string',
         'poolTeamSlotView' => 'string',
     

@@ -73,7 +73,7 @@ EOD;
         $projectId = $this->formData['projectId'];
 
         $sql = <<<EOD
-SELECT poolKey,poolTeamKey,program,gender,age,division
+SELECT poolKey,poolSlotView,poolTeamKey,program,gender,age,division
 FROM  poolTeams
 WHERE poolTypeKey = 'PP' AND projectId = ? and program = ?
 ORDER BY program,gender,age
@@ -118,11 +118,11 @@ EOD;
                             'poolKey'   => $poolKey, // This is unique within a project
                         ];
                         // Need a short pool name view
-                        $poolName = $pool['poolKey'];
-                        $poolName = substr($poolName,strlen($poolName)-1);
+                        //$poolName = $pool['poolKey'];
+                        //$poolName = substr($poolName,strlen($poolName)-1);
 
                         $html .= <<<EOD
-      <a href="{$this->generateUrl($routeName,$linkParams)}">{$poolName}</a>
+      <a href="{$this->generateUrl($routeName,$linkParams)}">{$pool['poolSlotView']}</a>
 EOD;
                     }
                     // Finish division column

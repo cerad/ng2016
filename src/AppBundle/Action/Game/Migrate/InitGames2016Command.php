@@ -192,6 +192,7 @@ class InitGames2016Command extends Command
             'poolTeamKey' => $poolTeamKey,
 
             'poolView'     => $poolView,
+            'poolSlotView' => $poolName,
             'poolTypeView' => $poolTypeView,
             'poolTeamView' => $poolTeamView,
             'poolTeamSlotView' => $poolSlot,
@@ -422,6 +423,7 @@ class InitGames2016Command extends Command
             'gameId'     => $gameId,
             'projectId'  => $projectId,
             'gameNumber' => $gameNumber,
+            'role'       => 'game',
             'fieldName'  => $age . ' -  ' . $fieldNumber,
             'venueName'  => 'Polo',
 

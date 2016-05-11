@@ -7,6 +7,7 @@ class ResultsPool
     public $poolTypeKey;
 
     public $poolView;
+    public $poolSlotView;
     public $poolTypeView;
     
     /** @var ResultsPoolTeam[]  */
@@ -19,6 +20,7 @@ class ResultsPool
         'poolKey'      => 'PoolKey',
         'poolTypeKey'  => 'PoolTypeKey',
         'poolView'     => 'string',
+        'poolSlotView' => 'string',
         'poolTypeView' => 'PoolTypeKey',
     ];
     public function setPoolTeams(array $poolTeams) {
