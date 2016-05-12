@@ -33,6 +33,7 @@ class AdminListingController extends AbstractController
         if ($session->has('project_person_admin_listing_search_data')) {
             $searchData = array_merge($searchData,$session->get('project_person_admin_listing_search_data'));
         };
+
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);
         

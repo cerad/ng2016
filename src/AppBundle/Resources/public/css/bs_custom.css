@@ -30,6 +30,16 @@ form { width: 100%; margin-left:auto; margin-right: auto; }
 
 .form-control { max-width: 300px; }
 
+.panel > .form-group { margin-top: 15px; }
+
+.avail .control-label { text-align: left; margin-left: 20px; }
+
+.avail input[type=checkbox] { margin-right: 6px; }
+
+.panel-footer { padding: 0 15px; }
+
+.panel-footer .btn { margin: 7px 10px 7px 0; }
+
 .vcenter {
     margin-top: 0.5em;
 }

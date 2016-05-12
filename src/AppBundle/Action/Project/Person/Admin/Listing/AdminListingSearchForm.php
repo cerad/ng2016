@@ -21,6 +21,20 @@ class AdminListingSearchForm extends AbstractForm
         $data = $request->request->all();
         $errors = [];
 
+        if(!isset($data['projectKey'])) {
+            $session = $request->getSession();
+            if ($session->has('project_person_admin_listing_search_data')) {
+                $data = array_merge($data,$session->get('project_person_admin_listing_search_data'));
+            } else {
+                $data = [
+                    'projectKey'    => $this->getCurrentProjectKey(),
+                    'displayKey'    => 'Plans',
+                    'reportKey'     =>  null,
+                    'name'          =>  null,
+                ];
+            }
+        }
+
         $projectKey = filter_var(trim($data['projectKey']), FILTER_SANITIZE_STRING);
         $displayKey = filter_var(trim($data['displayKey']), FILTER_SANITIZE_STRING);
         $reportKey = filter_var(trim($data['reportKey']), FILTER_SANITIZE_STRING);

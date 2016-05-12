@@ -46,9 +46,9 @@ class ProjectPersonViewDecorator
         return $this->person->getCerts();
     }
     //private $infoClass    = 'bg-info';
-    private $dangerClass  = 'bg-danger';
-    private $warningClass = 'bg-warning';
-    private $successClass = 'bg-success';
+    public $dangerClass  = 'bg-danger';
+    public $warningClass = 'bg-warning';
+    public $successClass = 'bg-success';
 
     //public $infoStyle    = 'background-color: #d9edf7';
     public $dangerStyle  = 'background-color: #f2dede';
@@ -173,6 +173,23 @@ class ProjectPersonViewDecorator
                 $role = $person->getRole('CERT_CONCUSSION');
                 if (!$role) {
                     return null;
+                }
+                if ($role->verified) {
+                    return 'Yes';
+                }
+                switch(strtolower($role->badge)) {
+                    case  null:
+                    case 'no':
+                    case 'none':
+                        return null;
+                }
+                return 'Yes';
+
+            case 'backgroundChecked':
+            case 'floridaResident':
+                $role = $person->getRole('CERT_BACKGROUND_CHECK');
+                if (!$role) {
+                    return 'nr';
                 }
                 if ($role->verified) {
                     return 'Yes';
