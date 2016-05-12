@@ -46,19 +46,21 @@ class AdminListingView extends AbstractView2
         
         $listPersons = [];
 
+        $personView = $this->projectPersonViewDecorator;
+
         foreach ($this->projectPersons as $person) {
+
+            $personView->setProjectPerson($person);
+
             switch ($this->reportKey) {
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$person->approved AND $person->verified) {
+                        if (!$personView->approved AND $personView->verified) {
                             $listPersons[] = $person;
                         }
                     }
                     break;
                 case 'FL':
-                    $personView = $this->projectPersonViewDecorator;
-
-                    $personView->setProjectPerson($person);
                     
                     $stateArr = explode('/',$personView->orgKey);
                     
@@ -68,9 +70,11 @@ class AdminListingView extends AbstractView2
                             $certKey = 'CERT_BACKGROUND_CHECK';
                             $concCert = $person->getCert($certKey,true);
                     
-                            $concCert->active = false;
+                            $concCert->active = true;
                     
                             $person->addCert($concCert);
+
+                            $this->projectPersonRepository->save($person);
                         }
 
                         $listPersons[] = $person;                        
