@@ -1,6 +1,13 @@
 <?php
 namespace AppBundle\Action\Results2016;
 
+/* ==============================================
+ * This might be depreciated
+ * Functionality has been moved to ResultsPool
+ * Would still like to have different rules for different tournaments
+ * Maybe a Pool factory of some sort?
+ * Same issue with ResultsPoolTeam::mergeGameTeam
+ */
 class ResultsStandingsCalculator
 {
     // Generates the standings for the pool

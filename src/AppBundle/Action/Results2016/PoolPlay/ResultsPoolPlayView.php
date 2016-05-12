@@ -72,7 +72,7 @@ EOD;
         $html = null;
         foreach($this->pools as $pool) {
             $poolView = $pool->poolView;
-            $html .= $this->renderPoolTeams($poolView,$pool->getPoolTeams());
+            $html .= $this->renderPoolTeams($poolView,$pool->getPoolTeamStandings());
             $html .= $this->renderPoolGames($poolView,$pool->getGames());
         }
         return $html;

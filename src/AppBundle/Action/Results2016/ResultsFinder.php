@@ -79,11 +79,11 @@ class ResultsFinder
             }
         }
         // Apply standings?
-        $standingsCalculator = $this->standingsCalculator;
-        foreach($pools as $pool) {
-            $poolTeams = $standingsCalculator($pool);
-            $pool->setPoolTeams($poolTeams);
-        }
+        //$standingsCalculator = $this->standingsCalculator;
+        //foreach($pools as $pool) {
+        //    $poolTeams = $standingsCalculator($pool);
+        //    $pool->setPoolTeams($poolTeams);
+        //}
         return $pools;
     }
 

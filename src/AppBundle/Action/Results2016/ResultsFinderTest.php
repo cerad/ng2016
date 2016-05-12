@@ -43,7 +43,7 @@ class ResultsFinderTest extends \PHPUnit_Framework_TestCase
         $pool = array_values($pools)[1];
         $this->assertEquals('U14B-Core-PP-B',$pool->poolKey);
 
-        $poolTeams = $pool->getPoolTeams();
+        $poolTeams = $pool->getPoolTeamStandings();
         $this->assertCount(6,$poolTeams);
 
         $games = $pool->getGames();
@@ -53,7 +53,7 @@ class ResultsFinderTest extends \PHPUnit_Framework_TestCase
         $poolTeam = array_values($poolTeams)[2];
         $this->assertEquals('U14B-Core-PP-B4',$poolTeam->poolTeamKey);
 
-        $this->assertEquals(    26, $poolTeam->pointsEarned);
+        $this->assertEquals(    32, $poolTeam->pointsEarned);
         $this->assertEquals(   198, $poolTeam->sportsmanship);
         $this->assertEquals('57.14',$poolTeam->winPercentView);
 
