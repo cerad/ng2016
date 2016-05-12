@@ -10,6 +10,9 @@ class ResultsPool
     public $poolSlotView;
     public $poolTypeView;
     
+    public $program;  // For medal round results
+    public $division;
+    
     /** @var ResultsPoolTeam[]  */
     private $teams = []; // Teams in the pool
     
@@ -22,6 +25,8 @@ class ResultsPool
         'poolView'     => 'string',
         'poolSlotView' => 'string',
         'poolTypeView' => 'PoolTypeKey',
+        'program'      => 'string',
+        'division'     => 'string',
     ];
     public function setPoolTeams(array $poolTeams) {
         $this->teams = $poolTeams;

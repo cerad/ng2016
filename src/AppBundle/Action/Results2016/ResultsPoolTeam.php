@@ -14,7 +14,8 @@ class ResultsPoolTeam
     public $poolTypeKey;
     public $poolTeamKey;
     public $poolTeamId;
-    
+
+    public $poolTypeView;
     public $poolTeamView;
     public $poolTeamSlotView;
     
@@ -42,6 +43,7 @@ class ResultsPoolTeam
         'poolTeamKey' => 'PoolTeamKey',
         'poolTeamId'  => 'PoolTeamId',
 
+        'poolTypeView'     => 'string',
         'poolTeamView'     => 'string',
         'poolTeamSlotView' => 'string',
     
@@ -114,8 +116,9 @@ class ResultsPoolTeam
             }
         }
         // Apply soccerfest points right from the start
-        $poolTeam->pointsEarned = $poolTeam->regTeamPoints;
-
+        if ($poolTeam->poolTypeKey === 'PP') {
+            $poolTeam->pointsEarned = $poolTeam->regTeamPoints;
+        }
         return $poolTeam;
     }
 }

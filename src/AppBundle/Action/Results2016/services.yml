@@ -35,3 +35,28 @@ services:
         parent: abstract_view2
         arguments:
             - '@results_poolplay_search_form_2016'
+
+    # ===============================================================
+    # Medal Round Results
+    results_medalround_search_form_2016:
+        class:  AppBundle\Action\Results2016\MedalRound\ResultsMedalRoundSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+            - '@game_connection'
+
+    results_medalround_controller_2016:
+        class:  AppBundle\Action\Results2016\MedalRound\ResultsMedalRoundController
+        parent: abstract_controller
+        arguments:
+            - '@results_medalround_search_form_2016'
+            - '@results_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
+
+    results_medalround_view_html_2016:
+        class:  AppBundle\Action\Results2016\MedalRound\ResultsMedalRoundView
+        parent: abstract_view2
+        arguments:
+            - '@results_medalround_search_form_2016'

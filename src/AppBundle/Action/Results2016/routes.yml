@@ -7,3 +7,12 @@ results_poolplay_2016:
         _view_xls:   schedule_team_view_xls
         _view_csv:   schedule_team_view_csv
 
+results_medalround_2016:
+    path: /medalround
+    defaults:
+        _format: html
+        _controller: results_medalround_controller_2016
+        _view_html:  results_medalround_view_html_2016
+        _view_xls:   schedule_team_view_xls
+        _view_csv:   schedule_team_view_csv
+
