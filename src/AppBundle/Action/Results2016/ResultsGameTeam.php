@@ -10,6 +10,7 @@ class ResultsGameTeam
     public $poolTeamKey;
     public $poolTeamId;
 
+    public $poolSlotView;
     public $poolTypeView;
     public $poolTeamView;
     public $poolTeamSlotView;
@@ -35,6 +36,7 @@ class ResultsGameTeam
         'poolTeamKey' => 'PoolTeamKey',
         'poolTeamId'  => 'PoolTeamId',
 
+        'poolSlotView'     => 'string',
         'poolTypeView'     => 'string',
         'poolTeamView'     => 'string',
         'poolTeamSlotView' => 'string',

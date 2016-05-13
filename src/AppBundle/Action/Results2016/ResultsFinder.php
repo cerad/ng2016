@@ -118,7 +118,10 @@ SELECT
   
   poolTeam.poolTeamId,
   poolTeam.poolKey,
+  poolTeam.poolView,
+  poolTeam.poolSlotView,
   poolTeam.poolTypeKey,
+  poolTeam.poolTypeView,
   poolTeam.poolTeamKey,
   poolTeam.poolTeamSlotView,
   

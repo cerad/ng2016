@@ -142,7 +142,7 @@ EOD;
   <td>{$game->reportState}</td>
   <td>{$gameStart}</td>
   <td><a href="">{$game->fieldName}</a></td>
-  <td>{$homeTeam->poolTypeKey}</td>
+  <td>{$homeTeam->poolTypeView} {$homeTeam->poolSlotView}</td>
   <td>{$homeTeam->poolTeamSlotView}{$hr}{$awayTeam->poolTeamSlotView}</td>
   <td class="text-left">{$this->escape($homeTeam->regTeamName)}{$hr}{$this->escape($awayTeam->regTeamName)}</td>
   <td>{$homeTeam->pointsScored} {$hr}{$awayTeam->pointsScored} </td>
