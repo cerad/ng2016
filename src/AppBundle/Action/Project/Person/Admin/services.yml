@@ -17,6 +17,12 @@ services:
             - '@ayso_repository'
             - '@phone_transformer'
 
+    reg_person_manage_roles_command:
+        class: AppBundle\Action\Project\Person\Admin\ManageRoles\ManageRolesCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - '@project_person_connection'
+
 # ==========================================================================
 # Listing (List throws exception)
 
