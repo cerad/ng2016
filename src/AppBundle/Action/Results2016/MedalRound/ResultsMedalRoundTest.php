@@ -12,7 +12,7 @@ class ResultsMedalRoundTest extends WebTestCase
 
         // This is protected
         $crawler = $client->request('GET', '/results2016/medalround?division=U14B');
-        $crawler = $client->followRedirect();
+        //$crawler = $client->followRedirect();
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
