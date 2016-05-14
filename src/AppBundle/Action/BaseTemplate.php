@@ -224,6 +224,8 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
+            <li><a href="{$this->generateUrl('results_poolplay_2016')}">POOL PLAY 2016</a></li>
+            <li><a href="{$this->generateUrl('results_medalround_2016')}">MEDAL ROUND 2016</a></li>
             <li><a href="{$this->generateUrl('app_results_poolplay')}">POOL PLAY</a></li>
             <li><a href="{$this->generateUrl('app_results_medalround')}">MEDAL ROUND</a></li>
             <li><a href="{$this->generateUrl('app_results_sportsmanship')}">SPORTSMANSHIP</a></li>

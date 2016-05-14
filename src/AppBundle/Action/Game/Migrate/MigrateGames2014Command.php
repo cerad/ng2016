@@ -171,6 +171,8 @@ EOD;
                     $program,$gender,$age,$division,
                     $row['groupType'],$row['groupName'],$row['groupSlot']
             );
+            // A,B,C,D or 1,2,3,4
+            $poolSlotView = substr($poolKey,strlen($poolKey) - 1);
 
             $projectId  = $row['projectId'];
 
@@ -190,6 +192,7 @@ EOD;
                 'poolTeamKey' => $poolTeamKey,
 
                 'poolView'         => $poolView,
+                'poolSlotView'     => $poolSlotView,
                 'poolTypeView'     => $poolTypeView,
                 'poolTeamView'     => $poolTeamView,
                 'poolTeamSlotView' => $poolTeamSlotView,
@@ -247,6 +250,7 @@ EOD;
                 'gameId'      => sprintf('%s:%s',$row['projectId'],$row['gameNumber']),
                 'projectId'   => $row['projectId'],
                 'gameNumber'  => $row['gameNumber'],
+                'role'        => 'game',
                 'fieldName'   => $row['fieldName'],
                 'venueName'   => $row['venueName'],
                 'start'       => $row['start'],

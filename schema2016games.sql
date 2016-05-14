@@ -8,7 +8,7 @@ CREATE TABLE games
   gameId     VARCHAR(99) NOT NULL,
   projectId  VARCHAR(99) NOT NULL,
   gameNumber INTEGER     NOT NULL,
-  role       VARCHAR(20) NOT NULL DEFAULT 'game', -- kftm, scrimmage
+  role       VARCHAR(40) NOT NULL DEFAULT 'game', -- kftm, scrimmage
   fieldName  VARCHAR(99),
   venueName  VARCHAR(99),
 
@@ -79,16 +79,17 @@ CREATE TABLE poolTeams
   poolTypeKey VARCHAR(40) NOT NULL,
   poolTeamKey VARCHAR(40) NOT NULL,
 
-  poolView         VARCHAR(40),
-  poolTypeView     VARCHAR(40),
-  poolTeamView     VARCHAR(40),
-  poolTeamSlotView VARCHAR(40),
+  poolView         VARCHAR(40), -- U-10B Core A
+  poolSlotView     VARCHAR(40), -- A,B,C,D
+  poolTypeView     VARCHAR(40), -- PP, FM
+  poolTeamView     VARCHAR(40), -- U-10B A1
+  poolTeamSlotView VARCHAR(40), -- A1,A2 ...
 
   sourcePoolKeys VARCHAR(255),
   sourcePoolSlot integer,
 
   program  VARCHAR(20),
-  gender   VARCHAR(20),
+  gender   VARCHAR(20), -- Something to convert to Boys/Girls label, but also want just B,G for some things
   age      VARCHAR(20),
   division VARCHAR(20),
 

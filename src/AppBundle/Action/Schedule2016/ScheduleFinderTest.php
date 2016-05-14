@@ -34,7 +34,7 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         }
         return new ScheduleFinder($this->gameConn,$this->regTeamConn);
     }
-    public function sestLoad()
+    public function testLoad()
     {
         // Just to create the connections
         $this->createScheduleFinder();
