@@ -58,6 +58,7 @@ class AdminUpdateController extends AbstractController
             // if post
             // get the data from the form
             $projectPersonArray = $updateForm->getData();
+
             // convert to object
             $projectPerson = $projectPerson->fromArray($projectPersonArray);
 

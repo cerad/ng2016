@@ -81,24 +81,29 @@ class AdminUpdateForm extends AbstractForm
         $data = $request->request->all();
 
         //start with the original data as array
-        $projectPerson = $this->formData;
-        $orgKey = explode(':',$projectPerson['orgKey'])[0];
-        $fedKey = explode(':',$projectPerson['fedKey'])[0];
+        $projectPersonArray = $this->formData;
+        $projectPerson = new ProjectPerson;
+        $projectPerson->fromArray($projectPersonArray);
+
+        $orgKey = explode(':',$projectPerson->orgKey)[0];
+        $fedKey = explode(':',$projectPerson->fedKey)[0];
         
         //update person array with form data
         $personData = $data;
 
-        $projectPerson['name']      = $personData['name'];
-        $projectPerson['email']     = $personData['email'];
-        $projectPerson['age']       = $personData['age'];
-        $projectPerson['phone']     = $personData['phone'];
-        $projectPerson['shirtSize'] = $personData['shirtSize'];
-        $projectPerson['fedKeyId']  = $fedKey . $personData['fedKeyId'];
-        $projectPerson['orgkey']    = $orgKey . $personData['orgKeyRegion']; //todo: transform to sar/st
-        $projectPerson['regYear']   = $personData['regYear'];
+        $strRegion = str_pad($this->filterScalarString($data,'orgKeyRegion'),4,'0',STR_PAD_LEFT);
         
+        $projectPerson->name      = $this->filterScalarString($data,'name');
+        $projectPerson->email     = $this->filterScalarString($data,'email');
+        $projectPerson->age       = $this->filterScalarString($data,'age');
+        $projectPerson->phone     = $this->filterScalarString($data,'phone');
+        $projectPerson->shirtSize = $personData['shirtSize'];
+        $projectPerson->fedKey    = $fedKey . ":" . $this->filterScalarString($data,'fedKeyId');
+        $projectPerson->orgKey    = $orgKey . ":" . $strRegion;
+        $projectPerson->regYear   = $personData['regYear'];
+
         //update plans
-        $projectPersonPlans = $projectPerson['plans'];
+        $projectPersonPlans = &$projectPerson->plans;
         $personPlansData = $data['plans'];
 
         $projectPersonPlans['willReferee']      = $personPlansData['willReferee'];
@@ -106,35 +111,27 @@ class AdminUpdateForm extends AbstractForm
         $projectPersonPlans['willCoach']        = $personPlansData['willCoach'];
 
         //update avail
-        $projectPersonAvail = $projectPerson['avail'];
-
-        //clear avail, $data only include set items
-        foreach($projectPersonAvail as &$avail) {
-            $avail = 'no';
-        }
+        $projectPersonAvail = &$projectPerson->avail;
         if (isset($data['avail'])) {
             foreach ($data['avail'] as $avail) {
                 $projectPersonAvail[$avail] = 'yes';
             }
-        }   
+        }
 
         //update roles
-        if (isset($projectPerson['roles']['CERT_REFEREE']) and
-            isset($projectPerson['roles']['ROLE_REFEREE'])
+        if (isset($projectPerson->roles['CERT_REFEREE']) and
+            isset($projectPerson->roles['ROLE_REFEREE'])
             ) {
-            $projectPersonCertReferee  = $projectPerson['roles']['CERT_REFEREE'];
-            $projectPersonRoleReferee   = $projectPerson['roles']['ROLE_REFEREE'];
+            $projectPersonCertReferee   = &$projectPerson->roles['CERT_REFEREE'];
+            $projectPersonRoleReferee   = &$projectPerson->roles['ROLE_REFEREE'];
     
             $projectPersonCertReferee['badge']  = $personData['badge'];
             $projectPersonRoleReferee['approved']   = isset($personData['approved']) ? '1' : '0';
         }
-var_dump($this->formData);
-var_dump($projectPerson);
-die();
 
         //update form data
-        $this->setData($projectPerson);
-        
+        $this->setData($projectPerson->toArray());
+
         $this->formDataErrors = $errors;
     }
     public function render()
@@ -244,7 +241,8 @@ EOD;
 
         $roleRef        = $personView->getRoles();
         $roleRef        = $roleRef['ROLE_REFEREE'];
-        $approvedRef    = isset($roleRef['approved']) ? $roleRef['approved'] : null; 
+        $approvedRef    = isset($roleRef['approved']) ? (bool) $roleRef['approved'] : false;
+
         $roleRef        = $personView->getRoleClass($roleRef);
         $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
         
@@ -268,15 +266,15 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="badge">Referee:</label>
       {$this->renderFormControlInput($this->formControls['refereeBadge'],$this->escape($personView->refereeBadge),'badge','badge','col-xs-4 form-control'.$classCertRef)}
-      <label class="col-xs-2 control-label approved"><input name="approved" value="approved" type="checkbox" {$this->isChecked($approvedRef)}> Approved to Referee</label>
+      <label class="col-xs-2 control-label approved"><input name="approved" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH)}      
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH, 'disabled')}      
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userConc">Concussion:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->concussionTrained)),'userConc','userConc','col-xs-4 form-control'.$classConc)}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->concussionTrained)),'userConc','userConc','col-xs-4 form-control'.$classConc, 'disabled')}
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userBackground">FL Background Check:</label>
@@ -322,26 +320,33 @@ EOD;
     }
     private function renderAvailInfo(ProjectPersonViewDecorator $personView)
     {
+        $availWed = strtolower($personView->availWed) == 'yes';
+        $availThu = strtolower($personView->availThu) == 'yes';
+        $availFri = strtolower($personView->availFri) == 'yes';
+        $availSatMorn = strtolower($personView->availSatMorn) == 'yes';
+        $availSatAfter = strtolower($personView->availSatAfter) == 'yes';
+        $availSunMorn = strtolower($personView->availSunMorn) == 'yes';
+        $availSunAfter = strtolower($personView->availSunAfter) == 'yes';
+
         $html = <<<EOD
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Availabilty Information</h1>
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($personView->availWed)}>Available Wed (Soccerfest)</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" {$this->isChecked($personView->availThu)}>Available Thu (Pool Play)</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" {$this->isChecked($personView->availFri)}>Available Fri (Pool Play)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Soccerfest)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" {$this->isChecked($availThu)}>Available Thu (Pool Play)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" {$this->isChecked($availFri)}>Available Fri (Pool Play)</label>
     </div>    
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatMorn" type="checkbox" {$this->isChecked($personView->availSatMorn)}>Available Sat Morning (PP)</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatAfter" type="checkbox" {$this->isChecked($personView->availSatAfter)}>Available Sat Afternoon(QF)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatMorn" type="checkbox" {$this->isChecked($availSatMorn)}>Available Sat Morning (PP)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatAfter" type="checkbox" {$this->isChecked($availSatAfter)}>Available Sat Afternoon(QF)</label>
     </div>    
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" {$this->isChecked($personView->availSunMorn)}>Available Sun Morning (SF)</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" {$this->isChecked($personView->availSunAfter)}>Available Sun Afternoon (FM)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" {$this->isChecked($availSunMorn)}>Available Sun Morning (SF)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunAfter" type="checkbox" {$this->isChecked($availSunAfter)}>Available Sun Afternoon (FM)</label>
     </div>    
     {$this->renderPanelFooter()}
 </div>
 EOD;
-
         return $html;
     }
     private function renderUserInfo(ProjectPerson $person)
@@ -370,9 +375,11 @@ EOD;
         return $html;
 
     }
-    private function isChecked($value)
+    private function isChecked(bool $value = null)
     {
-        if($value == 'Yes') {
+        if (is_null($value)) return '';
+        
+        if($value) {
             $checked = 'checked="checked"';
         } else {
             $checked = '';
@@ -410,22 +417,22 @@ EOD;
       {$this->renderFormControlInput($meta,$value,$id,$name,$class)}
 EOD;
     }
-    public function renderFormControlInput($meta,$value,$id,$name,$class="form-control")
+    public function renderFormControlInput($meta,$value,$id,$name,$class="form-control",$attrList='')
     {
         $type = $meta['type'];
 
         switch($type) {
 
             case 'select':
-                return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name,$class);
+                return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name,$class,$attrList);
 
             case 'textarea':
-                return $this->renderFormControlInputTextArea($meta,$value,$id,$name,$class);
+                return $this->renderFormControlInputTextArea($meta,$value,$id,$name,$class,$attrList);
 
         }
-        return $this->renderFormControlInputText($meta,$value,$id,$name,$class);
+        return $this->renderFormControlInputText($meta,$value,$id,$name,$class,$attrList);
     }
-    private function renderFormControlInputText($meta,$value,$id,$name,$class="form-control")
+    private function renderFormControlInputText($meta,$value,$id,$name,$class,$attrList)
     {
         $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
 
@@ -436,10 +443,10 @@ EOD;
         return  <<<EOD
 <input 
   type="{$meta['type']} id="{$id}" class="{$class}" {$required}
-  name="{$name}" value="{$value}" placeHolder="{$placeHolder}"} />
+  name="{$name}" value="{$value}" placeHolder="{$placeHolder}"} {$attrList}/>
 EOD;
     }
-    private function renderFormControlInputTextArea($meta,$value,$id,$name,$class)
+    private function renderFormControlInputTextArea($meta,$value,$id,$name,$class,$attrList)
     {
         $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
 
@@ -452,13 +459,13 @@ EOD;
         return  <<<EOD
 <textarea 
   id="{$id}" class="{$class}" rows="{$rows}" {$required}
-  name="{$name}" placeHolder="{$placeHolder}"} >{$value}</textarea>
+  name="{$name}" placeHolder="{$placeHolder}"}  {$attrList}>{$value}</textarea>
 EOD;
     }
-    protected function renderFormControlInputSelect($choices,$value,$id,$name,$class="form-control")
+    protected function renderFormControlInputSelect($choices,$value,$id,$name,$class,$attrList)
     {
         $html = <<<EOD
-<select id="{$id}" name="{$name}" class="{$class}">
+<select id="{$id}" name="{$name}" class="{$class}"  {$attrList}>
 EOD;
 
         foreach($choices as $choiceValue => $choiceContent)
