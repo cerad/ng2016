@@ -112,11 +112,24 @@ class AdminUpdateForm extends AbstractForm
 
         //update avail
         $projectPersonAvail = &$projectPerson->avail;
+        
+        //reset like this, Blue Sombrero does not have this field
+        $projectPerson->avail = [];
+        $projectPerson->avail = [
+            'availWed'      => 'no',
+            'availThu'      => 'no',
+            'availFri'      => 'no',
+            'availSatMorn'  => 'no',
+            'availSatAfter' => 'no',
+            'availSunMorn'  => 'no',
+            'availSunAfter' => 'no',
+        ];
+
         if (isset($data['avail'])) {
             foreach ($data['avail'] as $avail) {
                 $projectPersonAvail[$avail] = 'yes';
             }
-        }
+        };
 
         //update roles
         if (isset($projectPerson->roles['CERT_REFEREE']) and
@@ -256,17 +269,17 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userAYSOId">AYSO ID:</label>
       <input name="fedKeyId" type="text" class="col-xs-2 form-control" id="userAYSOId" value="{$this->escape($personView->fedKey)}">
-      <label class="col-xs-2 control-label" for="regYear">Mem Year:</label>
+      <label class="col-xs-1 control-label" for="regYear">Mem Year:</label>
       {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userRegion">AYSO Region</label>
-      <input name="orgKeyRegion" type="text" class="col-xs-4 form-control" id="userRegion" value="{$region}">
+      <input name="orgKeyRegion" type="text" class="col-xs-3 form-control" id="userRegion" value="{$region}">
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="badge">Referee:</label>
       {$this->renderFormControlInput($this->formControls['refereeBadge'],$this->escape($personView->refereeBadge),'badge','badge','col-xs-4 form-control'.$classCertRef)}
-      <label class="col-xs-2 control-label approved"><input name="approved" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
+      <label class="col-xs-3 control-label approved"><input name="approved" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
@@ -277,7 +290,7 @@ EOD;
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->concussionTrained)),'userConc','userConc','col-xs-4 form-control'.$classConc, 'disabled')}
     </div>
     <div class="form-group">
-      <label class="col-xs-3 control-label" for="userBackground">FL Background Check:</label>
+      <label class="col-xs-3 control-label" for="userBackground">FL BkGrnd Check:</label>
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->backgroundChecked)),'userBackground','userBackground','col-xs-4 form-control'.$classBgCk)}
     </div>
     {$this->renderPanelFooter()}
@@ -320,13 +333,15 @@ EOD;
     }
     private function renderAvailInfo(ProjectPersonViewDecorator $personView)
     {
-        $availWed = strtolower($personView->availWed) == 'yes';
-        $availThu = strtolower($personView->availThu) == 'yes';
-        $availFri = strtolower($personView->availFri) == 'yes';
-        $availSatMorn = strtolower($personView->availSatMorn) == 'yes';
-        $availSatAfter = strtolower($personView->availSatAfter) == 'yes';
-        $availSunMorn = strtolower($personView->availSunMorn) == 'yes';
-        $availSunAfter = strtolower($personView->availSunAfter) == 'yes';
+        $avail = isset($personView->person->avail);
+        
+        $availWed       = $avail ? strtolower($personView->availWed) == 'yes' : false;
+        $availThu       = $avail ? strtolower($personView->availThu) == 'yes' : false;
+        $availFri       = $avail ? strtolower($personView->availFri) == 'yes' : false;
+        $availSatMorn   = $avail ? strtolower($personView->availSatMorn) == 'yes' : false;
+        $availSatAfter  = $avail ? strtolower($personView->availSatAfter) == 'yes' : false;
+        $availSunMorn   = $avail ? strtolower($personView->availSunMorn) == 'yes' : false;
+        $availSunAfter  = $avail ? strtolower($personView->availSunAfter) == 'yes' : false;
 
         $html = <<<EOD
 <div class="panel panel-default">
@@ -387,7 +402,7 @@ EOD;
 
         return $checked;
     }
-    public function renderFormControl($key,$class="form-control",$meta = null)
+    public function renderFormControl($key,$class="col-xs-4 form-control",$meta = null)
     {
         if (is_null($meta)) {
             $meta = $this->formControls[$key];

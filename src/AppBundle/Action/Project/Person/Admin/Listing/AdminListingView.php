@@ -143,8 +143,7 @@ EOD;
                 break;
         }
 
-        foreach($this->projectPersons as $person) {
-            
+        foreach($this->projectPersons as $person) {          
             // Should this be a private variable to be consistent?
             $personView = $this->projectPersonViewDecorator;
 
@@ -188,6 +187,7 @@ EOD;
                 break;
             
             case 'Avail':
+            case 'Availability':
                 $html .= <<<EOD
 <tr id="project-person-{$personView->getKey()}">
   <td>{$this->renderRegistrationInfo($personView)}</td>
