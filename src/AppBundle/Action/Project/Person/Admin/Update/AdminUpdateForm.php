@@ -370,7 +370,7 @@ EOD;
         $enabled = $user['enabled'] ? 'Yes' : 'NO';
         $html = <<<EOD
 <div class="panel panel-default">
-    <h1 class="panel-heading">Update Plans Information</h1>
+    <h1 class="panel-heading">Update User Information</h1>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="userName">Name:</label>
       <input name="userinfoName" type="text" class="col-xs-4 form-control" id="userName" value="{$this->escape($user['name'])}">
