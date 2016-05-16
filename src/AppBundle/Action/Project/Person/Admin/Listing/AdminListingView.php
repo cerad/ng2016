@@ -53,6 +53,29 @@ class AdminListingView extends AbstractView2
             $personView->setProjectPerson($person);
 
             switch ($this->reportKey) {
+                case 'Referees':
+                    if ($personView->willReferee == 'Yes') {
+                        $listPersons[] = $person;
+                    }
+                    break;
+                case 'Volunteers':
+                    if ($personView->willVolunteer == 'Yes') {
+                        $listPersons[] = $person;
+                    }
+                    break;
+                case 'RefIssues':
+                    if ($personView->willReferee == 'Yes') {
+                        if ( $this->hasIssues($personView) ) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                case 'VolIssues':
+                    if ($personView->willVolunteer == 'Yes') {
+                        if ( $this->hasIssues($personView) ) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
                         if (!$personView->approved AND $personView->verified) {
@@ -325,5 +348,16 @@ EOD;
 EOD;
 
     }
+    private function hasIssues(ProjectPersonViewDecorator $personView)
+    {
+        $issues = false;
+        
+        $certs = $personView->getCerts();
+        $issues = false;
+        foreach($certs as $cert) {
+            $issues |= !(bool)$cert->verified;
+        }
 
+        return boolval($issues);
+    }
 }

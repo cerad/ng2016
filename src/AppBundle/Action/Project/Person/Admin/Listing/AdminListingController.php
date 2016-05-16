@@ -51,9 +51,6 @@ class AdminListingController extends AbstractController
         $verified = null;
 
         switch ($searchData['reportKey']) {
-            case 'Verified':
-                $verified = true;
-                break;
             case 'Unverified':
                 $verified = false;
                 break;
