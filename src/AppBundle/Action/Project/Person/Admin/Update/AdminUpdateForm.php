@@ -286,11 +286,20 @@ EOD;
       <input name="orgKeyRegion" type="text" class="col-xs-3 form-control" id="userRegion" value="{$region}">
       <label class="col-xs-3 control-label control-text" for="userSAR"><span style="font-weight: bold">S/A/R/St: </span>{$personView->orgKey}</label>
     </div>
+EOD;
+
+        $certs = $personView->getCerts();
+        if (isset($certs['CERT_REFEREE'])) {
+            $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="badge">Referee:</label>
       {$this->renderFormControlInput($this->formControls['refereeBadge'],$this->escape($personView->refereeBadge),'badge','badge','col-xs-4 form-control'.$classCertRef)}
       <label class="col-xs-3 control-label approved"><input name="approved" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
     </div>
+EOD;
+        }
+
+        $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH, 'disabled')}      
