@@ -69,6 +69,7 @@ class AdminListingView extends AbstractView2
                             $listPersons[] = $person;
                         }
                     }
+                    break;
                 case 'VolIssues':
                     if ($personView->willVolunteer == 'Yes') {
                         if ( $this->hasIssues($personView) ) {

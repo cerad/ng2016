@@ -142,8 +142,14 @@ class AdminUpdateForm extends AbstractForm
             $projectPersonRoleReferee   = &$projectPerson->roles['ROLE_REFEREE'];
     
             $projectPersonCertReferee['badge']  = $personData['badge'];
-            $projectPersonRoleReferee['approved']   = isset($personData['approved']) ? '1' : '0';
+            $projectPersonCertReferee->verified = true;
+            $projectPersonRoleReferee['approved']   = isset($personData['approved']) ? true : false;
         }
+
+        //update user info
+        $projectPerson->name = $this->filterScalarString($data,'userInfoName');
+        $projectPerson->email = $this->filterScalarString($data,'userInfoEmail');
+        $projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
 
         //update form data
         $this->setData($projectPerson->toArray());
@@ -302,12 +308,21 @@ EOD;
         $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH, 'disabled')}      
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH)}      
     </div>
+EOD;
+
+        $certs = $personView->getCerts();
+        if (isset($certs['CERT_REFEREE'])) {
+            $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userConc">Concussion:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->concussionTrained)),'userConc','userConc','col-xs-4 form-control'.$classConc, 'disabled')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->concussionTrained)),'userConc','userConc','col-xs-4 form-control'.$classConc)}
     </div>
+EOD;
+        }
+
+        $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userBackground">FL BkGrnd Check:</label>
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->backgroundChecked)),'userBackground','userBackground','col-xs-4 form-control'.$classBgCk)}
@@ -364,7 +379,7 @@ EOD;
 
         $html = <<<EOD
 <div class="panel panel-default">
-    <h1 class="panel-heading">Update Availabilty Information</h1>
+    <h1 class="panel-heading">Update Availability Information</h1>
     <div class="form-group avail">
       <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Soccerfest)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" {$this->isChecked($availThu)}>Available Thu (Pool Play)</label>
@@ -396,15 +411,15 @@ EOD;
     <h1 class="panel-heading">Update User Information</h1>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="userName">Name:</label>
-      <input name="userinfoName" type="text" class="col-xs-4 form-control" id="userName" value="{$this->escape($user['name'])}">
+      <input name="userInfoName" type="text" class="col-xs-4 form-control" id="userName" value="{$this->escape($user['name'])}">
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="userEmail">Email:</label>
-      <input name="userinfoEmail" type="text" class="col-xs-4 form-control" id="userEmail" value="{$this->escape($user['email'])}">
+      <input name="userInfoEmail" type="text" class="col-xs-4 form-control" id="userEmail" value="{$this->escape($user['email'])}">
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="userUname">User:</label>
-      <input name="userinfoUsername" type="text" class="col-xs-4 form-control" id="userUname" value="{$this->escape($user['username'])}">
+      <input name="userInfoUsername" type="text" class="col-xs-4 form-control" id="userUname" value="{$this->escape($user['username'])}">
     </div>
     {$this->renderPanelFooter()}
 </div>
