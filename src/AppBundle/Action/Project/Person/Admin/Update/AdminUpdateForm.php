@@ -53,7 +53,7 @@ class AdminUpdateForm extends AbstractForm
             'type'      => 'select',
             'label'     => 'MemYear',
             'default'   =>  'my2016',
-            'choices'   => ['my2016'=>'MY2016','my2015'=>'MY2015'],
+            'choices'   => ['my2016'=>'MY2016','my2015'=>'MY2015',null=>'***'],
         );
 
         $this->personView = $projectPersonViewDecorator;
@@ -263,8 +263,8 @@ EOD;
         $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $roleRef['ROLE_REFEREE'] : null;
         $approvedRef    = isset($roleRef['approved']) ? (bool) $roleRef['approved'] : false;
 
-        $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $personView->getRoleClass($roleRef) : null;
-        $classRoleRef   = isset($roleRef['ROLE_REFEREE']) ? (' '. (is_null($roleRef) ? $personView->successClass : $roleRef)) : null;
+        $roleRef        = !is_null($roleRef) ? $personView->getRoleClass($roleRef) : null;
+        $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
         
         $sar = explode('/', $personView->orgKey);
         $region = ltrim($sar[2], '0');
