@@ -22,9 +22,8 @@ schedule_game_2016:
         _format: html
         _controller: schedule_game_controller_2016
         _view_html:  schedule_game_view_html_2016
-        _view_xls:   schedule_game_view_xls
-        _view_csv:   schedule_game_view_csv
+        _view_xls:   schedule_game_view_xls_2016
+        _view_csv:   schedule_game_view_csv_2016
         _view_pdf:   schedule_game_view_pdf
         _view_json:  schedule_game_view_json
         _view_core:  schedule_game_core_xls
-        _view_extra: schedule_game_extra_xls
