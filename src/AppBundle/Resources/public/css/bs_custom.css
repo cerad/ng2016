@@ -30,6 +30,16 @@ form { width: 100%; margin-left:auto; margin-right: auto; }
 
 .form-control { max-width: 300px; }
 
+.panel > .form-group { margin-top: 15px; }
+
+.avail .control-label { text-align: left; margin-left: 20px; }
+
+.avail input[type=checkbox] { margin-right: 6px; }
+
+.panel-footer { padding: 0 15px; }
+
+.panel-footer .btn { margin: 7px 10px 7px 0; }
+
 .vcenter {
     margin-top: 0.5em;
 }
@@ -100,4 +110,12 @@ form.cerad_common_form1 fieldset div.col-xs-10 {
     .container {
         padding: 0;
     }
+}
+
+@media (min-width: 768px) {
+
+    .control-label.approved { margin-right: 20px; text-align: left }
+    
+    .control-label.control-text { font-weight: normal; text-align: left }
+
 }

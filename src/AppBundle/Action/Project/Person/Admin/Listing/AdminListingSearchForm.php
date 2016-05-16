@@ -21,6 +21,20 @@ class AdminListingSearchForm extends AbstractForm
         $data = $request->request->all();
         $errors = [];
 
+        if(!isset($data['projectKey'])) {
+            $session = $request->getSession();
+            if ($session->has('project_person_admin_listing_search_data')) {
+                $data = array_merge($data,$session->get('project_person_admin_listing_search_data'));
+            } else {
+                $data = [
+                    'projectKey'    => $this->getCurrentProjectKey(),
+                    'displayKey'    => 'Plans',
+                    'reportKey'     =>  null,
+                    'name'          =>  null,
+                ];
+            }
+        }
+
         $projectKey = filter_var(trim($data['projectKey']), FILTER_SANITIZE_STRING);
         $displayKey = filter_var(trim($data['displayKey']), FILTER_SANITIZE_STRING);
         $reportKey = filter_var(trim($data['reportKey']), FILTER_SANITIZE_STRING);
@@ -49,10 +63,12 @@ class AdminListingSearchForm extends AbstractForm
         $reportKey = $this->formData['reportKey'];
         $reportChoices = [
             'All'           =>  'All',
-            'Verified'      =>  'Verified',
+            'Referees'      =>  'Referees',
+            'Volunteers'    =>  'Volunteers',
             'Unverified'    =>  'Unverified',
             'Unapproved'    =>  'Unapproved',
-            'Issues'        =>  'Volunteers with Issues',
+            'RefIssues'     =>  'Referees with Issues',
+            'VolIssues'     =>  'Volunteers with Issues',
             'FL'            =>  'FL Residents'
         ];
         
@@ -63,6 +79,7 @@ class AdminListingSearchForm extends AbstractForm
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form role="form" class="form-inline" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
+<div class="col-xs-12">
   <div class="form-group">
     <label for="projectKey">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectKey,'projectKey','projectKey')}
@@ -81,12 +98,17 @@ class AdminListingSearchForm extends AbstractForm
       type="text" id="name" class="form-control"
       name="name" value="{$name}" placeholder="Filter By Name" />
   </div>
-  <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-search"></span> 
-    <span>Search</span>
-  </button>
-<a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+  </div>
+<div class="col-xs-12 clearfix">
+  <div class="form-group pull-right">
+    <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
+    <button type="submit" class="btn btn-sm btn-primary submit">
+      <span class="glyphicon glyphicon-search"></span> 
+      <span>Search</span>
+    </button>
+    <a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+    </div>
+</div>
 </form>
 
 EOD;

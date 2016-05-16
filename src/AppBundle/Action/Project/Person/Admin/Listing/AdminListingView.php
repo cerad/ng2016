@@ -53,6 +53,30 @@ class AdminListingView extends AbstractView2
             $personView->setProjectPerson($person);
 
             switch ($this->reportKey) {
+                case 'Referees':
+                    if ($personView->willReferee == 'Yes') {
+                        $listPersons[] = $person;
+                    }
+                    break;
+                case 'Volunteers':
+                    if ($personView->willVolunteer == 'Yes') {
+                        $listPersons[] = $person;
+                    }
+                    break;
+                case 'RefIssues':
+                    if ($personView->willReferee == 'Yes') {
+                        if ( $this->hasIssues($personView) ) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+                case 'VolIssues':
+                    if ($personView->willVolunteer == 'Yes') {
+                        if ( $this->hasIssues($personView) ) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
                         if (!$personView->approved AND $personView->verified) {
@@ -143,8 +167,7 @@ EOD;
                 break;
         }
 
-        foreach($this->projectPersons as $person) {
-            
+        foreach($this->projectPersons as $person) {          
             // Should this be a private variable to be consistent?
             $personView = $this->projectPersonViewDecorator;
 
@@ -188,6 +211,7 @@ EOD;
                 break;
             
             case 'Avail':
+            case 'Availability':
                 $html .= <<<EOD
 <tr id="project-person-{$personView->getKey()}">
   <td>{$this->renderRegistrationInfo($personView)}</td>
@@ -325,5 +349,16 @@ EOD;
 EOD;
 
     }
+    private function hasIssues(ProjectPersonViewDecorator $personView)
+    {
+        $issues = false;
+        
+        $certs = $personView->getCerts();
+        $issues = false;
+        foreach($certs as $cert) {
+            $issues |= !(bool)$cert->verified;
+        }
 
+        return boolval($issues);
+    }
 }
