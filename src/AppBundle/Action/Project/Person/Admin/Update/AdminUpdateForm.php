@@ -34,27 +34,27 @@ class AdminUpdateForm extends AbstractForm
     {
         $this->projectControls = $projectControls;
         
-        $formControls['YesNo'] = array(
-            'type'      => 'select',
-            'label'     => 'Yes / No',
-            'default'   =>  'nr',
-            'choices'   => ['no'=>'No','yes'=>'Yes','maybe'=>'Maybe','nr'=>'Not Required'],
-        );
-        
-        $formControls['regYear'] = array(
-            'type'      => 'select',
-            'label'     => 'MemYear',
-            'default'   =>  'my2016',
-            'choices'   => ['my2016'=>'MY2016','my2015'=>'MY2015'],
-        );
-
-        foreach($formControls as $key => $meta)
+        foreach($projectControls as $key => $meta)
         {
             if (!isset($meta['type'])) {
                 $meta = array_merge($meta,$projectControls[$key]);
             }
             $this->formControls[$key] = $meta;
         }
+
+        $this->formControls['YesNo'] = array(
+            'type'      => 'select',
+            'label'     => 'Yes / No',
+            'default'   =>  'nr',
+            'choices'   => ['no'=>'No','yes'=>'Yes','maybe'=>'Maybe','nr'=>'Not Required'],
+        );
+        
+        $this->formControls['regYear'] = array(
+            'type'      => 'select',
+            'label'     => 'MemYear',
+            'default'   =>  'my2016',
+            'choices'   => ['my2016'=>'MY2016','my2015'=>'MY2015'],
+        );
 
         $this->personView = $projectPersonViewDecorator;
 
@@ -104,11 +104,12 @@ class AdminUpdateForm extends AbstractForm
 
         //update plans
         $projectPersonPlans = &$projectPerson->plans;
-        $personPlansData = $data['plans'];
 
-        $projectPersonPlans['willReferee']      = $personPlansData['willReferee'];
-        $projectPersonPlans['willVolunteer']    = $personPlansData['willVolunteer'];
-        $projectPersonPlans['willCoach']        = $personPlansData['willCoach'];
+        $projectPersonPlans['willReferee']      = $personData['willReferee'];
+        $projectPersonPlans['willVolunteer']    = $personData['willVolunteer'];
+        $projectPersonPlans['willCoach']        = $personData['willCoach'];
+
+        $projectPerson['notesUser']             = $this->filterScalarString($data,'notesUser');
 
         //update avail
         $projectPersonAvail = &$projectPerson->avail;
@@ -130,6 +131,8 @@ class AdminUpdateForm extends AbstractForm
                 $projectPersonAvail[$avail] = 'yes';
             }
         };
+
+        $projectPerson['notes']             = $this->filterScalarString($data,'notes');
 
         //update roles
         if (isset($projectPerson->roles['CERT_REFEREE']) and
@@ -223,12 +226,16 @@ EOD;
     <div class="form-group">
       <label class="col-xs-2 control-label" for="regEmail">Email:</label>
       <input name="email" type="text" class="col-xs-4 form-control" id="regEmail" value="{$this->escape($personView->email)}">
+    </div>
+    <div class="form-group">
       <label class="col-xs-2 control-label" for="regAge">Age:</label>
       <input name="age" type="text" class="col-xs-4 form-control" id="regAge" value="{$this->escape($personView->age)}">
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="regPhone">Phone:</label>
       <input name="phone" type="text" class="col-xs-4 form-control" id="regPhone" value="{$this->escape($personView->phone)}">
+    </div>
+    <div class="form-group">
       <label class="col-xs-2 control-label" for="shirtSize">Shirt:</label>
       {$this->renderFormControl('shirtSize')}
     </div>
@@ -253,11 +260,11 @@ EOD;
         $classCertRef   = ' '. (is_null($certRef) ? $personView->successClass : $certRef);
 
         $roleRef        = $personView->getRoles();
-        $roleRef        = $roleRef['ROLE_REFEREE'];
+        $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $roleRef['ROLE_REFEREE'] : null;
         $approvedRef    = isset($roleRef['approved']) ? (bool) $roleRef['approved'] : false;
 
-        $roleRef        = $personView->getRoleClass($roleRef);
-        $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
+        $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $personView->getRoleClass($roleRef) : null;
+        $classRoleRef   = isset($roleRef['ROLE_REFEREE']) ? (' '. (is_null($roleRef) ? $personView->successClass : $roleRef)) : null;
         
         $sar = explode('/', $personView->orgKey);
         $region = ltrim($sar[2], '0');
@@ -269,12 +276,15 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userAYSOId">AYSO ID:</label>
       <input name="fedKeyId" type="text" class="col-xs-2 form-control" id="userAYSOId" value="{$this->escape($personView->fedKey)}">
-      <label class="col-xs-1 control-label" for="regYear">Mem Year:</label>
+    </div>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" for="regYear">Mem Year:</label>
       {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userRegion">AYSO Region</label>
       <input name="orgKeyRegion" type="text" class="col-xs-3 form-control" id="userRegion" value="{$region}">
+      <label class="col-xs-3 control-label control-text" for="userSAR"><span style="font-weight: bold">S/A/R/St: </span>{$personView->orgKey}</label>
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="badge">Referee:</label>
@@ -312,15 +322,15 @@ EOD;
     <h1 class="panel-heading">Update Plans Information</h1>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willReferee">Will Referee:</label>
-      {$this->renderFormControl('willReferee')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->willReferee)),'willReferee','willReferee','col-xs-4 form-control')}
     </div>    
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willVolunteer">Will Volunteer:</label>
-      {$this->renderFormControl('willVolunteer')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->willVolunteer)),'willVolunteer','willVolunteer','col-xs-4 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willCoach">Will Coach:</label>
-      {$this->renderFormControl('willCoach')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->willCoach)),'willCoach','willCoach','col-xs-4 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="notesUser">User Notes:</label>
@@ -359,6 +369,10 @@ EOD;
       <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" {$this->isChecked($availSunMorn)}>Available Sun Morning (SF)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availSunAfter" type="checkbox" {$this->isChecked($availSunAfter)}>Available Sun Afternoon (FM)</label>
     </div>    
+    <div class="form-group">
+      <label class="col-xs-2 control-label" for="notes">Assignor Notes:</label>
+      {$this->renderFormControl('notes')}
+    </div>
     {$this->renderPanelFooter()}
 </div>
 EOD;
@@ -461,7 +475,7 @@ EOD;
   name="{$name}" value="{$value}" placeHolder="{$placeHolder}"} {$attrList}/>
 EOD;
     }
-    private function renderFormControlInputTextArea($meta,$value,$id,$name,$class,$attrList)
+    private function renderFormControlInputTextArea($meta,$value,$id,$name,$class,$attrList='')
     {
         $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
 
@@ -477,7 +491,7 @@ EOD;
   name="{$name}" placeHolder="{$placeHolder}"}  {$attrList}>{$value}</textarea>
 EOD;
     }
-    protected function renderFormControlInputSelect($choices,$value,$id,$name,$class,$attrList)
+    protected function renderFormControlInputSelect($choices,$value,$id,$name,$class,$attrList='')
     {
         $html = <<<EOD
 <select id="{$id}" name="{$name}" class="{$class}"  {$attrList}>

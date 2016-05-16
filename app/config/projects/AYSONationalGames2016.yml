@@ -279,6 +279,12 @@ parameters:
           rows:  5
           cols:  40
 
+        notes:
+          type:  textarea
+          label: Notes
+          rows:  5
+          cols:  60
+
         fedKey:
             type:        integer # aysoid
             label:       AYSO Volunteer ID

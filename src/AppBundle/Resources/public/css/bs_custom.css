@@ -111,3 +111,11 @@ form.cerad_common_form1 fieldset div.col-xs-10 {
         padding: 0;
     }
 }
+
+@media (min-width: 768px) {
+
+    .control-label.approved { margin-right: 20px; text-align: left }
+    
+    .control-label.control-text { font-weight: normal; text-align: left }
+
+}
