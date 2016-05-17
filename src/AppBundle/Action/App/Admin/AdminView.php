@@ -144,7 +144,7 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">View Referee Assignments</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignments</a></li>
       <li><a href="#">Export Referee Assignments (Excel)</a></li>
 EOT;
 
@@ -154,11 +154,6 @@ EOT;
 EOT;
       }
 
-      if ($this->isGranted('ROLE_REFEREE_ADMIN')) {
-        $html .= <<<EOT
-      <li><a href="#">View Unregistered Referee List</a></li>
-EOT;
-      }
         $html .= <<<EOT
     </ul>
   </div>
