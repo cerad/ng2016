@@ -48,7 +48,7 @@ class ScheduleGameSearchForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
-<form role="form" class="form-inline" style="width: 760px;" action="{$action}" method="post">
+<form role="form" class="form-inline" action="{$action}" method="post">
   <div class="form-group">
     <label for="projectId">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
@@ -67,13 +67,16 @@ class ScheduleGameSearchForm extends AbstractForm
   </tr></table>
   </div>
   <br/>
+  <div class="form-group pull-right">
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span> 
     <span>Search</span>
   </button>
-<a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
-<a href="{$this->generateUrl('schedule_game_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a> 
+    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
+</div>
+<div style="clear: both" />
 </form>
 
 EOD;

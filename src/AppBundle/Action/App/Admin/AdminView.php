@@ -144,7 +144,7 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">View Referee Assignments</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignments</a></li>
       <li><a href="#">Export Referee Assignments (Excel)</a></li>
 EOT;
 
@@ -154,11 +154,6 @@ EOT;
 EOT;
       }
 
-      if ($this->isGranted('ROLE_REFEREE_ADMIN')) {
-        $html .= <<<EOT
-      <li><a href="#">View Unregistered Referee List</a></li>
-EOT;
-      }
         $html .= <<<EOT
     </ul>
   </div>
@@ -183,16 +178,6 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
       <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People (Excel)</a></li>
-EOT;
-      
-      if ($this->isGranted('ROLE_ADMIN')) {
-        $html .= <<<EOT
-      <li><a href="#">Sync eAYSO Information</a></li>
-      <li><a href="#">Import AYSO Information</a></li>
-EOT;
-      }
-      
-        $html .= <<<EOT
     </ul>
   </div>
 </div>

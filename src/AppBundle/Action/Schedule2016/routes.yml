@@ -4,8 +4,8 @@ schedule_team_2016:
         _format: html
         _controller: schedule_team_controller_2016
         _view_html:  schedule_team_view_html_2016
-        _view_xls:   schedule_team_view_xls
-        _view_csv:   schedule_team_view_csv
+        _view_xls:   schedule_team_view_xls_2016
+        _view_csv:   schedule_team_view_csv_2016
 
 schedule_official_2016:
     path: /official.{_format}

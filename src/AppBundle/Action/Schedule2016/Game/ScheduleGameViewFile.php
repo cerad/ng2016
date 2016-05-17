@@ -1,11 +1,12 @@
 <?php
 
-namespace AppBundle\Action\Schedule\Game;
+namespace AppBundle\Action\Schedule2016\Game;
 
 use AppBundle\Action\AbstractView;
 use AppBundle\Action\AbstractExporter;
 
-use AppBundle\Action\Schedule\ScheduleRepository;
+use AppBundle\Action\Schedule2016\ScheduleGame;
+use AppBundle\Action\Schedule2016\ScheduleTemplate;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,19 +17,15 @@ class ScheduleGameViewFile extends AbstractView
     private $scheduleRepository;
     private $exporter;
     
-    public function __construct(ScheduleRepository $scheduleRepository, AbstractExporter $exporter)
+    public function __construct(AbstractExporter $exporter)
     {
-        $this->scheduleRepository = $scheduleRepository;
-        
-        $this->outFileName =  'GameSchedule.' . '_' . date('Ymd_His') . '.' . $exporter->fileExtension;
+        $this->outFileName =  'GameSchedule2016.' . date('Ymd_His') . '.' . $exporter->fileExtension;
      
         $this->exporter = $exporter;
     }
     public function __invoke(Request $request)
     {
-        $search = $request->attributes->get('schedule_game_search');
-
-        $projectGames = $this->scheduleRepository->findProjectGames($search);
+        $projectGames = $request->attributes->get('games');
 
         $content = $this->generateResponse($projectGames);
         $exporter = $this->exporter;
@@ -52,20 +49,20 @@ class ScheduleGameViewFile extends AbstractView
         
         //set the data : game in each row
         foreach ( $projectGames as $projectGame ) {
-            
-            $projectGameTeamHome = $projectGame['teams'][1];
-            $projectGameTeamAway = $projectGame['teams'][2];
+//var_dump($projectGame); die();            
+            $projectGameTeamHome = $projectGame->homeTeam;
+            $projectGameTeamAway = $projectGame->awayTeam;
 
             $data[] = array(
-                $projectGame['number'],
-                $projectGame['dow'],
-                $projectGame['time'],
-                $projectGame['field_name'],
-                $projectGame['group_name'],
-                $projectGameTeamHome['group_slot'],
-                $projectGameTeamHome['name'],
-                $projectGameTeamAway['group_slot'],
-                $projectGameTeamAway['name']
+                $projectGame->gameNumber,
+                $projectGame->dow,
+                $projectGame->time,
+                $projectGame->fieldName,
+                $projectGame->poolView,
+                $projectGameTeamHome->poolTeamSlotView,
+                $projectGameTeamHome->regTeamName,
+                $projectGameTeamAway->poolTeamSlotView,
+                $projectGameTeamAway->regTeamName
             );
         }
 

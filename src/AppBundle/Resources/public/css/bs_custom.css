@@ -109,6 +109,10 @@ form.cerad_common_form1 fieldset div.col-xs-10 {
     
     .container {
         padding: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 280px;
+        min-width: inherit;
     }
 }
 

@@ -41,10 +41,8 @@ class AbstractExporter
                 break;
         }
     }
-    public function export($content, $options = null)
+    public function export($content)
     {
-        $this->options = $options;
-        
         switch ($this->format) {
             case 'csv': return $this->exportCSV ($content);
             case 'xls': return $this->exportXLSX($content);
@@ -52,7 +50,10 @@ class AbstractExporter
     }
     public function exportCSV($content) {
         
-        $this->writeWorksheet($content);
+        //for csv type, only export first sheet
+        $content = array_values($content);
+        
+        $this->writeWorksheet($content[0]);
         
         $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'CSV');
         
@@ -62,45 +63,94 @@ class AbstractExporter
         return ob_get_clean();
         
     }
-    
-    public function exportXLSX($content, $sheetName = 'Sheet ')
+    public function is_asso($a)
     {
-        // ensure unique sheetname    
-        $inc = 1;
-        $name = $sheetName;
-        while (!is_null($this->objPHPExcel->getSheetByName($sheetName) ) ){
-            $name = $sheetName . $inc;
-            $inc += 1;
+        foreach(array_keys($a) as $key)
+            if (!is_int($key)) return true;
+    
+        return false;
+    }    
+    public function exportXLSX($content, $sheetName = 'Sheet')
+    {
+        $xl = $this->objPHPExcel;
+        
+        //check for sheet names as keys
+        $isAssoc = $this->is_asso($content);
+        
+        // ensure unique sheetname
+        foreach ($content as $shName=>$data) {
+            if ($isAssoc) {
+                $sheetName = $shName;
+            }
+
+            $xl->createSheet();
+            $xl->setActiveSheetIndex($xl->getSheetCount()-1);
+
+            $this->writeWorksheet($data, $sheetName);
         }
         
-        $this->writeWorksheet($content, $name);
+        //remove first sheet -- is blank
+        $ws = $xl->removeSheetByIndex(0);
         
-        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
+        //write to application output buffer
+        $objWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
         
         ob_start();
         $objWriter->save('php://output'); // Instead of file name
     
         return ob_get_clean();
-        
+            
     }
-    
-    public function writeWorksheet($content)
+    public function writeWorksheet($content, $shName="Sheet")
     {
+        //check for data
+        if (!isset($content['data'])) return null;
+        
+        //get data
+        $data = $content['data'];
+        //get options (if any)
+        $options = isset($content['options']) ? $content['options'] : null;
+        
+        //select active sheet
         $ws = $this->objPHPExcel->getActiveSheet();
+
+        //load data into sheet
+        $ws->fromArray($data, NULL, 'A1');
         
-        $ws->fromArray($content, NULL, 'A1');
-        
+        //auto-size columns
         foreach(range('A',$ws->getHighestDataColumn()) as $col) {
             $ws->getColumnDimension($col)->setAutoSize(true);
         }
-
-        if (isset($this->options['hideCols'])){
+        
+        //apply options
+        if (isset($options['hideCols'])){
             // Hide sheet columns.
-            $cols = $this->options['hideCols'];
+            $cols = $options['hideCols'];
             foreach ($cols as $name) {
                 $ws->getColumnDimension($name)->setVisible(FALSE);
             }
         }
+        
+        //freeze top row
+        $ws->freezePane('E2');
+
+        //ensure sheet name is unique
+        $inc = 1;
+        $name = $shName;
+        while (!is_null($this->objPHPExcel->getSheetByName($name) ) ){
+            $name = $shName . $inc;
+            $inc += 1;
+        }
+        
+        //$shName = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $name);
+        
+        //Excel limit sheet names to 31 characters
+        if (strlen($shName) > 31) {
+            $shName = substr($name, -31);
+        }
+        
+        //name the sheet
+        $ws->setTitle($shName);
 
         return;
 

@@ -112,18 +112,17 @@ EOT;
 <<<EOT
         <nav class="navbar navbar-default">
           
-          <div class="container">
-             <div class="navbar-header">
-                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topmenu">
-                     <span class="sr-only">Toggle navigation</span>
-                     <span class="icon-bar"></span>
-                     <span class="icon-bar"></span>
-                     <span class="icon-bar"></span>
-                 </button>
-             </div>
-            
-             <!-- Collect the nav links, forms, and other content for toggling -->
-             <div id="topmenu" class="collapse navbar-collapse">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topmenu">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>  <!-- navbar-header -->
+           
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="topmenu" class="collapse navbar-collapse">
 EOT;
         $html .= $this->renderMenuForGuest();
         
@@ -131,8 +130,7 @@ EOT;
                 
         $html .=
 <<<EOT
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-->
+            </div><!-- navbar-collapse -->
 
         </nav>
 EOT;
@@ -208,7 +206,6 @@ EOT;
           <ul class="dropdown-menu">
             <li><a href="{$this->generateUrl('schedule_game_2016'    )}">GAME    SCHEDULES</a></li>
             <li><a href="{$this->generateUrl('schedule_team_2016'    )}">TEAM    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
@@ -273,9 +270,9 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="/project/natgames/schedule-user">MY SCHEDULE</a></li>
-            <li><a href="/project/natgames/schedule-referee">REQUEST ASSIGNMENTS</a></li>
-            <li><a href="/project/natgames/schedule-assignor">ASSIGNOR SCHEDULE</a></li>
+            <li><a href="#">MY SCHEDULE</a></li>
+            <li><a href="#">REQUEST ASSIGNMENTS</a></li>
+            <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
          </ul>
        </li>
 EOT;
