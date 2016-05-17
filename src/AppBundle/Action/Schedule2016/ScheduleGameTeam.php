@@ -18,6 +18,8 @@ class ScheduleGameTeam
     public $regTeamName;
     public $division;
 
+    public $poolTeamKey;
+    
     public $poolView;
     public $poolTypeView;
     public $poolTeamView;
@@ -38,6 +40,8 @@ class ScheduleGameTeam
         'poolTypeView'     => 'string',
         'poolTeamView'     => 'string',
         'poolTeamSlotView' => 'string',
+
+        'poolTeamKey' => 'PoolTeamKey',
     ];
 
     public function __get($name)
