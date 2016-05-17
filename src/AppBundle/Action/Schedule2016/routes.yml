@@ -27,3 +27,9 @@ schedule_game_2016:
         _view_pdf:   schedule_game_view_pdf
         _view_json:  schedule_game_view_json
         _view_core:  schedule_game_core_xls
+
+field_map:
+    path: /fieldmap/{filename}
+    defaults:
+        filename: 'master_field_layout.pdf'
+        _controller: field_map_controller
