@@ -74,6 +74,8 @@ SELECT
   poolTeam.regTeamName,
   poolTeam.division,
   
+  poolTeam.poolTeamKey,
+  
   poolTeam.poolView,
   poolTeam.poolTypeView,
   poolTeam.poolTeamView,

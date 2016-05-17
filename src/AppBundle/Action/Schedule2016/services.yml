@@ -40,11 +40,14 @@ services:
             - '@schedule_game_search_form_2016'
             - '@schedule_template_2016'
 
+    schedule_game_writer_excel:
+        class:  AppBundle\Action\Schedule2016\Game\ScheduleGameWriterExcel
+
     schedule_game_view_xls_2016:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameViewFile
-        parent: abstract_view
+        parent: abstract_view2
         arguments:
-            - '@abstract_exporter_xls'
+            - '@schedule_game_writer_excel'
             
     schedule_game_view_csv_2016:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameViewFile
