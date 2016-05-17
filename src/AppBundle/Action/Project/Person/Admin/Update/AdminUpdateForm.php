@@ -147,8 +147,6 @@ class AdminUpdateForm extends AbstractForm
         }
 
         //update user info
-        $projectPerson->name = $this->filterScalarString($data,'userInfoName');
-        $projectPerson->email = $this->filterScalarString($data,'userInfoEmail');
         $projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
 
         //update form data
@@ -288,7 +286,7 @@ EOD;
       {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control')}
     </div>
     <div class="form-group">
-      <label class="col-xs-3 control-label" for="userRegion">AYSO Region</label>
+      <label class="col-xs-3 control-label" for="userRegion">AYSO Region:</label>
       <input name="orgKeyRegion" type="text" class="col-xs-3 form-control" id="userRegion" value="{$region}">
       <label class="col-xs-3 control-label control-text" for="userSAR"><span style="font-weight: bold">S/A/R/St: </span>{$personView->orgKey}</label>
     </div>
@@ -409,14 +407,6 @@ EOD;
         $html = <<<EOD
 <div class="panel panel-default">
     <h1 class="panel-heading">Update User Information</h1>
-    <div class="form-group">
-      <label class="col-xs-2 control-label" for="userName">Name:</label>
-      <input name="userInfoName" type="text" class="col-xs-4 form-control" id="userName" value="{$this->escape($user['name'])}">
-    </div>
-    <div class="form-group">
-      <label class="col-xs-2 control-label" for="userEmail">Email:</label>
-      <input name="userInfoEmail" type="text" class="col-xs-4 form-control" id="userEmail" value="{$this->escape($user['email'])}">
-    </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="userUname">User:</label>
       <input name="userInfoUsername" type="text" class="col-xs-4 form-control" id="userUname" value="{$this->escape($user['username'])}">

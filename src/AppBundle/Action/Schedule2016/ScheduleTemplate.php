@@ -22,7 +22,7 @@ class ScheduleTemplate
         $gameCount = count($games);
 
         $html =  <<<EOD
-<div id="layout-block">
+<div id="layout-block clear-fix">
 <div class="schedule-games-list">
 <table id="schedule" class="schedule" border="1">
   <thead>

@@ -103,3 +103,16 @@ services:
         arguments:
             - '@schedule_team_search_form_2016'
             - '@schedule_template_2016'
+
+    schedule_team_view_xls_2016:
+        class:  AppBundle\Action\Schedule2016\Team\ScheduleTeamViewFile
+        parent: abstract_view
+        arguments:
+            - '@abstract_exporter_xls'
+            
+    schedule_team_view_csv_2016:
+        class:  AppBundle\Action\Schedule2016\Team\ScheduleTeamViewFile
+        parent: abstract_view
+        arguments:
+            - '@abstract_exporter_csv'
+            
