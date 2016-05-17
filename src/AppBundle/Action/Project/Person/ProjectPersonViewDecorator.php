@@ -159,10 +159,11 @@ class ProjectPersonViewDecorator
             case 'safeHavenCertified':
                 $role = $person->getRole('CERT_SAFE_HAVEN');
                 if (!$role) return null;
-                switch(strtolower($role->badge)) {
+                switch(strtolower($role->verified)) {
                     case  null:
                     case 'no':
                     case 'none':
+                    case '0':
                         return null;
                 }
                 return 'Yes';
@@ -177,10 +178,11 @@ class ProjectPersonViewDecorator
                 if ($role->verified) {
                     return 'Yes';
                 }
-                switch(strtolower($role->badge)) {
+                switch(strtolower($role->verified)) {
                     case  null:
                     case 'no':
                     case 'none':
+                    case '0':
                         return null;
                 }
                 return 'Yes';
@@ -194,10 +196,11 @@ class ProjectPersonViewDecorator
                 if ($role->verified) {
                     return 'Yes';
                 }
-                switch(strtolower($role->badge)) {
+                switch(strtolower($role->verified)) {
                     case  null:
                     case 'no':
                     case 'none':
+                    case '0':
                         return null;
                 }
                 return 'Yes';

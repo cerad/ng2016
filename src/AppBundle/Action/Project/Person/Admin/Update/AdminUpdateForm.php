@@ -45,8 +45,8 @@ class AdminUpdateForm extends AbstractForm
         $this->formControls['YesNo'] = array(
             'type'      => 'select',
             'label'     => 'Yes / No',
-            'default'   =>  'nr',
-            'choices'   => ['no'=>'No','yes'=>'Yes','maybe'=>'Maybe','nr'=>'Not Required'],
+            'default'   =>  null,
+            'choices'   => ['no'=>'No','yes'=>'Yes','maybe'=>'Maybe',null=>'No','nr'=>'Not Required'],
         );
         
         $this->formControls['regYear'] = array(
@@ -133,6 +133,14 @@ class AdminUpdateForm extends AbstractForm
         };
 
         $projectPerson['notes']             = $this->filterScalarString($data,'notes');
+
+        //update certs
+        if (isset($projectPerson->roles['CERT_SAFE_HAVEN']) and $personData['userSH']) {
+            $projectPerson->roles['CERT_SAFE_HAVEN']['verified'] = $personData['userSH'] == 'yes' ? 1 : 0;
+        }
+        if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
+            $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] == 'yes' ? 1 : 0;            
+        }
 
         //update roles
         if (isset($projectPerson->roles['CERT_REFEREE']) and
@@ -252,16 +260,16 @@ EOD;
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
         $certSH         = $personView->getCertClass('CERT_SAFE_HAVEN');
-        $classSH        = ' '. (is_null($certSH) ? $personView->successClass : $certSH);
+        $classSH        = ' '. (is_null($certSH) ? $personView->dangerClass : $certSH);
 
         $certConc       = $personView->getCertClass('CERT_CONCUSSION');
-        $classConc      = ' '. (is_null($certConc) ? $personView->successClass : $certConc);
-
+        $classConc      = ' '. (is_null($certConc) ? $personView->dangerClass : $certConc);
+        
         $certBgCk       = $personView->getCertClass('CERT_BACKGROUND_CHECK');
-        $classBgCk      = ' '. (is_null($certBgCk) ? $personView->successClass : $certBgCk);
+        $classBgCk      = ' '. (is_null($certBgCk) ? '' : $certBgCk);
 
         $certRef        = $personView->getCertClass('CERT_REFEREE');
-        $classCertRef   = ' '. (is_null($certRef) ? $personView->successClass : $certRef);
+        $classCertRef   = ' '. (is_null($certRef) ? $personView->dangerClass : $certRef);
 
         $roleRef        = $personView->getRoles();
         $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $roleRef['ROLE_REFEREE'] : null;
@@ -302,7 +310,6 @@ EOD;
     </div>
 EOD;
         }
-
         $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
@@ -319,7 +326,6 @@ EOD;
     </div>
 EOD;
         }
-
         $html .= <<<EOD
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userBackground">FL BkGrnd Check:</label>
