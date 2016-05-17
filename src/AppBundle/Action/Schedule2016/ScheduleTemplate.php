@@ -3,6 +3,8 @@ namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractActionTrait;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 class ScheduleTemplate
 {
     use AbstractActionTrait;
@@ -86,7 +88,7 @@ EOD;
   <td class="schedule-game" >{$gameNumber}</td>
   <td class="schedule-dow"  >{$game->dow}</td>
   <td class="schedule-time" >{$game->time}</td>
-  <td class="schedule-field">{$game->fieldName}</td>
+  <td class="schedule-field"><a href="{$this->generateUrl('field_map')}" target=_blank}>{$game->fieldName}</a></td>
   <td class="schedule-group">{$game->poolView}</td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
   <td class="text-left">{$homeTeam->regTeamName}<hr class="separator">{$awayTeam->regTeamName}</td>
