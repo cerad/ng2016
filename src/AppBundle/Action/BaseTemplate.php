@@ -206,7 +206,6 @@ EOT;
           <ul class="dropdown-menu">
             <li><a href="{$this->generateUrl('schedule_game_2016'    )}">GAME    SCHEDULES</a></li>
             <li><a href="{$this->generateUrl('schedule_team_2016'    )}">TEAM    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
@@ -271,9 +270,9 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="/project/natgames/schedule-user">MY SCHEDULE</a></li>
-            <li><a href="/project/natgames/schedule-referee">REQUEST ASSIGNMENTS</a></li>
-            <li><a href="/project/natgames/schedule-assignor">ASSIGNOR SCHEDULE</a></li>
+            <li><a href="#">MY SCHEDULE</a></li>
+            <li><a href="#">REQUEST ASSIGNMENTS</a></li>
+            <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
          </ul>
        </li>
 EOT;
