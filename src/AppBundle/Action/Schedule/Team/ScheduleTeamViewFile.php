@@ -68,6 +68,10 @@ class ScheduleTeamViewFile extends AbstractView
                 $projectGameTeamAway['name']
             );
         }
-        return $data;
+
+        $workbook['TeamSchedule']['data'] = $data;
+
+        return $workbook;
+
     }
 }

@@ -183,16 +183,6 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
       <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People (Excel)</a></li>
-EOT;
-      
-      if ($this->isGranted('ROLE_ADMIN')) {
-        $html .= <<<EOT
-      <li><a href="#">Sync eAYSO Information</a></li>
-      <li><a href="#">Import AYSO Information</a></li>
-EOT;
-      }
-      
-        $html .= <<<EOT
     </ul>
   </div>
 </div>

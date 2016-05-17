@@ -75,8 +75,10 @@ class ScheduleGameViewCore extends AbstractView
                 $projectGameTeamAway['name']
             );
         }
+        
+        $workbook['GameScheduleCore']['data'] = $data;
 
-        return $data;
+        return $workbook;
 
     }
 

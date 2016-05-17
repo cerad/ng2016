@@ -72,8 +72,8 @@ class ScheduleGameSearchForm extends AbstractForm
     <span class="glyphicon glyphicon-search"></span> 
     <span>Search</span>
   </button>
-<a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
-<a href="{$this->generateUrl('schedule_game_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a> 
+    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a> 
 </form>
 
 EOD;

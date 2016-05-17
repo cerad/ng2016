@@ -112,18 +112,17 @@ EOT;
 <<<EOT
         <nav class="navbar navbar-default">
           
-          <div class="container">
-             <div class="navbar-header">
-                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topmenu">
-                     <span class="sr-only">Toggle navigation</span>
-                     <span class="icon-bar"></span>
-                     <span class="icon-bar"></span>
-                     <span class="icon-bar"></span>
-                 </button>
-             </div>
-            
-             <!-- Collect the nav links, forms, and other content for toggling -->
-             <div id="topmenu" class="collapse navbar-collapse">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topmenu">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>  <!-- navbar-header -->
+           
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="topmenu" class="collapse navbar-collapse">
 EOT;
         $html .= $this->renderMenuForGuest();
         
@@ -131,8 +130,7 @@ EOT;
                 
         $html .=
 <<<EOT
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-->
+            </div><!-- navbar-collapse -->
 
         </nav>
 EOT;

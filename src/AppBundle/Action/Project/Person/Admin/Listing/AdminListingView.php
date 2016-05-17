@@ -8,6 +8,8 @@ use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
 use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 use AppBundle\Action\Project\User\ProjectUserRepository;
+use AppBundle\Action\Project\Person\Admin\AdminViewFilters;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminListingView extends AbstractView2
@@ -25,18 +27,22 @@ class AdminListingView extends AbstractView2
     private $projectPersonRepository;
 
     private $projectPersonViewDecorator;
+    
+    private $adminViewFilters;
 
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectUserRepository      $projectUserRepository,
         AdminListingSearchForm     $searchForm,
-        ProjectPersonViewDecorator $projectPersonViewDecorator
+        ProjectPersonViewDecorator $projectPersonViewDecorator,
+        AdminViewFilters           $adminViewFilters
     )
     {
         $this->searchForm = $searchForm;
-        $this->projectUserRepository      = $projectUserRepository;
-        $this->projectPersonRepository    = $projectPersonRepository;
-        $this->projectPersonViewDecorator = $projectPersonViewDecorator;
+        $this->projectUserRepository        = $projectUserRepository;
+        $this->projectPersonRepository      = $projectPersonRepository;
+        $this->projectPersonViewDecorator   = $projectPersonViewDecorator;
+        $this->adminViewFilters             = $adminViewFilters;
     }
     public function __invoke(Request $request)
     {
@@ -44,71 +50,7 @@ class AdminListingView extends AbstractView2
         $this->reportKey     = $request->attributes->get('reportKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
         
-        $listPersons = [];
-
-        $personView = $this->projectPersonViewDecorator;
-
-        foreach ($this->projectPersons as $person) {
-
-            $personView->setProjectPerson($person);
-
-            switch ($this->reportKey) {
-                case 'Referees':
-                    if ($personView->willReferee == 'Yes') {
-                        $listPersons[] = $person;
-                    }
-                    break;
-                case 'Volunteers':
-                    if ($personView->willVolunteer == 'Yes') {
-                        $listPersons[] = $person;
-                    }
-                    break;
-                case 'RefIssues':
-                    if ($personView->willReferee == 'Yes') {
-                        if ( $this->hasIssues($personView) ) {
-                            $listPersons[] = $person;
-                        }
-                    }
-                    break;
-                case 'VolIssues':
-                    if ($personView->willVolunteer == 'Yes') {
-                        if ( $this->hasIssues($personView) ) {
-                            $listPersons[] = $person;
-                        }
-                    }
-                    break;
-                case 'Unapproved':
-                    if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$personView->approved AND $personView->verified) {
-                            $listPersons[] = $person;
-                        }
-                    }
-                    break;
-                case 'FL':
-                    
-                    $stateArr = explode('/',$personView->orgKey);
-                    
-                    if (strpos($personView->orgKey, '/FL')) {
-                        // Background check for FL residents
-                        if (!$person->hasCert('CERT_BACKGROUND_CHECK')) {
-                            $certKey = 'CERT_BACKGROUND_CHECK';
-                            $concCert = $person->getCert($certKey,true);
-                    
-                            $concCert->active = true;
-                    
-                            $person->addCert($concCert);
-
-                            $this->projectPersonRepository->save($person);
-                        }
-
-                        $listPersons[] = $person;                        
-                    }
-                    
-                    break;
-                default:
-                    $listPersons[] = $person;
-            }
-        }
+        $listPersons = $this->adminViewFilters->getPersonListByReport($this->projectPersons, $this->reportKey);
         
         $this->projectPersons = $listPersons;
 
@@ -348,17 +290,5 @@ EOD;
 </table>
 EOD;
 
-    }
-    private function hasIssues(ProjectPersonViewDecorator $personView)
-    {
-        $issues = false;
-        
-        $certs = $personView->getCerts();
-        $issues = false;
-        foreach($certs as $cert) {
-            $issues |= !(bool)$cert->verified;
-        }
-
-        return boolval($issues);
     }
 }
