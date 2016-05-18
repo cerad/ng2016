@@ -41,6 +41,7 @@ CREATE TABLE orgs
   orgKey VARCHAR(20) NOT NULL,
   sar    VARCHAR(20) NOT NULL,
   state  VARCHAR( 4),
+  comms  LONGTEXT, -- communities
 
   CONSTRAINT aysoOrgs_primaryKey PRIMARY KEY(orgKey)
 
