@@ -36,6 +36,12 @@ const appTask = function() {
         ])
         .pipe(gulp.dest('web/images'));
         
+    // pdfs
+    gulp.src([
+            appPublicDir + '/../pdf/*.pdf',
+            
+        ])
+        .pipe(gulp.dest('web/pdf'));
 };
 gulp.task('app',appTask);
 
@@ -74,6 +80,7 @@ const watchTask = function()
         appPublicDir + '/js/*.js',
         appPublicDir + '/images/*.png',
         appPublicDir + '/images/*.ico',
+        appPublicDir + '/../pdf/*.pdf',
     ],  ['app']);
 };
 gulp.task('watch',watchTask);
