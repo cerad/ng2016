@@ -18,6 +18,11 @@ services:
         tags: [{ name: console.command }]
         arguments: ['@ayso_connection']
 
+    ayso_load_orgs_command:
+        class: AppBundle\Action\Physical\Ayso\Load\LoadOrgsCommand
+        tags: [{ name: console.command }]
+        arguments: ['@ayso_connection']
+
     ayso_region_key_transformer:
         class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer
 
