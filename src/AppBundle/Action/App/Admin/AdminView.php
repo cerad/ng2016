@@ -59,9 +59,9 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
 
-      <li><a href="{$this->generateUrl('app_results_poolplay')}">Pool Play</a></li>
+      <li><a href="{$this->generateUrl('results_poolplay_2016')}">Pool Play</a></li>
 
-      <li><a href="{$this->generateUrl('app_results_medalround')}">Medal Round</a></li>
+      <li><a href="{$this->generateUrl('results_medalround_2016')}">Medal Round</a></li>
 
       <li><a href="{$this->generateUrl('app_results_sportsmanship')}">Sportsmanship</a></li>
 
@@ -87,9 +87,9 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('app_schedule_game')}">View Game Schedule</a></li>
-      <li><a href="{$this->generateUrl('app_schedule_team')}">View Team Schedule</a></li>
-      <li><a href="{$this->generateUrl('app_schedule_game',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
+      <li><a href="{$this->generateUrl('schedule_game_2016')}">View Game Schedule</a></li>
+      <li><a href="{$this->generateUrl('schedule_team_2016')}">View Team Schedule</a></li>
+      <li><a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
