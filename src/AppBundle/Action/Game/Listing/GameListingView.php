@@ -3,8 +3,9 @@ namespace AppBundle\Action\Game\Listing;
 
 use AppBundle\Action\AbstractView2;
 
-use AppBundle\Action\Game\PoolTeam;
 use AppBundle\Action\Game\RegTeam;
+use AppBundle\Action\Game\PoolTeam;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class GameListingView extends AbstractView2
@@ -135,12 +136,12 @@ EOD;
 
         return <<<EOD
 <tr>
-  <td class="text-left">  {$team->poolTeamId} </td>
-  <td class="text-center">{$team->division}   </td>
-  <td class="text-left">  {$team->poolTypeKey} <br/>{$team->poolKey}<br/>{$team->poolTeamKey}</td>
+  <td class="text-left">  {$team->poolTeamId}</td>
+  <td class="text-center">{$team->division}</td>
+  <td class="text-left">  {$team->poolTypeKey} <br/>{$team->poolKey} <br/>{$team->poolTeamKey} </td>
   <td class="text-left">  {$team->poolTypeView}<br/>{$team->poolView}<br/>{$team->poolTeamView}</td>
   <td class="text-left">  &nbsp;<br/>{$team->poolSlotView}<br/>{$team->poolTeamSlotView}</td>
-  <td class="text-center">{$regTeamKey}  </td>
+  <td class="text-center">{$regTeamKey}</td>
 </tr>
 EOD;
     }
