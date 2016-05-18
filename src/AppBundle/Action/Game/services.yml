@@ -1,18 +1,7 @@
 services:
 
-    pool_connection:
-        alias: doctrine.dbal.ng2016games_connection
-
-    pool_team_repository:
-        class: AppBundle\Action\Game\PoolTeamRepository
-        arguments: ['@pool_connection']
-
     game_connection:
         alias: doctrine.dbal.ng2016games_connection
-
-    game_repository:
-        class: AppBundle\Action\Game\GameRepository
-        arguments: ['@game_connection','@pool_team_repository']
 
     game_migrate_ng2014_command:
         class: AppBundle\Action\Game\Migrate\MigrateGames2014Command
