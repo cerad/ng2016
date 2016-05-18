@@ -16,6 +16,12 @@ services:
         arguments:
             - '@doctrine.dbal.ng2016games_connection'
 
+    game_finder:
+        class: AppBundle\Action\Game\GameFinder
+        arguments:
+            - '@doctrine.dbal.ng2016games_connection'
+            - '@doctrine.dbal.ng2016games_connection'
+
 # Admin listing action
     game_listing_search_form:
         class:  AppBundle\Action\Game\Listing\GameListingSearchForm
@@ -30,6 +36,7 @@ services:
         parent: abstract_controller
         arguments:
             - '@game_listing_search_form'
+            - '@game_finder'
             - '%project_choices%'
             - '%projects%'
 

@@ -3,25 +3,26 @@ namespace AppBundle\Action\Game\Listing;
 
 use AppBundle\Action\AbstractController2;
 
+use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\Results2016\ResultsFinder;
 use Symfony\Component\HttpFoundation\Request;
 
 class GameListingController extends AbstractController2
 {
+    private $finder;
     private $searchForm;
-    private $resultsFinder;
 
     private $projects;
     private $projectChoices;
 
     public function __construct(
         GameListingSearchForm  $searchForm,
-        //ResultsFinder              $resultsFinder,
+        GameFinder             $finder,
         array $projectChoices,
         array $projects
     ) {
-        $this->searchForm    = $searchForm;
-        //$this->resultsFinder = $resultsFinder;
+        $this->finder = $finder;
+        $this->searchForm = $searchForm;
 
         $this->projects       = $projects;
         $this->projectChoices = $projectChoices;
@@ -33,6 +34,7 @@ class GameListingController extends AbstractController2
         $searchData = [
             'projectId' => $projectId,
             'program'   => $this->getDefaultProgramForProject($projectId),
+            'show'      => 'regTeams',
         ];
         // Override from session
         $session = $request->getSession();
@@ -53,38 +55,18 @@ class GameListingController extends AbstractController2
             $session->set($sessionKey,$searchDataNew);
             return $this->redirectToRoute($this->getCurrentRouteName());
         }
-        // Deal with query parameters
-        if ($request->query->has('division')) {
-            $searchData['division'] = $request->query->get('division');
-            $searchData['poolKey']  = null;
-            $session->set('results_search_data_2016', $searchData);
-            return $this->redirectToRoute($this->getCurrentRouteName());
-        }
-        if ($request->query->has('poolKey')) {
-            $searchData['poolKey'] = $request->query->get('poolKey');
-            $searchData['division']  = null;
-            $session->set('results_search_data_2016', $searchData);
-            return $this->redirectToRoute($this->getCurrentRouteName());
-        }
-        return null;
-        
-        $pools = [];
         $criteria = [
-            'poolTypeKeys' => ['PP'],
-            'projectIds'   => [$searchData['projectId']],
-            'programs'     => [$searchData['program']],
+            'projectIds' => [$searchData['projectId']],
+            'programs'   => [$searchData['program']],
+            'divisions'  => ['U14B'],
         ];
-        if (isset($searchData['division'])) {
-            $criteria['divisions'] = [$searchData['division']];
-            $pools = $this->resultsFinder->findPools($criteria);
+        switch($searchData['show']) {
+            case 'regTeams':
+                $regTeams = $this->finder->findRegTeams($criteria);
+                $request->attributes->set('regTeams',$regTeams);
+                dump($regTeams);
+                break;
         }
-        if (isset($searchData['poolKey'])) {
-            $criteria['poolKeys'] = [$searchData['poolKey']];
-            $pools = $this->resultsFinder->findPools($criteria);
-        }
-        // Get the pools if needed
-        // dump($pools);
-        $request->attributes->set('pools',$pools);
         return null;
     }
     private function getDefaultProjectId()

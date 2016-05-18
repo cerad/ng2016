@@ -32,11 +32,13 @@ class GameListingSearchForm extends AbstractForm
         $this->formData = array_replace($this->formData,[
             'projectId'   => $this->filterScalarString($data,'projectId'),
             'program'     => $this->filterScalarString($data,'program'),
+            'show'        => $this->filterScalarString($data,'show'),
         ]);
         $this->formDataErrors = $errors;
     }
     public function render()
     {
+        $show      = $this->formData['show'];
         $program   = $this->formData['program'];
         $projectId = $this->formData['projectId'];
         $project   = $this->projects[$projectId];
@@ -54,6 +56,10 @@ class GameListingSearchForm extends AbstractForm
     <label for="program">Program</label>
     {$this->renderInputSelect($project['programs'],$program,'program')}
   </div>
+  <div class="form-group">
+    <label for="show">Show</label>
+    {$this->renderInputSelect($this->showChoices,$show,'show')}
+  </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span> 
@@ -64,4 +70,9 @@ class GameListingSearchForm extends AbstractForm
 EOD;
         return $html;
     }
+    private $showChoices = [
+        'regTeams' => 'Registered Teams',
+        'pools'    => 'Pools',
+        'games'    => 'Games',
+    ];
 }
