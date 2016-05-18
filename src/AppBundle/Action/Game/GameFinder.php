@@ -233,9 +233,36 @@ EOD;
         return $games;
     }
 
-    /** ===========================================================================
-     * For the team schedule choices, maybe just make it choices
-     *
+    /** =======================================================================
+     * @param  array $criteria
+     * @return PoolTeam[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findPoolTeams(array $criteria)
+    {
+        $qb = $this->gameConn->createQueryBuilder();
+
+        $qb->select('*')->from('poolTeams')->orderBy('poolTeamId');
+
+        $whereMeta = [
+            'poolTeamIds'  => 'id',
+            'poolTypeKeys' => 'poolTypeKey',
+            'regTeamIds'   => 'regTeamId',
+            'projectIds'   => 'projectId',
+            'programs'     => 'program',
+            'genders'      => 'gender',
+            'ages'         => 'age',
+            'divisions'    => 'division',
+        ];
+        list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
+        $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
+        $poolTeams = [];
+        while($poolTeamRow = $stmt->fetch()) {
+            $poolTeams[] = PoolTeam::createFromArray($poolTeamRow);
+        }
+        return $poolTeams;
+    }
+    /** =======================================================================
      * @param  array $criteria
      * @return RegTeam[]
      * @throws \Doctrine\DBAL\DBALException
@@ -257,10 +284,9 @@ EOD;
         list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
         $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
         $regTeams = [];
-        while($regTeam = $stmt->fetch()) {
-            $regTeams[] = RegTeam::createFromArray($regTeam);
+        while($regTeamRow = $stmt->fetch()) {
+            $regTeams[] = RegTeam::createFromArray($regTeamRow);
         }
-        // Keep the object flag for now though I don't think it is needed
         return $regTeams;
     }
 }

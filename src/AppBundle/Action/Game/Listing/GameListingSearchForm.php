@@ -32,6 +32,7 @@ class GameListingSearchForm extends AbstractForm
         $this->formData = array_replace($this->formData,[
             'projectId'   => $this->filterScalarString($data,'projectId'),
             'program'     => $this->filterScalarString($data,'program'),
+            'division'    => $this->filterScalarString($data,'division'),
             'show'        => $this->filterScalarString($data,'show'),
         ]);
         $this->formDataErrors = $errors;
@@ -41,6 +42,8 @@ class GameListingSearchForm extends AbstractForm
         $show      = $this->formData['show'];
         $program   = $this->formData['program'];
         $projectId = $this->formData['projectId'];
+        $division  = $this->formData['division'];
+
         $project   = $this->projects[$projectId];
 
         $csrfToken = 'TODO';
@@ -57,6 +60,10 @@ class GameListingSearchForm extends AbstractForm
     {$this->renderInputSelect($project['programs'],$program,'program')}
   </div>
   <div class="form-group">
+    <label for="division">Div</label>
+    {$this->renderInputSelect($this->divisionChoices,$division,'division')}
+  </div>
+  <div class="form-group">
     <label for="show">Show</label>
     {$this->renderInputSelect($this->showChoices,$show,'show')}
   </div>
@@ -71,8 +78,21 @@ EOD;
         return $html;
     }
     private $showChoices = [
+        'all'      => 'All',
         'regTeams' => 'Registered Teams',
         'pools'    => 'Pools',
         'games'    => 'Games',
+    ];
+    private $divisionChoices = [
+        'U10B' => 'U-10 Boys',
+        'U10G' => 'U-10 Girls',
+        'U12B' => 'U-12 Boys',
+        'U12G' => 'U-12 Girls',
+        'U14B' => 'U-14 Boys',
+        'U14G' => 'U-14 Girls',
+        'U16B' => 'U-16 Boys',
+        'U16G' => 'U-16 Girls',
+        'U19B' => 'U-19 Boys',
+        'U19G' => 'U-19 Girls',
     ];
 }

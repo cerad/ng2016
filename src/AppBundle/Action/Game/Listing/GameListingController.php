@@ -34,7 +34,8 @@ class GameListingController extends AbstractController2
         $searchData = [
             'projectId' => $projectId,
             'program'   => $this->getDefaultProgramForProject($projectId),
-            'show'      => 'regTeams',
+            'division'  => 'U14B',
+            'show'      => 'all',
         ];
         // Override from session
         $session = $request->getSession();
@@ -58,13 +59,25 @@ class GameListingController extends AbstractController2
         $criteria = [
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
-            'divisions'  => ['U14B'],
+            'divisions'  => [$searchData['division']],
         ];
         switch($searchData['show']) {
+            case 'all':
+                $regTeams = $this->finder->findRegTeams($criteria);
+                $request->attributes->set('regTeams',$regTeams);
+                
+                $poolTeams = $this->finder->findPoolTeams($criteria);
+                $request->attributes->set('poolTeams',$poolTeams);
+                break;
+            
             case 'regTeams':
                 $regTeams = $this->finder->findRegTeams($criteria);
                 $request->attributes->set('regTeams',$regTeams);
-                dump($regTeams);
+                break;
+            
+            case 'poolTeams':
+                $poolTeams = $this->finder->findPoolTeams($criteria);
+                $request->attributes->set('poolTeams',$poolTeams);
                 break;
         }
         return null;
