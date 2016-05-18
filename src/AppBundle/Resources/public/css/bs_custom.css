@@ -30,6 +30,16 @@ form { width: 100%; margin-left:auto; margin-right: auto; }
 
 .form-control { max-width: 300px; }
 
+.form-control.report-update { width: inherit; margin: 0 35px ; text-align: center; }
+
+@media (max-width: 1024px) {
+    .form-control.report-update { width: inherit; margin: 0 15px ; text-align: center; }
+}
+
+@media (max-width: 667px) {
+    .form-control.report-update { width: 120px; margin: 0 10px ; text-align: center; }
+}
+
 .panel > .form-group { margin-top: 15px; }
 
 .avail .control-label { text-align: left; margin-left: 20px; }

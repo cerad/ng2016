@@ -146,7 +146,6 @@ class GameReportUpdateForm extends AbstractForm
         $awayTeamMisconduct = $awayTeam->misconduct;
 
         $html = <<<EOD
-<div class="container">
 <form method="post" action="{$gameReportUpdateUrl}" class="form-horizontal">
 <fieldset>
   <legend class="text-center">{$this->escape($gameReportDescription)}</legend> <!-- Game Report -->
@@ -212,18 +211,22 @@ class GameReportUpdateForm extends AbstractForm
     <div class="col-xs-8 col-xs-offset-7">
       <div class="row">
         <label class="col-xs-4 control-label">Next Match Number</label> 
-        <input class="col-xs-3 entry" type="number" name="nextGameNumber" value="{$gameNumberNext}" />
+        <input class="col-xs-3  form-control report-update" type="number" name="nextGameNumber" value="{$gameNumberNext}" />
       </div>
     </div>
   </div>
   <div class="clear-both"></div>       
 </fieldset>
+EOD;
+
+      if ($this->isGranted('ROLE_SCORE_ADMIN')) {
+        $html .= <<<EOD
 <fieldset>
   <div class="form-group">
     <div class="col-xs-12">
       <div class="row">
         <label class="col-xs-2 control-label" for="gameStatus">Game Status</label>
-        <select class="col-xs-3 entry" id="gameStatus" name="gameStatus">
+        <select class="col-xs-3 form-control report-update" id="gameStatus" name="gameStatus">
 EOD;
         $status = $gameReport->status;
         foreach($this->gameStatuses as $value => $text) {
@@ -235,7 +238,7 @@ EOD;
         $html .= <<<EOD
         </select>     
         <label class="col-xs-2 control-label" for="gameReportState">Report Status</label> 
-        <select class="col-xs-3 entry" id="gameReportState" name="gameReportState">
+        <select class="col-xs-3 form-control report-update" id="gameReportState" name="gameReportState">
 EOD;
         $state = $gameReport->reportState;
         foreach($this->reportStates as $value => $text) {
@@ -244,6 +247,7 @@ EOD;
           <option{$selected} value="{$value}">{$text}</option>
 EOD;
         }
+      }
         $html .= <<<EOD
         </select>
       </div>
@@ -251,7 +255,6 @@ EOD;
   </div>
 </fieldset>      
 </form>
-</div> <!-- .container -->
 EOD;
         return $html;
     }
@@ -294,8 +297,8 @@ EOD;
         return <<<EOD
 <div class="row">
   <label class="col-xs-4 control-label">{$label}</label>
-  <input type="number" name="{$homeTeamName}" value="{$homeTeamValue}" {$placeHolder} class="col-xs-3 entry">
-  <input type="number" name="{$awayTeamName}" value="{$awayTeamValue}" {$placeHolder} class="col-xs-3 entry">
+  <input type="number" name="{$homeTeamName}" value="{$homeTeamValue}" {$placeHolder} class="col-xs-3  form-control report-update">
+  <input type="number" name="{$awayTeamName}" value="{$awayTeamValue}" {$placeHolder} class="col-xs-3  form-control report-update">
 </div>
 EOD;
 
