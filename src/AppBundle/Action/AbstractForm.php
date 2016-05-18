@@ -8,14 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class AbstractForm implements ContainerAwareInterface
 {
     use AbstractActionTrait;
-    
+
     protected $isPost = false;
-    
+
     protected $submit;
-    
+
     protected $formData       = [];
     protected $formDataErrors = [];
-    
+
     public function setData($formData)
     {
         $this->formData = array_replace_recursive($this->formData, $formData);
@@ -30,11 +30,11 @@ abstract class AbstractForm implements ContainerAwareInterface
         if (count($this->formDataErrors)) return false;
         return true;
     }
-    public function getSubmit() 
+    public function getSubmit()
     {
         return $this->submit;
     }
-    /** 
+    /**
      * @param string $id
      * @return DataTransformerInterface
      */
@@ -43,7 +43,7 @@ abstract class AbstractForm implements ContainerAwareInterface
         return $this->container->get($id);
     }
     abstract function handleRequest(Request $request);
-    
+
     abstract public function render();
 
     protected function renderFormErrors()
@@ -64,12 +64,12 @@ EOD;
     }
     /* ===========================================================================
      * Your basic select input element
-     * 
+     *
      */
     protected function renderInputSelect($choices,$value,$name,$id=null,$size=null)
     {
         $id = $id ? : $name;
-        
+
         $size = $size ? sprintf(' size="%d"',$size) : null;
 
         $multiple = is_array($value) ? ' multiple' : null;
@@ -86,7 +86,7 @@ EOD;
             $choiceContent = $this->escape($choiceContent);
             $html .= <<<EOD
   <option value="{$choiceValue}"{$selected}>{$choiceContent}</option>
-  
+
 EOD;
         }
         $html .= <<<EOD
@@ -167,5 +167,12 @@ EOD;
             }
         }
         return $items;
+    }
+    protected function isAdminStyle()
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return ' style="visibility:hidden; width:0;"';
+        }
+        return '';
     }
 }

@@ -18,13 +18,13 @@ class ScheduleGameSearchForm extends AbstractForm
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) return;
-        
+
         $this->isPost = true;
-        
+
         $data = $request->request->all();
 
         $errors = [];
-        
+
         $this->formData = array_replace($this->formData,[
             'projectId' => $this->filterScalar($data,'projectId'),
             'programs'  => $this->filterArray ($data,'programs'),
@@ -49,7 +49,8 @@ class ScheduleGameSearchForm extends AbstractForm
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form role="form" class="form-inline" action="{$action}" method="post">
-  <div class="form-group">
+    <div class="schedule-search">
+  <div class="form-group" {$this->isAdminStyle()}>
     <label for="projectId">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
   </div>
@@ -57,8 +58,9 @@ class ScheduleGameSearchForm extends AbstractForm
     <label for="sortBy">Sort By</label>
     {$this->renderInputSelect($project['sortBy'],$formData['sortBy'],'sortBy')}
   </div>
-  <br/>
-  <div class="form-group">
+  </div>
+
+  <div class="form-group schedule-search">
   <table><tr>
     <td>{$this->renderInputSearchCheckbox($project['dates'],   $formData['dates'],   'dates[]',   'Days')    }</td>
     <td>{$this->renderInputSearchCheckbox($project['programs'],$formData['programs'],'programs[]','Programs')}</td>
@@ -66,17 +68,17 @@ class ScheduleGameSearchForm extends AbstractForm
     <td>{$this->renderInputSearchCheckbox($project['genders'], $formData['genders'], 'genders[]', 'Genders') }</td>
   </tr></table>
   </div>
-  <br/>
-  <div class="form-group pull-right">
+
+  <div class="schedule-search col-xs-8 col-xs-offset-2 clearfix">
+
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-search"></span> 
+  <button type="submit" class="btn btn-sm btn-primary submit pull-right">
+    <span class="glyphicon glyphicon-search"></span>
     <span>Search</span>
   </button>
-    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
-    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
+    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
+    <a href="{$this->generateUrl('schedule_game_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
 </div>
-<div style="clear: both" />
 </form>
 
 EOD;
