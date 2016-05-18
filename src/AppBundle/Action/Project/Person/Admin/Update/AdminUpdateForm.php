@@ -279,8 +279,20 @@ EOD;
         $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
         
         $sar = explode('/', $personView->orgKey);
-        $region = ltrim($sar[2], '0');
-        $state = ltrim($sar[3], ' ');
+        switch (count($sar)) {
+            case 3:
+                $section = $sar[0];
+                $area = $sar(1);
+                $region = ltrim($sar[2], '0');
+                $state = '';
+                break;
+            case 4:
+                $section = $sar[0];
+                $area = $sar(1);
+                $region = ltrim($sar[2], '0');
+                $state = ltrim($sar[3], ' ');
+                break;
+        }
 
         $html = <<<EOD
 <div class="panel panel-default">
