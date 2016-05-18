@@ -21,9 +21,9 @@ class ScheduleTeamSearchForm extends AbstractForm
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) return;
-        
+
         $this->isPost = true;
-        
+
         $data = $request->request->all();
         $errors = [];
 
@@ -44,7 +44,7 @@ class ScheduleTeamSearchForm extends AbstractForm
         $project    = $this->projects[$projectId];
 
         $program = $formData['program'];
-        
+
         $regTeamIds = $formData['regTeams'];
         $criteria = [
             'projectIds' => [$projectId],
@@ -65,8 +65,8 @@ class ScheduleTeamSearchForm extends AbstractForm
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form role="form" class="form-inline" action="{$this->generateUrl('schedule_team_2016')}" method="post">
-<div class="col-xs-12">
-  <div class="form-group">
+<div class="col-xs-12 schedule-search">
+  <div class="form-group" {$this->isAdminStyle()}>
     <label for="projectId">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
   </div>
@@ -80,27 +80,29 @@ class ScheduleTeamSearchForm extends AbstractForm
   </div>
   <div class="form-group">
     <label for="regTeamName">Name</label>
-    <input 
+    <input
       type="text" id="regTeamName" class="form-control"
       name="name" value="{$regTeamName}" placeholder="Filter By Name" />
   </div>
+  </div>
+<div class="col-xs-12 schedule-search">
   <div class="form-group">
     <label for="regTeamx">Select Teams</label>
     {$this->renderInputSelect($regTeamChoices,$regTeamIds,'regTeams[]','regTeams',10)}
   </div>
 </div>
-  <div class="col-xs-12 form-group">
-  <div class="form-group pull-right">
+
+  <div class="form-group col-xs-8 col-xs-offset-2 clearfix">
+
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-search"></span> 
+    <span class="glyphicon glyphicon-search"></span>
     <span>Search</span>
   </button>
-    <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+    <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
     <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
 </div>
-</div>
-<div style="clear: both" />
+<div class="clearfix"></div>
 </form>
 EOD;
 

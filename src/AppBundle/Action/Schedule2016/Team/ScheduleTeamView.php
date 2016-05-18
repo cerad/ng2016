@@ -29,7 +29,6 @@ class ScheduleTeamView extends AbstractView2
     private function render()
     {
         $content = <<<EOD
-<legend>Team Schedules</legend>
 {$this->searchForm->render()}
 <br/>
 {$this->scheduleTemplate->render($this->games)}
