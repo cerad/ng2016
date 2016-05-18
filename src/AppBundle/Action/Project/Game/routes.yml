@@ -1,8 +1,0 @@
-# /game/report
-game_report_update:
-    path: /update/{gameNumber}
-    defaults:
-        _controller: game_report_update_controller
-        _view:       game_report_update_view
-        _role:       ROLE_SCORE_ENTRY
-
