@@ -143,8 +143,3 @@ services:
         arguments:
             - '@abstract_exporter_txt'
             
-    # ===============================================================
-    # Field Map
-    field_map_controller:
-        class:  AppBundle\Action\Schedule2016\FieldMap\FieldMapController
-        parent: abstract_controller

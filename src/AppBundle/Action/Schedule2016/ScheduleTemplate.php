@@ -3,8 +3,6 @@ namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractActionTrait;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 class ScheduleTemplate
 {
     use AbstractActionTrait;

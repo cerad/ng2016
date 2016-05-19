@@ -31,7 +31,7 @@ schedule_game_2016:
         _view_json:  schedule_game_view_json
 
 field_map:
-    path: /fieldmap/{filename}
+    path: /field_map
     defaults:
-        filename: 'master_field_layout.pdf'
-        _controller: field_map_controller
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /pdf/master_field_layout.pdf
