@@ -1,13 +1,12 @@
 <?php
 namespace AppBundle\Action\Game;
 
-use AppBundle\Common\QueryBuilderTrait;
 use Doctrine\DBAL\Connection;
 
 class GameFinder
 {
-    use QueryBuilderTrait;
-
+    use GameFinderTrait;
+    
     /** @var  Connection */
     private $gameConn;
 
@@ -22,215 +21,43 @@ class GameFinder
 
     /**
      * @param  array $criteria
-     * @param  bool $objects
-     * @return ScheduleGame[]
+     * @return Game[]
      */
-    public function findGames(array $criteria, $objects = true)
+    public function findGames(array $criteria)
     {
+        $conn = $this->gameConn;
+
         // Now find unique game ids
-        $gameIds = $this->findGameIds($criteria);
+        $gameIds = $this->findGameIds($conn,$criteria);
 
         // Load the games
-        $games = $this->findGamesForIds($gameIds);
+        $games = $this->findGamesForIds($conn,$gameIds);
 
         // Load the teams
         $wantTeams = isset($criteria['wantTeams']) ? $criteria['wantTeams'] : true;
         if ($wantTeams) {
-            $games = $this->joinTeamsToGames($games);
+            $games = $this->joinTeamsToGames($conn, $games);
         }
+        
         // Load the officials
-        $wantOfficials = isset($criteria['wantOfficials']) ? $criteria['wantOfficials'] : true;
+        $wantOfficials = isset($criteria['wantOfficials']) ? $criteria['wantOfficials'] : false;
         if ($wantOfficials) {
-            $games = $this->joinOfficialsToGames($games);
+            $games = $this->joinOfficialsToGames($conn,$games);
         }
+        
+        // Array based sort
+        if (isset($criteria['sortBy'])) {
+            //$games = $this->sortGames($games,$criteria['sortBy']);
+        }
+
         // Convert to objects
-        if (!$objects) {
-            return $games;
-        }
         $gameObjects = [];
         foreach($games as $game) {
-            $gameObjects[] = ScheduleGame::createFromArray($game);
-        }
-        if (isset($criteria['sortBy'])) {
-            $gameObjects = $this->sortGames($gameObjects,$criteria['sortBy']);
+            $gameObjects[] = Game::createFromArray($game);
         }
         // Done
+        dump($gameObjects);
         return $gameObjects;
-    }
-    private function joinTeamsToGames(array $games)
-    {
-        if (!count($games)) {
-            return [];
-        }
-        $sql = <<<EOD
-SELECT 
-
-  gameTeam.gameTeamId,
-  gameTeam.gameId,
-  gameTeam.gameNumber,
-  gameTeam.slot,
-  
-  poolTeam.regTeamId,
-  poolTeam.regTeamName,
-  poolTeam.division,
-  
-  poolTeam.poolTeamKey,
-  
-  poolTeam.poolView,
-  poolTeam.poolTypeView,
-  poolTeam.poolTeamView,
-  poolTeam.poolTeamSlotView
-  
-FROM      gameTeams AS gameTeam
-LEFT JOIN poolTeams AS poolTeam ON poolTeam.poolTeamId = gameTeam.poolTeamId
-WHERE gameTeam.gameId IN (?)
-ORDER BY gameNumber,slot
-EOD;
-        $stmt = $this->gameConn->executeQuery($sql,[array_keys($games)],[Connection::PARAM_STR_ARRAY]);
-        while($gameTeam = $stmt->fetch()) {
-            $gameId = $gameTeam['gameId'];
-            $games[$gameId]['teams'][$gameTeam['slot']] = $gameTeam;
-        }
-        return $games;
-    }
-    private function joinOfficialsToGames(array $games)
-    {
-        if (!count($games)) {
-            return [];
-        }
-        $sql = <<<EOD
-SELECT * 
-FROM  gameOfficials AS gameOfficial
-WHERE gameOfficial.gameId IN (?)
-ORDER BY gameNumber,slot
-EOD;
-        $stmt = $this->gameConn->executeQuery($sql,[array_keys($games)],[Connection::PARAM_STR_ARRAY]);
-        while($gameOfficial = $stmt->fetch()) {
-            $gameId = $gameOfficial['gameId'];
-            $games[$gameId]['officials'][$gameOfficial['slot']] = $gameOfficial;
-        }
-        return $games;
-    }
-    private function findGamesForIds($gameIds)
-    {
-        if (!count($gameIds)) {
-            return [];
-        }
-        $sql = 'SELECT * FROM games WHERE gameId IN (?) ORDER BY gameNumber';
-        $stmt = $this->gameConn->executeQuery($sql,[$gameIds],[Connection::PARAM_STR_ARRAY]);
-        $games = [];
-        while($game = $stmt->fetch()) {
-            $game['teams']     = [];
-            $game['officials'] = [];
-            $game['gameNumber'] = (integer)$game['gameNumber'];
-            $games[$game['gameId']] = $game;
-        }
-        return $games;
-    }
-    private function findGameIds(array $criteria)
-    {
-        $qb = $this->gameConn->createQueryBuilder();
-        $qb->select('DISTINCT game.gameId');
-        $qb->from('games','game');
-        $qb->leftJoin('game',    'gameTeams','gameTeam','gameTeam.gameId = game.gameId');
-        $qb->leftJoin('gameTeam','poolTeams','poolTeam','poolTeam.poolTeamId = gameTeam.poolTeamId');
-        $qb->orderBy ('game.gameId');
-
-        $whereMeta = [
-            'projectIds'  => 'game.projectId',
-            'dates'       => 'DATE(game.start)',
-            'programs'    => 'program',
-            'genders'     => 'gender',
-            'ages'        => 'age',
-            'divisions'   => 'division',
-            'poolTypes'   => 'poolTypeKey',
-            'poolTeamIds' => 'poolTeam.poolTeamId',
-            'regTeamIds'  => 'regTeamId',
-        ];
-        list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
-        if (!count($values)) {
-            //return [];
-        }
-        $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
-        $gameIds = [];
-        while($gameId = $stmt->fetch()) {
-            $gameIds[] = $gameId['gameId'];
-        }
-        return $gameIds;
-    }
-    
-    /* =======================================================================
-     * Sort after the load to avoid joins
-     * Plus it is a bit more flexible and readable
-     */
-    protected function sortGames($games,$sortBy)
-    {
-        if ($sortBy === 1) {
-            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
-
-                if ($game1->start > $game2->start) return  1;
-                if ($game1->start < $game2->start) return -1;
-
-                if ($game1->poolView > $game2->poolView) return  1;
-                if ($game1->poolView < $game2->poolView) return -1;
-
-                if ($game1->fieldName > $game2->fieldName) return  1;
-                if ($game1->fieldName < $game2->fieldName) return -1;
-
-                return 0;
-            });
-            return $games;
-        }
-        if ($sortBy === 2) {
-            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
-
-                $date1 = substr($game1->start,0,10);
-                $date2 = substr($game1->start,0,10);
-                if ($date1 > $date2) return  1;
-                if ($date1 < $date2) return -1;
-
-                if ($game1->fieldName > $game2->fieldName) return  1;
-                if ($game1->fieldName < $game2->fieldName) return -1;
-
-                $time1 = substr($game1->start,11); // 2016-07-07 08:00:00
-                $time2 = substr($game2->start,11);
-                if ($time1 > $time2) return  1;
-                if ($time1 < $time2) return -1;
-
-                return 0;
-            });
-            return $games;
-        }
-        if ($sortBy === 3) {
-            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
-
-                if ($game1->venueName > $game2->venueName) return  1;
-                if ($game1->venueName < $game2->venueName) return -1;
-
-                if ($game1->fieldName > $game2->fieldName) return  1;
-                if ($game1->fieldName < $game2->fieldName) return -1;
-
-                if ($game1->start > $game2->start) return  1;
-                if ($game1->start < $game2->start) return -1;
-
-                return 0;
-            });
-            return $games;
-        }
-        if ($sortBy === 4) {
-            usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
-
-                if ($game1->projectId > $game2->projectId) return  1;
-                if ($game1->projectId < $game2->projectId) return -1;
-
-                if ($game1->gameNumber > $game2->gameNumber) return  1;
-                if ($game1->gameNumber < $game2->gameNumber) return -1;
-
-                return 0;
-            });
-            return $games;
-        }
-        return $games;
     }
 
     /** =======================================================================
@@ -245,7 +72,7 @@ EOD;
         $qb->select('*')->from('poolTeams')->orderBy('poolTeamId');
 
         $whereMeta = [
-            'poolTeamIds'  => 'id',
+            'poolTeamIds'  => 'poolTeamId',
             'poolTypeKeys' => 'poolTypeKey',
             'regTeamIds'   => 'regTeamId',
             'projectIds'   => 'projectId',
@@ -274,7 +101,7 @@ EOD;
         $qb->select('*')->from('regTeams')->orderBy('regTeamId');
 
         $whereMeta = [
-            'regTeamIds'  => 'id',
+            'regTeamIds'  => 'regTeamId',
             'projectIds'  => 'projectId',
             'programs'    => 'program',
             'genders'     => 'gender',
@@ -285,8 +112,17 @@ EOD;
         $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
         $regTeams = [];
         while($regTeamRow = $stmt->fetch()) {
-            $regTeams[] = RegTeam::createFromArray($regTeamRow);
+            $regTeams[$regTeamRow['regTeamId']] = RegTeam::createFromArray($regTeamRow);
         }
-        return $regTeams;
+        if (count($regTeams) < 1) {
+            return [];
+        }
+        // Join the pool keys
+        $sql = 'SELECT regTeamId,poolKey FROM poolTeams WHERE regTeamId IN (?) ORDER BY regTeamId,poolKey';
+        $stmt = $this->gameConn->executeQuery($sql,[array_keys($regTeams)],[Connection::PARAM_STR_ARRAY]);
+        while($row = $stmt->fetch()) {
+            $regTeams[$row['regTeamId']]->addPoolKey($row['poolKey']);
+        }
+        return array_values($regTeams);
     }
 }

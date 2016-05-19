@@ -60,6 +60,12 @@ class PoolTeam
     public function __get($name)
     {
         switch($name) {
+            case 'extraPoints':
+                if ($this->poolTypeKey !== 'PP') {
+                    return null;
+                }
+                return $this->regTeamPoints;
+                break;
         }
         throw new \InvalidArgumentException('PoolTeam::__get ' . $name);
     }

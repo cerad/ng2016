@@ -60,24 +60,33 @@ class GameListingController extends AbstractController2
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
             'divisions'  => [$searchData['division']],
+            'wantTeams'  => true,
         ];
         switch($searchData['show']) {
             case 'all':
                 $regTeams = $this->finder->findRegTeams($criteria);
                 $request->attributes->set('regTeams',$regTeams);
-                
+
                 $poolTeams = $this->finder->findPoolTeams($criteria);
                 $request->attributes->set('poolTeams',$poolTeams);
+
+                $games = $this->finder->findGames($criteria);
+                $request->attributes->set('games',$games);
                 break;
             
             case 'regTeams':
                 $regTeams = $this->finder->findRegTeams($criteria);
                 $request->attributes->set('regTeams',$regTeams);
                 break;
-            
+
             case 'poolTeams':
                 $poolTeams = $this->finder->findPoolTeams($criteria);
                 $request->attributes->set('poolTeams',$poolTeams);
+                break;
+
+            case 'games':
+                $games = $this->finder->findGames($criteria);
+                $request->attributes->set('games',$games);
                 break;
         }
         return null;

@@ -19,6 +19,8 @@ class RegTeam
     public $age;
     public $division;
  
+    public $poolKeys = [];
+    
     private $keys = [
         'regTeamId'  => 'RegTeamId',
         'projectId'  => 'ProjectId',
@@ -35,7 +37,10 @@ class RegTeam
         'age'      => 'string',
         'division' => 'string',
     ];
-    
+    public function addPoolKey($poolKey)
+    {
+        $this->poolKeys[] = $poolKey;
+    }
     /**
      * @param  array $data
      * @return RegTeam
