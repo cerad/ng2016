@@ -1,18 +1,7 @@
 services:
 
-    pool_connection:
-        alias: doctrine.dbal.ng2016games_connection
-
-    pool_team_repository:
-        class: AppBundle\Action\Game\PoolTeamRepository
-        arguments: ['@pool_connection']
-
     game_connection:
         alias: doctrine.dbal.ng2016games_connection
-
-    game_repository:
-        class: AppBundle\Action\Game\GameRepository
-        arguments: ['@game_connection','@pool_team_repository']
 
     game_migrate_ng2014_command:
         class: AppBundle\Action\Game\Migrate\MigrateGames2014Command
@@ -26,3 +15,33 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.ng2016games_connection'
+
+    game_finder:
+        class: AppBundle\Action\Game\GameFinder
+        arguments:
+            - '@doctrine.dbal.ng2016games_connection'
+            - '@doctrine.dbal.ng2016games_connection'
+
+# Admin listing action
+    game_listing_search_form:
+        class:  AppBundle\Action\Game\Listing\GameListingSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+            - '@game_connection'
+
+    game_listing_controller:
+        class:  AppBundle\Action\Game\Listing\GameListingController
+        parent: abstract_controller
+        arguments:
+            - '@game_listing_search_form'
+            - '@game_finder'
+            - '%project_choices%'
+            - '%projects%'
+
+    game_listing_view_html:
+        class:  AppBundle\Action\Game\Listing\GameListingView
+        parent: abstract_view2
+        arguments:
+            - '@game_listing_search_form'

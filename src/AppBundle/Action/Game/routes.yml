@@ -1,0 +1,7 @@
+
+game_listing:
+    path: /listing
+    defaults:
+        _controller: game_listing_controller
+        _view:       game_listing_view_html
+        _role:       ROLE_ADMIN

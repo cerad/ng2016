@@ -2,97 +2,106 @@
 namespace AppBundle\Action\Game;
 
 /**
- * @property-read string $projectKey
- * @property-read string $gameNumber
+ * @property-read GameTeam homeTeam
+ * @property-read GameTeam awayTeam
  * 
- * @property-read GameTeam $homeTeam
- * @property-read GameTeam $awayTeam
+ * @property-read GameOfficial referee
+ * @property-read GameOfficial ar1
+ * @property-read GameOfficial ar2
+ * 
+ * @property-read string dow
+ * @property-read string time
+ * @property-read string poolView
  */
 class Game
 {
-    /** @var GameId  */
-    public $id;
-
+    public $gameId;
+    public $projectId;
+    public $gameNumber;
+    public $role;
     public $fieldName;
     public $venueName;
     public $start;
     public $finish;
-    public $state  = 'Published';
+    public $state  = 'Pending';
     public $status = 'Normal';
-
-    private $teams = []; // Just because some stuff need some code
+    public $reportText;
+    public $reportState = 'Initial';
+    
+    /** @var GameTeam[] */
+    private $teams = [];
+    
+    /** @var GameOfficial[] */
+    private $officials = [];
 
     private $keys = [
-        'fieldName'  => 'ProjectFieldName',
-        'venueName'  => 'ProjectVenueName',
-        'start'      => 'datetime',
-        'finish'     => 'datetime',
-        'state'      => 'string', // Pending, Published, InProgress, Played, Reported. Verified, Closed
-        'status'     => 'string', // Normal, Played, Forfeited, Cancelled, Weather, Delayed, ToBeRescheduled
+        'gameId'      => 'GameId',
+        'projectId'   => 'ProjectId',
+        'gameNumber'  => 'integer',
+        'role'        => 'GameRole',
+        'fieldName'   => 'ProjectFieldName',
+        'venueName'   => 'ProjectVenueName',
+        'start'       => 'datetime',
+        'finish'      => 'datetime',
+        'state'       => 'string', // Pending, Published, InProgress, Played, Reported. Verified, Closed
+        'status'      => 'string', // Normal, Played, Forfeited, Cancelled, Weather, Delayed, ToBeRescheduled
+        'reportText'  => 'string',
+        'reportState' => 'ReportState',
     ];
-    public function __construct($projectKey,$gameNumber)
-    {
-        $this->id = new GameId($projectKey,$gameNumber);
-    }
-    public function addTeam(GameTeam $team)
-    {
-        $this->teams[$team->slot] = $team;
-
-        // How much do we really need here?  How much could the repo add
-        $team->game = $this;
-    }
-    public function hasTeam($slot) { return isset($this->teams[$slot]) ? true : false; }
-    public function getTeam($slot) { return $this->teams[$slot]; }
-    public function getHomeTeam()  { return $this->teams[1]; }
-    public function getAwayTeam()  { return $this->teams[2]; }
-    public function getTeams()     { return $this->teams;    }
-    public function getTeamSlots() { return array_keys($this->teams); }
 
     public function __get($name)
     {
         switch($name) {
-            case 'projectKey': return $this->id->projectKey;
-            case 'gameNumber': return $this->id->gameNumber;
 
-            case 'homeTeam':   return $this->teams[1];
-            case 'awayTeam':   return $this->teams[2];
+            case 'homeTeam': return $this->teams[1];
+            case 'awayTeam': return $this->teams[2];
+
+            case 'referee':   return $this->officials[1];
+            case 'ar1':       return $this->officials[2];
+            case 'ar2':       return $this->officials[3];
+            case 'officials': return $this->officials;
+
+            case 'dow':
+                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                return $start ? $start->format('D') : '???';
+            
+            case 'time':
+                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                return $start ? $start->format('g:i A') : '???';
+            
+            case 'poolView':
+                
+                $homePoolView = $this->teams[1]->poolView;
+                $awayPoolView = $this->teams[2]->poolView;
+                if ($homePoolView === $awayPoolView) {
+                    return $homePoolView;
+                }
+                return sprintf('%s<hr class="separator">%s',$homePoolView,$awayPoolView);
         }
         throw new \InvalidArgumentException('Game::__get ' . $name);
     }
     
-    // Arrayable Interface
-    public function toArray()
-    {
-        $data = [
-            'id'         => $this->id->id,
-            'projectKey' => $this->id->projectKey,
-            'gameNumber' => $this->id->gameNumber,
-        ];
-        foreach(array_keys($this->keys) as $key) {
-            $data[$key] = $this->$key;
-        }
-        $data['teams'] = [];
-        foreach($this->teams as $slot => $team) {
-            $data['teams'][$slot] = $team->toArray();
-        }
-        return $data;
-    }
     /** 
-     * @param array $data
+     * @param  array $data
      * @return Game
      */
     static public function createFromArray($data)
     {
-        $game = new Game($data['projectKey'],$data['gameNumber']);
-        
-        foreach(array_keys($game->keys) as $key) {
-            if (isset($data[$key]) || array_key_exists($key,$data)) {
+        $game = new self();
+
+        foreach($game->keys as $key => $type) {
+            if (isset($data[$key])) {
+                $game->$key = ($type === 'integer') ? (integer)$data[$key] : $data[$key];
+            }
+            else if (array_key_exists($key,$data)) {
                 $game->$key = $data[$key];
             }
         }
         foreach($data['teams'] as $teamData) {
-            $gameTeam = GameTeam::createFromArray(($teamData));
-            $game->addTeam($gameTeam);
+            $game->teams[$teamData['slot']] = GameTeam::createFromArray($teamData);
+        }
+        foreach($data['officials'] as $officialData) {
+            $game->officials[$officialData['slot']] = GameOfficial::createFromArray($officialData);
         }
         return $game;
     }

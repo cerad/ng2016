@@ -1,99 +1,91 @@
 <?php
 namespace AppBundle\Action\Game;
 
-/**
- * @property-read string $projectKey
- * @property-read string $poolTeamKey
- */
 class PoolTeam
 {
-    /** @var  PoolTeamId */
-    public $id;
-
-    // Keys
-    public $poolKey;      // U10-B Core PP A   U19G Core QF 1
-    public $poolType;     // PP, QF, SF, FM
-    //     $poolTeamKey;  // U10-B Core PP A1  U19G Core QF 1 A 1st
-
-    // Views
+    public $poolTeamId;
+    public $projectId;
+    
+    public $poolKey;
+    public $poolTypeKey;
+    public $poolTeamKey;
+    
     public $poolView;
+    public $poolSlotView;
+    
     public $poolTypeView;
+    
     public $poolTeamView;
     public $poolTeamSlotView;
-
-    // Source for advancement
-    public $sourcePoolKeys; // One or more pool keys
-    public $sourcePoolSlot; // Standing within the source
     
-    // Queries
-    public $program,$gender,$age,$division;
+    public $sourcePoolKeys;
+    public $sourcePoolSlot;
+    
+    public $program;
+    public $gender;
+    public $age;
+    public $division;
+    
+    public $regTeamId;
+    public $regTeamName;
+    public $regTeamPoints;
     
     private $keys = [
-        'poolKey'      => 'PoolKey (40)',
-        'poolType'     => 'PoolType(20)',
-
-        'poolView'         => 'string(40)',
-        'poolTypeView'     => 'string(40)',
-        'poolTeamView'     => 'string(40)',
-        'poolTeamSlotView' => 'string(40)',
-
-        'sourcePoolKeys' => 'string(255)',
-        'sourcePoolSlot' => 'integer',
+        'poolTeamId'  => 'PoolTeamId',
+        'projectId'   => 'ProjectId',
         
-        'program'  => 'string(20)',
-        'gender'   => 'string(20)',
-        'age'      => 'string(20)',
-        'division' => 'string(20)',
-    ];
-    public function __construct($projectKey,$poolTeamKey, $poolKey = null, $poolType = null)
-    {
-        $this->id = new PoolTeamId($projectKey,$poolTeamKey);
+        'poolKey'     => 'PoolKey',
+        'poolTypeKey' => 'PoolTeamKey',
+        'poolTeamKey' => 'PoolTeamKey',
 
-        $this->poolKey  = $poolKey;
-        $this->poolType = $poolType;
-    }
+        'poolView'     => 'string',
+        'poolSlotView' => 'string',
+        
+        'poolTypeView'     => 'string',
+        'poolTeamView'     => 'string',
+        'poolTeamSlotView' => 'string',
+    
+        'sourcePoolKeys' => 'string',
+        'sourcePoolSlot' => 'integer',
+
+        'program'  => 'ProgramId',
+        'gender'   => 'GenderId',
+        'age'      => 'AgeId',
+        'division' => 'DivisionId',
+        
+        'regTeamId'     => 'RegTeamId',
+        'regTeamName'   => 'string',
+        'regTeamPoints' => 'integer',
+    ];
     public function __get($name)
     {
         switch($name) {
-
-            case 'projectKey':
-                return $this->id->projectKey;
-
-            case 'poolTeamKey':
-                return $this->id->poolTeamKey;
+            case 'extraPoints':
+                if ($this->poolTypeKey !== 'PP') {
+                    return null;
+                }
+                return $this->regTeamPoints;
+                break;
         }
         throw new \InvalidArgumentException('PoolTeam::__get ' . $name);
     }
 
-    /** ====================================================
-     * Arrayable Interface
-     * @return array
-     */
-    public function toArray()
-    {
-        $data = [
-            'id'          => $this->id->id,
-            'projectKey'  => $this->id->projectKey,
-            'poolTeamKey' => $this->id->poolTeamKey,
-        ];
-        foreach(array_keys($this->keys) as $key) {
-            $data[$key] = $this->$key;
-        }
-        return $data;
-    }
     /**
-     * @param  array $data
+     * @param  $data array
      * @return PoolTeam
      */
-    static public function createFromArray($data)
+    static function createFromArray($data)
     {
-        $poolTeam = new PoolTeam($data['projectKey'],$data['poolTeamKey']);
-
-        foreach(array_keys($poolTeam->keys) as $key) {
-            if (isset($data[$key]) || array_key_exists($key,$data)) {
-                $poolTeam->$key = $data[$key];
+        $team = new self();
+        
+        foreach($team->keys as $key => $type) {
+            if (isset($data[$key])) {
+                $team->$key = ($type === 'integer') ? (integer)$data[$key] : $data[$key];
+            }
+            else if (array_key_exists($key,$data)) {
+                $team->$key = $data[$key];
             }
         }
-        return $poolTeam;
+        return $team;
     }
 }
