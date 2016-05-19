@@ -495,3 +495,6 @@ td.admin-listing {
 .approved { margin-right: 20px; text-align: left }
 
 .schedule-search { width: inherit; min-width: 400px; padding-bottom: 10px; margin-left: auto; margin-right: auto; }
+
+.errors ul { margin-left: 40px; }
+.errors li { color: #FF0000 }
