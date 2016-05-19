@@ -61,10 +61,12 @@ EOD;
         if (!$this->games) {
             return null;
         }
+        $gameCount = count($this->games);
+
         $html = <<<EOD
 <div id="layout-block">
 <table class="standings" border = "1">
-<tr><th colspan="20" class="text-center">Games</th></tr>
+<tr><th colspan="20" class="text-center">Games: {$gameCount}</th></tr>
 <tr class="tbl-hdr">
   <th class="text-center">Game</th>
   <th class="text-center">Day</th>
@@ -114,10 +116,12 @@ EOD;
         if (!$this->regTeams) {
             return null;
         }
+        $regTeamCount = count($this->regTeams);
+
         $html = <<<EOD
 <div id="layout-block">
 <table class="standings" border = "1">
-<tr><th colspan="20" class="text-center">Registered Teams</th></tr>
+<tr><th colspan="20" class="text-center">Registered Teams: {$regTeamCount}</th></tr>
 <tr class="tbl-hdr">
   <th class="text-center">Reg Team Key</th>
   <th class="text-center">Number</th>
@@ -164,10 +168,12 @@ EOD;
         if (!$this->poolTeams) {
             return null;
         }
+        $poolTeamCount = count($this->poolTeams);
+
         $html = <<<EOD
 <div id="layout-block">
 <table class="standings" border = "1">
-<tr><th colspan="20" class="text-center">Pool Teams</th></tr>
+<tr><th colspan="20" class="text-center">Pool Teams: {$poolTeamCount}</th></tr>
 <tr class="tbl-hdr">
   <th class="text-center">Pool Keys</th>
   <th class="text-center">Pool Views</th>

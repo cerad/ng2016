@@ -48,6 +48,16 @@ class InitGames2016Command extends Command
     private $genders   = ['B', 'G'];
     private $ages      = ['U10', 'U12', 'U14', 'U16', 'U19'];
 
+    private function getPools($division)
+    {
+        switch($division) {
+            case 'U10G':
+            case 'U16B':
+            case 'U19G':
+                return ['A','B','C'];
+        }
+        return ['A','B','C','D'];
+    }
     private function initRegTeams($commit)
     {
         if (!$commit) {
@@ -59,7 +69,9 @@ class InitGames2016Command extends Command
         foreach ($this->programs as $program) {
             foreach ($this->ages as $age) {
                 foreach ($this->genders as $gender) {
-                    for ($teamNumber = 1; $teamNumber <= 24; $teamNumber++) {
+                    $pools = $this->getPools($age . $gender);
+                    $teamCount = count($pools) * 6;
+                    for ($teamNumber = 1; $teamNumber <= $teamCount; $teamNumber++) {
                         $this->initRegTeam($this->projectId, $program, $age, $gender, $teamNumber);
                         $count++;
                         if (($count % 100) === 0) {
@@ -110,7 +122,8 @@ class InitGames2016Command extends Command
         foreach ($this->programs as $program) {
             foreach ($this->ages as $age) {
                 foreach ($this->genders as $gender) {
-                    foreach (['A', 'B', 'C', 'D'] as $poolName) {
+                    $pools = $this->getPools($age . $gender);
+                    foreach ($pools as $poolName) {
                         foreach ([1, 2, 3, 4, 5, 6] as $poolTeamName) {
                             $poolTeamSlot = $poolName . $poolTeamName;
                             $this->initPoolTeam($projectId, 'PP', $poolName, $poolTeamName, $poolTeamSlot, $program, $age, $gender);
@@ -144,9 +157,12 @@ class InitGames2016Command extends Command
                             '13-24' => [['name' => 'X', 'slot' => 'Team 1',], ['name' => 'Y', 'slot' => 'Team 2']],
                         ],
                     ];
-                    foreach ($medalRoundPools as $poolType => $pools) {
-                        foreach ($pools as $poolName => $poolTeams) {
+                    foreach ($medalRoundPools as $poolType => $rounds) {
+                        foreach ($rounds as $poolName => $poolTeams) {
                             foreach ($poolTeams as $poolTeam) {
+                                if ($poolType === 'QF' && count($pools) < 4) {
+                                    $poolTeam['slot'] = 'TBD';
+                                }
                                 $this->initPoolTeam($projectId, $poolType, $poolName, $poolTeam['name'], $poolTeam['slot'], $program, $age, $gender);
                                 $count++;
                                 if (($count % 100) === 0) {
@@ -397,6 +413,13 @@ class InitGames2016Command extends Command
     }
     private function initGame($projectId, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away)
     {
+        // Filter D games
+        if ($home[0] === 'D') {
+            $pools = $this->getPools($age . $gender);
+            if (count($pools) < 4) {
+                return;
+            }
+        }
         $dates = [
             'Wed' => '2016-07-06',
             'Thu' => '2016-07-07',
@@ -413,6 +436,51 @@ class InitGames2016Command extends Command
             'U16' => 60 + 10,
             'U19' => 60 + 10,
         ];
+        // Hack in fieldName for U16/U19 Medal rounds
+        $fieldName = $age . ' - ' . $fieldNumber;
+        $poolType = substr($home,0,2);
+        if ($poolType === 'QF' || $poolType === 'SF' || $poolType === 'TF') {
+            if ($age === 'U16' && $gender === 'G') {
+                switch($fieldName) {
+                    case 'U16 - 3': $fieldName = 'U16 - 1'; break;
+                    case 'U16 - 4': $fieldName = 'U16 - 2'; break;
+                    case 'U16 - 5': $fieldName = 'U16 - 3'; break;
+                    case 'U16 - 6': $fieldName = 'U16 - 4'; break;
+                }
+            }
+            if ($age === 'U19' && $gender === 'G') {
+                switch($fieldName) {
+                    case 'U19 - 3': $fieldName = 'U16 - 5'; break;
+                    case 'U19 - 4': $fieldName = 'U16 - 6'; break;
+                    case 'U19 - 5': $fieldName = 'U19 - 1'; break;
+                    case 'U19 - 6': $fieldName = 'U19 - 2'; break;
+                }
+            }
+            if ($age === 'U16' && $gender === 'B' && $poolType === 'QF') {
+                switch($fieldName) {
+                    case 'U16 - 3': $fieldName = 'U16 - 1'; break;
+                    case 'U16 - 4': $fieldName = 'U16 - 2'; break;
+                    case 'U16 - 5': $fieldName = 'U16 - 3'; break;
+                    case 'U16 - 6': $fieldName = 'U16 - 4'; break;
+                }
+            }
+            if ($age === 'U19' && $gender === 'B' && $poolType === 'QF') {
+                switch($fieldName) {
+                    case 'U19 - 3': $fieldName = 'U16 - 5'; break;
+                    case 'U19 - 4': $fieldName = 'U16 - 6'; break;
+                    case 'U19 - 5': $fieldName = 'U19 - 1'; break;
+                    case 'U19 - 6': $fieldName = 'U19 - 2'; break;
+                }
+            }
+            if ($age === 'U19' && $gender === 'B' && $poolType !== 'QF') {
+                switch($fieldName) {
+                    case 'U19 - 1': $fieldName = 'U16 - 5'; break;
+                    case 'U19 - 2': $fieldName = 'U16 - 6'; break;
+                    case 'U19 - 3': $fieldName = 'U19 - 1'; break;
+                    case 'U19 - 4': $fieldName = 'U19 - 2'; break;
+                }
+            }
+        }
         // Add playing time to game entity?
         $finishDateTime = new \DateTime($start);
         $interval = sprintf('PT%dM',$lengths[$age]);
@@ -424,7 +492,7 @@ class InitGames2016Command extends Command
             'projectId'  => $projectId,
             'gameNumber' => $gameNumber,
             'role'       => 'game',
-            'fieldName'  => $age . ' -  ' . $fieldNumber,
+            'fieldName'  => $fieldName,
             'venueName'  => 'Polo',
 
             'start'  => $start,
