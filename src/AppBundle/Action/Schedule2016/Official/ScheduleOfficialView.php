@@ -52,6 +52,7 @@ class ScheduleOfficialView extends AbstractView2
 {$this->searchForm->render()}
 <hr>
 {$this->scheduleTemplate->setTitle('Official Game Schedule')}
+{$this->scheduleTemplate->render($this->games)}
 EOD;
         $script = <<<EOD
 <script type="text/javascript">
