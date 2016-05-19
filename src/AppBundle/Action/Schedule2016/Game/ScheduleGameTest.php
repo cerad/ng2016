@@ -14,4 +14,20 @@ class ScheduleGameTest extends WebTestCase
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
+    public function testExportText()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/schedule2016/game.txt');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
+    public function testExportExcel()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/schedule2016/game.xls');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
 }
