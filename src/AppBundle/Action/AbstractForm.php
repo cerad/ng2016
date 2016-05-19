@@ -52,14 +52,14 @@ abstract class AbstractForm implements ContainerAwareInterface
 
         if (count($errors) === 0) return null;
 
-        $html = '<div class="errors" style="color: #0000FF">' . "\n";
+        $html = '<legend>Entry Error Messages</legend><div class="errors" ><ul>' . "\n";
         foreach($errors as $name => $items) {
             foreach($items as $item) {
                 $html .= <<<EOD
-<div>{$item['msg']}</div>
+<li>{$item['msg']}</li>
 EOD;
             }}
-        $html .= '</div>' . "\n";
+        $html .= '</ul></div>' . "\n";
         return $html;
     }
     /* ===========================================================================

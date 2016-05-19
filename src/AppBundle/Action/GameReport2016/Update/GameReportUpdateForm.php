@@ -149,7 +149,7 @@ class GameReportUpdateForm extends AbstractForm
 <form method="post" action="{$gameReportUpdateUrl}" class="form-horizontal">
 <fieldset>
   <legend class="text-center">{$this->escape($gameReportDescription)}</legend> <!-- Game Report -->
-  
+
   <div class="form-group">
     <div class="col-xs-2">
     <!-- required for floating -->
@@ -165,7 +165,7 @@ class GameReportUpdateForm extends AbstractForm
 
     <div class="col-xs-10">
       <!-- Tab panes -->
-      <div class="tab-content">                  
+      <div class="tab-content">
         <div class="tab-pane active" id="score">
           {$this->renderPairHeaderRow()}
           {$this->renderPairRow('Goals Scored',   'goalsScored',   $homeTeam->pointsScored,  $awayTeam->pointsScored)}
@@ -187,7 +187,7 @@ class GameReportUpdateForm extends AbstractForm
         </div>
         <div class="tab-pane" id="notes">
           <div class="row">
-            <label class="col-xs-4 control-label">Notes</label> 
+            <label class="col-xs-4 control-label">Notes</label>
             <textarea name="gameReportText" rows="10" cols="48" wrap="hard" class="textarea">{$this->escape($gameReport->reportText)}</textarea>
           </div>
         </div>
@@ -210,12 +210,12 @@ class GameReportUpdateForm extends AbstractForm
   <div class="col-xs-10">
     <div class="col-xs-8 col-xs-offset-7">
       <div class="row">
-        <label class="col-xs-4 control-label">Next Match Number</label> 
+        <label class="col-xs-4 control-label">Next Match Number</label>
         <input class="col-xs-3  form-control report-update" type="number" name="nextGameNumber" value="{$gameNumberNext}" />
       </div>
     </div>
   </div>
-  <div class="clear-both"></div>       
+  <div class="clear-both"></div>
 </fieldset>
 EOD;
 
@@ -236,8 +236,8 @@ EOD;
 EOD;
         }
         $html .= <<<EOD
-        </select>     
-        <label class="col-xs-2 control-label" for="gameReportState">Report Status</label> 
+        </select>
+        <label class="col-xs-2 control-label" for="gameReportState">Report Status</label>
         <select class="col-xs-3 form-control report-update" id="gameReportState" name="gameReportState">
 EOD;
         $state = $gameReport->reportState;
@@ -253,7 +253,8 @@ EOD;
       </div>
     </div>
   </div>
-</fieldset>      
+</fieldset>
+{$this->renderFormErrors()}
 </form>
 EOD;
         return $html;
@@ -272,9 +273,9 @@ EOD;
 
         return <<<EOD
 <div class="row">
-  <div class="col-xs-4"></div> 
-  <label class="col-xs-3 control-label text-center">Home<br/>{$homeTeamSlotView}<br/>{$homeTeamName}</label> 
-  <label class="col-xs-3 control-label text-center">Away<br/>{$awayTeamSlotView}<br/>{$awayTeamName}</label> 
+  <div class="col-xs-4"></div>
+  <label class="col-xs-3 control-label text-center">Home<br/>{$homeTeamSlotView}<br/>{$homeTeamName}</label>
+  <label class="col-xs-3 control-label text-center">Away<br/>{$awayTeamSlotView}<br/>{$awayTeamName}</label>
 </div>
 EOD;
     }
