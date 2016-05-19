@@ -94,13 +94,13 @@ class ScheduleTeamSearchForm extends AbstractForm
 
   <div class="form-group col-xs-8 col-xs-offset-2 clearfix">
 
+    <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'txt'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
+    <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit">
+  <button type="submit" class="btn btn-sm btn-primary submit pull-right">
     <span class="glyphicon glyphicon-search"></span>
     <span>Search</span>
   </button>
-    <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
-    <a href="{$this->generateUrl('schedule_team_2016',['_format' => 'csv'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
 </div>
 <div class="clearfix"></div>
 </form>

@@ -43,6 +43,11 @@ services:
         arguments:
             - 'csv'
 
+    abstract_exporter_txt:
+        class: AppBundle\Action\AbstractExporter
+        arguments:
+            - 'txt'
+
     schedule_game_controller:
         class: AppBundle\Action\Schedule\Game\ScheduleGameController
         parent: abstract_controller
@@ -75,11 +80,3 @@ services:
         arguments:
             - '@app_action_schedule_repository'
             - '@abstract_exporter_xls'
-
-    schedule_game_extra_xls:
-        class: AppBundle\Action\Schedule\Game\ScheduleGameViewExtra
-        parent: abstract_view
-        arguments:
-            - '@app_action_schedule_repository'
-            - '@abstract_exporter_xls'
-

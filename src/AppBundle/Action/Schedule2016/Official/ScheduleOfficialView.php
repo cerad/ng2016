@@ -13,7 +13,7 @@ class ScheduleOfficialView extends AbstractView2
 {
     /** @var  ScheduleGame[] */
     private $games;
-    
+
     private $project;
     private $search;
     private $searchControls;
@@ -50,9 +50,8 @@ class ScheduleOfficialView extends AbstractView2
     {
         $content = <<<EOD
 {$this->searchForm->render()}
-<br />
-{$this->scheduleTemplate->render($this->games)}
-<br />
+<hr>
+{$this->scheduleTemplate->setTitle('Official Game Schedule')}
 EOD;
         $script = <<<EOD
 <script type="text/javascript">
@@ -95,8 +94,8 @@ EOD;
     <div class="col-xs-10">
       <div class="row float-right">
         <button type="submit" id="form_search" class="btn btn-sm btn-primary submit">Search</button>
-        <a href="{$xlsUrl}" class="btn btn-sm btn-primary">{$shareSpan}Export to Excel</a> 
-        <a href="{$csvUrl}" class="btn btn-sm btn-primary">{$shareSpan}Export to CSV</a> 
+        <a href="{$xlsUrl}" class="btn btn-sm btn-primary">{$shareSpan}Export to Excel</a>
+        <a href="{$csvUrl}" class="btn btn-sm btn-primary">{$shareSpan}Export to CSV</a>
       </div>
     </div>
     <div class="clear-both"></div>
