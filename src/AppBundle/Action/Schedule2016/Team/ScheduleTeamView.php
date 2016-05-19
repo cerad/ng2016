@@ -30,7 +30,8 @@ class ScheduleTeamView extends AbstractView2
     {
         $content = <<<EOD
 {$this->searchForm->render()}
-<br/>
+<hr>
+{$this->scheduleTemplate->setTitle('Team Game Schedule')}
 {$this->scheduleTemplate->render($this->games)}
 EOD;
         return $this->renderBaseTemplate($content);

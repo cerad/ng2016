@@ -19,12 +19,12 @@ class ScheduleGameTeam
     public $division;
 
     public $poolTeamKey;
-    
+
     public $poolView;
     public $poolTypeView;
     public $poolTeamView;
     public $poolTeamSlotView;
-    
+
     private $keys = [
 
         'gameTeamId' => 'GameTeamId',
@@ -47,7 +47,7 @@ class ScheduleGameTeam
     public function __get($name)
     {
         switch($name) {
-            
+
         }
         throw new \InvalidArgumentException('GameTeam::__get ' . $name);
     }

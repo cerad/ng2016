@@ -11,14 +11,22 @@ class ScheduleTemplate
 
     protected $showOfficials;
 
+    protected $scheduleTitle;
+
     public function __construct($showOfficials = false)
     {
         $this->showOfficials = $showOfficials;
+
+        $this->scheduleTitle = 'Game Schedule';
     }
     /**
      * @param  ScheduleGame[] $games
      * @return string
      */
+    public function setTitle($title = 'Game Schedule')
+    {
+        $this->scheduleTitle = $title;
+    }
     public function render(array $games)
     {
         $gameCount = count($games);
@@ -28,7 +36,7 @@ class ScheduleTemplate
 <div class="schedule-games-list">
 <table id="schedule" class="schedule" border="1">
   <thead>
-    <tr><th colspan="20" class="text-center">Game Schedule - Game Count: {$gameCount}</th></tr>
+    <tr><th colspan="20" class="text-center">{$this->scheduleTitle} - Game Count: {$gameCount}</th></tr>
     <tr>
       <th class="schedule-game" >Game</th>
       <th class="schedule-dow"  >Day</th>
@@ -80,7 +88,7 @@ EOD;
                     'back' => $this->getCurrentRouteName(), // $this->generateUrl($this->getCurrentRouteName()) . '#' . $trId,
                 ];
                 $url = $this->generateUrl('game_report_update',$params);
-                
+
                 $gameNumber = sprintf('<a href="%s">%s</a>',$url,$gameNumber);
             }
             $html .= <<<EOD

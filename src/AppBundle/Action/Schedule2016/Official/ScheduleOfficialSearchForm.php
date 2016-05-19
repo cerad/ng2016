@@ -67,6 +67,9 @@ class ScheduleOfficialSearchForm extends AbstractForm
   </tr></table>
   </div>
   <div class="schedule-search col-xs-8 col-xs-offset-2 clearfix">
+
+    <a href="{$this->generateUrl('schedule_official_2016',['_format' => 'txt'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
+    <a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit pull-right">
     <span class="glyphicon glyphicon-search"></span>

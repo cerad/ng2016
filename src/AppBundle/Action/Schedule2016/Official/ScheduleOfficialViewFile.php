@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Schedule2016\Game;
+namespace AppBundle\Action\Schedule2016\Official;
 
 use AppBundle\Action\AbstractView2;
 use AppBundle\Action\AbstractExporter;
@@ -8,7 +8,7 @@ use AppBundle\Action\AbstractExporter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ScheduleGameViewFile extends AbstractView2
+class ScheduleOfficialViewFile extends AbstractView2
 {
     private $outFileName;
     private $scheduleRepository;
@@ -16,7 +16,7 @@ class ScheduleGameViewFile extends AbstractView2
 
     public function __construct(AbstractExporter $exporter)
     {
-        $this->outFileName =  'GameSchedule2016.' . date('Ymd_His') . '.' . $exporter->fileExtension;
+        $this->outFileName =  'OfficialSchedule2016.' . date('Ymd_His') . '.' . $exporter->fileExtension;
 
         $this->exporter = $exporter;
     }
@@ -42,13 +42,14 @@ class ScheduleGameViewFile extends AbstractView2
     {
         //set the header labels
         $data =   array(
-            array ('Game','Day','Time','Field','Group','Home Team Pool','Home Team','Away Team','Away Team Pool')
+            array ('Game','Day','Time','Field','Group','Home Team Pool','Home Team','Away Team','Away Team Pool','Referee','AR1','AR2')
         );
 
         //set the data : game in each row
         foreach ( $games as $game ) {
             $teamHome = $game->homeTeam;
             $teamAway = $game->awayTeam;
+            $officials = $game->referee;
 
             $data[] = array(
                 $game->gameNumber,
@@ -59,7 +60,10 @@ class ScheduleGameViewFile extends AbstractView2
                 $teamHome->poolTeamKey,
                 $teamHome->regTeamName,
                 $teamAway->regTeamName,
-                $teamAway->poolTeamKey
+                $teamAway->poolTeamKey,
+                $game->referee->regPersonName,
+                $game->ar1->regPersonName,
+                $game->ar2->regPersonName,
             );
 
         }

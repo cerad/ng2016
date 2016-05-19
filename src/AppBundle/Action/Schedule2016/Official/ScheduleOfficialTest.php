@@ -14,4 +14,20 @@ class ScheduleOfficialTest extends WebTestCase
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
+    public function testExportText()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/schedule2016/official.txt');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
+    public function testExportExcel()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/schedule2016/official.xls');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
 }

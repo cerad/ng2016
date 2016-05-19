@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Schedule2016\Game;
+namespace AppBundle\Action\Schedule2016\Team;
 
 use AppBundle\Action\AbstractView2;
 use AppBundle\Action\AbstractExporter;
@@ -8,7 +8,7 @@ use AppBundle\Action\AbstractExporter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ScheduleGameViewFile extends AbstractView2
+class ScheduleTeamViewFile extends AbstractView2
 {
     private $outFileName;
     private $scheduleRepository;
@@ -16,7 +16,7 @@ class ScheduleGameViewFile extends AbstractView2
 
     public function __construct(AbstractExporter $exporter)
     {
-        $this->outFileName =  'GameSchedule2016.' . date('Ymd_His') . '.' . $exporter->fileExtension;
+        $this->outFileName =  'TeamSchedule2016.' . date('Ymd_His') . '.' . $exporter->fileExtension;
 
         $this->exporter = $exporter;
     }
