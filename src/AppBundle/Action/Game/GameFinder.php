@@ -56,7 +56,6 @@ class GameFinder
             $gameObjects[] = Game::createFromArray($game);
         }
         // Done
-        dump($gameObjects);
         return $gameObjects;
     }
 
