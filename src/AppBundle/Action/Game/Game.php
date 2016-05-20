@@ -49,6 +49,10 @@ class Game
         'reportState' => 'ReportState',
     ];
 
+    public function getOfficial($slot)
+    {
+        return isset($this->officials[$slot]) ? $this->officials[$slot] : null;
+    }
     public function __get($name)
     {
         switch($name) {

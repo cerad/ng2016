@@ -102,9 +102,9 @@ EOD;
             if ($this->showOfficials) {
                 $html .= <<<EOD
   <td class="text-left">
-    {$game->referee->slotView} {$game->referee->regPersonName}<hr class="separator">
-    {$game->ar1->slotView    } {$game->ar1->regPersonName    }<hr class="separator">
-    {$game->ar2->slotView    } {$game->ar2->regPersonName    }
+    {$this->renderGameOfficial($game,$game->referee)}<hr class="separator">
+    {$this->renderGameOfficial($game,$game->ar1)    }<hr class="separator">
+    {$this->renderGameOfficial($game,$game->ar2)    }
   </td>
 EOD;
             }
@@ -113,5 +113,19 @@ EOD;
 EOD;
         }
         return $html;
+    }
+    private function renderGameOfficial(ScheduleGame $game, ScheduleGameOfficial $gameOfficial)
+    {
+        $params = [
+            'projectId'  => $game->projectId,
+            'gameNumber' => $game->gameNumber,
+            'slot'       => $gameOfficial->slot,
+            'back'       => $this->getCurrentRouteName(),
+        ];
+        $url = $this->generateUrl('game_official_assign_by_assignee',$params);
+
+        return <<<EOD
+    <a href="{$url}">{$gameOfficial->slotView}</a> {$gameOfficial->regPersonName}
+EOD;
     }
 }

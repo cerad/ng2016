@@ -96,6 +96,7 @@ EOD;
 
         $whereMeta = [
             'projectIds'  => 'game.projectId',
+            'gameNumbers' => 'game.gameNumber',
             'dates'       => 'DATE(game.start)',
             'programs'    => 'program',
             'genders'     => 'gender',

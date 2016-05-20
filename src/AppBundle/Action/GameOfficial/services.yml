@@ -1,0 +1,22 @@
+services:
+
+    # =========================================================================
+    # Assign by assignee
+    game_official_assign_by_assignee_form:
+        class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm
+        parent: abstract_form
+        arguments:
+            - '@game_connection'
+
+    game_official_assign_by_assignee_controller:
+        class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeController
+        parent: abstract_controller
+        arguments:
+            - '@game_official_assign_by_assignee_form'
+            - '@game_finder'
+
+    game_official_assign_by_assignee_view:
+        class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeView
+        parent: abstract_view2
+        arguments:
+            - '@game_official_assign_by_assignee_form'
