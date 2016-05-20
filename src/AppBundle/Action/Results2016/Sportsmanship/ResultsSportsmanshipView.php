@@ -4,9 +4,6 @@ namespace AppBundle\Action\Results2016\Sportsmanship;
 
 use AppBundle\Action\AbstractView2;
 
-//use AppBundle\Action\Results2016\ResultsGame;
-//use AppBundle\Action\Results2016\ResultsPool;
-//use AppBundle\Action\Results2016\ResultsPoolTeam;
 use AppBundle\Action\Results2016\ResultsSportsmanshipCalculator;
 
 use Symfony\Component\HttpFoundation\Request;

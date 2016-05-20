@@ -23,9 +23,9 @@ results_sportsmanship_2016:
         _controller: results_sportsmanship_controller_2016
         _view_html:  results_sportsmanship_view_html_2016
 
-results_finalstandings_2016:
+results_final_2016:
     path: /final
     defaults:
         _format: html
-        _controller: results_finalstandings_controller_2016
-        _view_html:  results_finalstandings_view_html_2016
+        _controller: results_final_controller_2016
+        _view_html:  results_final_view_html_2016
