@@ -47,7 +47,7 @@ class ResultsPoolPlaySearchForm extends AbstractForm
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl('results_poolplay_2016')}" method="post">
-  <div class="form-group">
+  <div class="form-group"  {$this->isAdminStyle()}>
     <label for="projectId">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
   </div>

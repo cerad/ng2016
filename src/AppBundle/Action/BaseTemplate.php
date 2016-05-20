@@ -223,8 +223,8 @@ EOT;
           <ul class="dropdown-menu">
             <li><a href="{$this->generateUrl('results_poolplay_2016')}">POOL PLAY 2016</a></li>
             <li><a href="{$this->generateUrl('results_medalround_2016')}">MEDAL ROUND 2016</a></li>
-            <li><a href="{$this->generateUrl('app_results_poolplay')}">POOL PLAY</a></li>
-            <li><a href="{$this->generateUrl('app_results_medalround')}">MEDAL ROUND</a></li>
+            <li><a href="{$this->generateUrl('results_sportsmanship_2016')}">SPORTSMANSHIP 2016</a></li>
+            <hr>
             <li><a href="{$this->generateUrl('app_results_sportsmanship')}">SPORTSMANSHIP</a></li>
             <li><a href="{$this->generateUrl('app_results_final')}">FINAL STANDINGS</a></li>
           </ul>
