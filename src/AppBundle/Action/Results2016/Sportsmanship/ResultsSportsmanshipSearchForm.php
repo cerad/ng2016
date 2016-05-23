@@ -1,12 +1,12 @@
 <?php
-namespace AppBundle\Action\Results2016\MedalRound;
+namespace AppBundle\Action\Results2016\Sportsmanship;
 
 use AppBundle\Action\AbstractForm;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
-class ResultsMedalRoundSearchForm extends AbstractForm
+class ResultsSportsmanshipSearchForm extends AbstractForm
 {
     private $conn;
     private $projects;
@@ -24,9 +24,9 @@ class ResultsMedalRoundSearchForm extends AbstractForm
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) return;
-        
+
         $this->isPost = true;
-        
+
         $data = $request->request->all();
         $errors = [];
 
@@ -57,7 +57,7 @@ class ResultsMedalRoundSearchForm extends AbstractForm
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
-    <span class="glyphicon glyphicon-search"></span> 
+    <span class="glyphicon glyphicon-search"></span>
     <span>Change Project/Program</span>
   </button>
 </form>
@@ -85,7 +85,7 @@ EOD;
         }
         $routeName = $this->getCurrentRouteName();
         $html = null;
-        
+
         // Keep the idea of multiple programs for now
         foreach ($pools as $program => $genders) {
             $html .= <<<EOD

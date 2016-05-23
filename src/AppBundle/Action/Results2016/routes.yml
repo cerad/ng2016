@@ -16,3 +16,16 @@ results_medalround_2016:
         _view_xls:   schedule_team_view_xls
         _view_csv:   schedule_team_view_csv
 
+results_sportsmanship_2016:
+    path: /sportsmanship
+    defaults:
+        _format: html
+        _controller: results_sportsmanship_controller_2016
+        _view_html:  results_sportsmanship_view_html_2016
+
+results_final_2016:
+    path: /final
+    defaults:
+        _format: html
+        _controller: results_final_controller_2016
+        _view_html:  results_final_view_html_2016

@@ -60,3 +60,60 @@ services:
         parent: abstract_view2
         arguments:
             - '@results_medalround_search_form_2016'
+
+    # ===============================================================
+    # Sportsmanship Results
+    results_sportsmanship_calculator_2016:
+        class: AppBundle\Action\Results2016\ResultsSportsmanshipCalculator
+
+    results_sportsmanship_search_form_2016:
+        class:  AppBundle\Action\Results2016\Sportsmanship\ResultsSportsmanshipSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+            - '@game_connection'
+
+    results_sportsmanship_controller_2016:
+        class:  AppBundle\Action\Results2016\Sportsmanship\ResultsSportsmanshipController
+        parent: abstract_controller
+        arguments:
+            - '@results_sportsmanship_search_form_2016'
+            - '@results_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
+
+    results_sportsmanship_view_html_2016:
+        class:  AppBundle\Action\Results2016\Sportsmanship\ResultsSportsmanshipView
+        parent: abstract_view2
+        arguments:
+            - '@results_sportsmanship_search_form_2016'
+            - '@results_sportsmanship_calculator_2016'
+    # ===============================================================
+    # Final Results
+    results_final_calculator_2016:
+        class: AppBundle\Action\Results2016\ResultsFinalCalculator
+
+    results_final_search_form_2016:
+        class:  AppBundle\Action\Results2016\FinalStandings\ResultsFinalSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+            - '@game_connection'
+
+    results_final_controller_2016:
+        class:  AppBundle\Action\Results2016\FinalStandings\ResultsFinalController
+        parent: abstract_controller
+        arguments:
+            - '@results_final_search_form_2016'
+            - '@results_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
+
+    results_final_view_html_2016:
+        class:  AppBundle\Action\Results2016\FinalStandings\ResultsFinalView
+        parent: abstract_view2
+        arguments:
+            - '@results_final_search_form_2016'
+            - '@results_final_calculator_2016'
