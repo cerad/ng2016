@@ -10,8 +10,8 @@ class ScheduleFieldMapTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/schedule2016/fieldmap');
+        $crawler = $client->request('GET', '/schedule2016/field_map');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }
