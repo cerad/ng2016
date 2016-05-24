@@ -23,6 +23,8 @@ class AdminViewFilters
     public function getPersonListByReport(array $projectPersons, $reportKey = null)
     {
         $listPersons = [];
+        
+        $yesMaybe = ['Yes', 'Maybe'];
 
         $personView = $this->projectPersonViewDecorator;
 
@@ -36,18 +38,18 @@ class AdminViewFilters
                     $listPersons[] = $person;
                     break;
                 case 'Referees':
-                    if ($personView->willReferee == 'Yes') {
+                    if (in_array($personView->willReferee, $yesMaybe)) {
                         $listPersons[] = $person;
                     }
                     break;
                 case 'Volunteers':
-                    if ($personView->willVolunteer == 'Yes') {
+                    if (in_array($personView->willVolunteer, $yesMaybe)) {
                         $listPersons[] = $person;
                     }
                     break;
                 case 'RefIssues':
                 case 'Referees with Issues':
-                    if ($personView->willReferee == 'Yes') {
+                    if (in_array($personView->willReferee, $yesMaybe)) {
                         if ( $this->hasIssues($personView) ) {
                             $listPersons[] = $person;
                         }
@@ -55,7 +57,7 @@ class AdminViewFilters
                     break;
                 case 'VolIssues':
                 case 'Volunteers with Issues':
-                    if ($personView->willVolunteer == 'Yes') {
+                    if (in_array($personView->willVolunteer, $yesMaybe)) {
                         if ( $this->hasIssues($personView) ) {
                             $listPersons[] = $person;
                         }
@@ -108,6 +110,10 @@ class AdminViewFilters
             $issues |= !(bool)$cert->verified;
         }
 
+        $roles = $personView->getRoles();
+        foreach($roles as $role) {
+            $issues |= !(bool)$role->verified;
+        }
         return boolval($issues);
     }
     
