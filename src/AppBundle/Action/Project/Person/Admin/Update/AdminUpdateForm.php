@@ -282,13 +282,13 @@ EOD;
         switch (count($sar)) {
             case 3:
                 $section = $sar[0];
-                $area = $sar(1);
+                $area = $sar[1];
                 $region = ltrim($sar[2], '0');
                 $state = '';
                 break;
             case 4:
                 $section = $sar[0];
-                $area = $sar(1);
+                $area = $sar[1];
                 $region = ltrim($sar[2], '0');
                 $state = ltrim($sar[3], ' ');
                 break;
