@@ -9,9 +9,9 @@ class ScheduleFieldMapTest extends WebTestCase
     public function testHeartbeat()
     {
         $client = static::createClient();
+        
+        $client->request('GET', '/schedule2016/field_map');
 
-        $crawler = $client->request('GET', '/schedule2016/field_map');
-
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertContains('/pdf/master_field_layout.pdf', $client->getResponse()->headers->get('location'));
     }
 }
