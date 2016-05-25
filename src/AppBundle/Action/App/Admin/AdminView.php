@@ -87,9 +87,12 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('schedule_game_2016')}">View Game Schedule</a></li>
-      <li><a href="{$this->generateUrl('schedule_team_2016')}">View Team Schedule</a></li>
-      <li><a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
+        <li><a href="{$this->generateUrl('schedule_game_2016')}">View Game Schedule</a></li>
+        <li><a href="{$this->generateUrl('schedule_team_2016')}">View Team Schedule</a></li>
+        <li><a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
+        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_qf'])}">Export Quarter-Finals Schedule for review</a></li>
+        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_sf'])}">Export Semi-Finals Schedule for review</a></li>
+        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_fm'])}">Export Finals Schedule for review</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
