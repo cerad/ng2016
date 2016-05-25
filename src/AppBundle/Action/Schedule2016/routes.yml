@@ -30,6 +30,16 @@ schedule_game_2016:
         _view_pdf:   schedule_game_view_pdf
         _view_json:  schedule_game_view_json
 
+
+schedule_medalroundcalc_2016:
+    path: /medalroundcalc.{_format}
+    defaults:
+        _format: xls_qf
+        _controller:    schedule_medalroundcalc_controller_2016
+        _view_xls_qf:   schedule_medalroundcalc_view_xls_qf_2016
+        _view_xls_sf:   schedule_medalroundcalc_view_xls_sf_2016
+        _view_xls_fm:   schedule_medalroundcalc_view_xls_fm_2016
+
 field_map:
     path: /field_map
     defaults:
