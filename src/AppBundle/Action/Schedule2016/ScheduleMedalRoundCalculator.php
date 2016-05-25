@@ -51,6 +51,54 @@ class ScheduleMedalRoundCalculator
  */
     public function generateQuarterFinals($pools)
     {
+        $data = [];
+        $result = [];
+        
+                    //use $pools until TODO is DONE
+        $result = $this->generateQuarterFinals4Pools($pools);
+        //return result until TODO is DONE
+        return $result;  
+        
+        // TODO: 1, 2, 3 pool solutions
+        $keySet = array(
+            ['U10B Core PP A','U10B Core PP B','U10B Core PP C','U10B Core PP D'],
+            ['U10G Core PP A','U10G Core PP B','U10G Core PP C','U10G Core PP D'],
+            ['U12B Core PP A','U12B Core PP B','U12B Core PP C','U12B Core PP D'],
+            ['U12G Core PP A','U12G Core PP B','U12G Core PP C','U12G Core PP D'],
+            ['U14B Core PP A','U14B Core PP B','U14B Core PP C','U14B Core PP D'],
+            ['U14G Core PP A','U14G Core PP B','U14G Core PP C','U14G Core PP D'],
+            ['U16B Core PP A','U16B Core PP B','U16B Core PP C','U16B Core PP D'],
+            ['U16G Core PP A','U16G Core PP B','U16G Core PP C','U16G Core PP D'],
+            ['U19B Core PP A','U19B Core PP B','U19B Core PP C','U19B Core PP D'],
+            ['U19G Core PP A','U19G Core PP B','U19G Core PP C','U19G Core PP D'],
+        );
+        
+        foreach($keySet as $keys) {
+            $keyPools = array_intersect_key($pools, array_fill_keys($keys, null) );
+
+            switch ( count($keyPools) ){
+                case 1:
+                    $result = $this->generateQuarterFinals1Pools($keyPools);
+                    break;
+                case 2:
+                    $result = $this->generateQuarterFinals2Pools($keyPools);
+                    break;
+                case 3:
+                    $result = $this->generateQuarterFinals3Pools($keyPools);
+                    break;
+                case 4:
+                    $result = $this->generateQuarterFinals4Pools($pools);
+                    break;
+            }
+                
+            $data = array_merge( $data, $result );            
+        }
+        
+        return $data;
+        
+    }
+    public function generateQuarterFinals4Pools($pools)
+    {
         $qfMatches = [];
 
         foreach($pools as $pool){
@@ -90,16 +138,171 @@ class ScheduleMedalRoundCalculator
         return $qfTeams;
     
     }
+    public function generateQuarterFinals1Pools($pool)
+    {
+        $qfMatches = [];
+        $poolGames = array_values(array_values($pool)[0]['games']);
+        $levelKey = $poolGames[0]['level_key'];
+        $groupName = $poolGames[0]['group_name'];
+        $slot = $poolGames[0]['group_type'].':'.$poolGames[0]['group_name'].':';
+
+        foreach ($poolGames as $game) {
+            foreach ($game['teams'] as $t) {
+                $teams[$t['key']] = $t;
+            }
+        }
+        $teams = array_values($teams);
+
+        $strMatches = [
+            'QF:1:A 1st',
+            'QF:3:A 2nd',
+            'QF:4:A 3rd',
+            'QF:2:A 4th',
+            'QF:2:A 5th',
+            'QF:4:A 6th',
+            'QF:3:A 7th',
+            'QF:1:A 8th'  
+        ];
+        
+        for ($i = 0; $i < min(count($teams), 8); $i++) {
+            $qfMatches[$levelKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>$strMatches[$i]);
+        }
+
+        for ($i = 8; $i < count($teams); $i++) {
+            $qfMatches[$levelKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>'');                
+        }
+
+        return $qfMatches;
+    
+    }
+    public function generateQuarterFinals2Pools($pools)
+    {
+        $qfMatches = [];
+
+        foreach($pools as $pool){
+            $poolGames = array_values($pool['games'])[0];
+            $poolTeams = $pool['teams'];
+            $levelKey = $poolGames['level_key'];
+            $groupName = $poolGames['group_name'];
+            $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
+
+            switch ($groupName) {
+                case 'A':
+                    $homeTeam[0] = [$poolTeams[0]['team'], 'QF:1:A 1st'];
+                    $awayTeam[1] = [$poolTeams[2]['team'], 'QF:2:A 3rd'];
+                    $homeTeam[2] = [$poolTeams[1]['team'], 'QF:3:A 2nd'];
+                    $awayTeam[3] = [$poolTeams[3]['team'], 'QF:4:A 4th'];
+                    break;
+                case 'B':
+                    $awayTeam[0] = [$poolTeams[3]['team'], 'QF:1:B 4th'];
+                    $homeTeam[1] = [$poolTeams[1]['team'], 'QF:2:B 2nd'];
+                    $awayTeam[2] = [$poolTeams[2]['team'], 'QF:3:B 3rd'];
+                    $homeTeam[3] = [$poolTeams[0]['team'], 'QF:4:B 1st'];
+                    break;
+            }
+
+        }
+        
+        for ( $i = 0; $i < 4; $i++ ) {
+            $qfMatches[$levelKey][$homeTeam[$i][0]['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['group_slot'],'QF'=>$homeTeam[$i][1]);
+            $qfMatches[$levelKey][$awayTeam[$i][0]['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['group_slot'],'QF'=>$awayTeam[$i][1]);            
+        }
+
+        foreach($pools as $pool){
+            $poolGames = array_values($pool['games'])[0];
+            $poolTeams = $pool['teams'];
+            $levelKey = $poolGames['level_key'];
+            $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
+
+            for ($i = 4; $i < count($poolTeams); $i++) {
+                $team = $poolTeams[$i]['team'];
+                $qfMatches[$levelKey][$team['name']] = array('Slots'=>$slot.$team['group_slot'],'QF'=>'');                
+            }
+        }
+
+        return $qfMatches;
+    
+    }
+    public function generateQuarterFinals3Pools($pools)
+    {
+        $qfMatches = [];
+
+        foreach($pools as $pool){
+            $poolGames = array_values($pool['games'])[0];
+            $poolTeams = $pool['teams'];
+            $levelKey = $poolGames['level_key'];
+            $groupName = $poolGames['group_name'];
+            $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
+
+            switch ($groupName) {
+                case 'A':
+                    $team['A'][0] = $poolTeams[0];
+                    $team['A'][1] = $poolTeams[1];
+                    $team['A'][2] = $poolTeams[2];
+                   break;
+                case 'B':
+                    $team['B'][0] = $poolTeams[0];
+                    $team['B'][1] = $poolTeams[1];
+                    $team['B'][2] = $poolTeams[2];
+                   break;
+                case 'C':
+                    $team['C'][0] = $poolTeams[0];
+                    $team['C'][1] = $poolTeams[1];
+                    $team['C'][2] = $poolTeams[2];
+                   break;
+            }
+        }
+
+        if ($team['A'][2]['winPercent'] > $team['C'][2]['winPercent'] and $team['B'][2]['winPercent'] > $team['C'][2]['winPercent']) {
+            $homeTeam[0] = [$team['A'][0], 'QF:1:A 1st'];
+            $awayTeam[0] = [$team['B'][2], 'QF:1:B 3rd'];
+            $homeTeam[1] = [$team['C'][1], 'QF:2:C 2nd'];
+            $awayTeam[1] = [$team['B'][1], 'QF:2:B 2nd'];
+            $homeTeam[2] = [$team['B'][0], 'QF:3:B 1st'];
+            $awayTeam[2] = [$team['A'][2], 'QF:3:A 3rd'];
+            $homeTeam[3] = [$team['C'][0], 'QF:4:C 1st'];
+            $awayTeam[3] = [$team['A'][1], 'QF:4:A 2nd'];
+        } elseif ($team['B'][2]['winPercent'] > $team['A'][2]['winPercent'] and $team['C'][2]['winPercent'] > $team['A'][2]['winPercent']) {
+            $homeTeam[0] = [$team['A'][0], 'QF:1:A 1st'];
+            $awayTeam[0] = [$team['B'][1], 'QF:1:B 2nd'];
+            $homeTeam[1] = [$team['C'][0], 'QF:2:C 1st'];
+            $awayTeam[1] = [$team['B'][2], 'QF:2:B 3rd'];
+            $homeTeam[2] = [$team['C'][1], 'QF:3:C 2nd'];
+            $awayTeam[2] = [$team['A'][1], 'QF:3:A 2nd'];
+            $homeTeam[3] = [$team['B'][0], 'QF:4:B 1st'];
+            $awayTeam[3] = [$team['C'][2], 'QF:4:C 3rd'];
+        } else {
+            $homeTeam[0] = [$team['A'][0], 'QF:1:A 1st'];
+            $awayTeam[0] = [$team['C'][2], 'QF:1:C 3rd'];
+            $homeTeam[1] = [$team['B'][0], 'QF:2:B 1st'];
+            $awayTeam[1] = [$team['C'][1], 'QF:2:C 2nd'];
+            $homeTeam[2] = [$team['A'][1], 'QF:3:A 2nd'];
+            $awayTeam[2] = [$team['B'][1], 'QF:3:B 2nd'];
+            $homeTeam[3] = [$team['C'][0], 'QF:4:C 1st'];
+            $awayTeam[3] = [$team['A'][2], 'QF:4:A 3rd'];              
+        }
+                    
+        for ($i = 0; $i < 4; $i++ ) {
+            $qfMatches[$levelKey][$homeTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['team']['group_slot'],'QF'=>$homeTeam[$i][1]);
+            $qfMatches[$levelKey][$awayTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['team']['group_slot'],'QF'=>$awayTeam[$i][1]);                
+        }
+
+        for ($i = 2; $i < count($poolTeams); $i++) {
+            $team = $poolTeams[$i]['team'];
+            $qfMatches[$levelKey][$team['name']] = array('Slots'=>$slot.$team['group_slot'],'QF'=>'');                
+        }
+
+             
+
+        return $qfMatches;
+    
+    }
 /*
- *  Implements Championship bracket (Semi-final and final games) defined in National Games 2016 Governing Rules
+ *  Implements Championship & consolation bracket (Semi-finas) defined in National Games 2016 Governing Rules
  *  Game 5: Winner of Game 1 vs. Winner of game 2
  *  Game 6: Winner of Game 3 vs. Winner of game 4
- *  Game 7: Winners of Games 5 and 6 play for 1st and 2nd in the championship bracket
- *  Game 8: Runners-up Games 5 and 6 play for 3rd and 4th in the championship bracket
  *  Game 9: Runner-up of Game 1 vs. Runner-up of Game 2
  *  Game 10: Runner-up of Game 3 vs. Runner-up of Game 4
- *  Game 11: Winners of Games 9 and 10 play for 1st and 2nd in the consolation bracket
- *  Game 12: Runners-up of Games 9 and 10 play for 3rd and 4th in the consolation bracket
  */
     public function generateSemiFinals($qfMatches)
     {
@@ -142,10 +345,16 @@ class ScheduleMedalRoundCalculator
         return $sfTeams;
     
     }
+/*
+ *  Implements Championship & consolation brackets (final games) defined in National Games 2016 Governing Rules
+ *  Game 7: Winners of Games 5 and 6 play for 1st and 2nd in the championship bracket
+ *  Game 8: Runners-up Games 5 and 6 play for 3rd and 4th in the championship bracket
+ *  Game 11: Winners of Games 9 and 10 play for 1st and 2nd in the consolation bracket
+ *  Game 12: Runners-up of Games 9 and 10 play for 3rd and 4th in the consolation bracket
+ */
     public function generateFinals($sfMatches)
     {
-        $fmMatches = [];
-//var_dump($sfMatches);     
+        $fmMatches = [];   
        
         foreach($sfMatches as $pool){
             $standings = $pool->getPoolTeamStandings();
