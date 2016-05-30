@@ -9,6 +9,14 @@ services:
             - '@game_connection'
             - '@project_person_connection'
 
+    game_official_voter:
+        class: AppBundle\Action\GameOfficial\GameOfficialVoter
+        tags: [{ name: security.voter }]
+        arguments:
+            - '@game_connection'
+            - '@project_person_connection'
+            - '@security.access.decision_manager'
+
     game_official_assignee_finder:
         class: AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeFinder
         arguments: ['@project_person_connection']

@@ -62,7 +62,12 @@ class AssigneeController extends AbstractController2
         if ($form->isValid()) {
 
             $gameOfficial = $form->getGameOfficial();
-            
+
+            // TODO Move the logic for processing state changes somewhere?
+            if ($gameOfficial->assignState === 'RemoveByAssignee') {
+                $gameOfficial->assignState = 'Open';
+                $gameOfficial->regPersonId = null;
+            }
             $this->gameOfficialUpdater->updateGameOfficial($gameOfficial,$gameOfficialOriginal);
             
             return $redirect;

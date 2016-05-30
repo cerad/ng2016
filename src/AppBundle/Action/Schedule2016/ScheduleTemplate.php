@@ -130,13 +130,17 @@ EOD;
             'back'       => $this->getCurrentRouteName(),
         ];
         $url = $this->generateUrl('game_official_assign_by_assignee',$params);
+        $slotView = $gameOfficial->slotView;
+        if ($this->isGranted('edit',$gameOfficial)) {
+            $slotView = '<a href="{$url}">{$slotView}</a>';
+        }
 
         $assignState = $gameOfficial->assignState;
         $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
 
         return <<<EOD
         <td class="text-left game-official-state-{$assignState}">{$assignStateView}</td>
-        <td class="text-left"><a href="{$url}">{$gameOfficial->slotView}</a></td>
+        <td class="text-left">{$slotView}</td>
         <td class="text-left">{$this->escape($gameOfficial->regPersonName)}</td>
 
 EOD;

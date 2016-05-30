@@ -5,7 +5,7 @@
 
 # Not all of these abbreviations will be used
 assignStateAbbreviations:
-  Open:      ' ' # Open
+  Open:      Open # Open
   Requested: Req
   If_Needed: If_N
   Accepted:  Acc
@@ -13,7 +13,7 @@ assignStateAbbreviations:
   Approved:  App
   Rejected:  Rej
   Reviewing: Rev
-  Pending:   Pen
+  Pending:   Pend
   Published: Pub
   Notified:  Not
  
