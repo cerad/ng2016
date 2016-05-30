@@ -155,7 +155,6 @@ services:
 
     schedule_medalround_calculator_2016:
         class: AppBundle\Action\Schedule2016\ScheduleMedalRoundCalculator
-        arguments: ['@project_connection']
         
     schedule_medalroundcalc_view_xls_qf_2016:
         class: AppBundle\Action\Schedule2016\ScheduleMedalRoundViewFile

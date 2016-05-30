@@ -53,7 +53,7 @@ class ScheduleMedalRoundController extends AbstractController
 
         $criteria['projectIds'] = [$this->projectId];
         $criteria['programs'] = ['Core'];
-        $criteria['ages'] = ['U12','U14','U16','U19'];
+        $criteria['ages'] = ['U10','U12','U14','U16','U19'];
         $criteria['poolTypeKeys'] = ['PP'];
 
         $pools = $this->resultsFinder->findPools($criteria);
