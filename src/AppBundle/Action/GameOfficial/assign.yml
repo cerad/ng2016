@@ -1,0 +1,160 @@
+
+# Mapping table for posted names vs internal names
+# TODO: Make these arrsys with clearPerson attribute
+#       and viewableBuUser
+
+# Not all of these abbreviations will be used
+assignStateAbbreviations:
+  Open:      ' ' # Open
+  Requested: Req
+  If_Needed: If_N
+  Accepted:  Acc
+  Declined:  Dec
+  Approved:  App
+  Rejected:  Rej
+  Reviewing: Rev
+  Pending:   Pen
+  Published: Pub
+  Notified:  Not
+ 
+  TurnBack:         TB
+  TurnBackApproved: TBA
+  TurnBackRejected: TBR
+  
+  RemoveByAssignee: RBU
+  RemoveByAssignor: RBA
+  
+assignStateMap:
+  
+  StateOpen:                  Open  # clearPerson: true
+  
+  StateRequestedByAssignee:   Requested
+  StateIfNeededByAssignee:    If_Needed
+  
+  StateAcceptedByAssignee:    Accepted
+  StateDeclinedByAssignee:    Declined         # Command
+  StateRemovedByAssignee:     RemoveByAssignee # Command
+  StateTurnedBackByAssignee:  TurnBack
+  
+  StateTurnBackApproved:      TurnBackApproved # Command
+  StateTurnBackRejected:      TurnBackRejected
+     
+  StateApprovedByAssignor:    Approved
+  StateRejectedByAssignor:    Rejected
+  StateUnderReviewByAssignor: Reviewing
+  
+  StatePendingByAssignor:     Pending
+  StatePublishedByAssignor:   Published
+  StateAssigneeNotified:      Notified
+  StateRemovedByAssignor:     RemoveByAssignor # Command
+  
+# This is what populates the select lists on the assigning forms
+# Keep it real simple
+# states are really commands which in turn changes the states
+
+# The state names need to match what is stored in the gameOfficial workflow
+# Or else need to tranform
+assigneeStateTransitions:
+  StateOpen:
+    StateOpen:                { desc: 'Slot Is Open' }
+    StateRequestedByAssignee: { desc: 'Request Assignment' }
+   #StateIfNeededByAssignee:  { desc: 'Will Do If Needed'  }
+      
+  StateRequestedByAssignee:
+    StateRequestedByAssignee: { desc: 'Assignment Requested' }
+    StateRemovedByAssignee:   { desc: 'Remove Me From Assignment', modState: StateOpen }
+      
+  StateIfNeededByAssignee:
+    StateIfNeededByAssignee: {  desc: 'Will Do If Needed' }
+    StateRemovedByAssignee:  {  desc: 'Remove Me From Assignment', modState: StateOpen }
+      
+  StateUnderReviewByAssignor:
+    StateUnderReviewByAssignor: { desc: 'Under Review By Assignor' }
+    StateRemovedByAssignee:     { desc: 'Remove Me From Assignment', modState: StateOpen }
+
+  StateAcceptedByAssignee:
+    StateAcceptedByAssignee:   { desc: 'Assignment Was Accepted' }
+    StateTurnedBackByAssignee: { desc: 'Request Turn Back Of Assignment', notifyAssignor: true }
+
+  StateApprovedByAssignor:
+    StateApprovedByAssignor:   { desc: 'Assignment Was Approved' }
+    StateTurnedBackByAssignee: { desc: 'Request Turn Back Of Assignment', notifyAssignor: true }
+     
+  StateTurnedBackByAssignee:
+    StateTurnedBackByAssignee: { desc: 'Assignment Was Turned Back'  }
+    StateAcceptedByAssignee:   { desc: 'Accept The Assignment Again' }
+     
+  StatePublishedByAssignor:
+    StatePublishedByAssignor: { desc: 'Assignment Was Published' }
+    StateAcceptedByAssignee:  { desc: 'Accept Assignment' }
+    StateDeclinedByAssignee:  { desc: 'Decline Assignment', modState: StateOpen, notifyAssignor: true }
+     
+  StateAssigneeNotified:
+    StateAssigneeNotified:   { desc: 'You Have Been Notified' }
+    StateAcceptedByAssignee: { desc: 'Accept Assignment' }
+    StateDeclinedByAssignee: { desc: 'Decline Assignment', modState: StateOpen, notifyAssignor: true }
+     
+  StatePendingByAssignor:
+    StatePendingByAssignor:  { desc: 'Assignment Has Not Yet Been Published', viewableByUser: false }
+    
+# ==================================================================
+# Lots more for assignor
+# Here is where having identical transitions might be nice?
+assignorStateTransitions:
+  StateOpen:
+    StateOpen:                { desc: 'Slot Is Open' }
+    StatePendingByAssignor:   { desc: 'Pending' }
+    StatePublishedByAssignor: { desc: 'Publish' }
+    StateAssigneeNotified:    { desc: 'Notified' }
+    StateAcceptedByAssignee:  { desc: 'Accept For Assignee' }
+   #StateApprovedByAssignor:  { desc: 'Approve For Assignee' }
+    
+  StatePendingByAssignor:
+    StatePendingByAssignor:   { desc: 'Pending' }
+    StatePublishedByAssignor: { desc: 'Publish' }
+    StateAssigneeNotified:    { desc: 'Notified' }
+    StateAcceptedByAssignee:  { desc: 'Accept For Assignee' }
+    StateRemovedByAssignor:   { desc: 'Remove Assignee', modState: StateOpen }
+    
+  StatePublishedByAssignor:
+    StatePendingByAssignor:   { desc: 'Pending' }
+    StatePublishedByAssignor: { desc: 'Publish' }
+    StateAssigneeNotified:    { desc: 'Notified' }
+    StateAcceptedByAssignee:  { desc: 'Accept For Assignee' }
+    StateRemovedByAssignor:   { desc: 'Remove Assignee', modState: StateOpen }
+    
+  StateAssigneeNotified:
+    StateAssigneeNotified:    { desc: 'Notified' }
+    StateAcceptedByAssignee:  { desc: 'Accept For Assignee' }
+    StateRemovedByAssignor:   { desc: 'Remove Assignee', modState: StateOpen }
+
+  StateAcceptedByAssignee:
+    StateAcceptedByAssignee:   { desc: 'Accepted By Assignee' }
+    StateRemovedByAssignor:    { desc: 'Remove Assignee',          modState: StateOpen }
+    StateTurnedBackByAssignee: { desc: 'Turned Back For Assignee', modState: StateOpen }
+    
+  StateApprovedByAssignor:
+    StateApprovedByAssignor:   { desc: 'Approved By Assignor' }
+    StateRemovedByAssignor:    { desc: 'Remove Assignee',          modState: StateOpen }
+    StateTurnedBackByAssignee: { desc: 'Turned Back For Assignee', modState: StateOpen }
+    
+  StateTurnedBackByAssignee:
+    StateTurnedBackByAssignee: { desc: 'Turned Back By Assignee' }
+    StateTurnBackApproved:     { desc: 'Approve Turn Back', modState: StateOpen }
+    StateTurnBackRejected:     { desc: 'Reject  Turn Back', modState: StateAcceptedByAssignee }
+    
+  StateRequestedByAssignee:
+    StateRequestedByAssignee:   { desc: 'Requested By Assignee' }
+    StateApprovedByAssignor:    { desc: 'Approve Request'  }
+    StateRejectedByAssignor:    { desc: 'Reject  Request', modState: StateOpen }
+    StateUnderReviewByAssignor: { desc: 'Review  Request'  }
+    
+  StateIfNeededByAssignee:
+    StateIfNeededByAssignee:    { desc: 'If Needed By Assignee' }
+    StateApprovedByAssignor:    { desc: 'Approve Request'  }
+    StateRejectedByAssignor:    { desc: 'Reject  Request', modState: StateOpen }
+    
+  StateUnderReviewByAssignor:
+    StateUnderReviewByAssignor: { desc: 'Under Review'  }
+    StateApprovedByAssignor:    { desc: 'Approve Request'  }
+    StateRejectedByAssignor:    { desc: 'Reject  Request', modState: StateOpen }

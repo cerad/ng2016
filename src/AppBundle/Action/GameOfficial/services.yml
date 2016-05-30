@@ -1,12 +1,26 @@
 services:
 
+    game_official_assign_workflow:
+        class: AppBundle\Action\GameOfficial\AssignWorkflow
+
+    game_official_updater:
+        class: AppBundle\Action\GameOfficial\GameOfficialUpdater
+        arguments:
+            - '@game_connection'
+            - '@project_person_connection'
+
+    game_official_assignee_finder:
+        class: AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeFinder
+        arguments: ['@project_person_connection']
+
     # =========================================================================
     # Assign by assignee
     game_official_assign_by_assignee_form:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm
         parent: abstract_form
         arguments:
-            - '@game_connection'
+            - '@game_official_assign_workflow'
+            - '@game_official_assignee_finder'
 
     game_official_assign_by_assignee_controller:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeController
@@ -14,6 +28,7 @@ services:
         arguments:
             - '@game_official_assign_by_assignee_form'
             - '@game_finder'
+            - '@game_official_updater'
 
     game_official_assign_by_assignee_view:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeView

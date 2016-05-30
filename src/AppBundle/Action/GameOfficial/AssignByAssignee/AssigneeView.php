@@ -27,53 +27,37 @@ class AssigneeView extends AbstractView2
         $content = <<<EOD
 {$this->form->render()}
 <br />
+{$this->renderNotes()}
 EOD;
         return $this->renderBaseTemplate($content);
     }
-    private function renderScoringNotes()
+    private function renderNotes()
     {
         return <<<EOD
-<legend class="text-left">Scoring Notes</legend>
 <div class="app_table" id="notes">
-<table>
+<table class="app_help">
+  <thead>
+    <th>Notes on Referee Assignment Procedures</th>
+  </thead>
   <tbody>
     <tr>
-      <td width="10%"></td>
-      <td style="vertical-align: top;" width="35%">
+      <td width="15%">&nbsp;
         <ul>
-          <li>Enter score and other info then click "Save"</li>
-          <li>Status fields will update themselves</li>
-          <br><br>
-          <li><strong>NOTE:</strong> Six points for proper participation in Soccerfest are added separately</li>
-        </ul>
-      </td>
-      <td width="35%">
-        <ul>
-          <li>Points earned will be calculated</li>
-          <li>Win: 6 pts / Tie: 3 pts / Shutout: 1 pt</li>
-          <li>For winner only: 1 pt per goal (3 pts max)
-          <li>Player Cautions: No impact</li>
-          <li>Player Sendoffs: -1 pt per sendoff</li>
-          <li>Coach/Substitute/Spectator Ejections: -1 pt per ejection</li>
-          <li>FORFEIT: Score as 1-0</li>
-        </ul>
-      </td>
-      <td width="10%"></td>
-    </tr>
-    <tr><td>&nbsp;</td></tr>
-    <tr>
-      <td width="10%"></td>
-      <td style="vertical-align: top;" width="35%" colspan=2>
-        <ul class="ul_bullets">
-          <li>For help with Match Reporting, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
-          <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a> or at {$this->project['schedules']['phone']}</li>
-          <li>For help with Account Management, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
+          <li>Use the drop down to select "Request Assignment"</li>
+          <li>Click Submit</li>
+          <li>Click "Return to Schedule" and you will see your name listed for this game</li>
+          <li>The Assignor will be notified and will approve your request</li>
+          <li>You may, before the assignor approves your request, rescind your request by returning to this game, selecting "Remove Me From Assignment" and clicking Submit.</li>
+          <li>After the assignor has approved the assignment, you may request to be removed from the match by returning to this game, selecting "Request Turnback of Assignment" and clicking Submit.</li>
+          <li>The Assignor will be notified and, depending on whether a replacement can be assigned, may or may not approve the request.</li>
+          <li><strong>NOTE: You are obliged to keep the assignment until the Assignor releases you.</strong></li>
         </ul>
       </td>
     </tr>
   </tbody>
 </table>
 </div>
+
 EOD;
 
     }

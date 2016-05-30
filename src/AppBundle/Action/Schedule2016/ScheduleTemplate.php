@@ -2,6 +2,7 @@
 namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractActionTrait;
+use AppBundle\Action\GameOfficial\AssignWorkflow;
 
 class ScheduleTemplate
 {
@@ -11,11 +12,15 @@ class ScheduleTemplate
 
     protected $scheduleTitle;
 
-    public function __construct($showOfficials = false)
+    protected $assignWorkflow;
+
+    public function __construct($showOfficials = false, AssignWorkflow $assignWorkflow)
     {
         $this->showOfficials = $showOfficials;
 
         $this->scheduleTitle = 'Game Schedule';
+
+        $this->assignWorkflow = $assignWorkflow;
     }
     /**
      * @param  ScheduleGame[] $games
@@ -101,10 +106,12 @@ EOD;
 EOD;
             if ($this->showOfficials) {
                 $html .= <<<EOD
-  <td class="text-left">
-    {$this->renderGameOfficial($game,$game->referee)}<hr class="separator">
-    {$this->renderGameOfficial($game,$game->ar1)    }<hr class="separator">
-    {$this->renderGameOfficial($game,$game->ar2)    }
+  <td class="schedule-referees text-left">
+    <table>
+      <tr>{$this->renderGameOfficial($game,$game->referee)}</tr>
+      <tr>{$this->renderGameOfficial($game,$game->ar1)    }</tr>
+      <tr>{$this->renderGameOfficial($game,$game->ar2)    }</tr>
+    </table>
   </td>
 EOD;
             }
@@ -124,8 +131,14 @@ EOD;
         ];
         $url = $this->generateUrl('game_official_assign_by_assignee',$params);
 
+        $assignState = $gameOfficial->assignState;
+        $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
+
         return <<<EOD
-    <a href="{$url}">{$gameOfficial->slotView}</a> {$gameOfficial->regPersonName}
+        <td class="text-left game-official-state-{$assignState}">{$assignStateView}</td>
+        <td class="text-left"><a href="{$url}">{$gameOfficial->slotView}</a></td>
+        <td class="text-left">{$this->escape($gameOfficial->regPersonName)}</td>
+
 EOD;
     }
 }
