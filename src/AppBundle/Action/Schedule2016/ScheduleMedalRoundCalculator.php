@@ -7,40 +7,6 @@ use AppBundle\Action\Results2016\ResultsStandingsCalculator;
 
 class ScheduleMedalRoundCalculator 
 {
-    private $conn;
-    
-    public function __construct(Connection $conn)
-    {                
-        $this->conn = $conn;
-    }
-
-    protected function getTeamList($level)
-    {
-        $qb = $this->conn->createQueryBuilder();
-
-        $qb->addSelect([
-            'project_teams.levelKey         AS Level',
-            'project_teams.num              AS Team',
-            'project_teams.orgKey           AS Region',
-            'project_teams.name             AS Name',
-            'project_teams.points           AS SfP',
-        ]);
-        $qb->from('teams', 'project_teams');
-        $qb->Where('project_teams.levelKey = :level');        
-        $qb->setParameter('level', $level);
-        
-        $stmt = $qb->execute();
-        
-        //put the results into an array
-        $teamList = [];        
-        while($row = $stmt->fetch()) {
-            $teamList[] = $row;
-        }
- 
-        return $teamList;
-        
-    }
-
 /*
  *    Implements Quarterfinal competition defined in National Games 2016 Governing Rules
  *
@@ -51,28 +17,22 @@ class ScheduleMedalRoundCalculator
  */
     public function generateQuarterFinals($pools)
     {
-        $data = [];
+        $qfMatches = [];
         $result = [];
-        
-                    //use $pools until TODO is DONE
-        $result = $this->generateQuarterFinals4Pools($pools);
-        //return result until TODO is DONE
-        return $result;  
-        
         // TODO: 1, 2, 3 pool solutions
         $keySet = array(
-            ['U10B Core PP A','U10B Core PP B','U10B Core PP C','U10B Core PP D'],
-            ['U10G Core PP A','U10G Core PP B','U10G Core PP C','U10G Core PP D'],
-            ['U12B Core PP A','U12B Core PP B','U12B Core PP C','U12B Core PP D'],
-            ['U12G Core PP A','U12G Core PP B','U12G Core PP C','U12G Core PP D'],
-            ['U14B Core PP A','U14B Core PP B','U14B Core PP C','U14B Core PP D'],
-            ['U14G Core PP A','U14G Core PP B','U14G Core PP C','U14G Core PP D'],
-            ['U16B Core PP A','U16B Core PP B','U16B Core PP C','U16B Core PP D'],
-            ['U16G Core PP A','U16G Core PP B','U16G Core PP C','U16G Core PP D'],
-            ['U19B Core PP A','U19B Core PP B','U19B Core PP C','U19B Core PP D'],
-            ['U19G Core PP A','U19G Core PP B','U19G Core PP C','U19G Core PP D'],
+            ['U10B-Core-PP-A','U10B-Core-PP-B','U10B-Core-PP-C','U10B-Core-PP-D'],
+            ['U10G-Core-PP-A','U10G-Core-PP-B','U10G-Core-PP-C','U10G-Core-PP-D'],
+            ['U12B-Core-PP-A','U12B-Core-PP-B','U12B-Core-PP-C','U12B-Core-PP-D'],
+            ['U12G-Core-PP-A','U12G-Core-PP-B','U12G-Core-PP-C','U12G-Core-PP-D'],
+            ['U14B-Core-PP-A','U14B-Core-PP-B','U14B-Core-PP-C','U14B-Core-PP-D'],
+            ['U14G-Core-PP-A','U14G-Core-PP-B','U14G-Core-PP-C','U14G-Core-PP-D'],
+            ['U16B-Core-PP-A','U16B-Core-PP-B','U16B-Core-PP-C','U16B-Core-PP-D'],
+            ['U16G-Core-PP-A','U16G-Core-PP-B','U16G-Core-PP-C','U16G-Core-PP-D'],
+            ['U19B-Core-PP-A','U19B-Core-PP-B','U19B-Core-PP-C','U19B-Core-PP-D'],
+            ['U19G-Core-PP-A','U19G-Core-PP-B','U19G-Core-PP-C','U19G-Core-PP-D'],
         );
-        
+
         foreach($keySet as $keys) {
             $keyPools = array_intersect_key($pools, array_fill_keys($keys, null) );
 
@@ -87,14 +47,16 @@ class ScheduleMedalRoundCalculator
                     $result = $this->generateQuarterFinals3Pools($keyPools);
                     break;
                 case 4:
-                    $result = $this->generateQuarterFinals4Pools($pools);
+                    $result = $this->generateQuarterFinals4Pools($keyPools);
                     break;
             }
                 
-            $data = array_merge( $data, $result );            
+            $qfMatches = array_merge( $qfMatches, $result );            
         }
+
+        $qfResults = $this->generateScheduleRecords($pools, 'QF', $qfMatches);
         
-        return $data;
+        return $qfResults;
         
     }
     public function generateQuarterFinals4Pools($pools)
@@ -106,24 +68,24 @@ class ScheduleMedalRoundCalculator
             $homeTeam = $standings[0];
             $awayTeam = $standings[1];
          
-            $teamKey = $pool->poolKey;
+            $poolKey = $pool->poolKey;
 
             switch ($pool->poolSlotView) {
                 case 'A':
-                   $qfMatches[$teamKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:A 1st');
-                   $qfMatches[$teamKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:A 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:A 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:A 2nd');
                    break;
                 case 'B':
-                   $qfMatches[$teamKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:2:B 1st');
-                   $qfMatches[$teamKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:4:B 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:2:B 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:4:B 2nd');
                    break;
                 case 'C':
-                   $qfMatches[$teamKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:3:C 1st');
-                   $qfMatches[$teamKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:1:C 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:3:C 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:1:C 2nd');
                    break;
                 case 'D':
-                   $qfMatches[$teamKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:A 1st');
-                   $qfMatches[$teamKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:A 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:A 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:A 2nd');
                    break;
             }
 
@@ -133,16 +95,14 @@ class ScheduleMedalRoundCalculator
             }
         }        
 
-        $qfTeams = $this->generateScheduleRecords($pools, 'QF', $qfMatches);
-
-        return $qfTeams;
+        return $qfMatches;
     
     }
     public function generateQuarterFinals1Pools($pool)
     {
         $qfMatches = [];
         $poolGames = array_values(array_values($pool)[0]['games']);
-        $levelKey = $poolGames[0]['level_key'];
+        $poolKey = $pool->poolKey;
         $groupName = $poolGames[0]['group_name'];
         $slot = $poolGames[0]['group_type'].':'.$poolGames[0]['group_name'].':';
 
@@ -165,11 +125,11 @@ class ScheduleMedalRoundCalculator
         ];
         
         for ($i = 0; $i < min(count($teams), 8); $i++) {
-            $qfMatches[$levelKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>$strMatches[$i]);
+            $qfMatches[$poolKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>$strMatches[$i]);
         }
 
         for ($i = 8; $i < count($teams); $i++) {
-            $qfMatches[$levelKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>'');                
+            $qfMatches[$poolKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>'');                
         }
 
         return $qfMatches;
@@ -182,7 +142,7 @@ class ScheduleMedalRoundCalculator
         foreach($pools as $pool){
             $poolGames = array_values($pool['games'])[0];
             $poolTeams = $pool['teams'];
-            $levelKey = $poolGames['level_key'];
+            $poolKey = $pool->poolKey;
             $groupName = $poolGames['group_name'];
             $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
 
@@ -204,8 +164,8 @@ class ScheduleMedalRoundCalculator
         }
         
         for ( $i = 0; $i < 4; $i++ ) {
-            $qfMatches[$levelKey][$homeTeam[$i][0]['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['group_slot'],'QF'=>$homeTeam[$i][1]);
-            $qfMatches[$levelKey][$awayTeam[$i][0]['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['group_slot'],'QF'=>$awayTeam[$i][1]);            
+            $qfMatches[$poolKey][$homeTeam[$i][0]['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['group_slot'],'QF'=>$homeTeam[$i][1]);
+            $qfMatches[$poolKey][$awayTeam[$i][0]['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['group_slot'],'QF'=>$awayTeam[$i][1]);            
         }
 
         foreach($pools as $pool){
@@ -230,7 +190,7 @@ class ScheduleMedalRoundCalculator
         foreach($pools as $pool){
             $poolGames = array_values($pool['games'])[0];
             $poolTeams = $pool['teams'];
-            $levelKey = $poolGames['level_key'];
+            $poolKey = $poolKey;
             $groupName = $poolGames['group_name'];
             $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
 
@@ -283,13 +243,13 @@ class ScheduleMedalRoundCalculator
         }
                     
         for ($i = 0; $i < 4; $i++ ) {
-            $qfMatches[$levelKey][$homeTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['team']['group_slot'],'QF'=>$homeTeam[$i][1]);
-            $qfMatches[$levelKey][$awayTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['team']['group_slot'],'QF'=>$awayTeam[$i][1]);                
+            $qfMatches[$poolKey][$homeTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['team']['group_slot'],'QF'=>$homeTeam[$i][1]);
+            $qfMatches[$poolKey][$awayTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['team']['group_slot'],'QF'=>$awayTeam[$i][1]);                
         }
 
         for ($i = 2; $i < count($poolTeams); $i++) {
             $team = $poolTeams[$i]['team'];
-            $qfMatches[$levelKey][$team['name']] = array('Slots'=>$slot.$team['group_slot'],'QF'=>'');                
+            $qfMatches[$poolKey][$team['name']] = array('Slots'=>$slot.$team['group_slot'],'QF'=>'');                
         }
 
              
@@ -311,9 +271,8 @@ class ScheduleMedalRoundCalculator
         foreach($qfMatches as $pool){
             $standings = $pool->getPoolTeamStandings();
 
-            $teamKey = $pool->poolKey;
-            $teamKeyArr = explode('-',$teamKey);
-            $matchKey = $teamKeyArr[2] . ' ' . $teamKeyArr[3];
+            $matchKey = $pool->poolTypeView . ' ' . $pool->poolSlotView;
+            $poolKey = $pool->poolKey;
 
             $winTeam = $standings[0];
             $losTeam = $standings[1];
@@ -321,20 +280,20 @@ class ScheduleMedalRoundCalculator
             foreach($standings as $team) {
                 switch ($matchKey) {
                     case 'QF 1':
-                        $sfMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:5:'.$matchKey.' Win');
-                        $sfMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:9:'.$matchKey.' Rup');
+                        $sfMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:5:'.$matchKey.' Win');
+                        $sfMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:9:'.$matchKey.' Rup');
                         break;
                     case 'QF 2':
-                        $sfMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:5:'.$matchKey.' Win');
-                        $sfMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:9:'.$matchKey.' Rup');
+                        $sfMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:5:'.$matchKey.' Win');
+                        $sfMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:9:'.$matchKey.' Rup');
                         break;
                     case 'QF 3':
-                        $sfMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:6:'.$matchKey.' Win');
-                        $sfMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:10:'.$matchKey.' Rup');
+                        $sfMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:6:'.$matchKey.' Win');
+                        $sfMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:10:'.$matchKey.' Rup');
                         break;
                     case 'QF 4':
-                        $sfMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:6:'.$matchKey.' Win');
-                        $sfMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:10:'.$matchKey.' Rup');
+                        $sfMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:6:'.$matchKey.' Win');
+                        $sfMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','SF'=>'SF:10:'.$matchKey.' Rup');
                         break;
                 }
             }
@@ -359,9 +318,8 @@ class ScheduleMedalRoundCalculator
         foreach($sfMatches as $pool){
             $standings = $pool->getPoolTeamStandings();
 
-            $teamKey = $pool->poolKey;
-            $teamKeyArr = explode('-',$teamKey);
-            $matchKey = $teamKeyArr[2] . ' ' . $teamKeyArr[3];
+            $poolKey = $pool->poolKey;
+            $matchKey = $pool->poolTypeView . ' ' . $pool->poolSlotView;
 
             $winTeam = $standings[0];
             $losTeam = $standings[1];
@@ -370,23 +328,23 @@ class ScheduleMedalRoundCalculator
                 switch ($matchKey) {
                     case 'SF 1':
                     case 'SF 5':
-                        $fmMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:7:'.$matchKey.' Win');
-                        $fmMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:8:'.$matchKey.' Run');
+                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:7:'.$matchKey.' Win');
+                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:8:'.$matchKey.' Run');
                         break;
                     case 'SF 2':
                     case 'SF 6':
-                        $fmMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:7:'.$matchKey.' Win');
-                        $fmMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:8:'.$matchKey.' Run');
+                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:7:'.$matchKey.' Win');
+                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:8:'.$matchKey.' Run');
                         break;
                     case 'SF 3':
                     case 'SF 9':
-                        $fmMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:11:'.$matchKey.' Win');
-                        $fmMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:12:'.$matchKey.' Run');
+                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:11:'.$matchKey.' Win');
+                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:12:'.$matchKey.' Run');
                         break;
                     case 'SF 4':
                     case 'SF 10':
-                        $fmMatches[$teamKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:11:'.$matchKey.' Win');
-                        $fmMatches[$teamKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:12:'.$matchKey.' Run');
+                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:11:'.$matchKey.' Win');
+                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','FM'=>'FM:12:'.$matchKey.' Run');
                         break;
                 }
             }
@@ -409,9 +367,11 @@ class ScheduleMedalRoundCalculator
         
         foreach($medalRounds as $pool=>$mrTeams) {
             //set the data : game in each row
+
 //var_dump($pool);
-//var_dump($pools);
 //var_dump($mrTeams);
+//var_dump($pools);
+//var_dump($medalRounds);
             $teams = $pools[$pool]->getPoolTeams();
             
             //blank row between levels
