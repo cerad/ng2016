@@ -34,11 +34,11 @@ class InitGames2016Command extends Command
 
         $this->initRegTeams($commit || false);
 
-        $this->initPoolTeams($commit || true);
+        $this->initPoolTeams($commit || false);
 
         $this->assignRegTeamsToPoolPlayTeams($commit || false);
 
-        $this->initGames($commit || false);
+        $this->initGames($commit || true);
 
         echo sprintf("Init Games NG2016 Completed.\n");
     }
@@ -319,15 +319,28 @@ class InitGames2016Command extends Command
         if (!$commit) {
             return;
         }
-        /* $timeSlots = [
-            'Wed' => ['08:00:00','09:15:00','10:30:00','11:45:00','13:00:00','14:15:00','15:30:00','16:45:00'], // Soccerfest
-            'Thu' => ['08:00:00','09:15:00','10:30:00','11:45:00','13:00:00','14:15:00','15:30:00','16:45:00'], // Pool Play
-            'Fri' => ['08:00:00','09:15:00','10:30:00','11:45:00','13:00:00','14:15:00','15:30:00','16:45:00'], // Pool Play
-            'Sat' => ['08:00:00','09:15:00','10:30:00','11:45:00','13:00:00','15:00:00'],                       // Pool Play / Quarter Finals
-            'Sun' => ['08:00:00','10:00:00','12:00:00','14:00:00'],                                             // Semi Fields / Finals
-        ]; */
         // Six fields per division
         $fieldSlots = [
+            [1,'Wed','08:00','ZZ01-12X','ZZ01-12Y','B'],[2,'Wed','08:00','ZZ01-12X','ZZ01-12Y','B'],[3,'Wed','08:00','ZZ01-12X','ZZ01-12X','B'],
+            [4,'Wed','08:00','ZZ01-12X','ZZ01-12Y','B'],[5,'Wed','08:00','ZZ01-12X','ZZ01-12Y','B'],[6,'Wed','08:00','ZZ01-12X','ZZ01-12Y','B'],
+            [1,'Wed','09:15','ZZ13-24X','ZZ13-24Y','B'],[2,'Wed','09:15','ZZ13-24X','ZZ13-24Y','B'],[3,'Wed','09:15','ZZ13-24X','ZZ13-24Y','B'],
+            [4,'Wed','09:15','ZZ13-24X','ZZ13-24Y','B'],[5,'Wed','09:15','ZZ13-24X','ZZ13-24Y','B'],[6,'Wed','09:15','ZZ13-24X','ZZ13-24Y','B'],
+
+            [1,'Wed','10:30','ZZ01-12X','ZZ01-12Y','G'],[2,'Wed','10:30','ZZ01-12X','ZZ01-12Y','G'],[3,'Wed','10:30','ZZ01-12X','ZZ01-12X','G'],
+            [4,'Wed','10:30','ZZ01-12X','ZZ01-12Y','G'],[5,'Wed','10:30','ZZ01-12X','ZZ01-12Y','G'],[6,'Wed','10:30','ZZ01-12X','ZZ01-12Y','G'],
+            [1,'Wed','11:45','ZZ13-24X','ZZ13-24Y','G'],[2,'Wed','11:45','ZZ13-24X','ZZ13-24Y','G'],[3,'Wed','11:45','ZZ13-24X','ZZ13-24Y','G'],
+            [4,'Wed','11:45','ZZ13-24X','ZZ13-24Y','G'],[5,'Wed','11:45','ZZ13-24X','ZZ13-24Y','G'],[6,'Wed','11:45','ZZ13-24X','ZZ13-24Y','G'],
+
+            [1,'Wed','13:00','ZZ01-12X','ZZ01-12Y','B'],[2,'Wed','13:00','ZZ01-12X','ZZ01-12Y','B'],[3,'Wed','13:00','ZZ01-12X','ZZ01-12X','B'],
+            [4,'Wed','13:00','ZZ01-12X','ZZ01-12Y','B'],[5,'Wed','13:00','ZZ01-12X','ZZ01-12Y','B'],[6,'Wed','13:00','ZZ01-12X','ZZ01-12Y','B'],
+            [1,'Wed','14:15','ZZ13-24X','ZZ13-24Y','B'],[2,'Wed','14:15','ZZ13-24X','ZZ13-24Y','B'],[3,'Wed','14:15','ZZ13-24X','ZZ13-24Y','B'],
+            [4,'Wed','14:15','ZZ13-24X','ZZ13-24Y','B'],[5,'Wed','14:15','ZZ13-24X','ZZ13-24Y','B'],[6,'Wed','14:15','ZZ13-24X','ZZ13-24Y','B'],
+
+            [1,'Wed','15:30','ZZ01-12X','ZZ01-12Y','G'],[2,'Wed','15:30','ZZ01-12X','ZZ01-12Y','G'],[3,'Wed','15:30','ZZ01-12X','ZZ01-12X','G'],
+            [4,'Wed','15:30','ZZ01-12X','ZZ01-12Y','G'],[5,'Wed','15:30','ZZ01-12X','ZZ01-12Y','G'],[6,'Wed','15:30','ZZ01-12X','ZZ01-12Y','G'],
+            [1,'Wed','16:45','ZZ13-24X','ZZ13-24Y','G'],[2,'Wed','16:45','ZZ13-24X','ZZ13-24Y','G'],[3,'Wed','16:45','ZZ13-24X','ZZ13-24Y','G'],
+            [4,'Wed','16:45','ZZ13-24X','ZZ13-24Y','G'],[5,'Wed','16:45','ZZ13-24X','ZZ13-24Y','G'],[6,'Wed','16:45','ZZ13-24X','ZZ13-24Y','G'],
+
             [1, 'Thu', '08:00', 'A1', 'A2', 'G'], [2, 'Thu', '08:00', 'A3', 'A5', 'G'], [3, 'Thu', '08:00', 'A4', 'A6', 'G'],
             [4, 'Thu', '08:00', 'C1', 'C2', 'G'], [5, 'Thu', '08:00', 'C3', 'C5', 'G'], [6, 'Thu', '08:00', 'C4', 'C6', 'G'],
             [1, 'Thu', '09:15', 'D1', 'D2', 'G'], [2, 'Thu', '09:15', 'D3', 'D5', 'G'], [3, 'Thu', '09:15', 'D4', 'D6', 'G'],
@@ -564,11 +577,12 @@ class InitGames2016Command extends Command
             'gameNumber' => $gameNumber,
             'poolTeamId' => null,
         ];
+        $isPoolPlay = !in_array(substr($home,0,2),['QF','SF','TF','ZZ']);
         foreach([1,2] as $slot)
         {
             $team = $slot === 1 ? $home : $away;
 
-            $poolTeamName = $isMedalRound ? $team : 'PP' . $team;
+            $poolTeamName = $isPoolPlay ? 'PP' . $team : $team;
 
             $poolTeamId = sprintf('%s:%s%s%s%s', $projectId, $age, $gender, $program, $poolTeamName);
 
