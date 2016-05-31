@@ -48,7 +48,7 @@ class ScheduleMedalRoundController extends AbstractController
             $criteria['ages'] = explode(',',$params['ages']);
         }
         if (isset($params['pools']) && $params['pools']) {
-            $criteria['group_names'] = explode(',',$params['pools']);
+            $criteria['poolSlotView'] = explode(',',$params['pools']);
         }
 
         $criteria['projectIds'] = [$this->projectId];

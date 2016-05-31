@@ -21,132 +21,103 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
     public function testGenerateQuarterFinals()
     {
         /* one pool */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/yamldata/pp1_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp1_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
+
+        $this->assertCount(70, $matches); // 6 teams x 10 pools + 10 blank separator rows in $data
         
-        $this->assertCount(250, $matches);
-        $this->assertArrayHasKey('AYSO_U10B_Core',$matches);
-        $this->assertCount(6, $matches['AYSO_U10B_Core']); //limited to 6 with ng2014 data
+        /* U10B A 1st */
+        $this->assertEquals("#01 10-W-0068 Caron", $matches[1][1]);
+        $this->assertEquals('QF:1:Home:A 1st',$matches[1][4]);
 
-        /* first place */
-        $this->assertArrayHasKey('#01 10-W-0068 Caron', $matches['AYSO_U10B_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U10B_Core']['#01 10-W-0068 Caron']);
-        $this->assertEquals('QF:1:A 1st',$matches['AYSO_U10B_Core']['#01 10-W-0068 Caron']['QF']);
-
-        /* sixth place */
-        $this->assertArrayHasKey('#16 12-D-0310 Ceja', $matches['AYSO_U10B_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U10B_Core']['#16 12-D-0310 Ceja']);
-        $this->assertEquals('QF:4:A 6th',$matches['AYSO_U10B_Core']['#16 12-D-0310 Ceja']['QF']);
+        /* U10B A 6th */
+        $this->assertEquals("#16 12-D-0310 Ceja", $matches[6][1]);
+        $this->assertEquals('QF:4:Away:A 6th',$matches[6][4]);
 
         /* two Pools */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/yamldata/pp2_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp2_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
 
-        $this->assertCount(10, $matches);
-        $this->assertArrayHasKey('AYSO_U12B_Core',$matches);
-        $this->assertCount(12, $matches['AYSO_U12B_Core']);
+        $this->assertCount(130, $matches);  // 6 teams x 2 pools x 10 division + 10 blank separator rows in $data
+    
+        /* U10B A 1st */
+        $this->assertEquals("#01 10-W-0068 Caron", $matches[1][1]);
+        $this->assertEquals('QF:1:Home:A 1st',$matches[1][4]);
+
+        /* U10B B 6th */
+        $this->assertEquals('#19 01-S-0397 Burgess',$matches[12][1]);
+        $this->assertEquals('',$matches[12][4]);
 
         /* QF1: home */
-        $this->assertArrayHasKey('#15 01-C-0088 Nord', $matches['AYSO_U12B_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U12B_Core']['#15 01-C-0088 Nord']);
-        $this->assertEquals('QF:1:A 1st',$matches['AYSO_U12B_Core']['#15 01-C-0088 Nord']['QF']);
+        $this->assertEquals("#01 10-W-0068 Caron", $matches[1][1]);
 
         /* QF4: away */
-        $this->assertArrayHasKey('#06 08-C-0158 Feleo', $matches['AYSO_U12B_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U12B_Core']['#06 08-C-0158 Feleo']);
-        $this->assertEquals('QF:4:A 4th',$matches['AYSO_U12B_Core']['#06 08-C-0158 Feleo']['QF']);
+        $this->assertEquals("#13 01-H-0080 Schieldge", $matches[4][1]);
 
         /* three Pools */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/yamldata/pp3_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp3_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
 
-        $this->assertCount(10, $matches);
-        $this->assertArrayHasKey('AYSO_U14B_Core',$matches);
-        $this->assertCount(12, $matches['AYSO_U14B_Core']);
+        $this->assertCount(190, $matches); // 6 teams x 3 pools x 10 division + 10 blank separator rows in $data
 
-        /* QF1: home */
-        $this->assertArrayHasKey('#14 01-P-0019 Castillo', $matches['AYSO_U14B_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U14B_Core']['#14 01-P-0019 Castillo']);
-        $this->assertEquals('QF:1:A 1st',$matches['AYSO_U14B_Core']['#14 01-P-0019 Castillo']['QF']);
+        /* U14G QF4: home */
+        $this->assertEquals("#18 01-D-0018 Chen",$matches[102][1]);
         
-        /* QF4: away */
-        $this->assertArrayHasKey('#05 01-G-0065 Morton', $matches['AYSO_U14B_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U14B_Core']['#05 01-G-0065 Morton']);
-        $this->assertEquals('QF:4:A 2nd',$matches['AYSO_U14B_Core']['#05 01-G-0065 Morton']['QF']);
+        /* U16B QF4: home */
+        $this->assertEquals("#21 01-C-0002 Joe",$matches[127][1]);
 
         /* four Pools */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/yamldata/pp4_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp4_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
       
-        $this->assertCount(10, $matches);
-        $this->assertArrayHasKey('AYSO_U19G_Core',$matches);
-        $this->assertCount(24, $matches['AYSO_U19G_Core']);
+        $this->assertCount(250, $matches);// 6 teams x 4 pools x 10 division + 10 blank separator rows in $data
 
-        /* QF1: home */
-        $this->assertArrayHasKey('#19 01-R-0544 Kane', $matches['AYSO_U19G_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U19G_Core']['#19 01-R-0544 Kane']);
-        $this->assertEquals('QF:1:A 1st',$matches['AYSO_U19G_Core']['#19 01-R-0544 Kane']['QF']);
+        /* U14G: QF1: home */
+        $this->assertEquals("#11 01-B-0003 Knudsen",$matches[126][1]);
         
-        /* QF4: away */
-        $this->assertArrayHasKey('#14 11-Z-0024 Jackson', $matches['AYSO_U19G_Core']);
-        $this->assertArrayHasKey('QF',$matches['AYSO_U19G_Core']['#14 11-Z-0024 Jackson']);
-        $this->assertEquals('QF:4:B 2nd',$matches['AYSO_U19G_Core']['#14 11-Z-0024 Jackson']['QF']);
+        /* U14B: QF3: home */
+        $this->assertEquals("#15 01-U-0624 Nunez",$matches[115][1]);
     }
     
     public function testGenerateSemiFinals()
     {
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/yamldata/qf_games.dat')));
-//var_dump($games);
-//var_dump(serialize($games));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/qf_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateSemiFinals($games);
-        $matches = $matches['Medal Round QF']['data'];
-//var_dump($matches);die();
+        $matches = $matches['Medal Round SF']['data'];
 
-        $this->assertCount(72, $matches);
-        $this->assertArrayHasKey('AYSO_U19B_Core',$matches);
-        $this->assertCount(8, $matches['AYSO_U19B_Core']);
+        $this->assertCount(154, $matches);
 
-        /* QF1: home */
-        $this->assertArrayHasKey('#10 02-B-0145 Kenny', $matches['AYSO_U19B_Core']);
-        $this->assertArrayHasKey('SF',$matches['AYSO_U19B_Core']['#10 02-B-0145 Kenny']);
-        $this->assertEquals('SF:5:QF 1 Win',$matches['AYSO_U19B_Core']['#10 02-B-0145 Kenny']['SF']);        
+        /* SF:5:QF 1 Win */
+        $this->assertEquals("#15 01-C-0088 Nord",$matches[19][1]);        
 
-        /* QF4: away */
-        $this->assertArrayHasKey('#20 01-H-0080 Cuevas', $matches['AYSO_U19B_Core']);
-        $this->assertArrayHasKey('SF',$matches['AYSO_U19B_Core']['#20 01-H-0080 Cuevas']);
-        $this->assertEquals('SF:9:QF 2 Run',$matches['AYSO_U19B_Core']['#20 01-H-0080 Cuevas']['SF']);        
+        /* SF:10:QF 3 Rup */
+        $this->assertEquals("#23 11-K-0143 Fisher",$matches[126][1]);        
 
     }
     
     public function testGenerateFinalMatches()
     {
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/yamldata/sf_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/sf_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateFinals($games);
-        $matches = $matches['Medal Round QF']['data'];
+        $matches = $matches['Medal Round FM']['data'];
 
-        $this->assertCount(72, $matches);
-        $this->assertArrayHasKey('AYSO_U19G_Core',$matches);
-        $this->assertCount(8, $matches['AYSO_U19G_Core']);
+        $this->assertCount(154, $matches);
 
-        /* QF1: home */
-        $this->assertArrayHasKey('#01 14-I-0345 Rodas', $matches['AYSO_U19G_Core']);
-        $this->assertArrayHasKey('FM',$matches['AYSO_U19G_Core']['#01 14-I-0345 Rodas']);
-        $this->assertEquals('FM:7:SF 1 Win',$matches['AYSO_U19G_Core']['#01 14-I-0345 Rodas']['FM']);        
+        /* FM:7:SF 2 Win */
+        $this->assertEquals("#11 01-U-0215 Florez",$matches[21][1]);        
 
-        /* QF4: away */
-        $this->assertArrayHasKey('#14 11-Z-0024 Jackson', $matches['AYSO_U19G_Core']);
-        $this->assertArrayHasKey('FM',$matches['AYSO_U19G_Core']['#14 11-Z-0024 Jackson']);
-        $this->assertEquals('FM:12:SF 4 Run',$matches['AYSO_U19G_Core']['#14 11-Z-0024 Jackson']['FM']);        
+        /* FM:12:SF 4 Run */
+        $this->assertEquals("#21 11-E-0094 Matewosian",$matches[77][1]);        
         
     }
 
