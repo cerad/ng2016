@@ -63,9 +63,9 @@ EOT;
 
       <li><a href="{$this->generateUrl('results_medalround_2016')}">Medal Round</a></li>
 
-      <li><a href="{$this->generateUrl('app_results_sportsmanship')}">Sportsmanship</a></li>
+      <li><a href="{$this->generateUrl('results_sportsmanship_2016')}">Sportsmanship</a></li>
 
-      <li><a href="{$this->generateUrl('app_results_final')}">Final Standings</a></li>
+      <li><a href="{$this->generateUrl('results_final_2016')}">Final Standings</a></li>
     </ul>
   </div>
 </div>
@@ -148,7 +148,7 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignments</a></li>
-      <li><a href="#">Export Referee Assignments (Excel)</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignments (Excel)</a></li>
 EOT;
 
       if ($this->isGranted('ROLE_ADMIN')) {
