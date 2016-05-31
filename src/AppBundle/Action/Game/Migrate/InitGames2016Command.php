@@ -30,11 +30,11 @@ class InitGames2016Command extends Command
     {
         echo sprintf("Init Games NG2016 ...\n");
 
-        $commit = true;
+        $commit = false;
 
         $this->initRegTeams($commit || false);
 
-        $this->initPoolTeams($commit || false);
+        $this->initPoolTeams($commit || true);
 
         $this->assignRegTeamsToPoolPlayTeams($commit || false);
 
@@ -135,22 +135,22 @@ class InitGames2016Command extends Command
                     }
                     $medalRoundPools = [
                         'QF' => [
-                            '1' => [['game' =>  1, 'name' => 'X', 'slot' => 'A 1st'], ['name' => 'Y', 'slot' => 'C 2nd']],
-                            '2' => [['game' =>  2, 'name' => 'X', 'slot' => 'B 1st'], ['name' => 'Y', 'slot' => 'D 2nd']],
-                            '3' => [['game' =>  3, 'name' => 'X', 'slot' => 'C 1st'], ['name' => 'Y', 'slot' => 'A 2nd']],
-                            '4' => [['game' =>  4, 'name' => 'X', 'slot' => 'D 1st'], ['name' => 'Y', 'slot' => 'B 2nd']],
+                            '1' => [['game' =>  1, 'name' => 'X', 'slot' => 'A 1st'], ['game' =>  1, 'name' => 'Y', 'slot' => 'C 2nd']],
+                            '2' => [['game' =>  2, 'name' => 'X', 'slot' => 'B 1st'], ['game' =>  2, 'name' => 'Y', 'slot' => 'D 2nd']],
+                            '3' => [['game' =>  3, 'name' => 'X', 'slot' => 'C 1st'], ['game' =>  3, 'name' => 'Y', 'slot' => 'A 2nd']],
+                            '4' => [['game' =>  4, 'name' => 'X', 'slot' => 'D 1st'], ['game' =>  4, 'name' => 'Y', 'slot' => 'B 2nd']],
                         ],
                         'SF' => [
-                            '1' => [['game' =>  5, 'name' => 'X', 'slot' => 'QF1 Win'], ['name' => 'Y', 'slot' => 'QF2 Win']],
-                            '2' => [['game' =>  6, 'name' => 'X', 'slot' => 'QF3 Win'], ['name' => 'Y', 'slot' => 'QF4 Win']],
-                            '3' => [['game' =>  7, 'name' => 'X', 'slot' => 'QF1 Los'], ['name' => 'Y', 'slot' => 'QF2 Los']],
-                            '4' => [['game' =>  8, 'name' => 'X', 'slot' => 'QF3 Los'], ['name' => 'Y', 'slot' => 'QF4 Los']],
+                            '1' => [['game' =>  5, 'name' => 'X', 'slot' => 'QF1 Win'], ['game' =>  5, 'name' => 'Y', 'slot' => 'QF2 Win']],
+                            '2' => [['game' =>  6, 'name' => 'X', 'slot' => 'QF3 Win'], ['game' =>  6, 'name' => 'Y', 'slot' => 'QF4 Win']],
+                            '3' => [['game' =>  9, 'name' => 'X', 'slot' => 'QF1 Los'], ['game' =>  9, 'name' => 'Y', 'slot' => 'QF2 Los']],
+                            '4' => [['game' => 10, 'name' => 'X', 'slot' => 'QF3 Los'], ['game' => 10, 'name' => 'Y', 'slot' => 'QF4 Los']],
                         ],
                         'TF' => [
-                            '1' => [['game' =>  9, 'name' => 'X', 'slot' => 'SF1 Win'], ['name' => 'Y', 'slot' => 'SF2 Win']],
-                            '2' => [['game' => 10, 'name' => 'X', 'slot' => 'SF1 Los'], ['name' => 'Y', 'slot' => 'SF2 Los']],
-                            '3' => [['game' => 11, 'name' => 'X', 'slot' => 'SF3 Win'], ['name' => 'Y', 'slot' => 'SF4 Win']],
-                            '4' => [['game' => 12, 'name' => 'X', 'slot' => 'SF3 Los'], ['name' => 'Y', 'slot' => 'SF4 Los']],
+                            '1' => [['game' =>  7, 'name' => 'X', 'slot' => 'SF5 Win'], ['game' =>  7, 'name' => 'Y', 'slot' => 'SF6 Win']],
+                            '2' => [['game' =>  8, 'name' => 'X', 'slot' => 'SF5 Los'], ['game' =>  8, 'name' => 'Y', 'slot' => 'SF6 Los']],
+                            '3' => [['game' => 11, 'name' => 'X', 'slot' => 'SF9 Win'], ['game' => 11, 'name' => 'Y', 'slot' => 'SF10 Win']],
+                            '4' => [['game' => 12, 'name' => 'X', 'slot' => 'SF9 Los'], ['game' => 12, 'name' => 'Y', 'slot' => 'SF10 Los']],
                         ],
                         'ZZ' => [ // Two teams is probably enough, could add 12 teams per pool, decide later
                             '01-12' => [['name' => 'X', 'slot' => 'Team 1',], ['name' => 'Y', 'slot' => 'Team 2']],
@@ -163,7 +163,12 @@ class InitGames2016Command extends Command
                                 if ($poolType === 'QF' && count($pools) < 4) {
                                     $poolTeam['slot'] = 'TBD';
                                 }
-                                $this->initPoolTeam($projectId, $poolType, $poolName, $poolTeam['name'], $poolTeam['slot'], $program, $age, $gender);
+                                // Real hack here
+                                $game = isset($poolTeam['game']) ? $poolTeam['game'] : null;
+                                $this->initPoolTeam(
+                                    $projectId, $poolType, $poolName, $poolTeam['name'], $poolTeam['slot'],
+                                    $program, $age, $gender, $game
+                                );
                                 $count++;
                                 if (($count % 100) === 0) {
                                     echo sprintf("\rLoading Pool Teams %5d", $count);
@@ -177,7 +182,7 @@ class InitGames2016Command extends Command
         echo sprintf("\rLoaded Pool Teams %5d      \n", $count);
     }
 
-    private function initPoolTeam($projectId, $poolType, $poolName, $poolTeamName, $poolSlot, $program, $age, $gender)
+    private function initPoolTeam($projectId, $poolType, $poolName, $poolTeamName, $poolSlot, $program, $age, $gender, $game = null)
     {
         $division = $age . $gender;
 
@@ -191,8 +196,42 @@ class InitGames2016Command extends Command
                 $poolTypeView = 'SOF';
                 break;
         }
-        $poolView     = sprintf('%s-%s %s %s %s', $age, $gender, $program, $poolTypeView, $poolName);
-        $poolTeamView = sprintf('%s-%s %s %s %s', $age, $gender, $program, $poolTypeView, $poolSlot);
+        $poolNameView = $game ? sprintf('%2s',$game): $poolName;
+        switch($poolType) {
+            case 'PP':
+                $poolTypeDesc = 'Pool Play';
+                break;
+            case 'QF':
+                $poolTypeDesc = 'Quarter-Final';
+                break;
+            case 'SF':
+                $poolTypeDesc = 'Semi-Final';
+                break;
+            case 'TF':
+                $poolTypeDesc = 'Final';
+                break;
+
+            case 'ZZ':
+                $poolTypeDesc = 'Soccerfest';
+                break;
+            default:
+                $poolTypeDesc = 'UNKNOWN POOL DESC';
+        }
+        $poolView     = sprintf('%s-%s %s %s', $age, $gender, $poolTypeDesc, $poolNameView);
+        $poolTeamView = sprintf('%s-%s %s %s', $age, $gender, $poolTypeDesc, $poolSlot);
+
+        switch($game) {
+            case 5: case 6: case 7: case 8:
+                $bracket = 'Championship';
+                break;
+            case 9: case 10: case 11: case 12:
+                $bracket = 'Consolation';
+                break;
+            default:
+                $bracket = null;
+        }
+        // Append bracket, probably should use new line here, adjust view later
+        $poolView = $bracket ? $poolView . '<br>' . $bracket : $poolView;
 
         $poolKey     = sprintf('%s%s%s%s',   $division, $program, $poolType, $poolName);
         $poolTeamKey = sprintf('%s%s%s%s%s', $division, $program, $poolType, $poolName, $poolTeamName);
@@ -208,7 +247,7 @@ class InitGames2016Command extends Command
             'poolTeamKey' => $poolTeamKey,
 
             'poolView'     => $poolView,
-            'poolSlotView' => $poolName,
+            'poolSlotView' => $poolNameView,
             'poolTypeView' => $poolTypeView,
             'poolTeamView' => $poolTeamView,
             'poolTeamSlotView' => $poolSlot,
