@@ -132,7 +132,7 @@ EOD;
         $url = $this->generateUrl('game_official_assign_by_assignee',$params);
         $slotView = $gameOfficial->slotView;
         if ($this->isGranted('edit',$gameOfficial)) {
-            $slotView = '<a href="{$url}">{$slotView}</a>';
+            $slotView = sprintf('<a href="%s">%s</a>',$url,$slotView);
         }
 
         $assignState = $gameOfficial->assignState;

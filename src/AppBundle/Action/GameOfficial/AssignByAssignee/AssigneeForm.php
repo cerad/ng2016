@@ -38,7 +38,7 @@ class AssigneeForm extends AbstractForm
     }
     public function setGameOfficial(GameOfficial $gameOfficial)
     {
-        $this->gameOfficial = $gameOfficial;
+        $this->gameOfficial = clone $gameOfficial;
     }
     public function setBackRouteName($backRouteName)
     {

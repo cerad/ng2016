@@ -49,16 +49,15 @@ class AssigneeController extends AbstractController2
         if (!$game) {
             return $this->redirectToRoute($backRouteName);
         }
-        $gameOfficial = $game->getOfficial($slot);
-        $gameOfficialOriginal = clone $gameOfficial;
-
+        // The form will clone this, should it?
+        $gameOfficialOriginal = $game->getOfficial($slot);
+        
         $form = $this->form;
         $form->setGame($game);
-        $form->setGameOfficial($gameOfficial);
+        $form->setGameOfficial($gameOfficialOriginal);
         $form->setBackRouteName($backRouteName);
         $form->handleRequest($request);
-
-
+        
         if ($form->isValid()) {
 
             $gameOfficial = $form->getGameOfficial();

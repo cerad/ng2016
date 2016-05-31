@@ -78,13 +78,13 @@ class GameOfficialVoter extends Voter
         if (!$this->decisionManager->decide($token, ['ROLE_REFEREE'])) {
             return false;
         }
-        return true;
+
         // Danger
         /** @var GameOfficial $gameOfficial */
         $gameOfficial = $subject;
 
         // Only certain games can be signed up for
-        if ($gameOfficial->assignState !== 'ROLE_REFEREE') {
+        if ($gameOfficial->assignRole !== 'ROLE_REFEREE') {
             return false;
         }
         // Maybe verify referee is approved?
@@ -101,9 +101,5 @@ class GameOfficialVoter extends Voter
         // Can edit my crew's games
 
         return false;
-
-        // this assumes that the data object has a getOwner() method
-        // to get the entity of the user who owns this data object
-        //return $user === $post->getOwner();
     }
 }
