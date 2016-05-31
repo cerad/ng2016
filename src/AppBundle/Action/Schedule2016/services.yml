@@ -1,5 +1,20 @@
 services:
 
+    abstract_exporter_xls:
+        class: AppBundle\Action\AbstractExporter
+        arguments:
+            - 'xls'
+
+    abstract_exporter_csv:
+        class: AppBundle\Action\AbstractExporter
+        arguments:
+            - 'csv'
+
+    abstract_exporter_txt:
+        class: AppBundle\Action\AbstractExporter
+        arguments:
+            - 'txt'
+
     schedule_finder_2016:
         class: AppBundle\Action\Schedule2016\ScheduleFinder
         arguments:
