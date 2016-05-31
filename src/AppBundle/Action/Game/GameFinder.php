@@ -18,8 +18,25 @@ class GameFinder
         $this->gameConn    = $gameConn;
         $this->regTeamConn = $regTeamConn;
     }
-
-    /**
+    /** =======================================================================
+     * Shortcut for finding one game
+     * @param  string  $projectId
+     * @param  integer $gameNumber
+     * @return Game
+     */
+    public function findGame($projectId,$gameNumber)
+    {
+        $criteria = [
+            'projectIds'    => [$projectId],
+            'gameNumbers'   => [$gameNumber],
+            'wantTeams'     => true,
+            'wantOfficials' => true,
+        ];
+        $games = $this->findGames($criteria);
+        
+        return count($games) === 1 ? $games[0] : null;
+    }
+    /** =======================================================================
      * @param  array $criteria
      * @return Game[]
      */

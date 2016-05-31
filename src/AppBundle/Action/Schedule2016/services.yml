@@ -9,11 +9,12 @@ services:
     schedule_template_2016:
         class: AppBundle\Action\Schedule2016\ScheduleTemplate
         calls: [['setContainer', ['@service_container']]]
+        arguments: [false, '@game_official_assign_workflow']
 
     schedule_template_show_officials_2016:
         class: AppBundle\Action\Schedule2016\ScheduleTemplate
         calls: [['setContainer', ['@service_container']]]
-        arguments: [true]
+        arguments: [true, '@game_official_assign_workflow']
 
     # ===============================================================
     # Schedule Game

@@ -13,7 +13,7 @@ const appTask = function() {
             //appPublicDir + '/css/reset.css',
             appPublicDir + '/css/common.css',
             //appPublicDir + '/css/fieldset.css',
-            //appPublicDir + '/css/schedule.css',
+            appPublicDir + '/css/schedule.css',
             appPublicDir + '/css/ng.css',
             appPublicDir + '/css/app.css',
             appPublicDir + '/css/bs_custom.css',

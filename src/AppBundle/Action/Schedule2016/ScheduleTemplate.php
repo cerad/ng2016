@@ -2,6 +2,7 @@
 namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractActionTrait;
+use AppBundle\Action\GameOfficial\AssignWorkflow;
 
 class ScheduleTemplate
 {
@@ -11,11 +12,15 @@ class ScheduleTemplate
 
     protected $scheduleTitle;
 
-    public function __construct($showOfficials = false)
+    protected $assignWorkflow;
+
+    public function __construct($showOfficials = false, AssignWorkflow $assignWorkflow)
     {
         $this->showOfficials = $showOfficials;
 
         $this->scheduleTitle = 'Game Schedule';
+
+        $this->assignWorkflow = $assignWorkflow;
     }
     /**
      * @param  ScheduleGame[] $games
@@ -101,10 +106,12 @@ EOD;
 EOD;
             if ($this->showOfficials) {
                 $html .= <<<EOD
-  <td class="text-left">
-    {$game->referee->slotView} {$game->referee->regPersonName}<hr class="separator">
-    {$game->ar1->slotView    } {$game->ar1->regPersonName    }<hr class="separator">
-    {$game->ar2->slotView    } {$game->ar2->regPersonName    }
+  <td class="schedule-referees text-left">
+    <table>
+      <tr>{$this->renderGameOfficial($game,$game->referee)}</tr>
+      <tr>{$this->renderGameOfficial($game,$game->ar1)    }</tr>
+      <tr>{$this->renderGameOfficial($game,$game->ar2)    }</tr>
+    </table>
   </td>
 EOD;
             }
@@ -113,5 +120,29 @@ EOD;
 EOD;
         }
         return $html;
+    }
+    private function renderGameOfficial(ScheduleGame $game, ScheduleGameOfficial $gameOfficial)
+    {
+        $params = [
+            'projectId'  => $game->projectId,
+            'gameNumber' => $game->gameNumber,
+            'slot'       => $gameOfficial->slot,
+            'back'       => $this->getCurrentRouteName(),
+        ];
+        $url = $this->generateUrl('game_official_assign_by_assignee',$params);
+        $slotView = $gameOfficial->slotView;
+        if ($this->isGranted('edit',$gameOfficial)) {
+            $slotView = sprintf('<a href="%s">%s</a>',$url,$slotView);
+        }
+
+        $assignState = $gameOfficial->assignState;
+        $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
+
+        return <<<EOD
+        <td class="text-left game-official-state-{$assignState}">{$assignStateView}</td>
+        <td class="text-left">{$slotView}</td>
+        <td class="text-left">{$this->escape($gameOfficial->regPersonName)}</td>
+
+EOD;
     }
 }

@@ -1,0 +1,25 @@
+
+game_official_assign_by_assignee:
+    path: /signup/{projectId}/{gameNumber}/{slot}
+    defaults:
+        slot: null
+        _controller: game_official_assign_by_assignee_controller
+        _form:       game_official_assign_by_assignee_form
+        _view:       game_official_assign_by_assignee_view
+        _role:       ROLE_REFEREE
+
+game_official_assign_by_assignor:
+    path: /assign/{projectId}/{gameNumber}
+    defaults:
+        _controller: game_official_assign_by_assignor_controller
+        _form:       game_official_assign_by_assignor_form
+        _view:       game_official_assign_by_assignor_view
+        _role:       ROLE_ASSIGNOR
+
+game_official_assign_by_import:
+    path: /import
+    defaults:
+        _controller: game_official_assign_by_import_controller
+        _form:       game_official_assign_by_import_form
+        _view:       game_official_assign_by_import_view
+        _role:       ROLE_ASSIGNOR
