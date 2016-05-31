@@ -47,6 +47,7 @@ class ResultsFinder
             'poolTypeKeys' => 'poolTypeKey',
             'poolTeamKeys' => 'poolTeamKey',
             'poolTeamIds'  => 'poolTeamId',
+            'poolSlotViews'=> 'poolSlotView',
 
             'programs'     => 'program',
             'genders'      => 'gender',

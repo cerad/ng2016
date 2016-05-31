@@ -143,3 +143,44 @@ services:
         arguments:
             - '@abstract_exporter_txt'
             
+    # ===============================================================
+    # Schedule MedalRoundLogic
+    
+    schedule_medalroundcalc_controller_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleMedalRoundController
+        parent: abstract_controller
+        arguments:
+            - '@results_finder_2016'
+            - '%project_choices%'
+
+    schedule_medalround_calculator_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleMedalRoundCalculator
+        
+    schedule_medalroundcalc_view_xls_qf_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleMedalRoundViewFile
+        parent: abstract_view2
+        arguments:
+            - 'qf'
+            - '@schedule_medalround_calculator_2016'
+            - '@results_finder_2016'
+            - '@abstract_exporter_xls'
+
+    schedule_medalroundcalc_view_xls_sf_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleMedalRoundViewFile
+        parent: abstract_view2
+        arguments:
+            - 'sf'
+            - '@schedule_medalround_calculator_2016'
+            - '@results_finder_2016'
+            - '@abstract_exporter_xls'
+
+    schedule_medalroundcalc_view_xls_fm_2016:
+        class: AppBundle\Action\Schedule2016\ScheduleMedalRoundViewFile
+        parent: abstract_view2
+        arguments:
+            - 'fm'
+            - '@schedule_medalround_calculator_2016'
+            - '@results_finder_2016'
+            - '@abstract_exporter_xls'
+
+
