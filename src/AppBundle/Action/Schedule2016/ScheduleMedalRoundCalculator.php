@@ -19,7 +19,7 @@ class ScheduleMedalRoundCalculator
     {
         $qfMatches = [];
         $result = [];
-        // TODO: 1, 2, 3 pool solutions
+
         $keySet = array(
             ['U10B-Core-PP-A','U10B-Core-PP-B','U10B-Core-PP-C','U10B-Core-PP-D'],
             ['U10G-Core-PP-A','U10G-Core-PP-B','U10G-Core-PP-C','U10G-Core-PP-D'],
@@ -53,7 +53,7 @@ class ScheduleMedalRoundCalculator
                 
             $qfMatches = array_merge( $qfMatches, $result );            
         }
-
+        
         $qfResults = $this->generateScheduleRecords($pools, 'QF', $qfMatches);
         
         return $qfResults;
@@ -72,113 +72,28 @@ class ScheduleMedalRoundCalculator
 
             switch ($pool->poolSlotView) {
                 case 'A':
-                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:A 1st');
-                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:A 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:Home:A 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:Away:A 2nd');
                    break;
                 case 'B':
-                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:2:B 1st');
-                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:4:B 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:2:Home:B 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:4:Away:B 2nd');
                    break;
                 case 'C':
-                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:3:C 1st');
-                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:1:C 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:3:Home:C 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:1:Away:C 2nd');
                    break;
                 case 'D':
-                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:A 1st');
-                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:A 2nd');
+                   $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>'QF:1:Home:A 1st');
+                   $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>'QF:3:Away:A 2nd');
                    break;
             }
 
             for ($i = 2; $i < count($standings); $i++) {
                 $team = $standings[$i];
-                $qfMatches[$teamKey][$team->regTeamName] = array('Slots'=>$team->poolTeamSlotView,'QF'=>'');                
+                $qfMatches[$poolKey][$team->regTeamName] = array('Slots'=>$team->poolTeamSlotView,'QF'=>'');                
             }
         }        
-
-        return $qfMatches;
-    
-    }
-    public function generateQuarterFinals1Pools($pool)
-    {
-        $qfMatches = [];
-        $poolGames = array_values(array_values($pool)[0]['games']);
-        $poolKey = $pool->poolKey;
-        $groupName = $poolGames[0]['group_name'];
-        $slot = $poolGames[0]['group_type'].':'.$poolGames[0]['group_name'].':';
-
-        foreach ($poolGames as $game) {
-            foreach ($game['teams'] as $t) {
-                $teams[$t['key']] = $t;
-            }
-        }
-        $teams = array_values($teams);
-
-        $strMatches = [
-            'QF:1:A 1st',
-            'QF:3:A 2nd',
-            'QF:4:A 3rd',
-            'QF:2:A 4th',
-            'QF:2:A 5th',
-            'QF:4:A 6th',
-            'QF:3:A 7th',
-            'QF:1:A 8th'  
-        ];
-        
-        for ($i = 0; $i < min(count($teams), 8); $i++) {
-            $qfMatches[$poolKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>$strMatches[$i]);
-        }
-
-        for ($i = 8; $i < count($teams); $i++) {
-            $qfMatches[$poolKey][$teams[$i]['name']] = array('Slots'=>$slot.$teams[$i]['group_slot'],'QF'=>'');                
-        }
-
-        return $qfMatches;
-    
-    }
-    public function generateQuarterFinals2Pools($pools)
-    {
-        $qfMatches = [];
-
-        foreach($pools as $pool){
-            $poolGames = array_values($pool['games'])[0];
-            $poolTeams = $pool['teams'];
-            $poolKey = $pool->poolKey;
-            $groupName = $poolGames['group_name'];
-            $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
-
-            switch ($groupName) {
-                case 'A':
-                    $homeTeam[0] = [$poolTeams[0]['team'], 'QF:1:A 1st'];
-                    $awayTeam[1] = [$poolTeams[2]['team'], 'QF:2:A 3rd'];
-                    $homeTeam[2] = [$poolTeams[1]['team'], 'QF:3:A 2nd'];
-                    $awayTeam[3] = [$poolTeams[3]['team'], 'QF:4:A 4th'];
-                    break;
-                case 'B':
-                    $awayTeam[0] = [$poolTeams[3]['team'], 'QF:1:B 4th'];
-                    $homeTeam[1] = [$poolTeams[1]['team'], 'QF:2:B 2nd'];
-                    $awayTeam[2] = [$poolTeams[2]['team'], 'QF:3:B 3rd'];
-                    $homeTeam[3] = [$poolTeams[0]['team'], 'QF:4:B 1st'];
-                    break;
-            }
-
-        }
-        
-        for ( $i = 0; $i < 4; $i++ ) {
-            $qfMatches[$poolKey][$homeTeam[$i][0]['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['group_slot'],'QF'=>$homeTeam[$i][1]);
-            $qfMatches[$poolKey][$awayTeam[$i][0]['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['group_slot'],'QF'=>$awayTeam[$i][1]);            
-        }
-
-        foreach($pools as $pool){
-            $poolGames = array_values($pool['games'])[0];
-            $poolTeams = $pool['teams'];
-            $levelKey = $poolGames['level_key'];
-            $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
-
-            for ($i = 4; $i < count($poolTeams); $i++) {
-                $team = $poolTeams[$i]['team'];
-                $qfMatches[$levelKey][$team['name']] = array('Slots'=>$slot.$team['group_slot'],'QF'=>'');                
-            }
-        }
 
         return $qfMatches;
     
@@ -187,76 +102,158 @@ class ScheduleMedalRoundCalculator
     {
         $qfMatches = [];
 
+        $team = [];
         foreach($pools as $pool){
-            $poolGames = array_values($pool['games'])[0];
-            $poolTeams = $pool['teams'];
-            $poolKey = $poolKey;
-            $groupName = $poolGames['group_name'];
-            $slot = $poolGames['group_type'].':'.$poolGames['group_name'].':';
+            $poolKey = $pool->poolKey;
+            $games = $pool->getGames();
+            $teams = $pool->getPoolTeams();
+            $slotView = $pool->poolSlotView;
+    
+            $teams = array_values($teams);
 
-            switch ($groupName) {
-                case 'A':
-                    $team['A'][0] = $poolTeams[0];
-                    $team['A'][1] = $poolTeams[1];
-                    $team['A'][2] = $poolTeams[2];
-                   break;
-                case 'B':
-                    $team['B'][0] = $poolTeams[0];
-                    $team['B'][1] = $poolTeams[1];
-                    $team['B'][2] = $poolTeams[2];
-                   break;
-                case 'C':
-                    $team['C'][0] = $poolTeams[0];
-                    $team['C'][1] = $poolTeams[1];
-                    $team['C'][2] = $poolTeams[2];
-                   break;
+            foreach ($teams as $t){
+                $qfMatches[$poolKey][$t->regTeamName] = array('Slots'=>$t->poolTeamSlotView,'QF'=>'');
+            }
+
+            for ($i = 0; $i < count($teams); $i++){
+                $team[$slotView][$i] = $teams[$i];
             }
         }
 
-        if ($team['A'][2]['winPercent'] > $team['C'][2]['winPercent'] and $team['B'][2]['winPercent'] > $team['C'][2]['winPercent']) {
-            $homeTeam[0] = [$team['A'][0], 'QF:1:A 1st'];
-            $awayTeam[0] = [$team['B'][2], 'QF:1:B 3rd'];
-            $homeTeam[1] = [$team['C'][1], 'QF:2:C 2nd'];
-            $awayTeam[1] = [$team['B'][1], 'QF:2:B 2nd'];
-            $homeTeam[2] = [$team['B'][0], 'QF:3:B 1st'];
-            $awayTeam[2] = [$team['A'][2], 'QF:3:A 3rd'];
-            $homeTeam[3] = [$team['C'][0], 'QF:4:C 1st'];
-            $awayTeam[3] = [$team['A'][1], 'QF:4:A 2nd'];
-        } elseif ($team['B'][2]['winPercent'] > $team['A'][2]['winPercent'] and $team['C'][2]['winPercent'] > $team['A'][2]['winPercent']) {
-            $homeTeam[0] = [$team['A'][0], 'QF:1:A 1st'];
-            $awayTeam[0] = [$team['B'][1], 'QF:1:B 2nd'];
-            $homeTeam[1] = [$team['C'][0], 'QF:2:C 1st'];
-            $awayTeam[1] = [$team['B'][2], 'QF:2:B 3rd'];
-            $homeTeam[2] = [$team['C'][1], 'QF:3:C 2nd'];
-            $awayTeam[2] = [$team['A'][1], 'QF:3:A 2nd'];
-            $homeTeam[3] = [$team['B'][0], 'QF:4:B 1st'];
-            $awayTeam[3] = [$team['C'][2], 'QF:4:C 3rd'];
-        } else {
-            $homeTeam[0] = [$team['A'][0], 'QF:1:A 1st'];
-            $awayTeam[0] = [$team['C'][2], 'QF:1:C 3rd'];
-            $homeTeam[1] = [$team['B'][0], 'QF:2:B 1st'];
-            $awayTeam[1] = [$team['C'][1], 'QF:2:C 2nd'];
-            $homeTeam[2] = [$team['A'][1], 'QF:3:A 2nd'];
-            $awayTeam[2] = [$team['B'][1], 'QF:3:B 2nd'];
-            $homeTeam[3] = [$team['C'][0], 'QF:4:C 1st'];
-            $awayTeam[3] = [$team['A'][2], 'QF:4:A 3rd'];              
+        //compute winPercent
+        $a2WinPercent = $team['A'][2]->pointsEarned / $team['A'][2]->gamesPlayed;
+        $b2WinPercent = $team['B'][2]->pointsEarned / $team['B'][2]->gamesPlayed;
+        $c2WinPercent = $team['C'][2]->pointsEarned / $team['C'][2]->gamesPlayed;
+        
+        foreach($pools as $pool){
+            $poolKey = $pool->poolKey;
+            $slotView = $pool->poolSlotView;
+            $teams = $pool->getPoolTeams();
+    
+            $teams = array_values($teams);
+            
+            switch($slotView) {
+                case 'A':
+                    if ($a2WinPercent > $c2WinPercent and $b2WinPercent > $c2WinPercent) {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:1:Home:A 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:4:Away:A 2nd');
+                        $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>'QF:3:Away:A 3rd');
+                    } elseif ($b2WinPercent > $a2WinPercent and $c2WinPercent > $a2WinPercent) {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:1:Home:A 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:3:Away:A 2nd');
+                    } else {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:1:Home:A 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:3:Home:A 2nd');
+                        $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>'QF:4:Away:A 3rd');
+                    }
+                    break;
+                case 'B':
+                    if ($a2WinPercent > $c2WinPercent and $b2WinPercent > $c2WinPercent) {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:3:Home:B 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:2:Away:B 2nd');
+                        $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>'QF:1:Away:B 3rd');
+                    } elseif ($b2WinPercent > $a2WinPercent and $c2WinPercent > $a2WinPercent) {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:4:Home:B 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:1:Away:B 2nd');
+                        $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>'QF:2:Away:B 3rd');
+                    } else {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:2:Home:B 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:3:Away:B 2nd');
+                    }
+                    break;
+                case 'C':
+                    if ($a2WinPercent > $c2WinPercent and $b2WinPercent > $c2WinPercent) {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:4:Home:C 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:2:Home:C 2nd');
+                    } elseif ($b2WinPercent > $a2WinPercent and $c2WinPercent > $a2WinPercent) {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:2:Home:C 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:3:Home:C 2nd');
+                        $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>'QF:4:Away:C 3rd');
+                    } else {
+                        $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>'QF:4:Home:C 1st');
+                        $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>'QF:2:Away:C 2nd');
+                        $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>'QF:1:Away:C 3rd');
+                    }
+                    break;
+            }
         }
-                    
-        for ($i = 0; $i < 4; $i++ ) {
-            $qfMatches[$poolKey][$homeTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$homeTeam[$i][0]['team']['group_slot'],'QF'=>$homeTeam[$i][1]);
-            $qfMatches[$poolKey][$awayTeam[$i][0]['team']['name']] = array('Slots'=>$slot.$awayTeam[$i][0]['team']['group_slot'],'QF'=>$awayTeam[$i][1]);                
-        }
+        
+        return $qfMatches;
+    
+    }
+    public function generateQuarterFinals2Pools($pools)
+    {
+        $qfMatches = [];
 
-        for ($i = 2; $i < count($poolTeams); $i++) {
-            $team = $poolTeams[$i]['team'];
-            $qfMatches[$poolKey][$team['name']] = array('Slots'=>$slot.$team['group_slot'],'QF'=>'');                
-        }
+        foreach($pools as $pool){
 
-             
+            $poolKey = $pool->poolKey;
+            $games = $pool->getGames();
+            $teams = $pool->getPoolTeams();
+            $slotView = $pool->poolSlotView;
+    
+            $teams = array_values($teams);
+            
+            $team = [];
+            switch ($slotView) {
+                case 'A':
+                    $team[0] = ['name'=>$teams[0]->regTeamName, 'slot'=>$teams[0]->poolTeamSlotView, 'QF'=>'QF:1:Home:A 1st'];
+                    $team[1] = ['name'=>$teams[1]->regTeamName, 'slot'=>$teams[1]->poolTeamSlotView, 'QF'=>'QF:3:Home:A 2nd'];
+                    $team[2] = ['name'=>$teams[2]->regTeamName, 'slot'=>$teams[2]->poolTeamSlotView, 'QF'=>'QF:2:Away:A 3rd'];
+                    $team[3] = ['name'=>$teams[3]->regTeamName, 'slot'=>$teams[3]->poolTeamSlotView, 'QF'=>'QF:4:Away:A 4th'];
+                    break;
+                case 'B':
+                    $team[3] = ['name'=>$teams[3]->regTeamName, 'slot'=>$teams[3]->poolTeamSlotView, 'QF'=>'QF:1:Away:B 4th'];
+                    $team[1] = ['name'=>$teams[1]->regTeamName, 'slot'=>$teams[1]->poolTeamSlotView, 'QF'=>'QF:2:Home:B 2nd'];
+                    $team[2] = ['name'=>$teams[2]->regTeamName, 'slot'=>$teams[2]->poolTeamSlotView, 'QF'=>'QF:3:Away:B 3rd'];
+                    $team[0] = ['name'=>$teams[0]->regTeamName, 'slot'=>$teams[0]->poolTeamSlotView, 'QF'=>'QF:4:Home:B 1st'];
+                    break;
+            }    
+
+            for ( $i = 4; $i < count($teams); $i++ ) {
+                $team[$i] = ['name' => $teams[$i]->regTeamName, 'slot'=>$teams[$i]->poolTeamSlotView,'QF'=>''];
+            }
+            foreach ($team as $t) {
+                $qfMatches[$poolKey][$t['name']] = array('Slots'=>$t['slot'],'QF'=>$t['QF']);
+            }
+        }
 
         return $qfMatches;
     
     }
+    public function generateQuarterFinals1Pools($pool)
+    {
+        $qfMatches = [];
+        
+        $pool = array_values($pool)[0];
+        $poolKey = $pool->poolKey;
+        $games = $pool->getGames();
+        $teams = $pool->getPoolTeams();
+
+        $teams = array_values($teams);
+        $strMatches = [
+            'QF:1:Home:A 1st',
+            'QF:3:Home:A 2nd',
+            'QF:4:Home:A 3rd',
+            'QF:2:Home:A 4th',
+            'QF:2:Away:A 5th',
+            'QF:4:Away:A 6th',
+            'QF:3:Away:A 7th',
+            'QF:1:Away:A 8th'  
+        ];
+        
+        for ($i = 0; $i < min(count($teams), 8); $i++) {
+            $qfMatches[$poolKey][$teams[$i]->regTeamName] = array('Slots'=>$teams[$i]->poolTeamSlotView,'QF'=>$strMatches[$i]);
+        }
+
+        for ($i = 8; $i < count($teams); $i++) {
+            $qfMatches[$poolKey][$teams[$i]->regTeamName] = array('Slots'=>$teams[$i]->poolTeamSlotView,'QF'=>'');                
+        }
+
+        return $qfMatches;
+    
+    }
+
 /*
  *  Implements Championship & consolation bracket (Semi-finas) defined in National Games 2016 Governing Rules
  *  Game 5: Winner of Game 1 vs. Winner of game 2
@@ -367,11 +364,6 @@ class ScheduleMedalRoundCalculator
         
         foreach($medalRounds as $pool=>$mrTeams) {
             //set the data : game in each row
-
-//var_dump($pool);
-//var_dump($mrTeams);
-//var_dump($pools);
-//var_dump($medalRounds);
             $teams = $pools[$pool]->getPoolTeams();
             
             //blank row between levels
@@ -380,11 +372,7 @@ class ScheduleMedalRoundCalculator
                 $data[] = array();
                 $division = $pools[$pool]->division;
             }
-
-//var_dump($teams);            
             foreach($teams as $team) {                
-//var_dump($team);            
-//var_dump($mrTeams[$team->regTeamName]);
                 $mr = $mrTeams[$team->regTeamName][$hdr];
                 $teamLevel = explode('-',$team->poolTeamKey)[0];
                 $teamInfo = explode(' ',$team->regTeamName);
@@ -398,7 +386,7 @@ class ScheduleMedalRoundCalculator
                 );
             }            
         }
-        
+
         $workbook['Medal Round '.$hdr]['data'] = $data;
 
         return $workbook;

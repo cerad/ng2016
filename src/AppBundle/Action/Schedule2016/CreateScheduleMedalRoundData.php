@@ -23,13 +23,14 @@ class ScheduleMedalRoundTest extends PHPUnit_Framework_TestCase
     /** @var  ScheduleMedalRoundCalculator */
     private $scheduleMedalRoundCalculator;
     
-    private $databaseKey = 'database_name_ng2016games';
+    private $databaseKey = 'database_name_ng2014games';
 
     private $conn;
     
     private $dumper;
     
-    private $project = [];
+    private $projectChoices;
+    
     private $criteria = [];
 
     public function setUp()
@@ -45,17 +46,16 @@ class ScheduleMedalRoundTest extends PHPUnit_Framework_TestCase
         $this->scheduleMedalRoundCalculator = new ScheduleMedalRoundCalculator();
         
         $this->dumper = new Dumper();
-
         
-        $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../app/config/projects/AYSONationalGames2016.yml'));
-        $params = $params['parameters']['app_project'];    
-        $project = $params['info']['key'];
+        $params = Yaml::parse(file_get_contents(__DIR__ . '/../../../../app/config/projects.yml'));
+        $this->projectChoices = $params['parameters']['project_choices'];    
 
-        $this->criteria['projects'] = [$project];
+        $projectId = $this->getDefaultProjectId();
+        
+        $this->criteria['projects'] = [$projectId];
         $this->criteria['programs'] = ['Core'];
         $this->criteria['genders'] = ['B', 'G'];
         $this->criteria['ages'] = ['U10','U12','U14','U16','U19'];
-        $this->criteria['group_names']  = ['A','B','C','D'];
     }
     private function generateYaml($data, $dataFilename)
     {
@@ -68,91 +68,94 @@ class ScheduleMedalRoundTest extends PHPUnit_Framework_TestCase
 
         $criteria['poolTypeKeys'] = ['PP'];
         
-        //4 pools
-        $criteria['group_names']  = ['A','B','C','D'];
+        //1 pool
+        $criteria['poolSlotViews']  = ['A'];
+
+        $games = $this->resultsFinder->findPools($criteria);
+
+        $qf = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);            
+
+        $gamesFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_games.dat';
+        file_put_contents($gamesFilename, base64_encode(serialize($games)));
+
+        $dataFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_qf_data.yml';
+        $this->generateYaml($qf, $dataFilename);
+        
+        //2 pools
+        $criteria['poolSlotViews']  = ['A','B'];
         
         $games = $this->resultsFinder->findPools($criteria);
 
         $qf = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);            
 
-        $gamesFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_games.dat';
+        $gamesFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_games.dat';
         file_put_contents($gamesFilename, base64_encode(serialize($games)));
 
-        $dataFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_qf_data.yml';
+        $dataFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_qf_data.yml';
         $this->generateYaml($qf, $dataFilename);
 
         //3 pools
-        $criteria['group_names']  = ['A','B','C'];
+        $criteria['poolSlotViews']  = ['A','B','C'];
         
         $games = $this->resultsFinder->findPools($criteria);
 
         $qf = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);            
 
-        $gamesFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_games.dat';
+        $gamesFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_games.dat';
         file_put_contents($gamesFilename, base64_encode(serialize($games)));
 
-        $dataFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_qf_data.yml';
+        $dataFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_qf_data.yml';
         $this->generateYaml($qf, $dataFilename);
 
-        //2 pools
-        $criteria['group_names']  = ['A','B'];
+        //4 pools
+        $criteria['poolSlotViews']  = ['A','B','C','D'];
         
         $games = $this->resultsFinder->findPools($criteria);
 
         $qf = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);            
 
-        $gamesFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_games.dat';
+        $gamesFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_games.dat';
         file_put_contents($gamesFilename, base64_encode(serialize($games)));
 
-        $dataFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_qf_data.yml';
+        $dataFilename = __DIR__ . '/testdata/' . $criteria['poolTypeKeys'][0] . count($criteria['poolSlotViews'] ) . '_qf_data.yml';
         $this->generateYaml($qf, $dataFilename);
 
-        //1 pool
-        $criteria['group_names']  = ['A'];
-        
-        $games = $this->resultsFinder->findPools($criteria);
-
-        $qf = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);            
-
-        $gamesFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_games.dat';
-        file_put_contents($gamesFilename, base64_encode(serialize($games)));
-
-        $dataFilename = __DIR__ . '/yamldata/' . $criteria['poolTypeKeys'][0] . count($criteria['group_names'] ) . '_qf_data.yml';
-        $this->generateYaml($qf, $dataFilename);
-        
     }
     
     public function testGenerateSemiFinals()
     {
         $this->criteria['poolTypeKeys'] = ['QF'];
-        $this->criteria['group_names']  = ['A','B','C','D'];
+        unset($this->criteria['poolSlotViews']);
         
         $games = $this->resultsFinder->findPools($this->criteria);
-
         $sf = $this->scheduleMedalRoundCalculator->generateSemiFinals($games);            
 
-        $gamesFilename = __DIR__ . '/yamldata/qf_games.dat';
+        $gamesFilename = __DIR__ . '/testdata/qf_games.dat';
         file_put_contents($gamesFilename, base64_encode(serialize($games)));
 
-        $dataFilename = __DIR__ . '/yamldata/sf_data.yml';
+        $dataFilename = __DIR__ . '/testdata/sf_data.yml';
         $this->generateYaml($sf, $dataFilename);
     }
     
     public function testGenerateFinalMatches()
     {
         $this->criteria['poolTypeKeys'] = ['SF'];
-        $this->criteria['group_names']  = ['A','B','C','D'];
+        unset($this->criteria['poolSlotViews']);
         
         $games = $this->resultsFinder->findPools($this->criteria);
 
         $fm = $this->scheduleMedalRoundCalculator->generateFinals($games);            
         
-        $gamesFilename = __DIR__ . '/yamldata/sf_games.dat';
+        $gamesFilename = __DIR__ . '/testdata/sf_games.dat';
         file_put_contents($gamesFilename, base64_encode(serialize($games)));
 
-        $dataFilename = __DIR__ . '/yamldata/fm_data.yml';
+        $dataFilename = __DIR__ . '/testdata/fm_data.yml';
         $this->generateYaml($fm, $dataFilename);
 
     }
+    private function getDefaultProjectId()
+    {
+        return array_keys($this->projectChoices)[1]; //AYSONationalGames2014
+    }    
     
 }
