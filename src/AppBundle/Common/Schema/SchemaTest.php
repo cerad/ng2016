@@ -1,5 +1,5 @@
 <?php
-namespace Tests\AppBundle\Common\Schema;
+namespace AppBundle\Common\Schema;
 
 
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
