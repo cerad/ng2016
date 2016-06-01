@@ -22,22 +22,17 @@ class ResultsPoolPlayControllerTest extends WebTestCase
     public function testU14B_D()
     {
         $client = static::createClient();
+        $client->followRedirects();
 
         $crawler = $client->request('GET', '/results/poolplay');
-        
-        $buttonCrawlerNode = $crawler->selectButton('submit');
-var_dump($crawler);die();
-        $form = $buttonCrawlerNode->form();
-        
-        $client->submit($form, array(
-            'projectId' => 'AYSONationalGames2014'
-        ));
 
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/results/poolplay?poolKey=U14BCorePPD');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Pool Team Standings : U14-B Core PP D")')->count()
+            $crawler->filter('html:contains("Pool Team Standings : U14-B Pool Play D")')->count()
         );
 
     }
