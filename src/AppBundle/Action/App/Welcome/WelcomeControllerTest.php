@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Action\Welcome;
+namespace AppBundle\Action\App\Welcome;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

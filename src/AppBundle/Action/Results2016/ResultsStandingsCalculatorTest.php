@@ -1,11 +1,11 @@
 <?php
-namespace Tests\AppBundle\Action\Results\PoolPlay;
+namespace AppBundle\Action\Results2016\PoolPlay;
 
-use AppBundle\Action\Results\PoolPlay\Calculator\StandingsCalculator;
+use AppBundle\Action\Results2016\ResultsStandingsCalculator;
 
 use AppBundle\Action\Project\ProjectFactory;
 
-class StandingsCalculatorTest extends \PHPUnit_Framework_TestCase
+class ResultsStandingsCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  ProjectFactory */
     private $projectFactory;
@@ -17,7 +17,7 @@ class StandingsCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->projectFactory      = new ProjectFactory();
-        $this->standingsCalculator = new StandingsCalculator($this->projectFactory);
+        $this->standingsCalculator = new ResultsStandingsCalculator();
     }
     public function testGeneratePools()
     {

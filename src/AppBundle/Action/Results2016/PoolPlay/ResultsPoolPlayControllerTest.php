@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Action\Results\PoolPlay;
+namespace AppBundle\Action\Results2016\PoolPlay;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -23,13 +23,21 @@ class ResultsPoolPlayControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/results/poolplay?project=AYSONationalGames2014&ages=U14&genders=B&programs=Core&pools=D');
+        $crawler = $client->request('GET', '/results/poolplay');
+        
+        $buttonCrawlerNode = $crawler->selectButton('submit');
+var_dump($crawler);die();
+        $form = $buttonCrawlerNode->form();
+        
+        $client->submit($form, array(
+            'projectId' => 'AYSONationalGames2014'
+        ));
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Pool Team Standings : U14B Core PP D")')->count()
+            $crawler->filter('html:contains("Pool Team Standings : U14-B Core PP D")')->count()
         );
 
     }

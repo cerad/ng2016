@@ -1,11 +1,11 @@
 <?php
-namespace Tests\AppBundle\Action\Project\User;
+namespace AppBundle\Action\Project\User;
 
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use AppBundle\Action\Project\User\ProjectUser;
 use AppBundle\Action\Project\User\ProjectUserProvider;
 
-use Tests\AppBundle\AbstractTestDatabase;
+use AppBundle\AbstractTestDatabase;
 
 use Symfony\Component\Yaml\Yaml;
 

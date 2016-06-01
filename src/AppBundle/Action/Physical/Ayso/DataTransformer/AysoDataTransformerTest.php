@@ -1,13 +1,13 @@
 <?php
-namespace Tests\AppBundle\Action\Physical\Ayso\DataTransformer;
+namespace AppBundle\Action\Physical\Ayso\AysoDataTransformer;
 
 use AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer;
 use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer;
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
-use Tests\AppBundle\AbstractTestDatabase;
+use AppBundle\AbstractTestDatabase;
 
-class DataTransformerTest extends AbstractTestDatabase
+class AysoDataTransformerTest extends AbstractTestDatabase
 {
     public function setUp()
     {

@@ -1,7 +1,7 @@
 <?php
-namespace Tests\AppBundleAction\Project\User;
+namespace AppBundleAction\Project\User;
 
-use Tests\AppBundle\AbstractTestDatabase;
+use AppBundle\AbstractTestDatabase;
 
 use AppBundle\Action\Project\User\ProjectUserRepository;
 

@@ -1,11 +1,11 @@
 <?php
-namespace Tests\AppBundle\Action\Project\Person;
+namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Action\Project\ProjectFactory;
 
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 
-use Tests\AppBundle\AbstractTestDatabase;
+use AppBundle\AbstractTestDatabase;
 
 class ProjectPersonRepositoryTest extends AbstractTestDatabase
 {
