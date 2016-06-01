@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Action\Results\Sportsmanship;
+namespace AppBundle\Action\Results2016\Sportsmanship;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -23,13 +23,13 @@ class ResultsSportsmanshipControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/results/sportsmanship?project=AYSONationalGames2014&ages=U16&genders=B&programs=Core');
+        $crawler = $client->request('GET', '/results/sportsmanship?division=U16B');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Sportsmanship Standings : AYSO U16B Core")')->count()
+            $crawler->filter('html:contains("Sportsmanship Standings : U16 Boys")')->count()
         );
 
     }

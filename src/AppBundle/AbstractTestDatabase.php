@@ -1,5 +1,5 @@
 <?php
-namespace Tests\AppBundle;
+namespace AppBundle;
 
 use Symfony\Component\Yaml\Yaml;
 

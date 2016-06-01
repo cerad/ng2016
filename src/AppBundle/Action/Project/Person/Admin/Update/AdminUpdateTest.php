@@ -9,10 +9,11 @@ class AdminUpdateTest extends WebTestCase
     public function testHeartbeat()
     {
         $client = static::createClient();
+        $client->followRedirects();
 
         // This is protected
-        $crawler = $client->request('GET', 'http://local.ng2016/project/person/admin/update/AYSONationalGames2016.C4AF1DBD-4945-4269-97A6-E2E203319D58');
+        $crawler = $client->request('GET', '/project/person/admin/update/AYSONationalGames2016.C4AF1DBD-4945-4269-97A6-E2E203319D58');
 
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 }

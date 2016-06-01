@@ -1,9 +1,9 @@
 <?php
-namespace Tests\AppBundle\Action\Project\Person;
+namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
-use Tests\AppBundle\AbstractTestDatabase;
+use AppBundle\AbstractTestDatabase;
 
 class ProjectPersonRepositoryV2Test extends AbstractTestDatabase
 {

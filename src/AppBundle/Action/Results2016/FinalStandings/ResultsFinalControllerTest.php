@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Action\Results\FinalStandings;
+namespace AppBundle\Action\Results2016\FinalStandings;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

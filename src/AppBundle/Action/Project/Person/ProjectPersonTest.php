@@ -1,5 +1,5 @@
 <?php
-namespace Tests\AppBundle\Action\Project\Person;
+namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRole;

@@ -1,15 +1,15 @@
 <?php
-namespace Tests\AppBundleAction\Physical\Ayso;
+namespace AppBundleAction\Physical\Ayso;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 
-use Tests\AppBundle\AbstractTestDatabase;
+use AppBundle\AbstractTestDatabase;
 
 class PhysicalAysoRepositoryTest extends AbstractTestDatabase
 {
     public function setUp()
     {
-        $this->schemaFile = 'src/AppBundle/Action/Physical/Ayso/schema.sql';
+        $this->schemaFile = __DIR__ . '/schema.sql';
 
         parent::setUp();
     }
