@@ -10,7 +10,7 @@ class ScheduleGameTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/schedule2016/game');
+        $crawler = $client->request('GET', '/schedule/game');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
@@ -18,7 +18,7 @@ class ScheduleGameTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/schedule2016/game.txt');
+        $crawler = $client->request('GET', '/schedule/game.txt');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
@@ -26,7 +26,7 @@ class ScheduleGameTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/schedule2016/game.xls');
+        $crawler = $client->request('GET', '/schedule/game.xls');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }

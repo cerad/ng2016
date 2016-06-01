@@ -10,7 +10,7 @@ class ScheduleFieldMapTest extends WebTestCase
     {
         $client = static::createClient();
         
-        $client->request('GET', '/schedule2016/field_map');
+        $client->request('GET', '/schedule/field_map');
 
         $this->assertContains('/pdf/master_field_layout.pdf', $client->getResponse()->headers->get('location'));
     }

@@ -11,7 +11,7 @@ class ResultsPoolPlayTest extends WebTestCase
         $client = static::createClient();
 
         // This is protected
-        $crawler = $client->request('GET', '/results2016/poolplay?division=U14B');
+        $crawler = $client->request('GET', '/results/poolplay?division=U14B');
         $crawler = $client->followRedirect();
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());

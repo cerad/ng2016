@@ -11,7 +11,7 @@ class ResultsFinalRoundTest extends WebTestCase
         $client = static::createClient();
 
         // This is protected
-        $crawler = $client->request('GET', '/results2016/final');
+        $crawler = $client->request('GET', '/results/final');
         //$crawler = $client->followRedirect();
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());

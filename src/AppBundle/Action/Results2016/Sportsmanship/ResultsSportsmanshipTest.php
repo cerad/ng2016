@@ -11,7 +11,7 @@ class ResultsSportsmanshipTest extends WebTestCase
         $client = static::createClient();
 
         // This is protected
-        $crawler = $client->request('GET', '/results2016/sportsmanship?division=U14B');
+        $crawler = $client->request('GET', '/results/sportsmanship?division=U14B');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
