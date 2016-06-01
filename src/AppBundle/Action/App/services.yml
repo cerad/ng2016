@@ -73,10 +73,17 @@ services:
             - '@project_person_view_decorator'
 
     # action admin
+    admin_switch_user_form:
+        class:  AppBundle\Action\App\Admin\AdminSwitchUserForm
+        parent: abstract_form
+        arguments: ['@reg_person_finder']
+
     admin_controller:
         class:  AppBundle\Action\App\Admin\AdminController
         parent: abstract_controller
-        
+        arguments: ['@admin_switch_user_form']
+
     admin_view:
         class:  AppBundle\Action\App\Admin\AdminView
         parent: abstract_view2
+        arguments: ['@admin_switch_user_form']

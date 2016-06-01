@@ -252,9 +252,17 @@ EOT;
     
     protected function renderSignOut()
     {
+        $userName = $this->escape($this->getUser()->getPersonName());
+        $userUrl  = $this->generateUrl('user_logout');
+        $userLabel = 'SIGNOUT ' . $userName;
+
+        if ($this->isGranted('ROLE_PREVIOUS_ADMIN')) {
+            $userUrl = $this->generateUrl('app_admin',['_switch_user' => '_exit']);
+            $userLabel = 'SU EXIT ' . $userName;
+        }
         return
 <<<EOT
-            <li><a href="{$this->generateUrl('user_logout')}">SIGN OUT</a></li>
+            <li><a href="{$userUrl}">{$userLabel}</a></li>
 EOT;
     }
     
