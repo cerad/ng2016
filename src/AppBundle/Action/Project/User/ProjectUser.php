@@ -94,4 +94,8 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess, \Serializable
     {
         return $this->personKey;
     }
+    public function getPersonName()
+    {
+        return $this->name;
+    }
 }

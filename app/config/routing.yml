@@ -12,7 +12,7 @@ app_game_report:
     prefix: /game/report
 
 app_game_official:
-    resource: "@AppBundle/Action/GameOfficial/routes.yml"
+    resource: "@AppBundle/Action/GameOfficial/config/routes.yml"
     prefix: /game/official
 
 #app_schedule:

@@ -20,7 +20,7 @@ class AssignWorkflow
 
     public function __construct()
     {
-        $configFilePath = __DIR__ . '/assign.yml';
+        $configFilePath = __DIR__ . '/config/assign.yml';
         
         $config = Yaml::parse(file_get_contents($configFilePath));
         

@@ -10,7 +10,13 @@ class AdminView extends AbstractView2
 {
     private $project;
     private $projectId;
-
+    private $switchUserForm;
+    
+    public function __construct(
+        AdminSwitchUserForm $switchUserForm
+    ) {
+        $this->switchUserForm = $switchUserForm;
+    }
     public function __invoke(Request $request)
     {
         $this->project = $this->getCurrentProjectInfo();
@@ -40,7 +46,7 @@ EOT;
 </div> <!-- class="container no-disc" -->
 <div class="panel-float-clear"></div>
 EOT;
-
+        $content .= $this->switchUserForm->render();
         $content .= $this->renderAdminHelp();
 
         return $this->renderBaseTemplate($content);

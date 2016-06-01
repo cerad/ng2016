@@ -1,0 +1,10 @@
+services:
+
+    reg_person_connection:
+        alias: doctrine.dbal.ng2016_connection
+
+    reg_person_finder:
+        class: AppBundle\Action\RegPerson\RegPersonFinder
+        arguments:
+            - '@reg_person_connection'
+            - '@user_connection'
