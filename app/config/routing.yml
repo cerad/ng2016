@@ -21,7 +21,7 @@ app_game_official:
 
 schedule_2016:
     resource: "@AppBundle/Action/Schedule2016/routes.yml"
-    prefix: /schedule2016
+    prefix: /schedule
 
 #app_results:
 #    resource: "@AppBundle/Action/Results/routes.yml"
@@ -29,7 +29,7 @@ schedule_2016:
 
 app_results_2016:
     resource: "@AppBundle/Action/Results2016/routes.yml"
-    prefix: /results2016
+    prefix: /results
 
 app_project_person:
     resource: "@AppBundle/Action/Project/Person/routes.yml"
