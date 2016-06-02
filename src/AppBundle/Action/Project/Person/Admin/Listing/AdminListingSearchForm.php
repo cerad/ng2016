@@ -65,7 +65,7 @@ class AdminListingSearchForm extends AbstractForm
             'All'           =>  'All',
             'Referees'      =>  'Referees',
             'Volunteers'    =>  'Volunteers',
-            'Unverified'    =>  'Unverified',
+            //'Unverified'    =>  'Unverified',
             'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
             'VolIssues'     =>  'Volunteers with Issues',

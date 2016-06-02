@@ -106,19 +106,29 @@ class ProjectPersonViewDecorator
         }
         return $cert->badge . '/' . $cert->badgeUser . $suffix;
     }
+    public function hasCertIssues()
+    {
+        $certs = $this->getCerts();
+        foreach($certs as $cert){
+            if ( !$cert->verified) {
+                return true;
+            }
+        }
+        return false;
+    }
     public function getRoleClass($role)
     {
         if ($role->approved) {
             return $this->successClass;
-        } 
-        return $role->verified ? $this->warningClass : $this->dangerClass;
+        }
+        return (!$this->hasCertIssues()) ? $this->warningClass : $this->dangerClass;
     }
     public function getRoleStyle($role)
     {
         if ($role->approved) {
             return $this->successStyle;
         } 
-        return $role->verified ? $this->warningStyle : $this->dangerStyle;
+        return (!$this->hasCertIssues()) ? $this->warningStyle : $this->dangerStyle;
     }
     public function __get($name)
     {
