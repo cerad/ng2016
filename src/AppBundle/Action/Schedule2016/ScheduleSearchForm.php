@@ -1,11 +1,11 @@
 <?php
-namespace AppBundle\Action\Schedule2016\Official;
+namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractForm;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class ScheduleOfficialSearchForm extends AbstractForm
+class ScheduleSearchForm extends AbstractForm
 {
     private $projects;
     private $projectChoices;
@@ -41,8 +41,11 @@ class ScheduleOfficialSearchForm extends AbstractForm
         $projectId = $formData['projectId'];
         $project   = $this->projects[$projectId];
 
-        $action = $this->generateUrl($this->getCurrentRouteName());
-
+        $currentRouteName = $this->getCurrentRouteName();
+        $action = $this->generateUrl($currentRouteName);
+        $txtUrl = $this->generateUrl($currentRouteName,['_format' => 'txt']);
+        $xlsUrl = $this->generateUrl($currentRouteName,['_format' => 'xls']);
+            
         $csrfToken = 'TODO';
 
         $html = <<<EOD
@@ -68,8 +71,8 @@ class ScheduleOfficialSearchForm extends AbstractForm
   </div>
   <div class="schedule-search col-xs-8 col-xs-offset-2 clearfix">
 
-    <a href="{$this->generateUrl('schedule_official_2016',['_format' => 'txt'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
-    <a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
+    <a href="{$txtUrl}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
+    <a href="{$xlsUrl}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit pull-right">
     <span class="glyphicon glyphicon-search"></span>

@@ -9,23 +9,25 @@ class ScheduleTemplate
     use AbstractActionTrait;
 
     protected $showOfficials;
-
+    protected $showOfficialDetails;
+    
     protected $scheduleTitle;
 
     protected $assignWorkflow;
 
-    public function __construct($showOfficials = false, AssignWorkflow $assignWorkflow)
-    {
-        $this->showOfficials = $showOfficials;
+    public function __construct(
+        $scheduleTitle,
+        $showOfficials = false,
+        $showOfficialDetails = false,
+        AssignWorkflow $assignWorkflow = null
+    ) {
+        $this->showOfficials       = $showOfficials;
+        $this->showOfficialDetails = $showOfficialDetails;
 
-        $this->scheduleTitle = 'Game Schedule';
+        $this->scheduleTitle = $scheduleTitle;
 
         $this->assignWorkflow = $assignWorkflow;
     }
-    /**
-     * @param  ScheduleGame[] $games
-     * @return string
-     */
     public function setTitle($title = 'Game Schedule')
     {
         $this->scheduleTitle = $title;
