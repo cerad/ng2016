@@ -58,14 +58,14 @@ class AdminViewFilters
                 case 'VolIssues':
                 case 'Volunteers with Issues':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if ( $this->hasIssues($personView) ) {
+                        if ( $personView->hasCertIssues() ) {
                             $listPersons[] = $person;
                         }
                     }
                     break;
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$personView->approved AND $personView->verified) {
+                        if (!$personView->approved AND !$personView->hasCertIssues()) {
                             $listPersons[] = $person;
                         }
                     }
@@ -110,10 +110,11 @@ class AdminViewFilters
             $issues |= !(bool)$cert->verified;
         }
 
-        $roles = $personView->getRoles();
-        foreach($roles as $role) {
-            $issues |= !(bool)$role->verified;
-        }
+        //$roles = $personView->getRoles();
+        //foreach($roles as $role) {
+        //    $issues |= !(bool)$role->verified;
+        //}
+
         return boolval($issues);
     }
     

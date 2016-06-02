@@ -151,9 +151,14 @@ class AdminUpdateForm extends AbstractForm
     
             $projectPersonCertReferee['badge']  = $personData['badge'];
             $projectPersonCertReferee->verified = true;
-            $projectPersonRoleReferee['approved']   = isset($personData['approved']) ? true : false;
+            $projectPersonRoleReferee['approved']   = isset($personData['approvedRef']) ? true : false;
         }
 
+        if (isset($projectPerson->roles['ROLE_VOLUNTEER'])) {
+            $projectPersonRoleVolunteer   = &$projectPerson->roles['ROLE_VOLUNTEER'];
+    
+            $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : false;
+        }
         //update user info
         $projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
 
@@ -277,7 +282,11 @@ EOD;
 
         $roleRef        = !is_null($roleRef) ? $personView->getRoleClass($roleRef) : null;
         $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
-        
+
+        $roleVol        = $personView->getRoles();
+        $roleVol        = isset($roleVol['ROLE_VOLUNTEER']) ? $roleVol['ROLE_VOLUNTEER'] : null;
+        $approvedVol    = isset($roleVol['approved']) ? (bool) $roleVol['approved'] : false;
+
         $sar = explode('/', $personView->orgKey);
         switch (count($sar)) {
             case 3:
@@ -318,7 +327,7 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="badge">Referee:</label>
       {$this->renderFormControlInput($this->formControls['refereeBadge'],$this->escape($personView->refereeBadge),'badge','badge','col-xs-4 form-control'.$classCertRef)}
-      <label class="col-xs-3 control-label approved"><input name="approved" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
+      <label class="col-xs-3 control-label approved"><input name="approvedRef" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
     </div>
 EOD;
         }
@@ -326,6 +335,7 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH)}      
+      <label class="col-xs-3 control-label approved"><input name="approvedVol" value="approved" type="checkbox" {$this->isChecked($approvedVol) }> Approved to Volunteer</label>
     </div>
 EOD;
 
