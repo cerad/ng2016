@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Action\GameOfficial\AssignByAssignor;
 
+use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
 use AppBundle\Action\Project\User\ProjectUser;
 use Doctrine\DBAL\Connection;
@@ -27,7 +28,32 @@ class AssignorFinder
         $crew = [
             $projectId . ':' . $personId => $row['name'],
         ];
-        
+
         return $crew;
+    }
+    public function findGameOfficialChoices(Game $game)
+    {
+        $sql = <<<EOD
+SELECT 
+    regPerson.personKey AS phyPersonId,
+    regPerson.name      AS name
+FROM
+  projectPersons AS regPerson
+WHERE
+  regPerson.projectKey = ?
+ORDER BY regPerson.name
+EOD;
+        $projectId = $game->projectId;
+        $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
+        $choices = [];
+        while($row = $stmt->fetch()) {
+
+            $regPersonId = $projectId . ':' . $row['phyPersonId'];
+
+            $desc = $row['name'];
+
+            $choices[$regPersonId] = $desc;
+        }
+        return $choices;
     }
 }

@@ -36,20 +36,34 @@ EOD;
 <div class="app_table" id="notes">
 <table class="app_help">
   <thead>
-    <th>Notes on Referee Assignment Procedures</th>
+    <th>Notes on Assignor Procedures</th>
   </thead>
   <tbody>
     <tr>
       <td width="15%">&nbsp;
         <ul>
-          <li>Use the drop down to select "Request Assignment"</li>
-          <li>Click Submit</li>
-          <li>Click "Return to Schedule" and you will see your name listed for this game</li>
-          <li>The Assignor will be notified and will approve your request</li>
-          <li>You may, before the assignor approves your request, rescind your request by returning to this game, selecting "Remove Me From Assignment" and clicking Submit.</li>
-          <li>After the assignor has approved the assignment, you may request to be removed from the match by returning to this game, selecting "Request Turnback of Assignment" and clicking Submit.</li>
-          <li>The Assignor will be notified and, depending on whether a replacement can be assigned, may or may not approve the request.</li>
-          <li><strong>NOTE: You are obliged to keep the assignment until the Assignor releases you.</strong></li>
+          <li>All registered officials will be vetted for current registration and Safe Haven</li>
+          <li>2 July Soccerfest and Pool Play games are open-assignment:
+          <ul>
+            <li>Referees get to pick their own matches as individuals or as teams</li>
+            <li>Assignors responsibilities:
+            <ul>
+              <li>Approve requests and manage turnbacks</li>
+              <li>If Referees self-assignments seem odd (e.g., under certified for division)
+              <ul>
+                <li>Consult with Site Referee Admin</li>
+                <li>Contact Referee to clarify</li>
+                <li>If necessary, reassign the match to another (more qualified) Referee</li>
+              </ul>
+              </li>
+              <li>Ensure all matches have 3 Referees coverage</li>
+              <li>Contact referees by phone to fill open slots</li>
+            </li>
+          </ul>
+       </ul>
+          </li>
+              <li>QF, SF, FM, CM on Sat & Sun are assigned by the Assignor</li>
+              <li>Use pool play to gather information about the Referees and, with the Referee Administrator, agree on assignments.</li>
         </ul>
       </td>
     </tr>
