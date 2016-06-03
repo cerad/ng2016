@@ -34,17 +34,19 @@ class GameOfficialUpdater
             'regPersonId'   => null,
             'regPersonName' => null,
         ];
-        if ($gameOfficial->regPersonId) {
-            $sql  = 'SELECT personKey, name FROM projectPersons WHERE id = ?';
-            $stmt = $this->regPersonConn->executeQuery($sql,[$gameOfficial->regPersonId]);
+        $regPersonId = $gameOfficial->regPersonId;
+        if ($regPersonId) {
+            list($projectId,$phyPersonId) = explode(':',$regPersonId);
+            $sql  = 'SELECT name FROM projectPersons WHERE projectKey = ? AND personKey = ?';
+            $stmt = $this->regPersonConn->executeQuery($sql,[$projectId,$phyPersonId]);
             $row  = $stmt->fetch();
             if (!$row) {
                 // Access violation
                 return;
             }
             $gameOfficialUpdateInfo = [
-                'phyPersonId'   => $row['personKey'],
-                'regPersonId'   => $gameOfficial->regPersonId,
+                'phyPersonId'   => $phyPersonId,
+                'regPersonId'   => $regPersonId,
                 'regPersonName' => $row['name'],
             ];
         }

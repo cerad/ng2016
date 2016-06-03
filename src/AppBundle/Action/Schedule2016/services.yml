@@ -22,14 +22,15 @@ services:
             - '@doctrine.dbal.ng2016games_connection' # regTeamConn
 
     schedule_template_2016:
-        class: AppBundle\Action\Schedule2016\ScheduleTemplate
+        abstract: true
         calls: [['setContainer', ['@service_container']]]
-        arguments: [false, '@game_official_assign_workflow']
 
-    schedule_template_show_officials_2016:
-        class: AppBundle\Action\Schedule2016\ScheduleTemplate
-        calls: [['setContainer', ['@service_container']]]
-        arguments: [true, '@game_official_assign_workflow']
+    schedule_search_form_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
 
     # ===============================================================
     # Schedule Game
@@ -49,12 +50,17 @@ services:
             - '%project_choices%'
             - '%projects%'
 
+    schedule_game_template_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleTemplate
+        parent: schedule_template_2016
+        arguments: ['Game Schedule']
+
     schedule_game_view_html_2016:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameView
         parent: abstract_view2
         arguments:
             - '@schedule_game_search_form_2016'
-            - '@schedule_template_2016'
+            - '@schedule_game_template_2016'
 
     schedule_game_writer_excel:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameWriterExcel
@@ -80,28 +86,26 @@ services:
     # ===============================================================
     # Schedule Official
 
-    schedule_official_search_form_2016:
-        class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialSearchForm
-        parent: abstract_form
-        arguments:
-            - '%project_choices%'
-            - '%projects%'
-
     schedule_official_controller_2016:
         class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialController
         parent: abstract_controller
         arguments:
-            - '@schedule_official_search_form_2016'
+            - '@schedule_search_form_2016'
             - '@schedule_finder_2016'
             - '%project_choices%'
             - '%projects%'
 
+    schedule_official_template_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleTemplate
+        parent: schedule_template_2016
+        arguments: ['Referee Game Schedule', true, false, '@game_official_assign_workflow']
+
     schedule_official_view_html_2016:
-        class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialView
+        class:  AppBundle\Action\Schedule2016\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_official_search_form_2016'
-            - '@schedule_template_show_officials_2016'
+            - '@schedule_search_form_2016'
+            - '@schedule_official_template_2016'
 
     schedule_official_view_xls_2016:
         class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialViewFile
@@ -111,6 +115,47 @@ services:
 
     schedule_official_view_txt_2016:
         class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialViewFile
+        parent: abstract_view2
+        arguments:
+            - '@abstract_exporter_txt'
+
+    # ===============================================================
+    # Schedule Assignor
+
+    schedule_assignor_controller_2016:
+        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorController
+        parent: abstract_controller
+        arguments:
+            - '@schedule_search_form_2016'
+            - '@schedule_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
+
+    schedule_assignor_template_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleTemplate
+        parent: schedule_template_2016
+        arguments:
+            - 'Assignor Game Schedule'
+            -  true
+            -  true
+            - '@game_official_assign_workflow'
+            - '@game_official_details_finder'
+
+    schedule_assignor_view_html_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleView
+        parent: abstract_view2
+        arguments:
+            - '@schedule_search_form_2016'
+            - '@schedule_assignor_template_2016'
+
+    schedule_assignor_view_xls_2016:
+        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
+        parent: abstract_view2
+        arguments:
+            - '@abstract_exporter_xls'
+
+    schedule_assignor_view_txt_2016:
+        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_txt'
@@ -134,12 +179,17 @@ services:
             - '%project_choices%'
             - '%projects%'
 
+    schedule_team_template_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleTemplate
+        parent: schedule_template_2016
+        arguments: ['Team Schedule']
+
     schedule_team_view_html_2016:
         class:  AppBundle\Action\Schedule2016\Team\ScheduleTeamView
         parent: abstract_view2
         arguments:
             - '@schedule_team_search_form_2016'
-            - '@schedule_template_2016'
+            - '@schedule_team_template_2016'
 
     schedule_team_view_xls_2016:
         class:  AppBundle\Action\Schedule2016\Team\ScheduleTeamViewFile

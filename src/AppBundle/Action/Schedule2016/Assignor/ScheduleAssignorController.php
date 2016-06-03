@@ -1,16 +1,14 @@
 <?php
-
-namespace AppBundle\Action\Schedule2016\Official;
+namespace AppBundle\Action\Schedule2016\Assignor;
 
 use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 
 use AppBundle\Action\Schedule2016\ScheduleSearchForm;
-
 use Symfony\Component\HttpFoundation\Request;
 
-class ScheduleOfficialController extends AbstractController2
+class ScheduleAssignorController extends AbstractController2
 {
     private $searchForm;
     private $scheduleFinder;
@@ -49,7 +47,7 @@ class ScheduleOfficialController extends AbstractController2
         ];
         // Save selected teams in session
         $session    = $request->getSession();
-        $sessionKey = 'schedule_official_search_data_2016';
+        $sessionKey = 'schedule_assignor_search_data_2016';
 
         if ($request->query->has('reset')) {
             $session->remove($sessionKey);

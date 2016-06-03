@@ -25,8 +25,9 @@ class AssigneeFinder
             return [];
         }
         $crew = [
-            $row['id'] => $row['name'],
+            $projectId . ':' . $personId => $row['name'],
         ];
+        
         return $crew;
     }
 }

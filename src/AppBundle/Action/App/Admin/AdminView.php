@@ -155,6 +155,7 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignments</a></li>
       <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignments (Excel)</a></li>
+      <li><a href="{$this->generateUrl('schedule_assignor_2016')}">View Assignor Assignments</a></li>
 EOT;
 
       if ($this->isGranted('ROLE_ADMIN')) {
