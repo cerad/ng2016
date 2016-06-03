@@ -3,6 +3,7 @@ namespace AppBundle\Action\Schedule2016;
 
 use AppBundle\Action\AbstractActionTrait;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
+use AppBundle\Action\GameOfficial\GameOfficialDetailsFinder;
 
 class ScheduleTemplate
 {
@@ -10,7 +11,8 @@ class ScheduleTemplate
 
     protected $showOfficials;
     protected $showOfficialDetails;
-    
+    protected $gameOfficialDetailsFinder;
+
     protected $scheduleTitle;
 
     protected $assignWorkflow;
@@ -19,10 +21,13 @@ class ScheduleTemplate
         $scheduleTitle,
         $showOfficials = false,
         $showOfficialDetails = false,
-        AssignWorkflow $assignWorkflow = null
+        AssignWorkflow $assignWorkflow = null,
+        GameOfficialDetailsFinder $gameOfficialDetailsFinder = null
     ) {
         $this->showOfficials       = $showOfficials;
         $this->showOfficialDetails = $showOfficialDetails;
+
+        $this->gameOfficialDetailsFinder = $gameOfficialDetailsFinder;
 
         $this->scheduleTitle = $scheduleTitle;
 
@@ -131,20 +136,38 @@ EOD;
             'slot'       => $gameOfficial->slot,
             'back'       => $this->getCurrentRouteName(),
         ];
-        $url = $this->generateUrl('game_official_assign_by_assignee',$params);
+        $assignRouteName = $this->showOfficialDetails ?
+            'game_official_assign_by_assignee':
+            'game_official_assign_by_assignee';
+
+        $assignUrl = $this->generateUrl($assignRouteName,$params);
+
         $slotView = $gameOfficial->slotView;
         if ($this->isGranted('edit',$gameOfficial)) {
-            $slotView = sprintf('<a href="%s">%s</a>',$url,$slotView);
+            $slotView = sprintf('<a href="%s">%s</a>',$assignUrl,$slotView);
         }
 
         $assignState = $gameOfficial->assignState;
         $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
 
-        return <<<EOD
+        $html = <<<EOD
         <td class="text-left game-official-state-{$assignState}">{$assignStateView}</td>
         <td class="text-left">{$slotView}</td>
         <td class="text-left">{$this->escape($gameOfficial->regPersonName)}</td>
-
 EOD;
+        if (!$this->showOfficialDetails) {
+            return $html;
+        }
+        $row = $this->gameOfficialDetailsFinder->findGameOfficialDetails($gameOfficial->regPersonId);
+        if (!$row) {
+            return $html;
+        }
+        $refereeBadge = substr($row['refereeBadge'],0,3);
+
+        return $html . <<<EOD
+        <td class="text-left">{$refereeBadge}</td>
+        <td class="text-left">{$row['orgView']}</td>
+EOD;
+
     }
 }

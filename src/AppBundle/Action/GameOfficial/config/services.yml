@@ -9,6 +9,13 @@ services:
             - '@game_connection'
             - '@project_person_connection'
 
+    game_official_details_finder:
+        class: AppBundle\Action\GameOfficial\GameOfficialDetailsFinder
+        arguments:
+            - '@game_connection'
+            - '@project_person_connection'
+            - '@ayso_region_to_sar_transformer'
+
     game_official_voter:
         class: AppBundle\Action\GameOfficial\GameOfficialVoter
         tags: [{ name: security.voter }]

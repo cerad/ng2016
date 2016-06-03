@@ -9,8 +9,9 @@ game_official_assign_by_assignee:
         _role:       ROLE_REFEREE
 
 game_official_assign_by_assignor:
-    path: /assign/{projectId}/{gameNumber}
+    path: /assign/{projectId}/{gameNumber}/{slot}
     defaults:
+        slot: null
         _controller: game_official_assign_by_assignor_controller
         _form:       game_official_assign_by_assignor_form
         _view:       game_official_assign_by_assignor_view

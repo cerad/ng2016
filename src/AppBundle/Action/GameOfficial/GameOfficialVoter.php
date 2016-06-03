@@ -72,7 +72,7 @@ class GameOfficialVoter extends Voter
     {
         // Assignor can do anything
         if ($this->decisionManager->decide($token, ['ROLE_ASSIGNOR'])) {
-            //return true;
+            return true;
         }
         // Must be a referee
         if (!$this->decisionManager->decide($token, ['ROLE_REFEREE'])) {

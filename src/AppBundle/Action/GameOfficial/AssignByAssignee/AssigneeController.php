@@ -68,8 +68,9 @@ class AssigneeController extends AbstractController2
                 $gameOfficial->regPersonId = null;
             }
             $this->gameOfficialUpdater->updateGameOfficial($gameOfficial,$gameOfficialOriginal);
-            
-            return $redirect;
+            dump($gameOfficial);
+            dump($gameOfficialOriginal);
+            //return $redirect;
         }
         $request->attributes->set('game',$game);
         return null;

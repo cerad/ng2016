@@ -134,7 +134,12 @@ services:
     schedule_assignor_template_2016:
         class:  AppBundle\Action\Schedule2016\ScheduleTemplate
         parent: schedule_template_2016
-        arguments: ['Assignor Game Schedule', true, true, '@game_official_assign_workflow']
+        arguments:
+            - 'Assignor Game Schedule'
+            -  true
+            -  true
+            - '@game_official_assign_workflow'
+            - '@game_official_details_finder'
 
     schedule_assignor_view_html_2016:
         class:  AppBundle\Action\Schedule2016\ScheduleView
