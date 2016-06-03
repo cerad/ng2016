@@ -24,12 +24,13 @@ services:
             - '@project_person_connection'
             - '@security.access.decision_manager'
 
+    # =========================================================================
+    # Assign by assignee
+
     game_official_assignee_finder:
         class: AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeFinder
         arguments: ['@project_person_connection']
 
-    # =========================================================================
-    # Assign by assignee
     game_official_assign_by_assignee_form:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm
         parent: abstract_form
@@ -50,3 +51,32 @@ services:
         parent: abstract_view2
         arguments:
             - '@game_official_assign_by_assignee_form'
+
+    # =========================================================================
+    # Assign by assignor
+
+    game_official_assignor_finder:
+        class: AppBundle\Action\GameOfficial\AssignByAssignor\AssignorFinder
+        arguments: ['@project_person_connection']
+
+
+    game_official_assign_by_assignor_form:
+        class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorForm
+        parent: abstract_form
+        arguments:
+            - '@game_official_assign_workflow'
+            - '@game_official_assignor_finder'
+
+    game_official_assign_by_assignor_controller:
+        class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorController
+        parent: abstract_controller
+        arguments:
+            - '@game_official_assign_by_assignor_form'
+            - '@game_finder'
+            - '@game_official_updater'
+
+    game_official_assign_by_assignor_view:
+        class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorView
+        parent: abstract_view2
+        arguments:
+            - '@game_official_assign_by_assignor_form'
