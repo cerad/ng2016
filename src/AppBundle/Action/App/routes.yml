@@ -24,8 +24,13 @@ app_admin:
         _view:       admin_view
         _controller: admin_controller
 
-app_css:
-    path: /css
-    
-app_images:
-    path: /images
+#   unknown path trap
+#   must be loaded last
+
+app__mystery__url:
+    path: /{url}/
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /welcome
+        requirements:
+            url: [.*]
