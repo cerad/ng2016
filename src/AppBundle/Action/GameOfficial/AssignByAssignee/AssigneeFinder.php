@@ -27,7 +27,7 @@ class AssigneeFinder
         $crew = [
             $projectId . ':' . $personId => $row['name'],
         ];
-        dump($crew);
+        
         return $crew;
     }
 }
