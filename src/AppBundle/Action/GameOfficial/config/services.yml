@@ -57,8 +57,9 @@ services:
 
     game_official_assignor_finder:
         class: AppBundle\Action\GameOfficial\AssignByAssignor\AssignorFinder
-        arguments: ['@project_person_connection']
-
+        arguments:
+            - '@project_person_connection'
+            - '@ayso_region_to_sar_transformer'
 
     game_official_assign_by_assignor_form:
         class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorForm

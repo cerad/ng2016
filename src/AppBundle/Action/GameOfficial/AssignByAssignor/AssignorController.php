@@ -26,19 +26,20 @@ class AssignorController extends AbstractController2
     public function __invoke(Request $request, $projectId, $gameNumber, $slot)
     {
         // Just to get it out of the way
+        $currentRouteName = $this->getCurrentRouteName();
         $redirect =  $this->redirectToRoute(
-            $this->getCurrentRouteName(),
+            $currentRouteName,
             ['projectId' => $projectId, 'gameNumber' => $gameNumber, 'slot' => $slot]
         );
 
         // Stash the back link in the session
         $session = $request->getSession();
-        $sessionKey = 'game_report_update_back';
+        $sessionKey = $currentRouteName;
         if ($request->query->has('back')) {
             $session->set($sessionKey,$request->query->get('back'));
             return $redirect;
         }
-        $backRouteName = 'schedule_official_2016'; // Inject or results link
+        $backRouteName = 'schedule_assignor_2016'; // Inject or results link
         if ($session->has($sessionKey)) {
             $backRouteName = $session->get($sessionKey);
         }
@@ -46,26 +47,31 @@ class AssignorController extends AbstractController2
         if (!$game) {
             return $this->redirectToRoute($backRouteName);
         }
-        // The form will clone this, should it?
-        $gameOfficialOriginal = $game->getOfficial($slot);
+        $gameOfficialsOriginal = $game->getOfficials();
         
         $form = $this->form;
         $form->setGame($game);
-        $form->setGameOfficial($gameOfficialOriginal);
         $form->setBackRouteName($backRouteName);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
 
-            $gameOfficial = $form->getGameOfficial();
+            $gameOfficials = $form->getGameOfficials();
+            foreach($gameOfficials as $gameOfficial) {
+                $gameOfficialOriginal = $gameOfficialsOriginal[$gameOfficial->slot];
+                
+                // Process some commands
+                $assignState = $gameOfficial->assignState;
+                switch($assignState) {
+                    case 'RemoveByAssignor':
+                    case 'TurnBackApproved':
+                        $gameOfficial->assignState = 'Open';
+                        $gameOfficial->regPersonId = null;
+                        break;
+                }
 
-            // TODO Move the logic for processing state changes somewhere?
-            if ($gameOfficial->assignState === 'RemoveByAssignee') {
-                $gameOfficial->assignState = 'Open';
-                $gameOfficial->regPersonId = null;
+                $this->gameOfficialUpdater->updateGameOfficial($gameOfficial,$gameOfficialOriginal);
             }
-            $this->gameOfficialUpdater->updateGameOfficial($gameOfficial,$gameOfficialOriginal);
-            
             return $redirect;
         }
         $request->attributes->set('game',$game);

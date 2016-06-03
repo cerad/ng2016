@@ -1,16 +1,22 @@
 <?php
 namespace AppBundle\Action\GameOfficial\AssignByAssignor;
 
+use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
+use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Project\User\ProjectUser;
 use Doctrine\DBAL\Connection;
 
 class AssignorFinder
 {
+    private $orgFinder;
     private $regPersonConn;
 
-    public function __construct(Connection $regPersonConn)
-    {
+    public function __construct(
+        Connection $regPersonConn,
+        RegionToSarTransformer $orgFinder
+    ) {
+        $this->orgFinder     = $orgFinder;
         $this->regPersonConn = $regPersonConn;
     }
     public function findCrew(ProjectUser $user, GameOfficial $gameOfficial)
@@ -27,7 +33,46 @@ class AssignorFinder
         $crew = [
             $projectId . ':' . $personId => $row['name'],
         ];
-        
+
         return $crew;
+    }
+    public function findGameOfficialChoices(Game $game)
+    {
+        $sql = <<<EOD
+SELECT 
+    regPerson.personKey AS phyPersonId,
+    regPerson.name      AS name,
+    regPerson.orgKey    AS orgId,
+    certReferee.badge   AS refereeBadge
+    
+FROM
+  projectPersons AS regPerson
+  
+LEFT JOIN
+  projectPersonRoles AS certReferee ON certReferee.projectPersonId = regPerson.id AND certReferee.role = 'CERT_REFEREE'
+  
+LEFT JOIN
+  projectPersonRoles AS roleReferee ON roleReferee.projectPersonId = regPerson.id AND roleReferee.role = 'ROLE_REFEREE'
+
+WHERE
+  regPerson.projectKey = ? AND
+  roleReferee.role = 'ROLE_REFEREE'
+  
+ORDER BY regPerson.name
+EOD;
+        $projectId = $game->projectId;
+        $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
+        $choices = [];
+        while($row = $stmt->fetch()) {
+
+            $regPersonId = $projectId . ':' . $row['phyPersonId'];
+
+            $orgView = $this->orgFinder->transform($row['orgId']);
+
+            $desc = sprintf('%s -- %s -- %s',$row['name'],$row['refereeBadge'],$orgView);
+
+            $choices[$regPersonId] = $desc;
+        }
+        return $choices;
     }
 }
