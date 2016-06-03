@@ -24,35 +24,13 @@ app_admin:
         _view:       admin_view
         _controller: admin_controller
 
-#   default path traps
+#   unknown path trap
 #   must be loaded last
 
-app_images:
-    path: /images
-    prefix: /
+app__mystery__url:
+    path: /{url}/
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
         path: /welcome
-        permanent: true
-        
-app_pdf:
-    path: /pdf
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /welcome
-        permanent: true
-
-app_css:
-    path: /css
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /welcome
-        permanent: true
-
-app_js:
-    path: /js
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /welcome
-        permanent: true
-
+        requirements:
+            url: [.*]

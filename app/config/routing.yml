@@ -40,6 +40,6 @@ app_project_person_admin:
     prefix: /project/person/admin
 
 #   must load last
-app_app:
+app__routes__mystery:
     resource: "@AppBundle/Action/App/routes.yml"
-    prefix: /
+    prefix:   /
