@@ -111,6 +111,7 @@ EOD;
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
   <td class="text-left">{$homeTeam->regTeamName}<hr class="separator">{$awayTeam->regTeamName}</td>
 EOD;
+            // TODO: Move all this to a ScheduleOfficialTemplate
             if ($this->showOfficials) {
                 $html .= <<<EOD
   <td class="schedule-referees text-left">
@@ -137,7 +138,7 @@ EOD;
             'back'       => $this->getCurrentRouteName(),
         ];
         $assignRouteName = $this->showOfficialDetails ?
-            'game_official_assign_by_assignee':
+            'game_official_assign_by_assignor':
             'game_official_assign_by_assignee';
 
         $assignUrl = $this->generateUrl($assignRouteName,$params);
