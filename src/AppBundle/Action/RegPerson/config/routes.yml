@@ -1,0 +1,13 @@
+reg_person_persons_update:
+    path: /persons/update
+    defaults:
+        _role:       ROLE_USER
+        _view:       reg_person_persons_update_view
+        _controller: reg_person_persons_update_controller
+
+reg_person_teams_update:
+    path: /teams/update
+    defaults:
+        _role:       ROLE_USER
+        _view:       reg_person_teams_update_view
+        _controller: reg_person_teams_update_controller
