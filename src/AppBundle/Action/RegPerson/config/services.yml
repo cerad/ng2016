@@ -14,6 +14,8 @@ services:
         arguments:
             - '@reg_person_connection'
 
+    # ===========================================
+    # RegPersonPerson Update
     reg_person_persons_update_form:
         class:  AppBundle\Action\RegPerson\Persons\Update\PersonsUpdateForm
         parent: abstract_form
@@ -33,3 +35,25 @@ services:
         parent: abstract_view2
         arguments:
             - '@reg_person_persons_update_form'
+
+    # ===========================================
+    # RegPersonTeam Update
+    reg_person_teams_update_form:
+        class:  AppBundle\Action\RegPerson\Teams\Update\TeamsUpdateForm
+        parent: abstract_form
+        arguments:
+            - '@reg_person_finder'
+
+    reg_person_teams_update_controller:
+        class:  AppBundle\Action\RegPerson\Teams\Update\TeamsUpdateController
+        parent: abstract_controller
+        arguments:
+            - '@reg_person_teams_update_form'
+            - '@reg_person_finder'
+            - '@reg_person_updater'
+
+    reg_person_teams_update_view:
+        class:  AppBundle\Action\RegPerson\Teams\Update\TeamsUpdateView
+        parent: abstract_view2
+        arguments:
+            - '@reg_person_teams_update_form'
