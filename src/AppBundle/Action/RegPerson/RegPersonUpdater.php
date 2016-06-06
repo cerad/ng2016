@@ -5,11 +5,14 @@ use Doctrine\DBAL\Connection;
 
 class RegPersonUpdater
 {
+    private $regTeamConn;
     private $regPersonConn;
     
     public function __construct(
-        Connection $regPersonConn
+        Connection $regPersonConn,
+        Connection $regTeamConn
     ) {
+        $this->regTeamConn   = $regTeamConn;
         $this->regPersonConn = $regPersonConn;
     }
     /* ===========================================
@@ -62,6 +65,48 @@ class RegPersonUpdater
         $data['memberName'] = $row['name'];
 
         $this->regPersonConn->insert('regPersonPersons',$data);
+
+        return 1;
+    }
+    /* ===========================================
+     * Remove RegPersonTeam
+     */
+    public function removeRegPersonTeam($managerId,$teamId,$role = 'Family')
+    {
+        // Composite key
+        $sql = 'DELETE FROM regPersonTeams WHERE managerId = ? AND teamId = ? AND role = ?';
+
+        return $this->regPersonConn->executeUpdate($sql,[$managerId,$teamId,$role]);
+    }
+
+    /* ===========================================
+     * Add RegPersonPerson
+     */
+    public function addRegPersonTeam($managerId,$teamId,$role = 'Family')
+    {
+        // We avoid adding the same record twice
+        $sql = 'SELECT role FROM regPersonTeams WHERE managerId = ? AND teamId = ? AND role = ?';
+        $stmt = $this->regPersonConn->executeQuery($sql,[$managerId,$teamId,$role]);
+        if ($stmt->fetch()) {
+            return 0;
+        }
+        $data = [
+            'role'      => $role,
+            'managerId' => $managerId,
+            'teamId'    => $teamId,
+        ];
+        // Need the name for performance
+        $sql = 'SELECT teamName,program,age,gender FROM regTeams WHERE regTeamId = ?';
+
+        $stmt = $this->regTeamConn->executeQuery($sql,[$teamId]);
+        $row = $stmt->fetch();
+        if (!$row) return 0; // Should not happen
+
+        // Messy need a view
+        $data['teamName'] = sprintf('%s-%s %s',
+            $row['age'],$row['gender'],$row['teamName']);
+
+        $this->regPersonConn->insert('regPersonTeams',$data);
 
         return 1;
     }

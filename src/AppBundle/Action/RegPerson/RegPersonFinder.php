@@ -6,16 +6,19 @@ use Doctrine\DBAL\Connection;
 class RegPersonFinder
 {
     private $userConn;
+    private $regTeamConn;
     private $regPersonConn;
-    
+
     public function __construct(
         Connection $regPersonConn,
+        Connection $regTeamConn,
         Connection $userConn
     ) {
         $this->userConn      = $userConn;
+        $this->regTeamConn   = $regTeamConn;
         $this->regPersonConn = $regPersonConn;
     }
-     /** ==========================================
+    /** ==========================================
      * Mainly for crews
      * projectPersonId is an autoincrement
      * This will be cleaner once the ids have been fixed up
@@ -58,6 +61,24 @@ EOD;
         }
         return $regPersonPersons;
     }
+    /** ==========================================
+     * Teams associated with RegPerson
+     *
+     * @param  $regPersonId string
+     * @return RegPersonTeam[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findRegPersonTeams($regPersonId)
+    {
+        // Now pull the crew
+        $sql = 'SELECT * FROM regPersonTeams WHERE managerId = ? ORDER BY role,teamId';
+        $stmt = $this->regPersonConn->executeQuery($sql,[$regPersonId]);
+        $regPersonTeams = [];
+        while($row = $stmt->fetch()) {
+            $regPersonTeams[] = RegPersonTeam::createFromArray($row);
+        }
+        return $regPersonTeams;
+    }
     /* ==========================================
      * Mainly for adding people to crews
      *
@@ -79,10 +100,32 @@ EOD;
         while($row = $stmt->fetch())
         {
             $regPersonId = $projectId . ':' . $row['personId'];
-            
+
             $persons[$regPersonId] = $row['name'];
         }
         return $persons;
+    }
+    /* ==========================================
+     * For adding teams to person
+     * This is a view routine, should it be in it's own class?
+     * Showing program here, better to have a choice view column
+     */
+    public function findRegTeamChoices($projectId)
+    {
+        $sql = <<<EOD
+SELECT regTeamId, teamName, program, gender, age
+FROM regTeams AS regTeam
+WHERE projectId = ?
+ORDER BY regTeamId
+EOD;
+        $stmt = $this->regTeamConn->executeQuery($sql,[$projectId]);
+        $choices = [];
+        while($row = $stmt->fetch())
+        {
+            $choices[$row['regTeamId']] = sprintf('%s-%s %s',
+                $row['age'],$row['gender'],$row['teamName']);
+        }
+        return $choices;
     }
     /* ==========================================
      * Mainly for Switch User within a project

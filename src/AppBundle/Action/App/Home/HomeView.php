@@ -89,7 +89,7 @@ EOD;
   <tr><td style="text-align: right;">{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
 EOD;
         }
-    $html .= <<<EOD
+        $html .= <<<EOD
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('reg_person_persons_update')}">
         Add/Remove People
@@ -104,13 +104,19 @@ EOD;
      */
     private function renderTeamInformation()
     {
-        $user = $this->user;
+        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($this->user->getRegPersonId());
 
-        return <<<EOD
+        $html = <<<EOD
 <table class="tableClass" >
   <tr><th colspan="2" style="text-align: center;">My Teams</th></tr>
-  <tr><td>Account Name </td><td>{$user['name']}</td></tr>
-  
+EOD;
+
+        foreach($regPersonTeams as $regPersonTeam) {
+            $html .= <<<EOD
+  <tr><td style="text-align: right;">{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
+EOD;
+        }
+        $html .= <<<EOD
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('reg_person_teams_update')}">
         Add/Remove Teams
@@ -118,6 +124,7 @@ EOD;
   </td></tr>
 </table>
 EOD;
+        return $html;
     }
     /* ====================================================
      * Account Information

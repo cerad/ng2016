@@ -26,30 +26,29 @@ class TeamsUpdateController extends AbstractController2
     }
     public function __invoke(Request $request)
     {
-        $regPersonPersons = $this->regPersonFinder->findRegPersonPersons($this->getUser()->getRegPersonId());
+        $managerId = $this->getUser()->getRegPersonId();
+
+        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($managerId);
         
         $form = $this->form;
-        $form->setRegPersonPersons($regPersonPersons);
+        $form->setRegPersonTeams($regPersonTeams);
         
         $form->handleRequest($request);
         
-        $managerId = $this->getUser()->getRegPersonId();
-        
         if ($form->isValid()) {
-            $regPersonPersonAdd = $form->getRegPersonPersonAdd();
-            if ($regPersonPersonAdd) {
-                
-                $this->regPersonUpdater->addRegPersonPerson(
-                    $regPersonPersonAdd['role'],
-                    $managerId,
-                    $regPersonPersonAdd['memberId']);
+            
+            $addTeamId = $form->getRegPersonTeamAdd();
+            if ($addTeamId) {
+                $this->regPersonUpdater->addRegPersonTeam($managerId,$addTeamId);
             }
-            $removeIds = $form->getRegPersonPersonsRemove();
-            foreach($removeIds as $removeId) {
-                list($role,$memberId) = explode(' ',$removeId);
-                $this->regPersonUpdater->removeRegPersonPerson($role,$managerId,$memberId);
+            $removeTeamIds = $form->getRegPersonTeamsRemove();
+            foreach($removeTeamIds as $removeTeamId) {
+                if ($removeTeamId) {
+                    list($role, $teamId) = explode(' ', $removeTeamId);
+                    $this->regPersonUpdater->removeRegPersonTeam($managerId,$teamId,$role);
+                }
             }
-            return $this->redirectToRoute('reg_person_persons_update');
+            return $this->redirectToRoute('reg_person_teams_update');
         }
         return null;
     }

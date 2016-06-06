@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS regPersonTeams;
 
 CREATE TABLE regPersonTeams
 (
-  managerId   VARCHAR( 99) NOT NULL, -- RegPersonId
+  managerId VARCHAR( 99) NOT NULL, -- RegPersonId
 
-  teamId   VARCHAR( 99) NOT NULL,  -- RegTeamId
-  teamName VARCHAR(255) NOT NULL,  -- Different databases
+  teamId    VARCHAR( 99) NOT NULL,  -- RegTeamId
+  teamName  VARCHAR(255) NOT NULL,  -- Different databases
 
   role VARCHAR(39) NOT NULL DEFAULT 'Family', -- Probably won't be used
 

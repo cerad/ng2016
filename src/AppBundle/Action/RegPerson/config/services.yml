@@ -1,5 +1,8 @@
 services:
 
+    reg_team_connection:
+        alias: doctrine.dbal.ng2016games_connection
+
     reg_person_connection:
         alias: doctrine.dbal.ng2016_connection
 
@@ -7,12 +10,14 @@ services:
         class: AppBundle\Action\RegPerson\RegPersonFinder
         arguments:
             - '@reg_person_connection'
+            - '@reg_team_connection'
             - '@user_connection'
 
     reg_person_updater:
         class: AppBundle\Action\RegPerson\RegPersonUpdater
         arguments:
             - '@reg_person_connection'
+            - '@reg_team_connection'
 
     # ===========================================
     # RegPersonPerson Update
