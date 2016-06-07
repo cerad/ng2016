@@ -3,6 +3,7 @@
 namespace AppBundle\Action\GameOfficial;
 
 use AppBundle\Action\Game\GameOfficial;
+use AppBundle\Action\RegPerson\RegPersonFinder;
 use AppBundle\Action\Schedule2016\ScheduleGameOfficial;
 
 use AppBundle\Action\Project\User\ProjectUser as User;
@@ -22,15 +23,18 @@ class GameOfficialVoter extends Voter
     private $gameConn;
     private $regPersonConn;
     private $decisionManager;
+    private $regPersonFinder;
 
     public function __construct(
         Connection $gameConn,
         Connection $regPersonConn,
-        AccessDecisionManagerInterface $decisionManager
+        AccessDecisionManagerInterface $decisionManager,
+        RegPersonFinder $regPersonFinder
     ) {
         $this->gameConn        = $gameConn;
         $this->regPersonConn   = $regPersonConn;
         $this->decisionManager = $decisionManager;
+        $this->regPersonFinder = $regPersonFinder;
     }
     protected function supports($attribute, $subject)
     {
@@ -100,6 +104,16 @@ class GameOfficialVoter extends Voter
         }
         // Can edit my crew's games
 
+        // Cache the crew ids for the current user
+        // TOD Use physical person id
+        $userRegPersonId = $user->getRegPersonId();
+        if (!$this->regPersonCrewIds) {
+            $this->regPersonCrewIds = $this->regPersonFinder->findRegPersonPersonIds($userRegPersonId);
+        }
+        if (isset($this->regPersonCrewIds[$gameOfficial->regPersonId])) {
+            return true;
+        }
         return false;
     }
+    private $regPersonCrewIds;
 }

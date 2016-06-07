@@ -4,10 +4,12 @@ namespace AppBundle\Action\Schedule2016;
 use AppBundle\Action\AbstractActionTrait;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\GameOfficial\GameOfficialDetailsFinder;
+use AppBundle\Action\RegPerson\RegPersonFinder;
 
 class ScheduleTemplate
 {
     use AbstractActionTrait;
+
 
     protected $showOfficials;
     protected $showOfficialDetails;
@@ -16,6 +18,12 @@ class ScheduleTemplate
     protected $scheduleTitle;
 
     protected $assignWorkflow;
+
+    /** @var  RegPersonFinder */
+    protected $regPersonFinder;
+    protected $regPersonId;
+    protected $regPersonTeamIds;
+    protected $regPersonPersonsIds;
 
     public function __construct(
         $scheduleTitle,
@@ -33,6 +41,11 @@ class ScheduleTemplate
 
         $this->assignWorkflow = $assignWorkflow;
     }
+    public function setRegPersonFinder(RegPersonFinder $regPersonFinder)
+    {
+        $this->regPersonFinder = $regPersonFinder;
+    }
+    // Depreciated
     public function setTitle($title = 'Game Schedule')
     {
         $this->scheduleTitle = $title;
@@ -80,6 +93,10 @@ EOD;
      */
     private function renderScheduleRows($games)
     {
+        $this->regPersonId = $regPersonId = $this->getUserRegPersonId();
+        $this->regPersonTeamIds    = $this->regPersonFinder->findRegPersonTeamIds  ($regPersonId);
+        $this->regPersonPersonsIds = $this->regPersonFinder->findRegPersonPersonIds($regPersonId);
+
         $html = null;
 
         foreach($games as $game) {
@@ -87,6 +104,16 @@ EOD;
             $homeTeam = $game->homeTeam;
             $awayTeam = $game->awayTeam;
 
+            $homeTeamName = $this->escape($homeTeam->regTeamName);
+            $awayTeamName = $this->escape($awayTeam->regTeamName);
+
+            if (isset($this->regPersonTeamIds[$homeTeam->regTeamId])) {
+                $homeTeamName = sprintf('<span class="my-team">%s</span>',$homeTeamName);
+            }
+            if (isset($this->regPersonTeamIds[$awayTeam->regTeamId])) {
+                $awayTeamName = sprintf('<span class="my-team">%s</span>',$awayTeamName);
+            }
+            // Id for returning
             $trId = 'game-' . $game->gameId;
 
             // Link for editing game
@@ -109,7 +136,7 @@ EOD;
   <td class="schedule-field"><a href="{$this->generateUrl('field_map')}" target=_blank}>{$game->fieldName}</a></td>
   <td class="schedule-group">{$game->poolView}</td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
-  <td class="text-left">{$homeTeam->regTeamName}<hr class="separator">{$awayTeam->regTeamName}</td>
+  <td class="text-left">{$homeTeamName}<hr class="separator">{$awayTeamName}</td>
 EOD;
             // TODO: Move all this to a ScheduleOfficialTemplate
             if ($this->showOfficials) {
@@ -131,6 +158,12 @@ EOD;
     }
     private function renderGameOfficial(ScheduleGame $game, ScheduleGameOfficial $gameOfficial)
     {
+        // Escape and hilite name
+        $gameOfficialName = $this->escape($gameOfficial->regPersonName);
+        if (isset($this->regPersonPersonsIds[$gameOfficial->regPersonId])) {
+            $class = $gameOfficial->regPersonId === $this->regPersonId ? 'my-slot' : 'my-slot-crew';
+            $gameOfficialName = sprintf('<span class="%s">%s</span>',$class,$gameOfficialName);
+        }
         $params = [
             'projectId'  => $game->projectId,
             'gameNumber' => $game->gameNumber,
@@ -154,7 +187,7 @@ EOD;
         $html = <<<EOD
         <td class="text-left game-official-state-{$assignState}">{$assignStateView}</td>
         <td class="text-left">{$slotView}</td>
-        <td class="text-left">{$this->escape($gameOfficial->regPersonName)}</td>
+        <td class="text-left">{$gameOfficialName}</td>
 EOD;
         if (!$this->showOfficialDetails) {
             return $html;

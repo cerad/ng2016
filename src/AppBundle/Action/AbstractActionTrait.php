@@ -72,6 +72,7 @@ trait AbstractActionTrait
      * Pulled from Symfony Framework Base Controller
      * Adjusted style to make PHPStorm happy
      * 
+     * TODO: Instead of returning a null when not logged in, should return a guest object
      * Get a user from the Security Token Storage.
      *
      * @return mixed
@@ -100,6 +101,12 @@ trait AbstractActionTrait
         }
 
         return $user;
+    }
+    // Current registered person's id if logged in, null otherwise
+    protected function getUserRegPersonId()
+    {
+        $user = $this->getUser();
+        return $user ? $user->getRegPersonId() : null;
     }
     /** Copied directly from Symfony Framework Base Controller
      * Checks if the attributes are granted against the current authentication token and optionally supplied object.

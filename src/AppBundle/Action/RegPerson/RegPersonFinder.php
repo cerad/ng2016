@@ -61,6 +61,16 @@ EOD;
         }
         return $regPersonPersons;
     }
+    public function findRegPersonPersonIds($regPersonId)
+    {
+        $sql = 'SELECT memberId FROM regPersonPersons WHERE managerId = ?';
+        $stmt = $this->regPersonConn->executeQuery($sql,[$regPersonId]);
+        $regPersonPersonIds[$regPersonId] = [$regPersonId];
+        while($row = $stmt->fetch()) {
+            $regPersonPersonIds[$row['memberId']] = $row['memberId'];
+        }
+        return $regPersonPersonIds;
+    }
     /** ==========================================
      * Teams associated with RegPerson
      *
@@ -70,7 +80,6 @@ EOD;
      */
     public function findRegPersonTeams($regPersonId)
     {
-        // Now pull the crew
         $sql = 'SELECT * FROM regPersonTeams WHERE managerId = ? ORDER BY role,teamId';
         $stmt = $this->regPersonConn->executeQuery($sql,[$regPersonId]);
         $regPersonTeams = [];
@@ -78,6 +87,16 @@ EOD;
             $regPersonTeams[] = RegPersonTeam::createFromArray($row);
         }
         return $regPersonTeams;
+    }
+    public function findRegPersonTeamIds($regPersonId)
+    {
+        $sql = 'SELECT teamId FROM regPersonTeams WHERE managerId = ?';
+        $stmt = $this->regPersonConn->executeQuery($sql,[$regPersonId]);
+        $regPersonTeamIds = [];
+        while($row = $stmt->fetch()) {
+            $regPersonTeamIds[$row['teamId']] = $row['teamId'];
+        }
+        return $regPersonTeamIds;
     }
     /* ==========================================
      * Mainly for adding people to crews

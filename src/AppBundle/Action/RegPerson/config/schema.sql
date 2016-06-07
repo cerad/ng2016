@@ -11,7 +11,7 @@ CREATE TABLE regPersonPersons
   managerId   VARCHAR( 99) NOT NULL, -- RegPersonId
   managerName VARCHAR(255) NOT NULL, -- Is this really neede?
 
-  memberId   VARCHAR( 99) NOT NULL,  -- RegPersonId
+  memberId   VARCHAR( 99) NOT NULL,  -- RegPersonId, TODO add phyPersonId as well
   memberName VARCHAR(255) NOT NULL,
 
   role VARCHAR(39) NOT NULL,
