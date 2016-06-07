@@ -19,8 +19,8 @@ class PersonsUpdateForm extends AbstractForm
     /** @var  RegPersonPerson[] */
     private $regPersonPersons = [];
 
-    private $regPersonPersonAdd;
-    private $regPersonPersonsRemove = [];
+    private $addPerson;
+    private $removePersonIds = [];
     
     public function __construct(
         RegPersonFinder $regPersonFinder
@@ -32,10 +32,10 @@ class PersonsUpdateForm extends AbstractForm
         $this->regPersonPersons = $regPersonPersons;
     }
     public function getRegPersonPersonAdd() {
-        return $this->regPersonPersonAdd;
+        return $this->addPerson;
     }
     public function getRegPersonPersonsRemove() {
-        return $this->regPersonPersonsRemove;
+        return $this->removePersonIds;
     }
     public function handleRequest(Request $request)
     {
@@ -48,21 +48,20 @@ class PersonsUpdateForm extends AbstractForm
 
         $data = $request->request->all();
         
-        if ($data['submit'] === 'add') {
-            $role     = $this->filterScalarString($data, 'role');
-            $memberId = $this->filterScalarString($data, 'memberId');
-            if ($role && $memberId) {
-                $this->regPersonPersonAdd = [
-                    'role'     => $role,
-                    'memberId' => $memberId
-                ];
-            }
+        // Adding
+        $addRole     =  $this->filterScalarString($data, 'addRole');
+        $addMemberId =  $this->filterScalarString($data, 'addMemberId');
+        if ($addRole && $addMemberId) {
+            $this->addPerson = [
+                'role'     => $addRole,
+                'memberId' => $addMemberId
+            ];
         }
-        if ($data['submit'] === 'remove') {
-            foreach($data['removeIds'] as $removeId) {
-                if ($removeId) {
-                    $this->regPersonPersonsRemove[] = $removeId;
-                }
+        // Removing
+        $removeIds = $this->filterArray($data,'removeIds');
+        foreach($removeIds as $removeId) {
+            if ($removeId) {
+                $this->removePersonIds[] = $removeId;
             }
         }
         $this->formDataErrors = $errors;
@@ -70,6 +69,10 @@ class PersonsUpdateForm extends AbstractForm
 
     public function render()
     {
+        $addChoices = [
+            'add' => 'Add',
+        ];
+
         $roleChoices = [
             null     => 'Select Relationship',
             'Family' => 'Family',
@@ -83,7 +86,7 @@ class PersonsUpdateForm extends AbstractForm
         $html = <<<EOD
 <table style="min-width: 500px;">
   <tr><th colspan="3" style="text-align: center;">My Crew</th></tr>
-  <tr><th>Relation</th><th>Name</th><th>Remove</th></tr>
+  <tr><th>Relation</th><th>Name</th><th>Add/Remove</th></tr>
 <form method="post" action="{$this->generateUrl('reg_person_persons_update')}" class="form-inline role="form"">
 EOD;
         foreach($this->regPersonPersons as $regPersonPerson) {
@@ -91,37 +94,26 @@ EOD;
         }
         $html .= <<<EOD
   <tr>
+    <td>{$this->renderInputSelect($roleChoices,'Family','addRole',    'addRole')}</td>
+    <td>{$this->renderInputSelect($memberChoices,null,  'addMemberId','addMemberId')}</td>
+    <td>{$this->renderInputSelect($addChoices,'add',    'addChoice',  'addChoice')}</td>
+  </tr>
+  <tr>
     <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td><button type="submit" name="submit" value="remove" class="btn btn-default">Remove Selected Person(s)</button></td>
+    <td><a href="{$this->generateUrl('app_home')}">Back To Home</a></td>
+    <td><button type="submit" name="submit" value="submit" class="btn btn-default">Add/Remove Selected Person(s)</button></td>
   </tr>
 </form>
 </table>
 <br/>
 EOD;
-        $html .= <<<EOD
-<table style="min-width: 500px;">
-  <tr><th colspan="3" style="text-align: center;">Add Person to Crew</th></tr>
-</table>
-<form method="post" action="{$this->generateUrl('reg_person_persons_update')}" class="form-inline role="form"">
-  <div class="form-group">
-      {$this->renderInputSelect($roleChoices,'Family','role','role')}
-  </div>
-  <div class="form-group">
-      {$this->renderInputSelect($memberChoices,null,'memberId','memberId')}
-  </div>
-  <button type="submit" name="submit" value="add" class="btn btn-default">Add Person</button>
-  <a href="{$this->generateUrl('app_home')}">Back To Home</a>
-</form>
-EOD;
-
         return $html;
     }
     private function renderRegPersonPerson(RegPersonPerson $regPersonPerson)
     {
         $role = $regPersonPerson->role;
         $name = $this->escape(($regPersonPerson->memberName));
-        $remove = '&nbsp;';
+        $removeChoices = [null => 'Keep'];
         if ($role !== 'Primary') {
             $memberId = $regPersonPerson->memberId;
             $removeId = $role . ' ' . $memberId;
@@ -129,8 +121,9 @@ EOD;
                  null     => 'Keep',
                 $removeId => 'Remove',
             ];
-            $remove = $this->renderInputSelect($removeChoices,null,'removeIds[]','removeIds');
         }
+        $remove = $this->renderInputSelect($removeChoices,null,'removeIds[]','removeIds');
+
         return <<<EOD
   <tr><td>{$role}</td><td>{$name}</td><td>{$remove}</td></tr>
 EOD;
