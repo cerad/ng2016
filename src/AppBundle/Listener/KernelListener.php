@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -144,6 +145,13 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
      */
     public function onException(GetResponseForExceptionEvent $event)
     {
+        // Copied from Symfony KernelEventListener
+        $exception = $event->getException();
+        $this->logException($exception,
+            sprintf('Uncaught PHP Exception %s: "%s" at %s line %s',
+                get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
+            ));
+
         /** @var Kernel $kernel */
         // $kernel = $event->getKernel(); // Mystery, getEnv is undefined here
         $kernel = $this->container->get('kernel');
@@ -162,4 +170,16 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
 
         $event->setResponse($response);
     }
+    private function logException(\Exception $exception, $message)
+    {
+        $logger = $this->container->get('logger');
+
+        // Copied from Symfony KernelExceptionListener
+        if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+            $logger->critical($message, array('exception' => $exception));
+        } else {
+            $logger->error($message, array('exception' => $exception));
+        }
+    }
+
 }
