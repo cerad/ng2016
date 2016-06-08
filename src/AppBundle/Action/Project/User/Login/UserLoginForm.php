@@ -47,20 +47,20 @@ EOT;
   <div class="form-group">
     <label for="user_login_username">Email</label>
     <input 
-      type="text" id="user_login_username" class="form-control" required
+      type="text" id="user_login_username" class="form-control" required tabIndex="1"
       name="username" value="{$lastUsername}" required placeholder="zAYSO Email" />
   </div>
   <div class="form-group">
-    <label for="user_login_password" ">
+    <label for="user_login_password" "> 
       Password
-      <a href="{$this->router->generate('user_password_reset_request')}"><span style="padding-left: 80px;">Forgot zAYSO Password?</a></span>
+      <a href="{$this->router->generate('user_password_reset_request')}" tabIndex="4"><span style="padding-left: 80px;">Forgot zAYSO Password?</a></span>
     </label>
     <input 
-      type="password" id="user_login_password" class="form-control" required
+      type="password" id="user_login_password" class="form-control" required tabIndex="2"
       name="password" value="" required placeholder="********" />
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit">
+  <button type="submit" class="btn btn-sm btn-primary submit" tabIndex="3">
     <span class="glyphicon glyphicon-edit"></span> Sign In
   </button><br>
   <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
