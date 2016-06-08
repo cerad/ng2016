@@ -54,7 +54,7 @@ class RegPersonUpdater
         $sql = 'SELECT name FROM projectPersons WHERE projectKey = ? AND personKey = ?';
         list($projectId,$phyPersonId) = explode(':',$managerId);
         $stmt = $this->regPersonConn->executeQuery($sql,[$projectId,$phyPersonId]);
-        $row = $stmt->fetch();dump($row);
+        $row = $stmt->fetch();
         if (!$row) return 0; // Should not happen
         $data['managerName'] = $row['name'];
 
