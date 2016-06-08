@@ -8,10 +8,13 @@ use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 
+use AppBundle\Action\Project\User\ProjectUser;
+use AppBundle\Action\RegPerson\RegPersonFinder;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeView extends AbstractView2
 {
+    /** @var  ProjectUser */
     private $user;
 
     /** @var  ProjectPerson */
@@ -22,11 +25,16 @@ class HomeView extends AbstractView2
 
     private $projectPersonViewDecorator;
 
+    private $regPersonFinder;
+
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
-        ProjectPersonViewDecorator $projectPersonViewDecorator
+        ProjectPersonViewDecorator $projectPersonViewDecorator,
+        RegPersonFinder $regPersonFinder
     )
     {
+        $this->regPersonFinder = $regPersonFinder;
+
         $this->projectPersonRepository    = $projectPersonRepository;
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
     }
@@ -52,6 +60,8 @@ class HomeView extends AbstractView2
 <div class="account-person-list">
 {$this->renderAccountInformation()}
 {$this->renderRegistration()}
+{$this->renderCrewInformation()}
+{$this->renderTeamInformation()}
 {$this->renderAysoInformation()}
 {$this->renderAvailability()}
 </div>
@@ -62,6 +72,60 @@ EOD;
         return $this->renderBaseTemplate($content);
     }
 
+    /* ====================================================
+     * Crew Information
+     */
+    private function renderCrewInformation()
+    {
+        $regPersonPersons = $this->regPersonFinder->findRegPersonPersons($this->user->getRegPersonId());
+
+        $html = <<<EOD
+<table class="tableClass" >
+  <tr><th colspan="2" style="text-align: center;">My Crew</th></tr>
+EOD;
+
+        foreach($regPersonPersons as $regPersonPerson) {
+            $html .= <<<EOD
+  <tr><td style="text-align: right;">{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
+EOD;
+        }
+        $html .= <<<EOD
+  <tr><td style="text-align: center;" colspan="2">
+    <a href="{$this->generateUrl('reg_person_persons_update')}">
+        Add/Remove People
+    </a>
+  </td></tr>
+</table>
+EOD;
+        return $html;
+    }
+    /* ====================================================
+     * Crew Information
+     */
+    private function renderTeamInformation()
+    {
+        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($this->user->getRegPersonId());
+
+        $html = <<<EOD
+<table class="tableClass" >
+  <tr><th colspan="2" style="text-align: center;">My Teams</th></tr>
+EOD;
+
+        foreach($regPersonTeams as $regPersonTeam) {
+            $html .= <<<EOD
+  <tr><td style="text-align: right;">{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
+EOD;
+        }
+        $html .= <<<EOD
+  <tr><td style="text-align: center;" colspan="2">
+    <a href="{$this->generateUrl('reg_person_teams_update')}">
+        Add/Remove Teams
+    </a>
+  </td></tr>
+</table>
+EOD;
+        return $html;
+    }
     /* ====================================================
      * Account Information
      * TODO Move to own teamplate

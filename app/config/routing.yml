@@ -35,6 +35,10 @@ app_project_person:
     resource: "@AppBundle/Action/Project/Person/routes.yml"
     prefix: /project/person
 
+app_reg_person:
+    resource: "@AppBundle/Action/RegPerson/config/routes.yml"
+    prefix: /project/person
+
 app_project_person_admin:
     resource: '@AppBundle/Action/Project/Person/Admin/routes.yml'
     prefix: /project/person/admin

@@ -71,6 +71,7 @@ services:
         arguments:
             - '@project_person_repository_v2'
             - '@project_person_view_decorator'
+            - '@reg_person_finder'
 
     # action admin
     admin_switch_user_form:

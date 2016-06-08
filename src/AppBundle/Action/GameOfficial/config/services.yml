@@ -23,13 +23,14 @@ services:
             - '@game_connection'
             - '@project_person_connection'
             - '@security.access.decision_manager'
+            - '@reg_person_finder'
 
     # =========================================================================
     # Assign by assignee
 
     game_official_assignee_finder:
         class: AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeFinder
-        arguments: ['@project_person_connection']
+        arguments: ['@project_person_connection','@reg_person_finder']
 
     game_official_assign_by_assignee_form:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm

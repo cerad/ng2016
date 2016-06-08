@@ -90,6 +90,10 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess, \Serializable
 
         return;
     }
+    public function getProjectId()
+    {
+        return $this->projectKey;
+    }
     public function getPersonId()
     {
         return $this->personKey;
@@ -97,5 +101,9 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess, \Serializable
     public function getPersonName()
     {
         return $this->name;
+    }
+    public function getRegPersonId()
+    {
+        return $this->projectKey . ':' . $this->personKey;
     }
 }

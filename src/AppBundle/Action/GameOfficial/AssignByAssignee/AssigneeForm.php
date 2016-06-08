@@ -109,7 +109,8 @@ class AssigneeForm extends AbstractForm
             $assignState = 'Requested';
         }
         // TODO Might need further processing to verify
-        $gameOfficialChoices = $this->assigneeFinder->findCrew($this->getUser(), $gameOfficial);
+        // $gameOfficialChoices = $this->assigneeFinder->findCrew($this->getUser(), $gameOfficial);
+        $gameOfficialChoices = $this->assigneeFinder->findCrewChoices($this->getUser()->getRegPersonId());
         
         $html = <<<EOD
 <table style="min-width: 500px;">
