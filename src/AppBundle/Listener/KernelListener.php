@@ -6,6 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,6 +31,7 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
             KernelEvents::REQUEST    => [['onRequest']],
             KernelEvents::CONTROLLER => [['onController']],
             KernelEvents::VIEW       => [['onView']],
+            KernelEvents::EXCEPTION  => [['onException']],
         ];
     }
     public function __construct($secureRoutes)
@@ -134,5 +137,29 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
     private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+    /* ==========================================
+     * Need my own exception handler since the default one relies on twig
+     *
+     */
+    public function onException(GetResponseForExceptionEvent $event)
+    {
+        /** @var Kernel $kernel */
+        // $kernel = $event->getKernel(); // Mystery, getEnv is undefined here
+        $kernel = $this->container->get('kernel');
+        $env = $kernel->getEnvironment();
+        if ($env !== 'prod') {
+            return;
+        }
+        /*
+        if ($kernel->getEnvironment() !== 'prod') {
+            return null;
+        }*/
+        // TODO Add logger
+
+        // Just redirect to home
+        $response = $this->redirectToRoute('app_welcome');
+
+        $event->setResponse($response);
     }
 }

@@ -15,17 +15,9 @@ app_game_official:
     resource: "@AppBundle/Action/GameOfficial/config/routes.yml"
     prefix: /game/official
 
-#app_schedule:
-#    resource: "@AppBundle/Action/Schedule/routes.yml"
-#    prefix: /schedule
-
-schedule_2016:
+app_schedule_2016:
     resource: "@AppBundle/Action/Schedule2016/routes.yml"
     prefix: /schedule
-
-#app_results:
-#    resource: "@AppBundle/Action/Results/routes.yml"
-#    prefix: /results
 
 app_results_2016:
     resource: "@AppBundle/Action/Results2016/routes.yml"
@@ -44,6 +36,6 @@ app_project_person_admin:
     prefix: /project/person/admin
 
 #   must load last
-app__routes__mystery:
+app__app:
     resource: "@AppBundle/Action/App/routes.yml"
     prefix:   /
