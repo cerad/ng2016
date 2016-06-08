@@ -27,10 +27,10 @@ app_admin:
 #   unknown path trap
 #   must be loaded last
 
-app__mystery__url:
-    path: /{url}/
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /welcome
-        requirements:
-            url: [.*]
+#app__mystery__url:
+#    path: /{url}/
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:urlRedirect
+#        path: /welcome
+#        requirements:
+#            url: [.*]
