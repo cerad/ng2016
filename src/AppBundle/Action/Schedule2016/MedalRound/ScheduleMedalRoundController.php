@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Schedule2016;
+namespace AppBundle\Action\Schedule2016\MedalRound;
 
 use AppBundle\Action\AbstractController;
 

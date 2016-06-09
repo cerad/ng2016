@@ -145,13 +145,6 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
      */
     public function onException(GetResponseForExceptionEvent $event)
     {
-        // Copied from Symfony KernelEventListener
-        $exception = $event->getException();
-        $this->logException($exception,
-            sprintf('Uncaught PHP Exception %s: "%s" at %s line %s',
-                get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
-            ));
-
         /** @var Kernel $kernel */
         // $kernel = $event->getKernel(); // Mystery, getEnv is undefined here
         $kernel = $this->container->get('kernel');
@@ -159,13 +152,14 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
         if ($env !== 'prod') {
             return;
         }
-        /*
-        if ($kernel->getEnvironment() !== 'prod') {
-            return null;
-        }*/
-        // TODO Add logger
 
-        // Just redirect to home
+        // Copied from Symfony KernelEventListener
+        $exception = $event->getException();
+        $this->logException($exception, sprintf('UNCAUGHT PHP Exception %s: "%s" at %s line %s',
+            get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()
+        ));
+
+        // Just redirect to home, no real need for a fail whale
         $response = $this->redirectToRoute('app_welcome');
 
         $event->setResponse($response);

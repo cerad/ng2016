@@ -1,9 +1,5 @@
 <?php
-namespace AppBundle\Action\Schedule2016;
-
-use AppBundle\Action\Schedule2016\ScheduleMedalRoundCalculator;
-
-use Symfony\Component\Yaml\Yaml;
+namespace AppBundle\Action\Schedule2016\MedalRound;
 
 use PHPUnit_Framework_TestCase;
 
@@ -13,7 +9,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        parent::setup();
+        parent::setUp();
         
         $this->scheduleMedalRoundCalculator = new ScheduleMedalRoundCalculator;
     }
@@ -21,7 +17,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
     public function testGenerateQuarterFinals()
     {
         /* one pool */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp1_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/TestData/pp1_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
