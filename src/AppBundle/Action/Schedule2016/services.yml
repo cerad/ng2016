@@ -163,6 +163,38 @@ services:
             - '@abstract_exporter_txt'
 
     # ===============================================================
+    # Schedule My
+    schedule_my_controller_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMyController
+        parent: abstract_controller
+        arguments:
+            - '@schedule_search_form_2016'
+            - '@schedule_finder_2016'
+            - '%project_choices%'
+            - '%projects%'
+
+    schedule_my_template_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleTemplate
+        parent: schedule_template_2016
+        arguments:
+            - 'My Game Schedule'
+            -  true
+            -  false
+
+    schedule_my_view_html_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleView
+        parent: abstract_view2
+        arguments:
+            - '@schedule_search_form_2016'
+            - '@schedule_my_template_2016'
+
+    schedule_my_view_txt_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMyViewFile
+        parent: abstract_view2
+        arguments:
+            - '@abstract_exporter_txt'
+
+    # ===============================================================
     # Schedule Team
     schedule_team_search_form_2016:
         class:  AppBundle\Action\Schedule2016\Team\ScheduleTeamSearchForm

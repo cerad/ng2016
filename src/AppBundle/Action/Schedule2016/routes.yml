@@ -40,6 +40,13 @@ schedule_game_2016:
         _view_pdf:   schedule_game_view_pdf
         _view_json:  schedule_game_view_json
 
+schedule_my_2016:
+    path: /ny.{_format}
+    defaults:
+        _format: html
+        _controller: schedule_my_controller_2016
+        _view_html:  schedule_my_view_html_2016
+        _view_txt:   schedule_game_view_txt_2016
 
 schedule_medalroundcalc_2016:
     path: /medalroundcalc.{_format}
