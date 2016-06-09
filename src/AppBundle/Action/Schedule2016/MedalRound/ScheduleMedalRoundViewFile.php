@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Schedule2016;
+namespace AppBundle\Action\Schedule2016\MedalRound;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,8 +10,6 @@ use AppBundle\Action\AbstractExporter;
 use AppBundle\Action\Results2016\ResultsStandingsCalculator;
 use AppBundle\Action\Results2016\ResultsFinder;
 use AppBundle\Action\Results2016\ResultsPool;
-
-use AppBundle\Action\Schedule2016\ScheduleMedalRoundCalculator;
 
 class ScheduleMedalRoundViewFile extends AbstractView2
 {

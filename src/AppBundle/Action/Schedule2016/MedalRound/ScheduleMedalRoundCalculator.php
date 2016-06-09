@@ -1,9 +1,5 @@
 <?php
-namespace AppBundle\Action\Schedule2016;
-
-use Doctrine\DBAL\Connection;
-
-use AppBundle\Action\Results2016\ResultsStandingsCalculator;
+namespace AppBundle\Action\Schedule2016\MedalRound;
 
 class ScheduleMedalRoundCalculator 
 {
