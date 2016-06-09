@@ -5,19 +5,25 @@ use PHPUnit_Framework_TestCase;
 
 class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
 {
+    private $testDataDir;
+
+    /** @var  ScheduleMedalRoundCalculator */
     private $scheduleMedalRoundCalculator;
     
     public function setUp()
     {
         parent::setUp();
         
-        $this->scheduleMedalRoundCalculator = new ScheduleMedalRoundCalculator;
+        $this->scheduleMedalRoundCalculator = new ScheduleMedalRoundCalculator();
+
+        // Linux directory names are case sensitive
+        $this->testDataDir = __DIR__ . '/TestData';
     }
     
     public function testGenerateQuarterFinals()
     {
         /* one pool */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/TestData/pp1_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp1_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -33,7 +39,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('QF:4:Away:A 6th',$matches[6][4]);
 
         /* two Pools */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp2_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp2_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -55,7 +61,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("#13 01-H-0080 Schieldge", $matches[4][1]);
 
         /* three Pools */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp3_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp3_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -69,7 +75,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("#21 01-C-0002 Joe",$matches[127][1]);
 
         /* four Pools */
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/pp4_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp4_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -85,7 +91,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
     
     public function testGenerateSemiFinals()
     {
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/qf_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/qf_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateSemiFinals($games);
         $matches = $matches['Medal Round SF']['data'];
@@ -102,7 +108,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
     
     public function testGenerateFinalMatches()
     {
-        $games = unserialize(base64_decode(file_get_contents(__DIR__ . '/testdata/sf_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/sf_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateFinals($games);
         $matches = $matches['Medal Round FM']['data'];
