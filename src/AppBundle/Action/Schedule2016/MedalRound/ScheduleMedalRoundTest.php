@@ -23,7 +23,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
     public function testGenerateQuarterFinals()
     {
         /* one pool */
-        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp1_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/PP1_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -39,7 +39,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('QF:4:Away:A 6th',$matches[6][4]);
 
         /* two Pools */
-        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp2_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/PP2_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -61,7 +61,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("#13 01-H-0080 Schieldge", $matches[4][1]);
 
         /* three Pools */
-        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp3_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/PP3_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
@@ -75,7 +75,7 @@ class ScheduleMedalRoundCalculatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("#21 01-C-0002 Joe",$matches[127][1]);
 
         /* four Pools */
-        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/pp4_games.dat')));
+        $games = unserialize(base64_decode(file_get_contents($this->testDataDir . '/PP4_games.dat')));
 
         $matches = $this->scheduleMedalRoundCalculator->generateQuarterFinals($games);      
         $matches = $matches['Medal Round QF']['data'];
