@@ -91,7 +91,10 @@ class ScheduleOfficialController extends AbstractController2
         // For now, restrict to one project
         $searchData['projectIds'] = [$searchData['projectId']];
         $searchData['wantOfficials'] = true;
-        
+
+        // Shows my games
+        $searchData['regPersonId'] = $this->getUserRegPersonId();
+
         $games = $this->scheduleFinder->findGames($searchData,true);
 
         $request->attributes->set('games', $games);

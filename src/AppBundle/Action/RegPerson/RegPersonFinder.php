@@ -65,7 +65,7 @@ EOD;
     {
         $sql = 'SELECT memberId FROM regPersonPersons WHERE managerId = ?';
         $stmt = $this->regPersonConn->executeQuery($sql,[$regPersonId]);
-        $regPersonPersonIds[$regPersonId] = [$regPersonId];
+        $regPersonPersonIds[$regPersonId] = $regPersonId;
         while($row = $stmt->fetch()) {
             $regPersonPersonIds[$row['memberId']] = $row['memberId'];
         }
