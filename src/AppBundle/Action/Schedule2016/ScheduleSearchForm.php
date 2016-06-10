@@ -31,12 +31,15 @@ class ScheduleSearchForm extends AbstractForm
             'ages'      => $this->filterArray ($data,'ages'),
             'dates'     => $this->filterArray ($data,'dates'),
             'sortBy'    => $this->filterScalar($data,'sortBy',true),
+            'filter'    => $this->filterScalar($data,'filter'),
         ]);
         $this->formDataErrors = $errors;
     }
     public function render()
     {
         $formData = $this->formData;
+
+        $filter = isset($formData['filter']) ? $formData['filter'] : null;
 
         $projectId = $formData['projectId'];
         $project   = $this->projects[$projectId];
@@ -67,7 +70,15 @@ class ScheduleSearchForm extends AbstractForm
     <td>{$this->renderInputSearchCheckbox($project['programs'],$formData['programs'],'programs[]','Programs')}</td>
     <td>{$this->renderInputSearchCheckbox($project['ages'],    $formData['ages'],    'ages[]',    'Ages')    }</td>
     <td>{$this->renderInputSearchCheckbox($project['genders'], $formData['genders'], 'genders[]', 'Genders') }</td>
-  </tr></table>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <label for="filter">Filter</label>
+      <input 
+        type="text" name="filter" id="filter" class="form-control" size="30"
+        value="{$filter}" placeholder="Filter Games" />
+    </td></tr>
+  </table>
   </div>
   <div class="schedule-search col-xs-8 col-xs-offset-2 clearfix">
 

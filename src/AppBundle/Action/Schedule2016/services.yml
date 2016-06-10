@@ -48,7 +48,7 @@ services:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameController
         parent: abstract_controller
         arguments:
-            - '@schedule_game_search_form_2016'
+            - '@schedule_search_form_2016'
             - '@schedule_finder_2016'
             - '%project_choices%'
             - '%projects%'
@@ -59,10 +59,10 @@ services:
         arguments: ['Game Schedule']
 
     schedule_game_view_html_2016:
-        class:  AppBundle\Action\Schedule2016\Game\ScheduleGameView
+        class:  AppBundle\Action\Schedule2016\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_game_search_form_2016'
+            - '@schedule_search_form_2016'
             - '@schedule_game_template_2016'
 
     schedule_game_writer_excel:
@@ -88,7 +88,6 @@ services:
 
     # ===============================================================
     # Schedule Official
-
     schedule_official_controller_2016:
         class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialController
         parent: abstract_controller

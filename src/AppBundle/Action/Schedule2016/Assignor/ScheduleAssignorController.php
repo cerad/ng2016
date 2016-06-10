@@ -3,6 +3,7 @@ namespace AppBundle\Action\Schedule2016\Assignor;
 
 use AppBundle\Action\AbstractController2;
 
+use AppBundle\Action\Schedule2016\ScheduleControllerTrait;
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 
 use AppBundle\Action\Schedule2016\ScheduleSearchForm;
@@ -10,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ScheduleAssignorController extends AbstractController2
 {
+    use ScheduleControllerTrait;
+
     private $searchForm;
     private $scheduleFinder;
 
@@ -44,6 +47,7 @@ class ScheduleAssignorController extends AbstractController2
             'ages'       => ['U14'],
             'dates'      => [$date],
             'sortBy'     => 1,
+            'filter'     => null,
         ];
         // Save selected teams in session
         $session    = $request->getSession();
@@ -92,7 +96,11 @@ class ScheduleAssignorController extends AbstractController2
         
         $games = $this->scheduleFinder->findGames($searchData,true);
 
-        $request->attributes->set('games', $games);
+        $games = $this->filterGames($games,$searchData['filter']);
+
+        $request->attributes->set('games',  $games);
+        $request->attributes->set('filter', $searchData['filter']);
+
         return null;
     }
 }
