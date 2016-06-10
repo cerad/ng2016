@@ -124,7 +124,6 @@ services:
 
     # ===============================================================
     # Schedule Assignor
-
     schedule_assignor_controller_2016:
         class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorController
         parent: abstract_controller
@@ -165,28 +164,27 @@ services:
 
     # ===============================================================
     # Schedule My
+    schedule_my_search_form_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMySearchForm
+        parent: abstract_form
+
     schedule_my_controller_2016:
         class:  AppBundle\Action\Schedule2016\My\ScheduleMyController
         parent: abstract_controller
         arguments:
-            - '@schedule_search_form_2016'
+            - '@schedule_my_search_form_2016'
             - '@schedule_finder_2016'
-            - '%project_choices%'
-            - '%projects%'
 
     schedule_my_template_2016:
         class:  AppBundle\Action\Schedule2016\ScheduleTemplate
         parent: schedule_template_2016
-        arguments:
-            - 'My Game Schedule'
-            -  true
-            -  false
+        arguments: ['My Game Schedule', true, false, '@game_official_assign_workflow']
 
     schedule_my_view_html_2016:
-        class:  AppBundle\Action\Schedule2016\ScheduleView
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMyView
         parent: abstract_view2
         arguments:
-            - '@schedule_search_form_2016'
+            - '@schedule_my_search_form_2016'
             - '@schedule_my_template_2016'
 
     schedule_my_view_txt_2016:
@@ -246,7 +244,6 @@ services:
             
     # ===============================================================
     # Schedule MedalRoundLogic
-    
     schedule_medalroundcalc_controller_2016:
         class: AppBundle\Action\Schedule2016\MedalRound\ScheduleMedalRoundController
         parent: abstract_controller

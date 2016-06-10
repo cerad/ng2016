@@ -41,7 +41,7 @@ schedule_game_2016:
         _view_json:  schedule_game_view_json
 
 schedule_my_2016:
-    path: /ny.{_format}
+    path: /my.{_format}
     defaults:
         _format: html
         _controller: schedule_my_controller_2016

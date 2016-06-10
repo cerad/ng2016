@@ -276,8 +276,8 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="#">MY SCHEDULE</a></li>
-            <li><a href="#">REQUEST ASSIGNMENTS</a></li>
+            <li><a href="{$this->generateUrl('schedule_my_2016')}">MY SCHEDULE</a></li>
+            <li><a href="{$this->generateUrl('schedule_official_2016')}">REQUEST ASSIGNMENTS</a></li>
             <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
          </ul>
        </li>
