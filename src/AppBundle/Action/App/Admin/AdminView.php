@@ -125,8 +125,8 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="#">View Teams</a></li>
-      <li><a href="#">Export Teams (Excel)</a></li>
+      <li><a href="{$this->generateUrl('game_listing')}">View Teams</a></li>
+      <li><a href="{$this->generateUrl('regteam_2016', ['_format' => 'xls'])}">Export Teams (Excel)</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
