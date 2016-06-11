@@ -23,9 +23,11 @@ const appTask = function() {
 
     // Javascripts
     gulp.src([
-            appPublicDir + '/js/zayso.js',
-            appPublicDir + '/js/ie10-viewport-bug-workaround.js'
+            appPublicDir + '/js/cerad-checkbox-all.js',
+            appPublicDir + '/js/ie10-viewport-bug-workaround.js',
+            appPublicDir + '/js/cerad-select-bgcolor.js',
         ])
+        .pipe(concat("zayso.js"))
         .pipe(gulp.dest('web/js'));
         
     // images

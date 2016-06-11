@@ -46,14 +46,14 @@ class AdminUpdateForm extends AbstractForm
             'type'      => 'select',
             'label'     => 'Yes / No',
             'default'   =>  null,
-            'choices'   => ['no'=>'No','yes'=>'Yes','maybe'=>'Maybe',null=>'No','nr'=>'Not Required'],
+            'choices'   => ['yes'=>'Yes',null=>'No','maybe'=>'Maybe','nr'=>'Not Required'],
         );
         
         $this->formControls['regYear'] = array(
             'type'      => 'select',
             'label'     => 'MemYear',
-            'default'   =>  'my2016',
-            'choices'   => ['my2016'=>'MY2016','my2015'=>'MY2015',null=>'***'],
+            'default'   =>  null,
+            'choices'   => ['MY2016'=>'MY2016','MY2015'=>'MY2015',null=>'***'],
         );
 
         $this->personView = $projectPersonViewDecorator;
@@ -87,6 +87,9 @@ class AdminUpdateForm extends AbstractForm
 
         $orgKey = explode(':',$projectPerson->orgKey)[0];
         $fedKey = explode(':',$projectPerson->fedKey)[0];
+
+        $orgKey = empty($orgKey) ? 'AYSOR' : $orgKey;
+        $fedKey = empty($fedKey) ? 'AYSOV' : $fedKey;
         
         //update person array with form data
         $personData = $data;
@@ -100,7 +103,7 @@ class AdminUpdateForm extends AbstractForm
         $projectPerson->shirtSize = $personData['shirtSize'];
         $projectPerson->fedKey    = $fedKey . ":" . $this->filterScalarString($data,'fedKeyId');
         $projectPerson->orgKey    = $orgKey . ":" . $strRegion;
-        $projectPerson->regYear   = $personData['regYear'];
+        $projectPerson->regYear   = strtoupper($personData['regYear']);
 
         //update plans
         $projectPersonPlans = &$projectPerson->plans;
@@ -133,13 +136,15 @@ class AdminUpdateForm extends AbstractForm
         };
 
         $projectPerson['notes']             = $this->filterScalarString($data,'notes');
-
         //update certs
-        if (isset($projectPerson->roles['CERT_SAFE_HAVEN']) and $personData['userSH']) {
-            $projectPerson->roles['CERT_SAFE_HAVEN']['verified'] = $personData['userSH'] == 'yes' ? 1 : 0;
+        if (isset($projectPerson->roles['CERT_SAFE_HAVEN'])) {
+            $projectPerson->roles['CERT_SAFE_HAVEN']['verified'] = $personData['userSH'] === 'yes' ? true : null;
         }
         if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
-            $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] == 'yes' ? 1 : 0;            
+            $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] === 'yes' ? true : null;            
+        }
+        if (isset($projectPerson->roles['CERT_BACKGROUND_CHECK'])) {
+            $projectPerson->roles['CERT_BACKGROUND_CHECK']['verified'] = $personData['userBackground'] === 'yes' ? true : null;            
         }
 
         //update roles
@@ -150,14 +155,16 @@ class AdminUpdateForm extends AbstractForm
             $projectPersonRoleReferee   = &$projectPerson->roles['ROLE_REFEREE'];
     
             $projectPersonCertReferee['badge']  = $personData['badge'];
-            $projectPersonCertReferee->verified = true;
-            $projectPersonRoleReferee['approved']   = isset($personData['approvedRef']) ? true : false;
+            $projectPersonRoleReferee['approved']   = isset($personData['approvedRef']) ? true : null;
+            if ($projectPersonRoleReferee['approved']) {
+                $projectPersonCertReferee['verified'] = true;
+            }
         }
 
         if (isset($projectPerson->roles['ROLE_VOLUNTEER'])) {
             $projectPersonRoleVolunteer   = &$projectPerson->roles['ROLE_VOLUNTEER'];
     
-            $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : false;
+            $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : null;
         }
         //update user info
         $projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
@@ -286,6 +293,8 @@ EOD;
         $roleVol        = $personView->getRoles();
         $roleVol        = isset($roleVol['ROLE_VOLUNTEER']) ? $roleVol['ROLE_VOLUNTEER'] : null;
         $approvedVol    = isset($roleVol['approved']) ? (bool) $roleVol['approved'] : false;
+        
+        $classRegYear   = ' ' . (empty($personView->regYear) ? $personView->dangerClass : '');
 
         $sar = explode('/', $personView->orgKey);
         switch (count($sar)) {
@@ -301,6 +310,11 @@ EOD;
                 $region = ltrim($sar[2], '0');
                 $state = ltrim($sar[3], ' ');
                 break;
+            default:
+                $section = '';
+                $area = '';
+                $region = '';
+                $state = '';
         }
 
         $html = <<<EOD
@@ -312,7 +326,7 @@ EOD;
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="regYear">Mem Year:</label>
-      {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control')}
+      {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control'.$classRegYear)}
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userRegion">AYSO Region:</label>
