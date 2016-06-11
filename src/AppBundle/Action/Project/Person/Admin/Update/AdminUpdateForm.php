@@ -45,8 +45,8 @@ class AdminUpdateForm extends AbstractForm
         $this->formControls['YesNo'] = array(
             'type'      => 'select',
             'label'     => 'Yes / No',
-            'default'   =>  null,
-            'choices'   => ['no'=>'No','yes'=>'Yes','maybe'=>'Maybe',null=>'No','nr'=>'Not Required'],
+            'default'   =>  'no',
+            'choices'   => ['yes'=>'Yes',null=>'No','maybe'=>'Maybe','nr'=>'Not Required'],
         );
         
         $this->formControls['regYear'] = array(
@@ -87,6 +87,9 @@ class AdminUpdateForm extends AbstractForm
 
         $orgKey = explode(':',$projectPerson->orgKey)[0];
         $fedKey = explode(':',$projectPerson->fedKey)[0];
+
+        $orgKey = empty($orgKey) ? 'AYSOR' : $orgKey;
+        $fedKey = empty($fedKey) ? 'AYSOV' : $fedKey;
         
         //update person array with form data
         $personData = $data;
@@ -100,7 +103,7 @@ class AdminUpdateForm extends AbstractForm
         $projectPerson->shirtSize = $personData['shirtSize'];
         $projectPerson->fedKey    = $fedKey . ":" . $this->filterScalarString($data,'fedKeyId');
         $projectPerson->orgKey    = $orgKey . ":" . $strRegion;
-        $projectPerson->regYear   = $personData['regYear'];
+        $projectPerson->regYear   = strtoupper($personData['regYear']);
 
         //update plans
         $projectPersonPlans = &$projectPerson->plans;
@@ -301,6 +304,11 @@ EOD;
                 $region = ltrim($sar[2], '0');
                 $state = ltrim($sar[3], ' ');
                 break;
+            default:
+                $section = '';
+                $area = '';
+                $region = '';
+                $state = '';
         }
 
         $html = <<<EOD
