@@ -97,6 +97,13 @@ legend { padding-bottom: 10px; }
 form.cerad_common_form1 fieldset div.col-xs-10 {
     padding: 0;
 }
+.input-group-btn { padding-left: 20px; }
+.input-group > .form-control {
+    width: 600px;
+    margin: 10px;
+}
+    
+.btn-file { margin: 0; }
 @media only screen and (max-width: 768px){
     
     .panel-float-left {
