@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Action\Schedule2016;
 
+use AppBundle\Action\RegPerson\RegPersonFinder;
 use AppBundle\Common\QueryBuilderTrait;
 use Doctrine\DBAL\Connection;
 
@@ -14,10 +15,17 @@ class ScheduleFinder
     /** @var  Connection */
     private $regTeamConn;
 
-    public function __construct(Connection $gameConn, Connection $regTeamConn)
-    {
-        $this->gameConn    = $gameConn;
-        $this->regTeamConn = $regTeamConn;
+    /** @var RegPersonFinder  */
+    private $regPersonFinder;
+
+    public function __construct(
+        Connection $gameConn,
+        Connection $regTeamConn,
+        RegPersonFinder $regPersonFinder
+    ) {
+        $this->gameConn        = $gameConn;
+        $this->regTeamConn     = $regTeamConn;
+        $this->regPersonFinder = $regPersonFinder;
     }
 
     /**
@@ -27,9 +35,15 @@ class ScheduleFinder
      */
     public function findGames(array $criteria, $objects = true)
     {
-        // Now find unique game ids
+        // Basic query
         $gameIds = $this->findGameIds($criteria);
-
+        
+        // Add in reg person games
+        $gameIds = array_merge($gameIds,$this->findGameIdsForRegPerson($criteria));
+        
+        // Amd move forward
+        $gameIds = array_values($gameIds);
+        
         // Load the games
         $games = $this->findGamesForIds($gameIds);
 
@@ -129,6 +143,11 @@ EOD;
     }
     private function findGameIds(array $criteria)
     {
+        // Very much a hack, ignore most of the criteria for my schedule
+        $doGeneral = isset($criteria['doGeneral']) ? $criteria['doGeneral'] : true;
+        if (!$doGeneral) {
+            return [];
+        }
         $qb = $this->gameConn->createQueryBuilder();
         $qb->select('DISTINCT game.gameId');
         $qb->from('games','game');
@@ -154,11 +173,74 @@ EOD;
         $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
         $gameIds = [];
         while($gameId = $stmt->fetch()) {
-            $gameIds[] = $gameId['gameId'];
+            $gameIds[$gameId['gameId']] = $gameId['gameId'];
         }
+        return $gameIds; // Indexed to allow merging multiple queries
+    }
+    /* ==========================================
+     * Little bit hackish but want to query all games
+     * That impact a particular person
+     * Need an or condition
+     */
+    private function findGameIdsForRegPerson(array $criteria)
+    {
+        // Make sure have a person
+        $regPersonId = isset($criteria['regPersonId']) ? $criteria['regPersonId'] : null;
+        if (!$regPersonId) {
+            return [];
+        }
+        // Get the crew
+        $criteria['regPersonIds'] = $this->regPersonFinder->findRegPersonPersonIds($regPersonId);
+
+        // Get ids for game officials
+        $qb = $this->gameConn->createQueryBuilder();
+        $qb->select('DISTINCT game.gameId');
+        $qb->from('games','game');
+        $qb->leftJoin('game','gameOfficials','gameOfficial','gameOfficial.gameId = game.gameId');
+        $qb->orderBy ('game.gameId');
+
+        // Suffice for now, might want to add some of the criteria back in later
+        $whereMeta = [
+            'projectIds'   => 'game.projectId',
+            'dates'        => 'DATE(game.start)',
+            'regPersonIds' => 'gameOfficial.regPersonId',
+        ];
+        list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
+        $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
+        $gameIds = [];
+        while($gameId = $stmt->fetch()) {
+            $gameIds[$gameId['gameId']] = $gameId['gameId'];
+        }
+
+        // Now do a query for any related teams
+        $regTeamIds = $this->regPersonFinder->findRegPersonTeamIds($regPersonId);
+        if (count($regTeamIds) < 1) {
+            return $gameIds;
+        }
+        $criteria['regTeamIds'] = $regTeamIds;
+
+        // Get ids for registered teams
+        $qb = $this->gameConn->createQueryBuilder();
+        $qb->select('DISTINCT game.gameId');
+        $qb->from('games','game');
+        $qb->leftJoin('game',    'gameTeams','gameTeam','gameTeam.gameId = game.gameId');
+        $qb->leftJoin('gameTeam','poolTeams','poolTeam','poolTeam.poolTeamId = gameTeam.poolTeamId');
+        $qb->orderBy ('game.gameId');
+
+        // Suffice for now, might want to add some of the criteria back in later
+        $whereMeta = [
+            'projectIds'   => 'game.projectId',
+            'dates'        => 'DATE(game.start)',
+            'regTeamIds'   => 'poolTeam.regTeamId',
+        ];
+        list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
+        $stmt = $qb->getConnection()->executeQuery($qb->getSQL(),$values,$types);
+        while($gameId = $stmt->fetch()) {
+            $gameIds[$gameId['gameId']] = $gameId['gameId'];
+        }
+
         return $gameIds;
     }
-    
     /* =======================================================================
      * Sort after the load to avoid joins
      * Plus it is a bit more flexible and readable

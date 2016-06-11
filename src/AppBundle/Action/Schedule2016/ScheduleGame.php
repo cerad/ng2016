@@ -45,6 +45,13 @@ class ScheduleGame
         'status'     => 'string', // Normal, Played, Forfeited, Cancelled, Weather, Delayed, ToBeRescheduled
     ];
 
+    /**
+     * @return ScheduleGameOfficial[]
+     */
+    public function getOfficials()
+    {
+        return $this->officials;
+    }
     public function __get($name)
     {
         switch($name) {
@@ -55,7 +62,6 @@ class ScheduleGame
             case 'referee':   return $this->officials[1];
             case 'ar1':       return $this->officials[2];
             case 'ar2':       return $this->officials[3];
-            case 'officials': return $this->officials;
 
             case 'dow':
                 $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);

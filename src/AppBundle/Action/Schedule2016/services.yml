@@ -20,6 +20,7 @@ services:
         arguments:
             - '@doctrine.dbal.ng2016games_connection' # gameConn
             - '@doctrine.dbal.ng2016games_connection' # regTeamConn
+            - '@reg_person_finder'
 
     schedule_template_2016:
         abstract: true
@@ -47,7 +48,7 @@ services:
         class:  AppBundle\Action\Schedule2016\Game\ScheduleGameController
         parent: abstract_controller
         arguments:
-            - '@schedule_game_search_form_2016'
+            - '@schedule_search_form_2016'
             - '@schedule_finder_2016'
             - '%project_choices%'
             - '%projects%'
@@ -58,10 +59,10 @@ services:
         arguments: ['Game Schedule']
 
     schedule_game_view_html_2016:
-        class:  AppBundle\Action\Schedule2016\Game\ScheduleGameView
+        class:  AppBundle\Action\Schedule2016\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_game_search_form_2016'
+            - '@schedule_search_form_2016'
             - '@schedule_game_template_2016'
 
     schedule_game_writer_excel:
@@ -87,7 +88,6 @@ services:
 
     # ===============================================================
     # Schedule Official
-
     schedule_official_controller_2016:
         class:  AppBundle\Action\Schedule2016\Official\ScheduleOfficialController
         parent: abstract_controller
@@ -123,7 +123,6 @@ services:
 
     # ===============================================================
     # Schedule Assignor
-
     schedule_assignor_controller_2016:
         class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorController
         parent: abstract_controller
@@ -158,6 +157,37 @@ services:
 
     schedule_assignor_view_txt_2016:
         class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
+        parent: abstract_view2
+        arguments:
+            - '@abstract_exporter_txt'
+
+    # ===============================================================
+    # Schedule My
+    schedule_my_search_form_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMySearchForm
+        parent: abstract_form
+
+    schedule_my_controller_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMyController
+        parent: abstract_controller
+        arguments:
+            - '@schedule_my_search_form_2016'
+            - '@schedule_finder_2016'
+
+    schedule_my_template_2016:
+        class:  AppBundle\Action\Schedule2016\ScheduleTemplate
+        parent: schedule_template_2016
+        arguments: ['My Game Schedule', true, false, '@game_official_assign_workflow']
+
+    schedule_my_view_html_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMyView
+        parent: abstract_view2
+        arguments:
+            - '@schedule_my_search_form_2016'
+            - '@schedule_my_template_2016'
+
+    schedule_my_view_txt_2016:
+        class:  AppBundle\Action\Schedule2016\My\ScheduleMyViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_txt'
@@ -213,7 +243,6 @@ services:
             
     # ===============================================================
     # Schedule MedalRoundLogic
-    
     schedule_medalroundcalc_controller_2016:
         class: AppBundle\Action\Schedule2016\MedalRound\ScheduleMedalRoundController
         parent: abstract_controller
