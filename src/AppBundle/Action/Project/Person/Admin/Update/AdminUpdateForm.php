@@ -45,15 +45,15 @@ class AdminUpdateForm extends AbstractForm
         $this->formControls['YesNo'] = array(
             'type'      => 'select',
             'label'     => 'Yes / No',
-            'default'   =>  'no',
+            'default'   =>  null,
             'choices'   => ['yes'=>'Yes',null=>'No','maybe'=>'Maybe','nr'=>'Not Required'],
         );
         
         $this->formControls['regYear'] = array(
             'type'      => 'select',
             'label'     => 'MemYear',
-            'default'   =>  'my2016',
-            'choices'   => ['my2016'=>'MY2016','my2015'=>'MY2015',null=>'***'],
+            'default'   =>  null,
+            'choices'   => ['MY2016'=>'MY2016','MY2015'=>'MY2015',null=>'***'],
         );
 
         $this->personView = $projectPersonViewDecorator;
@@ -293,6 +293,8 @@ EOD;
         $roleVol        = $personView->getRoles();
         $roleVol        = isset($roleVol['ROLE_VOLUNTEER']) ? $roleVol['ROLE_VOLUNTEER'] : null;
         $approvedVol    = isset($roleVol['approved']) ? (bool) $roleVol['approved'] : false;
+        
+        $classRegYear   = ' ' . (empty($personView->regYear) ? $personView->dangerClass : '');
 
         $sar = explode('/', $personView->orgKey);
         switch (count($sar)) {
@@ -324,7 +326,7 @@ EOD;
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="regYear">Mem Year:</label>
-      {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control')}
+      {$this->renderFormControlInput($this->formControls['regYear'],$this->escape($personView->regYear),'regYear','regYear','col-xs-2 form-control'.$classRegYear)}
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userRegion">AYSO Region:</label>
