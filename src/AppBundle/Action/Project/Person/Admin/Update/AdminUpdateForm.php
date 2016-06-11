@@ -136,13 +136,15 @@ class AdminUpdateForm extends AbstractForm
         };
 
         $projectPerson['notes']             = $this->filterScalarString($data,'notes');
-
         //update certs
-        if (isset($projectPerson->roles['CERT_SAFE_HAVEN']) and $personData['userSH']) {
-            $projectPerson->roles['CERT_SAFE_HAVEN']['verified'] = $personData['userSH'] == 'yes' ? 1 : 0;
+        if (isset($projectPerson->roles['CERT_SAFE_HAVEN'])) {
+            $projectPerson->roles['CERT_SAFE_HAVEN']['verified'] = $personData['userSH'] === 'yes' ? true : null;
         }
         if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
-            $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] == 'yes' ? 1 : 0;            
+            $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] === 'yes' ? true : null;            
+        }
+        if (isset($projectPerson->roles['CERT_BACKGROUND_CHECK'])) {
+            $projectPerson->roles['CERT_BACKGROUND_CHECK']['verified'] = $personData['userBackground'] === 'yes' ? true : null;            
         }
 
         //update roles
@@ -153,14 +155,16 @@ class AdminUpdateForm extends AbstractForm
             $projectPersonRoleReferee   = &$projectPerson->roles['ROLE_REFEREE'];
     
             $projectPersonCertReferee['badge']  = $personData['badge'];
-            $projectPersonCertReferee->verified = true;
-            $projectPersonRoleReferee['approved']   = isset($personData['approvedRef']) ? true : false;
+            $projectPersonRoleReferee['approved']   = isset($personData['approvedRef']) ? true : null;
+            if ($projectPersonRoleReferee['approved']) {
+                $projectPersonCertReferee['verified'] = true;
+            }
         }
 
         if (isset($projectPerson->roles['ROLE_VOLUNTEER'])) {
             $projectPersonRoleVolunteer   = &$projectPerson->roles['ROLE_VOLUNTEER'];
     
-            $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : false;
+            $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : null;
         }
         //update user info
         $projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
