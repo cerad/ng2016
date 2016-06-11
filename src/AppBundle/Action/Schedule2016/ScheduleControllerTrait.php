@@ -16,7 +16,6 @@ trait ScheduleControllerTrait
         if (count($filtersTrimmed) < 1) {
             return $games;
         }
-        dump($filtersTrimmed);
         $filteredGames = [];
         foreach($games as $game) {
             foreach($filtersTrimmed as $filter) {
