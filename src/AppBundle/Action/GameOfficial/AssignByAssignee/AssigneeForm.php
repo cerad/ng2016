@@ -4,12 +4,10 @@ namespace AppBundle\Action\GameOfficial\AssignByAssignee;
 use AppBundle\Action\AbstractForm;
 
 use AppBundle\Action\Game\Game;
-use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\Game\GameOfficial;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
-use AppBundle\Action\GameReport2016\GameReport;
+use AppBundle\Action\GameOfficial\GameOfficialConflictsFinder;
 
-use AppBundle\Action\GameReport2016\GameReportRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class AssigneeForm extends AbstractForm
@@ -19,31 +17,39 @@ class AssigneeForm extends AbstractForm
 
     /** @var  GameOfficial */
     private $gameOfficial;
-    
+
     private $backRouteName;
 
     private $assignWorkflow;
     private $assigneeFinder;
-    
+    private $conflictsFinder;
+
     public function __construct(
-        AssignWorkflow $assignWorkflow, 
-        AssigneeFinder $assigneeFinder
-    ) {
+        AssignWorkflow $assignWorkflow,
+        AssigneeFinder $assigneeFinder,
+        GameOfficialConflictsFinder $conflictsFinder
+    )
+    {
         $this->assignWorkflow = $assignWorkflow;
         $this->assigneeFinder = $assigneeFinder;
+        $this->conflictsFinder = $conflictsFinder;
     }
+
     public function setGame(Game $game)
     {
         $this->game = $game;
     }
+
     public function setGameOfficial(GameOfficial $gameOfficial)
     {
         $this->gameOfficial = clone $gameOfficial;
     }
+
     public function setBackRouteName($backRouteName)
     {
         $this->backRouteName = $backRouteName;
     }
+
     /**
      * @return GameOfficial
      */
@@ -51,6 +57,7 @@ class AssigneeForm extends AbstractForm
     {
         return $this->gameOfficial;
     }
+
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) {
@@ -64,18 +71,23 @@ class AssigneeForm extends AbstractForm
 
         $gameOfficial = $this->gameOfficial;
 
-        $gameOfficial->regPersonId  = $this->filterScalarString($data,'regPersonId');
-        $gameOfficial->assignState  = $this->filterScalarString($data,'assignState');
+        $gameOfficial->regPersonId = $this->filterScalarString($data, 'regPersonId');
+        $gameOfficial->assignState = $this->filterScalarString($data, 'assignState');
 
+        $conflicts = $this->conflictsFinder->findGameOfficialConflicts($this->game, $gameOfficial);
+        if (count($conflicts) > 0) {
+            $errors = array_merge($errors,$conflicts);
+        }
+        
         $this->formDataErrors = $errors;
     }
 
     public function render()
     {
-        $game         = $this->game;
+        $game = $this->game;
         $gameOfficial = $this->gameOfficial;
 
-        $projectId  = $game->projectId;
+        $projectId = $game->projectId;
         $gameNumber = $game->gameNumber;
 
         // Game  #11207: AYSO_U12B_Core, Thu, 10:30 AM on LL3
@@ -90,9 +102,9 @@ class AssigneeForm extends AbstractForm
 
         $gameOfficialUpdateUrl = $this->generateUrl(
             $this->getCurrentRouteName(),
-            ['projectId' => $projectId,'gameNumber' => $gameNumber, 'slot' => $gameOfficial->slot]
+            ['projectId' => $projectId, 'gameNumber' => $gameNumber, 'slot' => $gameOfficial->slot]
         );
-        $backUrl  = $this->generateUrl($this->backRouteName);
+        $backUrl = $this->generateUrl($this->backRouteName);
         $backUrl .= '#game-' . $game->gameId;
 
         $homeTeam = $game->homeTeam;
@@ -101,9 +113,9 @@ class AssigneeForm extends AbstractForm
         $homeTeamName = $this->escape($homeTeam->regTeamName);
         $awayTeamName = $this->escape($awayTeam->regTeamName);
 
-        $assignState        = $gameOfficial->assignState;
-        $assignTransitions  = $this->assignWorkflow->assigneeStateTransitions;
-        $assignStateChoices = $this->assignWorkflow->getStateChoices($assignState,$assignTransitions);
+        $assignState = $gameOfficial->assignState;
+        $assignTransitions = $this->assignWorkflow->assigneeStateTransitions;
+        $assignStateChoices = $this->assignWorkflow->getStateChoices($assignState, $assignTransitions);
 
         if ($assignState === 'Open') {
             $assignState = 'Requested';
@@ -111,7 +123,7 @@ class AssigneeForm extends AbstractForm
         // TODO Might need further processing to verify
         // $gameOfficialChoices = $this->assigneeFinder->findCrew($this->getUser(), $gameOfficial);
         $gameOfficialChoices = $this->assigneeFinder->findCrewChoices($this->getUser()->getRegPersonId());
-        
+
         $html = <<<EOD
 <table style="min-width: 500px;">
   <tr><th colspan="3">Assign By User</th></tr>
@@ -123,10 +135,10 @@ class AssigneeForm extends AbstractForm
     <input type="text" name="slot" readonly size="4" value="{$gameOfficial->slotView}" />
   </div>
   <div class="form-group">
-      {$this->renderInputSelect($gameOfficialChoices,$gameOfficial->regPersonId,'regPersonId','regPersonId')}
+      {$this->renderInputSelect($gameOfficialChoices, $gameOfficial->regPersonId, 'regPersonId', 'regPersonId')}
   </div>
   <div class="form-group">
-      {$this->renderInputSelect($assignStateChoices,$assignState,'assignState','assignState')}
+      {$this->renderInputSelect($assignStateChoices, $assignState, 'assignState', 'assignState')}
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
   <a href="{$backUrl}">Back To Schedule</a>
@@ -134,6 +146,18 @@ class AssigneeForm extends AbstractForm
 </form>
 
 EOD;
+        return $html;
+    }
+
+    protected function renderFormErrors()
+    {
+        $html = null;
+        foreach($this->formDataErrors as $conflict) {
+            $html .= <<<EOD
+<div class="errors">Conflicts With: {$conflict['gameNumber']} {$conflict['start']} {$conflict['fieldName']} </div>
+EOD;
+
+        }
         return $html;
     }
 }
