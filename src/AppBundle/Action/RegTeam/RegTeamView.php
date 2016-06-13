@@ -13,12 +13,16 @@ class RegTeamView extends AbstractView2
     /*  @var RegTeamUploadForm */
     private $regTeamUploadForm;
     
+    private $isTest;
+    
     public function __construct( RegTeamUploadForm $regTeamUploadForm )
     {
         $this->regTeamUploadForm = $regTeamUploadForm;
     }
     public function __invoke(Request $request)
-    { 
+    {
+        $this->isTest = $request->attributes->get('isTest');
+
         return $this->newResponse($this->render());
     }
     protected function render()
@@ -49,9 +53,31 @@ class RegTeamView extends AbstractView2
     </div>
 <br>
 EOD;
-
+        if ($this->isTest) {
+            $html .= $this->renderSuccessModal();
+        }
+        
         $html .= $uploadForm->render();
         
         return $this->renderBaseTemplate($html);
+    }
+    private function renderSuccessModal()
+    {
+        $html = <<<EOD
+<div class="modal fade" id="modalTestSuccess" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Thank you for pre-registering!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Thanks for getting in touch!</p>                     
+            </div>    
+        </div>
+    </div>
+</div>
+EOD;
+        return $html;
     }
 }
