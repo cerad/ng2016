@@ -50,15 +50,20 @@ class RegTeamController extends AbstractController2
     {
         $importForm = $this->regTeamUploadForm;
         $importForm->handleRequest($request);
+
         if ($importForm->isValid()) {
             
-            //TODO: add data processing
-            $msg = $importForm->renderMessages();            
-            $request->attributes->set('importMessages',$msg);                
-
-            return $this->redirectToRoute('game_listing');
+            $params = $request->request->all();
+            $isTest = $request->attributes->get('isTest');
+            if( empty($isTest) ) {
+                //TODO: add data processing
+                $msg = $importForm->renderMessages();            
+                $request->attributes->set('importMessages',$msg);                
+    
+                return $this->redirectToRoute('game_listing');
+            }
         }
-         
+
         // Support multiple projects: just following the leader
         $projectId = $this->getDefaultProjectId();
         $divisions = array_keys($this->divisionChoices);
@@ -77,7 +82,7 @@ class RegTeamController extends AbstractController2
         }
 
         $request->attributes->set('regTeamsByDivision',$regTeams);
-
+var_dump($request);
         return null;
     }
     private function getDefaultProjectId()
