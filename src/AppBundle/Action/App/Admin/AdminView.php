@@ -130,7 +130,7 @@ EOT;
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
-      <li><a href="#">Import/Update/Link Teams (Excel)</a></li>
+      <li><a href="{$this->generateUrl('regteam_2016', ['_format' => 'import'])}">Import/Update Teams (Excel)</a></li>
 EOT;
       }
 

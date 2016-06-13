@@ -456,6 +456,16 @@ div#layout-content {
     margin-left: 30px;
 }
 
+.cerad-common-help ol li {
+    list-style: decimal;
+    margin-left: 30px;
+}
+
+.cerad-common-help ol li ol li {
+    list-style: lower-alpha;
+    margin-left: 30px;
+}
+
 .app_help li {
     padding-top: 10px;
     padding-left: 20px;
@@ -496,4 +506,7 @@ td.admin-listing {
 .schedule-search { width: inherit; min-width: 400px; padding-bottom: 10px; margin-left: auto; margin-right: auto; }
 
 .errors ul { margin-left: 40px; }
-.errors li { color: #FF0000 }
+.errors li { color: #FF0000; }
+
+.messages ul { margin-left: 40px; }
+.messages li { color: #00FF00; }

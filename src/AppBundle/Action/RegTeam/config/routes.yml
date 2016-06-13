@@ -1,0 +1,7 @@
+regteam_2016:
+    path: /{_format}
+    defaults:
+        _format: _view_import
+        _controller: regteam_controller_2016
+        _view_import: regteam_view_2016
+        _view_xls: regteam_view_xls_2016
