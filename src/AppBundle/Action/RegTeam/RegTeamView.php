@@ -53,7 +53,7 @@ class RegTeamView extends AbstractView2
     </div>
 <br>
 EOD;
-        if ($this->isTest) {
+        if (!$this->isTest) {
             $html .= $this->renderSuccessModal();
         }
         
@@ -69,10 +69,10 @@ EOD;
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Thank you for pre-registering!</h4>
+                <h4 class="modal-title" id="myModalLabel">File import test result:  success!</h4>
             </div>
             <div class="modal-body">
-                <p>Thanks for getting in touch!</p>                     
+                <p>TODO: fix when this is displayed on refresh</p>                     
             </div>    
         </div>
     </div>

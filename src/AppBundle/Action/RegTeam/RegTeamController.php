@@ -61,6 +61,10 @@ class RegTeamController extends AbstractController2
                 $request->attributes->set('importMessages',$msg);                
     
                 return $this->redirectToRoute('game_listing');
+            } else {
+                
+                $request->attributes->set('isTest', 'yes');
+                return $this->redirectToRoute($this->generateUrl('regteam_2016', ['_format' => 'import']));
             }
         }
 
@@ -82,7 +86,7 @@ class RegTeamController extends AbstractController2
         }
 
         $request->attributes->set('regTeamsByDivision',$regTeams);
-var_dump($request);
+
         return null;
     }
     private function getDefaultProjectId()

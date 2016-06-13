@@ -99,7 +99,8 @@ class RegTeamUploadForm extends AbstractForm
         maxFileCount: 1,
         showCaption: false,
         elErrorContainer: '#file-input-upload-errors',
-        msgErrorClass: 'alert alert-block alert-danger',    
+        msgErrorClass: 'alert alert-block alert-danger',
+        uploadAsync: false,
         layoutTemplates: {
             main2: '{preview} {remove}' + btnCust + '{upload} {browse}'
         },
