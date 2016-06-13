@@ -26,6 +26,7 @@ const appTask = function() {
             appPublicDir + '/js/cerad-checkbox-all.js',
             appPublicDir + '/js/ie10-viewport-bug-workaround.js',
             appPublicDir + '/js/cerad-select-bgcolor.js',
+            appPublicDir + '/js/cerad-file-input.js',
         ])
         .pipe(concat("zayso.js"))
         .pipe(gulp.dest('web/js'));
