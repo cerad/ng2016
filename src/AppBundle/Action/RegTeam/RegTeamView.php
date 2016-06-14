@@ -53,31 +53,9 @@ class RegTeamView extends AbstractView2
     </div>
 <br>
 EOD;
-        if (!$this->isTest) {
-            $html .= $this->renderSuccessModal();
-        }
         
         $html .= $uploadForm->render();
         
         return $this->renderBaseTemplate($html);
-    }
-    private function renderSuccessModal()
-    {
-        $html = <<<EOD
-<div class="modal fade" id="modalTestSuccess" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">File import test result:  success!</h4>
-            </div>
-            <div class="modal-body">
-                <p>TODO: fix when this is displayed on refresh</p>                     
-            </div>    
-        </div>
-    </div>
-</div>
-EOD;
-        return $html;
     }
 }
