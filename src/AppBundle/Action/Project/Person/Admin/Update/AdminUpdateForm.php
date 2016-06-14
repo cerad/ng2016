@@ -294,7 +294,7 @@ EOD;
         $roleVol        = isset($roleVol['ROLE_VOLUNTEER']) ? $roleVol['ROLE_VOLUNTEER'] : null;
         $approvedVol    = isset($roleVol['approved']) ? (bool) $roleVol['approved'] : false;
         
-        $classRegYear   = ' ' . (empty($personView->regYear) ? $personView->dangerClass : '');
+        $classRegYear   = ' ' . (in_array($personView->regYear, ['***','',null]) ? $personView->dangerClass : $personView->successClass);
 
         $sar = explode('/', $personView->orgKey);
         switch (count($sar)) {
