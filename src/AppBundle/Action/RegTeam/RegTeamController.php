@@ -63,8 +63,8 @@ class RegTeamController extends AbstractController2
             } else {
                 $msg = $importForm->renderMessages();            
                 $request->request->set('importMessages',$msg);                
-var_dump($request);
-                $this->__invoke($request);
+                
+                return $this->redirectToRoute('regteam_2016');
             }
         }
 

@@ -42,7 +42,7 @@ class RegTeamUploadForm extends AbstractForm
         $this->formDataErrors = [];
         $this->formDataMessages = [];
 
-        if (!move_uploaded_file($file_loc,$folder.$file_name) ) {
+        if (move_uploaded_file($file_loc,$folder.$file_name) ) {
             $errors['upload'][] = [
                 'name' => 'upload',
                 'msg'  => 'Error uploading file ' . $file_name
@@ -81,6 +81,8 @@ class RegTeamUploadForm extends AbstractForm
     public function render()
     {
         $html = $this->renderUploadForm();
+        
+        $html .= $this->renderSuccessModal();
 
         return $html;
     }
@@ -122,6 +124,7 @@ class RegTeamUploadForm extends AbstractForm
         }).on('change', function(e) {
             console.log('File changed');
         }).on('fileuploaded', function(e, params) {
+           $('#modalTestSuccess').modal()
             console.log('File uploaded');
         }).on('fileselect', function(e) {
             $(".file-input-test-button").css("display","inline");
@@ -147,4 +150,23 @@ EOD;
 
         return $html;
     }
+    private function renderSuccessModal()
+    {
+        $html = <<<EOD
+<div class="modal fade" id="modalTestSuccess" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">File import test result:  success!</h4>
+            </div>
+            <div class="modal-body">
+                <p>TODO: fix when this is displayed on refresh</p>                     
+            </div>    
+        </div>
+    </div>
+</div>
+EOD;
+        return $html;
+    }    
 }

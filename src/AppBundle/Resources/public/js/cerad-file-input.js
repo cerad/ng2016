@@ -4,9 +4,7 @@
  * 11 June 2016
  *
 */
-$(window).load(function(){
-    $('#modalTestSuccess').modal()
-}); 
+
 
 //
 //var observeDOM = (function(){
