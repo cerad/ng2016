@@ -54,17 +54,17 @@ class RegTeamController extends AbstractController2
         if ($importForm->isValid()) {
             
             $params = $request->request->all();
-            $isTest = $request->attributes->get('isTest');
+            $isTest = $request->request->get('isTest');
+
             if( empty($isTest) ) {
                 //TODO: add data processing
-                $msg = $importForm->renderMessages();            
-                $request->attributes->set('importMessages',$msg);                
     
                 return $this->redirectToRoute('game_listing');
             } else {
-                
-                $request->attributes->set('isTest', 'yes');
-                return $this->redirectToRoute($this->generateUrl('regteam_2016', ['_format' => 'import']));
+                $msg = $importForm->renderMessages();            
+                $request->request->set('importMessages',$msg);                
+var_dump($request);
+                $this->__invoke($request);
             }
         }
 
