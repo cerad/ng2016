@@ -7,6 +7,7 @@ use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
 
+use AppBundle\Action\GameOfficial\GameOfficialConflictsFinder;
 use Symfony\Component\HttpFoundation\Request;
 
 class AssignorForm extends AbstractForm
@@ -21,14 +22,18 @@ class AssignorForm extends AbstractForm
 
     private $assignWorkflow;
     private $assignorFinder;
+    private $conflictsFinder;
+    
     private $gameOfficialChoices = [];
 
     public function __construct(
         AssignWorkflow $assignWorkflow, 
-        AssignorFinder $assignorFinder
+        AssignorFinder $assignorFinder,
+        GameOfficialConflictsFinder $conflictsFinder
     ) {
-        $this->assignWorkflow = $assignWorkflow;
-        $this->assignorFinder = $assignorFinder;
+        $this->assignWorkflow  = $assignWorkflow;
+        $this->assignorFinder  = $assignorFinder;
+        $this->conflictsFinder = $conflictsFinder;
     }
     public function setGame(Game $game)
     {

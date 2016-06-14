@@ -16,6 +16,11 @@ services:
             - '@project_person_connection'
             - '@ayso_region_to_sar_transformer'
 
+    game_official_conflicts_finder:
+        class: AppBundle\Action\GameOfficial\GameOfficialConflictsFinder
+        arguments:
+            - '@game_connection'
+
     game_official_voter:
         class: AppBundle\Action\GameOfficial\GameOfficialVoter
         tags: [{ name: security.voter }]
@@ -38,6 +43,7 @@ services:
         arguments:
             - '@game_official_assign_workflow'
             - '@game_official_assignee_finder'
+            - '@game_official_conflicts_finder'
 
     game_official_assign_by_assignee_controller:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeController
@@ -68,6 +74,7 @@ services:
         arguments:
             - '@game_official_assign_workflow'
             - '@game_official_assignor_finder'
+            - '@game_official_conflicts_finder'
 
     game_official_assign_by_assignor_controller:
         class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorController

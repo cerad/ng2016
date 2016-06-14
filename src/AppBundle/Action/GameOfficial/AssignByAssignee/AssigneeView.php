@@ -45,6 +45,7 @@ EOD;
         <ul>
           <li>Use the drop down to select "Request Assignment"</li>
           <li>Click Submit</li>
+          <li>A "Conflicts With" message indicates you tried to double book yourself</li>
           <li>Click "Return to Schedule" and you will see your name listed for this game</li>
           <li>The Assignor will be notified and will approve your request</li>
           <li>You may, before the assignor approves your request, rescind your request by returning to this game, selecting "Remove Me From Assignment" and clicking Submit.</li>
