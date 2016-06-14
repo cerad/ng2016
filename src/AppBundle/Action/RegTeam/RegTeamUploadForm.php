@@ -6,20 +6,25 @@ use AppBundle\Action\AbstractForm;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
+use AppBundle\Action\RegTeam\RegTeamFileReader;
+
 class RegTeamUploadForm extends AbstractForm
 {
     private $conn;
+    private $reader;
 
     public function __construct(
         Connection $conn
     ) {
         $this->conn           = $conn;
+        
+        $this->reader = new RegTeamFileReader;
     }
     public function handleRequest(Request $request)
     {
         
         if (!$request->isMethod('POST')) return;
-                
+
         $this->isPost = true;
 
         $params = $request->request->all();
@@ -43,25 +48,35 @@ class RegTeamUploadForm extends AbstractForm
                 'msg'  => 'Error uploading file ' . $file_name
             ];                
         }
-    
         if (isset($params['file-input-test'])){
-            $messages['test'][] = [
-                'name' => 'test',
-                'msg'  => "The file successfully has been tested for import."
-                ];
-            $request->attributes->set('isTest', 'yes');     
+                
+            $request->request->set('isTest', 'yes');
+
+            $dataArray = $this->reader->fileToArray($folder.$file_name);
+
+            if (!empty($dataArray)) {
+                $messages['test'][] = [
+                    'name' => 'test',
+                    'msg'  => "The file successfully has been tested for import."
+                    ];
+            } else {
+                $errors['test'][] = [
+                    'name' => 'test',
+                    'msg'  => "The file import failed."
+                    ];
+            }
+
         } else {
             $messages['import'][] = [
                 'name' => 'import',
                 'msg'  => "The file $file_name has been successfully imported."
                 ];
-            $request->attributes->remove('isTest');
+            $request->request->remove('isTest');
             //do processing here
         }
 
         $this->formDataErrors = $errors;
         $this->formDataMessages = $messages;
-
     }
     public function render()
     {
