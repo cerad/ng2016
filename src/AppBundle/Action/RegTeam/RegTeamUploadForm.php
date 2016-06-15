@@ -54,7 +54,7 @@ class RegTeamUploadForm extends AbstractForm
             //see if was test button or upload button
             if (isset($params['file-input-test'])){
                     
-                $request->request->set('isTest', 'yes');
+                $request->attributes->set('isTest', 'yes');
                 
                 $this->setData(array());
     
@@ -72,7 +72,7 @@ class RegTeamUploadForm extends AbstractForm
     
             } else {  //upload button
     
-                $request->request->remove('isTest');
+                $request->attributes->remove('isTest');
     
                 $messages['import'][] = [
                     'name' => 'import',

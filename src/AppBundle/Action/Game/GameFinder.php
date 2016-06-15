@@ -135,10 +135,11 @@ class GameFinder
             return [];
         }
         // Join the pool keys
-        $sql = 'SELECT regTeamId,poolKey FROM poolTeams WHERE regTeamId IN (?) ORDER BY regTeamId,poolKey';
+        $sql = 'SELECT regTeamId,poolKey,poolTeamKey FROM poolTeams WHERE regTeamId IN (?) ORDER BY regTeamId,poolKey';
         $stmt = $this->gameConn->executeQuery($sql,[array_keys($regTeams)],[Connection::PARAM_STR_ARRAY]);
         while($row = $stmt->fetch()) {
             $regTeams[$row['regTeamId']]->addPoolKey($row['poolKey']);
+            $regTeams[$row['regTeamId']]->addPoolTeamKey($row['poolTeamKey']);
         }
         return array_values($regTeams);
     }

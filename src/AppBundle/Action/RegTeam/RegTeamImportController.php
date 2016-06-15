@@ -39,8 +39,7 @@ class RegTeamImportController extends AbstractController2
         $importForm = $this->regTeamUploadForm;
         $importForm->handleRequest($request);
 
-        $params = $request->request->all();
-        $isTest = $request->request->get('isTest');
+        $isTest = $request->attributes->get('isTest');
 
         if ($importForm->isValid() and empty($isTest)) {            
             $data = $importForm->getData();

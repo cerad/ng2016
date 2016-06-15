@@ -72,8 +72,10 @@ class AbstractImporter
      *                               True - Return rows and columns indexed by their actual row and column IDs
      * @return array
      */
-    protected function importActiveSheet($nullValue = null, $calculateFormulas = true, $formatData = false){
-    	
+    protected function importActiveSheet($nullValue = null, $calculateFormulas = true, $formatData = false)
+	{
+		$data = [];
+		
         $ws = $this->objPHPExcel->getActiveSheet();
         $wsName = $ws->getTitle();
 

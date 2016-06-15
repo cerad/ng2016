@@ -52,7 +52,6 @@ class RegTeamExportController extends AbstractController2
         $criteria = [
             'projectIds' => [$projectId],
             'programs'   => [$this->getDefaultProgramForProject($projectId)],
-            'poolTypeKeys' => ['PP'],
             'wantTeams'  => true,
         ];
         
@@ -60,7 +59,7 @@ class RegTeamExportController extends AbstractController2
         foreach ($divisions as $division) {
             $criteria['divisions'] = [$division];
 
-            $regTeams[$division] = $this->finder->findPoolTeams($criteria);
+            $regTeams[$division] = $this->finder->findRegTeams($criteria);
         }
 
         $request->attributes->set('regTeamsByDivision',$regTeams);
