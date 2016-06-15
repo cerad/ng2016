@@ -76,11 +76,9 @@ class AssigneeForm extends AbstractForm
 
         $conflicts = $this->conflictsFinder->findGameOfficialConflicts($this->game, $gameOfficial);
         if (count($conflicts) > 0) {
-            dump($conflicts);
-            $errors = $conflicts;
+            $errors = array_merge($errors,$conflicts);
         }
-
-
+        
         $this->formDataErrors = $errors;
     }
 

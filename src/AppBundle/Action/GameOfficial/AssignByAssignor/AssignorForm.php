@@ -80,9 +80,13 @@ class AssignorForm extends AbstractForm
                 $gameOfficial->assignState = $this->filterScalarString($assignStates, $slotIndex);
 
                 $this->gameOfficials[$slotIndex] = $gameOfficial;
+
+                $conflicts = $this->conflictsFinder->findGameOfficialConflicts($this->game, $gameOfficial);
+                if (count($conflicts) > 0) {
+                    $errors = array_merge($errors,$conflicts);
+                }
             }
         }
-
         $this->formDataErrors = $errors;
     }
 
@@ -169,5 +173,16 @@ EOD;
   </div> 
   <br><br>
 EOD;
+    }
+    protected function renderFormErrors()
+    {
+        $html = null;
+        foreach($this->formDataErrors as $conflict) {
+            $html .= <<<EOD
+<div class="errors">Conflicts With: {$conflict['gameNumber']} {$conflict['start']} {$conflict['fieldName']} {$conflict['gameOfficialName']} </div>
+EOD;
+
+        }
+        return $html;
     }
 }

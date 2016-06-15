@@ -38,7 +38,8 @@ SELECT
   game.gameNumber,
   game.start,
   game.fieldName,
-  gameOfficial.slot AS gameOfficialSlot
+  gameOfficial.slot          AS gameOfficialSlot,
+  gameOfficial.regPersonName AS gameOfficialName
 FROM games AS game
 LEFT JOIN gameOfficials AS gameOfficial ON gameOfficial.gameId = game.gameId
 WHERE gameOfficial.regPersonId = ? AND game.start <= ? AND game.finish >= ?

@@ -33,19 +33,20 @@ trait ScheduleControllerTrait
         $homeTeam = $game->homeTeam;
         $awayTeam = $game->awayTeam;
 
-        if (strpos($homeTeam->regTeamName,$filter) !== false) return $game;
-        if (strpos($awayTeam->regTeamName,$filter) !== false) return $game;
+        if (stripos($homeTeam->regTeamName,$filter) !== false) return $game;
+        if (stripos($awayTeam->regTeamName,$filter) !== false) return $game;
 
-        if (strpos($homeTeam->poolTeamView,$filter) !== false) return $game;
-        if (strpos($awayTeam->poolTeamView,$filter) !== false) return $game;
+        if (stripos($homeTeam->poolTeamView,$filter) !== false) return $game;
+        if (stripos($awayTeam->poolTeamView,$filter) !== false) return $game;
 
-        if (strpos($game->dow,      $filter) !== false) return $game;
-        if (strpos($game->time,     $filter) !== false) return $game;
-        if (strpos($game->fieldName,$filter) !== false) return $game;
+        if (stripos($game->dow,       $filter) !== false) return $game;
+        if (stripos($game->time,      $filter) !== false) return $game;
+        if (stripos($game->fieldName, $filter) !== false) return $game;
+        if (stripos($game->gameNumber,$filter) !== false) return $game;
 
         $officials = $game->getOfficials();
         foreach($officials as $official) {
-            if (strpos($official->regPersonName,$filter) !== false) return $game;
+            if (stripos($official->regPersonName,$filter) !== false) return $game;
         }
         return null;
     }
