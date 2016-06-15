@@ -28,16 +28,12 @@ class RegTeamUploadForm extends AbstractForm
 
         $params = $request->request->all();
 
-        $file_name = $_FILES['team-xls-upload']['name'];
-        $file_loc = $_FILES['team-xls-upload']['tmp_name'];
-        $file_size = $_FILES['team-xls-upload']['size'];
-        $file_type = $_FILES['team-xls-upload']['type'];
+        $file = $request->files->get('team-xls-upload');
+
+        $inFilename = $file->getClientOriginalName();
         
-        $folder = __DIR__.'/uploads/';
-        $inFilename = $folder.$file_name;
-                
         $fs = new Filesystem();
-        
+
         $errors = [];
         $messages = [];
         
@@ -45,51 +41,52 @@ class RegTeamUploadForm extends AbstractForm
         $this->formDataMessages = [];
         
         //error if not successful upload
-        if (!move_uploaded_file($file_loc,$inFilename) ) {
+        if (!$fs->exists($file) ) {
             $errors['upload'][] = [
                 'name' => 'upload',
                 'msg'  => 'Error uploading file ' . $file_name
             ];                
-        } 
+        } else {
         
-        //get the data from the file as array
-        $dataArray = $this->importer->fileToArray($inFilename);
-
-        //see if was test button or upload button
-        if (isset($params['file-input-test'])){
+            //get the data from the file as array
+            $dataArray = $this->importer->fileToArray($file);
+    
+            //see if was test button or upload button
+            if (isset($params['file-input-test'])){
+                    
+                $request->request->set('isTest', 'yes');
                 
-            $request->request->set('isTest', 'yes');
-            
-            $this->setData(array());
-
-            if (!empty($dataArray)) {
-                $messages['test'][] = [
-                    'name' => 'test',
-                    'msg'  => "The file successfully has been tested for import."
+                $this->setData(array());
+    
+                if (!empty($dataArray)) {
+                    $messages['test'][] = [
+                        'name' => 'test',
+                        'msg'  => "$inFilename has been successfully tested for import."
+                        ];
+                } else {
+                    $errors['test'][] = [
+                        'name' => 'test',
+                        'msg'  => "The file import failed."
+                        ];
+                }
+    
+            } else {  //upload button
+    
+                $request->request->remove('isTest');
+    
+                $messages['import'][] = [
+                    'name' => 'import',
+                    'msg'  => "$inFilename has been successfully imported."
                     ];
-            } else {
-                $errors['test'][] = [
-                    'name' => 'test',
-                    'msg'  => "The file import failed."
-                    ];
+    
+                $this->setData($dataArray);
             }
-
-        } else {  //upload button
-
-            $request->request->remove('isTest');
-
-            $messages['import'][] = [
-                'name' => 'import',
-                'msg'  => "The file $file_name has been successfully imported."
-                ];
-
-            $this->setData($dataArray);
         }
-
+        
         $this->formDataErrors = $errors;
         $this->formDataMessages = $messages;
         
-        $fs->remove($inFilename);
+        $fs->remove($file);
     }
     public function render()
     {

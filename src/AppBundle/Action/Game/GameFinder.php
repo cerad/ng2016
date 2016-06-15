@@ -91,6 +91,7 @@ class GameFinder
             'poolTeamIds'  => 'poolTeamId',
             'poolTypeKeys' => 'poolTypeKey',
             'regTeamIds'   => 'regTeamId',
+            'poolTeamKeys' => 'poolTeamKey',
             'projectIds'   => 'projectId',
             'programs'     => 'program',
             'genders'      => 'gender',

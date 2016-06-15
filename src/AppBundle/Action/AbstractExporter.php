@@ -5,6 +5,7 @@ namespace AppBundle\Action;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Protection;
+use PHPExcel_Style_Alignment;
 
 /*
     // Sample array of data to publish
@@ -164,6 +165,29 @@ class AbstractExporter
             $ws->freezePane($options['freezePane']);
         }
         
+        //horizontal alignment
+        //$options['horizontalAlignment'] = 'left';
+        if (isset($options['horizontalAlignment'])){
+            switch ($options['horizontalAlignment']) {
+                case 'center':
+                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);  
+                    break;
+                case 'general':
+                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_GENERAL);                      
+                    break;
+                case 'justify':
+                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);                                          
+                    break;
+                case 'left':
+                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);                                          
+                    break;
+                case 'right':
+                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);                                          
+                    break;
+            }
+        }
+
+
         //protect cells
         //$options['protect'] = array('pw' => '2016NG', 'range' => array('A:D'));
         //reference: http://stackoverflow.com/questions/20543937/disable-few-cells-in-phpexcel
