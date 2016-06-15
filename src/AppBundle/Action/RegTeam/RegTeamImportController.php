@@ -45,13 +45,28 @@ class RegTeamImportController extends AbstractController2
             $data = $importForm->getData();
             
             //TODO: add data storage
+            $updater = $this->regTeamUpdater;
+            
+            foreach($data as $division=>$teams) {
+                foreach($teams as $key=>$regTeam) {
+                    if ($key > 0) {
+                    $teamKey = $regTeam[0];
+                    $teamName = $regTeam[1];
+                    $sars = $regTeam[2];
+                    
+                    $projId = $this->getDefaultProjectId();
+                    $updater->updateRegTeamName($projId, $teamKey, $teamName);
+                    $updater->updateRegTeamSAR($projId, $teamKey, $sars);                        
+                    }
+                }
+            }
         }
 
         return null;
     }
     private function getDefaultProjectId()
     {
-        return array_keys($this->projectChoices)[1];
+        return array_keys($this->projectChoices)[0];
     }
     private function getDefaultProgramForProject($projectId)
     {
