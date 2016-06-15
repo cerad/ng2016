@@ -68,7 +68,7 @@ class RegTeamExportController extends AbstractController2
     }
     private function getDefaultProjectId()
     {
-        return array_keys($this->projectChoices)[1];
+        return array_keys($this->projectChoices)[0];
     }
     private function getDefaultProgramForProject($projectId)
     {
