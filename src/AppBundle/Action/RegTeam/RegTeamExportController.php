@@ -6,15 +6,13 @@ use AppBundle\Action\AbstractController2;
 use AppBundle\Action\Game\GameFinder;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class RegTeamController extends AbstractController2
+class RegTeamExportController extends AbstractController2
 {
     /* @var GameFinder */
     private $finder;
 
-    /*  @var RegTeamUploadForm */
-    private $regTeamUploadForm;
-    
     /*  @var ProjectChoices  */
     private $projectChoices = [];
 
@@ -36,37 +34,16 @@ class RegTeamController extends AbstractController2
     
     public function __construct(
         GameFinder $finder,
-        RegTeamUploadForm $regTeamUploadForm,
         array $projectChoices,
         array $projects
     )
     {
         $this->finder = $finder;
-        $this->regTeamUploadForm = $regTeamUploadForm;
         $this->projectChoices = $projectChoices;
         $this->projects = $projects;
     }
     public function __invoke(Request $request)
     {
-        $importForm = $this->regTeamUploadForm;
-        $importForm->handleRequest($request);
-
-        if ($importForm->isValid()) {
-            
-            $params = $request->request->all();
-            $isTest = $request->request->get('isTest');
-
-            if( empty($isTest) ) {
-                //TODO: add data processing
-    
-                return $this->redirectToRoute('game_listing');
-            } else {
-                $msg = $importForm->renderMessages();            
-                $request->request->set('importMessages',$msg);                
-                
-                return $this->redirectToRoute('regteam_2016');
-            }
-        }
 
         // Support multiple projects: just following the leader
         $projectId = $this->getDefaultProjectId();

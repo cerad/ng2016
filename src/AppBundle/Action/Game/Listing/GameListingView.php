@@ -121,8 +121,8 @@ EOD;
 
         $html = <<<EOD
 <div class="form-group col-xs-9 col-xs-offset-2 clearfix">
-    <a href="{$this->generateUrl('regteam_2016')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Import Teams</a>
-    <a href="{$this->generateUrl('regteam_2016', ['_format' => 'xls'])}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export Teams to Excel</a>
+    <a href="{$this->generateUrl('regteam_import')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Import Teams</a>
+    <a href="{$this->generateUrl('regteam_export')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export Teams to Excel</a>
 </div>
 <div class="clearfix"></div>
 <div id="layout-block">
