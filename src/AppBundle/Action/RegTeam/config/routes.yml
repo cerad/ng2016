@@ -1,7 +1,13 @@
-regteam_2016:
-    path: /{_format}
+regteam_export:
+    path: /export
     defaults:
-        _format: _view_import
-        _controller: regteam_controller_2016
-        _view_import: regteam_view_2016
-        _view_xls: regteam_view_xls_2016
+        _controller:    regteam_export_controller
+        _view:          regteam_export_xls
+        _rolex:         ROLE_ADMIN
+
+regteam_import:
+    path: /import
+    defaults:
+        _controller:    regteam_import_controller
+        _view:          regteam_import_view
+        _rolex:         ROLE_ADMIN

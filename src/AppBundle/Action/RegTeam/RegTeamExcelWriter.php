@@ -8,7 +8,7 @@ use AppBundle\Action\AbstractExporter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegTeamViewFile extends AbstractView2
+class RegTeamExcelWriter extends AbstractView2
 {
     private $outFileName;
  

@@ -8,7 +8,7 @@ use AppBundle\Action\RegTeam\RegTeamUploadForm;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class RegTeamView extends AbstractView2
+class RegTeamImportView extends AbstractView2
 {
     /*  @var RegTeamUploadForm */
     private $regTeamUploadForm;
@@ -37,7 +37,7 @@ class RegTeamView extends AbstractView2
         <li><strong>Important: </strong>You must use the same format worksheet as is exported. <strong>NO added columns or rows</strong>.</li>
         <li>The <strong><em>only</em></strong> proper way to do this is to:
             <ol style="list-style: decimal">
-                <li><a href="{$this->generateUrl('regteam_2016', ['_format' => 'xls'])}">Export the teams to Excel</a></li>
+                <li><a href="{$this->generateUrl('regteam_export')}">Export the teams to Excel</a></li>
                 <li>In Excel, update the team names, Soccerfest Points or team slots in the pools</li>
                 <li>Save the Team workbook</li>
                 <li>Using the controls below:
