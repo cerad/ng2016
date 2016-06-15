@@ -508,5 +508,5 @@ td.admin-listing {
 .errors ul { margin-left: 40px; }
 .errors li { color: #FF0000; }
 
-.messages ul { margin-left: 40px; }
-.messages li { color: #00FF00; }
+.messages ul { margin-left: 40px; font-weight: bold; }
+.messages li { color: #468c47; font-weight: bold; }

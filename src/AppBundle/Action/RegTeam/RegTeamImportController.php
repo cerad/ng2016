@@ -8,7 +8,7 @@ use AppBundle\Action\Game\GameFinder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegTeamController extends AbstractController2
+class RegTeamImportController extends AbstractController2
 {
     /*  @var RegTeamUploadForm */
     private $regTeamUploadForm;
@@ -19,15 +19,20 @@ class RegTeamController extends AbstractController2
     /*  @var Projects  */
     private $projects = [];
 
+    /*  @var Projects  */
+    private $regTeamUpdater;
+
     public function __construct(
         RegTeamUploadForm $regTeamUploadForm,
         array $projectChoices,
-        array $projects
+        array $projects,
+        RegTeamUpdater $regTeamUpdater
     )
     {
         $this->regTeamUploadForm = $regTeamUploadForm;
         $this->projectChoices = $projectChoices;
         $this->projects = $projects;
+        $this->regTeamUpdater = $regTeamUpdater;
     }
     public function __invoke(Request $request)
     {
@@ -37,10 +42,10 @@ class RegTeamController extends AbstractController2
         $params = $request->request->all();
         $isTest = $request->request->get('isTest');
 
-        if ($importForm->isValid() and empty($isTest)) {
+        if ($importForm->isValid() and empty($isTest)) {            
+            $data = $importForm->getData();
             
-            //TODO: add data processing
-
+            //TODO: add data storage
         }
 
         return null;

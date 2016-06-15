@@ -53,7 +53,7 @@ abstract class AbstractForm implements ContainerAwareInterface
 
         if (count($msgs) === 0) return null;
 
-        $html = '<hr><legend>Entry Messages</legend><div class="messages" ><ul>' . "\n";
+        $html = '<hr><legend>Entry Success Messages</legend><div class="messages" ><ul>' . "\n";
         foreach($msgs as $name => $items) {
             foreach($items as $item) {
                 $html .= <<<EOD

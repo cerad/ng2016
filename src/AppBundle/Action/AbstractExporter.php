@@ -4,6 +4,7 @@ namespace AppBundle\Action;
 
 use PHPExcel;
 use PHPExcel_IOFactory;
+use PHPExcel_Style_Protection;
 
 /*
     // Sample array of data to publish
@@ -157,9 +158,27 @@ class AbstractExporter
             }
         }
 
-        //freeze top row
+        //freeze pane
+        //$options['freezePane'] = 'A2';
         if (isset($options['freezePane'])){
             $ws->freezePane($options['freezePane']);
+        }
+        
+        //protect cells
+        //$options['protect'] = array('pw' => '2016NG', 'range' => array('A:D'));
+        //reference: http://stackoverflow.com/questions/20543937/disable-few-cells-in-phpexcel
+
+        if (isset($options['protection']['pw']) and isset($options['protection']['unlocked'])) {
+            $pw = $options['protection']['pw'];
+            $range = $options['protection']['unlocked'];
+
+            //turn protection on
+            $ws->getProtection()->setSheet(true);
+            
+            //now unprotect requested range
+            foreach ($range as $cells) {
+                $ws->getStyle($cells)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+            }
         }
 
         //ensure sheet name is unique

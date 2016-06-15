@@ -13,7 +13,7 @@ use PHPExcel_IOFactory;
 
     // Sample array of data returned
     $arrayData = array(
-        array(NULL, 2010, 2011, 2012),   //heading labels
+        array(NULL,   2010, 2011, 2012),   //heading labels; NULL for row labels
         array('Q1',   12,   15,   21),
         array('Q2',   56,   73,   86),
         array('Q3',   52,   61,   69),
@@ -27,6 +27,8 @@ class AbstractImporter
 
     protected function import($file)
     {
+        $wb = null;
+        
         //accept file objects or filenames
         if($file instanceof \SplFileInfo){
             $fileName = $file->getRealPath();

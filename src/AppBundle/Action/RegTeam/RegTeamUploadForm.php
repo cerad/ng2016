@@ -7,18 +7,17 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Action\RegTeam\RegTeamFileReader;
+use Symfony\Component\Filesystem\Filesystem;
 
 class RegTeamUploadForm extends AbstractForm
 {
-    private $conn;
-    private $reader;
+    /*  var RegTeamFileReader */
+    private $importer;
 
     public function __construct(
-        Connection $conn
+        RegTeamFileReader $importer
     ) {
-        $this->conn           = $conn;
-        
-        $this->reader = new RegTeamFileReader;
+        $this->importer = $importer;
     }
     public function handleRequest(Request $request)
     {
@@ -35,24 +34,33 @@ class RegTeamUploadForm extends AbstractForm
         $file_type = $_FILES['team-xls-upload']['type'];
         
         $folder = __DIR__.'/uploads/';
+        $inFilename = $folder.$file_name;
                 
+        $fs = new Filesystem();
+        
         $errors = [];
         $messages = [];
         
         $this->formDataErrors = [];
         $this->formDataMessages = [];
-
-        if (move_uploaded_file($file_loc,$folder.$file_name) ) {
+        
+        //error if not successful upload
+        if (!move_uploaded_file($file_loc,$inFilename) ) {
             $errors['upload'][] = [
                 'name' => 'upload',
                 'msg'  => 'Error uploading file ' . $file_name
             ];                
-        }
+        } 
+        
+        //get the data from the file as array
+        $dataArray = $this->importer->fileToArray($inFilename);
+
+        //see if was test button or upload button
         if (isset($params['file-input-test'])){
                 
             $request->request->set('isTest', 'yes');
-
-            $dataArray = $this->reader->fileToArray($folder.$file_name);
+            
+            $this->setData(array());
 
             if (!empty($dataArray)) {
                 $messages['test'][] = [
@@ -66,23 +74,26 @@ class RegTeamUploadForm extends AbstractForm
                     ];
             }
 
-        } else {
+        } else {  //upload button
+
+            $request->request->remove('isTest');
+
             $messages['import'][] = [
                 'name' => 'import',
                 'msg'  => "The file $file_name has been successfully imported."
                 ];
-            $request->request->remove('isTest');
-            //do processing here
+
+            $this->setData($dataArray);
         }
 
         $this->formDataErrors = $errors;
         $this->formDataMessages = $messages;
+        
+        $fs->remove($inFilename);
     }
     public function render()
     {
         $html = $this->renderUploadForm();
-        
-        $html .= $this->renderSuccessModal();
 
         return $html;
     }
@@ -99,7 +110,7 @@ class RegTeamUploadForm extends AbstractForm
 .file-input-test-button { display: none; }
 </style>
 
-<form id="file-upload-form" role="form" class="form-inline" action="submit" method="post" enctype="multipart/form-data">
+<form id="file-upload-form" role="form" class="form-inline" action="{$this->generateUrl("regteam_import")}" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
         <label class="control-label">Choose a file to upload</label>
@@ -124,7 +135,6 @@ class RegTeamUploadForm extends AbstractForm
         }).on('change', function(e) {
             console.log('File changed');
         }).on('fileuploaded', function(e, params) {
-           $('#modalTestSuccess').modal()
             console.log('File uploaded');
         }).on('fileselect', function(e) {
             $(".file-input-test-button").css("display","inline");
@@ -150,23 +160,4 @@ EOD;
 
         return $html;
     }
-    private function renderSuccessModal()
-    {
-        $html = <<<EOD
-<div class="modal fade" id="modalTestSuccess" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">File import test result:  success!</h4>
-            </div>
-            <div class="modal-body">
-                <p>TODO: fix when this is displayed on refresh</p>                     
-            </div>    
-        </div>
-    </div>
-</div>
-EOD;
-        return $html;
-    }    
 }

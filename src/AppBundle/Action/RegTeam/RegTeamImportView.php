@@ -43,8 +43,11 @@ class RegTeamImportView extends AbstractView2
                 <li>Using the controls below:
                     <ol>
                         <li>Select your updated workbook by clicking the "Browse" button.</li>
+                        <li>Test the import by clicking the "Test Upload" button.</li>
+                        <li>If there are errors, return to Step 2 and fix updated workbook.</li>
+                        <li>Select your updated workbook by clicking the "Browse" button.</li>
                         <li>Complete the import by clicking the "Upload" button.</li>
-                        <li><a href="{$this->generateUrl('results_poolplay_2016')}">View Pool Standings</a> to verify your changes.</li>
+                        <li><a href="{$this->generateUrl('game_listing')}">View Game Listing</a> to verify your changes.</li>
                     </ol>
                 </li>
             </ol>

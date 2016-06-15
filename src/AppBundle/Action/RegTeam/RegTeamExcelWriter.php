@@ -69,6 +69,8 @@ class RegTeamExcelWriter extends AbstractView2
         //writes the data : division on each sheet
         $response[$t->division]['data'] = $data;
         $response[$t->division]['options']['freezePane'] = 'A2';
+        //lock all but 'Pool Team 1','QF Pool Team 1','SF Pool Team 2','FM Pool Team 3','Coach\'s Last Name', 'Team Region', 'Soccerfest Points'
+        $response[$t->division]['options']['protection'] = array('pw' => '2016NG', 'unlocked' => array('E:K'));
             
         return $response;
     }

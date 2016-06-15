@@ -6,7 +6,7 @@ services:
         class:  AppBundle\Action\RegTeam\RegTeamUploadForm
         parent: abstract_form
         arguments:
-            - '@game_connection'
+            - '@regteam_import_xls'
             
     regteam_import_controller:
         class:  AppBundle\Action\RegTeam\RegTeamImportController
@@ -15,6 +15,7 @@ services:
             - '@regteam_upload_form'
             - '%project_choices%'
             - '%projects%'
+            - '@reg_team_updater'
 
     regteam_import_view:
         class:  AppBundle\Action\RegTeam\RegTeamImportView
@@ -35,3 +36,15 @@ services:
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_xls'
+
+    abstract_importer_xls:
+        class: AppBundle\Action\AbstractImporter
+
+    regteam_import_xls:
+        class:  AppBundle\Action\RegTeam\RegTeamFileReader
+        parent: abstract_importer_xls
+
+    reg_team_updater:
+        class: AppBundle\Action\RegTeam\RegTeamUpdater
+        arguments:
+            - '@reg_team_connection'
