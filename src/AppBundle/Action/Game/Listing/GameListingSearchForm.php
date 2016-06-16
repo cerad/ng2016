@@ -70,7 +70,7 @@ class GameListingSearchForm extends AbstractForm
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span> 
-    <span>Change Project/Program</span>
+    <span>Search</span>
   </button>
 </form>
 <br/>
@@ -84,6 +84,7 @@ EOD;
         'games'    => 'Games',
     ];
     private $divisionChoices = [
+         null  => 'All',
         'U10B' => 'U-10 Boys',
         'U10G' => 'U-10 Girls',
         'U12B' => 'U-12 Boys',

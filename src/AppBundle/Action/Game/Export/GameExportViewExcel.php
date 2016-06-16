@@ -11,7 +11,7 @@ class GameExportViewExcel extends AbstractView2
 {
     private $writer;
 
-    public function __construct(GameWriterExcel $writer)
+    public function __construct(GameExportWriterExcel $writer)
     {
         $this->writer = $writer;
     }

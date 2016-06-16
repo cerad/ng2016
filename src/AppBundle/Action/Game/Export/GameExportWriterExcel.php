@@ -3,7 +3,7 @@ namespace AppBundle\Action\Game\Export;
 
 use AppBundle\Action\Schedule2016\ScheduleGame;
 
-class GameWriterExcel
+class GameExportWriterExcel
 {
     private $wb;
 

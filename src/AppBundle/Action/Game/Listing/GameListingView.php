@@ -65,6 +65,13 @@ EOD;
         $gameCount = count($this->games);
 
         $html = <<<EOD
+<div class="form-group col-xs-9 col-xs-offset-2 clearfix">
+  <a href="{$this->generateUrl('game_import')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Import Games</a>
+  <a href="{$this->generateUrl('game_export')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Export Games to Excel</a>
+</div>
+<div class="clearfix"></div>
 <div id="layout-block">
 <table class="standings" border = "1">
 <tr><th colspan="20" class="text-center">Games: {$gameCount}</th></tr>

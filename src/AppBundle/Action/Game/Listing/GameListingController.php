@@ -59,9 +59,12 @@ class GameListingController extends AbstractController2
         $criteria = [
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
-            'divisions'  => [$searchData['division']],
             'wantTeams'  => true,
         ];
+        if ($searchData['division']) {
+            $criteria['divisions'] = [$searchData['division']];
+        }
+
         switch($searchData['show']) {
             case 'all':
                 $regTeams = $this->finder->findRegTeams($criteria);

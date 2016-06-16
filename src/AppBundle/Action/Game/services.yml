@@ -55,11 +55,32 @@ services:
             - '%project_choices%'
             - '%projects%'
 
-    game_writer_excel:
-        class:  AppBundle\Action\Game\Export\GameWriterExcel
+    game_export_writer_excel:
+        class:  AppBundle\Action\Game\Export\GameExportWriterExcel
 
     game_export_view_excel:
         class:  AppBundle\Action\Game\Export\GameExportViewExcel
         parent: abstract_view2
         arguments:
-            - '@game_writer_excel'
+            - '@game_export_writer_excel'
+
+    # ===========================================
+    # Game Import
+    game_import_reader_excel:
+        class:  AppBundle\Action\Game\Import\GameImportReaderExcel
+
+    game_import_form:
+        class:  AppBundle\Action\Game\Import\GameImportForm
+        parent: abstract_controller
+
+    game_import_controller:
+        class:  AppBundle\Action\Game\Import\GameImportController
+        parent: abstract_controller
+        arguments:
+            - '@game_import_form'
+
+    game_import_view:
+        class:  AppBundle\Action\Game\Import\GameImportView
+        parent: abstract_view2
+        arguments:
+            - '@game_import_form'
