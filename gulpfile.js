@@ -47,7 +47,7 @@ const nodeModulesTask = function() {
             path.join(nodeModulesDir,'normalize.css/normalize.css'),
             path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css'),
             path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css.map'),
-            path.join(nodeModulesDir,'bootstrap-fileinput/css/fileinput.min.css')
+            path.join(nodeModulesDir,'bootstrap-fileinput/css/bootstrap.min.css')            
         ])
         .pipe(gulp.dest('web/css'));
 
@@ -55,7 +55,7 @@ const nodeModulesTask = function() {
             path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
             path.join(nodeModulesDir,'jquery/dist/jquery.min.map'),
             path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
-            path.join(nodeModulesDir,'bootstrap-fileinput/js/fileinput.min.js')
+            path.join(nodeModulesDir,'bootstrap-fileinput/js/bootstrap.min.js')
         ])
         .pipe(gulp.dest('web/js'));
 };

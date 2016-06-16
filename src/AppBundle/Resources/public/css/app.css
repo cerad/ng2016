@@ -129,7 +129,7 @@ height:2em;
 }
 
 .schedule tr:nth-child(odd),.standings tr:nth-child(odd),.results tr:nth-child(odd),#person-list tr:nth-child(odd),.my_schedule tr:nth-child(odd) {
-background:#EDEDED;
+background:#FFB8B8;
 }
 
 .schedule td,.standings td,.results td,.scoring td {
@@ -141,7 +141,7 @@ vertical-align:middle;
 .tbl-title th
 .row-hdr {
 background:#B90101;
-height:2em; 
+height:2em;
 }
 
 .tbl-hdr th {
@@ -510,7 +510,6 @@ td.admin-listing {
 
 .messages ul { margin-left: 40px; font-weight: bold; }
 .messages li { color: #468c47; font-weight: bold; }
-
 
 table.min-width-500 { min-width: 500px; }
 table.person-update-form td { height: 34px; }
