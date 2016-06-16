@@ -9,7 +9,7 @@ abstract class AbstractUpdateForm extends AbstractForm
      * Your basic select input element
      *
      */
-    protected function renderInputSelect($choices,$value,$name,$id=null,$size=null)
+    protected function renderInputSelect($choices,$value,$name,$id=null,$size=null,$class="form-control")
     {
         $id = $id ? : $name;
 
@@ -21,7 +21,7 @@ abstract class AbstractUpdateForm extends AbstractForm
 
         if (count($choices) > 1) { 
             $html = <<<EOD
-<select id="{$id}" name="{$name}"{$multiple}{$size} class="form-control">
+<select id="{$id}" name="{$name}"{$multiple}{$size} class="{$class}">
 EOD;
             foreach($choices as $choiceValue => $choiceContent)
             {
