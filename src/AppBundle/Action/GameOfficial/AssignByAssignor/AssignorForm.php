@@ -139,8 +139,8 @@ EOD;
             $html .= $this->renderGameOfficial($gameOfficial);
         }
         $html .= <<<EOD
-  <button type="submit" class="btn btn-default">Update</button>
-  <a href="{$backUrl}">Back To Schedule</a>
+  <button type="submit" class="btn bth-sm btn-primary">Update</button>
+  <a href="{$backUrl}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back To Schedule</a>
 {$this->renderFormErrors()}
 </form>
 EOD;

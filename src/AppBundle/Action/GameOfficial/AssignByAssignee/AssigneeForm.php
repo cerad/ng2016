@@ -130,6 +130,7 @@ class AssigneeForm extends AbstractForm
   <tr><th colspan="3">{$gameDescription}</th></tr>
   <tr><th colspan="3">{$homeTeamName} -VS- {$awayTeamName}</th></tr>
 </table>
+<br/>
 <form method="post" action="{$gameOfficialUpdateUrl}" class="form-inline role="form"">
   <div class="form-group">
     <input type="text" name="slot" readonly size="4" value="{$gameOfficial->slotView}" />
@@ -140,8 +141,9 @@ class AssigneeForm extends AbstractForm
   <div class="form-group">
       {$this->renderInputSelect($assignStateChoices, $assignState, 'assignState', 'assignState')}
   </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-  <a href="{$backUrl}">Back To Schedule</a>
+  <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+  <a href="{$backUrl}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back To Schedule</a>
+
 {$this->renderFormErrors()}
 </form>
 

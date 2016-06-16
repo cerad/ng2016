@@ -34,15 +34,10 @@ EOD;
     private function renderNotes()
     {
         return <<<EOD
-<div class="app_table" id="notes">
-<table class="app_help">
-  <thead>
-    <th>Notes on Referee Assignment Procedures</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td width="15%">&nbsp;
-        <ul>
+<legend>Notes on Referee Assignment Procedures</legend>
+<div class="app_help">
+  <ul class="cerad-common-help">
+    <ul class="ul_bullets">
           <li>Use the drop down to select "Request Assignment"</li>
           <li>Click Submit</li>
           <li>A "Conflicts With" message indicates you tried to double book yourself</li>
@@ -53,10 +48,7 @@ EOD;
           <li>The Assignor will be notified and, depending on whether a replacement can be assigned, may or may not approve the request.</li>
           <li><strong>NOTE: You are obliged to keep the assignment until the Assignor releases you.</strong></li>
         </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    </ul>
 </div>
 
 EOD;

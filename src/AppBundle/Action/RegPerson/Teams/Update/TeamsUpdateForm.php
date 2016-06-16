@@ -82,8 +82,8 @@ EOD;
     <td>{$this->renderInputSelect($addChoices,'add','addChoice','addChoice')}</td>
   </tr>
   <tr>
-    <td><a href="{$this->generateUrl('app_home')}">Back to Home</a></td>
-    <td><button type="submit" name="submit" value="submit" class="btn btn-default">Add/Remove Teams(s)</button></td>
+    <td><a href="{$this->generateUrl('app_home')}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back to Home</a></td>
+    <td><button type="submit" name="submit" value="submit" class="btn btn-primary">Add/Remove Teams(s)</button></td>
   </tr>
 </form>
 </table>
