@@ -170,18 +170,27 @@ EOT;
      */
     protected function renderMenuForUser()
     {
+        $html = '';
+        
       if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
         $html =
 <<<EOT
          <ul class="nav navbar-nav navbar-right">
-           {$this->renderRefereeSchedules()}
+EOT;
+        if ($this->isGranted('ROLE_REFEREE')) {
+            $html .= $this->renderRefereeSchedules();
+        }
+
+        $html .= <<<EOT
            {$this->renderMyAccount()}
 EOT;
           if ( $this->isGranted('ROLE_STAFF') ) {
               $html .= $this->renderAdmin();
           }
+
           $html .= $this->renderSignOut();
-$html .= <<<EOT
+
+        $html .= <<<EOT
         </ul>
 EOT;
       } else { // TODO Do not use _SERVER
@@ -277,17 +286,25 @@ EOT;
         if (!$this->showResultsMenu) {
             return null;
         }
-        return
-<<<EOT
+        $html = <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_my_2016')}">MY SCHEDULE</a></li>
             <li><a href="{$this->generateUrl('schedule_official_2016')}">REQUEST ASSIGNMENTS</a></li>
-            <li><a href="{$this->generateUrl('schedule_official_2016')}">REFEREE SCHEDULES</a></li>
+EOT;
+
+        if ($this->isGranted('ROLE_ASSIGNOR')) {
+            $html .= <<<EOT
+            <li><a href="{$this->generateUrl('schedule_assignor_2016')}">ASSIGNOR SCHEDULE</a></li>
+EOT;
+        }
+
+        $html .= <<<EOT
          </ul>
        </li>
 EOT;
+        
+        return $html;
     }
 
     protected function renderMyAccount()
@@ -300,9 +317,11 @@ EOT;
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS</a></li>
-          <li><a href="{$this->generateUrl('app_home')}">MY AYSO INFO</a></li>
-          <li><a href="{$this->generateUrl('app_home')}">MY SCHEDULE</a></li>
+          <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
+          <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS & AVAILABILITY</a></li>
+          <li><a href="{$this->generateUrl('schedule_my_2016')}">MY SCHEDULE</a></li>
+          <li><a href="{$this->generateUrl('reg_person_persons_update')}">MY CREW</a></li>
+          <li><a href="{$this->generateUrl('reg_person_teams_update')}">MY TEAMS</a></li>
         </ul>
 EOT;
     }

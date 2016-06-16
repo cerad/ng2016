@@ -66,9 +66,8 @@ class TeamsUpdateForm extends AbstractForm
             [null => 'Add Team'],
             $this->regPersonFinder->findRegTeamChoices($this->getUser()->getProjectId())
         );
-
         $html = <<<EOD
-<table style="min-width: 500px;">
+<table class="person-update-form min-width-500" >
   <tr><th colspan="3" style="text-align: center;">My Teams</th></tr>
   <tr><th>Team Name</th><th>Add/Remove</th></tr>
 <form method="post" action="{$this->generateUrl('reg_person_teams_update')}" class="form-inline role="form"">
@@ -81,9 +80,10 @@ EOD;
     <td>{$this->renderInputSelect($teamChoices,null,'addTeamId','addTeamId')}</td>
     <td>{$this->renderInputSelect($addChoices,'add','addChoice','addChoice')}</td>
   </tr>
+  <tr><td  colspan="3">&nbsp</td></tr>
   <tr>
-    <td><a href="{$this->generateUrl('app_home')}">Back to Home</a></td>
-    <td><button type="submit" name="submit" value="submit" class="btn btn-default">Add/Remove Teams(s)</button></td>
+    <td><a href="{$this->generateUrl('app_home')}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back to Home</a></td>
+    <td><button type="submit" name="submit" value="submit" class="btn btn-primary">Add/Remove Teams(s)</button></td>
   </tr>
 </form>
 </table>

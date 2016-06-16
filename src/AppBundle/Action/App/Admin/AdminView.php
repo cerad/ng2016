@@ -44,6 +44,7 @@ EOT;
           
         $content .=  <<<EOT
 </div> <!-- class="container no-disc" -->
+<br>
 <div class="panel-float-clear"></div>
 EOT;
         $content .= $this->switchUserForm->render();
@@ -153,8 +154,8 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignments</a></li>
-      <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignments (Excel)</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignment Requests</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignment Requests (Excel)</a></li>
       <li><a href="{$this->generateUrl('schedule_assignor_2016')}">View Assignor Assignments</a></li>
 EOT;
 

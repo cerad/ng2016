@@ -71,25 +71,22 @@ class ScheduleSearchForm extends AbstractForm
     <td>{$this->renderInputSearchCheckbox($project['ages'],    $formData['ages'],    'ages[]',    'Ages')    }</td>
     <td>{$this->renderInputSearchCheckbox($project['genders'], $formData['genders'], 'genders[]', 'Genders') }</td>
   </tr>
-  <tr>
-    <td colspan="3">
-      <label for="filter">Filter</label>
-      <input 
-        type="text" name="filter" id="filter" class="form-control" size="30"
-        value="{$filter}" placeholder="Filter Games" />
-    </td></tr>
   </table>
-  </div>
+  <br/>
   <div class="schedule-search col-xs-8 col-xs-offset-2 clearfix">
-
-    <a href="{$txtUrl}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
-    <a href="{$xlsUrl}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
+       <label class="col-xs-offset-2" for="filter">Filter</label>
+      <input type="text" name="filter" id="filter" class="form-control" size="15"
+        value="{$filter}" placeholder="Filter Games" />
+<div class="form-group">
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit pull-right">
+  <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span>
     <span>Search</span>
   </button>
+    <a href="{$xlsUrl}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
+    <a href="{$txtUrl}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
   </div>
+</div>
 </form>
 
 EOD;

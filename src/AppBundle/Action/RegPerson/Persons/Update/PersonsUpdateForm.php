@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\RegPerson\Persons\Update;
 
-use AppBundle\Action\AbstractForm;
+use AppBundle\Action\AbstractUpdateForm;
 
 use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
@@ -11,7 +11,7 @@ use AppBundle\Action\RegPerson\RegPersonFinder;
 use AppBundle\Action\RegPerson\RegPersonPerson;
 use Symfony\Component\HttpFoundation\Request;
 
-class PersonsUpdateForm extends AbstractForm
+class PersonsUpdateForm extends AbstractUpdateForm
 {
     /** @var  RegPersonFinder */
     private $regPersonFinder;
@@ -84,11 +84,12 @@ class PersonsUpdateForm extends AbstractForm
         );
 
         $html = <<<EOD
-<table style="min-width: 500px;">
+<table class="person-update-form min-width-500" >
   <tr><th colspan="3" style="text-align: center;">My Crew</th></tr>
   <tr><th>Relation</th><th>Name</th><th>Add/Remove</th></tr>
 <form method="post" action="{$this->generateUrl('reg_person_persons_update')}" class="form-inline role="form"">
 EOD;
+
         foreach($this->regPersonPersons as $regPersonPerson) {
             $html .= $this->renderRegPersonPerson($regPersonPerson);
         }
@@ -98,10 +99,11 @@ EOD;
     <td>{$this->renderInputSelect($memberChoices,null,  'addMemberId','addMemberId')}</td>
     <td>{$this->renderInputSelect($addChoices,'add',    'addChoice',  'addChoice')}</td>
   </tr>
+  <tr><td  colspan="3">&nbsp</td></tr>
   <tr>
     <td>&nbsp;</td>
-    <td><a href="{$this->generateUrl('app_home')}">Back To Home</a></td>
-    <td><button type="submit" name="submit" value="submit" class="btn btn-default">Add/Remove Selected Person(s)</button></td>
+    <td><a href="{$this->generateUrl('app_home')}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back to Home</a></td>
+    <td><button type="submit" name="submit" value="submit" class="btn btn-primary">Add/Remove Selected Person(s)</button></td>
   </tr>
 </form>
 </table>

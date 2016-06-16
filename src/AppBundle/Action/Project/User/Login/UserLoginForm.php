@@ -59,18 +59,20 @@ EOT;
       type="password" id="user_login_password" class="form-control" required tabIndex="2"
       name="password" value="" required placeholder="********" />
   </div>
-  <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit" tabIndex="3">
-    <span class="glyphicon glyphicon-edit"></span> Sign In
-  </button><br>
-  <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
-    <!--<span class="glyphicon glyphicon-edit"></span>-->
-    Sign In (Google)
-  </a>
-  <a href="{$loginFacebook}" class="btn btn-sm btn-default btn-provider" role="button">
-    <!--<span class="glyphicon glyphicon-edit"></span>-->
-    Sign In (Facebook)
-  </a>
+  <div class="form-group">
+    <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
+    <button type="submit" class="btn btn-sm btn-primary submit" tabIndex="3">
+      <span class="glyphicon glyphicon-edit"></span> Sign In
+    </button>
+    <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
+      <!--<span class="glyphicon glyphicon-edit"></span>-->
+      Sign In (Google)
+    </a>
+    <a href="{$loginFacebook}" class="btn btn-sm btn-default btn-provider" role="button">
+      <!--<span class="glyphicon glyphicon-edit"></span>-->
+      Sign In (Facebook)
+    </a>
+  </div>
 </form>
 EOT;
     }

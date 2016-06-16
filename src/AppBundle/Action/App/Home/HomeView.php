@@ -86,11 +86,11 @@ EOD;
 
         foreach($regPersonPersons as $regPersonPerson) {
             $html .= <<<EOD
-  <tr><td style="text-align: right;">{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
+  <tr><td>{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
 EOD;
         }
         $html .= <<<EOD
-  <tr><td style="text-align: center;" colspan="2">
+  <tr class="trAction"><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('reg_person_persons_update')}">
         Add/Remove People
     </a>
@@ -113,11 +113,11 @@ EOD;
 
         foreach($regPersonTeams as $regPersonTeam) {
             $html .= <<<EOD
-  <tr><td style="text-align: right;">{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
+  <tr><td>{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
 EOD;
         }
         $html .= <<<EOD
-  <tr><td style="text-align: center;" colspan="2">
+  <tr class="trAction"><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('reg_person_teams_update')}">
         Add/Remove Teams
     </a>
@@ -239,7 +239,7 @@ EOD;
         return <<<EOD
 <table class="account-person-list app_table" border="1">
   <tr><th colspan="2">My Teams</th></tr>
-  <tr><td style="text-align: center;" colspan="2" >
+  <tr class="trAction"><td style="text-align: center;" colspan="2" >
     <a href="/project/natgames/person/1/teams?_back=%2Fhome">Add/Remove Teams
     </a>
   </td></tr>
@@ -250,7 +250,7 @@ EOD;
   <tr><td style="text-align: center;" colspan="2">
     Primary: Art Hundiak
   </td></tr>
-  <tr><td style="text-align: center;" colspan="2" >
+  <tr class="trAction"><td style="text-align: center;" colspan="2" >
     <a href="/project/natgames/person/1/persons?_back=%2Fhome">Add/Remove People
     </a>
   </td></tr>

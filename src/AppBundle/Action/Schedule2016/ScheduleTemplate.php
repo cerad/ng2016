@@ -6,7 +6,9 @@ use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\GameOfficial\GameOfficialDetailsFinder;
 use AppBundle\Action\RegPerson\RegPersonFinder;
 
-class ScheduleTemplate
+use AppBundle\Action\AbstractTemplate;
+
+class ScheduleTemplate extends AbstractTemplate
 {
     use AbstractActionTrait;
 
@@ -33,8 +35,7 @@ class ScheduleTemplate
         GameOfficialDetailsFinder $gameOfficialDetailsFinder = null
     ) {
         $this->showOfficials       = $showOfficials;
-        $this->showOfficialDetails = $showOfficialDetails;
-
+        $this->showOfficialDetails =  $showOfficialDetails;
         $this->gameOfficialDetailsFinder = $gameOfficialDetailsFinder;
 
         $this->scheduleTitle = $scheduleTitle;
@@ -54,6 +55,9 @@ class ScheduleTemplate
     {
         $gameCount = count($games);
 
+        $this->showOfficials       = $this->isGranted('ROLE_REFEREE') ? $this->showOfficials : false;
+        $this->showOfficialDetails =  $this->isGranted('ROLE_REFEREE') ? $this->showOfficialDetails : false;
+        
         $html =  <<<EOD
 <div id="layout-block clear-fix">
 <div class="schedule-games-list">
@@ -139,6 +143,7 @@ EOD;
   <td class="text-left">{$homeTeamName}<hr class="separator">{$awayTeamName}</td>
 EOD;
             // TODO: Move all this to a ScheduleOfficialTemplate
+
             if ($this->showOfficials) {
                 $html .= <<<EOD
   <td class="schedule-referees text-left">

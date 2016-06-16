@@ -30,23 +30,15 @@ EOD;
     private function renderNotes()
     {
         return <<<EOD
-<div class="app_table" id="notes">
-<table class="app_help">
-  <thead>
-    <th>Notes on Adding a Team</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td width="15%">&nbsp;
-        <ul>
+<legend>Notes on Adding a Team</legend>
+<div class="app_help">
+  <ul class="cerad-common-help">
+    <ul class="ul_bullets">
           <li>Note: No real point in adding teams until we get the actual team names from national.</li>
           <li>Adding teams will cause games involving those teams to show up on your schedule.</li>
           <li>This can be handy when choosing which games to officiate.</li>
         </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    </ul>
 </div>
 EOD;
 
