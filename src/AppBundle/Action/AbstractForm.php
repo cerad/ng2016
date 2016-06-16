@@ -15,6 +15,7 @@ abstract class AbstractForm implements ContainerAwareInterface
 
     protected $formData       = [];
     protected $formDataErrors = [];
+    protected $formDataMessages = [];
 
     public function setData($formData)
     {
@@ -46,13 +47,30 @@ abstract class AbstractForm implements ContainerAwareInterface
 
     abstract public function render();
 
+    protected function renderFormMessages()
+    {
+        $msgs = $this->formDataMessages;
+
+        if (count($msgs) === 0) return null;
+
+        $html = '<hr><legend>Entry Success Messages</legend><div class="messages" ><ul>' . "\n";
+        foreach($msgs as $name => $items) {
+            foreach($items as $item) {
+                $html .= <<<EOD
+<li>{$item['msg']}</li>
+EOD;
+            }}
+        $html .= '</ul></div>' . "\n";
+        return $html;
+    }
+
     protected function renderFormErrors()
     {
         $errors = $this->formDataErrors;
 
         if (count($errors) === 0) return null;
 
-        $html = '<legend>Entry Error Messages</legend><div class="errors" ><ul>' . "\n";
+        $html = '<hr><legend>Entry Error Messages</legend><div class="errors" ><ul>' . "\n";
         foreach($errors as $name => $items) {
             foreach($items as $item) {
                 $html .= <<<EOD

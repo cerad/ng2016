@@ -20,6 +20,7 @@ class RegTeam
     public $division;
  
     public $poolKeys = [];
+    public $poolTeamKeys = [];
     
     private $keys = [
         'regTeamId'  => 'RegTeamId',
@@ -40,6 +41,10 @@ class RegTeam
     public function addPoolKey($poolKey)
     {
         $this->poolKeys[] = $poolKey;
+    }
+    public function addPoolTeamKey($poolTeamKey)
+    {
+        $this->poolTeamKeys[] = $poolTeamKey;
     }
     /**
      * @param  array $data

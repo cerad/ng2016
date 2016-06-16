@@ -30,8 +30,6 @@ class BaseTemplate extends AbstractTemplate
             <div class="container">
               {$this->content}
             </div>
-      {$this->renderScripts()}
-
       {$this->renderFooter()}
 
 EOT;
@@ -41,21 +39,25 @@ EOT;
     protected function renderHead()
     {
     return <<<EOT
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>{$this->escape($this->project['abbv'])}</title>
-<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico">
-<link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-72x72.png"><!-- iPad -->
-<link rel="apple-touch-icon" type="image/png" sizes="114x114" href="/images/apple-touch-icon-114x114.png"><!-- iPhone4 -->
-<link rel="icon" type="image/png" href="/images/apple-touch-icon-114x114.png"><!-- Opera Speed Dial, at least 144?114 px -->
-            <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-          <link rel="stylesheet" href="http://dbtek.github.io/bootstrap-vertical-tabs/assets/bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" type="text/css">
-            <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
-          </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$this->escape($this->project['abbv'])}</title>
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-72x72.png"><!-- iPad -->
+    <link rel="apple-touch-icon" type="image/png" sizes="114x114" href="/images/apple-touch-icon-114x114.png"><!-- iPhone4 -->
+    <link rel="icon" type="image/png" href="/images/apple-touch-icon-114x114.png"><!-- Opera Speed Dial, at least 144?114 px -->
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css" media="all" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://dbtek.github.io/bootstrap-vertical-tabs/assets/bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" type="text/css">
+    <link href="/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
+      
+    {$this->renderScripts()}
+
+</head>
 EOT;
     }
     
@@ -347,8 +349,8 @@ EOT;
           <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
           <!-- Latest compiled and minified JavaScript -->
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+          <script src="/js/fileinput.min.js"></script>
           <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-          <script src="/js/ie10-viewport-bug-workaround.js"></script>
           <script src="/js/zayso.js"></script>
 EOT;
     }

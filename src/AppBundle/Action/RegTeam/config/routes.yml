@@ -1,0 +1,13 @@
+regteam_export:
+    path: /export
+    defaults:
+        _controller:    regteam_export_controller
+        _view:          regteam_export_xls
+        _role:          ROLE_ADMIN
+
+regteam_import:
+    path: /import
+    defaults:
+        _controller:    regteam_import_controller
+        _view:          regteam_import_view
+        _role:          ROLE_ADMIN

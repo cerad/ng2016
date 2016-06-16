@@ -56,10 +56,8 @@ form { width: 100%; margin-left:auto; margin-right: auto; }
 
 .width-90 { max-width: 90%; margin-left: auto; margin-right: auto; }
 
-.btn { margin: 10px 10px 10px 0;}
-
 .btn-provider { color: #000; background-color: #f5f5f5; }
-
+.btn { margin-left: 10px; }
 .tableClass {
   width: 400px;
   max-width: 100%;
@@ -97,6 +95,22 @@ legend { padding-bottom: 10px; }
 form.cerad_common_form1 fieldset div.col-xs-10 {
     padding: 0;
 }
+.input-group > .form-control {
+    width: 600px;
+    margin: 10px 0;
+}
+a.btn { margin-left: 10px; }
+
+.file-preview-frame {
+    width: 90% !important;
+    height: 80px !important;
+}
+
+.file-preview-other { display: none; }
+
+.file-footer-caption { width: inherit; font-size: inherit; color: inherit; }
+.file-input-test-button { display: none; }
+
 @media only screen and (max-width: 768px){
     
     .panel-float-left {

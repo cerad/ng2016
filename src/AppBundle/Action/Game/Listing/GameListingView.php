@@ -44,9 +44,10 @@ class GameListingView extends AbstractView2
 <div id="layout-block">
 {$this->searchForm->render()}
 </div>
-{$this->renderPoolTeams()}
-<br/>
+<hr>
 {$this->renderRegTeams()}
+<hr>
+{$this->renderPoolTeams()}
 <br/>
 {$this->renderGames()}
 EOD;
@@ -119,6 +120,11 @@ EOD;
         $regTeamCount = count($this->regTeams);
 
         $html = <<<EOD
+<div class="form-group col-xs-9 col-xs-offset-2 clearfix">
+    <a href="{$this->generateUrl('regteam_import')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Import Teams</a>
+    <a href="{$this->generateUrl('regteam_export')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export Teams to Excel</a>
+</div>
+<div class="clearfix"></div>
 <div id="layout-block">
 <table class="standings" border = "1">
 <tr><th colspan="20" class="text-center">Registered Teams: {$regTeamCount}</th></tr>

@@ -1,0 +1,50 @@
+services:
+
+    # ===============================================================
+    # Team Management
+    regteam_upload_form:
+        class:  AppBundle\Action\RegTeam\RegTeamUploadForm
+        parent: abstract_form
+        arguments:
+            - '@regteam_import_xls'
+            
+    regteam_import_controller:
+        class:  AppBundle\Action\RegTeam\RegTeamImportController
+        parent: abstract_controller
+        arguments:
+            - '@regteam_upload_form'
+            - '%project_choices%'
+            - '%projects%'
+            - '@reg_team_updater'
+
+    regteam_import_view:
+        class:  AppBundle\Action\RegTeam\RegTeamImportView
+        parent: abstract_view2
+        arguments:
+            - '@regteam_upload_form'
+
+    regteam_export_controller:
+        class:  AppBundle\Action\RegTeam\RegTeamExportController
+        parent: abstract_controller
+        arguments:
+            - '@game_finder'
+            - '%project_choices%'
+            - '%projects%'
+
+    regteam_export_xls:
+        class:  AppBundle\Action\RegTeam\RegTeamExcelWriter
+        parent: abstract_view2
+        arguments:
+            - '@abstract_exporter_xls'
+
+    abstract_importer_xls:
+        class: AppBundle\Action\AbstractImporter
+
+    regteam_import_xls:
+        class:  AppBundle\Action\RegTeam\RegTeamFileReader
+        parent: abstract_importer_xls
+
+    reg_team_updater:
+        class: AppBundle\Action\RegTeam\RegTeamUpdater
+        arguments:
+            - '@reg_team_connection'
