@@ -45,3 +45,21 @@ services:
         parent: abstract_view2
         arguments:
             - '@game_listing_search_form'
+
+# Admin export action
+    game_export_controller:
+        class:  AppBundle\Action\Game\Export\GameExportController
+        parent: abstract_controller
+        arguments:
+            - '@game_finder'
+            - '%project_choices%'
+            - '%projects%'
+
+    game_writer_excel:
+        class:  AppBundle\Action\Game\Export\GameWriterExcel
+
+    game_export_view_excel:
+        class:  AppBundle\Action\Game\Export\GameExportViewExcel
+        parent: abstract_view2
+        arguments:
+            - '@game_writer_excel'
