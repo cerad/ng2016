@@ -86,7 +86,7 @@ EOD;
 
         foreach($regPersonPersons as $regPersonPerson) {
             $html .= <<<EOD
-  <tr><td style="text-align: right;">{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
+  <tr><td>{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
 EOD;
         }
         $html .= <<<EOD
@@ -113,7 +113,7 @@ EOD;
 
         foreach($regPersonTeams as $regPersonTeam) {
             $html .= <<<EOD
-  <tr><td style="text-align: right;">{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
+  <tr><td>{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
 EOD;
         }
         $html .= <<<EOD

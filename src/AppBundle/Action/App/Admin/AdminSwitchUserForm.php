@@ -47,11 +47,12 @@ class AdminSwitchUserForm extends AbstractForm
 
         $html = <<<EOD
 <form method="post" action="{$this->generateUrl('app_admin')}" class="form-inline role="form"">
-  <div class="form-group">
-      <label for="username">User</label>
-      {$this->renderInputSelect($userChoices,null,'username','username')}
-  </div>
+  <div class="form-group col-xs-12">
+      <label class="form-label col-xs-1" for="username">User</label>
+      {$this->renderInputSelect($userChoices,null,'username','username',null,"form-control col-xs-8")}
   <button type="submit" class="btn btn-default">Switch To User</button>
+  </div>
+<br>
 {$this->renderFormErrors()}
 </form>
 

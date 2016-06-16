@@ -30,24 +30,15 @@ EOD;
     private function renderNotes()
     {
         return <<<EOD
-<div class="app_table" id="notes">
-<table class="app_help">
-  <thead>
-    <th>Notes on Adding a Person to Your Crew</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td width="15%">&nbsp;
-        <ul>
+<legend>Notes on Adding a Team</legend>
+<div class="app_help">
+  <ul class="cerad-common-help">
+    <ul class="ul_bullets">
           <li>Adding a person to your crew allows you to sign them up for games.</li>
           <li>The person must have already created an account on zAYSO.</li>
           <li>Use Family for family members, Peer for others.</li>
           <li><strong>Please make sure the person knows you will be assigning their games.</strong></li>
         </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
 </div>
 
 EOD;

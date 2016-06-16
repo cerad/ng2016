@@ -170,18 +170,27 @@ EOT;
      */
     protected function renderMenuForUser()
     {
+        $html = '';
+        
       if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
         $html =
 <<<EOT
          <ul class="nav navbar-nav navbar-right">
-           {$this->renderRefereeSchedules()}
+EOT;
+        if ($this->isGranted('ROLE_REFEREE')) {
+            $html .= $this->renderRefereeSchedules();
+        }
+
+        $html .= <<<EOT
            {$this->renderMyAccount()}
 EOT;
           if ( $this->isGranted('ROLE_STAFF') ) {
               $html .= $this->renderAdmin();
           }
+
           $html .= $this->renderSignOut();
-$html .= <<<EOT
+
+        $html .= <<<EOT
         </ul>
 EOT;
       } else { // TODO Do not use _SERVER

@@ -84,7 +84,7 @@ EOD;
      * Your basic select input element
      *
      */
-    protected function renderInputSelect($choices,$value,$name,$id=null,$size=null)
+    protected function renderInputSelect($choices,$value,$name,$id=null,$size=null,$class="form-control")
     {
         $id = $id ? : $name;
 
@@ -95,11 +95,11 @@ EOD;
         $values   = is_array($value) ? $value : [$value];
 
         $html = <<<EOD
-<select id="{$id}" name="{$name}"{$multiple}{$size} class="form-control">
+<select id="{$id}" name="{$name}"{$multiple}{$size} class="{$class}">
 EOD;
         foreach($choices as $choiceValue => $choiceContent)
         {
-            $selected = in_array($choiceValue,$values) ? ' selected' : null;;
+            $selected = in_array($choiceValue,$values) ? ' selected' : null;
             $choiceValue   = $this->escape($choiceValue);
             $choiceContent = $this->escape($choiceContent);
             $html .= <<<EOD

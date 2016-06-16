@@ -44,6 +44,7 @@ EOT;
           
         $content .=  <<<EOT
 </div> <!-- class="container no-disc" -->
+<br>
 <div class="panel-float-clear"></div>
 EOT;
         $content .= $this->switchUserForm->render();

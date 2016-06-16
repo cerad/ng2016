@@ -74,17 +74,19 @@ class ScheduleSearchForm extends AbstractForm
   </table>
   <br/>
   <div class="schedule-search col-xs-8 col-xs-offset-2 clearfix">
-       <label class="col-xs-offset-3" for="filter">Filter</label>
-      <input type="text" name="filter" id="filter" class="form-control" size="30"
+       <label class="col-xs-offset-2" for="filter">Filter</label>
+      <input type="text" name="filter" id="filter" class="form-control" size="15"
         value="{$filter}" placeholder="Filter Games" />
+<div class="form-group">
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
-  <button type="submit" class="btn btn-sm btn-primary submit col-xs-offset-1">
+  <button type="submit" class="btn btn-sm btn-primary submit">
     <span class="glyphicon glyphicon-search"></span>
     <span>Search</span>
   </button>
     <a href="{$xlsUrl}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
     <a href="{$txtUrl}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
   </div>
+</div>
 </form>
 
 EOD;
