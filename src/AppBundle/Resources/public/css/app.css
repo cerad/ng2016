@@ -129,7 +129,7 @@ height:2em;
 }
 
 .schedule tr:nth-child(odd),.standings tr:nth-child(odd),.results tr:nth-child(odd),#person-list tr:nth-child(odd),.my_schedule tr:nth-child(odd) {
-background:#FFB8B8;
+background:#EDEDED;
 }
 
 .schedule td,.standings td,.results td,.scoring td {
