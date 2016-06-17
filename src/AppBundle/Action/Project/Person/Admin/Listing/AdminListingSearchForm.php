@@ -38,7 +38,7 @@ class AdminListingSearchForm extends AbstractForm
         $projectKey = filter_var(trim($data['projectKey']), FILTER_SANITIZE_STRING);
         $displayKey = filter_var(trim($data['displayKey']), FILTER_SANITIZE_STRING);
         $reportKey = filter_var(trim($data['reportKey']), FILTER_SANITIZE_STRING);
-        $name       = filter_var(trim($data['name']),       FILTER_SANITIZE_STRING);
+        $name       = filter_var(trim($data['name']),       FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
         
         $this->formData = array_merge($this->formData,[
             'projectKey'    => $projectKey,
