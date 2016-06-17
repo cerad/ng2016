@@ -39,9 +39,7 @@ class GameImportController extends AbstractController2
             
             $commit = $formData['op'] === 'update' ? true : false;
             
-            $results = $this->updater->updateGames($games,$commit);
-            
-            $results->fileName = $file->getClientOriginalName();
+            $results = $this->updater->updateGames($games,$commit,$file->getClientOriginalName());
             
             $request->attributes->set('results',$results);
         }

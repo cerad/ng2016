@@ -32,6 +32,9 @@ class GameImportReaderExcel
         $date = $this->processDate($row[$colDate]);
         $time = $this->processTime($row[$colTime]);
 
+        $homePoolTeamKey = trim($row[$colHomeTeamPoolKey]);
+        $awayPoolTeamKey = trim($row[$colAwayTeamPoolKey]);
+
         $game = [
             'projectId'       => $projectId,
             'gameNumber'      => $gameNumber,
@@ -40,8 +43,10 @@ class GameImportReaderExcel
             'time'            => $time,
             'start'           => $date . ' ' . $time,
             'fieldName'       => trim($row[$colFieldName]),
-            'homeTeamPoolKey' => trim($row[$colHomeTeamPoolKey]),
-            'awayTeamPoolKey' => trim($row[$colAwayTeamPoolKey]),
+            'homePoolTeamKey' => $homePoolTeamKey,
+            'awayPoolTeamKey' => $awayPoolTeamKey,
+            'homePoolTeamId'  => $projectId . ':' . $homePoolTeamKey,
+            'awayPoolTeamId'  => $projectId . ':' . $awayPoolTeamKey,
             'homeTeamName'    => trim($row[$colHomeTeamName]),
             'awayTeamName'    => trim($row[$colAwayTeamName]),
         ];
