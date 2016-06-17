@@ -80,6 +80,11 @@ assigneeStateTransitions:
     StateApprovedByAssignor:   { desc: 'Assignment Was Approved' }
     StateTurnedBackByAssignee: { desc: 'Request Turn Back Of Assignment', notifyAssignor: true }
      
+  StateTurnBackRejected:
+    StateTurnBackRejected:     { desc: 'Turnback Request Was Rejected' }
+    StateAcceptedByAssignee:   { desc: 'Accept The Assignment Again' }
+    StateTurnedBackByAssignee: { desc: 'Request Turn Back Of Assignment', notifyAssignor: true }
+
   StateTurnedBackByAssignee:
     StateTurnedBackByAssignee: { desc: 'Assignment Was Turned Back'  }
     StateAcceptedByAssignee:   { desc: 'Accept The Assignment Again' }
@@ -158,3 +163,7 @@ assignorStateTransitions:
     StateUnderReviewByAssignor: { desc: 'Under Review'  }
     StateApprovedByAssignor:    { desc: 'Approve Request'  }
     StateRejectedByAssignor:    { desc: 'Reject  Request', modState: StateOpen }
+
+  StateTurnBackRejected:
+    StateTurnBackRejected:     { desc: 'Turnback Request Was Rejected' }
+    StateTurnBackApproved:     { desc: 'Approve Turn Back', modState: StateOpen }
