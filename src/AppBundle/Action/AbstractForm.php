@@ -157,7 +157,7 @@ EOD;
     protected function filterScalarString($data,$name)
     {
         $itemData = isset($data[$name]) ? $data[$name] : null;
-        $itemData = filter_var(trim($itemData), FILTER_SANITIZE_STRING );
+        $itemData = filter_var(trim($itemData), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES );
         if ($itemData === null || strlen($itemData) < 1) {
             return null;
         }
