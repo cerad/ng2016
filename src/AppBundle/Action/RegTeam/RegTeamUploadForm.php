@@ -103,49 +103,14 @@ class RegTeamUploadForm extends AbstractForm
 {$this->renderFormMessages()}
 <hr>
 <div id="file-input-upload-errors" class="center-block" style="width:800px;display:none"></div>
-<style>
-.file-input-test-button { display: none; }
-</style>
 
 <form id="file-upload-form" role="form" class="form-inline" action="{$this->generateUrl("regteam_import")}" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
         <label class="control-label">Choose a file to upload</label>
-        <input id="team-xls-upload" type="file" name="team-xls-upload" class="form-control input-file file file-loading"  >
+        <input id="team-xls-upload" type="file" name="team-xls-upload" class="form-control input-file file-loading"  >
     </div>
 </form>
-<script>
-    var btnCust = '<button type="submit" name="file-input-test" class="btn btn-default file-input-test file-input-test-button" title="Test Upload" data-toggle="modal" data-target="#modalTestSuccess">' +
-        '<i class="glyphicon glyphicon-upload"></i><span class="hidden-xs">Test Upload</span>' +
-        '</button>';
-
-    $('#team-xls-upload').fileinput({
-        allowedFileExtensions: ["xls", "xlsx"],
-        maxFileCount: 1,
-        showCaption: false,
-        elErrorContainer: '#file-input-upload-errors',
-        msgErrorClass: 'alert alert-block alert-danger',
-        uploadAsync: false,
-        layoutTemplates: {
-            main2: '{preview} {remove}' + btnCust + '{upload} {browse}'
-        },
-        }).on('change', function(e) {
-            console.log('File changed');
-        }).on('fileuploaded', function(e, params) {
-            console.log('File uploaded');
-        }).on('fileselect', function(e) {
-            $(".file-input-test-button").css("display","inline");
-            console.log('File selected');            
-        }).on('filecleared', function(e) {
-            $(".file-input-test-button").css("display","none");
-            console.log('File cleared');            
-        }).on('fileerror', function(e) {
-            $(".file-input-test-button").css("display","none");
-            console.log('File error');            
-        });
-    
-</script>
-
 <br/>
 EOD;
         

@@ -96,14 +96,14 @@ EOT;
     <ul>
         <li><a href="{$this->generateUrl('schedule_game_2016')}">View Game Schedule</a></li>
         <li><a href="{$this->generateUrl('schedule_team_2016')}">View Team Schedule</a></li>
-        <li><a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}">Export Game Schedule (Excel)</a></li>
+        <li><a href="{$this->generateUrl('schedule_game_2016',['_format' => 'xls'])}">Export Game Schedule</a></li>
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_qf'])}">Export Quarter-Finals Schedule for review</a></li>
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_sf'])}">Export Semi-Finals Schedule for review</a></li>
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_fm'])}">Export Finals Schedule for review</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
-     <li><a href="#">Import Game Schedule (Excel)</a></li> 
+     <li><a href="#">Import Game Schedule</a></li> 
 EOT;
       }
       
@@ -127,11 +127,11 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('game_listing')}">View Teams</a></li>
-      <li><a href="{$this->generateUrl('regteam_export')}">Export Teams (Excel)</a></li>
+      <li><a href="{$this->generateUrl('regteam_export')}">Export Teams</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
-      <li><a href="{$this->generateUrl('regteam_import')}">Import/Update Teams (Excel)</a></li>
+      <li><a href="{$this->generateUrl('regteam_import')}">Import/Update Teams</a></li>
 EOT;
       }
 
@@ -155,13 +155,13 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('schedule_official_2016')}">View Referee Assignment Requests</a></li>
-      <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignment Requests (Excel)</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignment Requests</a></li>
       <li><a href="{$this->generateUrl('schedule_assignor_2016')}">View Assignor Assignments</a></li>
 EOT;
 
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
-      <li><a href="#">Import Referee Assignments (Excel)</a></li>
+      <li><a href="#">Import Referee Assignments</a></li>
 EOT;
       }
 
@@ -188,7 +188,7 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
-      <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People (Excel)</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People</a></li>
     </ul>
   </div>
 </div>
