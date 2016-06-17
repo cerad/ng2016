@@ -69,6 +69,10 @@ services:
     game_import_reader_excel:
         class:  AppBundle\Action\Game\Import\GameImportReaderExcel
 
+    game_import_updater:
+        class:  AppBundle\Action\Game\Import\GameImportUpdater
+        arguments: ['@game_connection']
+
     game_import_form:
         class:  AppBundle\Action\Game\Import\GameImportForm
         parent: abstract_controller
@@ -79,6 +83,7 @@ services:
         arguments:
             - '@game_import_form'
             - '@game_import_reader_excel'
+            - '@game_import_updater'
 
     game_import_view:
         class:  AppBundle\Action\Game\Import\GameImportView

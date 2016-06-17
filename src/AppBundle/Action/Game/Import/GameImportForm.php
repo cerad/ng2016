@@ -52,6 +52,7 @@ class GameImportForm extends AbstractForm
     <span class="glyphicon glyphicon-search"></span> 
     <span>Import</span>
   </button>
+  <a href="{$this->generateUrl('game_listing')}">Back To Game Listing</a>
 </form>
 <br/>
 EOD;

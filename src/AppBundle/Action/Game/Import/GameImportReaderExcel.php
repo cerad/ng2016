@@ -35,8 +35,10 @@ class GameImportReaderExcel
         $game = [
             'projectId'       => $projectId,
             'gameNumber'      => $gameNumber,
+            'gameId'          => $projectId . ':' . abs($gameNumber),
             'date'            => $date,
             'time'            => $time,
+            'start'           => $date . ' ' . $time,
             'fieldName'       => trim($row[$colFieldName]),
             'homeTeamPoolKey' => trim($row[$colHomeTeamPoolKey]),
             'awayTeamPoolKey' => trim($row[$colAwayTeamPoolKey]),

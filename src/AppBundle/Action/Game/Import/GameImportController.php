@@ -10,13 +10,16 @@ class GameImportController extends AbstractController2
 {
     private $form;
     private $reader;
+    private $updater;
     
     public function __construct(
         GameImportForm $form,
-        GameImportReaderExcel $reader
+        GameImportReaderExcel $reader,
+        GameImportUpdater     $updater
     ) {
-        $this->form   = $form;
-        $this->reader = $reader;
+        $this->form    = $form;
+        $this->reader  = $reader;
+        $this->updater = $updater;
     }
     public function __invoke(Request $request)
     {
@@ -32,9 +35,15 @@ class GameImportController extends AbstractController2
             /** @var UploadedFile $file */
             $file = $formData['file'];
             
-            $games = $this->reader->read($file->getRealPath(),$file->getClientOriginalName());
+            $games = $this->reader->read($file->getRealPath());
             
-            dump($games);
+            $commit = $formData['op'] === 'update' ? true : false;
+            
+            $results = $this->updater->updateGames($games,$commit);
+            
+            $results->fileName = $file->getClientOriginalName();
+            
+            $request->attributes->set('results',$results);
         }
         return null;
     }
