@@ -36,7 +36,7 @@ class RegisterForm extends AbstractForm
         foreach($data as $key => $value)
         {
             if (!is_array($value)) {
-                $value = filter_var(trim($value), FILTER_SANITIZE_STRING);
+                $value = filter_var(trim($value), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
             }
             if (isset($this->formControls[$key])) {
                 $meta = $this->formControls[$key];
@@ -48,6 +48,7 @@ class RegisterForm extends AbstractForm
             $data[$key] = $value;
         }
         // Validate
+        dump($data['notesUser']);
         // $errors = [];
 
         //dump($data);
