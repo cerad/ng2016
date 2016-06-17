@@ -48,7 +48,6 @@ class RegisterForm extends AbstractForm
             $data[$key] = $value;
         }
         // Validate
-        dump($data['notesUser']);
         // $errors = [];
 
         //dump($data);
