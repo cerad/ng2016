@@ -31,6 +31,8 @@ class BaseTemplate extends AbstractTemplate
               {$this->content}
             </div>
       {$this->renderFooter()}
+      
+    {$this->renderScripts()}
 
 EOT;
     }
@@ -54,9 +56,6 @@ EOT;
     <link rel="stylesheet" href="http://dbtek.github.io/bootstrap-vertical-tabs/assets/bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" type="text/css">
     <link href="/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="/css/zayso.css" media="all" />
-      
-    {$this->renderScripts()}
-
 </head>
 EOT;
     }

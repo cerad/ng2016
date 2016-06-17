@@ -5,35 +5,32 @@
  *
 */
 
+$(document).ready(function() {
+    var btnCust = '<button type="submit" name="file-input-test" class="btn btn-default file-input-test file-input-test-button" title="Test Upload" data-toggle="modal" data-target="#modalTestSuccess"><i class="glyphicon glyphicon-upload"></i><span class="hidden-xs">Test Upload</span></button>';
 
-//
-//var observeDOM = (function(){
-//    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
-//        eventListenerSupported = window.addEventListener;
-//
-//    return function(obj, callback){
-//        if( MutationObserver ){
-//            // define a new observer
-//            var obs = new MutationObserver(function(mutations, observer){
-//                if( mutations[0].addedNodes.length || mutations[0].removedNodes.length )
-//                    callback();
-//            });
-//            // have the observer observe foo for changes in children
-//            obs.observe( obj, { childList:true, subtree:true });
-//        }
-//        else if( eventListenerSupported ){
-//            obj.addEventListener('DOMNodeInserted', callback, false);
-//            obj.addEventListener('DOMNodeRemoved', callback, false);
-//        }
-//    };
-//})();
-//
-//// Observe a specific DOM element:
-//observeDOM( document.getElementById('team-xls-upload') ,function(){ 
-//    var btnCust = '<button type="button" class="btn btn-default file-input-test file-input-test-button" title="Test Upload" onclick="alert(\'Call your custom code here.\')">' +
-//        '<i class="glyphicon glyphicon-upload"></i><span class="hidden-xs">Test Upload</span>' +
-//        '</button>';
-//
-//    console.log('document.onhaschange');
-//    console.log('dom changed');
-//});
+    $('#team-xls-upload').fileinput({
+        allowedFileExtensions: ["xls", "xlsx"],
+        maxFileCount: 1,
+        showCaption: false,
+        elErrorContainer: '#file-input-upload-errors',
+        msgErrorClass: 'alert alert-block alert-danger',
+        uploadAsync: false,
+        layoutTemplates: {
+            main2: '{preview} {remove}' + btnCust + '{upload} {browse}'
+        },
+        }).on('change', function(e) {
+            console.log('File changed');
+        }).on('fileuploaded', function(e, params) {
+            console.log('File uploaded');
+        }).on('fileselect', function(e) {
+            $(".file-input-test-button").css("display","inline");
+            console.log('File selected');            
+        }).on('filecleared', function(e) {
+            $(".file-input-test-button").css("display","none");
+            console.log('File cleared');            
+        }).on('fileerror', function(e) {
+            $(".file-input-test-button").css("display","none");
+            console.log('File error');            
+        });
+
+})
