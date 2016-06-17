@@ -57,10 +57,10 @@ class GameExportWriterExcel
         $ws->getCell($colDate           . '1')->setValue('Date');
         $ws->getCell($colTime           . '1')->setValue('Time');
         $ws->getCell($colFieldName      . '1')->setValue('Field');
-        $ws->getCell($colHomeTeamPoolId . '1')->setValue('Home Team Pool Id');
+        $ws->getCell($colHomeTeamPoolId . '1')->setValue('Home Team Pool Key');
         $ws->getCell($colHomeTeamName   . '1')->setValue('Home Team Name');
         $ws->getCell($colAwayTeamName   . '1')->setValue('Away Team Name');
-        $ws->getCell($colAwayTeamPoolId . '1')->setValue('Away Team Pool Id');
+        $ws->getCell($colAwayTeamPoolId . '1')->setValue('Away Team Pool Key');
 
         $ws->getColumnDimension($colProjectId     )->setWidth(24);
         $ws->getColumnDimension($colGameNumber    )->setWidth( 8);
@@ -90,7 +90,7 @@ class GameExportWriterExcel
             $awayTeam = $game->awayTeam;
 
             $ws->getCell($colProjectId  . $row)->setValue($game->projectId);
-            $ws->getCell($colGameNumber . $row)->setValue($game->gameNumber);
+            $ws->getCell($colGameNumber . $row)->setValueExplicit($game->gameNumber);
 
             // Copied from advanced binder
             $startDate = substr($game->start,0,10);

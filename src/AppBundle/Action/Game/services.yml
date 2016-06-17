@@ -78,6 +78,7 @@ services:
         parent: abstract_controller
         arguments:
             - '@game_import_form'
+            - '@game_import_reader_excel'
 
     game_import_view:
         class:  AppBundle\Action\Game\Import\GameImportView

@@ -20,8 +20,6 @@ class GameImportForm extends AbstractForm
         if (!$file) {
             $errors[] = 'Missing File';
         }
-        dump($file);
-        
         $this->formData = array_replace($this->formData,[
             'op'   => $this->filterScalarString($data,'op'),
             'file' => $file,
