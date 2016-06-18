@@ -6,6 +6,8 @@ use AppBundle\Common\DirectoryTrait;
 
 use Doctrine\DBAL\Connection;
 
+use AppBundle\Action\RegPerson\RegPersonFinder;
+
 use PHPUnit_Framework_TestCase;
 
 class ScheduleFinderTest extends PHPUnit_Framework_TestCase
@@ -15,12 +17,22 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
     private $gameDatabaseKey = 'database_name_test';
     private $regTeamDatabaseKey = 'database_name_test'; // Registered teams
+    private $regPersonDatabaseKey = 'database_name_test'; // Registered teams
 
     /** @var  Connection */
     private $gameConn;
 
     /** @var  Connection */
     private $regTeamConn;
+
+    /** @var  Connection */
+    private $regPersonConn;
+
+    /** @var  Connection */
+    private $userConn;
+    
+    /** @var RegPersonFinder  */
+    private $regPersonFinder;
 
     private $projectId = 'OlympicsFootball2016';
 
@@ -32,7 +44,18 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         if (!$this->regTeamConn) {
              $this->regTeamConn = $this->getConnection($this->regTeamDatabaseKey);
         }
-        return new ScheduleFinder($this->gameConn,$this->regTeamConn);
+        if (!$this->regPersonConn) {
+             $this->regPersonConn = $this->getConnection($this->regTeamDatabaseKey);
+        }
+        if (!$this->userConn) {
+             $this->userConn = $this->getConnection($this->regPersonDatabaseKey);
+        }
+        if (!$this->regTeamConn) {
+             $this->regTeamConn = $this->getConnection($this->regPersonDatabaseKey);
+        }
+        $this->regPersonFinder = new RegPersonFinder($this->regPersonConn,$this->regTeamConn,$this->userConn);
+
+        return new ScheduleFinder($this->gameConn,$this->regTeamConn,$this->regPersonFinder);
     }
     public function testLoad()
     {
