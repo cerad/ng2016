@@ -6,7 +6,6 @@ use AppBundle\Action\AbstractController2;
 use AppBundle\Action\Schedule2016\ScheduleControllerTrait;
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 
-use AppBundle\Action\Schedule2016\ScheduleSearchForm;
 use Symfony\Component\HttpFoundation\Request;
 
 class ScheduleAssignorController extends AbstractController2
@@ -18,9 +17,11 @@ class ScheduleAssignorController extends AbstractController2
 
     private $projects;
     private $projectChoices;
+    
+    private $reportKey;
 
     public function __construct(
-        ScheduleSearchForm $searchForm,
+        ScheduleAssignorSearchForm $searchForm,
         ScheduleFinder     $scheduleFinder,
         array $projectChoices,
         array $projects
@@ -40,27 +41,34 @@ class ScheduleAssignorController extends AbstractController2
         // Second date in project
         $date = array_keys($this->projects[$projectId]['dates'])[1];
 
+        // Save selected teams in session
         $searchData = [
-            'projectId' => $projectId,
+            'projectId'  => $projectId,
             'programs'   => ['Core'],
             'genders'    => ['G'],
             'ages'       => ['U14'],
             'dates'      => [$date],
             'sortBy'     => 1,
             'filter'     => null,
+            'reportKey'  => null   
         ];
-        // Save selected teams in session
-        $session    = $request->getSession();
+
+        $session = $request->getSession();
         $sessionKey = 'schedule_assignor_search_data_2016';
 
-        if ($request->query->has('reset')) {
-            $session->remove($sessionKey);
-        }
         if ($session->has($sessionKey)) {
-            $searchData = array_replace($searchData,$session->get($sessionKey));
-        }
+            $searchData = array_merge($searchData,$session->get($sessionKey));
+        };
+
+        //if ($request->query->has('reset')) {
+        //    $session->remove($sessionKey);
+        //}
+        //if ($session->has($sessionKey)) {
+        //    $searchData = array_replace($searchData,$session->get($sessionKey));
+        //}
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);
+        
         $searchForm->handleRequest($request);
         
         if ($searchForm->isValid()) {
@@ -97,10 +105,79 @@ class ScheduleAssignorController extends AbstractController2
         $games = $this->scheduleFinder->findGames($searchData,true);
 
         $games = $this->filterGames($games,$searchData['filter']);
-
+        
+        //apply report filters on assignState
+        $this->reportKey = $searchData['reportKey'];
+        $games = $this->filterGames($games);
+        
         $request->attributes->set('games',  $games);
         $request->attributes->set('filter', $searchData['filter']);
 
         return null;
+    }
+    
+    private function filterGames($games)
+    {
+        //from assign.yml
+          //Open:      Open # Open
+          //Requested: Req
+          //If_Needed: If_N
+          //Accepted:  Acc
+          //Declined:  Dec
+          //Approved:  App
+          //Rejected:  Rej
+          //Reviewing: Rev
+          //Pending:   Pend
+          //Published: Pub
+          //Notified:  Not
+  
+        if (is_null($games)) return $games;
+   
+        if (in_array($this->reportKey, array(null, 'All'))) return $games;
+
+        $gamesReport = [];
+        $reportKey = strtolower($this->reportKey);
+        foreach($games as $game) {
+            $officials = $game->getOfficials();
+            $next = false;
+            foreach($officials as $official) {
+                $assignState = strtolower($official->assignState);
+                switch ($reportKey) {
+                    case 'issues':
+                        if ($assignState != "accepted") {
+                            if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                    case 'open':
+                        if ($assignState == "open") {
+                            if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                    case 'pending':
+                        if ($assignState == "pending") {
+                            if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                    case 'published':
+                        if ($assignState == "published") {
+                            if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                    case 'requested':
+                        if ($assignState == "requested") {
+                            if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                    case 'turnback':
+                        if ($assignState == "turnback") {            
+                            if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                }
+            }
+        }
+        
+        return $gamesReport;
+
     }
 }
