@@ -158,17 +158,17 @@ EOD;
     }
     protected function renderRegTeam(RegTeam $team)
     {
-        $poolKeys = array_replace(['&nbsp;','&nbsp;','&nbsp;','&nbsp;'],$team->poolKeys);
+        $poolTeamKeys = array_replace(['&nbsp;','&nbsp;','&nbsp;','&nbsp;'],$team->poolTeamKeys);
         return <<<EOD
 <tr>
   <td class="text-left">  {$team->teamKey}   </td>
   <td class="text-left">  {$team->teamNumber}</td>
   <td class="text-left">  {$team->teamName}  </td>
   <td class="text-center">{$team->orgView}   </td>
-  <td class="text-center">{$poolKeys[0]}     </td>
-  <td class="text-center">{$poolKeys[1]}     </td>
-  <td class="text-center">{$poolKeys[2]}     </td>
-  <td class="text-center">{$poolKeys[3]}     </td>
+  <td class="text-center">{$poolTeamKeys[0]} </td>
+  <td class="text-center">{$poolTeamKeys[1]} </td>
+  <td class="text-center">{$poolTeamKeys[2]} </td>
+  <td class="text-center">{$poolTeamKeys[3]} </td>
 </tr>
 EOD;
     }

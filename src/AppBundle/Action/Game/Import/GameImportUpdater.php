@@ -112,6 +112,56 @@ class GameImportUpdater
 
         if (!$this->commit) return;
 
+        $gameId     = $game['gameId'];
+        $projectId  = $game['projectId'];
+        $gameNumber = $game['gameNumber'];
+
+        $gameRow = [
+            'gameId'     => $gameId,
+            'projectId'  => $projectId,
+            'gameNumber' => $gameNumber,
+            'fieldName'  => $game['fieldName'],
+            'venueName'  => 'Polo',
+            'start'      => $game['start'],
+            'finish'     => $this->calcFinish($game['start'],$homePoolTeam),
+        ];
+        $this->conn->insert('games',$gameRow);
+
+        // Home Team
+        $slot = 1;
+        $gameTeam = [
+            'projectId'  => $projectId,
+            'gameId'     => $gameId,
+            'gameNumber' => $gameNumber,
+            'poolTeamId' => $homePoolTeam['poolTeamId'],
+            'slot'       => $slot,
+            'gameTeamId' => $gameId . ':' . $slot,
+        ];
+        $this->conn->insert('gameTeams',$gameTeam);
+
+        // Away Team
+        $slot = 2;
+        $gameTeam = array_replace($gameTeam,[
+            'poolTeamId' => $awayPoolTeam['poolTeamId'],
+            'slot'       => $slot,
+            'gameTeamId' => $gameId . ':' . $slot,
+        ]);
+        $this->conn->insert('gameTeams',$gameTeam);
+
+        // Officials
+        $isMedalRound = in_array($homePoolTeam['poolTypeKey'],['QF','SF','TF']);
+        $gameOfficial = [
+            'projectId'   => $projectId,
+            'gameId'      => $gameId,
+            'gameNumber'  => $gameNumber,
+            'assignRole'  => $isMedalRound ? 'ROLE_ASSIGNOR' : 'ROLE_REFEREE',
+            'assignState' => 'Open',
+        ];
+        foreach([1,2,3] as $slot) {
+            $gameOfficial['gameOfficialId'] = $gameId . ':' . $slot;
+            $gameOfficial['slot'] = $slot;
+            $this->conn->insert('gameOfficials',$gameOfficial);
+        }
     }
     private function removeGame($game)
     {
@@ -144,7 +194,7 @@ class GameImportUpdater
     }
     private function findPoolTeam($poolTeamId)
     {
-        $sql = 'SELECT poolTeamId,age FROM poolTeams WHERE poolTeamId = ?';
+        $sql = 'SELECT poolTeamId,poolTypeKey,age FROM poolTeams WHERE poolTeamId = ?';
         $stmt = $this->conn->executeQuery($sql,[$poolTeamId]);
         return $stmt->fetch();
     }
