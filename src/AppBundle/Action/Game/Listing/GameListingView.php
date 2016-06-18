@@ -65,6 +65,13 @@ EOD;
         $gameCount = count($this->games);
 
         $html = <<<EOD
+<div class="form-group col-xs-9 col-xs-offset-2 clearfix">
+  <a href="{$this->generateUrl('game_import')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Import Games</a>
+  <a href="{$this->generateUrl('game_export')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Export Games to Excel</a>
+</div>
+<div class="clearfix"></div>
 <div id="layout-block">
 <table class="standings" border = "1">
 <tr><th colspan="20" class="text-center">Games: {$gameCount}</th></tr>
@@ -151,17 +158,17 @@ EOD;
     }
     protected function renderRegTeam(RegTeam $team)
     {
-        $poolKeys = array_replace(['&nbsp;','&nbsp;','&nbsp;','&nbsp;'],$team->poolKeys);
+        $poolTeamKeys = array_replace(['&nbsp;','&nbsp;','&nbsp;','&nbsp;'],$team->poolTeamKeys);
         return <<<EOD
 <tr>
   <td class="text-left">  {$team->teamKey}   </td>
   <td class="text-left">  {$team->teamNumber}</td>
   <td class="text-left">  {$team->teamName}  </td>
   <td class="text-center">{$team->orgView}   </td>
-  <td class="text-center">{$poolKeys[0]}     </td>
-  <td class="text-center">{$poolKeys[1]}     </td>
-  <td class="text-center">{$poolKeys[2]}     </td>
-  <td class="text-center">{$poolKeys[3]}     </td>
+  <td class="text-center">{$poolTeamKeys[0]} </td>
+  <td class="text-center">{$poolTeamKeys[1]} </td>
+  <td class="text-center">{$poolTeamKeys[2]} </td>
+  <td class="text-center">{$poolTeamKeys[3]} </td>
 </tr>
 EOD;
     }

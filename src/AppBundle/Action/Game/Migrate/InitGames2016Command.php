@@ -32,11 +32,11 @@ class InitGames2016Command extends Command
 
         $commit = false;
 
-        $this->initRegTeams($commit || false);
+        $this->initRegTeams($commit || true);
 
-        $this->initPoolTeams($commit || false);
+        $this->initPoolTeams($commit || true);
 
-        $this->assignRegTeamsToPoolPlayTeams($commit || false);
+        $this->assignRegTeamsToPoolPlayTeams($commit || true);
 
         $this->initGames($commit || true);
 
@@ -88,7 +88,7 @@ class InitGames2016Command extends Command
     {
         $division = $age . $gender;
 
-        $teamKey = sprintf('%s-%s-%02d', $division, $program, $teamNumber);
+        $teamKey = sprintf('%s%s%02d', $division, $program, $teamNumber);
 
         $regTeamId = $projectId . ':' . $teamKey;
 
