@@ -24,3 +24,8 @@ app_admin:
         _view:       admin_view
         _controller: admin_controller
 
+app_text_alerts:
+    path: /textalerts
+    defaults:
+        _view:       text_alerts_view
+        _controller: text_alerts_controller

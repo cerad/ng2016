@@ -47,9 +47,14 @@ EOT;
 EOT;
         if ($this->showResultsMenu) {
             $html .= <<<EOT
+<p>
   If you just want to peruse the Schedules and Results, no need to go any further.  
   You do not need to sign-in to access Schedules or Results above.
-</p><br/>
+</p>
+<p>
+<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">Join AYSO National Games 2016 text alerts on RainedOut</a> 
+</p>
+<br/>
 EOT;
 }
         $html .= <<<EOT
