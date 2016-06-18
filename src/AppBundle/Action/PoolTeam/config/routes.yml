@@ -1,0 +1,14 @@
+
+pool_team_export:
+    path: /export
+    defaults:
+        _controller: pool_team_export_controller
+        _view:       pool_team_export_view_excel
+        _role:       ROLE_ADMIN
+
+pool_team_import:
+    path: /import
+    defaults:
+        _controller: pool_team_import_controller
+        _view:       pool_team_import_view
+        _role:       ROLE_ADMIN

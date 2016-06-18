@@ -31,7 +31,8 @@ class AppExtension extends Extension
         $actionLoader->load('GameReport2016/services.yml');
         
         $actionLoader->load('User/services.yml');
-        
+
+        $actionLoader->load('RegTeam/config/services.yml');
         $actionLoader->load('RegPerson/config/services.yml');
         
         $actionLoader->load('Results2016/services.yml');
@@ -44,8 +45,7 @@ class AppExtension extends Extension
 
         $actionLoader->load('Physical/Ayso/services.yml');
         $actionLoader->load('Physical/Person/services.yml');
-
-        $actionLoader->load('RegTeam/config/services.yml');
-
+        
+        $actionLoader->load('PoolTeam/config/services.yml');
     }
 }

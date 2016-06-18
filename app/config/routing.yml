@@ -15,6 +15,10 @@ app_game_official:
     resource: "@AppBundle/Action/GameOfficial/config/routes.yml"
     prefix: /game/official
 
+app_pool_team:
+    resource: "@AppBundle/Action/PoolTeam/config/routes.yml"
+    prefix: /pool/team
+
 app_schedule_2016:
     resource: "@AppBundle/Action/Schedule2016/routes.yml"
     prefix: /schedule
