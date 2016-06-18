@@ -123,11 +123,18 @@ services:
 
     # ===============================================================
     # Schedule Assignor
+    schedule_assignor_search_form_2016:
+        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorSearchForm
+        parent: abstract_form
+        arguments:
+            - '%project_choices%'
+            - '%projects%'
+
     schedule_assignor_controller_2016:
         class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorController
         parent: abstract_controller
         arguments:
-            - '@schedule_search_form_2016'
+            - '@schedule_assignor_search_form_2016'
             - '@schedule_finder_2016'
             - '%project_choices%'
             - '%projects%'
@@ -146,20 +153,20 @@ services:
         class:  AppBundle\Action\Schedule2016\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_search_form_2016'
+            - '@schedule_assignor_search_form_2016'
             - '@schedule_assignor_template_2016'
 
-    schedule_assignor_view_xls_2016:
-        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
-        parent: abstract_view2
-        arguments:
-            - '@abstract_exporter_xls'
-
-    schedule_assignor_view_txt_2016:
-        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
-        parent: abstract_view2
-        arguments:
-            - '@abstract_exporter_txt'
+    #schedule_assignor_view_xls_2016:
+    #    class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
+    #    parent: abstract_view2
+    #    arguments:
+    #        - '@abstract_exporter_xls'
+    #
+    #schedule_assignor_view_txt_2016:
+    #    class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
+    #    parent: abstract_view2
+    #    arguments:
+    #        - '@abstract_exporter_txt'
 
     # ===============================================================
     # Schedule My
