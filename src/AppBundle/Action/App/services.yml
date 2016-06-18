@@ -60,6 +60,15 @@ services:
             - '@user_login_form'
             - '%show_results_menu%'
 
+    # action text alerts
+    text_alerts_controller:
+        class:  AppBundle\Action\App\TextAlerts\TextAlertsController
+        parent: abstract_controller
+
+    text_alerts_view:
+        class:  AppBundle\Action\App\TextAlerts\TextAlertsView
+        parent: abstract_view2
+
     # action home
     home_controller:
         class:  AppBundle\Action\App\Home\HomeController
