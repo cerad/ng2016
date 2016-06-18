@@ -78,10 +78,11 @@ EOD;
         return $html;
     }
     private $showChoices = [
-        'all'       => 'All',
-        'regTeams'  => 'Registered Teams',
-        'poolTeams' => 'Pool Teamss',
-        'games'     => 'Games',
+        'all'         => 'All',
+        'regTeams'    => 'Registered Teams',
+        'poolTeams'   => 'Pool Teams',
+        'games'       => 'Games',
+        'gameNumbers' => 'Game Numbers(todo)',
     ];
     private $divisionChoices = [
          null  => 'All',

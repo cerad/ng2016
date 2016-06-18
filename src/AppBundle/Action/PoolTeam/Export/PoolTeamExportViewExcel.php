@@ -21,13 +21,13 @@ class PoolTeamExportViewExcel extends AbstractView2
 
         $response = new Response();
 
-        $games = $request->attributes->get('games');
+        $poolTeams = $request->attributes->get('poolTeams');
 
-        $response->setContent($writer->write($games));
+        $response->setContent($writer->write($poolTeams));
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'GameSchedule2016_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = 'PoolTeams2016_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

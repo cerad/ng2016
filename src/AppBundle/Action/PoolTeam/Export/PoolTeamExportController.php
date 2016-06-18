@@ -14,53 +14,31 @@ use Symfony\Component\HttpFoundation\Request;
 class PoolTeamExportController extends AbstractController2
 {
     private $finder;
-    
-    private $projects;
-    private $projectChoices;
 
     public function __construct(
-        GameFinder             $finder,
-        array $projectChoices,
-        array $projects
+        GameFinder             $finder
     ) {
         $this->finder = $finder;
-
-        $this->projects       = $projects;
-        $this->projectChoices = $projectChoices;
     }
     public function __invoke(Request $request)
     {
-        // Support multiple projects
-        $projectId = $this->getDefaultProjectId();
-        $searchData = [
-            'projectId' => $projectId,
-            'program'   => $this->getDefaultProgramForProject($projectId),
-            'division'  => 'U14B',
-            'show'      => 'all',
-        ];
         // Override from session
         $session = $request->getSession();
         $sessionKey = 'game_listing';
-        if ($session->has($sessionKey)) {
-            $searchData = array_replace($searchData,$session->get($sessionKey));
+        if (!$session->has($sessionKey)) {
+            return $this->redirectToRoute('game_listing');
         }
+        $searchData = $session->get($sessionKey);
+        
         $criteria = [
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
             'divisions'  => [$searchData['division']],
             'wantTeams'  => true,
         ];
-        $games = $this->finder->findGames($criteria);
-        $request->attributes->set('games',$games);
+        $poolTeams = $this->finder->findPoolTeams($criteria);
+        $request->attributes->set('poolTeams',$poolTeams);
         
         return null;
-    }
-    private function getDefaultProjectId()
-    {
-        return array_keys($this->projectChoices)[0];
-    }
-    private function getDefaultProgramForProject($projectId)
-    {
-        return  array_keys($this->projects[$projectId]['programs'])[0];
     }
 }

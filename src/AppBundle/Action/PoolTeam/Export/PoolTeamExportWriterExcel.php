@@ -1,18 +1,18 @@
 <?php
 namespace AppBundle\Action\PoolTeam\Export;
 
-use AppBundle\Action\Schedule2016\ScheduleGame;
+use AppBundle\Action\Game\PoolTeam;
 
 class PoolTeamExportWriterExcel
 {
     private $wb;
 
     /**
-     * @param  ScheduleGame[] $games
+     * @param  PoolTeam[] $poolTeams
      * @return string
      * @throws \PHPExcel_Exception
      */
-    public function write(array $games)
+    public function write(array $poolTeams)
     {
         // Not sure this is needed
         \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
@@ -21,95 +21,96 @@ class PoolTeamExportWriterExcel
 
         $ws = $wb->getSheet();
 
-        $this->writeGames($ws, $games);
+        $this->writePoolTeams($ws, $poolTeams);
         
         return $this->getContents();
-        
     }
 
     /**
      * @param \PHPExcel_Worksheet $ws
-     * @param ScheduleGame[] $games
+     * @param PoolTeam[] $poolTeams
      * @throws \PHPExcel_Exception
      */
-    private function writeGames(\PHPExcel_Worksheet $ws,$games)
+    private function writePoolTeams(\PHPExcel_Worksheet $ws,$poolTeams)
     {
-        $ws->setTitle('Schedule');
+        $ws->setTitle('PoolTeams');
 
-        $colProjectId      = 'A';
-        $colGameNumber     = 'B';
-        $colDate           = 'C';
-        $colTime           = 'D';
-        $colFieldName      = 'E';
-        $colHomeTeamPoolId = 'F';
-        $colHomeTeamName   = 'G';
-        $colAwayTeamName   = 'H';
-        $colAwayTeamPoolId = 'I';
+        $colProjectId    = 'A';
+        $colPoolKey      = 'B';
+        $colPoolSlot     = 'C';
+        $colPoolTypeKey  = 'D';
+        $colPoolTeamKey  = 'E';
+        $colPoolTeamSlot = 'F';
 
-        // Column alignment needs to go first?
-        $ws->getStyle($colGameNumber)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($colDate)      ->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($colTime . '1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $colRegTeamKey    = 'G';
+        $colRegTeamPoints = 'H';
+
+        $colProgram  = 'I';
+        $colGender   = 'J';
+        $colAge      = 'K';
+        $colDivision = 'L';
 
         // Not really sure about this ABC stuff but try for now
-        $ws->getCell($colProjectId      . '1')->setValue('Project ID');
-        $ws->getCell($colGameNumber     . '1')->setValue('Game');
-        $ws->getCell($colDate           . '1')->setValue('Date');
-        $ws->getCell($colTime           . '1')->setValue('Time');
-        $ws->getCell($colFieldName      . '1')->setValue('Field');
-        $ws->getCell($colHomeTeamPoolId . '1')->setValue('Home Team Pool Key');
-        $ws->getCell($colHomeTeamName   . '1')->setValue('Home Team Name');
-        $ws->getCell($colAwayTeamName   . '1')->setValue('Away Team Name');
-        $ws->getCell($colAwayTeamPoolId . '1')->setValue('Away Team Pool Key');
+        $ws->getCell($colProjectId    . '1')->setValue('ProjectId');
+        $ws->getCell($colPoolKey      . '1')->setValue('PoolKey');
+        $ws->getCell($colPoolSlot     . '1')->setValue('PSlot');
+        $ws->getCell($colPoolTypeKey  . '1')->setValue('PType');
+        $ws->getCell($colPoolTeamKey  . '1')->setValue('PoolTeamKey');
+        $ws->getCell($colPoolTeamSlot . '1')->setValue('TSlot');
 
-        $ws->getColumnDimension($colProjectId     )->setWidth(24);
-        $ws->getColumnDimension($colGameNumber    )->setWidth( 8);
-        $ws->getColumnDimension($colDate          )->setWidth( 6);
-        $ws->getColumnDimension($colTime          )->setWidth(10);
-        $ws->getColumnDimension($colFieldName     )->setWidth(10);
-        $ws->getColumnDimension($colHomeTeamPoolId)->setWidth(20);
-        $ws->getColumnDimension($colHomeTeamName  )->setWidth(30);
-        $ws->getColumnDimension($colAwayTeamName  )->setWidth(30);
-        $ws->getColumnDimension($colAwayTeamPoolId)->setWidth(20);
+        $ws->getCell($colRegTeamKey    . '1')->setValue('Reg Team');
+        $ws->getCell($colRegTeamPoints . '1')->setValue('PTS');
 
-        // Special formats for date/time
-        $rowCount = count($games) + 1;
-        
-        $startDateFormatCode = 'ddd';
-        $cols = sprintf('%s2:%s%d',$colDate,$colDate,$rowCount);
-        $ws->getStyle($cols)->getNumberFormat()->setFormatCode($startDateFormatCode);
-        
-        $startTimeFormatCode = '[$-409]h:mm AM/PM;@';
-        $cols = sprintf('%s2:%s%d',$colTime,$colTime,$rowCount);
-        $ws->getStyle($cols)->getNumberFormat()->setFormatCode($startTimeFormatCode);
+        $ws->getCell($colProgram  . '1')->setValue('Prog');
+        $ws->getCell($colGender   . '1')->setValue('Gen');
+        $ws->getCell($colAge      . '1')->setValue('Age');
+        $ws->getCell($colDivision . '1')->setValue('Div');
+
+        $ws->getColumnDimension($colProjectId   )->setWidth(24);
+        $ws->getColumnDimension($colPoolKey     )->setWidth(24);
+        $ws->getColumnDimension($colPoolSlot    )->setWidth( 8);
+        $ws->getColumnDimension($colPoolTypeKey )->setWidth(10);
+        $ws->getColumnDimension($colPoolTeamKey )->setWidth(24);
+        $ws->getColumnDimension($colPoolTeamSlot)->setWidth(10);
+
+        $ws->getColumnDimension($colRegTeamKey)   ->setWidth(20);
+        $ws->getColumnDimension($colRegTeamPoints)->setWidth( 4);
+
+        $ws->getColumnDimension($colProgram )->setWidth(8);
+        $ws->getColumnDimension($colGender  )->setWidth(6);
+        $ws->getColumnDimension($colAge     )->setWidth(6);
+        $ws->getColumnDimension($colDivision)->setWidth(6);
 
         $row = 2;
-        foreach($games as $game) {
-            
-            $homeTeam = $game->homeTeam;
-            $awayTeam = $game->awayTeam;
+        foreach($poolTeams as $poolTeam) {
 
-            $ws->getCell($colProjectId  . $row)->setValue($game->projectId);
-            $ws->getCell($colGameNumber . $row)->setValueExplicit($game->gameNumber);
+            $ws->getCell($colProjectId   . $row)->setValue($poolTeam->projectId);
+            $ws->getCell($colPoolKey     . $row)->setValue($poolTeam->poolKey);
+            $ws->getCell($colPoolTypeKey . $row)->setValue($poolTeam->poolTypeKey);
+            $ws->getCell($colPoolTeamKey . $row)->setValue($poolTeam->poolTeamKey);
 
-            // Copied from advanced binder
-            $startDate = substr($game->start,0,10);
-            $startDateValue = \PHPExcel_Shared_Date::stringToExcel($startDate);
-            $ws->getCell($colDate . $row)->setValueExplicit($startDateValue, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $regTeamIdParts = explode(':',$poolTeam->regTeamId);
+            $regTeamKey = count($regTeamIdParts) === 2 ? $regTeamIdParts[1] : null;
+            $ws->getCell($colRegTeamKey    . $row)->setValue($regTeamKey);
+            $ws->getCell($colRegTeamPoints . $row)->setValue($poolTeam->regTeamPoints);
 
-            // No built in conversion for time
-            $startTime = substr($game->start,10);
-            list($h, $m, $s) = explode(':', $startTime);
-            $startTimeValue = $h / 24 + $m / 1440 + $s / 86400;
-            $ws->getCell($colTime . $row)->setValueExplicit($startTimeValue, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            
-            $ws->getCell($colFieldName      . $row)->setValue($game->fieldName);
-            $ws->getCell($colHomeTeamPoolId . $row)->setValue($homeTeam->poolTeamKey);
-            $ws->getCell($colHomeTeamName   . $row)->setValue($homeTeam->regTeamName);
-            $ws->getCell($colAwayTeamName   . $row)->setValue($awayTeam->regTeamName);
-            $ws->getCell($colAwayTeamPoolId . $row)->setValue($awayTeam->poolTeamKey);
-            
+            $ws->getCell($colProgram  . $row)->setValue($poolTeam->program);
+            $ws->getCell($colGender   . $row)->setValue($poolTeam->gender);
+            $ws->getCell($colAge      . $row)->setValue($poolTeam->age);
+            $ws->getCell($colDivision . $row)->setValue($poolTeam->division);
+
             $row++;
+
+            $ws->getCell($colProjectId    . $row)->setValue('Views');
+            $ws->getCell($colPoolKey      . $row)->setValue($poolTeam->poolView);
+            $ws->getCell($colPoolSlot     . $row)->setValueExplicit($poolTeam->poolSlotView,\PHPExcel_Cell_DataType::TYPE_STRING);
+            $ws->getCell($colPoolTypeKey  . $row)->setValue($poolTeam->poolTypeView);
+            $ws->getCell($colPoolTeamKey  . $row)->setValue($poolTeam->poolTeamView);
+            $ws->getCell($colPoolTeamSlot . $row)->setValueExplicit($poolTeam->poolTeamSlotView,\PHPExcel_Cell_DataType::TYPE_STRING);
+
+            $ws->getCell($colRegTeamKey   . $row)->setValue($poolTeam->regTeamName);
+
+            $row += 2;
         }
     }
     private function getContents()

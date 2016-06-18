@@ -10,8 +10,6 @@ services:
         parent: abstract_controller
         arguments:
             - '@game_finder'
-            - '%project_choices%'
-            - '%projects%'
 
     pool_team_export_writer_excel:
         class:  AppBundle\Action\PoolTeam\Export\PoolTeamExportWriterExcel
