@@ -85,7 +85,7 @@ class ScheduleAssignorSearchForm extends ScheduleSearchForm
     <label for="projectId">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
   </div>
-  <div class="form-group col-xs-12 clearfix">
+  <div class="form-group">
     <label for="sortBy">Sort By</label>
     {$this->renderInputSelect($project['sortBy'],$formData['sortBy'],'sortBy')}
   </div>
