@@ -513,3 +513,7 @@ td.admin-listing {
 
 table.min-width-500 { min-width: 500px; }
 table.person-update-form td { height: 34px; }
+
+.rainedout-logo-show { margin-right: 30px }
+.rainedout_logo { display: none }
+.rainedout-logo-menu { height: 2.2em; margin-top: -4px; }

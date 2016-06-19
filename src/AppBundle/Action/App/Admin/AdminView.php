@@ -41,6 +41,8 @@ EOT;
         $content .= $this->renderTeamManagement();
   
         $content .= $this->renderAccountManagement();
+        
+        $content .= $this->renderCommunications();
           
         $content .=  <<<EOT
 </div> <!-- class="container no-disc" -->
@@ -56,7 +58,6 @@ EOT;
     /* Match Reporting content */
     protected function renderMatchReporting()
     {
-      if ($this->isGranted('ROLE_SCORE_ENTRY')) {
         $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
@@ -64,8 +65,14 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
+EOT;
+        if ($this->isGranted('ROLE_SCORE_ENTRY')) {
+            $html .= <<<EOT
       <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
-
+EOT;
+      }
+      
+        $html .= <<<EOT
       <li><a href="{$this->generateUrl('results_poolplay_2016')}">Pool Play</a></li>
 
       <li><a href="{$this->generateUrl('results_medalround_2016')}">Medal Round</a></li>
@@ -78,10 +85,6 @@ EOT;
 </div>
 
 EOT;
-      } else {
-        $html = "";
-      }
-      
       return $html;
     }
 
@@ -189,6 +192,25 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
       <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People</a></li>
+    </ul>
+  </div>
+</div>
+EOT;
+
+      return $html;      
+    }
+
+    protected function renderCommunications()
+    {
+        $html = <<<EOT
+<div class="panel panel-default panel-float-left">
+  <div class="panel-heading">
+    <h1>Communications</h1>
+  </div>
+  <div class="panel-body">
+    <ul>
+      <li><a href="{$this->generateUrl('app_text_alerts')}">RainedOut Messaging</a></li>
+      <li><a href="https://www.rainedout.net/admin/login.php?a=0588afab19ee214eca29" target="_blank">RainedOut Admin Login</a></li>
     </ul>
   </div>
 </div>
