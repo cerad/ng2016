@@ -41,6 +41,8 @@ EOT;
         $content .= $this->renderTeamManagement();
   
         $content .= $this->renderAccountManagement();
+        
+        $content .= $this->renderCommunications();
           
         $content .=  <<<EOT
 </div> <!-- class="container no-disc" -->
@@ -189,6 +191,24 @@ EOT;
     <ul>
       <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
       <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People</a></li>
+    </ul>
+  </div>
+</div>
+EOT;
+
+      return $html;      
+    }
+
+    protected function renderCommunications()
+    {
+        $html = <<<EOT
+<div class="panel panel-default panel-float-left">
+  <div class="panel-heading">
+    <h1>Communications</h1>
+  </div>
+  <div class="panel-body">
+    <ul>
+      <li><a href="{$this->generateUrl('app_text_alerts')}">RainedOut Messaging</a></li>
     </ul>
   </div>
 </div>
