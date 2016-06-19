@@ -36,12 +36,12 @@ class PoolTeamImportController extends AbstractController2
             $file = $formData['file'];
             
             $poolTeams = $this->reader->read($file->getRealPath());
-            dump($poolTeams);
+
             $commit = $formData['op'] === 'update' ? true : false;
             
-            //$results = $this->updater->updateGames($poolTeams,$commit,$file->getClientOriginalName());
+            $results = $this->updater->updatePoolTeams($poolTeams,$commit,$file->getClientOriginalName());
             
-            //$request->attributes->set('results',$results);
+            $request->attributes->set('results',$results);
         }
         return null;
     }

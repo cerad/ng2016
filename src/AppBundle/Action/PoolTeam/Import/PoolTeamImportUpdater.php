@@ -8,7 +8,7 @@ class PoolTeamImportUpdater
     private $conn;
     private $commit;
 
-    /** @var  GameImportResults */
+    /** @var  PoolTeamImportResults */
     private $results;
 
     public function __construct(
@@ -20,201 +20,86 @@ class PoolTeamImportUpdater
      * @param  array   $games
      * @param  boolean $commit
      * @param  string  $fileName
-     * @return GameImportResults
+     * @return PoolTeamImportResults
      */
-    public function updateGames(array $games, $commit, $fileName)
+    public function updatePoolTeams(array $poolTeams, $commit, $fileName)
     {
         $this->commit  = $commit;
-        $this->results = new GameImportResults($games,$commit,$fileName);
+        $this->results = new PoolTeamImportResults($poolTeams,$commit,$fileName);
 
-        foreach($games as $game) {
-            $this->updateGame($game);
+        foreach($poolTeams as $poolTeam) {
+            $this->updatePoolTeam($poolTeam);
         }
         $this->results->calcCounts();
         
         return $this->results;
     }
-    private function updateGame($game)
+    private function updatePoolTeam($poolTeam)
     {
-        $gameId = $game['gameId'];
+        $poolTeamId  = $poolTeam['poolTeamId'];
+        $poolTeamKey = $poolTeam['poolTeamKey'];
+
+        // Delete Pool Team
+        if (strpos($poolTeamKey,'DELETE ') === 0) {
+            $this->deletePoolTeam($poolTeam);
+            return;
+        }
+        // Verify have one
+        $poolTeamRow = $this->findPoolTeam($poolTeamId);
+        if (!$poolTeamRow) {
+            // No create functionality for now
+            return;
+        }
         
-        $gameNumber = $game['gameNumber'];
-
-        // Delete Game
-        if ($gameNumber < 0) {
-            $this->removeGame($game);
-            return;
-        }
-        // Must have valid pool teams
-        $homePoolTeamId = $game['homePoolTeamId'];
-        $awayPoolTeamId = $game['awayPoolTeamId'];
-        $homePoolTeam = $this->findPoolTeam($homePoolTeamId);
-        $awayPoolTeam = $this->findPoolTeam($awayPoolTeamId);
-
-        if (!$homePoolTeam) {
-            $this->results->invalidPoolTeamIds[] = $game['homePoolTeamId'];
-        }
-        if (!$awayPoolTeam) {
-            $this->results->invalidPoolTeamIds[] = $game['awayPoolTeamId'];
-        }
-        if (!$homePoolTeam || !$awayPoolTeam) {
-            return;
-        }
-        // Create Game
-        $gameRow = $this->findGame($gameId);
-        if (!$gameRow) {
-            $this->createGame($game,$homePoolTeam,$awayPoolTeam);
-            return;
-        }
-        // Update game
+        // Check for updates
         $updates = [];
-
-        // Field name
-        if (strcmp($gameRow['fieldName'],$game['fieldName'])) {
-            $updates['fieldName'] = $game['fieldName'];
-        }
-        // Start time
-        if (strcmp($gameRow['start'],$game['start'])) {
-
-            $updates['start']  = $game['start'];
-            $updates['finish'] = $this->calcFinish($game['start'],$homePoolTeam);
+        foreach(['poolView','poolSlotView','poolTypeView','poolTeamView','poolTeamSlotView'] as $key)
+        if (strcmp($poolTeamRow[$key],$poolTeam[$key])) {
+            $updates[$key] = $poolTeam[$key];
         }
         // Update if needed
-        if (count($updates)) {
-            $this->results->addUpdatedGame($game);
-            if ($this->commit) {
-                $this->conn->update('games', $updates, ['gameId' => $gameId]);
-            }
+        if (count($updates) < 1) {
+            return;
         }
-        // Check for pool team changes, messy, refactor later
-        $homeGameTeamRow = $this->findGameTeam($gameId,1);
-        $awayGameTeamRow = $this->findGameTeam($gameId,2);
-        if (strcmp($homeGameTeamRow['poolTeamId'],$homePoolTeamId)) {
-            $this->results->addUpdatedGame($game);
-            if ($this->commit) {
-                $this->conn->update('gameTeams',
-                    ['poolTeamId' => $homePoolTeamId],
-                    ['gameTeamId' => $homeGameTeamRow['gameTeamId']]);
-            }
-        }
-        if (strcmp($awayGameTeamRow['poolTeamId'],$awayPoolTeamId)) {
-            $this->results->addUpdatedGame($game);
-            if ($this->commit) {
-                $this->conn->update('gameTeams',
-                    ['poolTeamId' => $awayPoolTeamId],
-                    ['gameTeamId' => $awayGameTeamRow['gameTeamId']]);
-            }
+        dump($updates);
+        $this->results->updatedPoolTeams[] = $poolTeam;
+        if ($this->commit) {
+            $this->conn->update('poolTeams', $updates, ['poolTeamId' => $poolTeamId]);
         }
     }
-    private function createGame($game,$homePoolTeam,$awayPoolTeam)
+    private function deletePoolTeam($poolTeam)
     {
-        $this->results->createdGames[] = $game;
+        $poolTeamId = $poolTeam['poolTeamId'];
 
-        if (!$this->commit) return;
-
-        $gameId     = $game['gameId'];
-        $projectId  = $game['projectId'];
-        $gameNumber = $game['gameNumber'];
-
-        $gameRow = [
-            'gameId'     => $gameId,
-            'projectId'  => $projectId,
-            'gameNumber' => $gameNumber,
-            'fieldName'  => $game['fieldName'],
-            'venueName'  => 'Polo',
-            'start'      => $game['start'],
-            'finish'     => $this->calcFinish($game['start'],$homePoolTeam),
-        ];
-        $this->conn->insert('games',$gameRow);
-
-        // Home Team
-        $slot = 1;
-        $gameTeam = [
-            'projectId'  => $projectId,
-            'gameId'     => $gameId,
-            'gameNumber' => $gameNumber,
-            'poolTeamId' => $homePoolTeam['poolTeamId'],
-            'slot'       => $slot,
-            'gameTeamId' => $gameId . ':' . $slot,
-        ];
-        $this->conn->insert('gameTeams',$gameTeam);
-
-        // Away Team
-        $slot = 2;
-        $gameTeam = array_replace($gameTeam,[
-            'poolTeamId' => $awayPoolTeam['poolTeamId'],
-            'slot'       => $slot,
-            'gameTeamId' => $gameId . ':' . $slot,
-        ]);
-        $this->conn->insert('gameTeams',$gameTeam);
-
-        // Officials
-        $isMedalRound = in_array($homePoolTeam['poolTypeKey'],['QF','SF','TF']);
-        $gameOfficial = [
-            'projectId'   => $projectId,
-            'gameId'      => $gameId,
-            'gameNumber'  => $gameNumber,
-            'assignRole'  => $isMedalRound ? 'ROLE_ASSIGNOR' : 'ROLE_REFEREE',
-            'assignState' => 'Open',
-        ];
-        foreach([1,2,3] as $slot) {
-            $gameOfficial['gameOfficialId'] = $gameId . ':' . $slot;
-            $gameOfficial['slot'] = $slot;
-            $this->conn->insert('gameOfficials',$gameOfficial);
+        // See if it exists, multiple delete attempts are common
+        $poolTeamRow = $this->findPoolTeam($poolTeamId);
+        if (!$poolTeamRow) {
+            return;
         }
-    }
-    private function removeGame($game)
-    {
-        $gameId = $game['gameId'];
+        $this->results->deletedPoolTeams[] = $poolTeam;
         
-        // For stats see if it exists, multiple delete attempts are common
-        if (!$this->findGame($gameId)) return;
-
-        $this->results->deletedGames[] = $game;
-
+        // Make sure not games are using the pool team
+        $sql = <<<EOD
+SELECT game.gameId, game.gameNumber, game.fieldName, game.start, gameTeam.poolTeamId
+FROM games AS game
+LEFT JOIN gameTeams AS gameTeam ON gameTeam.gameId = game.gameID
+WHERE gameTeam.poolTeamId = ?
+EOD;
+        $stmt = $this->conn->executeQuery($sql,[$poolTeamId]);
+        $gameRows = $stmt->fetchAll();
+        if (count($gameRows)) {
+            $this->results->existingGames = array_merge($this->results->existingGames,$gameRows);
+            return;
+        }
+        
         if (!$this->commit) return;
-
-        // TODO Add foreign key references and cascade delete
-        $id = ['gameId' => $gameId];
-        $this->conn->delete('gameTeams',    $id);
-        $this->conn->delete('gameOfficials',$id);
-        $this->conn->delete('games',        $id);
-    }
-    private function findGame($gameId)
-    {
-        $sql = 'SELECT gameId,fieldName,start FROM games WHERE gameId = ?';
-        $stmt = $this->conn->executeQuery($sql,[$gameId]);
-        return $stmt->fetch();
-    }
-    private function findGameTeam($gameId,$slot)
-    {
-        $sql = 'SELECT gameTeamId,poolTeamId FROM gameTeams WHERE gameId = ? AND slot = ?';
-        $stmt = $this->conn->executeQuery($sql,[$gameId,$slot]);
-        return $stmt->fetch();
+        
+        $this->conn->delete('poolTeams',['poolTeamId' => $poolTeamId]);
     }
     private function findPoolTeam($poolTeamId)
     {
-        $sql = 'SELECT poolTeamId,poolTypeKey,age FROM poolTeams WHERE poolTeamId = ?';
+        $sql = 'SELECT poolTeamId,poolTypeKey,poolView,poolSlotView,poolTypeView,poolTeamView,poolTeamSlotView FROM poolTeams WHERE poolTeamId = ?';
         $stmt = $this->conn->executeQuery($sql,[$poolTeamId]);
         return $stmt->fetch();
-    }
-    private function calcFinish($start,$poolTeam)
-    {
-        $lengths = [
-            'U10' => 40 +  5,
-            'U12' => 50 +  5,
-            'U14' => 50 + 10,
-            'U16' => 60 + 10,
-            'U19' => 60 + 10,
-        ];
-        $finishDateTime = new \DateTime($start);
-
-        $age = $poolTeam['age'];
-
-        $interval = sprintf('PT%dM',$lengths[$age]);
-
-        $finishDateTime->add(new \DateInterval($interval));
-
-        return $finishDateTime->format('Y-m-d H:i:s');
     }
 }

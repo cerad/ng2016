@@ -30,6 +30,9 @@ class PoolTeamImportView extends AbstractView2
 </div>
 <hr>
 {$this->renderResults()}
+<p>
+  Add DELETE in front of pool team key to delete the pool team.
+</p>
 EOD;
         return $this->renderBaseTemplate($content);
     }
@@ -37,7 +40,8 @@ EOD;
     {
         if (!$this->results) return null;
         $results = $this->results;
-        return <<<EOD
+        dump($results);
+        $html = <<<EOD
 <table>
 <tr><td>File   </td><td>{$results->fileName}</td></tr>
 <tr><td>Total  </td><td>{$results->totalCount}</td></tr>
@@ -46,6 +50,12 @@ EOD;
 <tr><td>Updated</td><td>{$results->updatedCount}</td></tr>
 </table>
 EOD;
-
+        if (count($results->existingGames) < 1) {
+            return $html;
+        }
+        foreach($results->existingGames as $game) {
+            $html .= sprintf("<div>%s %s</div>\n",$game['poolTeamId'],$game['gameNumber']);
+        }
+        return $html;
     }
 }

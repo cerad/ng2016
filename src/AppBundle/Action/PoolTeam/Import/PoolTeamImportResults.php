@@ -16,8 +16,7 @@ class PoolTeamImportResults
     public $deletedPoolTeams = [];
     public $updatedPoolTeams = [];
     
-    public $invalidPoolTeamIds = [];
-    public $invalidPoolTeamIdsCount;
+    public $existingGames = [];
     
     public function __construct($poolTeams,$commit,$fileName)
     {
@@ -36,6 +35,5 @@ class PoolTeamImportResults
         $this->deletedCount = count($this->deletedPoolTeams);
         $this->updatedCount = count($this->updatedPoolTeams);
         
-        $this->invalidPoolTeamIdsCount = count($this->invalidPoolTeamIds);
     }
 }
