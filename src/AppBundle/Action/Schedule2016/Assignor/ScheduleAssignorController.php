@@ -108,7 +108,7 @@ class ScheduleAssignorController extends AbstractController2
         
         //apply report filters on assignState
         $this->reportKey = $searchData['reportKey'];
-        $games = $this->filterGames($games);
+        $games = $this->filterGamesForReport($games);
         
         $request->attributes->set('games',  $games);
         $request->attributes->set('filter', $searchData['filter']);
@@ -116,7 +116,7 @@ class ScheduleAssignorController extends AbstractController2
         return null;
     }
     
-    private function filterGames($games)
+    private function filterGamesForReport($games)
     {
         //from assign.yml
           //Open:      Open # Open

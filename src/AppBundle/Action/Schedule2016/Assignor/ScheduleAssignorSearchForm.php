@@ -24,12 +24,7 @@ class ScheduleAssignorSearchForm extends ScheduleSearchForm
         $data = $request->request->all();
         $errors = [];
 
-        if(!isset($data['projectKey'])) {
-            $session = $request->getSession();
-            if ($session->has('schedule_assignor_search_data')) {
-                $data = array_merge($data,$session->get('schedule_assignor_search_data'));
-            } else {
-                $data = [
+        $this->formData = array_replace($this->formData,[
                     'projectId' => $this->filterScalar($data,'projectId'),
                     'programs'  => $this->filterArray ($data,'programs'),
                     'genders'   => $this->filterArray ($data,'genders'),
@@ -38,15 +33,7 @@ class ScheduleAssignorSearchForm extends ScheduleSearchForm
                     'sortBy'    => $this->filterScalar($data,'sortBy',true),
                     'filter'    => $this->filterScalar($data,'filter'),
                     'reportKey' => $this->filterScalar($data,'reportKey'),
-                ];
-            }
-        }
-        
-        $reportKey = filter_var(trim($data['reportKey']), FILTER_SANITIZE_STRING);
-        
-        $this->formData = array_merge($this->formData,[
-            'reportKey'     => $reportKey,
-        ]);
+                ]);
         
         $this->formDataErrors = $errors;
     }
