@@ -10,7 +10,7 @@ parameters:
         AYSONationalGames2016:
             programs:
                 Core: Core
-                VIP:  VIP
+            #   VIP:  VIP
             genders:
                 B:  B
                 G:  G
