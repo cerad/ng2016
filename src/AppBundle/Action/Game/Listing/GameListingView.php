@@ -128,8 +128,10 @@ EOD;
 
         $html = <<<EOD
 <div class="form-group col-xs-9 col-xs-offset-2 clearfix">
-    <a href="{$this->generateUrl('regteam_import')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Import Teams</a>
-    <a href="{$this->generateUrl('regteam_export')}" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-share"></span> Export Teams to Excel</a>
+  <a href="{$this->generateUrl('regteam_import')}" class="btn btn-sm btn-primary pull-right">
+      <span class="glyphicon glyphicon-share"></span> Import Reg Teams</a>
+  <a href="{$this->generateUrl('regteam_export')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Export Reg Teams to Excel</a>
 </div>
 <div class="clearfix"></div>
 <div id="layout-block">
@@ -184,6 +186,13 @@ EOD;
         $poolTeamCount = count($this->poolTeams);
 
         $html = <<<EOD
+<div class="form-group col-xs-9 col-xs-offset-2 clearfix">
+  <a href="{$this->generateUrl('pool_team_import')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Import Pool Teams</a>
+  <a href="{$this->generateUrl('pool_team_export')}" class="btn btn-sm btn-primary pull-right">
+    <span class="glyphicon glyphicon-share"></span> Export Pool Teams to Excel</a>
+</div>
+<div class="clearfix"></div>
 <div id="layout-block">
 <table class="standings" border = "1">
 <tr><th colspan="20" class="text-center">Pool Teams: {$poolTeamCount}</th></tr>
