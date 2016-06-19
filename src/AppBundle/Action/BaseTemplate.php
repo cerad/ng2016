@@ -143,23 +143,29 @@ EOT;
      */
     protected function renderMenuForGuest()
     {
+        $html =
+<<<EOT
+        <ul class="nav navbar-nav">
+EOT;
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $html = <<<EOT
-            <ul class="nav navbar-nav">
-               {$this->renderHome()}
-              {$this->renderTopMenuSchedules()}
-              {$this->renderTopMenuResults()}
-            </ul>
+            $html .=
+<<<EOT
+                {$this->renderHome()}
 EOT;
         } else {
-            $html = <<<EOT
-            <ul class="nav navbar-nav">
+            $html .=
+<<<EOT
                 {$this->renderWelcome()}
-               {$this->renderTopMenuSchedules()}
-               {$this->renderTopMenuResults()}
-             </ul>
 EOT;
         }
+        
+        $html .=
+<<<EOT
+              {$this->renderTopMenuSchedules()}
+              {$this->renderTopMenuResults()}
+              {$this->renderTopMenuTextAlerts()}
+            </ul>
+EOT;
         
         return $html;
     }
@@ -180,7 +186,8 @@ EOT;
             $html .= $this->renderRefereeSchedules();
         }
 
-        $html .= <<<EOT
+        $html .=
+<<<EOT
            {$this->renderMyAccount()}
 EOT;
           if ( $this->isGranted('ROLE_STAFF') ) {
@@ -189,7 +196,8 @@ EOT;
 
           $html .= $this->renderSignOut();
 
-        $html .= <<<EOT
+        $html .=
+<<<EOT
         </ul>
 EOT;
       } else { // TODO Do not use _SERVER
@@ -221,6 +229,16 @@ EOT;
 EOT;
     }
     
+    protected function renderTopMenuTextAlerts()
+    {
+        $html =
+<<<EOT
+            <li><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank"><img src="http://www.rainedout.com/sites/default/files/RO_badge_grey.png" border="0" alt="RainedOut" class="rainedout-logo-menu"></a></li>
+EOT;
+
+        return $html;
+    }
+
     protected function renderTopMenuResults()
     {
         if (!$this->showResultsMenu) {
@@ -285,7 +303,8 @@ EOT;
         if (!$this->showResultsMenu) {
             return null;
         }
-        $html = <<<EOT
+        $html =
+<<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
@@ -293,7 +312,8 @@ EOT;
 EOT;
 
         if ($this->isGranted('ROLE_ASSIGNOR')) {
-            $html .= <<<EOT
+            $html .=
+<<<EOT
             <li><a href="{$this->generateUrl('schedule_assignor_2016')}">ASSIGNOR SCHEDULE</a></li>
 EOT;
         }

@@ -58,7 +58,6 @@ EOT;
     /* Match Reporting content */
     protected function renderMatchReporting()
     {
-      if ($this->isGranted('ROLE_SCORE_ENTRY')) {
         $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
@@ -66,8 +65,14 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
+EOT;
+        if ($this->isGranted('ROLE_SCORE_ENTRY')) {
+            $html .= <<<EOT
       <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
-
+EOT;
+      }
+      
+        $html .= <<<EOT
       <li><a href="{$this->generateUrl('results_poolplay_2016')}">Pool Play</a></li>
 
       <li><a href="{$this->generateUrl('results_medalround_2016')}">Medal Round</a></li>
@@ -80,10 +85,6 @@ EOT;
 </div>
 
 EOT;
-      } else {
-        $html = "";
-      }
-      
       return $html;
     }
 
@@ -209,6 +210,7 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('app_text_alerts')}">RainedOut Messaging</a></li>
+      <li><a href="https://www.rainedout.net/admin/login.php?a=0588afab19ee214eca29" target="_blank">RainedOut Admin Login</a></li>
     </ul>
   </div>
 </div>

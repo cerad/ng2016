@@ -180,7 +180,8 @@ EOD;
         }
         $personView = $this->projectPersonViewDecorator;
         
-        return <<<EOD
+        return
+<<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Availability Information</th></tr>
   <tr><td>Available Wed (Soccerfest) </td><td>{$personView->availWed}     </td></tr>
@@ -205,7 +206,8 @@ EOD;
 
         $regYearProject = $this->getCurrentProjectInfo()['regYear'];
 
-        return <<<EOD
+        return
+<<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
   <tr>
@@ -236,7 +238,8 @@ EOD;
      */
     protected function renderMoreInformation()
     {
-        return <<<EOD
+        return
+<<<EOD
 <table class="account-person-list app_table" border="1">
   <tr><th colspan="2">My Teams</th></tr>
   <tr class="trAction"><td style="text-align: center;" colspan="2" >
@@ -259,26 +262,23 @@ EOD;
     }
     private function renderNotes()
     {
-        return <<<EOD
+        return
+<<<EOD
 <div id="notes">
   <legend>Thank you for registering to Volunteer at the 2016 National Games!</legend>
   <p>
-    Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games. 
+    Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games.
+    </p>
+    <p>
     Update your plans and availability at any time.
     </p>  
-  <p>
-    Discounted hotel reservations are now available for the AYSO National Games 2016!  See below for information on Referee Hotel discounts.
-    </p>
-  
-  <p>
-  Additional information on booking discounted travel can be found at <a href="http://aysonationalgames.org/book-travel/" target="_blank">http://aysonationalgames.org/book-travel/</a>
-  </p>
 </div>
 EOD;
     }
     private function renderHotelInformation()
     {
-        return <<<EOT
+        return
+<<<EOT
 <legend>Referee Hotel Discounts</legend>
 <p>Discounted hotel rates (double occupancy) are now available for the AYSO National Games 2016. </p>
 <ul class="cerad-common-help ul_bullets">
@@ -292,6 +292,9 @@ EOD;
 Phone: (561) 290-0587<br>
 Email: <a href="mailto:trina@globaljbs.com">trina@globaljbs.com</a><br>
 Reservation link: <a href="http://www.globaljbs.com/event/AYSO16" target="_blank">http://www.globaljbs.com/event/AYSO16</a></p>
+<br>
+</div>
+<p>Additional information on booking discounted travel can be found at <a href="http://aysonationalgames.org/book-travel/" target="_blank">http://aysonationalgames.org/book-travel/</a></p>
 EOT;
     }
 }
