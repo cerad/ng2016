@@ -233,7 +233,7 @@ EOT;
     {
         $html =
 <<<EOT
-            <li><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank"><img src="http://www.rainedout.com/sites/default/files/RO_badge_grey.png" border="0" alt="RainedOut" class="rainedout-logo-menu"></a></li>
+            <li><a href="{$this->generateUrl('app_text_alerts')}">TEXT ALERTS</a></li>
 EOT;
 
         return $html;
