@@ -66,7 +66,6 @@ EOD;
 <legend class="float-right">Final Standings</legend>
 <div class="container col-xs-8 col-xs-offset-2">
 EOD;
-
             foreach ($standings as $div=>$teams) {
                 $html .= $this->renderDivision($div, $teams);                    
             }
@@ -138,7 +137,7 @@ EOD;
 
                 switch ($homeTeam->poolTeamSlotView) {
                     case 'SF1 Win':
-                    case 'SF2 Win':
+                    case 'SF5 Win':
                         if ($homeGoals > $awayGoals) {
                             $standings[$div][1] = $homeTeam;
                             $standings[$div][2] = $awayTeam;
@@ -148,7 +147,7 @@ EOD;
                         }
                         break;
                     case 'SF3 Win':
-                    case 'SF4 Win':
+                    case 'SF5 Los':
                         if ($homeGoals > $awayGoals) {
                             $standings[$div][3] = $homeTeam;
                             $standings[$div][4] = $awayTeam;
@@ -157,6 +156,27 @@ EOD;
                             $standings[$div][4] = $homeTeam;
                         }
                         break;
+                    case 'SF1 Run':
+                    case 'SF9 Win':
+                        if ($homeGoals > $awayGoals) {
+                            $standings[$div][5] = $homeTeam;
+                            $standings[$div][6] = $awayTeam;
+                        } else {
+                            $standings[$div][5] = $awayTeam;
+                            $standings[$div][6] = $homeTeam;
+                        }
+                        break;
+                    case 'SF3 Run':
+                    case 'SF9 Los':
+                        if ($homeGoals > $awayGoals) {
+                            $standings[$div][7] = $homeTeam;
+                            $standings[$div][8] = $awayTeam;
+                        } else {
+                            $standings[$div][7] = $awayTeam;
+                            $standings[$div][8] = $homeTeam;
+                        }
+                        break;
+                    
                 }
             }
         }
