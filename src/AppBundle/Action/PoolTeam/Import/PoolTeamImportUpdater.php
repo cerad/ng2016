@@ -61,7 +61,6 @@ class PoolTeamImportUpdater
         if (count($updates) < 1) {
             return;
         }
-        dump($updates);
         $this->results->updatedPoolTeams[] = $poolTeam;
         if ($this->commit) {
             $this->conn->update('poolTeams', $updates, ['poolTeamId' => $poolTeamId]);

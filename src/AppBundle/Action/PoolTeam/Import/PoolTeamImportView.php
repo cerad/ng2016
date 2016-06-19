@@ -40,7 +40,7 @@ EOD;
     {
         if (!$this->results) return null;
         $results = $this->results;
-        dump($results);
+        
         $html = <<<EOD
 <table>
 <tr><td>File   </td><td>{$results->fileName}</td></tr>
