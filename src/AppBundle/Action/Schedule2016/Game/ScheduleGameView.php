@@ -42,18 +42,9 @@ class ScheduleGameView extends AbstractView2
 {$this->scheduleTemplate->render($this->games)}
 <br />
 EOD;
-        $script = <<<EOD
-<script type="text/javascript">
-$(document).ready(function() {
-    // checkbox all functionality
-    $('.cerad-checkbox-all').change(Cerad.checkboxAll);
-});
-</script>
-EOD;
 
         $baseTemplate = $this->getBaseTemplate();
         $baseTemplate->setContent($content);
-        $baseTemplate->addScript ($script);
         return $baseTemplate->render();
     }
 }
