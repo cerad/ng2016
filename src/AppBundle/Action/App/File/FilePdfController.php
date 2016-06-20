@@ -19,7 +19,7 @@ class FilePdfController extends AbstractController2
     {
         $response = new Response();
 
-        $filePath = $this->container->getParameter('kernel.root_dir').'/../web/pdf/' . $fileName;
+        $filePath = __DIR__ . '/../../../Resources/public/pdf/' . $fileName;
 
         if (!file_exists($filePath)) {
             throw new AccessDeniedException('Files is not accessible');
