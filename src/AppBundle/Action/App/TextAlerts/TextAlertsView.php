@@ -31,6 +31,7 @@ class TextAlertsView extends AbstractView2
     </ul>
 </div>    
     <legend>Latest Announcements</legend>
+    <p><i><b>NOTE</b>: All times are Eastern Time Zone</i></p>
     <script type="text/javascript" src="http://widgets.omnilert.net/0588afab19ee214eca29-11380"></script>
 
 EOT;
