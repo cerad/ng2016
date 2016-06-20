@@ -20,6 +20,8 @@ class GameListingView extends AbstractView2
     /** @var  Game[] */
     private $games;
 
+    private $gameNumbers;
+    
     private $searchForm;
 
     public function __construct(
@@ -29,9 +31,10 @@ class GameListingView extends AbstractView2
     }
     public function __invoke(Request $request)
     {
-        $this->games     = $request->attributes->get('games');
-        $this->regTeams  = $request->attributes->get('regTeams');
-        $this->poolTeams = $request->attributes->get('poolTeams');
+        $this->games       = $request->attributes->get('games');
+        $this->regTeams    = $request->attributes->get('regTeams');
+        $this->poolTeams   = $request->attributes->get('poolTeams');
+        $this->gameNumbers = $request->attributes->get('gameNumbers');
 
         return $this->newResponse($this->renderPage());
     }
@@ -50,6 +53,8 @@ class GameListingView extends AbstractView2
 {$this->renderPoolTeams()}
 <br/>
 {$this->renderGames()}
+<br/>
+{$this->renderGameNumbers()}
 EOD;
         return $this->renderBaseTemplate($content);
     }
@@ -229,5 +234,31 @@ EOD;
   <td class="text-center">{$team->extraPoints}</td>
 </tr>
 EOD;
+    }
+    private function renderGameNumbers()
+    {
+        if (!$this->gameNumbers) {
+            return null;
+        }
+        $html = <<<EOD
+<div id="layout-block">
+<table class="standings" border = "1">
+<tr><th colspan="20" class="text-center">Max Game Number In Use</th></tr>
+EOD;
+        foreach($this->gameNumbers as $gameNumber) {
+            $html .= <<<EOD
+<tr>
+  <td>{$gameNumber['program']}</td>
+  <td>{$gameNumber['division']}</td>
+  <td>{$gameNumber['gameNumberMax']}</td>
+</tr>
+EOD;
+        }
+        $html .= <<<EOD
+</table>
+</div>
+EOD;
+
+        return $html;
     }
 }
