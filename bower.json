@@ -1,0 +1,14 @@
+{
+  "name": "ng2016",
+  "description": "AYSO National Games 2016",
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "bootstrap-vertical-tabs": "^1.2.1"
+  }
+}
