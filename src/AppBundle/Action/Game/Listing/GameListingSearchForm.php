@@ -82,7 +82,7 @@ EOD;
         'regTeams'    => 'Registered Teams',
         'poolTeams'   => 'Pool Teams',
         'games'       => 'Games',
-        'gameNumbers' => 'Game Numbers(todo)',
+        'gameNumbers' => 'Game Numbers',
     ];
     private $divisionChoices = [
          null  => 'All',

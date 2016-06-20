@@ -143,4 +143,31 @@ class GameFinder
         }
         return array_values($regTeams);
     }
+    public function findGameNumbers(array $criteria)
+    {
+        $projectId = $criteria['projectIds'][0];
+
+        // Actual list of programs,divisions
+        $sql  = 'SELECT DISTINCT program,division FROM poolTeams WHERE projectId = ? ORDER BY program,division';
+        $stmt = $this->gameConn->executeQuery($sql,[$projectId]);
+        $divs = $stmt->fetchAll();
+        
+        // Could probably do this in one shot with group by
+        // Should also do a prepare and bind here but oh well
+        $sql = <<<EOD
+SELECT MAX(game.gameNumber) AS gameNumberMax 
+FROM games AS game
+LEFT JOIN gameTeams AS gameTeam ON gameTeam.gameId = game.gameId
+LEFT JOIN poolTeams AS poolTeam ON poolTeam.poolTeamId = gameTeam.poolTeamId
+WHERE game.projectId = ? AND poolTeam.program = ? AND poolTeam.division = ?
+EOD;
+        foreach($divs as &$div)
+        {
+            $search = [$projectId,$div['program'],$div['division']];
+            $stmt = $this->gameConn->executeQuery($sql,$search);
+            $row = $stmt->fetch();
+            $div['gameNumberMax'] = $row ? (integer)$row['gameNumberMax'] : 0;
+        }
+        return $divs;
+    }
 }

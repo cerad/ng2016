@@ -91,6 +91,12 @@ class GameListingController extends AbstractController2
                 $games = $this->finder->findGames($criteria);
                 $request->attributes->set('games',$games);
                 break;
+            
+            case 'gameNumbers':
+                $gameNumbers = $this->finder->findGameNumbers($criteria);
+                $request->attributes->set('gameNumbers',$gameNumbers);
+                break;
+                
         }
         return null;
     }
