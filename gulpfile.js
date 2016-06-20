@@ -4,7 +4,6 @@ const concat = require('gulp-concat');
 
 const appPublicDir   = path.join(__dirname, 'src/AppBundle/Resources/public');
 const nodeModulesDir = path.join(__dirname,'node_modules');
-const bowerDir = path.join(__dirname,'bower_components');
 
 const appTask = function() {
 
@@ -64,7 +63,6 @@ const buildTask = function()
 {
     appTask();
     nodeModulesTask();
-    bowerComponentsTask();
 };
 gulp.task('build',buildTask);
 
@@ -77,8 +75,7 @@ const watchTask = function()
         appPublicDir + '/css/*.css',
         appPublicDir + '/js/*.js',
         appPublicDir + '/images/*.png',
-        appPublicDir + '/images/*.ico',
-        appPublicDir + '/../pdf/*.pdf',
+        appPublicDir + '/images/*.ico'
     ],  ['app']);
 };
 gulp.task('watch',watchTask);
