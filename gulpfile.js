@@ -47,7 +47,7 @@ const nodeModulesTask = function() {
     //        path.join(nodeModulesDir,'normalize.css/normalize.css'),
     //        path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css'),
     //        path.join(nodeModulesDir,'bootstrap-fileinput/css/fileinput.min.css')            
-            path.join(bowerDir,'bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css')            
+            path.join(nodeModulesDir,'bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css')            
         ])
         .pipe(gulp.dest('web/css'));
     //
@@ -59,20 +59,6 @@ const nodeModulesTask = function() {
     //    .pipe(gulp.dest('web/js'));
 };
 gulp.task('node_modules',nodeModulesTask);
-
-const bowerComponentsTask = function() {
-
-    gulp.src([
-            path.join(bowerDir,'bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css')            
-        ])
-        .pipe(gulp.dest('web/css'));
-
-    //gulp.src([
-
-    //    ])
-    //    .pipe(gulp.dest('web/js'));
-};
-gulp.task('bower_components',bowerComponentsTask);
 
 const buildTask = function()
 {

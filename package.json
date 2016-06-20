@@ -31,6 +31,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "bootstrap-fileinput": "^4.2.8",
+    "bootstrap-vertical-tabs": "git+https://github.com/dbtek/bootstrap-vertical-tabs.git",
     "jquery": "^2.2.2",
     "normalize.css": "^3.0.3"
   }
