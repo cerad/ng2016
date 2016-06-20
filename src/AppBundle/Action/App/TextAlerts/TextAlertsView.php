@@ -31,7 +31,7 @@ class TextAlertsView extends AbstractView2
     </ul>
 </div>    
     <legend>Latest Announcements</legend>
-    <script type="text/javascript" src="http://widgets.omnilert.net/0588afab19ee214eca29"></script>
+    <script type="text/javascript" src="http://widgets.omnilert.net/0588afab19ee214eca29-11380"></script>
 
 EOT;
         return $this->renderBaseTemplate($content);
