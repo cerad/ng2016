@@ -39,7 +39,7 @@ class AbstractExporter
                 break;
             case 'xls':
                 $this->fileExtension = 'xlsx';
-                $this->contentType   = 'application/vnd.ms-excel';
+                $this->contentType   = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                 break;
             case 'txt':
                 $this->fileExtension = "txt";
