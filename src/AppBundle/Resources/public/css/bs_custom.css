@@ -116,6 +116,8 @@ a.btn { margin-left: 10px; }
 
 .file-actions { display: none; }
 
+hr { border-top: 1px solid #d2d2d2 }
+
 @media only screen and (max-width: 768px){
     
     .panel-float-left {

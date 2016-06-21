@@ -47,7 +47,6 @@ class GameListingView extends AbstractView2
 <div id="layout-block">
 {$this->searchForm->render()}
 </div>
-<hr>
 {$this->renderRegTeams()}
 <hr>
 {$this->renderPoolTeams()}
