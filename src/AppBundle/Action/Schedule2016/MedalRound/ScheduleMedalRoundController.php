@@ -68,6 +68,6 @@ class ScheduleMedalRoundController extends AbstractController
     }
     private function getDefaultProjectId()
     {
-        return array_keys($this->projectChoices)[1]; //NG2014
+        return array_keys($this->projectChoices)[0]; //NG2016
     }    
 }
