@@ -156,17 +156,19 @@ services:
             - '@schedule_assignor_search_form_2016'
             - '@schedule_assignor_template_2016'
 
-    #schedule_assignor_view_xls_2016:
-    #    class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
-    #    parent: abstract_view2
-    #    arguments:
-    #        - '@abstract_exporter_xls'
-    #
-    #schedule_assignor_view_txt_2016:
-    #    class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewFile
-    #    parent: abstract_view2
-    #    arguments:
-    #        - '@abstract_exporter_txt'
+    schedule_assignor_view_excel_2016:
+        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorViewExcel
+        parent: abstract_view2
+        arguments:
+            - '@schedule_assignor_writer_excel_2016'
+
+    schedule_assignor_writer_excel_2016:
+        class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorWriterExcel
+        arguments:
+            - '@game_official_assign_workflow'
+            - '@game_official_details_finder'
+            - '@phone_transformer'
+            - '@shirt_size_transformer'
 
     # ===============================================================
     # Schedule My

@@ -24,7 +24,7 @@ schedule_assignor_2016:
         _format: html
         _controller: schedule_assignor_controller_2016
         _view_html:  schedule_assignor_view_html_2016
-        #_view_xls:   schedule_assignor_view_xls_2016
+        _view_xls:   schedule_assignor_view_excel_2016
         #_view_csv:   schedule_assignor_view_csv_2016
         #_view_txt:   schedule_assignor_view_txt_2016
 
