@@ -60,6 +60,9 @@ services:
         arguments:
             - '@ayso_repository'
 
+    reg_team_import_reader_excel:
+        class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
+
     reg_team_transform_writer_excel:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformWriterExcel
 

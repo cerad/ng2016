@@ -88,6 +88,7 @@ SELECT
   poolTeam.regTeamName,
   poolTeam.division,
   
+  gameTeam.poolTeamId,
   poolTeam.poolTeamKey,
   
   poolTeam.poolView,
@@ -163,7 +164,7 @@ EOD;
             'ages'        => 'age',
             'divisions'   => 'division',
             'poolTypes'   => 'poolTypeKey',
-            'poolTeamIds' => 'poolTeam.poolTeamId',
+            'poolTeamIds' => 'gameTeam.poolTeamId', // TEST!
             'regTeamIds'  => 'regTeamId',
         ];
         list($values,$types) = $this->addWhere($qb,$whereMeta,$criteria);
