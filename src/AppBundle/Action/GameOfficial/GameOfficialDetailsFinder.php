@@ -42,8 +42,10 @@ SELECT
   regYear    AS regYear,
   name       AS name,
   email      AS email,
+  phone      AS phone,
   shirtSize  AS shirtSize,
-  badge      AS refereeBadge
+  badge      AS refereeBadge,
+  age        AS age
 FROM projectPersons as regPerson
 LEFT JOIN 
   projectPersonRoles AS regPersonRole 

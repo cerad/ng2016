@@ -3,3 +3,6 @@ services:
     phone_transformer:
         class:  AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer
 
+    shirt_size_transformer:
+        class:  AppBundle\Action\Physical\Person\DataTransformer\ShirtSizeTransformer
+

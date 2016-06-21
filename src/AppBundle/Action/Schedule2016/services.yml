@@ -164,6 +164,11 @@ services:
 
     schedule_assignor_writer_excel_2016:
         class:  AppBundle\Action\Schedule2016\Assignor\ScheduleAssignorWriterExcel
+        arguments:
+            - '@game_official_assign_workflow'
+            - '@game_official_details_finder'
+            - '@phone_transformer'
+            - '@shirt_size_transformer'
 
     # ===============================================================
     # Schedule My
