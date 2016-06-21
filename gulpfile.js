@@ -1,7 +1,6 @@
 const path   = require('path');
 const gulp   = require('gulp');
 const concat = require('gulp-concat');
-const concatCss = require('gulp-concat-css');
 
 const appPublicDir   = path.join(__dirname, 'src/AppBundle/Resources/public');
 const nodeModulesDir = path.join(__dirname,'node_modules');
@@ -44,20 +43,19 @@ gulp.task('app',appTask);
 const nodeModulesTask = function() {
 
     gulp.src([
-            path.join(nodeModulesDir,'normalize.css/normalize.css'),
-            path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css'),
-            path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css.map'),
-            path.join(nodeModulesDir,'bootstrap-fileinput/css/fileinput.min.css')            
+    //        path.join(nodeModulesDir,'normalize.css/normalize.css'),
+    //        path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css'),
+    //        path.join(nodeModulesDir,'bootstrap-fileinput/css/fileinput.min.css')            
+            path.join(nodeModulesDir,'bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css')            
         ])
         .pipe(gulp.dest('web/css'));
-
-    gulp.src([
-            path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
-            path.join(nodeModulesDir,'jquery/dist/jquery.min.map'),
-            path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
-            path.join(nodeModulesDir,'bootstrap-fileinput/js/fileinput.min.js')
-        ])
-        .pipe(gulp.dest('web/js'));
+    //
+    //gulp.src([
+    //        path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
+    //        path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
+    //        path.join(nodeModulesDir,'bootstrap-fileinput/js/fileinput.min.js')
+    //    ])
+    //    .pipe(gulp.dest('web/js'));
 };
 gulp.task('node_modules',nodeModulesTask);
 
@@ -77,8 +75,7 @@ const watchTask = function()
         appPublicDir + '/css/*.css',
         appPublicDir + '/js/*.js',
         appPublicDir + '/images/*.png',
-        appPublicDir + '/images/*.ico',
-        appPublicDir + '/../pdf/*.pdf',
+        appPublicDir + '/images/*.ico'
     ],  ['app']);
 };
 gulp.task('watch',watchTask);

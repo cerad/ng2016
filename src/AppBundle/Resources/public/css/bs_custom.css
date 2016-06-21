@@ -114,6 +114,8 @@ a.btn { margin-left: 10px; }
 .file-footer-caption { width: inherit; font-size: inherit; color: inherit; }
 .file-input-test-button { display: none; }
 
+.file-actions { display: none; }
+
 @media only screen and (max-width: 768px){
     
     .panel-float-left {
