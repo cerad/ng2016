@@ -16,6 +16,14 @@ services:
         arguments:
             - '@doctrine.dbal.ng2016games_connection'
 
+    game_adjust_ng2016_command:
+        class: AppBundle\Action\Game\Migrate\AdjustGames2016Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '@doctrine.dbal.ng2016games_connection'
+            - '@schedule_finder_2016'
+            - '@reg_team_import_reader_excel'
+
     game_finder:
         class: AppBundle\Action\Game\GameFinder
         arguments:

@@ -11,3 +11,10 @@ regteam_import:
         _controller:    regteam_import_controller
         _view:          regteam_import_view
         _role:          ROLE_ADMIN
+
+regteam_transform:
+    path: /transform
+    defaults:
+        _controller:    reg_team_transform_controller
+        _view:          reg_team_transform_view
+        _role:          ROLE_ADMIN
