@@ -56,6 +56,7 @@ class AdjustGames2016Command extends Command
         $this->adjustU10B();
         $this->adjustU14G();
         $this->adjustU16G();
+        $this->adjustU16B();
         $this->adjustU19B();
 
         $filename = $input->getArgument(('filename'));
@@ -109,7 +110,64 @@ class AdjustGames2016Command extends Command
         $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
 
     }
-    // Currently down by 4 teams
+
+    // Moving from 3 pools to two pools
+    private function adjustU16B()
+    {
+        $projectId = $this->projectId;
+
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC1');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC2');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC3');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC4');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC5');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC6');
+
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore15');
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore16');
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore17');
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore18');
+
+        $poolTeam = [
+            'poolTeamId'   => $projectId . ':' . 'U16BCorePPA7',
+            'projectId'    => $projectId,
+            'poolKey'      => 'U16BCorePPA',
+            'poolTypeKey'  => 'PP',
+            'poolTeamKey'  => 'U16BCorePPA7',
+
+            'poolView'         => 'U16-B Pool Play A',
+            'poolSlotView'     => 'A',
+            'poolTypeView'     => 'PP',
+            'poolTeamView'     => 'U16-B Pool Play A7',
+            'poolTeamSlotView' => 'A7',
+
+            'program'  => 'Core',
+            'gender'   => 'B',
+            'age'      => 'U16',
+            'division' => 'U16B',
+        ];
+        $this->gameConn->insert('poolTeams',$poolTeam);
+
+        $poolTeam = [
+            'poolTeamId'   => $projectId . ':' . 'U16BCorePPB7',
+            'projectId'    => $projectId,
+            'poolKey'      => 'U16BCorePPB',
+            'poolTypeKey'  => 'PP',
+            'poolTeamKey'  => 'U16BCorePPB7',
+
+            'poolView'         => 'U16-B Pool Play B',
+            'poolSlotView'     => 'B',
+            'poolTypeView'     => 'PP',
+            'poolTeamView'     => 'U16-B Pool Play B7',
+            'poolTeamSlotView' => 'B7',
+
+            'program'  => 'Core',
+            'gender'   => 'B',
+            'age'      => 'U16',
+            'division' => 'U16B',
+        ];
+        $this->gameConn->insert('poolTeams',$poolTeam);
+    }
     private function adjustU19B()
     {
         $projectId = $this->projectId;
@@ -117,7 +175,7 @@ class AdjustGames2016Command extends Command
         $poolTeamIdB6 =  $projectId . ':' . 'U19BCorePPB6';
         $poolTeamIdC6 =  $projectId . ':' . 'U19BCorePPC6';
         $poolTeamIdD6 =  $projectId . ':' . 'U19BCorePPD6';
-        
+
         $this->deletePoolTeam($poolTeamIdA6);
         $this->deletePoolTeam($poolTeamIdB6);
         $this->deletePoolTeam($poolTeamIdC6);
