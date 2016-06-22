@@ -72,24 +72,19 @@ class AdjustGames2016Command extends Command
         $poolTeamIdB6 =  $projectId . ':' . 'U14GCorePPB6';
         $poolTeamIdC6 =  $projectId . ':' . 'U14GCorePPC6';
         $poolTeamIdD6 =  $projectId . ':' . 'U14GCorePPD6';
-        $poolTeamIds = [
-            $poolTeamIdA6,$poolTeamIdB6,$poolTeamIdC6,$poolTeamIdD6,
-        ];
-        foreach($poolTeamIds as $poolTeamId) {
-            $this->deletePoolTeam($poolTeamId);
-        }
+
+        $this->deletePoolTeam($poolTeamIdA6);
+        $this->deletePoolTeam($poolTeamIdB6);
+        $this->deletePoolTeam($poolTeamIdC6);
+        $this->deletePoolTeam($poolTeamIdD6);
+
         $this->deleteRegTeam($projectId . ':' . 'U14GCore21');
         $this->deleteRegTeam($projectId . ':' . 'U14GCore22');
         $this->deleteRegTeam($projectId . ':' . 'U14GCore23');
         $this->deleteRegTeam($projectId . ':' . 'U14GCore24');
 
-        // Delete any related games
-        foreach($poolTeamIds as $poolTeamId) {
-            $games = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId]]);
-            foreach($games as $game) {
-                $this->gameUpdater->deleteGame($game->projectId,$game->gameNumber);
-            }
-        }
+        $this->crossPool($poolTeamIdA6,$poolTeamIdC6);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
     }
     // Currently down by 4 teams
     private function adjustU16G()
@@ -99,24 +94,20 @@ class AdjustGames2016Command extends Command
         $poolTeamIdB6 =  $projectId . ':' . 'U16GCorePPB6';
         $poolTeamIdC6 =  $projectId . ':' . 'U16GCorePPC6';
         $poolTeamIdD6 =  $projectId . ':' . 'U16GCorePPD6';
-        $poolTeamIds = [
-            $poolTeamIdA6,$poolTeamIdB6,$poolTeamIdC6,$poolTeamIdD6,
-        ];
-        foreach($poolTeamIds as $poolTeamId) {
-            $this->deletePoolTeam($poolTeamId);
-        }
+
+        $this->deletePoolTeam($poolTeamIdA6);
+        $this->deletePoolTeam($poolTeamIdB6);
+        $this->deletePoolTeam($poolTeamIdC6);
+        $this->deletePoolTeam($poolTeamIdD6);
+
         $this->deleteRegTeam($projectId . ':' . 'U16GCore21');
         $this->deleteRegTeam($projectId . ':' . 'U16GCore22');
         $this->deleteRegTeam($projectId . ':' . 'U16GCore23');
         $this->deleteRegTeam($projectId . ':' . 'U16GCore24');
 
-        // Delete any related games
-        foreach($poolTeamIds as $poolTeamId) {
-            $games = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId]]);
-            foreach($games as $game) {
-                $this->gameUpdater->deleteGame($game->projectId,$game->gameNumber);
-            }
-        }
+        $this->crossPool($poolTeamIdA6,$poolTeamIdC6);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
+
     }
     // Currently down by 4 teams
     private function adjustU19B()
@@ -126,24 +117,19 @@ class AdjustGames2016Command extends Command
         $poolTeamIdB6 =  $projectId . ':' . 'U19BCorePPB6';
         $poolTeamIdC6 =  $projectId . ':' . 'U19BCorePPC6';
         $poolTeamIdD6 =  $projectId . ':' . 'U19BCorePPD6';
-        $poolTeamIds = [
-            $poolTeamIdA6,$poolTeamIdB6,$poolTeamIdC6,$poolTeamIdD6,
-        ];
-        foreach($poolTeamIds as $poolTeamId) {
-            $this->deletePoolTeam($poolTeamId);
-        }
+        
+        $this->deletePoolTeam($poolTeamIdA6);
+        $this->deletePoolTeam($poolTeamIdB6);
+        $this->deletePoolTeam($poolTeamIdC6);
+        $this->deletePoolTeam($poolTeamIdD6);
+
         $this->deleteRegTeam($projectId . ':' . 'U19BCore21');
         $this->deleteRegTeam($projectId . ':' . 'U19BCore22');
         $this->deleteRegTeam($projectId . ':' . 'U19BCore23');
         $this->deleteRegTeam($projectId . ':' . 'U19BCore24');
 
-        // Delete any related games
-        foreach($poolTeamIds as $poolTeamId) {
-            $games = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId]]);
-            foreach($games as $game) {
-                $this->gameUpdater->deleteGame($game->projectId,$game->gameNumber);
-            }
-        }
+        $this->crossPool($poolTeamIdA6,$poolTeamIdC6);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
     }
     // Down by two teams
     private function adjustU10B()
@@ -161,15 +147,19 @@ class AdjustGames2016Command extends Command
         $this->deleteRegTeam($projectId . ':' . 'U10BCore24');
 
         // Find the impacted games
-        $gamesB6 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamIdB6]]);
-        $gamesD6 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamIdD6]]);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
 
-        echo sprintf("Games %d %d\n",count($gamesB6),count($gamesD6));
-        if (count($gamesB6) !== count($gamesD6)) {
+    }
+    private function crossPool($poolTeamId1,$poolTeamId2)
+    {
+        $games1 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId1]]);
+        $games2 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId2]]);
+
+        if (count($games1) !== count($games2)) {
             return;
         }
-        for($i = 0; $i < count($gamesB6); $i++) {
-            $this->mergeGames($poolTeamIdB6,$poolTeamIdD6,$gamesB6[$i],$gamesD6[$i]);
+        for($i = 0; $i < count($games1); $i++) {
+            $this->mergeGames($poolTeamId1,$poolTeamId2,$games1[$i],$games2[$i]);
         }
     }
     private function mergeGames($poolTeamId1,$poolTeamId2,ScheduleGame $game1, ScheduleGame $game2)
