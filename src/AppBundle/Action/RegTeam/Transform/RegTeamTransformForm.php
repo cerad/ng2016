@@ -32,6 +32,14 @@ class RegTeamTransformForm extends AbstractForm
         $sheetChoices = [
             'U10B' => 'U10B',
             'U10G' => 'U10G',
+            'U12B' => 'U12B',
+            'U12G' => 'U12G',
+            'U14B' => 'U14B',
+            'U14G' => 'U14G',
+            'U16B' => 'U16B',
+            'U16G' => 'U16G',
+            'U19B' => 'U19B',
+            'U19G' => 'U19G',
         ];
         $action = $this->generateUrl($this->getCurrentRouteName());
         $csrfToken = 'TODO';
