@@ -17,7 +17,7 @@ class PoolTeamImportUpdater
         $this->conn = $conn;
     }
     /**
-     * @param  array   $games
+     * @param  array   $poolTeams
      * @param  boolean $commit
      * @param  string  $fileName
      * @return PoolTeamImportResults
