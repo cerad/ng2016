@@ -4,6 +4,7 @@ namespace AppBundle\Action\Game\Listing;
 use AppBundle\Action\AbstractView2;
 
 use AppBundle\Action\Game\Game;
+use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\Game\RegTeam;
 use AppBundle\Action\Game\PoolTeam;
 
@@ -23,11 +24,14 @@ class GameListingView extends AbstractView2
     private $gameNumbers;
     
     private $searchForm;
+    private $gameFinder;
 
     public function __construct(
-        GameListingSearchForm $searchForm
+        GameListingSearchForm $searchForm,
+        GameFinder $gameFinder
     ) {
-        $this->searchForm  = $searchForm;
+        $this->searchForm = $searchForm;
+        $this->gameFinder = $gameFinder;
     }
     public function __invoke(Request $request)
     {
@@ -229,7 +233,7 @@ EOD;
   <td class="text-left">  {$team->poolTypeKey} <br/>{$team->poolKey} <br/>{$team->poolTeamKey} </td>
   <td class="text-left">  {$team->poolTypeView}<br/>{$team->poolView}<br/>{$team->poolTeamView}</td>
   <td class="text-left">  &nbsp;<br/>{$team->poolSlotView}<br/>{$team->poolTeamSlotView}</td>
-  <td class="text-center">{$regTeamKey}</td>
+  <td class="text-center">{$regTeamKey}<br/>{$this->escape($team->regTeamName)}</td>
   <td class="text-center">{$team->extraPoints}</td>
 </tr>
 EOD;

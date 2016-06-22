@@ -54,13 +54,98 @@ class AdjustGames2016Command extends Command
         echo sprintf("Adjust Games NG2016 ...\n");
 
         $this->adjustU10B();
+        $this->adjustU14G();
+        $this->adjustU16G();
+        $this->adjustU19B();
 
         $filename = $input->getArgument(('filename'));
-        foreach(['U10B','U10G'] as $div) {
+        foreach(['U10B','U10G','U12B','U12G','U14B','U14G','U16B','U16G','U19B','U19G'] as $div) {
             $this->processFile($filename,$div);
         }
 
     }
+    // Currently down by 4 teams
+    private function adjustU14G()
+    {
+        $projectId = $this->projectId;
+        $poolTeamIdA6 =  $projectId . ':' . 'U14GCorePPA6';
+        $poolTeamIdB6 =  $projectId . ':' . 'U14GCorePPB6';
+        $poolTeamIdC6 =  $projectId . ':' . 'U14GCorePPC6';
+        $poolTeamIdD6 =  $projectId . ':' . 'U14GCorePPD6';
+        $poolTeamIds = [
+            $poolTeamIdA6,$poolTeamIdB6,$poolTeamIdC6,$poolTeamIdD6,
+        ];
+        foreach($poolTeamIds as $poolTeamId) {
+            $this->deletePoolTeam($poolTeamId);
+        }
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore21');
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore22');
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore23');
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore24');
+
+        // Delete any related games
+        foreach($poolTeamIds as $poolTeamId) {
+            $games = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId]]);
+            foreach($games as $game) {
+                $this->gameUpdater->deleteGame($game->projectId,$game->gameNumber);
+            }
+        }
+    }
+    // Currently down by 4 teams
+    private function adjustU16G()
+    {
+        $projectId = $this->projectId;
+        $poolTeamIdA6 =  $projectId . ':' . 'U16GCorePPA6';
+        $poolTeamIdB6 =  $projectId . ':' . 'U16GCorePPB6';
+        $poolTeamIdC6 =  $projectId . ':' . 'U16GCorePPC6';
+        $poolTeamIdD6 =  $projectId . ':' . 'U16GCorePPD6';
+        $poolTeamIds = [
+            $poolTeamIdA6,$poolTeamIdB6,$poolTeamIdC6,$poolTeamIdD6,
+        ];
+        foreach($poolTeamIds as $poolTeamId) {
+            $this->deletePoolTeam($poolTeamId);
+        }
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore21');
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore22');
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore23');
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore24');
+
+        // Delete any related games
+        foreach($poolTeamIds as $poolTeamId) {
+            $games = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId]]);
+            foreach($games as $game) {
+                $this->gameUpdater->deleteGame($game->projectId,$game->gameNumber);
+            }
+        }
+    }
+    // Currently down by 4 teams
+    private function adjustU19B()
+    {
+        $projectId = $this->projectId;
+        $poolTeamIdA6 =  $projectId . ':' . 'U19BCorePPA6';
+        $poolTeamIdB6 =  $projectId . ':' . 'U19BCorePPB6';
+        $poolTeamIdC6 =  $projectId . ':' . 'U19BCorePPC6';
+        $poolTeamIdD6 =  $projectId . ':' . 'U19BCorePPD6';
+        $poolTeamIds = [
+            $poolTeamIdA6,$poolTeamIdB6,$poolTeamIdC6,$poolTeamIdD6,
+        ];
+        foreach($poolTeamIds as $poolTeamId) {
+            $this->deletePoolTeam($poolTeamId);
+        }
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore21');
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore22');
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore23');
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore24');
+
+        // Delete any related games
+        foreach($poolTeamIds as $poolTeamId) {
+            $games = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId]]);
+            foreach($games as $game) {
+                $this->gameUpdater->deleteGame($game->projectId,$game->gameNumber);
+            }
+        }
+    }
+    // Down by two teams
     private function adjustU10B()
     {
         $projectId = $this->projectId;
