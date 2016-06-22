@@ -86,9 +86,16 @@ class RegTeamUpdater
         
         $regTeamId = $projId . ':' . $teamKey;
 
-        $region = explode('-',$sars)[2];
-        $orgKey = 'AYSOR:';
-        $orgId = $orgKey . str_pad($region,4,'0',STR_PAD_LEFT);
+        
+        $region = explode('-',$sars);
+        if(!empty($region) and (count($region) > 2)){
+            $region = $region[2];
+            $orgKey = 'AYSOR:';
+            $orgId = $orgKey . str_pad($region,4,'0',STR_PAD_LEFT);
+        } else {
+            $sars = NULL;
+            $orgId = NULL;
+        }
 
         $params = array($orgId, $sars, $regTeamId);      
       
