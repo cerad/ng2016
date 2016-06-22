@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Action\Game\Migrate;
 
+use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 use AppBundle\Action\Schedule2016\ScheduleGame;
@@ -19,12 +20,14 @@ class AdjustGames2016Command extends Command
     private $regTeamConn;
     
     private $gameFinder;
+    private $gameUpdater;
     
     private $projectId = 'AYSONationalGames2016';
 
     public function __construct(
         Connection $ng2016GamesConn,
         ScheduleFinder $gameFinder,
+        GameUpdater    $gameUpdater,
         RegTeamImportReaderExcel $reader
     ) {
         parent::__construct();
@@ -34,7 +37,8 @@ class AdjustGames2016Command extends Command
         $this->gameConn    = $ng2016GamesConn;
         $this->regTeamConn = $ng2016GamesConn;
         
-        $this->gameFinder = $gameFinder;
+        $this->gameFinder  = $gameFinder;
+        $this->gameUpdater = $gameUpdater;
     }
 
     protected function configure()
@@ -109,15 +113,8 @@ class AdjustGames2016Command extends Command
             $this->changePoolTeam($game1->awayTeam,$poolTeamId2x);
         }
         // Remove the second game
-        $this->deleteGame($game2);
+        $this->gameUpdater->deleteGame($game2->projectId,$game2->gameNumber);
 
-    }
-    private function deleteGame(ScheduleGame $game)
-    {
-        $id = ['gameId' => $game->gameId];
-        $this->gameConn->delete('gameTeams',    $id);
-        $this->gameConn->delete('gameOfficials',$id);
-        $this->gameConn->delete('games',        $id);
     }
     private function deletePoolTeam($poolTeamId)
     {
