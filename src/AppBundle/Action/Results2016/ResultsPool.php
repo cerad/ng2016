@@ -47,8 +47,11 @@ class ResultsPool
         // Summarize results
         foreach($game->getTeams() as $gameTeam)
         {
-            $poolTeam = $this->teams[$gameTeam->poolTeamId];
-            $poolTeam->mergeGameTeam($gameTeam);
+            // Need this check for U10 cross pool play, VERIFY!!!
+            if (isset( $this->teams[$gameTeam->poolTeamId])) {
+                $poolTeam = $this->teams[$gameTeam->poolTeamId];
+                $poolTeam->mergeGameTeam($gameTeam);
+            }
         }
     }
     public function getGames()

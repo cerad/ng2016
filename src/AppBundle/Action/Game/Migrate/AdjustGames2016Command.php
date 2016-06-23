@@ -54,13 +54,142 @@ class AdjustGames2016Command extends Command
         echo sprintf("Adjust Games NG2016 ...\n");
 
         $this->adjustU10B();
+        $this->adjustU14G();
+        $this->adjustU16G();
+        $this->adjustU16B();
+        $this->adjustU19B();
 
         $filename = $input->getArgument(('filename'));
-        foreach(['U10B','U10G'] as $div) {
+        foreach(['U10B','U10G','U12B','U12G','U14B','U14G','U16B','U16G','U19B','U19G'] as $div) {
             $this->processFile($filename,$div);
         }
 
     }
+    // Currently down by 4 teams
+    private function adjustU14G()
+    {
+        $projectId = $this->projectId;
+        $poolTeamIdA6 =  $projectId . ':' . 'U14GCorePPA6';
+        $poolTeamIdB6 =  $projectId . ':' . 'U14GCorePPB6';
+        $poolTeamIdC6 =  $projectId . ':' . 'U14GCorePPC6';
+        $poolTeamIdD6 =  $projectId . ':' . 'U14GCorePPD6';
+
+        $this->deletePoolTeam($poolTeamIdA6);
+        $this->deletePoolTeam($poolTeamIdB6);
+        $this->deletePoolTeam($poolTeamIdC6);
+        $this->deletePoolTeam($poolTeamIdD6);
+
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore21');
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore22');
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore23');
+        $this->deleteRegTeam($projectId . ':' . 'U14GCore24');
+
+        $this->crossPool($poolTeamIdA6,$poolTeamIdC6);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
+    }
+    // Currently down by 4 teams
+    private function adjustU16G()
+    {
+        $projectId = $this->projectId;
+        $poolTeamIdA6 =  $projectId . ':' . 'U16GCorePPA6';
+        $poolTeamIdB6 =  $projectId . ':' . 'U16GCorePPB6';
+        $poolTeamIdC6 =  $projectId . ':' . 'U16GCorePPC6';
+        $poolTeamIdD6 =  $projectId . ':' . 'U16GCorePPD6';
+
+        $this->deletePoolTeam($poolTeamIdA6);
+        $this->deletePoolTeam($poolTeamIdB6);
+        $this->deletePoolTeam($poolTeamIdC6);
+        $this->deletePoolTeam($poolTeamIdD6);
+
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore21');
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore22');
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore23');
+        $this->deleteRegTeam($projectId . ':' . 'U16GCore24');
+
+        $this->crossPool($poolTeamIdA6,$poolTeamIdC6);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
+
+    }
+
+    // Moving from 3 pools to two pools
+    private function adjustU16B()
+    {
+        $projectId = $this->projectId;
+
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC1');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC2');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC3');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC4');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC5');
+        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC6');
+
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore15');
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore16');
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore17');
+        $this->deleteRegTeam($projectId . ':' . 'U16BCore18');
+
+        $poolTeam = [
+            'poolTeamId'   => $projectId . ':' . 'U16BCorePPA7',
+            'projectId'    => $projectId,
+            'poolKey'      => 'U16BCorePPA',
+            'poolTypeKey'  => 'PP',
+            'poolTeamKey'  => 'U16BCorePPA7',
+
+            'poolView'         => 'U16-B Pool Play A',
+            'poolSlotView'     => 'A',
+            'poolTypeView'     => 'PP',
+            'poolTeamView'     => 'U16-B Pool Play A7',
+            'poolTeamSlotView' => 'A7',
+
+            'program'  => 'Core',
+            'gender'   => 'B',
+            'age'      => 'U16',
+            'division' => 'U16B',
+        ];
+        $this->gameConn->insert('poolTeams',$poolTeam);
+
+        $poolTeam = [
+            'poolTeamId'   => $projectId . ':' . 'U16BCorePPB7',
+            'projectId'    => $projectId,
+            'poolKey'      => 'U16BCorePPB',
+            'poolTypeKey'  => 'PP',
+            'poolTeamKey'  => 'U16BCorePPB7',
+
+            'poolView'         => 'U16-B Pool Play B',
+            'poolSlotView'     => 'B',
+            'poolTypeView'     => 'PP',
+            'poolTeamView'     => 'U16-B Pool Play B7',
+            'poolTeamSlotView' => 'B7',
+
+            'program'  => 'Core',
+            'gender'   => 'B',
+            'age'      => 'U16',
+            'division' => 'U16B',
+        ];
+        $this->gameConn->insert('poolTeams',$poolTeam);
+    }
+    private function adjustU19B()
+    {
+        $projectId = $this->projectId;
+        $poolTeamIdA6 =  $projectId . ':' . 'U19BCorePPA6';
+        $poolTeamIdB6 =  $projectId . ':' . 'U19BCorePPB6';
+        $poolTeamIdC6 =  $projectId . ':' . 'U19BCorePPC6';
+        $poolTeamIdD6 =  $projectId . ':' . 'U19BCorePPD6';
+
+        $this->deletePoolTeam($poolTeamIdA6);
+        $this->deletePoolTeam($poolTeamIdB6);
+        $this->deletePoolTeam($poolTeamIdC6);
+        $this->deletePoolTeam($poolTeamIdD6);
+
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore21');
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore22');
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore23');
+        $this->deleteRegTeam($projectId . ':' . 'U19BCore24');
+
+        $this->crossPool($poolTeamIdA6,$poolTeamIdC6);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
+    }
+    // Down by two teams
     private function adjustU10B()
     {
         $projectId = $this->projectId;
@@ -76,15 +205,19 @@ class AdjustGames2016Command extends Command
         $this->deleteRegTeam($projectId . ':' . 'U10BCore24');
 
         // Find the impacted games
-        $gamesB6 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamIdB6]]);
-        $gamesD6 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamIdD6]]);
+        $this->crossPool($poolTeamIdB6,$poolTeamIdD6);
 
-        echo sprintf("Games %d %d\n",count($gamesB6),count($gamesD6));
-        if (count($gamesB6) !== count($gamesD6)) {
+    }
+    private function crossPool($poolTeamId1,$poolTeamId2)
+    {
+        $games1 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId1]]);
+        $games2 = $this->gameFinder->findGames(['poolTeamIds' => [$poolTeamId2]]);
+
+        if (count($games1) !== count($games2)) {
             return;
         }
-        for($i = 0; $i < count($gamesB6); $i++) {
-            $this->mergeGames($poolTeamIdB6,$poolTeamIdD6,$gamesB6[$i],$gamesD6[$i]);
+        for($i = 0; $i < count($games1); $i++) {
+            $this->mergeGames($poolTeamId1,$poolTeamId2,$games1[$i],$games2[$i]);
         }
     }
     private function mergeGames($poolTeamId1,$poolTeamId2,ScheduleGame $game1, ScheduleGame $game2)
