@@ -182,7 +182,7 @@ EOD;
         $assignUrl = $this->generateUrl($assignRouteName,$params);
 
         $slotView = $gameOfficial->slotView;
-        if ($this->isGranted('edit',$gameOfficial)) {
+        if ($this->isGranted('view',$gameOfficial)) {
             $slotView = sprintf('<a href="%s">%s</a>',$assignUrl,$slotView);
         }
 
