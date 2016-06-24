@@ -212,4 +212,46 @@ EOD;
         }
         return $row['approved'] ? true : false;
     }
+    /* ==========================================
+     * Just for the referee summary for now but
+     * Also a partial design for future RegPerson
+     * 
+     * @param  $projectId string
+     * @return RegPerson[]
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findRegPersons($projectId)
+    {
+        $sql = <<<EOD
+SELECT
+  projectKey AS projectId,
+  personKey  AS personId,
+  orgKey     AS orgId,
+  fedKey     AS fedId,
+  regYear    AS regYear,
+  name,email,phone,gender,dob,age,shirtSize,notes,notesUser
+FROM projectPersons AS regPerson
+WHERE regPerson.projectKey = ?
+EOD;
+        $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
+        $regPersons = [];
+        while($row = $stmt->fetch()) {
+            $regPerson = RegPerson::createFromArray($row);
+            $regPersons[$regPerson->personId] = $regPerson;
+        }
+        $sql = <<<EOD
+SELECT 
+  projectKey AS projectId,
+  personKey  AS personId,
+  role,badge,approved 
+FROM projectPersonRoles AS regPersonRole 
+LEFT JOIN projectPersons AS regPerson ON regPerson.id = regPersonRole.projectPersonId
+WHERE projectKey = ?
+EOD;
+        $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
+        while($row = $stmt->fetch()) {
+
+        }
+        return array_values($regPersons);
+    }
 }

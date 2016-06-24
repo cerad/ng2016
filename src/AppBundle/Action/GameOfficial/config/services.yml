@@ -90,3 +90,16 @@ services:
         parent: abstract_view2
         arguments:
             - '@game_official_assign_by_assignor_form'
+
+    # =========================================================================
+    # Export summary report
+    game_official_summary_controller:
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryController
+        parent: abstract_controller
+        arguments:
+            - '@game_finder'
+            - '@reg_person_finder'
+
+    game_official_summary_view:
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryView
+        parent: abstract_view2
