@@ -44,6 +44,7 @@ services:
             - '@game_official_assign_workflow'
             - '@game_official_assignee_finder'
             - '@game_official_conflicts_finder'
+            - '@reg_person_finder'
 
     game_official_assign_by_assignee_controller:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeController

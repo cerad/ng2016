@@ -62,17 +62,8 @@ class GameOfficialVoter extends Voter
 
         throw new \LogicException('This code should not be reached!');
     }
-
-    private function canView($subject, TokenInterface $token, User $user)
-    {
-        // if they can edit, they can view
-        if ($this->canEdit($subject, $token, $user)) {
-            return true;
-        }
-        return true;
-    }
-
-    private function canEdit($subject, TokenInterface $token, User $user)
+    // Determine if they can link or not
+    private function canView($gameOfficial, TokenInterface $token, User $user)
     {
         // Assignor can do anything
         if ($this->decisionManager->decide($token, ['ROLE_ASSIGNOR'])) {
@@ -82,10 +73,6 @@ class GameOfficialVoter extends Voter
         if (!$this->decisionManager->decide($token, ['ROLE_REFEREE'])) {
             return false;
         }
-
-        // Danger
-        /** @var GameOfficial $gameOfficial */
-        $gameOfficial = $subject;
 
         // Only certain games can be signed up for
         if ($gameOfficial->assignRole !== 'ROLE_REFEREE') {
@@ -115,5 +102,32 @@ class GameOfficialVoter extends Voter
         }
         return false;
     }
+    private function canEdit($gameOfficial, TokenInterface $token, User $user)
+    {
+        // Assignor can do anything
+        if ($this->decisionManager->decide($token, ['ROLE_ASSIGNOR'])) {
+            return true;
+        }
+        // Must be able to view
+        if (!$this->canView($gameOfficial, $token, $user)) {
+            return false;
+        }
+        
+        $regPersonId = $gameOfficial->regPersonId;
+        if (!$regPersonId) {
+            // Empty slot, use current user
+            $regPersonId = $user->getRegPersonId();
+        }
+        
+        // Must be approved to actually make a change
+        $isApproved = $this->regPersonFinder->isApprovedForRole('ROLE_REFEREE',$regPersonId);
+        if (!$isApproved) {
+            return false;
+        }
+        // Go crazy and check for conflicts here?  Wish I had a context for returning messages
+
+        return true;
+    }
+
     private $regPersonCrewIds;
 }

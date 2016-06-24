@@ -8,6 +8,7 @@ use AppBundle\Action\Game\GameOfficial;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\GameOfficial\GameOfficialConflictsFinder;
 
+use AppBundle\Action\RegPerson\RegPersonFinder;
 use Symfony\Component\HttpFoundation\Request;
 
 class AssigneeForm extends AbstractForm
@@ -23,16 +24,19 @@ class AssigneeForm extends AbstractForm
     private $assignWorkflow;
     private $assigneeFinder;
     private $conflictsFinder;
+    private $regPersonFinder;
 
     public function __construct(
         AssignWorkflow $assignWorkflow,
         AssigneeFinder $assigneeFinder,
-        GameOfficialConflictsFinder $conflictsFinder
+        GameOfficialConflictsFinder $conflictsFinder,
+        RegPersonFinder $regPersonFinder
     )
     {
-        $this->assignWorkflow = $assignWorkflow;
-        $this->assigneeFinder = $assigneeFinder;
+        $this->assignWorkflow  = $assignWorkflow;
+        $this->assigneeFinder  = $assigneeFinder;
         $this->conflictsFinder = $conflictsFinder;
+        $this->regPersonFinder = $regPersonFinder;
     }
 
     public function setGame(Game $game)
@@ -78,16 +82,24 @@ class AssigneeForm extends AbstractForm
         if (count($conflicts) > 0) {
             $errors = array_merge($errors,$conflicts);
         }
-        
+        if (!$this->isGranted('edit',$gameOfficial)) {
+            $errors[] = 'Not approved to referee';
+        }
+
         $this->formDataErrors = $errors;
     }
 
     public function render()
     {
+        // The current user must be approved to referee
+        $userRegPersonId = $this->getUserRegPersonId();
+        if (!$this->regPersonFinder->isApprovedForRole('ROLE_REFEREE',$userRegPersonId)) {
+            return $this->renderNotApproved($this->game);
+        }
         $game = $this->game;
         $gameOfficial = $this->gameOfficial;
 
-        $projectId = $game->projectId;
+        $projectId  = $game->projectId;
         $gameNumber = $game->gameNumber;
 
         // Game  #11207: AYSO_U12B_Core, Thu, 10:30 AM on LL3
@@ -120,9 +132,19 @@ class AssigneeForm extends AbstractForm
         if ($assignState === 'Open') {
             $assignState = 'Requested';
         }
-        // TODO Might need further processing to verify
-        // $gameOfficialChoices = $this->assigneeFinder->findCrew($this->getUser(), $gameOfficial);
         $gameOfficialChoices = $this->assigneeFinder->findCrewChoices($this->getUser()->getRegPersonId());
+        $gameOfficialChoicesApproved = [];
+        foreach($gameOfficialChoices as $regPersonId => $regPersonName) {
+            if ($this->regPersonFinder->isApprovedForRole('ROLE_REFEREE',$regPersonId)) {
+                $gameOfficialChoicesApproved[$regPersonId] = $regPersonName;
+            }
+            // TODO Maybe check for conflicts here
+        }
+        $gameOfficialChoicesApproved = array_filter($gameOfficialChoices, function($regPersonId) {
+            return $this->regPersonFinder->isApprovedForRole('ROLE_REFEREE',$regPersonId);
+        }, ARRAY_FILTER_USE_KEY);
+
+        // TODO maybe deal with no approved choices better
 
         $html = <<<EOD
 <table class="min-width-500">
@@ -136,7 +158,7 @@ class AssigneeForm extends AbstractForm
   <div class="form-group col-xs-7">
     <input type="text" name="slot" readonly size="4" value="{$gameOfficial->slotView}" />
 
-      {$this->renderInputSelect($gameOfficialChoices, $gameOfficial->regPersonId, 'regPersonId', 'regPersonId')}
+      {$this->renderInputSelect($gameOfficialChoicesApproved, $gameOfficial->regPersonId, 'regPersonId', 'regPersonId')}
 
       {$this->renderInputSelect($assignStateChoices, $assignState, 'assignState', 'assignState')}
   </div>
@@ -152,15 +174,37 @@ class AssigneeForm extends AbstractForm
 EOD;
         return $html;
     }
+    private function renderNotApproved(Game $game)
+    {
+        $backUrl = $this->generateUrl($this->backRouteName);
+        $backUrl .= '#game-' . $game->gameId;
 
+        return <<<EOD
+<legend class="text-warning">You are not currently approved to referee</legend>
+<div class="app_help">
+  <ul class="cerad-common-help ul_bullets">
+    <li>The assignor needs to review your certifications and approve you.</li>
+    <li>Contact the assignor (Tom Tobin, spsoccerref@earthlink.net) to expedite the process.</li>
+  </ul>
+</div>
+<a href="{$backUrl}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back To Schedule</a>
+
+EOD;
+    }
     protected function renderFormErrors()
     {
         $html = null;
-        foreach($this->formDataErrors as $conflict) {
-            $html .= <<<EOD
+        foreach($this->formDataErrors as $error) {
+            if (isset($error['gameNumber'])) {
+                $conflict = $error;
+                $html .= <<<EOD
 <div class="errors">Conflicts With: {$conflict['gameNumber']} {$conflict['start']} {$conflict['fieldName']} </div>
 EOD;
-
+            } else {
+                $html .= <<<EOD
+<div class="errors">{$error} </div>
+EOD;
+            }
         }
         return $html;
     }

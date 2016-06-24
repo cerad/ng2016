@@ -191,4 +191,25 @@ EOD;
         }
         return $userChoices;
     }
+    public function isApprovedForRole($role,$regPersonId)
+    {
+        if (!$regPersonId) {
+            return false;
+        }
+        list($projectId,$personId) = explode(':',$regPersonId);
+
+        // TODO: Test some refinements here
+        $sql = <<<EOD
+SELECT regPersonRole.approved 
+FROM projectPersons AS regPerson
+LEFT JOIN projectPersonRoles AS regPersonRole ON regPersonRole.projectPersonId = regPerson.id AND regPersonRole.role = ?
+WHERE regPerson.projectKey = ? AND regPerson.personKey = ?
+EOD;
+        $stmt = $this->regPersonConn->executeQuery($sql,[$role,$projectId,$personId]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            return false;
+        }
+        return $row['approved'] ? true : false;
+    }
 }
