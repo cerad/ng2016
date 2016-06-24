@@ -6,7 +6,9 @@ use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 use AppBundle\Action\Schedule2016\ScheduleGame;
 use AppBundle\Action\Schedule2016\ScheduleGameTeam;
+
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -44,22 +46,72 @@ class AdjustGames2016Command extends Command
     protected function configure()
     {
         $this
-            ->setName('adjust:games:ng2016')
+            ->setName('games:adjust:ng2016')
             ->setDescription('Adjust Games NG2016')
-            ->addArgument('filename');
+            ->addArgument('filename',InputArgument::OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         echo sprintf("Adjust Games NG2016 ...\n");
 
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $filename = $input->getArgument(('filename'));
+
+        //$this->adjust($filename);
+        $this->adjustTimes();
+        
+    }
+    private function adjustTimes()
+    {
+        $this->adjustTime('2016-07-09 08:00:00','2016-07-09 07:30:00');
+        $this->adjustTime('2016-07-09 09:15:00','2016-07-09 08:45:00');
+
+        $this->adjustTime('2016-07-09 10:30:00','2016-07-09 10:15:00');
+        $this->adjustTime('2016-07-09 11:45:00','2016-07-09 11:30:00');
+
+        $this->adjustTime('2016-07-10 08:00:00','2016-07-10 07:30:00');
+        $this->adjustTime('2016-07-10 10:00:00','2016-07-10 09:30:00');
+        $this->adjustTime('2016-07-10 13:00:00','2016-07-10 12:30:00');
+        $this->adjustTime('2016-07-10 15:00:00','2016-07-10 14:30:00');
+    }
+    private function adjustTime($dt1,$dt2)
+    {
+        $projectId = $this->projectId;
+        $sql = 'SELECT projectId,gameNumber,start,finish FROM games WHERE projectId = ? and start = ?';
+        $stmt = $this->gameConn->executeQuery($sql,[$projectId,$dt1]);
+        while($row = $stmt->fetch()) {
+
+            $start1  = new \DateTime($row['start']);
+            $finish1 = new \DateTime($row['finish']);
+            $interval = $start1->diff($finish1);
+
+            $finish2 = new \DateTime($dt2);
+            $finish2->add($interval);
+            $dt2x = $finish2->format('Y-m-d H:i:s');
+
+            echo sprintf("Game %d %s %s %s\n",$row['gameNumber'],$interval->format('%H %I'),$dt2,$dt2x);;
+
+            $this->gameConn->update('games',[
+                'start'  => $dt2,
+                'finish' => $dt2x,
+            ],[
+                'projectId'  => $projectId,
+                'gameNumber' => $row['gameNumber'],
+            ]);
+        }
+    }
+    /** @noinspection PhpUnusedPrivateMethodInspection
+     *  @param $filename
+     */
+    private function adjust($filename)
+    {
         $this->adjustU10B();
         $this->adjustU14G();
         $this->adjustU16G();
         $this->adjustU16B();
         $this->adjustU19B();
 
-        $filename = $input->getArgument(('filename'));
         foreach(['U10B','U10G','U12B','U12G','U14B','U14G','U16B','U16G','U19B','U19G'] as $div) {
             $this->processFile($filename,$div);
         }
