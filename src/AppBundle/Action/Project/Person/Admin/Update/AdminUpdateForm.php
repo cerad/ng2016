@@ -45,8 +45,8 @@ class AdminUpdateForm extends AbstractForm
         $this->formControls['YesNo'] = array(
             'type'      => 'select',
             'label'     => 'Yes / No',
-            'default'   =>  null,
-            'choices'   => ['yes'=>'Yes',null=>'No','maybe'=>'Maybe','nr'=>'Not Required'],
+            'default'   =>  'no',
+            'choices'   => ['yes'=>'Yes','no'=>'No','maybe'=>'Maybe','nr'=>'Not Required'],
         );
         
         $this->formControls['regYear'] = array(
@@ -380,21 +380,25 @@ EOD;
             $notesUser = substr($notesUser, 0, 75) . '...';
         }
         $notesUser = $this->escape($notesUser);
+        
+        $willReferee = is_null($this->escape($personView->willReferee)) ? 'no' : $this->escape($personView->willReferee);
+        $willCoach = is_null($this->escape($personView->willCoach)) ? 'no' : $this->escape($personView->willCoach);
+        $willVolunteer = is_null($this->escape($personView->willVolunteer)) ? 'no' : $this->escape($personView->willVolunteer);
 
         $html = <<<EOD
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Plans Information</h1>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willReferee">Will Referee:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->willReferee)),'willReferee','willReferee','col-xs-4 form-control')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($willReferee),'willReferee','willReferee','col-xs-4 form-control')}
     </div>    
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willVolunteer">Will Volunteer:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->willVolunteer)),'willVolunteer','willVolunteer','col-xs-4 form-control')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($willVolunteer),'willVolunteer','willVolunteer','col-xs-4 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willCoach">Will Coach:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->willCoach)),'willCoach','willCoach','col-xs-4 form-control')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($willCoach),'willCoach','willCoach','col-xs-4 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="notesUser">User Notes:</label>
