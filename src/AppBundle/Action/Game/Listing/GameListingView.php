@@ -138,7 +138,7 @@ EOD;
 <div class="form-group col-xs-9 col-xs-offset-2 clearfix">
   <a href="{$this->generateUrl('regteam_import')}" class="btn btn-sm btn-primary pull-right">
       <span class="glyphicon glyphicon-share"></span> Import Reg Teams</a>
-  <a href="{$this->generateUrl('regteam_export')}" class="btn btn-sm btn-primary pull-right">
+  <a href="{$this->generateUrl('reg_team_export2')}" class="btn btn-sm btn-primary pull-right">
     <span class="glyphicon glyphicon-share"></span> Export Reg Teams to Excel</a>
 </div>
 <div class="clearfix"></div>

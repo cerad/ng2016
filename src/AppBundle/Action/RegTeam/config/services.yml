@@ -50,6 +50,29 @@ services:
             - '@reg_team_connection'
 
     # ===========================================
+    # Reg Team Export V2
+    reg_team_finder:
+        class:  AppBundle\Action\RegTeam\RegTeamFinder
+        arguments:
+            - '@game_connection'
+            - '@reg_team_connection'
+
+    reg_team_export_controller2:
+        class:  AppBundle\Action\RegTeam\Export\RegTeamExportController
+        parent: abstract_controller
+        arguments:
+            - '@reg_team_finder'
+
+    reg_team_export_view_excel2:
+        class:  AppBundle\Action\RegTeam\Export\RegTeamExportViewExcel
+        parent: abstract_view2
+        arguments:
+            - '@reg_team_export_writer_excel2'
+
+    reg_team_export_writer_excel2:
+        class:  AppBundle\Action\RegTeam\Export\RegTeamExportWriterExcel
+
+    # ===========================================
     # Transform the team regstrar's spreadsheet to out spreadsheet
     reg_team_transform_form:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformForm

@@ -5,6 +5,13 @@ regteam_export:
         _view:          regteam_export_xls
         _role:          ROLE_ADMIN
 
+reg_team_export2:
+    path: /export2
+    defaults:
+        _controller:    reg_team_export_controller2
+        _view:          reg_team_export_view_excel2
+        _role:          ROLE_ADMIN
+
 regteam_import:
     path: /import
     defaults:
