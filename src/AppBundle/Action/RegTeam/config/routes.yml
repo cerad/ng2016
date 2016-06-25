@@ -19,6 +19,13 @@ regteam_import:
         _view:          regteam_import_view
         _role:          ROLE_ADMIN
 
+reg_team_import2:
+    path: /import2
+    defaults:
+        _controller:    reg_team_import_controller2
+        _view:          reg_team_import_view2
+        _role:          ROLE_ADMIN
+
 regteam_transform:
     path: /transform
     defaults:

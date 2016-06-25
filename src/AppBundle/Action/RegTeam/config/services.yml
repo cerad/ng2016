@@ -73,6 +73,37 @@ services:
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportWriterExcel
 
     # ===========================================
+    # Reg Team Import V2
+    reg_team_import_form:
+        class:  AppBundle\Action\RegTeam\Import\RegTeamImportForm
+        parent: abstract_form
+
+    reg_team_import_controller2:
+        class:  AppBundle\Action\RegTeam\Import\RegTeamImportController
+        parent: abstract_controller
+        arguments:
+            - '@reg_team_import_form'
+            - '@reg_team_import_reader_excel'
+            - '@reg_team_import_updater'
+
+    reg_team_import_view2:
+        class:  AppBundle\Action\RegTeam\Import\RegTeamImportView
+        parent: abstract_view2
+        arguments:
+            - '@reg_team_import_form'
+
+    reg_team_import_reader_excel:
+        class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
+        arguments:
+            - '@ayso_repository'
+
+    reg_team_import_updater:
+        class:  AppBundle\Action\RegTeam\Import\RegTeamImportUpdater
+        arguments:
+            - '@reg_team_connection'
+            - '@game_connection'
+
+    # ===========================================
     # Transform the team regstrar's spreadsheet to out spreadsheet
     reg_team_transform_form:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformForm
@@ -82,9 +113,6 @@ services:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformReaderExcel
         arguments:
             - '@ayso_repository'
-
-    reg_team_import_reader_excel:
-        class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
 
     reg_team_transform_writer_excel:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformWriterExcel
