@@ -38,7 +38,7 @@ class RegTeamImportReaderExcel
         if (!$regTeamKey) return;
         
         $projectId = trim($row[$colProjectId]);
-        $regTeamId = strpos($regTeamKey, 'DELETE ') === 0 ?
+        $regTeamId = strpos($regTeamKey, 'DELETE ') === 0 ? // TODO Add delete flag
             $projectId . ':' . substr($regTeamKey,7) :
             $projectId . ':' . $regTeamKey;
 
@@ -58,15 +58,19 @@ class RegTeamImportReaderExcel
                 }
             }
         }
+        // Points are either null,0,6
+        $pointsStr = trim($row[$colPoints]);
+        $points = strlen($pointsStr) ? (integer)$pointsStr : null;
+
         $regTeam = [
             'projectId'      => $projectId,
             'regTeamId'      => $regTeamId,
             'regTeamKey'     => $regTeamKey,
-            'regTeamName'    => $regTeamName,
+            'teamName'       => $regTeamName,
             'orgId'          => $orgId,
             'orgView'        => $orgView,
             'regionNumber'   => $region,
-            'points'         => (integer)trim($row[$colPoints]),
+            'points'         => $points,
             'poolTeamKeys'   => [
                 trim($row[$colPoolTeamKey0]),
                 trim($row[$colPoolTeamKey1]),

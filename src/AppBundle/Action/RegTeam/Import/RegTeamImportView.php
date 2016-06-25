@@ -30,9 +30,13 @@ class RegTeamImportView extends AbstractView2
 </div>
 <hr>
 {$this->renderResults()}
-<p>
-  Add DELETE in front of reg team key to delete the reg team.
-</p>
+<ul>
+  <li>Add DELETE in front of reg team key to delete the reg team</li>
+  <li>Add a tilde ~ in front of pool team key to clear the link with reg team</li>
+  <li>Region can either be a number or AYSOR:0894 or blank</li>
+  <li>Leave SARS column blank to generate from region</li>
+  <li>Add the literal string SARS to team name, it will be replaced with generated SARS</li>
+</ul>
 EOD;
         return $this->renderBaseTemplate($content);
     }
@@ -47,7 +51,8 @@ EOD;
 <tr><td>Total  </td><td>{$results->totalCount}</td></tr>
 <tr><td>Deleted</td><td>{$results->deletedCount}</td></tr>
 <tr><td>Created</td><td>{$results->createdCount}</td></tr>
-<tr><td>Updated</td><td>{$results->updatedCount}</td></tr>
+<tr><td>Updated Reg  Teams</td><td>{$results->updatedCount}</td></tr>
+<tr><td>Updated Pool Teams</td><td>{$results->updatedPoolTeamCount}</td></tr>
 </table>
 EOD;
         return $html;

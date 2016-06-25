@@ -16,6 +16,9 @@ class RegTeamImportResults
     public $deletedRegTeams = [];
     public $updatedRegTeams = [];
     
+    public $updatedPoolTeams = [];
+    public $updatedPoolTeamCount = 0;
+    
     public function __construct($regTeams,$commit,$fileName)
     {
         $this->totalRegTeams = $regTeams;
@@ -32,6 +35,8 @@ class RegTeamImportResults
         $this->createdCount = count($this->createdRegTeams);
         $this->deletedCount = count($this->deletedRegTeams);
         $this->updatedCount = count($this->updatedRegTeams);
+        
+        $this->updatedPoolTeamCount = count($this->updatedPoolTeams);
         
     }
 }

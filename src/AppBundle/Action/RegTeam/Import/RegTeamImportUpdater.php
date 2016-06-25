@@ -41,71 +41,108 @@ class RegTeamImportUpdater
     }
     private function updateRegTeam($regTeam)
     {
-        return;
-        
-        $poolTeamId  = $poolTeam['poolTeamId'];
-        $poolTeamKey = $poolTeam['poolTeamKey'];
+        $regTeamId  = $regTeam['regTeamId'];
+        $regTeamKey = $regTeam['regTeamKey'];
 
-        // Delete Pool Team
-        if (strpos($poolTeamKey,'DELETE ') === 0) {
-            $this->deletePoolTeam($poolTeam);
+        // Delete Reg Team
+        if (strpos($regTeamKey,'DELETE ') === 0) {
+            $this->deleteRegTeam($regTeam);
             return;
         }
         // Verify have one
-        $poolTeamRow = $this->findPoolTeam($poolTeamId);
-        if (!$poolTeamRow) {
+        $regTeamRow = $this->findRegTeam($regTeamId);
+        if (!$regTeamRow) {
             // No create functionality for now
             return;
         }
-        
         // Check for updates
         $updates = [];
-        foreach(['poolView','poolSlotView','poolTypeView','poolTeamView','poolTeamSlotView'] as $key)
-        if (strcmp($poolTeamRow[$key],$poolTeam[$key])) {
-            $updates[$key] = $poolTeam[$key];
+        foreach(['teamName','orgId','orgView'] as $key)
+        if (strcmp($regTeamRow[$key],$regTeam[$key])) {
+            $updates[$key] = $regTeam[$key];
         }
         // Update if needed
+        if (count($updates)) {
+            $this->results->updatedRegTeams[] = $regTeam;
+            if ($this->commit) {
+                $this->regTeamConn->update('regTeams', $updates, ['regTeamId' => $regTeamId]);
+            }
+        }
+        // Assign to pool teams TODO Check soccerfest points
+        foreach($regTeam['poolTeamKeys'] as $poolTeamKey) {
+            $this->updatePoolTeam($regTeam,$poolTeamKey);
+        }
+    }
+    private function updatePoolTeam($regTeam,$poolTeamKey)
+    {
+        if (!$poolTeamKey) {
+            return;
+        }
+        if ($poolTeamKey[0] === '~') {
+            $regTeam['regTeamId']     = null;
+            $regTeam['regTeamName']   = null;
+            $regTeam['regTeamPoints'] = null;
+            $poolTeamKey = substr($poolTeamKey,1);;
+        }
+        $sql  = 'SELECT poolTypeKey,regTeamId,regTeamName,regTeamPoints FROM poolTeams WHERE projectId = ? AND poolTeamKey = ?';
+        $stmt = $this->poolTeamConn->executeQuery($sql,[$regTeam['projectId'],$poolTeamKey]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            return; // Really should not happen
+        }
+        $updates = [];
+        if (strcmp($regTeam['regTeamId'],$row['regTeamId'])) {
+            $updates['regTeamId'] = $regTeam['regTeamId'];
+        }
+        if (strcmp($regTeam['teamName'],$row['regTeamName'])) {
+            $updates['regTeamName'] = $regTeam['teamName'];
+        }
+        if ($row['poolTypeKey'] === 'PP') {
+            $points = strlen($row['regTeamPoints']) ? (integer)$row['regTeamPoints'] : null;
+            if ($regTeam['points'] !== $points) {
+                $updates['regTeamPoints'] = $regTeam['points'];
+            }
+        }
         if (count($updates) < 1) {
             return;
         }
-        $this->results->updatedPoolTeams[] = $poolTeam;
-        if ($this->commit) {
-            $this->conn->update('poolTeams', $updates, ['poolTeamId' => $poolTeamId]);
+        $this->results->updatedPoolTeams[] = $row;
+        if (!$this->commit) {
+            return;
         }
+        dump($updates);
+        $this->poolTeamConn->update('poolTeams',$updates,
+            ['projectId' => $regTeam['projectId'], 'poolTeamKey' => $poolTeamKey]);
     }
-    private function deletePoolTeam($poolTeam)
+    private function deleteRegTeam($regTeam)
     {
-        $poolTeamId = $poolTeam['poolTeamId'];
+        $regTeamId = $regTeam['regTeamId'];
 
         // See if it exists, multiple delete attempts are common
-        $poolTeamRow = $this->findPoolTeam($poolTeamId);
-        if (!$poolTeamRow) {
+        $regTeamRow = $this->findRegTeam($regTeamId);
+        if (!$regTeamRow) {
             return;
         }
-        $this->results->deletedPoolTeams[] = $poolTeam;
-        
-        // Make sure not games are using the pool team
-        $sql = <<<EOD
-SELECT game.gameId, game.gameNumber, game.fieldName, game.start, gameTeam.poolTeamId
-FROM games AS game
-LEFT JOIN gameTeams AS gameTeam ON gameTeam.gameId = game.gameID
-WHERE gameTeam.poolTeamId = ?
-EOD;
-        $stmt = $this->conn->executeQuery($sql,[$poolTeamId]);
-        $gameRows = $stmt->fetchAll();
-        if (count($gameRows)) {
-            $this->results->existingGames = array_merge($this->results->existingGames,$gameRows);
-            return;
-        }
-        
+        $this->results->deletedRegTeams[] = $regTeam;
+
         if (!$this->commit) return;
-        
-        $this->conn->delete('poolTeams',['poolTeamId' => $poolTeamId]);
+
+        // Reset any pool teams links here
+        $sql = <<<EOD
+SELECT poolTeamId
+FROM   poolTeams AS poolTeam
+WHERE  poolTeam.regTeamId = ?
+EOD;
+        $stmt = $this->poolTeamConn->executeQuery($sql,[$regTeamId]);
+        while($row = $stmt->fetch()) {
+            $this->poolTeamConn->update('poolTeams',['regTeamId' => null],['poolTeamId' => $row['poolTeamId']]);
+        }
+        $this->regTeamConn->delete('regTeams',['regTeamId' => $regTeamId]);
     }
-    private function findPoolTeam($poolTeamId)
+    private function findRegTeam($regTeamId)
     {
-        $sql = 'SELECT poolTeamId,poolTypeKey,poolView,poolSlotView,poolTypeView,poolTeamView,poolTeamSlotView FROM poolTeams WHERE poolTeamId = ?';
-        $stmt = $this->conn->executeQuery($sql,[$poolTeamId]);
+        $sql = 'SELECT regTeamId,teamName,orgId,orgView FROM regTeams WHERE regTeamId = ?';
+        $stmt = $this->regTeamConn->executeQuery($sql,[$regTeamId]);
         return $stmt->fetch();
     }
 }
