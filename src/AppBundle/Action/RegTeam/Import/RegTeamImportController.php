@@ -36,7 +36,7 @@ class RegTeamImportController extends AbstractController2
             $file = $formData['file'];
             
             $regTeams = $this->reader->read($file->getRealPath(),null);
-dump($regTeams);
+
             $commit = $formData['op'] === 'update' ? true : false;
             
             $results = $this->updater->updateRegTeams($regTeams,$commit,$file->getClientOriginalName());

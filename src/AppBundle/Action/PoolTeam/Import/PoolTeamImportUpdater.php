@@ -40,7 +40,7 @@ class PoolTeamImportUpdater
         $poolTeamKey = $poolTeam['poolTeamKey'];
 
         // Delete Pool Team
-        if (strpos($poolTeamKey,'DELETE ') === 0) {
+        if ($poolTeam['poolTeamDelete']) {
             $this->deletePoolTeam($poolTeam);
             return;
         }
@@ -77,7 +77,7 @@ class PoolTeamImportUpdater
         }
         $this->results->deletedPoolTeams[] = $poolTeam;
         
-        // Make sure not games are using the pool team
+        // Make sure no games are using the pool team
         $sql = <<<EOD
 SELECT game.gameId, game.gameNumber, game.fieldName, game.start, gameTeam.poolTeamId
 FROM games AS game

@@ -38,9 +38,13 @@ class RegTeamImportReaderExcel
         if (!$regTeamKey) return;
         
         $projectId = trim($row[$colProjectId]);
-        $regTeamId = strpos($regTeamKey, 'DELETE ') === 0 ? // TODO Add delete flag
-            $projectId . ':' . substr($regTeamKey,7) :
-            $projectId . ':' . $regTeamKey;
+        if ($regTeamKey[0] === '~') {
+            $regTeamKey = substr($regTeamKey,1);
+            $regTeamDelete = true;
+        }
+        else $regTeamDelete = false;
+        
+        $regTeamId = $projectId . ':' . $regTeamKey;
 
         $region = (integer)trim($row[$colRegion]);
         $orgId  = $region ? sprintf('AYSOR:%04u',$region) : trim($row[$colRegion]);
@@ -64,9 +68,12 @@ class RegTeamImportReaderExcel
 
         $regTeam = [
             'projectId'      => $projectId,
+            
             'regTeamId'      => $regTeamId,
             'regTeamKey'     => $regTeamKey,
-            'teamName'       => $regTeamName,
+            'regTeamDelete'  => $regTeamDelete,
+            'regTeamName'    => $regTeamName,
+            
             'orgId'          => $orgId,
             'orgView'        => $orgView,
             'regionNumber'   => $region,

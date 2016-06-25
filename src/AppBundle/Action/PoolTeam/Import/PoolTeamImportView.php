@@ -30,9 +30,10 @@ class PoolTeamImportView extends AbstractView2
 </div>
 <hr>
 {$this->renderResults()}
-<p>
-  Add DELETE in front of pool team key to delete the pool team.
-</p>
+<ul>
+  <li>Add a tilde (~) in front of pool team key to delete the pool team.</li>
+  <li>Any games using the pool team key must be deleted first.</li>
+</ul>
 EOD;
         return $this->renderBaseTemplate($content);
     }

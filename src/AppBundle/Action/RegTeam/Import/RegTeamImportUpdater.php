@@ -45,7 +45,7 @@ class RegTeamImportUpdater
         $regTeamKey = $regTeam['regTeamKey'];
 
         // Delete Reg Team
-        if (strpos($regTeamKey,'DELETE ') === 0) {
+        if ($regTeam['regTeamDelete']) {
             $this->deleteRegTeam($regTeam);
             return;
         }
@@ -57,9 +57,9 @@ class RegTeamImportUpdater
         }
         // Check for updates
         $updates = [];
-        foreach(['teamName','orgId','orgView'] as $key)
+        foreach(['regTeamName' => 'teamName','orgId' => 'orgId','orgView' => 'orgView'] as $key => $colName)
         if (strcmp($regTeamRow[$key],$regTeam[$key])) {
-            $updates[$key] = $regTeam[$key];
+            $updates[$colName] = $regTeam[$key];
         }
         // Update if needed
         if (count($updates)) {
@@ -94,7 +94,7 @@ class RegTeamImportUpdater
         if (strcmp($regTeam['regTeamId'],$row['regTeamId'])) {
             $updates['regTeamId'] = $regTeam['regTeamId'];
         }
-        if (strcmp($regTeam['teamName'],$row['regTeamName'])) {
+        if (strcmp($regTeam['regTeamName'],$row['regTeamName'])) {
             $updates['regTeamName'] = $regTeam['teamName'];
         }
         if ($row['poolTypeKey'] === 'PP') {
@@ -110,7 +110,6 @@ class RegTeamImportUpdater
         if (!$this->commit) {
             return;
         }
-        dump($updates);
         $this->poolTeamConn->update('poolTeams',$updates,
             ['projectId' => $regTeam['projectId'], 'poolTeamKey' => $poolTeamKey]);
     }
@@ -135,13 +134,15 @@ WHERE  poolTeam.regTeamId = ?
 EOD;
         $stmt = $this->poolTeamConn->executeQuery($sql,[$regTeamId]);
         while($row = $stmt->fetch()) {
-            $this->poolTeamConn->update('poolTeams',['regTeamId' => null],['poolTeamId' => $row['poolTeamId']]);
+            $this->poolTeamConn->update('poolTeams',
+                ['regTeamId' => null, 'regTeamName' => null, 'regTeamPoints' => null],
+                ['poolTeamId' => $row['poolTeamId']]);
         }
         $this->regTeamConn->delete('regTeams',['regTeamId' => $regTeamId]);
     }
     private function findRegTeam($regTeamId)
     {
-        $sql = 'SELECT regTeamId,teamName,orgId,orgView FROM regTeams WHERE regTeamId = ?';
+        $sql = 'SELECT regTeamId,teamName AS regTeamName,orgId,orgView FROM regTeams WHERE regTeamId = ?';
         $stmt = $this->regTeamConn->executeQuery($sql,[$regTeamId]);
         return $stmt->fetch();
     }

@@ -27,18 +27,24 @@ class PoolTeamImportReaderExcel
 
         $projectId   = trim($row1[$colProjectId]);
         $poolTeamKey = trim($row1[$colPoolTeamKey]);
+        
+        if ($poolTeamKey[0] === '~') {
+            $poolTeamKey = substr($poolTeamKey,1);
+            $poolTeamDelete = true;
+        }
+        else $poolTeamDelete = false;
 
-        $poolTeamId = strpos($poolTeamKey, 'DELETE ') === 0 ?
-            $projectId . ':' . substr($poolTeamKey,7) :
-            $projectId . ':' . $poolTeamKey;
-
+        $poolTeamId = $projectId . ':' . $poolTeamKey;
+        
         $poolTeam = [
             'poolTeamId'  => $poolTeamId,
             'projectId'   => $projectId,
             'poolKey'     => trim($row1[$colPoolKey]),
             'poolTypeKey' => trim($row1[$colPoolTypeKey]),
             'poolTeamKey' => $poolTeamKey,
-
+            
+            'poolTeamDelete' => $poolTeamDelete,
+            
             'poolView'     => trim($row2[$colPoolKey]),
             'poolSlotView' => $row2[$colPoolSlot], // Bit of a hack but allow leading spaces here
 

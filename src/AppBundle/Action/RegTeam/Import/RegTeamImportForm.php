@@ -40,7 +40,7 @@ class RegTeamImportForm extends AbstractForm
 {$this->renderFormErrors()}
 <form role="form" style="width: 1200px;" action="{$action}" method="post" enctype="multipart/form-data">
   <div class="form-group">
-    <label for="op">Operation</label>
+    <label for="op">Reg Team Operation</label>
     {$this->renderInputSelect($opChoices,$op,'op')}
   </div>
   <div class="form-group">
