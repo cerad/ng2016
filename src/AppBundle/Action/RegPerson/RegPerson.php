@@ -3,6 +3,11 @@ namespace AppBundle\Action\RegPerson;
 
 use AppBundle\Common\ItemFactoryTrait;
 
+/**
+ * @property-read boolean isReferee
+ * @property-read string  refereeBadge
+ * @property-read string  refereeBadgeUser
+ */
 class RegPerson
 {
     use ItemFactoryTrait;
@@ -27,7 +32,7 @@ class RegPerson
     /** @var RegPersonRole[] */
     public $roles = [];
 
-    private $keys = [
+    protected $keys = [
         'projectId' => 'ProjectId',
         'personId'  => 'PersonId',
         'orgId'     => 'OrgId',
@@ -130,21 +135,19 @@ class RegPerson
         }
         return $roles;
     }
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'isReferee': 
+                return isset($this->roles['ROLE_REFEREE']) ? true : false;
+            case 'refereeBadge':
+                return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badge : null;
+            case 'refereeBadgeUser':
+                return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badgeUser : null;
+        }
+    }
 
-    public function getRefereeBadge()
-    {
-        return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badge : null;
-    }
-    public function getRefereeBadgeUser()
-    {
-        return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badgeUser : null;
-    }
-    public function isReferee()
-    {
-        // Might need to refine later
-        return isset($this->roles['ROLE_REFEREE']) ? true : false;
-    }
-    /**
+            /**
      * @param  array $data
      * @return RegPerson
      */

@@ -244,13 +244,14 @@ SELECT
   projectKey AS projectId,
   personKey  AS personId,
   role,badge,approved 
-FROM projectPersonRoles AS regPersonRole 
+FROM projectPersonRoles  AS regPersonRole 
 LEFT JOIN projectPersons AS regPerson ON regPerson.id = regPersonRole.projectPersonId
 WHERE projectKey = ?
 EOD;
         $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
         while($row = $stmt->fetch()) {
-
+            $regPersonRole = RegPersonRole::createFromArray($row);
+            $regPersons[$regPersonRole->personId]->addRole($regPersonRole);
         }
         return array_values($regPersons);
     }

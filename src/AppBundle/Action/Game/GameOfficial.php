@@ -6,6 +6,8 @@ namespace AppBundle\Action\Game;
  */
 class GameOfficial
 {
+    public $game;
+    
     public $gameOfficialId;
     public $projectId;
     public $gameId;

@@ -101,5 +101,11 @@ services:
             - '@reg_person_finder'
 
     game_official_summary_view:
-        class:  AppBundle\Action\GameOfficial\Summary\SummaryView
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryViewExcel
         parent: abstract_view2
+        arguments:
+            - '@game_official_summary_writer_excel'
+
+    game_official_summary_writer_excel:
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryWriterExcel
+

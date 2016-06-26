@@ -1,11 +1,15 @@
 <?php
 namespace AppBundle\Action\RegPerson;
 
+use AppBundle\Common\ItemFactoryTrait;
+
 class RegPersonRole
 {
-    private /** @noinspection PhpUnusedPrivateFieldInspection */ $id;
-    private /** @noinspection PhpUnusedPrivateFieldInspection */ $projectPersonId;
+    use ItemFactoryTrait;
 
+    public $projectId;
+    public $personId;
+    
     public $role;
     public $roleDate;
 
@@ -22,10 +26,10 @@ class RegPersonRole
     public $misc;
     public $notes;
 
-    private $scalarKeys = [
-        
-        'id'              => 'PrimaryKey',
-        'projectPersonId' => 'ForeignKey',
+    protected $keys = [
+
+        'projectId' => 'ProjectId',
+        'personId'  => 'PersonId',
         
         'role'     => 'Role', // Required
         'roleDate' => 'date',
@@ -43,83 +47,16 @@ class RegPersonRole
         'misc'  => 'boolean',
         'notes' => 'boolean',
     ];
-    private $collectionKeys = [];
-    
-    private $propertyKeys = [];
-    
-    public function __construct()
-    {
-        $this->propertyKeys = array_merge($this->scalarKeys,$this->collectionKeys);
-    }
-    public function init($role,$badge)
-    {
-        $this->role  = $role;
-        $this->badge = $badge;
-    }
-    public function clearId()
-    {
-        $this->id = null;
-        return $this;
-    }
-    // Arrayable Interface
-    public function toArray()
-    {
-        $data = [];
-        foreach(array_keys($this->scalarKeys) as $key) {
-            $data[$key] = $this->$key;
-        }
-        foreach (array_keys($this->collectionKeys) as $key)
-        {
-            $collection = [];
-            foreach($this->$key as $itemKey => $item) {
-                /** @noinspection PhpUndefinedMethodInspection */
-                $collection[$itemKey] = $item->toArray();
-            }
-            $data[$key] = $collection;
-        }
-        return $data;
-    }
-    /** 
-     * @param array $data
-     * @return ProjectPersonRole
+    /**
+     * @param  array $data
+     * @return RegPerson
      */
-    public function fromArray($data)
+    static public function createFromArray($data)
     {
-        foreach(array_keys($this->scalarKeys) as $key) {
-            if (isset($data[$key]) || array_key_exists($key,$data)) {
-                $this->$key = $data[$key];
-            }
-        }
-        return $this; // Suppose could make it immutable
-    }
-    // ArrayAccess Interface
-    public function offsetSet($offset, $value) {
-        if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::set ' . $offset);
-        }
-        // Be fun to make this immutable
-        $this->$offset = $value;
-        
-        return $this;
-    }
-    public function offsetGet($offset) {
-        if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::get ' . $offset);
-        }
-        return $this->$offset;
-    }
-    public function offsetExists($offset) {
-        if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::exists ' . $offset);
-        }
-        return isset($this->$offset);
-    }
-    public function offsetUnset($offset) {
-        if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::unset ' . $offset);
-        }
-        $this->$offset = null;
-        
-        return $this;
+        $item = new self();
+
+        $item->loadFromArray($data);
+
+        return $item;
     }
 }

@@ -22,6 +22,7 @@ class SummaryController extends AbstractController2
     }
     public function __invoke(Request $request, $projectId, $program)
     {
+        
         // Grab entire games database
         $criteria = [
             'projectIds'    => [$projectId],
@@ -35,8 +36,8 @@ class SummaryController extends AbstractController2
         $regPersons = $this->regPersonFinder->findRegPersons($projectId);
         $request->attributes->set('regPersons',$regPersons);
 
-        echo sprintf("Game Count: %d, Reg Person Count: %d.\n",count($games),count($regPersons));
-        die();
+        //echo sprintf("Game Count: %d, Reg Person Count: %d.\n",count($games),count($regPersons));
+        //die();
         return null;
     }
 }
