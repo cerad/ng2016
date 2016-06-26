@@ -95,7 +95,7 @@ class RegTeamImportUpdater
             $updates['regTeamId'] = $regTeam['regTeamId'];
         }
         if (strcmp($regTeam['regTeamName'],$row['regTeamName'])) {
-            $updates['regTeamName'] = $regTeam['teamName'];
+            $updates['regTeamName'] = $regTeam['regTeamName'];
         }
         if ($row['poolTypeKey'] === 'PP') {
             $points = strlen($row['regTeamPoints']) ? (integer)$row['regTeamPoints'] : null;
