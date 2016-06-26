@@ -2,6 +2,7 @@
 
 namespace AppBundle\Action\RegTeam\Import;
 
+use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Common\ExcelReaderTrait;
 
 class RegTeamImportReaderExcel
@@ -10,36 +11,78 @@ class RegTeamImportReaderExcel
 
     private $regTeams = [];
 
+    private $regionFinder;
+
+    public function __construct(
+        PhysicalAysoRepository $regionFinder
+    )
+    {
+        $this->regionFinder = $regionFinder;
+    }
+
     private function processRow($row)
     {
-        $colTeamKey      = 0;
-        $colTeamName     = 1;
-        $colOrgView      = 2;
-        $colRegion       = 3;
-        $colPoints       = 4;
-        $colPoolTeamKey0 = 5;
-        $colPoolTeamKey1 = 6;
-        $colPoolTeamKey2 = 7;
-        $colPoolTeamKey3 = 8;
+        $colProjectId    = 0;
+        $colTeamKey      = 1;
+        $colTeamName     = 2;
+        $colOrgView      = 3;
+        $colRegion       = 4;
+        $colPoints       = 5;
+        $colPoolTeamKey0 = 6;
+        $colPoolTeamKey1 = 7;
+        $colPoolTeamKey2 = 8;
+        $colPoolTeamKey3 = 9;
 
-        $regTeamKey = trim(($row[$colTeamKey]));
+        $regTeamKey  = trim($row[$colTeamKey]);
+        $regTeamName = trim(($row[$colTeamName]));
         if (!$regTeamKey) return;
+        
+        $projectId = trim($row[$colProjectId]);
+        if ($regTeamKey[0] === '~') {
+            $regTeamKey = substr($regTeamKey,1);
+            $regTeamDelete = true;
+        }
+        else $regTeamDelete = false;
+        
+        $regTeamId = $projectId . ':' . $regTeamKey;
 
-        $region = (integer)trim(($row[$colRegion]));
-        $orgId  = sprintf('AYSOR:%04u',$region);
+        $region = (integer)trim($row[$colRegion]);
+        $orgId  = $region ? sprintf('AYSOR:%04u',$region) : trim($row[$colRegion]);
+        $orgView = trim($row[$colOrgView]);
+
+        if ($orgId) {
+            if (!$orgView || strpos($regTeamName,'SARS') !== false) {
+
+                $org = $this->regionFinder->findOrg($orgId);
+                if ($org) {
+                    $sarParts = explode('/', $org['sar']);
+                    $sars = sprintf('%02u-%s-%04u-%s', $sarParts[0], $sarParts[1], $sarParts[2], $org['state']);
+                    $orgView = $orgView ? : $sars;
+                    $regTeamName = str_replace('SARS',$sars,$regTeamName);
+                }
+            }
+        }
+        // Points are either null,0,6
+        $pointsStr = trim($row[$colPoints]);
+        $points = strlen($pointsStr) ? (integer)$pointsStr : null;
 
         $regTeam = [
+            'projectId'      => $projectId,
+            
+            'regTeamId'      => $regTeamId,
             'regTeamKey'     => $regTeamKey,
-            'regTeamName'    => trim(($row[$colTeamName])),
+            'regTeamDelete'  => $regTeamDelete,
+            'regTeamName'    => $regTeamName,
+            
             'orgId'          => $orgId,
-            'orgView'        => trim(($row[$colOrgView])),
-            'region'         => $region,
-            'points'         => (integer)trim(($row[$colPoints])),
+            'orgView'        => $orgView,
+            'regionNumber'   => $region,
+            'points'         => $points,
             'poolTeamKeys'   => [
-                trim(($row[$colPoolTeamKey0])),
-                trim(($row[$colPoolTeamKey1])),
-                trim(($row[$colPoolTeamKey2])),
-                trim(($row[$colPoolTeamKey3])),
+                trim($row[$colPoolTeamKey0]),
+                trim($row[$colPoolTeamKey1]),
+                trim($row[$colPoolTeamKey2]),
+                trim($row[$colPoolTeamKey3]),
             ],
         ];
         $this->regTeams[] = $regTeam;
@@ -55,7 +98,7 @@ class RegTeamImportReaderExcel
 
         // Just grab all the rows
         $wb = $reader->load($filename);
-        $ws = $wb->getSheetByName($sheet);
+        $ws = $sheet ? $wb->getSheetByName($sheet) : $wb->getSheet(0);
         $rows = $ws->toArray();
         array_shift($rows); // Discard header line
 

@@ -1,11 +1,11 @@
 <?php
-namespace AppBundle\Action\PoolTeam\Import;
+namespace AppBundle\Action\RegTeam\Import;
 
 use AppBundle\Action\AbstractForm;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class PoolTeamImportForm extends AbstractForm
+class RegTeamImportForm extends AbstractForm
 {
     public function handleRequest(Request $request)
     {
@@ -40,7 +40,7 @@ class PoolTeamImportForm extends AbstractForm
 {$this->renderFormErrors()}
 <form role="form" style="width: 1200px;" action="{$action}" method="post" enctype="multipart/form-data">
   <div class="form-group">
-    <label for="op">Pool Teams Operation</label>
+    <label for="op">Reg Team Operation</label>
     {$this->renderInputSelect($opChoices,$op,'op')}
   </div>
   <div class="form-group">
