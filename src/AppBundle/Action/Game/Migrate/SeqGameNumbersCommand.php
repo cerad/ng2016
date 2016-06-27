@@ -40,7 +40,7 @@ class SeqGameNumbersCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('seq:game:numbers')
+            ->setName('games:sequence:ng2016')
             ->setDescription('Sequence Game Numbers');
     }
 
@@ -48,7 +48,16 @@ class SeqGameNumbersCommand extends Command
     {
         echo sprintf("Sequence Game Numbers\n");
 
+        $this->sequenceGameNumbers('U10B',11001);
         $this->sequenceGameNumbers('U10G',13001);
+        $this->sequenceGameNumbers('U12B',11201);
+        $this->sequenceGameNumbers('U12G',13201);
+        $this->sequenceGameNumbers('U14B',11401);
+        $this->sequenceGameNumbers('U14G',13401);
+        $this->sequenceGameNumbers('U16B',11601);
+        $this->sequenceGameNumbers('U16G',13601);
+        $this->sequenceGameNumbers('U19B',11901);
+        $this->sequenceGameNumbers('U19G',13901);
 
     }
     private function sequenceGameNumbers($div,$gameNumber)
