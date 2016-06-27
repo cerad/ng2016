@@ -8,11 +8,13 @@ class BaseTemplate extends AbstractTemplate
 
     private $showHeaderImage;
     private $showResultsMenu;
+    private $showFinalResults;
     
-    public function __construct($showHeaderImage,$showResultsMenu)
+    public function __construct($showHeaderImage,$showResultsMenu,$showFinalResults)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showResultsMenu = $showResultsMenu;
+        $this->showFinalResults = $showFinalResults;
     }
     public function setContent($content)
     {
@@ -244,7 +246,8 @@ EOT;
         if (!$this->showResultsMenu) {
             return null;
         }
-        return
+        
+        $html =
 <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
@@ -252,10 +255,21 @@ EOT;
             <li><a href="{$this->generateUrl('results_poolplay_2016')}">POOL PLAY</a></li>
             <li><a href="{$this->generateUrl('results_medalround_2016')}">MEDAL ROUND</a></li>
             <li><a href="{$this->generateUrl('results_sportsmanship_2016')}">SPORTSMANSHIP</a></li>
+EOT;
+        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
+            $html .=
+<<<EOT
             <li><a href="{$this->generateUrl('results_final_2016')}">FINAL STANDINGS</a></li>
+EOT;
+        }
+            
+        $html .=
+<<<EOT
           </ul>
         </li>
 EOT;
+
+        return $html;
     }
     
     protected function renderCreateNewAccount()

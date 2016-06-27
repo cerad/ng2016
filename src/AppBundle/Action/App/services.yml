@@ -20,6 +20,7 @@ services:
         arguments:
             - '%show_header_image%'
             - '%show_results_menu%'
+            - '%show_final_results%'
 
     abstract_form:
         abstract: true
