@@ -26,7 +26,15 @@ services:
             - '@reg_team_import_reader_excel'
 
     game_seq_numbers_command:
-        class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
+         class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
+         tags: [{ name: console.command }]
+         arguments:
+             - '@doctrine.dbal.ng2016games_connection'
+             - '@game_finder'
+             - '@game_updater'
+
+    game_validate_command:
+        class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.ng2016games_connection'
