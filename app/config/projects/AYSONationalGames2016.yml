@@ -37,14 +37,16 @@ parameters:
             phone: 310-920-8209
             
         assignor:
-            name:  "Tom Tobin"
-            email: "spsoccerref@earthlink.net"
-            phone:  661-644-5096
+            name:  "Pat Mullane"
+            email: "mullane.patrick@comcast.net"
+            subject: "Referee Assignments"
+            phone:  312-217-1869
 
         administrator:
             name:  "Tom Bobadilla"
             email: "thomasbobadilla@ayso.org"
-            phone:  424-221-7980
+            subject: "Question for NG Referee Administrator"
+            phone:  562-547-4457
 
         system:
             name:  "Zayso Admin"
