@@ -25,6 +25,7 @@ SELECT
   gameTeam.gameId,
   gameTeam.gameNumber,
   gameTeam.slot,
+  gameTeam.misconduct,
   
   poolTeam.regTeamId,
   poolTeam.regTeamName,

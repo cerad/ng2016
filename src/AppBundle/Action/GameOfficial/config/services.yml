@@ -108,4 +108,8 @@ services:
 
     game_official_summary_writer_excel:
         class:  AppBundle\Action\GameOfficial\Summary\SummaryWriterExcel
+        arguments:
+            - '@ayso_region_to_sar_transformer'
+            - '@phone_transformer'
+            - '@shirt_size_transformer'
 
