@@ -126,6 +126,7 @@ line-height:2em;
 .schedule tr,.standings tr,.results tr {
 line-height:2em;
 height:2em;
+border: black;
 }
 
 .schedule tr:nth-child(odd),.standings tr:nth-child(odd),.results tr:nth-child(odd),#person-list tr:nth-child(odd),.my_schedule tr:nth-child(odd) {
