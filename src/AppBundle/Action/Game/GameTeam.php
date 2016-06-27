@@ -21,6 +21,10 @@ class GameTeam
     public $poolTeamView;
     public $poolTeamSlotView;
     
+    public $playerWarnings;
+    public $playerEjections;
+    public $coachEjections;
+
     private $keys = [
 
         'gameTeamId' => 'GameTeamId',
@@ -66,6 +70,12 @@ class GameTeam
                 $gameTeam->$key = $data[$key];
             }
         }
+        // Added for referee summary
+        $misconduct = isset($data['misconduct']) ? unserialize($data['misconduct']) : [];
+        $gameTeam->playerWarnings  = isset($misconduct['playerWarnings'])  ? (integer)$misconduct['playerWarnings']  : null;
+        $gameTeam->playerEjections = isset($misconduct['playerEjections']) ? (integer)$misconduct['playerEjections'] : null;
+        $gameTeam->coachEjections  = isset($misconduct['coachEjections'])  ? (integer)$misconduct['coachEjections']  : null;
+        
         return $gameTeam;
     }
 }

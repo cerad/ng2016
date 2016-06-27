@@ -24,3 +24,12 @@ game_official_assign_by_import:
         _form:       game_official_assign_by_import_form
         _view:       game_official_assign_by_import_view
         _role:       ROLE_ASSIGNOR
+
+game_official_summary:
+    path: /summary/{projectId}/{program}
+    defaults:
+        projectId:   AYSONationalGames2014
+        program:     Core
+        _controller: game_official_summary_controller
+        _view:       game_official_summary_view
+        _role:       ROLE_ASSIGNOR

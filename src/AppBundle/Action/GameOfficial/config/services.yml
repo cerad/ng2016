@@ -90,3 +90,26 @@ services:
         parent: abstract_view2
         arguments:
             - '@game_official_assign_by_assignor_form'
+
+    # =========================================================================
+    # Export summary report
+    game_official_summary_controller:
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryController
+        parent: abstract_controller
+        arguments:
+            - '@game_finder'
+            - '@reg_person_finder'
+
+    game_official_summary_view:
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryViewExcel
+        parent: abstract_view2
+        arguments:
+            - '@game_official_summary_writer_excel'
+
+    game_official_summary_writer_excel:
+        class:  AppBundle\Action\GameOfficial\Summary\SummaryWriterExcel
+        arguments:
+            - '@ayso_region_to_sar_transformer'
+            - '@phone_transformer'
+            - '@shirt_size_transformer'
+

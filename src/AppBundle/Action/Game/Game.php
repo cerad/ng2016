@@ -57,6 +57,10 @@ class Game
     {
         return $this->officials;
     }
+    public function getTeams()
+    {
+        return $this->teams;
+    }
     public function __get($name)
     {
         switch($name) {
