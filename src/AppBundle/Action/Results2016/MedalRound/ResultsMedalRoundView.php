@@ -52,6 +52,7 @@ EOD;
 <div class="results-legend">
   <h2>GS=Goals Scored, YC=Caution, RC=Sendoff, TE=Total Ejections</h2>
 </div>
+<hr>
 EOD;
 
     }

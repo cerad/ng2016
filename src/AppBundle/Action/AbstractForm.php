@@ -189,7 +189,7 @@ EOD;
     protected function isAdminStyle()
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
-            return ' style="visibility:hidden; width:0;"';
+            return ' style="visibility:hidden; width:0; height:0;"';
         }
         return '';
     }

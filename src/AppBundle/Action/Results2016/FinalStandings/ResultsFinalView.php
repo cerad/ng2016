@@ -41,7 +41,6 @@ class ResultsFinalView extends AbstractView2
         $title = $project['title'];
         $content = <<<EOD
 {$this->searchForm->render()}
-<hr>
 <div id="layout-block">
 <h1 class="text-center" style="font-style:italic; font-size:1.5em;"><emphasis>Congratulations to all {$title} Teams!</emphasis></h1>
 </div>
