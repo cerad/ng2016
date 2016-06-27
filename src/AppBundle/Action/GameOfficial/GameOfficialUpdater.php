@@ -25,9 +25,11 @@ class GameOfficialUpdater
         if ($gameOfficial->assignState !== $gameOfficialOriginal->assignState) {
             $this->gameConn->update('gameOfficials',['assignState' => $gameOfficial->assignState],$id);
         }
+        //dump($gameOfficial);
+        //dump($gameOfficialOriginal);
         // The person
         if ($gameOfficial->regPersonId === $gameOfficialOriginal->regPersonId) {
-            return;
+            //return; // Something is not clearing right, state is being updated to Open
         }
         $gameOfficialUpdateInfo = [
             'phyPersonId'   => null,
@@ -50,6 +52,7 @@ class GameOfficialUpdater
                 'regPersonName' => $row['name'],
             ];
         }
+        //dump($gameOfficialUpdateInfo);
         $this->gameConn->update('gameOfficials',$gameOfficialUpdateInfo,$id);
     }
 }
