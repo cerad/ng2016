@@ -1,12 +1,16 @@
 <?php
 namespace AppBundle\Common;
 
+use \PHPExcel as WorkBook;
+
+use \PHPExcel_Worksheet as WorkSheet;
+
 trait ExcelWriterTrait
 {
-    /** @var \PHPExcel */
+    /** @var WorkBook */
     private $wb;
 
-    private function setCellValue(\PHPExcel_Worksheet $ws,$col,$row,$value)
+    private function setCellValue(Worksheet $ws,$col,$row,$value)
     {
         $ws->getCell($col . $row)->setValue($value);
     }
@@ -14,13 +18,22 @@ trait ExcelWriterTrait
     {
         $ws->getCell($col . $row)->setValueExplicit($value,\PHPExcel_Cell_DataType::TYPE_NUMERIC);
     }
-    private function setCellValueString(\PHPExcel_Worksheet $ws,$col,$row,$value)
+    private function setCellValueString(\PHPExcel_Worksheet $ws, $col, $row, $value)
     {
         $ws->getCell($col . $row)->setValueExplicit($value,\PHPExcel_Cell_DataType::TYPE_STRING);
     }
     private function setCellFormat(\PHPExcel_Worksheet $ws,$col,$row,$format)
     {
         $ws->getStyle($col . $row)->getNumberFormat()->setFormatCode($format);
+    }
+    private function setCellFillColor(\PHPExcel_Worksheet $ws,$col,$row,$color)
+    {
+        $ws->getStyle($col . $row)->applyFromArray([
+            'fill' => [
+                'type'  => \PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => ['rgb' => $color]
+            ] 
+        ]);
     }
     private function setCellValueDate(\PHPExcel_Worksheet $ws,$col,$row,$dt,$format = 'ddd')
     {
@@ -57,7 +70,7 @@ trait ExcelWriterTrait
         // Not sure this is needed
         \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
 
-        $this->wb = $wb = new \PHPExcel();
+        $this->wb = $wb = new WorkBook();
         
         return $wb;
     }

@@ -3,8 +3,11 @@ namespace AppBundle\Action\GameOfficial\Summary;
 
 use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
+
+use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\RegPerson\RegPerson;
 
+use AppBundle\Common\ExcelConstants;
 use AppBundle\Common\ExcelWriterTrait;
 
 use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
@@ -19,11 +22,16 @@ class SummaryWriterExcel
     private $shirtSizeTransformer;
     private $regionToSarTransformer;
 
+    private $assignWorkflow;
+
     public function __construct(
         RegionToSarTransformer $regionToSarTransformer,
         PhoneTransformer       $phoneTransformer,
-        ShirtSizeTransformer   $shirtSizeTransformer
+        ShirtSizeTransformer   $shirtSizeTransformer,
+        AssignWorkflow         $assignWorkflow
     ) {
+        $this->assignWorkflow = $assignWorkflow;
+
         $this->phoneTransformer       = $phoneTransformer;
         $this->shirtSizeTransformer   = $shirtSizeTransformer;
         $this->regionToSarTransformer = $regionToSarTransformer;
@@ -98,6 +106,7 @@ class SummaryWriterExcel
         $colOfficialBadge = $col++;
         $colOfficialSars  = $col++;
         $colOfficialAge   = $col++;
+        $colOfficialState = $col++;
         $colOfficialSlot  = $col++;
 
         $colGameNumber = $col++;
@@ -119,6 +128,7 @@ class SummaryWriterExcel
         $this->setColWidth($ws,$colOfficialBadge,   6);
         $this->setColWidth($ws,$colOfficialSars,   16);
         $this->setColWidth($ws,$colOfficialAge,     5);
+        $this->setColWidth($ws,$colOfficialState,   6);
         $this->setColWidth($ws,$colOfficialSlot,    6);
         $this->setColWidth($ws,$colGameNumber,      8);
         $this->setColWidth($ws,$colGameDate,        6);
@@ -134,6 +144,7 @@ class SummaryWriterExcel
         $this->setCellValue($ws,$colOfficialBadge,  $row,'Badge');
         $this->setCellValue($ws,$colOfficialSars,   $row,'SARS');
         $this->setCellValue($ws,$colOfficialAge,    $row,'Age' );
+        $this->setCellValue($ws,$colOfficialSlot,   $row,'State');
         $this->setCellValue($ws,$colOfficialSlot,   $row,'Slot');
         $this->setCellValue($ws,$colGameNumber,     $row,'Game');
         $this->setCellValue($ws,$colGameDate,       $row,'Date');
@@ -157,8 +168,16 @@ class SummaryWriterExcel
 
                     $orgView = $this->regionToSarTransformer->transform(($regPerson->orgId));
                     $this->setCellValue($ws,$colOfficialSars,$row,$orgView);
-
                     $this->setCellValue($ws,$colOfficialAge, $row,$regPerson->age);
+
+                    $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$gameOfficial->assignState];
+                    switch($assignStateView) {
+                        case 'Acc':
+                        case 'App':
+                            $this->setCellFillColor($ws,$colOfficialState,$row,ExcelConstants::COLOR_GREEN);
+                    }
+                    $this->setCellValue($ws,$colOfficialState,$row,$assignStateView);
+
                     $this->setCellValue($ws,$colOfficialSlot,$row,$gameOfficial->slotView);
 
                     $game = $gameOfficial->game;
