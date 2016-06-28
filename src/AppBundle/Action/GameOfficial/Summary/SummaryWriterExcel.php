@@ -144,7 +144,7 @@ class SummaryWriterExcel
         $this->setCellValue($ws,$colOfficialBadge,  $row,'Badge');
         $this->setCellValue($ws,$colOfficialSars,   $row,'SARS');
         $this->setCellValue($ws,$colOfficialAge,    $row,'Age' );
-        $this->setCellValue($ws,$colOfficialSlot,   $row,'State');
+        $this->setCellValue($ws,$colOfficialState,  $row,'State');
         $this->setCellValue($ws,$colOfficialSlot,   $row,'Slot');
         $this->setCellValue($ws,$colGameNumber,     $row,'Game');
         $this->setCellValue($ws,$colGameDate,       $row,'Date');
