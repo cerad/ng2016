@@ -79,11 +79,16 @@ class ResultsPoolPlayController extends AbstractController2
             $pools = $this->resultsFinder->findPools($criteria);
         }
         if (isset($searchData['poolKey'])) {
-            $criteria['poolKeys'] = [$searchData['poolKey']];
+            //$criteria['poolKeys'] = [$searchData['poolKey']];
+            $poolKey = $searchData['poolKey'];
+            $criteria['divisions'] = [substr($poolKey,0,4)];
             $pools = $this->resultsFinder->findPools($criteria);
+            $pools = array_filter($pools,function($key) use ($poolKey) {
+                return $key === $poolKey;
+            },ARRAY_FILTER_USE_KEY);
         }
         // Get the pools if needed
-        // dump($pools);
+        //dump($pools);
         $request->attributes->set('pools',$pools);
         return null;
     }
