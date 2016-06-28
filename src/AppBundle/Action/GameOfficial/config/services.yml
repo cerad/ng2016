@@ -112,4 +112,5 @@ services:
             - '@ayso_region_to_sar_transformer'
             - '@phone_transformer'
             - '@shirt_size_transformer'
+            - '@game_official_assign_workflow'
 
