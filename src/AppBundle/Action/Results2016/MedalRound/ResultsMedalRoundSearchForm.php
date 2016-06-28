@@ -46,6 +46,9 @@ class ResultsMedalRoundSearchForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
+EOD;
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $html .= <<<EOD
 <form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl($this->getCurrentRouteName())}" method="post">
   <div class="form-group"  {$this->isAdminStyle()}>
     <label for="projectId">Project</label>
@@ -62,6 +65,10 @@ class ResultsMedalRoundSearchForm extends AbstractForm
   </button>
 </form>
 <br/>
+EOD;
+        }
+        
+        $html .= <<<EOD
 {$this->renderPoolLinks()}
 EOD;
         return $html;

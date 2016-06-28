@@ -34,3 +34,4 @@ parameters:
 
     show_header_image: true
     show_results_menu: true
+    show_final_results: false
