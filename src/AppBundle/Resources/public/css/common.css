@@ -163,7 +163,7 @@ p {
      FONT FOR OTHER BROWSERS
  ***********************************
 */
-@font-face {
+/*@font-face {
     font-family: "Bebas Neue";
     src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf");
 }
@@ -171,7 +171,7 @@ p {
     font-family: "Palatino Linotype";
     src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf");
 }
-/************************************
+*//************************************
   END FONT FOR...
 ************************************/
 body {
@@ -236,27 +236,27 @@ p {
     FONT FOR INTERNET EXPLORER
  ***********************************
 */
-@font-face {
+/*@font-face {
     font-family: "Bebas Neue";
     src: url(../css/bebasneue.eot);
 }
 @font-face {
     font-family: "Palatino Linotype";
     src: url(../css/pala.eot);
-}
+}*/
 /*
  ***********************************
      FONT FOR OTHER BROWSERS
  ***********************************
 */
-@font-face {
-    font-family: "Bebas Neue";
-    src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf");
-}
-@font-face {
-    font-family: "Palatino Linotype";
-    src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf");
-}
+/*@font-face {*/
+/*    font-family: "Bebas Neue";*/
+/*    src: local("Bebas Neue"), local("Bebas Neue"), url("../css/bebasneue.otf");*/
+/*}*/
+/*@font-face {*/
+/*    font-family: "Palatino Linotype";*/
+/*    src: local("Palatino Linotype"), local("Palatino Linotype"), url("../css/pala.ttf");*/
+/*}*/
 /************************************
   END FONT FOR...
 ************************************/
