@@ -9,6 +9,7 @@ use AppBundle\Action\GameReport2016\GameReport;
 use AppBundle\Action\GameReport2016\GameReportRepository;
 use AppBundle\Action\GameReport2016\GameReportPointsCalculator;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class AssigneeController extends AbstractController2
@@ -73,8 +74,13 @@ class AssigneeController extends AbstractController2
             }
             
             $this->gameOfficialUpdater->updateGameOfficial($gameOfficial,$gameOfficialOriginal);
+
+            $backUrl = $this->generateUrl($backRouteName);
+            $backUrl .= '#game-' . $game->gameId;
+
+            return new RedirectResponse($backUrl);
             
-            return $redirect;
+            //return $redirect;
         }
         $request->attributes->set('game',$game);
         return null;
