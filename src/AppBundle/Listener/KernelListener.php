@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -33,6 +34,7 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
             KernelEvents::CONTROLLER => [['onController']],
             KernelEvents::VIEW       => [['onView']],
             KernelEvents::EXCEPTION  => [['onException']],
+            KernelEvents::RESPONSE   => [['onResponseP3P']],
         ];
     }
     public function __construct($secureRoutes)
@@ -175,5 +177,11 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
             $logger->error($message, array('exception' => $exception));
         }
     }
-
+    // Needed for iframes in some browsers
+    public function onResponseP3P(FilterResponseEvent $event)
+    {
+        // P3P Policy
+        $event->getResponse()->headers->set('P3P',
+            'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+    }
 }
