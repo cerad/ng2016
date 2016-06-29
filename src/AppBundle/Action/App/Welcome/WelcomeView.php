@@ -73,7 +73,7 @@ EOT;
 </p>
 <br/>
 <p>
-    If you have previously registered on Blue Sombrero or WooFoo, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_create')}">Click here to reset your zAYSO password</a>.
+    If you have previously registered on Blue Sombrero or WooFoo, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.
     If you still need help, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a>.
 </div>
 EOT;
