@@ -29,6 +29,7 @@ class ScheduleMyController extends AbstractController2
             'regPersonId'   => $this->getUserRegPersonId(),
             'doGeneral'     => false,
             'wantOfficials' => true,
+            'sortBy'        => ScheduleFinder::SORT_BY_START_POOL_FIELD,
         ];
         $games = $this->scheduleFinder->findGames($criteria);
 

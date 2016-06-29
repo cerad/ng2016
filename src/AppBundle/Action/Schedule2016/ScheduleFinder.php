@@ -246,9 +246,14 @@ EOD;
      * Sort after the load to avoid joins
      * Plus it is a bit more flexible and readable
      */
+    const SORT_BY_START_POOL_FIELD    = 1;
+    const SORT_BY_DATE_FIELD_TIME     = 2;
+    const SORT_BY_VENUE_FIELD_START   = 3;
+    const SORT_BY_PROJECT_GAME_NUMBER = 4;
+
     protected function sortGames($games,$sortBy)
     {
-        if ($sortBy === 1) {
+        if ($sortBy === self::SORT_BY_START_POOL_FIELD) {
             usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
 
                 if ($game1->start > $game2->start) return  1;
@@ -264,7 +269,7 @@ EOD;
             });
             return $games;
         }
-        if ($sortBy === 2) {
+        if ($sortBy === self::SORT_BY_DATE_FIELD_TIME) {
             usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
 
                 $date1 = substr($game1->start,0,10);
@@ -284,7 +289,7 @@ EOD;
             });
             return $games;
         }
-        if ($sortBy === 3) {
+        if ($sortBy === self::SORT_BY_VENUE_FIELD_START) {
             usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
 
                 if ($game1->venueName > $game2->venueName) return  1;
@@ -300,7 +305,7 @@ EOD;
             });
             return $games;
         }
-        if ($sortBy === 4) {
+        if ($sortBy === self::SORT_BY_PROJECT_GAME_NUMBER) {
             usort($games,function(ScheduleGame $game1, ScheduleGame $game2) {
 
                 if ($game1->projectId > $game2->projectId) return  1;
