@@ -30,7 +30,7 @@ EOD;
     private function renderNotes()
     {
         return <<<EOD
-<legend>Notes on Adding a Team</legend>
+<legend>Notes on Adding a Person to your Crew</legend>
 <div class="app_help">
   <ul class="cerad-common-help">
     <ul class="ul_bullets">
