@@ -59,8 +59,29 @@ class AdjustGames2016Command extends Command
         $filename = $input->getArgument(('filename'));
 
         //$this->adjust($filename);
-        $this->adjustTimes();
+        // $this->adjustTimes();
+        $this->adjustSoccerfestDuration();
         
+    }
+    private function adjustSoccerfestDuration()
+    {
+        $projectId = $this->projectId;
+        $sql  = 'SELECT projectId,gameNumber,start FROM games WHERE projectId = ? and DATE(start) = ?';
+        $stmt = $this->gameConn->executeQuery($sql,[$projectId,'2016-07-06']);
+        while($row = $stmt->fetch()) {
+
+            $finishDateTime = new \DateTime($row['start']);
+            $interval = sprintf('PT%dM',50);
+            $finishDateTime->add(new \DateInterval($interval));
+            $finish =  $finishDateTime->format('Y-m-d H:i:s');
+
+            $this->gameConn->update('games',[
+                'finish' => $finish,
+            ],[
+                'projectId'  => $projectId,
+                'gameNumber' => $row['gameNumber'],
+            ]);
+        }
     }
     private function adjustTimes()
     {
