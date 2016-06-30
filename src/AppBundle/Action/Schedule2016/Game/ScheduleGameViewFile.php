@@ -49,13 +49,19 @@ class ScheduleGameViewFile extends AbstractView2
         foreach ( $games as $game ) {
             $teamHome = $game->homeTeam;
             $teamAway = $game->awayTeam;
+            
+            $poolView = $game->poolView;
+            $sep = '<hr class="separator">';
+            if (strpos($poolView, $sep) !== false) {
+                $poolView = str_replace($sep, ' / ', $poolView);
+            }
 
             $data[] = array(
                 $game->gameNumber,
                 $game->dow,
                 $game->time,
                 $game->fieldName,
-                $game->poolView,
+                $poolView,
                 $teamHome->poolTeamKey,
                 $teamHome->regTeamName,
                 $teamAway->regTeamName,
