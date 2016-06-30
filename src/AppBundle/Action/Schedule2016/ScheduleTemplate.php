@@ -5,6 +5,7 @@ use AppBundle\Action\AbstractActionTrait;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\GameOfficial\GameOfficialDetailsFinder;
 use AppBundle\Action\RegPerson\RegPersonFinder;
+use AppBundle\Action\InstructionsView;
 
 use AppBundle\Action\AbstractTemplate;
 
@@ -26,6 +27,8 @@ class ScheduleTemplate extends AbstractTemplate
     protected $regPersonId;
     protected $regPersonTeamIds;
     protected $regPersonPersonsIds;
+    
+    private $instructionsView;
 
     public function __construct(
         $scheduleTitle,
@@ -41,6 +44,8 @@ class ScheduleTemplate extends AbstractTemplate
         $this->scheduleTitle = $scheduleTitle;
 
         $this->assignWorkflow = $assignWorkflow;
+        
+        $this->instructionsView = new InstructionsView;
     }
     public function setRegPersonFinder(RegPersonFinder $regPersonFinder)
     {
@@ -58,9 +63,25 @@ class ScheduleTemplate extends AbstractTemplate
         $this->showOfficials       = $this->isGranted('ROLE_REFEREE') ? $this->showOfficials : false;
         $this->showOfficialDetails =  $this->isGranted('ROLE_REFEREE') ? $this->showOfficialDetails : false;
         
-        $html =  <<<EOD
+        $html = null;
+        
+        if($this->showOfficialDetails){
+            $html .=
+<<<EOT
 <div id="layout-block clear-fix">
+{$this->instructionsView->renderAssignorInstructions($this->generateUrl('assignor_instruction'))}
 <div class="schedule-games-list">
+EOT;
+        } elseif ($this->showOfficials ) {
+            $html .=
+<<<EOT
+<div id="layout-block clear-fix">
+{$this->instructionsView->renderRefereeInstructions($this->generateUrl('detailed_instruction'))}
+<div class="schedule-games-list">
+EOT;
+        }
+        
+        $html .=  <<<EOD
 <table id="schedule" class="schedule" border="1">
   <thead>
     <tr><th colspan="20" class="text-center">{$this->scheduleTitle} - Game Count: {$gameCount}</th></tr>

@@ -29,3 +29,17 @@ app_text_alerts:
     defaults:
         _view:       text_alerts_view
         _controller: text_alerts_controller
+
+detailed_instruction:
+    path: /self-assigning
+    defaults:
+        fileType: pdf # For future use, only pdf is currently supported
+        fileName: referee_self-assigning.pdf
+        _controller: file_controller
+
+assignor_instruction:
+    path: /assigning
+    defaults:
+        fileType: pdf # For future use, only pdf is currently supported
+        fileName: referee_assigning.pdf
+        _controller: file_controller

@@ -103,6 +103,7 @@ EOT;
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_qf'])}">Export Quarter-Finals Schedule for review</a></li>
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_sf'])}">Export Semi-Finals Schedule for review</a></li>
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2016',['_format' => 'xls_fm'])}">Export Finals Schedule for review</a></li>
+        <li><a href="{$this->generateUrl('field_map')}" target="_blank">Field Map</a></li>
 EOT;
 
       $html .=
@@ -156,6 +157,7 @@ EOT;
       <li><a href="{$this->generateUrl('schedule_official_2016',['_format' => 'xls'])}">Export Referee Assignment Requests</a></li>
       <li><a href="{$this->generateUrl('schedule_assignor_2016')}">View Assignor Assignments</a></li>
       <li><a href="{$this->generateUrl('game_official_summary')}">Export Referee Summary</a></li>
+      <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">Referee Self-Assignment Instruction</a></li>
 EOT;
 
         $html .= <<<EOT
