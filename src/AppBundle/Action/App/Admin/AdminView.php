@@ -125,11 +125,11 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('game_listing')}">View Teams</a></li>
-      <li><a href="{$this->generateUrl('regteam_export')}">Export Teams</a></li>
+      <li><a href="{$this->generateUrl('reg_team_export2')}">Export Teams</a></li>
 EOT;
       if ($this->isGranted('ROLE_ADMIN')) {
         $html .= <<<EOT
-      <li><a href="{$this->generateUrl('regteam_import')}">Import/Update Teams</a></li>
+      <li><a href="{$this->generateUrl('reg_team_import2')}">Import/Update Teams</a></li>
 EOT;
       }
 
