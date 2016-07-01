@@ -5,8 +5,6 @@ use AppBundle\Action\AbstractActionTrait;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\GameOfficial\GameOfficialDetailsFinder;
 use AppBundle\Action\RegPerson\RegPersonFinder;
-use AppBundle\Action\InstructionsView;
-
 use AppBundle\Action\AbstractTemplate;
 
 class ScheduleTemplate extends AbstractTemplate
@@ -28,8 +26,6 @@ class ScheduleTemplate extends AbstractTemplate
     protected $regPersonTeamIds;
     protected $regPersonPersonsIds;
     
-    private $instructionsView;
-
     public function __construct(
         $scheduleTitle,
         $showOfficials = false,
@@ -44,8 +40,6 @@ class ScheduleTemplate extends AbstractTemplate
         $this->scheduleTitle = $scheduleTitle;
 
         $this->assignWorkflow = $assignWorkflow;
-        
-        $this->instructionsView = new InstructionsView;
     }
     public function setRegPersonFinder(RegPersonFinder $regPersonFinder)
     {
@@ -65,19 +59,23 @@ class ScheduleTemplate extends AbstractTemplate
         
         $html = null;
         
-        if($this->showOfficialDetails){
+        if($this->showOfficialDetails){ // for Assignor Instructions
+            $html .= null;
+            
+        } elseif ($this->showOfficials ) {  // for Referee instructions
             $html .=
 <<<EOT
-<div id="layout-block clear-fix">
-{$this->instructionsView->renderAssignorInstructions($this->generateUrl('assignor_instruction'))}
-<div class="schedule-games-list">
-EOT;
-        } elseif ($this->showOfficials ) {
-            $html .=
-<<<EOT
-<div id="layout-block clear-fix">
-{$this->instructionsView->renderRefereeInstructions($this->generateUrl('detailed_instruction'))}
-<div class="schedule-games-list">
+<div id="clear-fix">
+    <legend>Instructions for Referees</legend>
+      <ul class="cerad-common-help ul_bullets">
+            <li>Click on "<a href="{$this->generateUrl('schedule_official_2016')}">Request Assignments</a>" under the "Referees" menu item above.</li>
+            <li>On any open match, click on the position you'd like to request, e.g. REF, AR1, AR2</li>
+            <li>Click "Submit" button"</li>
+            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2016')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+            <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl('detailed_instruction')}" target="_blank">by clicking here</a>.</ul>
+      </ul>
+</div>
+<hr>
 EOT;
         }
         
