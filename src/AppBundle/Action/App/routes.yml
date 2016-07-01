@@ -34,7 +34,7 @@ detailed_instruction:
     path: /self-assigning
     defaults:
         fileType: pdf # For future use, only pdf is currently supported
-        fileName: referee_self-assigning.pdf
+        fileName: Referee_Self-Assigning.pdf
         _controller: file_controller
 
 assignor_instruction:
