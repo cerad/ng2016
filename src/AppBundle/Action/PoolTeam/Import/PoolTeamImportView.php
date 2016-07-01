@@ -28,9 +28,9 @@ class PoolTeamImportView extends AbstractView2
 <div id="layout-block">
 {$this->form->render()}
 </div>
-<hr>
 {$this->renderResults()}
-<ul>
+<legend>Notes on Import</legend>
+<ul class="cerad_common_help ul_bullets">
   <li>Add a tilde (~) in front of pool team key to delete the pool team.</li>
   <li>Any games using the pool team key must be deleted first.</li>
 </ul>
@@ -50,6 +50,7 @@ EOD;
 <tr><td>Created</td><td>{$results->createdCount}</td></tr>
 <tr><td>Updated</td><td>{$results->updatedCount}</td></tr>
 </table>
+<hr>
 EOD;
         if (count($results->existingGames) < 1) {
             return $html;

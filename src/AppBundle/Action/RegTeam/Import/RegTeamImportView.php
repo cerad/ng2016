@@ -28,9 +28,9 @@ class RegTeamImportView extends AbstractView2
 <div id="layout-block">
 {$this->form->render()}
 </div>
-<hr>
 {$this->renderResults()}
-<ul>
+<legend>Notes on Import</legend>
+<ul class="cerad_common_help ul_bullets">
   <li>Add a tilde (~) in front of reg team key to delete the reg team.</li>
   <li>Add a tilde (~) in front of pool team key to clear the link with reg team.</li>
   <li>Region can either be a number or AYSOR:0894 or blank.</li>
@@ -54,6 +54,7 @@ EOD;
 <tr><td>Updated Reg  Teams</td><td>{$results->updatedCount}</td></tr>
 <tr><td>Updated Pool Teams</td><td>{$results->updatedPoolTeamCount}</td></tr>
 </table>
+<hr>
 EOD;
         return $html;
     }

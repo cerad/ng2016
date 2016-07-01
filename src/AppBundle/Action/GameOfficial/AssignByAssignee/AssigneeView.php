@@ -34,9 +34,8 @@ EOD;
     private function renderNotes()
     {
         return <<<EOD
-<legend>Notes on Referee Assignment Procedures</legend>
-<div class="app_help">
-  <ul class="cerad-common-help">
+<div class="cerad-common-help">
+<legend>Notes on Referee Self-Assignment Procedure</legend>
     <ul class="ul_bullets">
           <li>Use the drop down to select "Request Assignment"</li>
           <li>Click Submit</li>
@@ -47,10 +46,8 @@ EOD;
           <li>After the assignor has approved the assignment, you may request to be removed from the match by returning to this game, selecting "Request Turnback of Assignment" and clicking Submit.</li>
           <li>The Assignor will be notified and, depending on whether a replacement can be assigned, may or may not approve the request.</li>
           <li><strong>NOTE: You are obliged to keep the assignment until the Assignor releases you.</strong></li>
-        </ul>
     </ul>
 </div>
-
 EOD;
 
     }

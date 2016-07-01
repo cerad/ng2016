@@ -127,8 +127,8 @@ class AssignorForm extends AbstractForm
         );
 
         $html = <<<EOD
+  <legend>Assign By Assignor</legend>
 <table style="min-width: 500px;">
-  <tr><th colspan="3">Assign By User</th></tr>
   <tr><th colspan="3">{$gameDescription}</th></tr>
   <tr><th colspan="3">{$homeTeamName} -VS- {$awayTeamName}</th></tr>
 </table>
