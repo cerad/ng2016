@@ -12,6 +12,8 @@ use AppBundle\Action\Project\User\ProjectUser;
 use AppBundle\Action\RegPerson\RegPersonFinder;
 use Symfony\Component\HttpFoundation\Request;
 
+use AppBundle\Action\InstructionsView;
+
 class HomeView extends AbstractView2
 {
     /** @var  ProjectUser */
@@ -27,6 +29,8 @@ class HomeView extends AbstractView2
 
     private $regPersonFinder;
 
+    private $instructionsView;
+
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectPersonViewDecorator $projectPersonViewDecorator,
@@ -37,6 +41,8 @@ class HomeView extends AbstractView2
 
         $this->projectPersonRepository    = $projectPersonRepository;
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
+
+        $this->instructionsView = new InstructionsView;
     }
     public function __invoke(Request $request)
     {
@@ -64,6 +70,9 @@ class HomeView extends AbstractView2
 {$this->renderTeamInformation()}
 {$this->renderAysoInformation()}
 {$this->renderAvailability()}
+</div>
+<div>
+{$this->renderInstructions()}
 </div>
 <div>
 {$this->renderHotelInformation()}
@@ -274,6 +283,32 @@ EOD;
     </p>  
 </div>
 EOD;
+    }
+    private function renderInstructions()
+    {
+        $personView = $this->projectPersonViewDecorator;
+
+        $isReferee = $personView->getCertBadge('CERT_REFEREE');
+        
+        $html = null;
+        if ($isReferee) {
+            $html = 
+<<<EOT
+<div id="clear-fix">
+    <legend>Instructions for Referees</legend>
+      <ul class="cerad-common-help ul_bullets">
+            <li>Click on "<a href="{$this->generateUrl('schedule_official_2016')}">Request Assignments</a>" under the "Referees" menu item above.</li>
+            <li>On any open match, click on the position you'd like to request, e.g. REF, AR1, AR2</li>
+            <li>Click "Submit" button"</li>
+            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2016')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+            <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl('detailed_instruction')}" target="_blank">by clicking here</a>.</ul>
+      </ul>
+</div>
+<hr>
+EOT;
+        }
+        
+        return $html;
     }
     private function renderHotelInformation()
     {

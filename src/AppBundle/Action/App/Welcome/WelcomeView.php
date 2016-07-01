@@ -49,17 +49,15 @@ EOT;
             $html .= <<<EOT
 <p>
   If you just want to peruse the Schedules and Results, no need to go any further.  
-  You do not need to sign-in to access Schedules or Results above.
-</p>
-<p>
-<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">Join AYSO National Games 2016 text alerts on RainedOut</a> 
+  You do not need to sign-in to access Schedules or Results above.  To volunteer, you will need to <a href="{$this->generateUrl('user_create')}">create a zAYSO account</a>.
+  In either case, you should
+<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to AYSO National Games 2016 text alerts on RainedOut</a>. 
 </p>
 <br/>
 EOT;
 }
         $html .= <<<EOT
 <p>
-  To volunteer, you will need to create a zAYSO account.  
   If you officiated at the 2012 National Games in Tennesee or 2014 National Games in Southern California, 
   you can simply sign in below and update your plans for the 2016 National Games.
   If you need help remembering your password, 

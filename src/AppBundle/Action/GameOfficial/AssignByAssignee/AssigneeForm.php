@@ -147,8 +147,8 @@ class AssigneeForm extends AbstractForm
         // TODO maybe deal with no approved choices better
 
         $html = <<<EOD
+  <legend>Self-Assignment By Referee</legend>
 <table class="min-width-500">
-  <tr><th colspan="3">Assign By User</th></tr>
   <tr><th colspan="3">{$gameDescription}</th></tr>
   <tr><th colspan="3">{$homeTeamName} -VS- {$awayTeamName}</th></tr>
 </table>

@@ -5,7 +5,6 @@ use AppBundle\Action\AbstractActionTrait;
 use AppBundle\Action\GameOfficial\AssignWorkflow;
 use AppBundle\Action\GameOfficial\GameOfficialDetailsFinder;
 use AppBundle\Action\RegPerson\RegPersonFinder;
-
 use AppBundle\Action\AbstractTemplate;
 
 class ScheduleTemplate extends AbstractTemplate
@@ -26,7 +25,7 @@ class ScheduleTemplate extends AbstractTemplate
     protected $regPersonId;
     protected $regPersonTeamIds;
     protected $regPersonPersonsIds;
-
+    
     public function __construct(
         $scheduleTitle,
         $showOfficials = false,
@@ -58,9 +57,29 @@ class ScheduleTemplate extends AbstractTemplate
         $this->showOfficials       = $this->isGranted('ROLE_REFEREE') ? $this->showOfficials : false;
         $this->showOfficialDetails =  $this->isGranted('ROLE_REFEREE') ? $this->showOfficialDetails : false;
         
-        $html =  <<<EOD
-<div id="layout-block clear-fix">
-<div class="schedule-games-list">
+        $html = null;
+        
+        if($this->showOfficialDetails){ // for Assignor Instructions
+            $html .= null;
+            
+        } elseif ($this->showOfficials ) {  // for Referee instructions
+            $html .=
+<<<EOT
+<div id="clear-fix">
+    <legend>Instructions for Referees</legend>
+      <ul class="cerad-common-help ul_bullets">
+            <li>Click on "<a href="{$this->generateUrl('schedule_official_2016')}">Request Assignments</a>" under the "Referees" menu item above.</li>
+            <li>On any open match, click on the position you'd like to request, e.g. REF, AR1, AR2</li>
+            <li>Click "Submit" button"</li>
+            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2016')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+            <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl('detailed_instruction')}" target="_blank">by clicking here</a>.</ul>
+      </ul>
+</div>
+<hr>
+EOT;
+        }
+        
+        $html .=  <<<EOD
 <table id="schedule" class="schedule" border="1">
   <thead>
     <tr><th colspan="20" class="text-center">{$this->scheduleTitle} - Game Count: {$gameCount}</th></tr>
