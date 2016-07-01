@@ -29,7 +29,7 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
     public $plans = [];
     public $avail = [];
 
-    //private $createdOn;
+    public $createdOn;
     //private $updatedOn;
 
     public $version = 0;
@@ -59,6 +59,7 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         'notesUser'  => 'longtext',
         'plans'      => 'array',
         'avail'      => 'array',
+        'createdOn'  => 'CreatedOn',
         'version'    => 'Version',
     ];
     private $collectionKeys = [
