@@ -163,8 +163,11 @@ class AdminUpdateForm extends AbstractForm
 
         if (isset($projectPerson->roles['ROLE_VOLUNTEER'])) {
             $projectPersonRoleVolunteer   = &$projectPerson->roles['ROLE_VOLUNTEER'];
-    
+
             $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : null;
+            if ($projectPersonRoleVolunteer['approved']) {
+                $projectPersonRoleVolunteer['verified'] = true;
+            }
         }
         //update user info
         $projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
@@ -293,7 +296,7 @@ EOD;
         $roleVol        = $personView->getRoles();
         $roleVol        = isset($roleVol['ROLE_VOLUNTEER']) ? $roleVol['ROLE_VOLUNTEER'] : null;
         $approvedVol    = isset($roleVol['approved']) ? (bool) $roleVol['approved'] : false;
-        
+
         $classRegYear   = ' ' . (in_array($personView->regYear, ['***','',null]) ? $personView->dangerClass : $personView->successClass);
 
         $sar = explode('/', $personView->orgKey);
@@ -341,7 +344,15 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="badge">Referee:</label>
       {$this->renderFormControlInput($this->formControls['refereeBadge'],$this->escape($personView->refereeBadge),'badge','badge','col-xs-4 form-control'.$classCertRef)}
+EOD;
+        if ($this->willReferee($personView) != 'no'){
+            $html .=
+<<<EOD
       <label class="col-xs-3 control-label approved"><input name="approvedRef" value="approved" type="checkbox" {$this->isChecked($approvedRef) }> Approved to Referee</label>
+EOD;
+        }    
+        $html .=
+<<<EOD
     </div>
 EOD;
         }
@@ -349,7 +360,15 @@ EOD;
     <div class="form-group">
       <label class="col-xs-3 control-label" for="userSH">Safe Haven:</label>
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->safeHavenCertified)),'userSH','userSH','col-xs-4 form-control'.$classSH)}      
+EOD;
+        if ($this->willVolunteer($personView) != 'no' or $this->willCoach($personView) != 'no'){
+            $html .=
+<<<EOD
       <label class="col-xs-3 control-label approved"><input name="approvedVol" value="approved" type="checkbox" {$this->isChecked($approvedVol) }> Approved to Volunteer</label>
+EOD;
+        }
+        $html .=
+<<<EOD
     </div>
 EOD;
 
@@ -380,25 +399,21 @@ EOD;
             $notesUser = substr($notesUser, 0, 75) . '...';
         }
         $notesUser = $this->escape($notesUser);
-        
-        $willReferee = is_null($this->escape($personView->willReferee)) ? 'no' : $this->escape($personView->willReferee);
-        $willCoach = is_null($this->escape($personView->willCoach)) ? 'no' : $this->escape($personView->willCoach);
-        $willVolunteer = is_null($this->escape($personView->willVolunteer)) ? 'no' : $this->escape($personView->willVolunteer);
 
         $html = <<<EOD
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Plans Information</h1>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willReferee">Will Referee:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($willReferee),'willReferee','willReferee','col-xs-4 form-control')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],$this->willReferee($personView),'willReferee','willReferee','col-xs-4 form-control')}
     </div>    
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willVolunteer">Will Volunteer:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($willVolunteer),'willVolunteer','willVolunteer','col-xs-4 form-control')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],$this->willVolunteer($personView),'willVolunteer','willVolunteer','col-xs-4 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="willCoach">Will Coach:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($willCoach),'willCoach','willCoach','col-xs-4 form-control')}
+      {$this->renderFormControlInput($this->formControls['YesNo'],$this->willCoach($personView),'willCoach','willCoach','col-xs-4 form-control')}
     </div>
     <div class="form-group">
       <label class="col-xs-2 control-label" for="notesUser">User Notes:</label>
@@ -569,6 +584,24 @@ EOD;
 </select>
 EOD;
         return $html;
+    }
+    private function willReferee (ProjectPersonViewDecorator $personView)
+    {
+        $will= is_null($this->escape($personView->willReferee)) ? 'no' : $this->escape($personView->willReferee);
+
+        return strtolower($will);
+    }
+    private function willCoach (ProjectPersonViewDecorator $personView)
+    {
+        $will = is_null($this->escape($personView->willCoach)) ? 'no' : $this->escape($personView->willCoach);
+
+        return strtolower($will);
+    }
+    private function willVolunteer (ProjectPersonViewDecorator $personView)
+    {
+        $will = is_null($this->escape($personView->willVolunteer)) ? 'no' : $this->escape($personView->willVolunteer);
+
+        return strtolower($will);
     }
 
 }
