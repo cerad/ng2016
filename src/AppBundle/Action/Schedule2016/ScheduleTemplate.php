@@ -224,8 +224,35 @@ EOD;
 
         return $html . <<<EOD
         <td class="text-left">{$refereeBadge}</td>
-        <td class="text-left">{$row['orgView']}</td>
+        <td class="text-right {$this->styleSectionConflict($row['orgView'],$game)}">{$row['orgView']}</td>
 EOD;
 
+    }
+    private function styleSectionConflict($refOrg, $game)
+    {
+        $homeTeam = explode(' ',$game->homeTeam->regTeamName);
+        $awayTeam = explode(' ',$game->awayTeam->regTeamName);
+        
+        if (isset($homeTeam[1])) {
+            $homeTeamOrg = $homeTeam[1];            
+        } else return null;
+        
+        if (isset($awayTeam[1])) {
+            $awayTeamOrg = $awayTeam[1];            
+        } else return null;
+
+        if ($homeTeamOrg == 'BYE') return null;
+        if ($awayTeamOrg == 'BYE') return null;
+
+        $homeTeamSection = (integer) explode('-',$homeTeamOrg)[0];
+        $awayTeamSection = (integer) explode('-',$awayTeamOrg)[0];
+
+        $refSection = (integer) explode('/',$refOrg)[0];
+     
+        if ( ($homeTeamSection == $refSection) or ($awayTeamSection == $refSection) ) {
+            return "bg-danger";
+        }
+        
+        return '';
     }
 }
