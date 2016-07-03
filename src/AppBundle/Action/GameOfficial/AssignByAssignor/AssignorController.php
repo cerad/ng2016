@@ -64,6 +64,7 @@ class AssignorController extends AbstractController2
                 $assignState = $gameOfficial->assignState;
                 switch($assignState) {
                     case 'RemoveByAssignor':
+                    case 'Rejected':
                     case 'TurnBackApproved':
                         $gameOfficial->assignState = 'Open';
                         $gameOfficial->regPersonId = null;
