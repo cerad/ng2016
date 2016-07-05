@@ -32,6 +32,8 @@ class RegPerson
     /** @var RegPersonRole[] */
     public $roles = [];
 
+    public $avail = [];
+    
     protected $keys = [
         'projectId' => 'ProjectId',
         'personId'  => 'PersonId',
@@ -156,6 +158,8 @@ class RegPerson
         $item = new self();
 
         $item->loadFromArray($data);
+        
+        $item->avail = isset($data['avail']) ? unserialize($data['avail']) : [];
         
         return $item;
     }

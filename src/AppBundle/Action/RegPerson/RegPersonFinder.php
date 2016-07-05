@@ -229,7 +229,7 @@ SELECT
   orgKey     AS orgId,
   fedKey     AS fedId,
   regYear    AS regYear,
-  name,email,phone,gender,dob,age,shirtSize,notes,notesUser
+  name,email,phone,gender,dob,age,shirtSize,notes,notesUser,avail
 FROM projectPersons AS regPerson
 WHERE regPerson.projectKey = ?
 EOD;
