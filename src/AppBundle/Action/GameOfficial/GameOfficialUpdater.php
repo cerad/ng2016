@@ -35,6 +35,7 @@ class GameOfficialUpdater
             'phyPersonId'   => null,
             'regPersonId'   => null,
             'regPersonName' => null,
+            'assignState'   => $gameOfficial->assignState,
         ];
         $regPersonId = $gameOfficial->regPersonId;
         if ($regPersonId) {
@@ -50,6 +51,7 @@ class GameOfficialUpdater
                 'phyPersonId'   => $phyPersonId,
                 'regPersonId'   => $regPersonId,
                 'regPersonName' => $row['name'],
+                'assignState'   => $gameOfficial->assignState,
             ];
         }
         //dump($gameOfficialUpdateInfo);
