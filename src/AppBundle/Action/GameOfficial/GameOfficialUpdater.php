@@ -23,7 +23,7 @@ class GameOfficialUpdater
 
         // The state
         if ($gameOfficial->assignState !== $gameOfficialOriginal->assignState) {
-            $this->gameConn->update('gameOfficials',['assignState' => $gameOfficial->assignState],$id);
+            //$this->gameConn->update('gameOfficials',['assignState' => $gameOfficial->assignState],$id);
         }
         //dump($gameOfficial);
         //dump($gameOfficialOriginal);
@@ -38,7 +38,7 @@ class GameOfficialUpdater
             'assignState'   => $gameOfficial->assignState,
         ];
         $regPersonId = $gameOfficial->regPersonId;
-        if ($regPersonId) {
+        if ($regPersonId && $gameOfficial->assignState !== 'Open') {
             list($projectId,$phyPersonId) = explode(':',$regPersonId);
             $sql  = 'SELECT name FROM projectPersons WHERE projectKey = ? AND personKey = ?';
             $stmt = $this->regPersonConn->executeQuery($sql,[$projectId,$phyPersonId]);
