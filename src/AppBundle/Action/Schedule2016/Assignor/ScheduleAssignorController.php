@@ -96,7 +96,7 @@ class ScheduleAssignorController extends AbstractController2
             }
             $session->set($sessionKey,$searchDataNew);
 
-            return $this->redirectToRoute($request->attributes->get('_route'));
+           return $this->redirectToRoute($request->attributes->get('_route'));
         }
         // For now, restrict to one project
         $searchData['projectIds'] = [$searchData['projectId']];
@@ -144,7 +144,7 @@ class ScheduleAssignorController extends AbstractController2
                 $assignState = strtolower($official->assignState);
                 switch ($reportKey) {
                     case 'issues':
-                        if ($assignState != "accepted") {
+                        if ($assignState != "accepted" && $assignState != 'approved') {
                             if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
                         }
                         continue;
