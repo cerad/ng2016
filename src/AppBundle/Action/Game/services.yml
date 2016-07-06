@@ -34,6 +34,15 @@ services:
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
+    game_approve_ng2016_command:
+        class: AppBundle\Action\Game\Migrate\Approve2016Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '@doctrine.dbal.ng2016games_connection'
+            - '@schedule_finder_2016'
+            - '@game_updater'
+            - '@reg_team_import_reader_excel'
+
     game_seq_numbers_command:
          class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
          tags: [{ name: console.command }]
