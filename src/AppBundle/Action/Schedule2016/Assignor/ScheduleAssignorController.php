@@ -3,6 +3,7 @@ namespace AppBundle\Action\Schedule2016\Assignor;
 
 use AppBundle\Action\AbstractController2;
 
+use AppBundle\Action\Game\Game;
 use AppBundle\Action\Schedule2016\ScheduleControllerTrait;
 use AppBundle\Action\Schedule2016\ScheduleFinder;
 
@@ -115,7 +116,11 @@ class ScheduleAssignorController extends AbstractController2
 
         return null;
     }
-    
+
+    /**
+     * @param Game[] $games
+     * @return array
+     */
     private function filterGamesForReport($games)
     {
         //from assign.yml
