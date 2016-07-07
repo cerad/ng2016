@@ -10,27 +10,34 @@ class ResultsSportsmanshipCalculator
         }
         
         $standings = null;
-        
+        $gamesProcessed = [];
+
         //get the SP into an array keyed by team name
         foreach($divisionGames as $poolGames) {
 
             foreach ($poolGames as $games) {
 
-                //get each team report: sportsmanship
-                $teams = $games->getTeams();
-                foreach ($teams as $team) {
-                    if (!is_null($team->results)) {
-                        $name = $team->regTeamName;
+                $gameId = $games->gameId;
+                if (!isset($gamesProcessed[$gameId])) {
 
-                        $teamSportsmanship = $team->sportsmanship;
+                    $gamesProcessed[$gameId] = true;
 
-                        if (isset($standings[$name])) {
-                            $standings[$name][] = $teamSportsmanship;
-                        } else {
-                            $standings[$name] = array($teamSportsmanship);
+                    //get each team report: sportsmanship
+                    $teams = $games->getTeams();
+                    foreach ($teams as $team) {
+                        if (!is_null($team->results)) {
+                            $name = $team->regTeamName;
+                            $teamSportsmanship = $team->sportsmanship;
+                            if (isset($standings[$name])) {
+                                $standings[$name][] = $teamSportsmanship;
+                            } else {
+                                $standings[$name] = array($teamSportsmanship);
+                            }
                         }
                     }
-                }       
+//                } else {
+//                    dump($gamesProcessed);
+                }
             }
         }
 

@@ -93,7 +93,7 @@ EOD;
         }
 
         $divisionView = array_values($this->pools)[0]->division;
-            
+
         $html = <<<EOD
 <table class="standings" border = "1">
 EOD;
