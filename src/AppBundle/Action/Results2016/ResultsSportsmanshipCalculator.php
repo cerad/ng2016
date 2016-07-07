@@ -18,15 +18,17 @@ class ResultsSportsmanshipCalculator
 
                 //get each team report: sportsmanship
                 $teams = $games->getTeams();
-                foreach ($teams as $team) {                
-                    $name = $team->regTeamName;
-                       
-                    $teamSportsmanship = $team->sportsmanship;
-             
-                    if (isset($standings[$name])) {
-                        $standings[$name][] = $teamSportsmanship;
-                    } else {
-                        $standings[$name] = array($teamSportsmanship);
+                foreach ($teams as $team) {
+                    if (!is_null($team->results)) {
+                        $name = $team->regTeamName;
+
+                        $teamSportsmanship = $team->sportsmanship;
+
+                        if (isset($standings[$name])) {
+                            $standings[$name][] = $teamSportsmanship;
+                        } else {
+                            $standings[$name] = array($teamSportsmanship);
+                        }
                     }
                 }       
             }
