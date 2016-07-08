@@ -208,6 +208,12 @@ EOD;
         $assignState = $gameOfficial->assignState;
         $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
 
+        if ($assignState === 'Pending' && !$this->isGranted('ROLE_ASSIGNOR')) {
+            $assignState      = 'Open';
+            $assignStateView  = 'Open';
+            $gameOfficialName = null;
+        }
+
         $html = <<<EOD
         <td class="text-left game-official-state-{$assignState}">{$assignStateView}</td>
         <td class="text-left">{$slotView}</td>
