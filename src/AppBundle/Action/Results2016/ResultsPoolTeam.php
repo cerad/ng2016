@@ -89,7 +89,7 @@ class ResultsPoolTeam
                 if ($this->gamesPlayed === null) {
                     return null;
                 }
-                return ($this->sportsmanship * 1.0) / ($this->gamesPlayed * 40.0);
+                return ($this->sportsmanship * 1.0) / ($this->gamesPlayed * 26.0); // Was 40
 
             case 'pointsScoredPercent':
             case 'pointsAgainstPercent':

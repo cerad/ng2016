@@ -59,7 +59,7 @@ FROM gameOfficials AS gameOfficial
 LEFT JOIN games AS game ON game.gameId = gameOfficial.gameId
 WHERE game.projectId = ? AND DATE(game.start) = ?
 EOD;
-        $stmt = $this->gameConn->executeQuery($sql,[$this->projectId, '2016-07-09']);
+        $stmt = $this->gameConn->executeQuery($sql,[$this->projectId, '2016-07-10']);
         while($row = $stmt->fetch()) {
             $this->gameConn->update('gameOfficials', ['assignRole' => 'ROLE_REFEREE'],
                 [
