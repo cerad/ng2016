@@ -64,23 +64,23 @@ class ScheduleMedalRoundCalculator
             $awayTeam = $standings[1];
          
             $poolKey = $pool->poolKey;
-            $switchKey = substr($poolKey, -1);
+            $switchKey = substr($poolKey, -3);
             $prefix = substr($poolKey, 0, 8);
 
             switch ($switchKey) {
-                case 'A':
+                case 'PPA':
                    $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>$prefix.'QF1X');
                    $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>$prefix.'QF3Y');
                    break;
-                case 'B':
+                case 'PPB':
                    $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>$prefix.'QF2X');
                    $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>$prefix.'QF4Y');
                    break;
-                case 'C':
+                case 'PPC':
                    $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>$prefix.'QF3X');
                    $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>$prefix.'QF1Y');
                    break;
-                case 'D':
+                case 'PPD':
                    $qfMatches[$poolKey][$homeTeam->regTeamName] = array('Slots'=>$homeTeam->poolTeamSlotView,'QF'=>$prefix.'QF4X');
                    $qfMatches[$poolKey][$awayTeam->regTeamName] = array('Slots'=>$awayTeam->poolTeamSlotView,'QF'=>$prefix.'QF2Y');
                    break;
@@ -124,11 +124,11 @@ class ScheduleMedalRoundCalculator
             $poolKey = $pool->poolKey;
             $slotView = $pool->poolSlotView;
 
-            $switchKey = substr($poolKey, -1);
+            $switchKey = substr($poolKey, -3);
             $prefix = substr($poolKey, 0, 8);
             
             switch($switchKey) {
-                case 'A':
+                case 'PPA':
                     if ($a2WinPercent > $c2WinPercent and $b2WinPercent > $c2WinPercent) {
                         $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>$prefix.'QF1X');
                         $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>$prefix.'QF4Y');
@@ -142,7 +142,7 @@ class ScheduleMedalRoundCalculator
                         $qfMatches[$poolKey][$team[$slotView][2]->regTeamName] = array('Slots'=>$team[$slotView][2]->poolTeamSlotView,'QF'=>$prefix.'QF4Y');
                     }
                     break;
-                case 'B':
+                case 'PPB':
                     if ($a2WinPercent > $c2WinPercent and $b2WinPercent > $c2WinPercent) {
                         $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>$prefix.'QF3X');
                         $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>$prefix.'QF2Y');
@@ -156,7 +156,7 @@ class ScheduleMedalRoundCalculator
                         $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>$prefix.'QF3Y');
                     }
                     break;
-                case 'C':
+                case 'PPC':
                     if ($a2WinPercent > $c2WinPercent and $b2WinPercent > $c2WinPercent) {
                         $qfMatches[$poolKey][$team[$slotView][0]->regTeamName] = array('Slots'=>$team[$slotView][0]->poolTeamSlotView,'QF'=>$prefix.'QF4X');
                         $qfMatches[$poolKey][$team[$slotView][1]->regTeamName] = array('Slots'=>$team[$slotView][1]->poolTeamSlotView,'QF'=>$prefix.'QF2X');
@@ -184,7 +184,7 @@ class ScheduleMedalRoundCalculator
 
             $poolKey = $pool->poolKey;
 
-            $switchKey = substr($poolKey, -1);
+            $switchKey = substr($poolKey, -3);
             $prefix = substr($poolKey, 0, 8);
 
             $teams = $pool->getPoolTeamStandings();
@@ -192,13 +192,13 @@ class ScheduleMedalRoundCalculator
             
             $team = [];
             switch ($switchKey) {
-                case 'A':
+                case 'PPA':
                     $team[0] = ['name'=>$teams[0]->regTeamName, 'slot'=>$teams[0]->poolTeamSlotView, 'QF'=>$prefix.'QF1X'];
                     $team[1] = ['name'=>$teams[1]->regTeamName, 'slot'=>$teams[1]->poolTeamSlotView, 'QF'=>$prefix.'QF3X'];
                     $team[2] = ['name'=>$teams[2]->regTeamName, 'slot'=>$teams[2]->poolTeamSlotView, 'QF'=>$prefix.'QF2Y'];
                     $team[3] = ['name'=>$teams[3]->regTeamName, 'slot'=>$teams[3]->poolTeamSlotView, 'QF'=>$prefix.'QF4Y'];
                     break;
-                case 'B':
+                case 'PPB':
                     $team[3] = ['name'=>$teams[3]->regTeamName, 'slot'=>$teams[3]->poolTeamSlotView, 'QF'=>$prefix.'QF1Y'];
                     $team[1] = ['name'=>$teams[1]->regTeamName, 'slot'=>$teams[1]->poolTeamSlotView, 'QF'=>$prefix.'QF2X'];
                     $team[2] = ['name'=>$teams[2]->regTeamName, 'slot'=>$teams[2]->poolTeamSlotView, 'QF'=>$prefix.'QF3Y'];
@@ -265,7 +265,7 @@ class ScheduleMedalRoundCalculator
 
             $poolKey = $pool->poolKey;
 
-            $switchKey = substr($poolKey, -1);
+            $switchKey = substr($poolKey, -3);
             $prefix = substr($poolKey, 0, 8);
 
             $winTeam = $standings[0];
@@ -313,7 +313,7 @@ class ScheduleMedalRoundCalculator
             $standings = $pool->getPoolTeamStandings();
 
             $poolKey = $pool->poolKey;
-            $switchKey = substr($poolKey, -1);
+            $switchKey = substr($poolKey, -3);
             $prefix = substr($poolKey, 0, 8);
 
             $winTeam = $standings[0];
