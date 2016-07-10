@@ -319,25 +319,49 @@ class ScheduleMedalRoundCalculator
             $winTeam = $standings[0];
             $losTeam = $standings[1];
 
-            foreach($standings as $team) {
-                switch ($switchKey) {
-                    case 'SF1':
-                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF1X');
-                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF3X');
-                        break;
-                    case 'SF2':
-                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF1Y');
-                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF3Y');
-                        break;
-                    case 'SF3':
-                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF2X');
-                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF4X');
-                        break;
-                    case 'SF4':
-                        $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF2Y');
-                        $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots'=>'','TF'=>$prefix.'TF4Y');
-                        break;
+            if (!is_null($winTeam->pointsScored)) {
+                foreach ($standings as $team) {
+                    switch ($switchKey) {
+                        case 'SF1':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF1X');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF3X');
+                            break;
+                        case 'SF2':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF1Y');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF3Y');
+                            break;
+                        case 'SF3':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF2X');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF4X');
+                            break;
+                        case 'SF4':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF2Y');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => $prefix . 'TF4Y');
+                            break;
+                    }
                 }
+            } else {
+                foreach ($standings as $team) {
+                    switch ($switchKey) {
+                        case 'SF1':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            break;
+                        case 'SF2':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            break;
+                        case 'SF3':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            break;
+                        case 'SF4':
+                            $fmMatches[$poolKey][$winTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            $fmMatches[$poolKey][$losTeam->regTeamName] = array('Slots' => '', 'TF' => '');
+                            break;
+                    }
+                }
+
             }
         }
    
@@ -355,7 +379,6 @@ class ScheduleMedalRoundCalculator
         );
         
         $division = '';
-        
         foreach($medalRounds as $pool=>$mrTeams) {
             //set the data : game in each row
             $teams = $pools[$pool]->getPoolTeams();
@@ -374,7 +397,7 @@ class ScheduleMedalRoundCalculator
                     $teamLevel,
                     $team->regTeamName,
                     $team->sportsmanship,
-                    $team->poolTeamSlotView,
+                    $team->poolTeamKey,
                     $mr,
                 );
             }            
