@@ -93,8 +93,8 @@ class RegTeamExportWriterExcel
                         break;
 
                     case 'QF' : $ws->getCell($this->colPoolTeamKey1 . $row)->setValue($poolTeam->poolTeamKey); break;
-                    case 'SF' : $ws->getCell($this->colPoolTeamKey1 . $row)->setValue($poolTeam->poolTeamKey); break;
-                    case 'TF' : $ws->getCell($this->colPoolTeamKey1 . $row)->setValue($poolTeam->poolTeamKey); break;
+                    case 'SF' : $ws->getCell($this->colPoolTeamKey2 . $row)->setValue($poolTeam->poolTeamKey); break;
+                    case 'TF' : $ws->getCell($this->colPoolTeamKey3 . $row)->setValue($poolTeam->poolTeamKey); break;
                 }
             }
             $row++;
