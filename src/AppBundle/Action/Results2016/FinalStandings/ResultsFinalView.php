@@ -92,11 +92,12 @@ EOD;
   <th class="text-center">Team</th>
 </tr>
 EOD;
+
         foreach($teams as $finish=>$team) {
             $html .= <<<EOD
 <tr>
   <td class="text-center">{$finish}</td>
-  <td class="text-left">{$team->regTeamName}</td>
+  <td class="text-left">{$this->renderTeamName($team)}</td>
 </tr>
 EOD;
         }
@@ -108,7 +109,14 @@ EOD;
 
         return $html;
     }
+    private function renderTeamName($team) {
+        if ($team->pointsScored !== null) {
+            return $team->regTeamName;
+        } else {
+            return '';
+        }
 
+    }
     private function generateStandings($results)
     {
         $medalRounds = [];
