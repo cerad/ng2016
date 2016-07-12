@@ -174,7 +174,7 @@ EOD;
         return <<<EOD
 <table>
   <tr><td>Name  </td><td  class="admin-listing"><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
-  <tr><td>Email </td><td  class="admin-listing">{$this->escape($personView->email)} </td></tr>
+  <tr><td>Email  </td><td class="admin-listing"><a href="mailto:{$this->escape($personView->email)}">{$this->escape($personView->email)}</a></td></tr>
   <tr><td>Phone </td><td>{$this->escape($personView->phone)} </td></tr>
   <tr><td>G Age</td><td> {$this->escape($gage)}</td></tr>
   <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
@@ -195,7 +195,7 @@ EOD;
   </tr><tr>
   <tr>
     <td class="admin-listing">Email</td>
-    <td>{$personView->email}</td>
+    <td><a href="mailto:{$this->escape($personView->email)}">{$this->escape($personView->email)}</a></td>
   </tr><tr>
   <tr>
     <td>AYSO ID</td>
@@ -283,7 +283,7 @@ EOD;
         return <<<EOD
 <table>
   <tr><td>Name   </td><td class="admin-listing">{$this->escape($user['name'])}    </td></tr>
-  <tr><td>Email  </td><td class="admin-listing">{$this->escape($user['email'])}   </td></tr>
+  <tr><td>Email  </td><td class="admin-listing"><a href="mailto:{$this->escape($user['email'])}">{$this->escape($user['email'])}</a></td></tr>
   <tr><td>User   </td><td>{$this->escape($user['username'])}</td></tr>
   <tr><td>Enabled</td><td>{$enabled}</td></tr>
   <tr><td>Roles  </td><td>{$roles}  </td></tr>
