@@ -28,7 +28,7 @@ security:
         ROLE_REFEREE_ADMIN:
           - ROLE_STAFF
           - ROLE_ASSIGNOR_ADMIN
-          - ROLE_SCORE
+          - ROLE_SCORE_ENTRY
 
         ROLE_ADMIN:
           - ROLE_STAFF
