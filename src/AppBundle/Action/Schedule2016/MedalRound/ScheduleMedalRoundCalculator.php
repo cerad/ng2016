@@ -116,9 +116,9 @@ class ScheduleMedalRoundCalculator
         }
 
         //compute winPercent
-        $a2WinPercent = $team['A'][2]->pointsEarned / $team['A'][2]->gamesPlayed;
-        $b2WinPercent = $team['B'][2]->pointsEarned / $team['B'][2]->gamesPlayed;
-        $c2WinPercent = $team['C'][2]->pointsEarned / $team['C'][2]->gamesPlayed;
+        $a2WinPercent = $team['A'][2]->gamesPlayed > 0 ? $team['A'][2]->pointsEarned / $team['A'][2]->gamesPlayed : null;
+        $b2WinPercent = $team['B'][2]->gamesPlayed > 0 ? $team['B'][2]->pointsEarned / $team['B'][2]->gamesPlayed : null;
+        $c2WinPercent = $team['C'][2]->gamesPlayed > 0 ? $team['C'][2]->pointsEarned / $team['C'][2]->gamesPlayed : null;
         
         foreach($pools as $pool){
             $poolKey = $pool->poolKey;
