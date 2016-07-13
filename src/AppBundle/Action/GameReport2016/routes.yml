@@ -4,5 +4,5 @@ game_report_update:
     defaults:
         _controller: game_report_update_controller
         _view:       game_report_update_view
-        _rolex:       ROLE_SCORE_ENTRY
+        _role:       ROLE_SCORE_ENTRY
 

@@ -194,6 +194,46 @@ class GameReportUpdateForm extends AbstractForm
       </div>
     </div>
   </div>
+EOD;
+
+        if ($this->isGranted('ROLE_SCORE_ADMIN')) {
+            $html .= <<<EOD
+<fieldset>
+  <div class="form-group">
+    <div class="col-xs-12">
+      <div class="row">
+        <label class="col-xs-2 control-label" for="gameStatus">Game Status</label>
+        <select class="col-xs-3 form-control report-update" id="gameStatus" name="gameStatus">
+EOD;
+            $status = $gameReport->status;
+            foreach($this->gameStatuses as $value => $text) {
+                $selected = $status == $value ? ' selected' : null;
+                $html .= <<<EOD
+          <option{$selected} value="{$value}">{$text}</option>
+EOD;
+            }
+            $html .= <<<EOD
+        </select>
+        <label class="col-xs-2 control-label" for="gameReportState">Report Status</label>
+        <select class="col-xs-3 form-control report-update" id="gameReportState" name="gameReportState">
+EOD;
+            $state = $gameReport->reportState;
+            foreach($this->reportStates as $value => $text) {
+                $selected = $state == $value ? ' selected' : null;
+                $html .= <<<EOD
+          <option{$selected} value="{$value}">{$text}</option>
+EOD;
+            }
+        }
+        $html .= <<<EOD
+        </select>
+      </div>
+    </div>
+  </div>
+</fieldset>
+EOD;
+        
+        $html .= <<<EOD
   <div class="col-xs-11">
     <div class="row float-right">
       <button type="submit" name="save" class="btn btn-sm btn-primary submit" >
@@ -217,43 +257,7 @@ class GameReportUpdateForm extends AbstractForm
   </div>
   <div class="clear-both"></div>
 </fieldset>
-EOD;
 
-      if ($this->isGranted('ROLE_SCORE_ADMIN')) {
-        $html .= <<<EOD
-<fieldset>
-  <div class="form-group">
-    <div class="col-xs-12">
-      <div class="row">
-        <label class="col-xs-2 control-label" for="gameStatus">Game Status</label>
-        <select class="col-xs-3 form-control report-update" id="gameStatus" name="gameStatus">
-EOD;
-        $status = $gameReport->status;
-        foreach($this->gameStatuses as $value => $text) {
-            $selected = $status == $value ? ' selected' : null;
-            $html .= <<<EOD
-          <option{$selected} value="{$value}">{$text}</option>
-EOD;
-        }
-        $html .= <<<EOD
-        </select>
-        <label class="col-xs-2 control-label" for="gameReportState">Report Status</label>
-        <select class="col-xs-3 form-control report-update" id="gameReportState" name="gameReportState">
-EOD;
-        $state = $gameReport->reportState;
-        foreach($this->reportStates as $value => $text) {
-            $selected = $state == $value ? ' selected' : null;
-            $html .= <<<EOD
-          <option{$selected} value="{$value}">{$text}</option>
-EOD;
-        }
-      }
-        $html .= <<<EOD
-        </select>
-      </div>
-    </div>
-  </div>
-</fieldset>
 {$this->renderFormErrors()}
 </form>
 EOD;
