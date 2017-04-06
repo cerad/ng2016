@@ -18,8 +18,8 @@ services:
     schedule_finder_2016:
         class: AppBundle\Action\Schedule2016\ScheduleFinder
         arguments:
-            - '@doctrine.dbal.ng2016games_connection' # gameConn
-            - '@doctrine.dbal.ng2016games_connection' # regTeamConn
+            - '@doctrine.dbal.aoc2017games_connection' # gameConn
+            - '@doctrine.dbal.aoc2017games_connection' # regTeamConn
             - '@reg_person_finder'
 
     schedule_template_2016:

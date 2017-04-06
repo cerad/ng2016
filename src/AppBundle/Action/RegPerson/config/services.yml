@@ -1,10 +1,10 @@
 services:
 
     reg_team_connection:
-        alias: doctrine.dbal.ng2016games_connection
+        alias: doctrine.dbal.aoc2017games_connection
 
     reg_person_connection:
-        alias: doctrine.dbal.ng2016_connection
+        alias: doctrine.dbal.aoc2017_connection
 
     reg_person_finder:
         class: AppBundle\Action\RegPerson\RegPersonFinder

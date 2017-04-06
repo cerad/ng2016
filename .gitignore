@@ -29,3 +29,4 @@ tests/tmp
 web/pdf
 src/AppBundle/Resources/pdf/archive
 *alias*
+src/AppBundle/Resources/public/images/iOS icons (National_Open_Cup.2017)

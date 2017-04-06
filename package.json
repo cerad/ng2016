@@ -1,7 +1,7 @@
 {
-  "name": "ng2016",
+  "name": "aoc2017",
   "version": "1.0.0",
-  "description": "AYSO National Games 2016",
+  "description": "AYSO National Open Cup 2017",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -20,9 +20,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cerad/ng2016/issues"
+    "url": "https://github.com/cerad/aoc2017/issues"
   },
-  "homepage": "https://github.com/cerad/ng2016#readme",
+  "homepage": "https://github.com/cerad/aoc2017#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",

@@ -60,6 +60,22 @@ doctrine:
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
+            aoc2017:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name_aoc2017%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+            aoc2017games:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name_aoc2017games%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
 
     orm:
         default_entity_manager:       default

@@ -2,10 +2,37 @@
 parameters:
 
     project_choices:
+        AYSONationalOpenCup2017 : AOC2017
         AYSONationalGames2016 : NG2016
         AYSONationalGames2014 : NG2014
 
     projects:
+
+        AYSONationalOpenCup2017:
+            programs:
+                Core: Core
+            #   VIP:  VIP
+            genders:
+                B:  B
+                G:  G
+            ages:
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+                Adult: Adult
+            dates:
+                '2017-07-12': Thu # Pool Play
+                '2017-07-13': Thu # Pool Play
+                '2017-07-14': Fri # Pool Play
+                '2017-07-15': Sat # Pool Play and Quarter Finals
+                '2017-07-16': Sun # Semi and Finals
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'
+                3: 'Field, Date, Time'
+                4: 'Game Number'
 
         AYSONationalGames2016:
             programs:
