@@ -3,7 +3,7 @@ namespace AppBundle\Action\Game\Migrate;
 
 use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
-use AppBundle\Action\Schedule2016\ScheduleFinder;
+use AppBundle\Action\Schedule\ScheduleFinder;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

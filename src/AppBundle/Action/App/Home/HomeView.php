@@ -31,6 +31,8 @@ class HomeView extends AbstractView2
 
     private $instructionsView;
 
+    private $project;
+
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectPersonViewDecorator $projectPersonViewDecorator,
@@ -46,6 +48,8 @@ class HomeView extends AbstractView2
     }
     public function __invoke(Request $request)
     {
+        $this->project = $this->getCurrentProjectInfo();
+
         $this->user = $user = $this->getUser();
         $projectKey = $user['projectKey'];
         $personKey  = $user['personKey'];
@@ -66,17 +70,20 @@ class HomeView extends AbstractView2
 <div class="account-person-list">
 {$this->renderAccountInformation()}
 {$this->renderRegistration()}
+<!--
 {$this->renderCrewInformation()}
 {$this->renderTeamInformation()}
+-->
 {$this->renderAysoInformation()}
 {$this->renderAvailability()}
 </div>
+<!--
 <div>
 {$this->renderInstructions()}
 </div>
 <div>
 {$this->renderHotelInformation()}
-</div>
+</div>-->
 EOD;
         return $this->renderBaseTemplate($content);
     }
@@ -274,7 +281,7 @@ EOD;
         return
 <<<EOD
 <div id="notes">
-  <legend>Thank you for registering to Volunteer at the 2016 National Games!</legend>
+  <legend>Thank you for registering to Volunteer at the {$this->project['title']}!</legend>
   <p>
     Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games.
     </p>
@@ -297,10 +304,10 @@ EOD;
 <div id="clear-fix">
     <legend>Instructions for Referees</legend>
       <ul class="cerad-common-help ul_bullets">
-            <li>Click on "<a href="{$this->generateUrl('schedule_official_2016')}">Request Assignments</a>" under the "Referees" menu item above.</li>
+            <li>Click on "<a href="{$this->generateUrl('schedule_official_2017')}">Request Assignments</a>" under the "Referees" menu item above.</li>
             <li>On any open match, click on the position you'd like to request, e.g. REF, AR1, AR2</li>
             <li>Click "Submit" button"</li>
-            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2016')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2017')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
             <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl('detailed_instruction')}" target="_blank">by clicking here</a>.</ul>
       </ul>
 </div>

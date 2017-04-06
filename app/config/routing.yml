@@ -8,7 +8,7 @@ app_game:
     prefix: /game
 
 app_game_report:
-    resource: "@AppBundle/Action/GameReport2016/routes.yml"
+    resource: "@AppBundle/Action/GameReport/routes.yml"
     prefix: /game/report
 
 app_game_official:
@@ -19,12 +19,12 @@ app_pool_team:
     resource: "@AppBundle/Action/PoolTeam/config/routes.yml"
     prefix: /pool/team
 
-app_schedule_2016:
-    resource: "@AppBundle/Action/Schedule2016/routes.yml"
+app_schedule_2017:
+    resource: "@AppBundle/Action/Schedule/routes.yml"
     prefix: /schedule
 
-app_results_2016:
-    resource: "@AppBundle/Action/Results2016/routes.yml"
+app_results_2017:
+    resource: "@AppBundle/Action/Results/routes.yml"
     prefix: /results
 
 app_project_person:
@@ -39,7 +39,7 @@ app_project_person_admin:
     resource: '@AppBundle/Action/Project/Person/Admin/routes.yml'
     prefix: /project/person/admin
 
-app_regteam_2016:
+app_regteam_2017:
     resource: "@AppBundle/Action/RegTeam/config/routes.yml"
     prefix: /regteam
 

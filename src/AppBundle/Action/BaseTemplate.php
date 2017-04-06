@@ -69,7 +69,7 @@ EOT;
 <<<EOT
     <div id="banner">
           <h1>
-          <a href="http://aysonationalopencup.org/" target="_blank"><img src="/images/National_Open_Cup.png" height="30" alt="National Games"></a>
+          <a href="http://aysonationalopencup.org/" target="_blank"><img src="/images/National_Open_Cup.png" height="30" alt="National Games"></a>     
           {$this->escape($this->project['title'])}
           </h1>
     </div>
@@ -79,7 +79,8 @@ EOT;
 <<<EOT
     <div class="skBanners">
         <a href="http://www.aysonationalopencup.org/" target="_blank"><img class="width-90" src="/images/header-ipad_01.png"></a>
-        <center class="skFont  width-90">AYSO WELCOMES YOU TO LANCASTER, CALIFORNIA, JULY 12-16, 2017</center>
+        <br/>
+        <p class="subtitle skFont width-90">{$this->project['welcome']}</p>
     </div>
 EOT;
       }
@@ -96,9 +97,9 @@ EOT;
     <div class="cerad-footer">
       <br />
       <hr>
-      <p> zAYSO - For assistance contact {$this->project['support']['name']} at
-      <a href="mailto:{$this->project['support']['email']}?subject={$this->project['support']['subject']}">{$this->project['support']['email']}</a>
-      or {$this->project['support']['phone']} </p>
+      <p> zAYSO - For assistance contact {$this->project['administrator']['name']} at
+      <a href="mailto:{$this->project['administrator']['email']}?subject={$this->project['administrator']['subject']}">{$this->project['administrator']['email']}</a>
+      or {$this->project['administrator']['phone']} </p>
     </div>
     
 				<div class="clear-both"></div>
@@ -224,8 +225,8 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_game_2016'    )}">GAME    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_team_2016'    )}">TEAM    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_game_2017'    )}">GAME    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_team_2017'    )}">TEAM    SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
@@ -252,14 +253,14 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('results_poolplay_2016')}">POOL PLAY</a></li>
-            <li><a href="{$this->generateUrl('results_medalround_2016')}">MEDAL ROUND</a></li>
-            <li><a href="{$this->generateUrl('results_sportsmanship_2016')}">SPORTSMANSHIP</a></li>
+            <li><a href="{$this->generateUrl('results_poolplay_2017')}">POOL PLAY</a></li>
+            <li><a href="{$this->generateUrl('results_medalround_2017')}">MEDAL ROUND</a></li>
+            <li><a href="{$this->generateUrl('results_sportsmanship_2017')}">SPORTSMANSHIP</a></li>
 EOT;
         if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
             $html .=
 <<<EOT
-            <li><a href="{$this->generateUrl('results_final_2016')}">FINAL STANDINGS</a></li>
+            <li><a href="{$this->generateUrl('results_final_2017')}">FINAL STANDINGS</a></li>
 EOT;
         }
             
@@ -322,13 +323,13 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_official_2016')}">REQUEST ASSIGNMENTS</a></li>
+            <li><a href="{$this->generateUrl('schedule_official_2017')}">REQUEST ASSIGNMENTS</a></li>
 EOT;
 
         if ($this->isGranted('ROLE_ASSIGNOR')) {
             $html .=
 <<<EOT
-            <li><a href="{$this->generateUrl('schedule_assignor_2016')}">ASSIGNOR SCHEDULE</a></li>
+            <li><a href="{$this->generateUrl('schedule_assignor_2017')}">ASSIGNOR SCHEDULE</a></li>
 EOT;
         }
 
@@ -352,7 +353,7 @@ EOT;
         <ul class="dropdown-menu">
           <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
           <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS & AVAILABILITY</a></li>
-          <li><a href="{$this->generateUrl('schedule_my_2016')}">MY SCHEDULE</a></li>
+          <li><a href="{$this->generateUrl('schedule_my_2017')}">MY SCHEDULE</a></li>
           <li><a href="{$this->generateUrl('reg_person_persons_update')}">MY CREW</a></li>
           <li><a href="{$this->generateUrl('reg_person_teams_update')}">MY TEAMS</a></li>
         </ul>

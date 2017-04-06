@@ -20,7 +20,9 @@ parameters:
         abbv:    "AOC2016"
         title:   "AYSO National Open Cup 2017"
         desc:    "AYSO National Open Cup 2017 - Lancaster, California - July 12th to July 16th"
-        prefix:  'NatGames2016'
+        prefix:  'NatOpenCup2017'
+        welcome: 'AYSO WELCOMES YOU TO LANCASTER, CALIFORNIA, JULY 12-16, 2017'
+        website: 'http://aysonationalopencup.org/'
 
         regYear: 'MY2016'
 
@@ -45,11 +47,11 @@ parameters:
         administrator:
             name:  "Tom Bobadilla"
             email: "thomasbobadilla@ayso.org"
-            subject: "Question for NG Referee Administrator"
+            subject: "Question for the Referee Administrator"
             phone:  562-547-4457
 
         system:
-            name:  "Zayso Admin"
+            name:  "zAYSO Admin"
             email: "noreply@zayso.org"
             phone:  ""
 

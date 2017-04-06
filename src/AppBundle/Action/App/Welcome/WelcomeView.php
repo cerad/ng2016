@@ -32,7 +32,7 @@ class WelcomeView extends AbstractView2
     {
         $content = <<<EOT
   <div id="welcome">
-    <legend>Welcome to the AYSO National Games 2016</legend>
+    <legend>Welcome to the {$this->project['title']}</legend>
   </div>
   {$this->renderNotes()}      
   {$this->renderUser()}
@@ -58,21 +58,21 @@ EOT;
 }
         $html .= <<<EOT
 <p>
-  If you officiated at the 2012 National Games in Tennesee or 2014 National Games in Southern California, 
-  you can simply sign in below and update your plans for the 2016 National Games.
+  If you officiated at the National Games in 2012, 2014 or 2016, 
+  you can simply sign in below and update your plans for the 2017 National Open Cup.
   If you need help remembering your password, 
   you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.
 </p>
 <br/>
 <p>
-  If this is your first time to the National Games (you are in for a treat), 
+  If this is your first time to a National event, 
   <a href="{$this->generateUrl('user_create')}">click here to create a new zAYSO account</a> 
   and start the registration process to referee or volunteer.
 </p>
 <br/>
 <p>
-    If you have previously registered on Blue Sombrero or WooFoo, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.
-    If you still need help, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a>.
+    If you have previously registered on WooFoo, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.
+    If you still need help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a>.
 </div>
 EOT;
 

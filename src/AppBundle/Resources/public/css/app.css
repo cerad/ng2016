@@ -518,3 +518,8 @@ table.person-update-form td { height: 34px; }
 .rainedout-logo-show { margin-right: 30px }
 .rainedout_logo { display: none }
 .rainedout-logo-menu { height: 2.2em; margin-top: -4px; }
+
+.subtitle {
+    margin-top: 20px;
+    text-align: center;
+}

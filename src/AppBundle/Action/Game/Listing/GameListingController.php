@@ -4,7 +4,7 @@ namespace AppBundle\Action\Game\Listing;
 use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Game\GameFinder;
-use AppBundle\Action\Results2016\ResultsFinder;
+use AppBundle\Action\Results\ResultsFinder;
 use Symfony\Component\HttpFoundation\Request;
 
 class GameListingController extends AbstractController2

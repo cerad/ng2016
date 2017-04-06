@@ -21,7 +21,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2016'
+            - '@schedule_finder_2017'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -30,7 +30,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2016'
+            - '@schedule_finder_2017'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -39,7 +39,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2016'
+            - '@schedule_finder_2017'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -48,7 +48,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2016'
+            - '@schedule_finder_2017'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -57,7 +57,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2016'
+            - '@schedule_finder_2017'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 

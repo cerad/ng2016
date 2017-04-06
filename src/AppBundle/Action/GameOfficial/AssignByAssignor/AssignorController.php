@@ -39,7 +39,7 @@ class AssignorController extends AbstractController2
             $session->set($sessionKey,$request->query->get('back'));
             return $redirect;
         }
-        $backRouteName = 'schedule_assignor_2016'; // Inject or results link
+        $backRouteName = 'schedule_assignor_2017'; // Inject or results link
         if ($session->has($sessionKey)) {
             $backRouteName = $session->get($sessionKey);
         }

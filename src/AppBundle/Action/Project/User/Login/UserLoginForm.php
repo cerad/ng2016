@@ -64,14 +64,16 @@ EOT;
     <button type="submit" class="btn btn-sm btn-primary submit" tabIndex="3">
       <span class="glyphicon glyphicon-edit"></span> Sign In
     </button>
+    <!--
     <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
-      <!--<span class="glyphicon glyphicon-edit"></span>-->
+      <span class="glyphicon glyphicon-edit"></span>
       Sign In (Google)
     </a>
     <a href="{$loginFacebook}" class="btn btn-sm btn-default btn-provider" role="button">
-      <!--<span class="glyphicon glyphicon-edit"></span>-->
+      <span class="glyphicon glyphicon-edit"></span>
       Sign In (Facebook)
     </a>
+    -->
   </div>
 </form>
 EOT;

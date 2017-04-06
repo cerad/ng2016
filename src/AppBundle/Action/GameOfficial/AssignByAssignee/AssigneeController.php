@@ -5,9 +5,9 @@ use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\GameOfficial\GameOfficialUpdater;
-use AppBundle\Action\GameReport2016\GameReport;
-use AppBundle\Action\GameReport2016\GameReportRepository;
-use AppBundle\Action\GameReport2016\GameReportPointsCalculator;
+use AppBundle\Action\GameReport\GameReport;
+use AppBundle\Action\GameReport\GameReportRepository;
+use AppBundle\Action\GameReport\GameReportPointsCalculator;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +42,7 @@ class AssigneeController extends AbstractController2
             $session->set($sessionKey,$request->query->get('back'));
             return $redirect;
         }
-        $backRouteName = 'schedule_official_2016'; // Inject or results link
+        $backRouteName = 'schedule_official_2017'; // Inject or results link
         if ($session->has($sessionKey)) {
             $backRouteName = $session->get($sessionKey);
         }
