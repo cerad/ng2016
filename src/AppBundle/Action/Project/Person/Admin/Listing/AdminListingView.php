@@ -233,7 +233,7 @@ EOD;
 
         return <<<EOD
 <table>
-  <tr><td>Avail Wednesday</td><td>{$personView->availWed}     </td></tr>
+<!--  <tr><td>Avail Wednesday</td><td>{$personView->availWed}     </td></tr> -->
   <tr><td>Avail Thursday </td><td>{$personView->availThu}     </td></tr>
   <tr><td>Avail Friday   </td><td>{$personView->availFri}     </td></tr>
   <tr><td>Avail Sat Morn </td><td>{$personView->availSatMorn} </td></tr>

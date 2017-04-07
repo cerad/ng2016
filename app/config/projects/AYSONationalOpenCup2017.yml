@@ -200,7 +200,7 @@ parameters:
       willCoach:     { group: plans }
       shirtSize: {}
 
-      availWed:      { group: avail }
+#      availWed:      { group: avail }
       availThu:      { group: avail }
       availFri:      { group: avail }
       availSatMorn:  { group: avail }
@@ -325,12 +325,12 @@ parameters:
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
 
-        availWed:
-            type:    select
-            label:   Available Wednesday (Soccerfest)
-            default: no
-            choices: { no: No, yes: Yes, maybe: Maybe}
-
+#        availWed:
+#            type:    select
+#            label:   Available Wednesday (Soccerfest)
+#            default: no
+#            choices: { no: No, yes: Yes, maybe: Maybe}
+#
         availThu:
             type:    select
             label:   Available Thursday (Pool Play)

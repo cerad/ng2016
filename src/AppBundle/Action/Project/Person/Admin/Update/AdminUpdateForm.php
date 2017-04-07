@@ -428,7 +428,7 @@ EOD;
     {
         $avail = isset($personView->person->avail);
         
-        $availWed       = $avail ? strtolower($personView->availWed) == 'yes' : false;
+//        $availWed       = $avail ? strtolower($personView->availWed) == 'yes' : false;
         $availThu       = $avail ? strtolower($personView->availThu) == 'yes' : false;
         $availFri       = $avail ? strtolower($personView->availFri) == 'yes' : false;
         $availSatMorn   = $avail ? strtolower($personView->availSatMorn) == 'yes' : false;
@@ -440,7 +440,7 @@ EOD;
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Availability Information</h1>
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Soccerfest)</label>
+<!--      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Soccerfest)</label> -->
       <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" {$this->isChecked($availThu)}>Available Thu (Pool Play)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" {$this->isChecked($availFri)}>Available Fri (Pool Play)</label>
     </div>    
