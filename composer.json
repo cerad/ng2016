@@ -2,7 +2,7 @@
     "name": "cerad/ng2016",
     "license": "MIT",
     "type": "project",
-    "description": "AYSO National Games 2016",
+    "description": "AYSO National Open Cup 2017",
     "autoload": {
         "psr-4": { "": "src/", "Cerad\\Bundle\\": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
