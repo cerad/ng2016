@@ -27,28 +27,28 @@ parameters:
         regYear: 'MY2016'
 
         support:
-            name: "Art Hundiak"
-            email: "ahundiak@gmail.com"
+            name:  "Tom Bobadilla"
+            email: "thomasbobadilla@ayso.org"
             subject: "AOC2017 zAYSO question..."
-            phone: 256-457-5943
+            phone: 562-547-4457
               
         schedules:
-            name: "Rick Roberts"
-            email: "web.aoc2017@gmail.com"
+            name: "Andy Price"
+            email: "andyprice@ayso.org"
             subject: "AOC2017 schedule question..."
-            phone: 310-920-8209
+            phone: 310-529-3120
             
         assignor:
             name:  "Tom Bobadilla"
             email: "thomasbobadilla@ayso.org"
             subject: "Referee Assignments"
-            phone:  562-547-4457
+            phone: 562-547-4457
 
         administrator:
             name:  "Tom Bobadilla"
             email: "thomasbobadilla@ayso.org"
             subject: "Question for the Referee Administrator"
-            phone:  562-547-4457
+            phone: 562-547-4457
 
         system:
             name:  "zAYSO Admin"
