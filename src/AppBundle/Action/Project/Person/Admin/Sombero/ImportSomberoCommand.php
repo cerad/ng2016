@@ -117,7 +117,7 @@ class ImportSomberoCommand extends Command
         'bmacy@bak.rr.com'          => ['Brenda Fitzpatrick','Brigid Macy'],
         'bobby_csi@sbcglobal.net'   => ['Robert Orozco',     'Samantha Orozco'],
     ];
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2017';
 
     private function importRow($row)
     {

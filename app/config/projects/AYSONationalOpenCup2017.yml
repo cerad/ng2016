@@ -56,11 +56,10 @@ parameters:
             phone:  ""
 
         dates:
-            - '2016-07-12' # Wed Pool Play
-            - '2016-07-13' # Thu Pool Play
-            - '2016-07-14' # Fri Pool Play
-            - '2016-07-15' # Sat Pool Play and Quarter Finals
-            - '2016-07-16' # Sun Semi and Finals
+            - '2017-07-13' # Thu Pool Play
+            - '2017-07-14' # Fri Pool Play
+            - '2017-07-15' # Sat Pool Play and Quarter Finals
+            - '2017-07-16' # Sun Semi and Finals
 
         programs:
             Core: Core

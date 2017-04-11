@@ -43,7 +43,7 @@ class InitGames2016Command extends Command
         echo sprintf("Init Games NG2016 Completed.\n");
     }
 
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2017';
     private $programs  = ['Core'];
     private $genders   = ['B', 'G'];
     private $ages      = ['U10', 'U12', 'U14', 'U16', 'U19'];

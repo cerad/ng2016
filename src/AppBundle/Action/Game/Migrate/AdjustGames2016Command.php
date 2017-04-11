@@ -24,7 +24,7 @@ class AdjustGames2016Command extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2017';
 
     public function __construct(
         Connection $ng2016GamesConn,
