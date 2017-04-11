@@ -50,6 +50,12 @@ parameters:
             subject: "Question for the Referee Administrator"
             phone: 562-547-4457
 
+        feedback:
+            name:  "AOC Web Team"
+            email: "feedback.aoc2017@gmail.com"
+            subject: "Feedback for the team"
+            phone: ""
+
         system:
             name:  "zAYSO Admin"
             email: "noreply@zayso.org"

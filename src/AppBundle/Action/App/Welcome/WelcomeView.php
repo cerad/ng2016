@@ -102,7 +102,7 @@ EOD;
             Once you create an account, you will be able to modify your information and availability.
         </li>
         <li>
-            If you have comments or suggestions, please submit them by <a href="mailto:feedback.ng2016@gmail.com?subject=Registration %20Feedback" target="_top">clicking here</a>.  Thank you for your support.
+            If you have comments or suggestions, please submit them by <a href="mailto:{$this->project['feedback']['email']}?subject={$this->project['feedback']['subject']}" target="_top">clicking here</a>.  Thank you for your support.
         </li>
      </ul>
     </div>
