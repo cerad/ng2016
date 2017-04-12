@@ -4,17 +4,11 @@ AYSO Open Cup 2017
 Install
 --------------
 
-Use composer install (as oppsoed to update) to install or update.  
+Use composer install (as opposed to update) to install or update.  
 This ensures that composer.lock will be used which in turn means that the same software versions will be used.
 
 Changes from ng2016
 --------------
-
-Renamed the Action directory to Module.
-
-Using the Action Domain Responder nomenclature. 
-https://github.com/pmjones/adr
-So Controller renamed to Action and View renamed to Responder.
 
 Thought about moving the various module services files to app/config/services per the docs.
 This would avoid the need for the DI extension.
@@ -36,7 +30,7 @@ For ng2016 had a bewildering set of abstract controller/view/form classes.
 Trying to clean it up.
 
 Have an ActionTrait which in turn uses RouteTrait and SecurityTrait.
-Added setter injections for rthe required services.
+Added setter injections for the required services.
 Might want a LoggerTrait as well later.
 
 Reused the RouteTrait and SecurityTrait for the KernelListener.
