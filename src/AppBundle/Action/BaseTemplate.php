@@ -100,6 +100,7 @@ EOT;
       <p> zAYSO - For assistance contact {$this->project['administrator']['name']} at
       <a href="mailto:{$this->project['administrator']['email']}?subject={$this->project['administrator']['subject']}">{$this->project['administrator']['email']}</a>
       or {$this->project['administrator']['phone']} </p>
+      <p>Version {{version}}</p>
     </div>
     
 				<div class="clear-both"></div>

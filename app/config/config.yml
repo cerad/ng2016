@@ -40,7 +40,9 @@ framework:
     assets: ~
 
 # Twig Configuration
-#twig:
+twig:
+    globals:
+        version: '2017.04.12.01'
 #    debug:            "%kernel.debug%"
 #    strict_variables: "%kernel.debug%"
 #    paths:
