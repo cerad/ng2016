@@ -3,7 +3,7 @@ namespace AppBundle\Action;
 
 class BaseTemplate extends AbstractTemplate
 {
-    protected $title = 'NG2016';
+    protected $title = null;
     protected $content = null;
 
     private $showHeaderImage;
@@ -19,6 +19,7 @@ class BaseTemplate extends AbstractTemplate
     public function setContent($content)
     {
         $this->content = $content;
+        $this->title = $this->project['abbv'];
     }
     public function render()
     {
@@ -69,7 +70,7 @@ EOT;
 <<<EOT
     <div id="banner">
           <h1>
-          <a href="http://aysonationalopencup.org/" target="_blank"><img src="/images/National_Open_Cup.png" height="30" alt="National Games"></a>     
+          <a href="{$this->project['website']}" target="_blank"><img src="{$this->project['logo']}" height="36" alt="{$this->project['shortTitle']}"></a>     
           {$this->escape($this->project['title'])}
           </h1>
     </div>

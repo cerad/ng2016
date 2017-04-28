@@ -19,10 +19,15 @@ parameters:
 
         abbv:    "AOC2017"
         title:   "AYSO National Open Cup 2017"
+        shortTitle: "Open Cup"
         desc:    "AYSO National Open Cup 2017 - Lancaster, California - July 12th to July 16th"
         prefix:  'NatOpenCup2017'
         welcome: 'AYSO WELCOMES YOU TO LANCASTER, CALIFORNIA, JULY 12-16, 2017'
         website: 'http://aysonationalopencup.org/'
+        logo:    '/images/National_Open_Cup.png'
+        firstDay: 'Wednesday, July 12'
+        lastDay: 'Sunday, July 16'
+        calendarLink: 'http://aysonationalopencup.org/national-open-cup-schedule/'
 
         regYear: 'MY2016'
 

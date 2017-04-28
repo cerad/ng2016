@@ -51,7 +51,7 @@ EOT;
   If you just want to peruse the Schedules and Results, no need to go any further.  
   You do not need to sign-in to access Schedules or Results above.  To volunteer, you will need to <a href="{$this->generateUrl('user_create')}">create a zAYSO account</a>.
   In either case, you should
-<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to AYSO National Games 2016 text alerts on RainedOut</a>. 
+<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to {$this->project['title']} text alerts on RainedOut</a>. 
 </p>
 <br/>
 EOT;
@@ -59,7 +59,7 @@ EOT;
         $html .= <<<EOT
 <p>
   If you officiated at the National Games in 2012, 2014 or 2016, 
-  you can simply sign in below and update your plans for the 2017 National Open Cup.
+  you can simply sign in below and update your plans for the {$this->project['title']}.
   If you need help remembering your password, 
   you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.
 </p>

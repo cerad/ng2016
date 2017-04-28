@@ -20,6 +20,8 @@ class RegisterController extends AbstractController2
 
     private $refereeBadgeUser;
 
+    private $project;
+
     public function __construct(
         RegisterForm              $registerForm,
         ProjectPersonRepositoryV2 $projectPersonRepository,
@@ -37,6 +39,8 @@ class RegisterController extends AbstractController2
     }
     public function __invoke(Request $request)
     {
+        $this->project = $this->getCurrentProjectInfo();
+
         $projectPerson = $this->findProjectPersonForUser($this->getUser());
 
         $projectPersonArray = $projectPerson->toArray();
@@ -217,7 +221,11 @@ class RegisterController extends AbstractController2
             return $projectPerson;
         }
         // Search previous tournaments
-        $projectPerson = $projectPersonRepository->find('AYSONationalGames2014',$personKey);
+        $projectPerson = $projectPersonRepository->find('AYSONationalGames2016',$personKey);
+
+        if (!$projectPerson) {
+            $projectPerson = $projectPersonRepository->find('AYSONationalGames2014', $personKey);
+        }
 
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->find('AYSONationalGames2012',$personKey);
@@ -276,15 +284,15 @@ class RegisterController extends AbstractController2
         $assignor = $projectInfo['assignor'];
         $refAdmin = $projectInfo['administrator'];
         
-        $update = $person['id'] ? ' Update' : null;
+        $update = $person['id'] ? 'Update' : null;
 
-        $subject = sprintf('[NG2016] Registration%s for: %s',$update,$person['name']);
+        $subject = sprintf("[{$this->project['abbv']}] Registration %s for: %s",$update,$person['name']);
 
         $html = $this->templateEmail->renderHtml($person);
 
         $toms = [
             $refAdmin['email'] => $refAdmin['name'], // Tom B
-            $assignor['email'] => $assignor['name'], // Tom T
+            $assignor['email'] => $assignor['name'], // Tom B
         ];
 
         $mailer = $this->getMailer();

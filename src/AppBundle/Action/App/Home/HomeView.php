@@ -283,7 +283,7 @@ EOD;
 <div id="notes">
   <legend>Thank you for registering to Volunteer at the {$this->project['title']}!</legend>
   <p>
-    Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games.
+    Review your plans for the {$this->project['title']} to ensure we understand your availability and the roles you expect to play during this event.
     </p>
     <p>
     Update your plans and availability at any time.
@@ -322,7 +322,7 @@ EOT;
         return
 <<<EOT
 <legend>Referee Hotel Discounts</legend>
-<p>Discounted hotel rates (double occupancy) are now available for the AYSO National Games 2016. </p>
+<p>Discounted hotel rates (double occupancy) are now available for the {$this->project['title']}. </p>
 <ul class="cerad-common-help ul_bullets">
 <li><a href="http://www.innatboyntonbeach.com/" target="_blank">Inn at Boynton Beach</a> at $65 per night using the code AYSO1660008. This hotel will feature complimentary breakfast.</li>
 <li><a href="http://www.hipalmbeachairport.com/" target="_blank">Holiday Inn West Palm Beach Airport</a> at $93 per night plus tax using the code AYSO1660008.</li>
