@@ -3,18 +3,19 @@ namespace AppBundle\Action;
 
 class BaseTemplate extends AbstractTemplate
 {
-    protected $title = 'NG2016';
     protected $content = null;
+    protected $version = null;
 
     private $showHeaderImage;
     private $showResultsMenu;
     private $showFinalResults;
     
-    public function __construct($showHeaderImage,$showResultsMenu,$showFinalResults)
+    public function __construct($showHeaderImage,$showResultsMenu,$showFinalResults,$version)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
+        $this->version = $version;
     }
     public function setContent($content)
     {
@@ -100,6 +101,7 @@ EOT;
       <p> zAYSO - For assistance contact {$this->project['administrator']['name']} at
       <a href="mailto:{$this->project['administrator']['email']}?subject={$this->project['administrator']['subject']}">{$this->project['administrator']['email']}</a>
       or {$this->project['administrator']['phone']} </p>
+      <p>Version {$this->version}</p>
     </div>
     
 				<div class="clear-both"></div>

@@ -21,6 +21,7 @@ services:
             - '%show_header_image%'
             - '%show_results_menu%'
             - '%show_final_results%'
+            - '%app_version%'
 
     abstract_form:
         abstract: true
