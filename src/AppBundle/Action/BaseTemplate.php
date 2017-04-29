@@ -100,7 +100,7 @@ EOT;
     <div class="cerad-footer">
       <br />
       <hr>
-      <p> zAYSO - For assistance contact {$this->project['administrator']['name']} at
+      <p>For assistance contact {$this->project['administrator']['name']} at
       <a href="mailto:{$this->project['administrator']['email']}?subject={$this->project['administrator']['subject']}">{$this->project['administrator']['email']}</a>
       or {$this->project['administrator']['phone']} </p>
       <p>Version {$this->version}</p>
