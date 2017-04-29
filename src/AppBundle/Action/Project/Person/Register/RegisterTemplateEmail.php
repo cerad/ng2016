@@ -10,6 +10,8 @@ class RegisterTemplateEmail extends AbstractView2
 {
     private $projectPersonViewDecorator;
 
+    private $project;
+
     /* define inline styling for gmail */
     protected $styleSkHeader = '
         position: relative;
@@ -60,6 +62,8 @@ class RegisterTemplateEmail extends AbstractView2
 
     public function renderHtml($personArray)
     {
+        $this->project = $this->getCurrentProjectInfo();
+
         $person = new ProjectPerson();
         $person = $person->fromArray($personArray);
         $personView = $this->projectPersonViewDecorator;
@@ -70,18 +74,18 @@ class RegisterTemplateEmail extends AbstractView2
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
 </head>
 <body style="{$this->styleBodyEmail}" >
-  <center>
+  <div style="align-content: center">
     <div style="{$this->styleSkHeader}">
       <h1>
-          <img src="http://ng2016.zayso.org/images/header-ipad_01.png" width="70%">
+          <img src="http://aoc2017.zayso.org/images/header-ipad_01.png" width="70%">
       </h1>
     </div>
     <br>
-    <p style="{$this->styleSkFontEmail}">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</p>
+    <p style="{$this->styleSkFontEmail}">{$this->project['welcome']}</p>
     <div style="{$this->styleClearBoth}"></div>
-  </center>
+  </div>
   <hr>
-  <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the 2016 National Games!</p>
+  <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the {$this->project['title']}!</p>
   <br>
   {$this->renderHtmlPerson($personView)}
 
@@ -89,18 +93,17 @@ class RegisterTemplateEmail extends AbstractView2
     
     <p style="{$this->styleP}">
       I will provide additional updates in the coming weeks. 
-      Please drop me a note if you have any questions about officiating at the Games or with suggestions you have on how we can 
+      Please drop me a note if you have any questions about officiating at the {$this->project['shortTitle']} or with suggestions you have on how we can 
       better communicate the information you need.
     </p>
 
-    <p style="{$this->styleP}">I look forward to meeting you at the Games.</p>
+    <p style="{$this->styleP}">I look forward to meeting you at the {$this->project['shortTitle']}.</p>
 
     <p style="{$this->styleP}">Sincerely,</p>
     
-    <p style="{$this->styleP}">Tom Bobadilla<br>
-      National Referee Administrator<br>
-      2016 National Games Referee Administrator<br>
-      <a href="mailto:ThomasBobadilla@ayso.org?subject=Question%20about%20the%202016%20National%Games">ThomasBobadilla@ayso.org</a>
+    <p style="{$this->styleP}">{$this->project['administrator']['name']}<br>
+      Referee Administrator / {$this->project['title']}<br>
+      <a href="mailto:{$this->project['administrator']['email']}?subject=Question%20about%20the%20{$this->project['title']}">{$this->project['administrator']['email']}</a>
     </p>
 </body>
 </html>
@@ -112,14 +115,13 @@ EOD;
     General Information
   </p>
   <p style="{$this->styleP}">
-    As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 5 and 
-    running through Sunday, July 10. 
-    On Tuesday, July 5, 2016, we will have a mandatory meeting for Coaches and Referees at the 
-    <a href="http://www3.hilton.com/en/hotels/florida/hilton-west-palm-beach-PBIWPHH/index.html" target="_blank">Hilton West Palm Beach</a> 
-    to provide information to all coaches and referees on how to have a successful National Games. 
+    As you might expect, we have a full calendar of soccer and related activities starting {$this->project['firstDay']} and 
+    running through {$this->project['lastDay']}. 
+    On {$this->project['firstDay']}, we will have a mandatory meeting for Coaches and Referees on site 
+    to provide information to all volunteers on how to have a successful {$this->project['shortTitle']}. 
     We will review important roles, procedures, safety and more! You will also receive your coach and referee bags at this meeting.
-    A full calendar may be viewed at <a href="http://aysonationalgames.org/schedule-of-events/" target="_blank">National Games Calendar</a>.
-    General information about the Games can be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>.
+    A full calendar may be viewed at <a href="{$this->project['calendarLink']}" target="_blank">{$this->project['shortTitle']} Calendar</a>.
+    General information about the {$this->project['shortTitle']} can be found at <a href="{$this->project['website']}" target="_blank">{$this->project['shortTitle']} website</a>.
     </p>
 EOT;
     } 
@@ -181,7 +183,7 @@ EOD;
 
 <p style="{$this->styleP}">
     This training takes about 30-60 minutes.  Please take time today and complete this training.
-    When it's done, your records will be updated and you'll be ready to join us at the National Games.
+    When it's done, your records will be updated and you'll be ready to join us at the {$this->project['title']}.
 </p>
 EOT;
     }
@@ -205,7 +207,7 @@ EOT;
     AYSO Concussion Awareness
   </p>
 <p style="{$this->styleP}">
-    By Florida law, all participating referees and coaches are required to have completed CDC Concussion Awareness training.
+    By California law, all participating administrators and coaches are required to have completed CDC Concussion Awareness training.  It is strongly recommended for Referees as well.
     If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
     with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
 </p>
