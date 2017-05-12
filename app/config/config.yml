@@ -3,6 +3,8 @@ imports:
     - { resource: doctrine.yml   }
     - { resource: security.yml   }
     - { resource: services.yml   }
+    - { resource: '@AppBundle/Action/Physical/Ayso/services.yml' }
+    - { resource: '@CeradAysoBundle/services.yml' }
     - { resource: users.yml      }
     - { resource: providers.yml  }
     - { resource: projects.yml   }

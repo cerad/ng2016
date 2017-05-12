@@ -1,0 +1,34 @@
+services:
+
+    cerad.ayso.connection:
+        alias: doctrine.dbal.ayso_connection
+
+    cerad.ayso.finder:
+        class: Cerad\Bundle\AysoBundle\AysoFinder
+        arguments: ['@cerad.ayso.connection']
+
+#    ayso_load_eayso_command:
+#        class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - '@ayso_connection'
+
+#    ayso_load_tom_command:
+#        class: AppBundle\Action\Physical\Ayso\Load\LoadTomCommand
+#        tags: [{ name: console.command }]
+#        arguments: ['@ayso_connection']
+
+#    ayso_load_orgs_command:
+#        class: AppBundle\Action\Physical\Ayso\Load\LoadOrgsCommand
+#        tags: [{ name: console.command }]
+#        arguments: ['@ayso_connection']
+
+    cerad.ayso.region_key_transformer:
+        class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionKeyTransformer
+
+    cerad.ayso.volunteer_key_transformer:
+        class:  Cerad\Bundle\AysoBundle\DataTransformer\VolunteerKeyTransformer
+
+    cerad.ayso.region_to_sar_transformer:
+        class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer
+        arguments: ['@cerad.ayso.finder']

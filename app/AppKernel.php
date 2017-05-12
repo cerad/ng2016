@@ -16,7 +16,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             //new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             //new Cerad\Bundle\UserBundle\CeradUserBundle(),
-            //new \Cerad\Bundle\ProjectBundle\CeradProjectBundle(),
+            new \Cerad\Bundle\AysoBundle\CeradAysoBundle(),
             new AppBundle\AppBundle(),
         ];
 
