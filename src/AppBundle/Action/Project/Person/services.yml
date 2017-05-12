@@ -12,8 +12,8 @@ services:
         class: AppBundle\Action\Project\Person\ProjectPersonViewDecorator
         arguments:
             - '@phone_transformer'
-            - '@ayso_volunteer_key_transformer'
-            - '@ayso_region_to_sar_transformer'
+            - '@cerad.ayso.volunteer_key_transformer'
+            - '@cerad.ayso.region_to_sar_transformer'
             - '@project_person_will_referee_transformer'
 
 # ==========================================================================
@@ -25,7 +25,7 @@ services:
         arguments:
             - '@project_person_register_form'
             - '@project_person_repository_v2'
-            - '@ayso_repository'
+            - '@cerad.ayso.finder'
             - '%app_home_route%'
             - '@project_person_register_template_email'
 

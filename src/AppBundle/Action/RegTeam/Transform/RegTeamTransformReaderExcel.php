@@ -2,7 +2,7 @@
 
 namespace AppBundle\Action\RegTeam\Transform;
 
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\Common\ExcelReaderTrait;
 
 class RegTeamTransformReaderExcel
@@ -14,7 +14,7 @@ class RegTeamTransformReaderExcel
     private $regionFinder;
 
     public function __construct(
-        PhysicalAysoRepository $regionFinder
+        AysoFinder $regionFinder
     )
     {
         $this->regionFinder = $regionFinder;

@@ -95,7 +95,7 @@ services:
     reg_team_import_reader_excel:
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
         arguments:
-            - '@ayso_repository'
+            - '@cerad.ayso.finder'
 
     reg_team_import_updater:
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportUpdater
@@ -112,7 +112,7 @@ services:
     reg_team_transform_reader_excel:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformReaderExcel
         arguments:
-            - '@ayso_repository'
+            - '@cerad.ayso.finder'
 
     reg_team_transform_writer_excel:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformWriterExcel

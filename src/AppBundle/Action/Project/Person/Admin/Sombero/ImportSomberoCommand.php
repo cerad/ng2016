@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Action\Project\Person\Admin\Sombero;
 
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 use AppBundle\Action\User\UserManager;
@@ -11,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 
 class ImportSomberoCommand extends Command
 {
@@ -24,7 +24,7 @@ class ImportSomberoCommand extends Command
         UserManager $userManager,
         Connection  $regPersonConn,
         ProjectPersonRepositoryV2 $regPersonRepository,
-        PhysicalAysoRepository $aysoFinder,
+        AysoFinder $aysoFinder,
         PhoneTransformer $phoneTransformer
     )
     {

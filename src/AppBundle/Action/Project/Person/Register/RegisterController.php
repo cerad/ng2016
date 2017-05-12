@@ -3,7 +3,7 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractController2;
 
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RegisterController extends AbstractController2
 {
     private $registerForm;
-    private $fedRepository;
+    private $fedFinder;
     private $projectPersonRepository;
 
     private $successRouteName;
@@ -25,13 +25,13 @@ class RegisterController extends AbstractController2
     public function __construct(
         RegisterForm              $registerForm,
         ProjectPersonRepositoryV2 $projectPersonRepository,
-        PhysicalAysoRepository    $fedRepository,
+        AysoFinder                $fedFinder,
                                   $successRouteName,
         RegisterTemplateEmail     $templateEmail
     )
     {
         $this->registerForm            = $registerForm;
-        $this->fedRepository           = $fedRepository;
+        $this->fedFinder               = $fedFinder;
         $this->projectPersonRepository = $projectPersonRepository;
         
         $this->successRouteName = $successRouteName;
@@ -86,7 +86,7 @@ class RegisterController extends AbstractController2
         $fedKey = $projectPerson->fedKey;
 
         // Probably only want to do this if aysoid has changed
-        $vol = $this->fedRepository->findVol($fedKey);
+        $vol = $this->fedFinder->findVol($fedKey);
         if ($vol) {
             $projectPerson->orgKey  = $vol['orgKey'];
             $projectPerson->regYear = $vol['regYear'];
@@ -126,7 +126,7 @@ class RegisterController extends AbstractController2
         $refereeCert = $projectPerson->getCert($certKey,true);
         $refereeCert->active = false;
 
-        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
 
         if ($cert) {
             $refereeCert->roleDate  = $cert['roleDate'];
@@ -150,7 +150,7 @@ class RegisterController extends AbstractController2
 
         $safeHavenCert->active = false;
 
-        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
 
         if ($cert) {
             $safeHavenCert->badge = $cert['badge'];
@@ -164,7 +164,7 @@ class RegisterController extends AbstractController2
 
         $concCert->active = false;
 
-        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
 
         if ($cert) {
             $concCert->badge = $cert['badge'];
@@ -197,7 +197,7 @@ class RegisterController extends AbstractController2
 
         $safeHavenCert->active = false;
 
-        $cert = $this->fedRepository->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
 
         if ($cert) {
             $safeHavenCert->badge = $cert['badge'];
@@ -244,9 +244,9 @@ class RegisterController extends AbstractController2
         $projectPerson->avail = [];
 
         $fedKey = $projectPerson->fedKey;
-        $fedRepository = $this->fedRepository;
+        $fedFinder = $this->fedFinder;
 
-        $vol = $fedRepository->findVol($fedKey);
+        $vol = $fedFinder->findVol($fedKey);
         if ($vol) {
             $projectPerson->orgKey  = $vol['orgKey'];
             $projectPerson->regYear = $vol['regYear'];
@@ -260,7 +260,7 @@ class RegisterController extends AbstractController2
             
             $projectPersonCert->clearId();
 
-            $cert = $fedRepository->findVolCert($fedKey, $certKey);
+            $cert = $fedFinder->findVolCert($fedKey, $certKey);
 
             if ($cert) {
                 $projectPersonCert->roleDate  = $cert['roleDate'];

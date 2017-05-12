@@ -14,7 +14,7 @@ services:
             - '@user_manager'
             - '@project_person_connection'
             - '@project_person_repository_v2'
-            - '@ayso_repository'
+            - '@cerad.ayso.finder'
             - '@phone_transformer'
 
     reg_person_manage_roles_command:

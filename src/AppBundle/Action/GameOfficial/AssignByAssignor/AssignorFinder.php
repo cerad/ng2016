@@ -3,21 +3,21 @@ namespace AppBundle\Action\GameOfficial\AssignByAssignor;
 
 use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
+use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Project\User\ProjectUser;
 use Doctrine\DBAL\Connection;
 
 class AssignorFinder
 {
-    private $orgFinder;
+    private $orgTransformer;
     private $regPersonConn;
 
     public function __construct(
         Connection $regPersonConn,
-        RegionToSarTransformer $orgFinder
+        RegionToSarTransformer $orgTransformer
     ) {
-        $this->orgFinder     = $orgFinder;
-        $this->regPersonConn = $regPersonConn;
+        $this->orgTransformer = $orgTransformer;
+        $this->regPersonConn  = $regPersonConn;
     }
     public function findCrew(ProjectUser $user, GameOfficial $gameOfficial)
     {
@@ -67,7 +67,7 @@ EOD;
 
             $regPersonId = $projectId . ':' . $row['phyPersonId'];
 
-            $orgView = $this->orgFinder->transform($row['orgId']);
+            $orgView = $this->orgTransformer->transform($row['orgId']);
 
             $desc = sprintf('%s -- %s -- %s',$row['name'],$row['refereeBadge'],$orgView);
 
