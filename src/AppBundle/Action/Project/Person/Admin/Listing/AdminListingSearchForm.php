@@ -69,7 +69,6 @@ class AdminListingSearchForm extends AbstractForm
             'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
             'VolIssues'     =>  'Volunteers with Issues',
-            'FL'            =>  'FL Residents'
         ];
         
         $name = $this->formData['name'];

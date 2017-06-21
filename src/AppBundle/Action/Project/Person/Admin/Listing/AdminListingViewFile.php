@@ -48,7 +48,6 @@ class AdminListingViewFile extends AbstractView
             'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
             'VolIssues'     =>  'Volunteers with Issues',
-            'FL'            =>  'FL Residents'
         ];
         
         $content = [];

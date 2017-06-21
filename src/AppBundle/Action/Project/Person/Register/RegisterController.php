@@ -281,6 +281,7 @@ class RegisterController extends AbstractController2
     {
         $projectInfo = $this->getCurrentProjectInfo();
         $support  = $projectInfo['support'];
+        $registration = $projectInfo['registration'];
         $assignor = $projectInfo['assignor'];
         $refAdmin = $projectInfo['administrator'];
         
@@ -314,7 +315,7 @@ class RegisterController extends AbstractController2
 
         $message->setBcc([
             $support['email'] => $support['name'],
-            'web.ng2016@gmail.com' => 'Rick Roberts', // ???
+            $registration['email'] => $registration['name'], // ???
         ]);
 
         /**  noinspection PhpParamsInspection */

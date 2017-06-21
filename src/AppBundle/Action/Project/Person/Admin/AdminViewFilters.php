@@ -71,27 +71,27 @@ class AdminViewFilters
                     }
                     break;
                 case 'FL':
-                case 'FL Residents':
-                    //get the state
-                    $stateArr = explode('/',$personView->orgKey);
-                    //check CERT_BACKGROUND_CHECK
-                    if (strpos($personView->orgKey, '/FL')) {
-                        // Background check for FL residents
-                        if (!$person->hasCert('CERT_BACKGROUND_CHECK')) {
-                            $certKey = 'CERT_BACKGROUND_CHECK';
-                            $concCert = $person->getCert($certKey,true);
-                    
-                            $concCert->active = true;
-                    
-                            $person->addCert($concCert);
-
-                            $this->projectPersonRepository->save($person);
-                        }
-
-                        $listPersons[] = $person;                        
-                    }
-                    
-                    break;
+//                case 'FL Residents':
+//                    //get the state
+//                    $stateArr = explode('/',$personView->orgKey);
+//                    //check CERT_BACKGROUND_CHECK
+//                    if (strpos($personView->orgKey, '/FL')) {
+//                        // Background check for FL residents
+//                        if (!$person->hasCert('CERT_BACKGROUND_CHECK')) {
+//                            $certKey = 'CERT_BACKGROUND_CHECK';
+//                            $concCert = $person->getCert($certKey,true);
+//
+//                            $concCert->active = true;
+//
+//                            $person->addCert($concCert);
+//
+//                            $this->projectPersonRepository->save($person);
+//                        }
+//
+//                        $listPersons[] = $person;
+//                    }
+//
+//                    break;
                 default:
                     $listPersons[] = $person;
                     break;

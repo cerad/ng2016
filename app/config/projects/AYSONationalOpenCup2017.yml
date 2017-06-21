@@ -61,6 +61,12 @@ parameters:
             subject: "Feedback for the team"
             phone: ""
 
+        registration:
+            name:  "AOC Web Team"
+            email: "web.aoc2017@gmail.com"
+            subject: "Registration"
+            phone: ""
+
         system:
             name:  "zAYSO Admin"
             email: "noreply@zayso.org"
