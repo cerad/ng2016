@@ -39,6 +39,7 @@ class AdminListingViewFile extends AbstractView
     public function __invoke(Request $request)
     {
         $projectPersons = $request->attributes->get('projectPersons');
+        $exportAll = !is_bool(strpos($request->getQueryString(), 'all'));
 
         $reportChoices = [
             'All'           =>  'All',
@@ -48,14 +49,22 @@ class AdminListingViewFile extends AbstractView
             'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
             'VolIssues'     =>  'Volunteers with Issues',
+            'AdultRefs'     =>  'Referees with Adult Experience'
         ];
-        
-        $content = [];
-        foreach($reportChoices as $reportKey => $report) {
-            $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons,$reportKey);
 
-            $content = array_merge($content, $this->generateResponse($listPersons, $report));        
+        if ($exportAll) {
+            $content = [];
+            foreach ($reportChoices as $reportKey => $report) {
+                $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $reportKey);
+                $content = array_merge($content, $this->generateResponse($listPersons, $report));
+            }
+        } else {
+            $reportKey = $request->attributes->get('reportKey');
+            $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $reportKey);
+            $report = $reportChoices[$reportKey];
+            $content = $this->generateResponse($listPersons, $report);
         }
+
         $content = $this->exporter->export($content);
 
         $response = new Response();
@@ -72,6 +81,7 @@ class AdminListingViewFile extends AbstractView
             array ('AYSO ID','projectKey','personKey','Name','eMail','Phone','Age',
                    'Approved','Verified', 'Created On',
                    'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
+                   'Adult Exp Yrs',
                    'Shirt Size','Notes',
                    'Will Coach', 'Will Referee', 'Will Volunteer', 'User Notes', 'Notes'
             )
@@ -98,6 +108,7 @@ class AdminListingViewFile extends AbstractView
                 $personView->refereeBadge,
                 $personView->safeHavenCertified,
                 $personView->concussionTrained,
+                $personView->adultExp,
                 $personView->shirtSize,
                 $personView->notes,
                 $personView->willCoach,

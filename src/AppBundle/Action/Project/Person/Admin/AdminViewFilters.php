@@ -39,7 +39,9 @@ class AdminViewFilters
                     break;
                 case 'Referees':
                     if (in_array($personView->willReferee, $yesMaybe)) {
-                        $listPersons[] = $person;
+                        if ( $personView->hasRoleReferee() ) {
+                            $listPersons[] = $person;
+                        }
                     }
                     break;
                 case 'Volunteers':
@@ -50,7 +52,7 @@ class AdminViewFilters
                 case 'RefIssues':
                 case 'Referees with Issues':
                     if (in_array($personView->willReferee, $yesMaybe)) {
-                        if ( $this->hasIssues($personView) ) {
+                        if ( $personView->hasCertIssues() OR !$personView->isCurrentMY()) {
                             $listPersons[] = $person;
                         }
                     }
@@ -70,7 +72,15 @@ class AdminViewFilters
                         }
                     }
                     break;
-                case 'FL':
+                case 'AdultRefs':
+                case 'Referees with Adult Experience':
+                    if (isset($person['roles']['ROLE_REFEREE'])) {
+                        if ($personView->hasAdultExp() /*AND $personView->approved */) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+//                case 'FL':
 //                case 'FL Residents':
 //                    //get the state
 //                    $stateArr = explode('/',$personView->orgKey);
@@ -97,7 +107,6 @@ class AdminViewFilters
                     break;
             }
         }
-        
         return $listPersons;
     }
     private function hasIssues(ProjectPersonViewDecorator $personView)

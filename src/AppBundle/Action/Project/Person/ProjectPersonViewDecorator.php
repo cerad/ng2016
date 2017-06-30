@@ -109,12 +109,29 @@ class ProjectPersonViewDecorator
     public function hasCertIssues()
     {
         $certs = $this->getCerts();
+        if(empty($certs)) {
+            return true;
+        }
         foreach($certs as $cert){
             if ( !$cert->verified) {
                 return true;
             }
         }
         return false;
+    }
+    public function isCurrentMY()
+    {
+        $regYearCurrent = is_bool(strpos($this->getRegYear($this->person->projectKey), '***'));
+        return $regYearCurrent;
+    }
+    public function hasRoleReferee() {
+        $role = $this->person->getRole('ROLE_REFEREE');
+
+        return !is_null($role);
+    }
+    public function hasAdultExp()
+    {
+        return 0 < $this->adultExp;
     }
     public function getRoleClass($role)
     {
@@ -221,7 +238,11 @@ class ProjectPersonViewDecorator
             case 'willVolunteer':
                 $will = isset($person->plans[$name]) ? $person->plans[$name] : null;
                 return ucfirst(strtolower($will));
-            
+
+            case 'adultExp':
+                $adultExp = isset($person->plans[$name]) ? $person->plans[$name] : null;
+                return $adultExp;
+
             case 'willRefereeBadge':
                 $willRefereeTransformer = $this->willRefereeTransformer;
                 return $willRefereeTransformer($person);

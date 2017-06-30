@@ -170,7 +170,7 @@ EOD;
     {
         $href = $this->generateUrl('project_person_admin_update',['projectPersonKey' => $personView->getKey()]);
 
-        $gage = $personView->gender . $personView->age;
+        $gage = $personView->gender . ' ' . $personView->age;
         return <<<EOD
 <table>
   <tr><td>Name  </td><td  class="admin-listing"><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
@@ -178,6 +178,7 @@ EOD;
   <tr><td>Phone </td><td>{$this->escape($personView->phone)} </td></tr>
   <tr><td>G Age</td><td> {$this->escape($gage)}</td></tr>
   <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
+  <tr><td>Adult Ref Exp</td><td>{$personView->adultExp} yrs</td></tr>
 </table>
 EOD;
 

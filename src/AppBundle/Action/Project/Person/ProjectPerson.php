@@ -23,6 +23,7 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
     public $dob;
     public $age;
     public $shirtSize;
+    public $adultExp;
 
     public $notes;
     public $notesUser;

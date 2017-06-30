@@ -180,6 +180,7 @@ EOD;
   <tr><td>Will Referee  </td><td>{$personView->willRefereeBadge}</td></tr>
   <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}   </td></tr>
   <tr><td>Will Coach    </td><td>{$personView->willCoach}       </td></tr>
+  <tr><td>Yrs Exp Officiating Adults</td><td>{$personView->adultExp}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
         Update My Plans or Availability
@@ -195,7 +196,7 @@ EOD;
             return null;
         }
         $personView = $this->projectPersonViewDecorator;
-        
+
         return
 <<<EOD
 <table class="tableClass">
@@ -296,10 +297,10 @@ EOD;
         $personView = $this->projectPersonViewDecorator;
 
         $isReferee = $personView->getCertBadge('CERT_REFEREE');
-        
+
         $html = null;
         if ($isReferee) {
-            $html = 
+            $html =
 <<<EOT
 <div id="clear-fix">
     <legend>Instructions for Referees</legend>
@@ -314,7 +315,7 @@ EOD;
 <hr>
 EOT;
         }
-        
+
         return $html;
     }
     private function renderHotelInformation()

@@ -55,7 +55,7 @@ class Provider
                 'Authorization'  => 'Bearer ' . $accessTokenData['access_token']
             ],
         ]);
-        $data = $this->getResponseData($guzzleResponse); var_dump($data);
+        $data = $this->getResponseData($guzzleResponse); //var_dump($data);
         $userInfoData = [];
         foreach($this->params['keys'] as $key) {
             $userInfoData[$key] = isset($data[$key]) ? $data[$key] : null;

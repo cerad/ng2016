@@ -64,10 +64,11 @@ class AdminListingSearchForm extends AbstractForm
         $reportChoices = [
             'All'           =>  'All',
             'Referees'      =>  'Referees',
-            'Volunteers'    =>  'Volunteers',
+            'AdultRefs'     =>  'Referees with Adult Experience',
             //'Unverified'    =>  'Unverified',
             'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
+            'Volunteers'    =>  'Volunteers',
             'VolIssues'     =>  'Volunteers with Issues',
         ];
         

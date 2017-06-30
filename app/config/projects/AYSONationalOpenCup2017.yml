@@ -214,6 +214,7 @@ parameters:
       willReferee:   { group: plans }
       willVolunteer: { group: plans }
       willCoach:     { group: plans }
+      adultExp:      { group: plans }
       shirtSize: {}
 
 #      availWed:      { group: avail }
@@ -271,6 +272,11 @@ parameters:
                 National_2:   National 2
                 Assistant:    Assistant
                 U8Official:   U8 Official
+
+        adultExp:
+            type:     integer # years
+            label:    Years experience refereeing adult games
+            default:  0
 
         shirtSize:
             type:    select
