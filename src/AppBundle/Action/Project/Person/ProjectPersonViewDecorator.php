@@ -240,7 +240,7 @@ class ProjectPersonViewDecorator
                 return ucfirst(strtolower($will));
 
             case 'adultExp':
-                $adultExp = isset($person->plans[$name]) ? $person->plans[$name] : null;
+                $adultExp = isset($person->plans[$name]) ? $person->plans[$name] : 0;
                 return $adultExp;
 
             case 'willRefereeBadge':
