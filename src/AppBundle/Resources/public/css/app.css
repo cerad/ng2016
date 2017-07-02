@@ -356,10 +356,8 @@ padding:0 10px;
 }
 
 table td {
-    height:inherit;
-    padding: 0 5px;
-    margin: 5px 0;
     word-wrap: break-word;
+    vertical-align: top;
 }
 
 table td p {
@@ -373,6 +371,8 @@ border:1px solid;
 table table {
 margin-left:0;
 margin-right:0;
+table-layout: fixed;
+width: 100%;
 }
 
 table.standings, table.results { min-width: 80%; }
@@ -498,10 +498,13 @@ td.admin-listing {
     width: 100px;
     display: inline-block;
     overflow: visible;
-    white-space: nowrap;
+    white-space: normal;
     margin:0;
-}
 
+}
+td.admin-listing.plans {
+    width: 20px;
+}
 .approved { margin-right: 20px; text-align: left }
 
 .schedule-search { width: inherit; min-width: 400px; padding-bottom: 10px; margin-left: auto; margin-right: auto; }
