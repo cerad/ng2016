@@ -256,7 +256,7 @@ EOD;
     <div class="form-group">
       <label class="col-xs-2 control-label" for="adultExp">Adult Ref Exp:</label>
       <input name="adultExp" type="text" class="col-xs-4 form-control" id="adultExp" value="{$this->escape($personView->adultExp)}">
-      <label class="col-xs-2 control-label">years</label>
+      <label class="col-xs-2 control-label text-left">years</label>
     </div>
     {$this->renderPanelFooter()}
 </div>
