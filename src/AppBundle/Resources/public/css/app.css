@@ -13,7 +13,7 @@ border:none;
 html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,dl,pre,address,variable,form,fieldset,blockquote,label,img {
 color:#000;
 font-family:Arial,'Trebuchet MS',sans-serif;
-font-size:medium;
+font-size:small;
 margin:0;
 padding:0;
 }
@@ -356,8 +356,10 @@ padding:0 10px;
 }
 
 table td {
+    height:inherit;
+    padding: 0 5px;
+    margin: 5px 0;
     word-wrap: break-word;
-    vertical-align: top;
 }
 
 table td p {
@@ -371,8 +373,6 @@ border:1px solid;
 table table {
 margin-left:0;
 margin-right:0;
-table-layout: fixed;
-width: 100%;
 }
 
 table.standings, table.results { min-width: 80%; }
@@ -495,7 +495,7 @@ p.email {
   text-align: center;
 }
 td.admin-listing {
-    width: 100px;
+    width: 100%;
     display: inline-block;
     overflow: visible;
     white-space: normal;
