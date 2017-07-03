@@ -29,7 +29,7 @@ class RegionToSarTransformer implements DataTransformerInterface
             $state = $org['state'] ? : '??';
             return $org['sar'] . '/' . $state;
         }
-        return $orgKey; // Unknown or invalid, maybe toss exception
+        return $org; // Unknown or invalid, maybe toss exception
     }
     /**
      * @param string $sar 5/C/0894

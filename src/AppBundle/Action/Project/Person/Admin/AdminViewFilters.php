@@ -20,7 +20,7 @@ class AdminViewFilters
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
         $this->projectPersonRepository = $projectPersonRepository;
     }
-    public function getPersonListByReport(array $projectPersons, $reportKey = null)
+    public function getPersonListByReport(array $projectPersons, $regYearProject, $reportKey = null)
     {
         $listPersons = [];
         
@@ -52,7 +52,7 @@ class AdminViewFilters
                 case 'RefIssues':
                 case 'Referees with Issues':
                     if (in_array($personView->willReferee, $yesMaybe)) {
-                        if ( $personView->hasCertIssues() OR !$personView->isCurrentMY()) {
+                        if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }
@@ -67,7 +67,7 @@ class AdminViewFilters
                     break;
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$personView->approved AND !$personView->hasCertIssues()) {
+                        if (!$personView->approved AND !$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }

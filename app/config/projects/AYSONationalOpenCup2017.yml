@@ -364,3 +364,15 @@ parameters:
             label:   Available Friday (Pool Play)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
+            
+        YesNo:
+            type:    select
+            label:   Yes / No
+            default: no
+            choices: { yes: Yes, no: No, maybe: Maybe, nr: Not Required }
+        
+        regYear:
+            type: select
+            label: MemYear
+            default:  null
+            choices: { MY2017: MY2017, MY2016: MY2016, null: '***' }

@@ -106,7 +106,7 @@ class AdminListingSearchForm extends AbstractForm
       <span class="glyphicon glyphicon-search"></span> 
       <span>Search</span>
     </button>
-    <a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
+    <a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}" download class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a> 
     </div>
 </div>
 </form>

@@ -30,6 +30,8 @@ class AdminListingView extends AbstractView2
     
     private $adminViewFilters;
 
+    private $regYearProject;
+
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectUserRepository      $projectUserRepository,
@@ -49,8 +51,9 @@ class AdminListingView extends AbstractView2
         $this->displayKey     = $request->attributes->get('displayKey');
         $this->reportKey     = $request->attributes->get('reportKey');
         $this->projectPersons = $request->attributes->get('projectPersons');
-        
-        $listPersons = $this->adminViewFilters->getPersonListByReport($this->projectPersons, $this->reportKey);
+        $this->regYearProject = $this->getCurrentProjectInfo()['regYear'];
+
+        $listPersons = $this->adminViewFilters->getPersonListByReport($this->projectPersons, $this->regYearProject, $this->reportKey);
         
         $this->projectPersons = $listPersons;
 
@@ -170,13 +173,23 @@ EOD;
     {
         $href = $this->generateUrl('project_person_admin_update',['projectPersonKey' => $personView->getKey()]);
 
-        $gage = $personView->gender . ' ' . $personView->age;
+        switch ($personView->gender) {
+            case 'M':
+                $gender = 'Male';
+                break;
+            case 'F':
+                $gender = 'Female';
+                break;
+            default:
+                $gender = '';
+        }
         return <<<EOD
 <table>
-  <tr><td>Name  </td><td  class="admin-listing"><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
-  <tr><td>Email  </td><td class="admin-listing"><a href="mailto:{$this->escape($personView->email)}">{$this->escape($personView->email)}</a></td></tr>
-  <tr><td>Phone </td><td>{$this->escape($personView->phone)} </td></tr>
-  <tr><td>G Age</td><td> {$this->escape($gage)}</td></tr>
+  <tr><td>Name</td><td  class="admin-listing"><a href="{$href}">{$this->escape($personView->name)}</a></td></tr>
+  <tr><td>Email</td><td class="admin-listing"><a href="mailto:{$this->escape($personView->email)}">{$this->escape($personView->email)}</a></td></tr>
+  <tr><td>Phone</td><td>{$this->escape($personView->phone)} </td></tr>
+  <tr><td>Gender</td><td> {$this->escape($gender)}</td></tr>
+  <tr><td>Age</td><td> {$this->escape($personView->age)}</td></tr>
   <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
   <tr><td>Adult Ref Exp</td><td>{$personView->adultExp} yrs</td></tr>
 </table>
@@ -186,8 +199,6 @@ EOD;
     // TODO Pull ayso name,email,phone if available
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
-        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
-
         return <<<EOD
 <table>
   <tr>
@@ -206,7 +217,7 @@ EOD;
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
   </tr><tr>
     <td>Mem Year</td>
-    <td class="{$personView->getRegYearClass($regYearProject)}">{$personView->getRegYear($regYearProject)}</td>
+    <td class="{$personView->getRegYearClass($this->regYearProject)}">{$personView->getRegYear($this->regYearProject)}</td>
   </tr>
 </table>
 EOD;
@@ -247,13 +258,15 @@ EOD;
     }
     private function renderRoles(ProjectPersonViewDecorator $personView)
     {
+        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
+
         $html = <<<EOD
 <table>
 EOD;
         foreach($personView->getRoles() as $role) {
 
             $html .= <<<EOD
-<tr><td class="{$personView->getRoleClass($role)}">{$role->role}</td></tr>   
+<tr><td class="{$personView->getRoleClass($role, $regYearProject)}">{$role->role}</td></tr>   
 EOD;
         }
         foreach($personView->getCerts() as $cert) {

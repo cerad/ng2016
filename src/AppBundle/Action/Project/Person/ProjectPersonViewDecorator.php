@@ -70,7 +70,8 @@ class ProjectPersonViewDecorator
     public function getOrgKeyClass()
     {
         $sar = $this->orgKey;
-        return ($sar && substr($sar,0,1) !== 'A') ? $this->successClass : $this->dangerClass;
+        $sarClass = ($sar && substr($sar,0,1) !== 'A') ? $this->successClass : $this->dangerClass;
+        return $sarClass;
     }
     public function getOrgKeyStyle()
     {
@@ -119,9 +120,9 @@ class ProjectPersonViewDecorator
         }
         return false;
     }
-    public function isCurrentMY()
+    public function isCurrentMY($regYearProject)
     {
-        $regYearCurrent = is_bool(strpos($this->getRegYear($this->person->projectKey), '***'));
+        $regYearCurrent = $this->regYear >= $regYearProject;
         return $regYearCurrent;
     }
     public function hasRoleReferee() {
@@ -133,12 +134,12 @@ class ProjectPersonViewDecorator
     {
         return 0 < $this->adultExp;
     }
-    public function getRoleClass($role)
+    public function getRoleClass($role, $regYearProject)
     {
         if ($role->approved) {
             return $this->successClass;
         }
-        return (!$this->hasCertIssues()) ? $this->warningClass : $this->dangerClass;
+        return (!$this->hasCertIssues() AND $this->isCurrentMY($regYearProject)) ? $this->warningClass : $this->dangerClass;
     }
     public function getRoleStyle($role)
     {
@@ -169,7 +170,7 @@ class ProjectPersonViewDecorator
                 return $this->fedKeyTransformer->transform($person->fedKey);
             
             case 'sar':
-            case 'orgKey': 
+            case 'orgKey':
                 return $this->orgKeyTransformer->transform($person->orgKey);
 
             case 'personKey':

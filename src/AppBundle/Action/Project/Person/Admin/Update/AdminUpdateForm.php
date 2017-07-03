@@ -42,20 +42,6 @@ class AdminUpdateForm extends AbstractForm
             $this->formControls[$key] = $meta;
         }
 
-        $this->formControls['YesNo'] = array(
-            'type'      => 'select',
-            'label'     => 'Yes / No',
-            'default'   =>  'no',
-            'choices'   => ['yes'=>'Yes','no'=>'No','maybe'=>'Maybe','nr'=>'Not Required'],
-        );
-        
-        $this->formControls['regYear'] = array(
-            'type'      => 'select',
-            'label'     => 'MemYear',
-            'default'   =>  null,
-            'choices'   => ['MY2016'=>'MY2016','MY2015'=>'MY2015',null=>'***'],
-        );
-
         $this->personView = $projectPersonViewDecorator;
 
         $this->projectUserRepository = $projectUserRepository;
@@ -267,6 +253,11 @@ EOD;
       <label class="col-xs-2 control-label" for="shirtSize">Shirt:</label>
       {$this->renderFormControl('shirtSize')}
     </div>
+    <div class="form-group">
+      <label class="col-xs-2 control-label" for="adultExp">Adult Ref Exp:</label>
+      <input name="adultExp" type="text" class="col-xs-4 form-control" id="adultExp" value="{$this->escape($personView->adultExp)}">
+      <label class="col-xs-2 control-label">years</label>
+    </div>
     {$this->renderPanelFooter()}
 </div>
 EOD;
@@ -275,6 +266,8 @@ EOD;
     }
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
+        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
+
         $certSH         = $personView->getCertClass('CERT_SAFE_HAVEN');
         $classSH        = ' '. (is_null($certSH) ? $personView->dangerClass : $certSH);
 
@@ -291,7 +284,7 @@ EOD;
         $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $roleRef['ROLE_REFEREE'] : null;
         $approvedRef    = isset($roleRef['approved']) ? (bool) $roleRef['approved'] : false;
 
-        $roleRef        = !is_null($roleRef) ? $personView->getRoleClass($roleRef) : null;
+        $roleRef        = !is_null($roleRef) ? $personView->getRoleClass($roleRef, $regYearProject) : null;
         $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
 
         $roleVol        = $personView->getRoles();
@@ -432,7 +425,6 @@ EOD;
     {
         $avail = isset($personView->person->avail);
         
-//        $availWed       = $avail ? strtolower($personView->availWed) == 'yes' : false;
         $availThu       = $avail ? strtolower($personView->availThu) == 'yes' : false;
         $availFri       = $avail ? strtolower($personView->availFri) == 'yes' : false;
         $availSatMorn   = $avail ? strtolower($personView->availSatMorn) == 'yes' : false;
@@ -444,7 +436,6 @@ EOD;
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Availability Information</h1>
     <div class="form-group avail">
-<!--      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Soccerfest)</label> -->
       <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" {$this->isChecked($availThu)}>Available Thu (Pool Play)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" {$this->isChecked($availFri)}>Available Fri (Pool Play)</label>
     </div>    
