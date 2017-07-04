@@ -60,6 +60,8 @@ class AdminListingViewFile extends AbstractView
             }
         } else {
             $reportKey = $request->attributes->get('reportKey');
+            $reportKey = !empty($reportKey) ? $reportKey : 'All';
+
             $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $reportKey);
             $report = $reportChoices[$reportKey];
             $content = $this->generateResponse($listPersons, $report);
