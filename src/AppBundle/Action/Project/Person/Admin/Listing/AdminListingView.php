@@ -112,7 +112,7 @@ EOD;
                 break;
         }
 
-        foreach($this->projectPersons as $person) {          
+        foreach($this->projectPersons as $person) {
             // Should this be a private variable to be consistent?
             $personView = $this->projectPersonViewDecorator;
 

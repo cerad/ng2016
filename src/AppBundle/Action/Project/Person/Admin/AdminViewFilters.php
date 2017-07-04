@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Action\Project\Person\Admin;
 
 use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
@@ -8,22 +9,22 @@ class AdminViewFilters
 {
     /** var ProjectPersonViewDecorator **/
     private $projectPersonViewDecorator;
-    
+
     /** var ProjectPersonRepositoryV2 **/
     private $projectPersonRepository;
-    
+
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
         ProjectPersonRepositoryV2 $projectPersonRepository
-    )
-    {
+    ) {
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
         $this->projectPersonRepository = $projectPersonRepository;
     }
+
     public function getPersonListByReport(array $projectPersons, $regYearProject, $reportKey = null)
     {
         $listPersons = [];
-        
+
         $yesMaybe = ['Yes', 'Maybe'];
 
         $personView = $this->projectPersonViewDecorator;
@@ -39,7 +40,7 @@ class AdminViewFilters
                     break;
                 case 'Referees':
                     if (in_array($personView->willReferee, $yesMaybe)) {
-                        if ( $personView->hasRoleReferee() ) {
+                        if ($personView->hasRoleReferee()) {
                             $listPersons[] = $person;
                         }
                     }
@@ -60,14 +61,17 @@ class AdminViewFilters
                 case 'VolIssues':
                 case 'Volunteers with Issues':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if ( $personView->hasCertIssues() ) {
+                        if ($personView->hasCertIssues()) {
                             $listPersons[] = $person;
                         }
                     }
                     break;
                 case 'Unapproved':
                     if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$personView->approved AND !$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
+                        if (!$personView->approved AND !$personView->hasCertIssues() AND $personView->isCurrentMY(
+                                $regYearProject
+                            )
+                        ) {
                             $listPersons[] = $person;
                         }
                     }
@@ -107,15 +111,18 @@ class AdminViewFilters
                     break;
             }
         }
+
+        uasort($listPersons, array($this, 'cmp'));
+
         return $listPersons;
     }
+
+
     private function hasIssues(ProjectPersonViewDecorator $personView)
     {
-        $issues = false;
-        
         $certs = $personView->getCerts();
         $issues = false;
-        foreach($certs as $cert) {
+        foreach ($certs as $cert) {
             $issues |= !(bool)$cert->verified;
         }
 
@@ -126,5 +133,22 @@ class AdminViewFilters
 
         return boolval($issues);
     }
-    
+
+
+    public function cmp($a, $b)
+    {
+        $aName = explode (' ', ucwords($a->name));
+        $firstA = $aName[0];
+        $lastA = isset($aName[1]) ? $aName[1] : $aName[0];
+        $bName = explode (' ', ucwords($b->name));
+        $firstB = $bName[0];
+        $lastB = isset($bName[1]) ? $bName[1] : $bName[0];
+
+        if ($lastA == $lastB) {
+            return ($firstA < $firstB) ? -1 : 1;
+        }
+
+        return ($lastA < $lastB) ? -1 : 1;
+    }
+
 }
