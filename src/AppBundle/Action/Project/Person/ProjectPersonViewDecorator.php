@@ -139,7 +139,20 @@ class ProjectPersonViewDecorator
         if ($role->approved) {
             return $this->successClass;
         }
-        return (!$this->hasCertIssues() AND $this->isCurrentMY($regYearProject)) ? $this->warningClass : $this->dangerClass;
+        switch ($role->role) {
+            case 'ROLE_REFEREE':
+                $roleClass = !$this->person->needsCerts() &&
+                    ((bool) $this->person->getCert('CERT_REFEREE')['verified']) &&
+                    $this->isCurrentMY($regYearProject);
+                break;
+            case 'ROLE_VOLUNTEER':
+                $roleClass = !$this->person->needsCertSafeHaven() &&
+                    $this->isCurrentMY($regYearProject);
+                break;
+            default:
+                $roleClass = (!$this->hasCertIssues() AND $this->isCurrentMY($regYearProject));
+        }
+        return $roleClass ? $this->warningClass : $this->dangerClass;
     }
     public function getRoleStyle($role)
     {
