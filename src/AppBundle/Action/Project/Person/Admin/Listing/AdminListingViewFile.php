@@ -23,6 +23,8 @@ class AdminListingViewFile extends AbstractView
     private $adminViewFilters;
     
     private $outFileName;
+
+    private $regYearProject;
     
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
@@ -35,9 +37,13 @@ class AdminListingViewFile extends AbstractView
         $this->personView = $projectPersonViewDecorator;
         $this->exporter = $exporter;
         $this->adminViewFilters = $adminViewFilters;
+
+        $this->regYearProject = $this->project['regYear'];
     }
     public function __invoke(Request $request)
     {
+        $reportKey = $request->attributes->get('reportKey');
+
         $projectPersons = $request->attributes->get('projectPersons');
         $exportAll = !is_bool(strpos($request->getQueryString(), 'all'));
 
@@ -52,20 +58,15 @@ class AdminListingViewFile extends AbstractView
             'AdultRefs'     =>  'Referees with Adult Experience'
         ];
 
-        if ($exportAll) {
-            $content = [];
-            foreach ($reportChoices as $reportKey => $report) {
-                $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $reportKey);
-                $content = array_merge($content, $this->generateResponse($listPersons, $report));
-            }
-        } else {
-            $reportKey = $request->attributes->get('reportKey');
-            $reportKey = !empty($reportKey) ? $reportKey : 'All';
 
-            $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $reportKey);
-            $report = $reportChoices[$reportKey];
-            $content = $this->generateResponse($listPersons, $report);
-        }
+        $reportKey = $exportAll ? 'All' : $reportKey;
+
+        $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $this->regYearProject, $reportKey);
+        $report = is_null($reportKey) ? 'All' : $reportChoices[$reportKey];
+
+        $content = $this->generateResponse($listPersons, $report);
+
+        $this->outFileName = str_replace(' ', '_', $report) . '.' . $this->outFileName;
 
         $content = $this->exporter->export($content);
 
