@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Action;
 
 class BaseTemplate extends AbstractTemplate
@@ -10,22 +11,24 @@ class BaseTemplate extends AbstractTemplate
     private $showHeaderImage;
     private $showResultsMenu;
     private $showFinalResults;
-    
-    public function __construct($showHeaderImage,$showResultsMenu,$showFinalResults,$version)
+
+    public function __construct($showHeaderImage, $showResultsMenu, $showFinalResults, $version)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
         $this->version = $version;
     }
+
     public function setContent($content)
     {
         $this->content = $content;
         $this->title = $this->project['abbv'];
     }
+
     public function render()
     {
-      return <<<EOT
+        return <<<EOT
         {$this->renderHead()}
         {$this->renderHeader()}
         <body>
@@ -41,14 +44,15 @@ class BaseTemplate extends AbstractTemplate
 
 EOT;
     }
-    
+
     /*  DOC & Header  */
     protected function renderHead()
     {
-    return <<<EOT
+        return <<<EOT
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="refresh" content="0; url=http://aysonationalopencup.org/">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$this->escape($this->project['abbv'])}</title>
@@ -64,12 +68,12 @@ EOT;
 </head>
 EOT;
     }
-    
+
     protected function renderHeader()
     {
-      if (!$this->showHeaderImage) {
-        $html = 
-<<<EOT
+        if (!$this->showHeaderImage) {
+            $html =
+                <<<EOT
     <div id="banner">
           <h1>
           <a href="{$this->project['website']}" target="_blank"><img src="{$this->project['logo']}" height="36" alt="{$this->project['shortTitle']}"></a>     
@@ -77,26 +81,26 @@ EOT;
           </h1>
     </div>
 EOT;
-      } else {
-          $html =
-<<<EOT
+        } else {
+            $html =
+                <<<EOT
     <div class="skBanners">
         <a href="http://www.aysonationalopencup.org/" target="_blank"><img class="width-90" src="/images/header-ipad_01.png"></a>
         <br/>
         <p class="subtitle skFont width-90">{$this->project['welcome']}</p>
     </div>
 EOT;
-      }
-  
-      return $html;
-  
+        }
+
+        return $html;
+
     }
-    
+
     /* Footer item go here */
     protected function renderFooter()
     {
         return
-<<<EOT
+            <<<EOT
     <div class="cerad-footer">
       <br />
       <hr>
@@ -112,12 +116,12 @@ EOT;
         </html>
 EOT;
     }
-    
-/*  Bootstrap menu  */
-  protected function renderTopMenu()
+
+    /*  Bootstrap menu  */
+    protected function renderTopMenu()
     {
         $html =
-<<<EOT
+            <<<EOT
         <nav class="navbar navbar-default">
           
             <div class="navbar-header">
@@ -133,113 +137,116 @@ EOT;
             <div id="topmenu" class="collapse navbar-collapse">
 EOT;
         $html .= $this->renderMenuForGuest();
-        
+
         $html .= $this->renderMenuForUser();
-                
+
         $html .=
-<<<EOT
+            <<<EOT
             </div><!-- navbar-collapse -->
 
         </nav>
 EOT;
-      return $html;
+
+        return $html;
     }
-    
+
     /* ====================================================
      * Top Menu for Guest
      */
     protected function renderMenuForGuest()
     {
         $html =
-<<<EOT
+            <<<EOT
         <ul class="nav navbar-nav">
 EOT;
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $html .=
-<<<EOT
+                <<<EOT
                 {$this->renderHome()}
 EOT;
         } else {
             $html .=
-<<<EOT
+                <<<EOT
                 {$this->renderWelcome()}
 EOT;
         }
-        
+
         $html .=
-<<<EOT
+            <<<EOT
               {$this->renderTopMenuSchedules()}
               {$this->renderTopMenuResults()}
               {$this->renderTopMenuTextAlerts()}
             </ul>
 EOT;
-        
+
         return $html;
     }
-    
+
     /* ====================================================
      * Top Menu for Users
      */
     protected function renderMenuForUser()
     {
         $html = '';
-        
-      if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-        $html =
-<<<EOT
+
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $html =
+                <<<EOT
          <ul class="nav navbar-nav navbar-right">
 EOT;
-        if ($this->isGranted('ROLE_REFEREE')) {
-            $html .= $this->renderRefereeSchedules();
-        }
+            if ($this->isGranted('ROLE_REFEREE')) {
+                $html .= $this->renderRefereeSchedules();
+            }
 
-        $html .=
-<<<EOT
+            $html .=
+                <<<EOT
            {$this->renderMyAccount()}
 EOT;
-          if ( $this->isGranted('ROLE_STAFF') ) {
-              $html .= $this->renderAdmin();
-          }
+            if ($this->isGranted('ROLE_STAFF')) {
+                $html .= $this->renderAdmin();
+            }
 
-          $html .= $this->renderSignOut();
+            $html .= $this->renderSignOut();
 
-        $html .=
-<<<EOT
+            $html .=
+                <<<EOT
         </ul>
 EOT;
-      } else { // TODO Do not use _SERVER
-          /*
-        if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
-            $html = $this->renderCreateNewAccount();            
-        } else {
-            $html = $this->renderSignIn();
-        }*/
-          $html = '';  //$this->renderSignIn();
-      }
-      return $html;
+        } else { // TODO Do not use _SERVER
+            /*
+          if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
+              $html = $this->renderCreateNewAccount();
+          } else {
+              $html = $this->renderSignIn();
+          }*/
+            $html = '';  //$this->renderSignIn();
+        }
+
+        return $html;
     }
-    
+
     protected function renderTopMenuSchedules()
     {
         if (!$this->showResultsMenu) {
             return null;
         }
+
         return
-<<<EOT
+            <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_game_2017'    )}">GAME    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_team_2017'    )}">TEAM    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_game_2017')}">GAME    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_team_2017')}">TEAM    SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
     }
-    
+
     protected function renderTopMenuTextAlerts()
     {
         $html =
-<<<EOT
+            <<<EOT
             <li><a href="{$this->generateUrl('app_text_alerts')}">TEXT ALERTS</a></li>
 EOT;
 
@@ -251,9 +258,9 @@ EOT;
         if (!$this->showResultsMenu) {
             return null;
         }
-        
+
         $html =
-<<<EOT
+            <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -263,24 +270,24 @@ EOT;
 EOT;
         if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
             $html .=
-<<<EOT
+                <<<EOT
             <li><a href="{$this->generateUrl('results_final_2017')}">FINAL STANDINGS</a></li>
 EOT;
         }
-            
+
         $html .=
-<<<EOT
+            <<<EOT
           </ul>
         </li>
 EOT;
 
         return $html;
     }
-    
+
     protected function renderCreateNewAccount()
     {
         return
-<<<EOT
+            <<<EOT
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{$this->generateUrl('user_create')}">CREATE NEW ACCOUNT</a></li>
           </ul>
@@ -290,40 +297,41 @@ EOT;
     protected function renderSignIn()
     {
         return
-<<<EOT
+            <<<EOT
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{$this->generateUrl('user_login')}">SIGN IN</a></li>
           </ul>
 EOT;
     }
-    
+
     protected function renderSignOut()
     {
         $userName = $this->escape($this->getUser()->getPersonName());
-        $userUrl  = $this->generateUrl('user_logout');
-        if ($this->isGranted('ROLE_ADMIN')){
-            $userLabel = 'SIGN OUT ' . $userName;            
+        $userUrl = $this->generateUrl('user_logout');
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $userLabel = 'SIGN OUT '.$userName;
         } else {
-            $userLabel = 'SIGN OUT ';                        
+            $userLabel = 'SIGN OUT ';
         }
 
         if ($this->isGranted('ROLE_PREVIOUS_ADMIN')) {
-            $userUrl = $this->generateUrl('app_admin',['_switch_user' => '_exit']);
-            $userLabel = 'SU EXIT ' . $userName;
+            $userUrl = $this->generateUrl('app_admin', ['_switch_user' => '_exit']);
+            $userLabel = 'SU EXIT '.$userName;
         }
+
         return
-<<<EOT
+            <<<EOT
             <li><a href="{$userUrl}">{$userLabel}</a></li>
 EOT;
     }
-    
+
     protected function renderRefereeSchedules()
     {
         if (!$this->showResultsMenu) {
             return null;
         }
         $html =
-<<<EOT
+            <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
@@ -332,7 +340,7 @@ EOT;
 
         if ($this->isGranted('ROLE_ASSIGNOR')) {
             $html .=
-<<<EOT
+                <<<EOT
             <li><a href="{$this->generateUrl('schedule_assignor_2017')}">ASSIGNOR SCHEDULE</a></li>
 EOT;
         }
@@ -341,7 +349,7 @@ EOT;
          </ul>
        </li>
 EOT;
-        
+
         return $html;
     }
 
@@ -350,8 +358,9 @@ EOT;
         if (!$this->showResultsMenu) {
             return null;
         }
+
         return
-<<<EOT
+            <<<EOT
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
         <ul class="dropdown-menu">
@@ -363,31 +372,34 @@ EOT;
         </ul>
 EOT;
     }
-    
+
     protected function renderHome()
     {
         //if (!$this->showResultsMenu) {
         //    return null;
         //}
         return
-<<<EOT
+            <<<EOT
         <li>
           <a href="{$this->generateUrl('app_home')}">HOME</a>
         </li>
 EOT;
     }
+
     protected function renderWelcome()
     {
         //if (!$this->showResultsMenu) {
         //    return null;
         //}
         return
-<<<EOT
+            <<<EOT
         <li>
           <a href="{$this->generateUrl('app_welcome')}">WELCOME</a>
         </li>
 EOT;
-    }    protected function renderAdmin()
+    }
+
+    protected function renderAdmin()
     {
         return <<<EOT
 <li>
@@ -395,10 +407,11 @@ EOT;
 </li>
 EOT;
     }
+
     protected function renderScripts()
     {
         return
-<<<EOT
+            <<<EOT
           <!-- Placed at the end of the document so the pages load faster -->
           <!-- Latest compiled and minified JQuery -->
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -409,7 +422,7 @@ EOT;
           <script src="/js/zayso.js"></script>
 EOT;
     }
-    
+
     /* ====================================================
      * Maybe implement blocks later
      */
@@ -418,7 +431,9 @@ EOT;
         return null;
     }
 
-    public function addStylesheet() {}
+    public function addStylesheet()
+    {
+    }
 
     public function addScript($script)
     {

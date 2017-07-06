@@ -1,5 +1,3 @@
-Redirect 301 / http://aysonationalopencup.org/
-
 # Use the front controller as index file. It serves as a fallback solution when
 # every other rewrite/redirect fails (e.g. in an aliased environment without
 # mod_rewrite). Additionally, this reduces the matching process for the
