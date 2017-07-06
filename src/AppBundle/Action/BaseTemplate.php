@@ -52,7 +52,7 @@ EOT;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0; url=http://aysonationalopencup.org/">
+    <meta http-equiv="refresh" content="0; url=http://aysonationalopencup.org/contact-ayso/">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$this->escape($this->project['abbv'])}</title>
