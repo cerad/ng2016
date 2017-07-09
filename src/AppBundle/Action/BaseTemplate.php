@@ -374,7 +374,7 @@ EOT;
     protected function renderMyAccount()
     {
         if (!$this->showResultsMenu) {
-            return null;
+            //return null;
         }
 
         return
