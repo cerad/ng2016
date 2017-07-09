@@ -16,6 +16,12 @@ services:
         arguments:
             - '@doctrine.dbal.aoc2017games_connection'
 
+    game_init_aoc2017_command:
+        class: AppBundle\Action\Game\Migrate\InitGames2017Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '@doctrine.dbal.aoc2017games_connection'
+
     game_adjust_ng2016_command:
         class: AppBundle\Action\Game\Migrate\AdjustGames2016Command
         tags: [{ name: console.command }]
