@@ -346,7 +346,7 @@ EOT;
     protected function renderRefereeSchedules()
     {
         if (!$this->showResultsMenu) {
-            return null;
+            //return null;
         }
         $html =
             <<<EOT
