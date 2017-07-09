@@ -70,7 +70,11 @@ EOT;
 </p>
 <br/>
 <p>
-    If you have previously registered on the {$this->project['title']} website, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.</p>
+    If you have previously registered on the {$this->project['title']} website, 
+    your registration might not have been migrated to zAYSO. If your login fails then just register again here. 
+</p>
+<br>
+    <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.</p>
 <br>
     <p>If you need help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a>.</p><br>
     <p>Thank you for your support.</p>
