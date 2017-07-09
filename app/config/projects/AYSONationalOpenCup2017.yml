@@ -312,7 +312,7 @@ parameters:
             label:       AYSO Volunteer ID
             href:        eayso.org
             placeHolder: 8 digit number
-            transformer: ayso_volunteer_key_transformer
+            transformer: cerad.ayso.volunteer_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
         orgKey:
@@ -320,7 +320,7 @@ parameters:
             label:       AYSO Region Number
             href:        eayso.org
             placeHolder: 1-4 digit number
-            transformer: ayso_region_key_transformer
+            transformer: cerad.ayso.region_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
         availSatMorn:

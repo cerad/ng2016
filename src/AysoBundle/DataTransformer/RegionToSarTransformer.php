@@ -1,20 +1,20 @@
 <?php
-namespace AppBundle\Action\Physical\Ayso\DataTransformer;
+namespace Cerad\Bundle\AysoBundle\DataTransformer;
 
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
 class RegionToSarTransformer implements DataTransformerInterface
 {   
-    /** @var  PhysicalAysoRepository */
-    private $aysoRepository;
+    /** @var  AysoFinder */
+    private $finder;
     
     public function __construct(
-        PhysicalAysoRepository $aysoRepository
+        AysoFinder $finder
     )
     {
-        $this->aysoRepository = $aysoRepository;
+        $this->finder = $finder;
     }
     /** 
      * @param string $orgKey AYSOR:0894
@@ -24,7 +24,7 @@ class RegionToSarTransformer implements DataTransformerInterface
     {
         if (!$orgKey) return null;
 
-        $org = $this->aysoRepository->findOrg($orgKey);
+        $org = $this->finder->findOrg($orgKey);
         if ($org) {
             $state = $org['state'] ? : '??';
             return $org['sar'] . '/' . $state;

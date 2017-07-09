@@ -1,10 +1,10 @@
 <?php
-namespace AppBundle\Action\Physical\Ayso;
+namespace Cerad\Bundle\AysoBundle;
 
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
 
-class PhysicalAysoRepository
+class AysoFinder
 {
     /** @var  Connection */
     private $conn;

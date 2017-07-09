@@ -1,10 +1,8 @@
 <?php
-namespace AppBundle\Action\Physical\Ayso\AysoDataTransformer;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer;
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
-use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer;
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+namespace Cerad\Bundle\AysoBundle\DataTransformer;
+
+use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\AbstractTestDatabase;
 
 class AysoDataTransformerTest extends AbstractTestDatabase
@@ -45,7 +43,7 @@ class AysoDataTransformerTest extends AbstractTestDatabase
     public function testRegionToSarTransformer()
     {
         // Really should use the test database for this
-        $aysoRepository = new PhysicalAysoRepository($this->conn);
+        $aysoRepository = new AysoFinder($this->conn);
 
         $transformer = new RegionToSarTransformer($aysoRepository);
 

@@ -10,7 +10,7 @@ use AppBundle\Action\RegPerson\RegPerson;
 use AppBundle\Common\ExcelConstants;
 use AppBundle\Common\ExcelWriterTrait;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
+use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\ShirtSizeTransformer;
 
@@ -20,21 +20,21 @@ class SummaryWriterExcel
 
     private $phoneTransformer;
     private $shirtSizeTransformer;
-    private $regionToSarTransformer;
+    private $orgTransformer;
 
     private $assignWorkflow;
 
     public function __construct(
-        RegionToSarTransformer $regionToSarTransformer,
+        RegionToSarTransformer $orgTransformer,
         PhoneTransformer       $phoneTransformer,
         ShirtSizeTransformer   $shirtSizeTransformer,
         AssignWorkflow         $assignWorkflow
     ) {
         $this->assignWorkflow = $assignWorkflow;
 
-        $this->phoneTransformer       = $phoneTransformer;
-        $this->shirtSizeTransformer   = $shirtSizeTransformer;
-        $this->regionToSarTransformer = $regionToSarTransformer;
+        $this->phoneTransformer     = $phoneTransformer;
+        $this->shirtSizeTransformer = $shirtSizeTransformer;
+        $this->orgTransformer       = $orgTransformer;
     }
     /**
      * @param  RegPerson[] $regPersons
@@ -61,6 +61,7 @@ class SummaryWriterExcel
         {
             if ($game1->start < $game2->start) return -1;
             if ($game1->start > $game2->start) return +1;
+            return 0;
         });
         $gameOfficialsMap = $this->generateGameOfficialsMap($games);
 
@@ -166,7 +167,7 @@ class SummaryWriterExcel
                     $this->setCellValue($ws,$colOfficialName, $row,$regPerson->name);
                     $this->setCellValue($ws,$colOfficialBadge,$row,substr($regPerson->refereeBadge,0,3));
 
-                    $orgView = $this->regionToSarTransformer->transform(($regPerson->orgId));
+                    $orgView = $this->orgTransformer->transform(($regPerson->orgId));
                     $this->setCellValue($ws,$colOfficialSars,$row,$orgView);
                     $this->setCellValue($ws,$colOfficialAge, $row,$regPerson->age);
 
@@ -356,7 +357,7 @@ class SummaryWriterExcel
                 $availCol++;
             }
 
-            $orgView = $this->regionToSarTransformer->transform(($regPerson->orgId));
+            $orgView = $this->orgTransformer->transform(($regPerson->orgId));
             $this->setCellValue($ws,$colSars,$row,$orgView);
 
             $this->setCellValue($ws,$colAge,$row,$regPerson->age);

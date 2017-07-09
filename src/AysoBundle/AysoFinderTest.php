@@ -1,11 +1,11 @@
 <?php
-namespace AppBundleAction\Physical\Ayso;
+namespace Cerad\Bundle\AysoBundle;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 
 use AppBundle\AbstractTestDatabase;
 
-class PhysicalAysoRepositoryTest extends AbstractTestDatabase
+class AysoFinderTest extends AbstractTestDatabase
 {
     public function setUp()
     {

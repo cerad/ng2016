@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Action\Project\Person;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
-use AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer;
+use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
+use Cerad\Bundle\AysoBundle\DataTransformer\VolunteerKeyTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 
@@ -10,6 +10,8 @@ class ProjectPersonViewDecorator
 {
     /** @var  ProjectPerson */
     protected $person;
+    private   $regYear;
+    private   $orgKey;
 
     private $phoneTransformer;
     private $fedKeyTransformer;
@@ -34,6 +36,8 @@ class ProjectPersonViewDecorator
     public function setProjectPerson(ProjectPerson $person)
     {
         $this->person = $person;
+        $this->regYear = $person->regYear;
+        $this->orgKey  = $person->orgKey;
     }
     public function getKey()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Project\Person\Admin\Sombero;
+namespace AppBundle\Action\Project\Person\Admin\Infinity;
 
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 use Cerad\Bundle\AysoBundle\AysoFinder;
 
-class ImportSomberoCommand extends Command
+class ImportInfinityCommand extends Command
 {
     private $userManager;
     private $regPersonConn;
@@ -41,14 +41,14 @@ class ImportSomberoCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('import:sombero')
-            ->setDescription('Import Sombero Registration Data');
+            ->setName('import:infinity')
+            ->setDescription('Import Infinity Registration Data');
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = './var/sombero/Sombero20160419.xlsx';
+        $filename = './var/data/InfinityReferees20170622.xlsx';
 
-        echo sprintf("Import Sombero Registration from %s\n",$filename);
+        echo sprintf("Import Infinity Registration from %s\n",$filename);
 
         $this->import($filename);
 
@@ -61,12 +61,11 @@ class ImportSomberoCommand extends Command
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);
-        $ws = $wb->getSheetByName('Report');
+        $ws = $wb->getSheetByName('Sheet1');
 
         $wsData = $ws->toArray();
 
         $header = array_shift($wsData);
-        //var_dump($header);
         if (!$header) {
             return;
         }
@@ -87,35 +86,38 @@ class ImportSomberoCommand extends Command
     /* ============================================================
      * Format
      */
-    private $lastNameIndex     =  0; // [ 0]=> "Account Last Name" Sadly, no full name
+    private $lastNameIndex     =  2; // [ 0]=> "Account Last Name" Sadly, no full name
     private $firstNameIndex    =  1; // [ 1]=> "Account First Name"
-    private $aysoidIndex       =  2; // [ 2]=> "AYSO ID"
-    private $refereeBadgeIndex =  3; // [ 3]=> "Referee Level?" aka badge, did not see any national 1 or two
-    private $datesAvailIndex   =  4; // [ 4]=> "Dates Available" free form
-    private $timesAvailIndex   =  5; // [ 5]=> "Times Available" free form
+    private $aysoidIndex       =  5; // [ 2]=> "AYSO ID"
+//    private $refereeBadgeIndex =  3; // [ 3]=> "Referee Level?" aka badge, did not see any national 1 or two
+//    private $datesAvailIndex   =  4; // [ 4]=> "Dates Available" free form
+//    private $timesAvailIndex   =  5; // [ 5]=> "Times Available" free form
 //  private $groundTransIndex  =  6; // [ 6]=> "Ground Transportation" (standard phases)
 //  private $stateIndex        = 11; // [11]=> "State" Michigan or CA
-    private $emailIndex        = 12; // [12]=> "Users Email"
-    private $phoneIndex        = 13; // [13]=> "Cell phone"
+    private $emailIndex        =  4; // [12]=> "Users Email"
+    private $phoneIndex        =  3; // [13]=> "Cell phone"
 //  private $regDateIndex      = 14; // [14]=> "Registration Date" Can we set this?, not consistent
-    private $shirtSizeIndex    = 17; // [17]=> "T-Shirt Size" AM,AL
+//  private $shirtSizeIndex    = 17; // [17]=> "T-Shirt Size" AM,AL
 //  private $sectionIndex      = 21; // [21]=> "Section"
-//  private $areaIndex         = 22; // [22]=> "Area"
-    private $regionIndex       = 23; // [23]=> "Region" 609
-    private $safeHavenIndex    = 24; // [24]=> "Safe Haven Certified?" Yes/No
-    private $concussionIndex   = 25; // [25]=> "CDC Concussion Awareness Certified?" Yes/No
+//  private $areaIndex         = 22; // [22]=> "Area
+//  private $regionIndex       = 23; // [23]=> "Region" 609
+    //private $safeHavenIndex    = 24; // [24]=> "Safe Haven Certified?" Yes/No
+    //private $concussionIndex   = 25; // [25]=> "CDC Concussion Awareness Certified?" Yes/No
 //  private $verifiedIndex     = 29; // [29]=> "Verified in eAYSO?" Yes/Y
-    private $notesIndex        = 33; // [33]=> string(5) "Notes" Looks like assignor notes
+    //private $notesIndex        = 33; // [33]=> string(5) "Notes" Looks like assignor notes
 
     private $names   = [];
     private $emails  = [];
     private $aysoIds = [];
 
     private $emailSpecial = [
-        'regioncomish914@yahoo.com' => ['David Lunsford',    'Johnathan Lunsford', 'Mark Lunsford'],
-        'jbernier136@yahoo.com'     => ['Joseph Bernier',    'Eric Bernier'],
-        'bmacy@bak.rr.com'          => ['Brenda Fitzpatrick','Brigid Macy'],
-        'bobby_csi@sbcglobal.net'   => ['Robert Orozco',     'Samantha Orozco'],
+//        'regioncomish914@yahoo.com' => ['David Lunsford',    'Johnathan Lunsford', 'Mark Lunsford'],
+//        'jbernier136@yahoo.com'     => ['Joseph Bernier',    'Eric Bernier'],
+//        'bmacy@bak.rr.com'          => ['Brenda Fitzpatrick','Brigid Macy'],
+//        'bobby_csi@sbcglobal.net'   => ['Robert Orozco',     'Samantha Orozco'],
+        'maureenetal@verizon.net'   => ['Maureen Sundstrom', 'Marvin Sundstrom'],
+        'ckmajusiak@gmail.com'      => ['Chandler Majusiak', 'Kristen Majusiak'],
+        'davidsasek@earthlink.net'  => ['David Sasek',       'DJ Sasek'],
     ];
     private $projectId = 'AYSONationalOpenCup2017';
 
@@ -124,6 +126,8 @@ class ImportSomberoCommand extends Command
         $aysoId = trim($row[$this->aysoidIndex]);
         $email  = strtolower(trim($row[$this->emailIndex]));
         $name   = $this->getPersonName($row);
+
+        //dump($aysoId,$email,$name); die();
 
         // Blank lines
         if (!$email) {
@@ -152,11 +156,16 @@ class ImportSomberoCommand extends Command
         else {
             echo sprintf("*** Duplicate aysoId %s %-32s %s\n",$aysoId,$name,$email);
         }
+
         // Volunteer record
         $vol = $this->aysoFinder->findVol($aysoId);
         if (!$vol) {
-            //echo sprintf("*** No ayso record for %s %-32s %s\n",$aysoId,$name,$email);
+            echo sprintf("*** No ayso record for %s %-32s %s\n",$aysoId,$name,$email);
+            return;
         }
+        dump($vol);
+        return;
+
         $regYear = isset($vol['regYear']) ? $vol['regYear'] : null;
 
         $verified = $regYear >= 'MY2015' ? true : false;

@@ -2,8 +2,8 @@
 
 namespace AppBundle\Action\RegTeam\Import;
 
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Common\ExcelReaderTrait;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 
 class RegTeamImportReaderExcel
 {
@@ -14,7 +14,7 @@ class RegTeamImportReaderExcel
     private $regionFinder;
 
     public function __construct(
-        PhysicalAysoRepository $regionFinder
+        AysoFinder $regionFinder
     )
     {
         $this->regionFinder = $regionFinder;

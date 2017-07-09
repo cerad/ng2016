@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Physical\Ayso\Load;
+namespace AysoBundle\Load;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -83,7 +83,7 @@ WHERE fedKey = ?
 EOD;
         $this->updateVolStmt = $conn->prepare($sql);
 
-        $sql = 'SELECT regYear FROM vols WHERE fedKey = ?';
+        $sql = 'SELECT * FROM vols WHERE fedKey = ?';
         $this->checkVolStmt = $conn->prepare($sql);
 
         $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate) VALUES (?,?,?,?,?)';
@@ -122,6 +122,16 @@ EOD;
         $this->badgeSorts = $badgeSorts;
     }
     protected $certMetas = [
+        'U-8 Official' => [
+            'role'  => 'CERT_REFEREE',
+            'badge' => 'U8',
+            'sort'  =>  2,
+        ],
+        'Assistant Referee' => [
+            'role'  => 'CERT_REFEREE',
+            'badge' => 'Assistant',
+            'sort'  =>  5,
+        ],
         'Regional Referee' => [
             'role'  => 'CERT_REFEREE',
             'badge' => 'Regional',
