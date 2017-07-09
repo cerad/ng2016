@@ -14,13 +14,13 @@ class LoadTomCommand extends LoadAbstractCommand
     }
     protected function load($filename)
     {
-        $fp = fopen($filename, 'r');
-
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $header = fgetcsv($fp); // var_dump($header);
-
         $rowCount = 0;
         while($row = fgetcsv($fp)) {
+            $fp = fopen($filename, 'r');
+
+            /** @noinspection PhpUnusedLocalVariableInspection */
+            $header = fgetcsv($fp); // var_dump($header);
+
 
             $rowCount++;
 

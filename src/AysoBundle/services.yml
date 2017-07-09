@@ -13,10 +13,15 @@ services:
 #        arguments:
 #            - '@ayso_connection'
 
-#    ayso_load_tom_command:
-#        class: AppBundle\Action\Physical\Ayso\Load\LoadTomCommand
-#        tags: [{ name: console.command }]
-#        arguments: ['@ayso_connection']
+    cerad.ayso.load_certs.command:
+        class: AysoBundle\Load\LoadCertRickCommand
+        tags: [{ name: console.command }]
+        arguments: ['@cerad.ayso.connection']
+
+    cerad.ayso.load_vols.command:
+        class: AysoBundle\Load\LoadVolsRickCommand
+        tags: [{ name: console.command }]
+        arguments: ['@cerad.ayso.connection']
 
 #    ayso_load_orgs_command:
 #        class: AppBundle\Action\Physical\Ayso\Load\LoadOrgsCommand
