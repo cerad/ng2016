@@ -129,3 +129,9 @@ services:
         arguments:
             - '@reg_team_transform_form'
             - '@reg_team_transform_writer_excel'
+
+    reg_team_init_aoc2017_command:
+        class: AppBundle\Action\RegTeam\Init\InitTeams2017Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '@doctrine.dbal.aoc2017games_connection'

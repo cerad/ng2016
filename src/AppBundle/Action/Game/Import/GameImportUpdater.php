@@ -201,11 +201,12 @@ class GameImportUpdater
     private function calcFinish($start,$poolTeam)
     {
         $lengths = [
-            'U10' => 40 +  5,
-            'U12' => 50 +  5,
-            'U14' => 50 + 10,
-            'U16' => 60 + 10,
-            'U19' => 60 + 10,
+            'U10'   => 40 +  5,
+            'U12'   => 50 +  5,
+            'U14'   => 50 + 10,
+            'U16'   => 60 + 10,
+            'U19'   => 60 + 10,
+            'Adult' => 50 + 10,
         ];
         $finishDateTime = new \DateTime($start);
 

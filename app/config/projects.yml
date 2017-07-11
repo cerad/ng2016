@@ -10,7 +10,9 @@ parameters:
 
         AYSONationalOpenCup2017:
             programs:
-                Core: Core
+                Core:  Core
+                Extra: Extra
+                Adult: Adult
             #   VIP:  VIP
             genders:
                 B:  B
@@ -20,10 +22,9 @@ parameters:
                 U12: U12
                 U14: U14
                 U16: U16
-                U19: U19
+                U19: U19 # How about adult? Sort of like VIP
                 Adult: Adult
             dates:
-                '2017-07-12': Thu # Pool Play
                 '2017-07-13': Thu # Pool Play
                 '2017-07-14': Fri # Pool Play
                 '2017-07-15': Sat # Pool Play and Quarter Finals
