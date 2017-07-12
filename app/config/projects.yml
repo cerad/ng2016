@@ -11,7 +11,7 @@ parameters:
         AYSONationalOpenCup2017:
             programs:
                 Core:  Core
-                Extra: Extra
+                Club:  Club
                 Adult: Adult
             #   VIP:  VIP
             genders:
@@ -19,7 +19,9 @@ parameters:
                 G:  G
             ages:
                 U10: U10
+                U11: U11
                 U12: U12
+                U13: U13
                 U14: U14
                 U16: U16
                 U19: U19 # How about adult? Sort of like VIP

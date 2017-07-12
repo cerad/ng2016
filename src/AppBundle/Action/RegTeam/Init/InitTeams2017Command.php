@@ -32,9 +32,9 @@ class InitTeams2017Command extends Command
 
         //$commit = false;
 
-        //$this->initRegTeams($commit || true);
+        $this->initRegTeams($this->teamsClub);
 
-        $this->initPoolTeams($this->teamsCoreU14B);
+        $this->initPoolTeams($this->teamsClub);
 
         //$this->assignRegTeamsToPoolPlayTeams($commit || false);
 
@@ -45,6 +45,98 @@ class InitTeams2017Command extends Command
 
     private $projectId = 'AYSONationalOpenCup2017';
 
+    private $teamsClub = [
+        'Club' => [
+            'U10G' => [ // Club Girls 07
+                'pools' => [
+                    'A' => ['count' => 4],
+                ],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U10GClubTF1','poolTeamKey' => 'U10GClubTF1X',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U10-G Club Final<br>Championship',
+                        'poolTeamView' => 'U10-G Club Final A 1st',
+                        'poolTeamSlotView' => 'A 1st',
+                    ],
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U10GClubTF1','poolTeamKey' => 'U10GClubTF1Y',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U10-G Club Final<br>Championship',
+                        'poolTeamView' => 'U10-G Club Final A 2nd',
+                        'poolTeamSlotView' => 'A 2nd',
+                    ],
+                ]
+            ],
+            'U11G' => [ // Club Girls 06 No finals
+                'pools' => [
+                    'A' => ['count' => 3],
+                ],
+                'medals' => [],
+            ],
+            'U12G' => [ // Club Girls 05 No Finals
+                'pools' => [
+                    'A' => ['count' => 4],
+                ],
+                'medals' => [],
+            ],
+            'U14G' => [ // Club Girls 03-04 No Finals
+                'pools' => [
+                    'A' => ['count' => 5],
+                ],
+                'medals' => [],
+            ],
+            'U16G' => [ // Club Girls 01-02 No finals, 3 Games
+                'pools' => [
+                    'A' => ['count' => 3],
+                ],
+                'medals' => []
+            ],
+            'U11B' => [ // Club Boys 06-07
+                'pools' => [
+                    'A' => ['count' => 3],
+                    'B' => ['count' => 6],
+                ],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U11BClubTF1','poolTeamKey' => 'U11BClubTF1X',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U11-B Club Final<br>Championship',
+                        'poolTeamView' => 'U11-B Club Final A 1st',
+                        'poolTeamSlotView' => 'A 1st',
+                    ],
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U11BClubTF1','poolTeamKey' => 'U11BClubTF1Y',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U11-B Club Final<br>Championship',
+                        'poolTeamView' => 'U11-B Club Final B 1st',
+                        'poolTeamSlotView' => 'B 1st',
+                    ],
+                ],
+            ],
+            'U13B' => [ // Club Boys 04-05
+                'pools' => [
+                    'A' => ['count' => 4],
+                ],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U13BClubTF1','poolTeamKey' => 'U13BClubTF1X',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U13-B Club Final<br>Championship',
+                        'poolTeamView' => 'U13-B Club Final A 1st',
+                        'poolTeamSlotView' => 'A 1st',
+                    ],
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U13BClubTF1','poolTeamKey' => 'U13BClubTF1Y',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U13-B Club Final<br>Championship',
+                        'poolTeamView' => 'U13-B Club Final A 2nd',
+                        'poolTeamSlotView' => 'A 2nd',
+                    ],
+                ],
+            ],
+        ],
+    ];
     private $teamsExtra = [
         'Extra' => [
             'U12B' => [
@@ -95,28 +187,28 @@ class InitTeams2017Command extends Command
                 'medals' => [
                     [
                         'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA5',
-                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolTypeView' => 'PP', 'poolSlotView' => 'A',
                         'poolView'     => 'U14-B Pool Play A',
                         'poolTeamView' => 'U14-B Pool Play A5',
                         'poolTeamSlotView' => 'A5',
                     ],
                     [
                         'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA6',
-                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolTypeView' => 'PP', 'poolSlotView' => 'A',
                         'poolView'     => 'U14-B Pool Play A',
                         'poolTeamView' => 'U14-B Pool Play A6',
                         'poolTeamSlotView' => 'A6',
                     ],
                     [
                         'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA7',
-                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolTypeView' => 'PP', 'poolSlotView' => 'A',
                         'poolView'     => 'U14-B Pool Play A',
                         'poolTeamView' => 'U14-B Pool Play A7',
                         'poolTeamSlotView' => 'A7',
                     ],
                     [
                         'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA8',
-                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolTypeView' => 'PP', 'poolSlotView' => 'A',
                         'poolView'     => 'U14-B Pool Play A',
                         'poolTeamView' => 'U14-B Pool Play A8',
                         'poolTeamSlotView' => 'A8',
@@ -126,13 +218,9 @@ class InitTeams2017Command extends Command
         ]
     ];
 
-    private function initRegTeams($commit)
+    private function initRegTeams($teams)
     {
-        if (!$commit) {
-            return;
-        }
         $projectId = $this->projectId;
-        $teams = $this->teamsAdult;
 
         // Clear any existing teams
         foreach(array_keys($teams) as $program) {
@@ -186,7 +274,7 @@ class InitTeams2017Command extends Command
 
         // Clear any existing teams
         foreach(array_keys($teams) as $program) {
-            // $this->gameConn->delete('poolTeams', ['projectId' => $projectId, 'program' => $program]);
+            $this->gameConn->delete('poolTeams', ['projectId' => $projectId, 'program' => $program]);
         }
         $teamCount = 0;
 
@@ -210,7 +298,7 @@ class InitTeams2017Command extends Command
                         $poolTeamKey = $poolKey . $count;
                         $poolTeamId = $projectId.':'.$poolTeamKey;
 
-                        $poolView = sprintf('%s-%s Pool Play %s',$age,$gender,$poolName);
+                        $poolView = sprintf('%s-%s %s PP %s',$age,$gender,$program,$poolName);
                         if ($program === 'Adult') {
                             $poolView = sprintf('Adult Pool Play %s',$poolName);
                         }
