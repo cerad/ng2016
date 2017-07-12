@@ -30,11 +30,11 @@ class InitTeams2017Command extends Command
     {
         echo sprintf("Init Teams AOC2016 ...\n");
 
-        $commit = false;
+        //$commit = false;
 
-        $this->initRegTeams($commit || true);
+        //$this->initRegTeams($commit || true);
 
-        $this->initPoolTeams($commit || true);
+        $this->initPoolTeams($this->teamsCoreU14B);
 
         //$this->assignRegTeamsToPoolPlayTeams($commit || false);
 
@@ -88,6 +88,44 @@ class InitTeams2017Command extends Command
             ]
         ]
     ];
+    private $teamsCoreU14B = [
+        'Core' => [
+            'U14B' => [
+                'pools' => [],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA5',
+                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolView'     => 'U14-B Pool Play A',
+                        'poolTeamView' => 'U14-B Pool Play A5',
+                        'poolTeamSlotView' => 'A5',
+                    ],
+                    [
+                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA6',
+                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolView'     => 'U14-B Pool Play A',
+                        'poolTeamView' => 'U14-B Pool Play A6',
+                        'poolTeamSlotView' => 'A6',
+                    ],
+                    [
+                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA7',
+                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolView'     => 'U14-B Pool Play A',
+                        'poolTeamView' => 'U14-B Pool Play A7',
+                        'poolTeamSlotView' => 'A7',
+                    ],
+                    [
+                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA8',
+                        'poolTypeView' => 'PP', 'poolSlotView' => null, //'5',
+                        'poolView'     => 'U14-B Pool Play A',
+                        'poolTeamView' => 'U14-B Pool Play A8',
+                        'poolTeamSlotView' => 'A8',
+                    ],
+                ],
+            ]
+        ]
+    ];
+
     private function initRegTeams($commit)
     {
         if (!$commit) {
@@ -142,17 +180,13 @@ class InitTeams2017Command extends Command
         }
         echo sprintf("Reg  Team Count: %d\n",$teamCount);
     }
-    private function initPoolTeams($commit)
+    private function initPoolTeams($teams)
     {
-        if (!$commit) {
-            return;
-        }
         $projectId = $this->projectId;
-        $teams = $this->teamsAdult;
 
         // Clear any existing teams
         foreach(array_keys($teams) as $program) {
-            $this->gameConn->delete('poolTeams', ['projectId' => $projectId, 'program' => $program]);
+            // $this->gameConn->delete('poolTeams', ['projectId' => $projectId, 'program' => $program]);
         }
         $teamCount = 0;
 
