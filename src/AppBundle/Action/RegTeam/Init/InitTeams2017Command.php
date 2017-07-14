@@ -32,9 +32,9 @@ class InitTeams2017Command extends Command
 
         //$commit = false;
 
-        $this->initRegTeams($this->teamsClub);
+        $this->initRegTeams($this->teamsAdult, false);
 
-        $this->initPoolTeams($this->teamsClub);
+        $this->initPoolTeams($this->teamsAdult,false);
 
         //$this->assignRegTeamsToPoolPlayTeams($commit || false);
 
@@ -171,13 +171,44 @@ class InitTeams2017Command extends Command
     ];
     private $teamsAdult = [
         'Adult' => [
-            'Adult' => [
-                'pools' => [
-                    'A' => ['count' => 4],
-                    'B' => ['count' => 4],
-                ],
-                'medals' => [],
-            ]
+            'AdultCoed' => [
+                'pools' => ['A' => ['count' => 4]],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'AdultCoedAdultTF1','poolTeamKey' => 'AdultCoedAdultTF1X',
+                        'poolTypeView' => 'FM','poolSlotView' => '', //7,
+                        'poolView'     => 'Adult Coed Final<br>Championship',
+                        'poolTeamView' => 'Adult Coed Final A 1st',
+                        'poolTeamSlotView' => 'A 1st',
+                    ],
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'AdultCoedAdultTF1','poolTeamKey' => 'AdultCoedAdultTF1Y',
+                        'poolTypeView' => 'FM','poolSlotView' => '', //7,
+                        'poolView'     => 'Adult Coed Final<br>Championship',
+                        'poolTeamView' => 'Adult Coed Final A 2nd',
+                        'poolTeamSlotView' => 'A 2nd',
+                    ],
+                ]
+            ],
+            'AdultMen' => [
+                'pools' => ['A' => ['count' => 4]],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'AdultMenAdultTF1','poolTeamKey' => 'AdultMenAdultTF1X',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'Adult Men Final<br>Championship',
+                        'poolTeamView' => 'Adult Men Final A 1st',
+                        'poolTeamSlotView' => 'A 1st',
+                    ],
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'AdultMenAdultTF1','poolTeamKey' => 'AdultMenAdultTF1Y',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'Adult Men Final<br>Championship',
+                        'poolTeamView' => 'Adult Men Final A 2nd',
+                        'poolTeamSlotView' => 'A 2nd',
+                    ],
+                ]
+            ],
         ]
     ];
     private $teamsCoreU14B = [
@@ -218,13 +249,15 @@ class InitTeams2017Command extends Command
         ]
     ];
 
-    private function initRegTeams($teams)
+    private function initRegTeams($teams, $clear = false)
     {
         $projectId = $this->projectId;
 
         // Clear any existing teams
-        foreach(array_keys($teams) as $program) {
-            $this->regTeamConn->delete('regTeams', ['projectId' => $projectId, 'program' => $program]);
+        if ($clear) {
+            foreach (array_keys($teams) as $program) {
+                $this->regTeamConn->delete('regTeams', ['projectId' => $projectId, 'program' => $program]);
+            }
         }
         $teamCount = 0;
         // Cycle through each program
@@ -233,7 +266,11 @@ class InitTeams2017Command extends Command
             foreach($divisions as $division => $info) {
                 $age = substr($division,0,3);
                 $gender = substr($division,3,1);
-                if ($division === 'Adult') {
+                if ($division === 'AdultCoed') {
+                    $age = 'Adult';
+                    $gender = 'C';
+                }
+                if ($division === 'AdultMen') {
                     $age = 'Adult';
                     $gender = 'B';
                 }
@@ -268,13 +305,15 @@ class InitTeams2017Command extends Command
         }
         echo sprintf("Reg  Team Count: %d\n",$teamCount);
     }
-    private function initPoolTeams($teams)
+    private function initPoolTeams($teams,$clear = false)
     {
         $projectId = $this->projectId;
 
         // Clear any existing teams
-        foreach(array_keys($teams) as $program) {
-            $this->gameConn->delete('poolTeams', ['projectId' => $projectId, 'program' => $program]);
+        if ($clear) {
+            foreach (array_keys($teams) as $program) {
+                $this->gameConn->delete('poolTeams', ['projectId' => $projectId, 'program' => $program]);
+            }
         }
         $teamCount = 0;
 
@@ -284,7 +323,11 @@ class InitTeams2017Command extends Command
             foreach($divisions as $division => $info) {
                 $age = substr($division,0,3);
                 $gender = substr($division,3,1);
-                if ($division === 'Adult') {
+                if ($division === 'AdultCoed') {
+                    $age = 'Adult';
+                    $gender = 'C';
+                }
+                if ($division === 'AdultMen') {
                     $age = 'Adult';
                     $gender = 'B';
                 }
@@ -299,8 +342,11 @@ class InitTeams2017Command extends Command
                         $poolTeamId = $projectId.':'.$poolTeamKey;
 
                         $poolView = sprintf('%s-%s %s PP %s',$age,$gender,$program,$poolName);
-                        if ($program === 'Adult') {
-                            $poolView = sprintf('Adult Pool Play %s',$poolName);
+                        if ($division === 'AdultMen') {
+                            $poolView = sprintf('Adult Men PP %s',$poolName);
+                        }
+                        if ($division === 'AdultCoed') {
+                            $poolView = sprintf('Adult Coed PP %s',$poolName);
                         }
                         $poolTeamView = $poolView . $count;
 

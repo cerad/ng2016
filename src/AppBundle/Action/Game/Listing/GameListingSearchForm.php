@@ -99,6 +99,7 @@ EOD;
         'U16G' => 'U-16 Girls',
         'U19B' => 'U-19 Boys',
         'U19G' => 'U-19 Girls',
-        'Adult' => 'Adult',
+        'AdultMen'  => 'Adult Men',
+        'AdultCoed' => 'Adult Coed',
     ];
 }

@@ -17,6 +17,7 @@ parameters:
             genders:
                 B:  B
                 G:  G
+                C:  C
             ages:
                 U10: U10
                 U11: U11
