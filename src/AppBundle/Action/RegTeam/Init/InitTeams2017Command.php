@@ -30,7 +30,7 @@ class InitTeams2017Command extends Command
     {
         echo sprintf("Init Teams AOC2016 ...\n");
 
-        $this->initTeams($this->allTeamsClubU11G);
+        $this->initTeams($this->allTeamsClubU12G);
 
         //$commit = false;
 
@@ -135,6 +135,26 @@ class InitTeams2017Command extends Command
             'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
             'poolView'     => 'U11-G Club Final<br>Championship',
             'poolTeamView' => 'U11-G Club Final A 2nd',
+            'poolTeamSlotView' => 'A 2nd',
+        ],
+    ];
+    private $allTeamsClubU12G = [
+        [
+            'program'  => 'Club', 'gender' => 'G', 'age' => 'U12','division' => 'U12G',
+            'addPoolTeam'  => true,
+            'poolTypeKey'  => 'TF','poolKey' => 'U12GClubTF1','poolTeamKey' => 'U12GClubTF1X',
+            'poolTypeView' => 'FM','poolSlotView' => '', //7,
+            'poolView'     => 'U12-G Club Final<br>Championship',
+            'poolTeamView' => 'U12-G Club Final A 1st',
+            'poolTeamSlotView' => 'A 1st',
+        ],
+        [
+            'program'  => 'Club', 'gender' => 'G', 'age' => 'U12','division' => 'U12G',
+            'addPoolTeam'  => true,
+            'poolTypeKey'  => 'TF','poolKey' => 'U12GClubTF1','poolTeamKey' => 'U12GClubTF1Y',
+            'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+            'poolView'     => 'U12-G Club Final<br>Championship',
+            'poolTeamView' => 'U12-G Club Final A 2nd',
             'poolTeamSlotView' => 'A 2nd',
         ],
     ];
