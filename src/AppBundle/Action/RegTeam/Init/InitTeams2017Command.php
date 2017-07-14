@@ -30,7 +30,7 @@ class InitTeams2017Command extends Command
     {
         echo sprintf("Init Teams AOC2016 ...\n");
 
-        $this->initTeams($this->allTeamsClubU12G);
+        $this->initTeams($this->allTeamsClubU16G);
 
         //$commit = false;
 
@@ -155,6 +155,39 @@ class InitTeams2017Command extends Command
             'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
             'poolView'     => 'U12-G Club Final<br>Championship',
             'poolTeamView' => 'U12-G Club Final A 2nd',
+            'poolTeamSlotView' => 'A 2nd',
+        ],
+    ];
+    private $allTeamsClubU16G = [
+        [
+            'addRegTeam' => true,
+            'regTeamKey' => 'U16GClub04', 'regTeamNumber' => 4, 'regTeamName' => '#04',
+            'program' => 'Club', 'gender' => 'G', 'age' => 'U16','division' => 'U16G',
+            'addPoolTeam' => true,
+            'poolTypeKey'  => 'PP','poolKey' => 'U16GClubPPA','poolTeamKey' => 'U16GClubPPA4',
+            'poolTypeView' => 'PP','poolSlotView' => 'A',
+            'poolView'     => 'U16-G Club Pool A',
+            'poolTeamView' => 'U16-G Club Pool A4',
+            'poolTeamSlotView' => 'A4',
+        ],
+        [
+            'add' => true,
+            'program'  => 'Club', 'gender' => 'G', 'age' => 'U16','division' => 'U16G',
+            'addPoolTeam'  => true,
+            'poolTypeKey'  => 'TF','poolKey' => 'U16GClubTF1','poolTeamKey' => 'U16GClubTF1X',
+            'poolTypeView' => 'FM', 'poolSlotView' => '',
+            'poolView'     => 'U16-G Club Final',
+            'poolTeamView' => 'U16-G Club Final A 1st',
+            'poolTeamSlotView' => 'A 1st',
+        ],
+        [
+            'add' => true,
+            'program'  => 'Club', 'gender' => 'G', 'age' => 'U16','division' => 'U16G',
+            'addPoolTeam'  => true,
+            'poolTypeKey'  => 'TF','poolKey' => 'U16GClubTF1','poolTeamKey' => 'U16GClubTF1Y',
+            'poolTypeView' => 'FM', 'poolSlotView' => '',
+            'poolView'     => 'U16-G Club Final',
+            'poolTeamView' => 'U16-G Club Final A 2nd',
             'poolTeamSlotView' => 'A 2nd',
         ],
     ];
