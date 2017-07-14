@@ -30,11 +30,13 @@ class InitTeams2017Command extends Command
     {
         echo sprintf("Init Teams AOC2016 ...\n");
 
+        $this->initTeams($this->allTeamsClubU11G);
+
         //$commit = false;
 
-        $this->initRegTeams($this->teamsAdult, false);
+        //$this->initRegTeams($this->teamsClubU11G, false);
 
-        $this->initPoolTeams($this->teamsAdult,false);
+        //$this->initPoolTeams($this->teamsClubU11G,false);
 
         //$this->assignRegTeamsToPoolPlayTeams($commit || false);
 
@@ -44,6 +46,123 @@ class InitTeams2017Command extends Command
     }
 
     private $projectId = 'AYSONationalOpenCup2017';
+
+    private function initTeams($teams)
+    {
+        $projectId = $this->projectId;
+
+        $regTeamCount = 0;
+        $poolTeamCount = 0;
+
+        // Cycle through each program
+        foreach($teams as $team)
+        {
+            if (isset($team['regTeamKey'])) {
+                $regTeam = [
+                    'regTeamId'  => $projectId . ':' . $team['regTeamKey'],
+                    'projectId'  => $projectId,
+                    'teamKey'    => $team['regTeamKey'],
+                    'teamNumber' => $team['regTeamNumber'],
+                    'teamName'   => $team['regTeamName'],
+
+                    'program'  => $team['program'],
+                    'gender'   => $team['gender'],
+                    'age'      => $team['age'],
+                    'division' => $team['division'],
+                ];
+                if ($team['addRegTeam']) {
+                    $this->regTeamConn->insert('regTeams', $regTeam);
+                    $regTeamCount++;
+                }
+            }
+            $poolTeam = [
+                'poolTeamId' => $projectId . ':' . $team['poolTeamKey'],
+                'projectId'  => $projectId,
+
+                'poolKey'  => $team['poolKey'],
+                'poolView' => $team['poolView'],
+
+                'poolTypeKey'  => $team['poolTypeKey'],
+                'poolTypeView' => $team['poolTypeView'],
+
+                'poolTeamKey'  => $team['poolTeamKey'],
+                'poolTeamView' => $team['poolTeamView'],
+
+                'poolSlotView'     => $team['poolSlotView'],
+                'poolTeamSlotView' => $team['poolTeamSlotView'],
+
+                'program'  => $team['program'],
+                'gender'   => $team['gender'],
+                'age'      => $team['age'],
+                'division' => $team['division'],
+
+            ];
+            if ($team['addPoolTeam']) {
+                $this->gameConn->insert('poolTeams', $poolTeam);
+                $poolTeamCount++;
+            }
+        }
+        echo sprintf("Team Count: %d %d\n",$regTeamCount,$poolTeamCount);
+    }
+
+    private $allTeamsClubU11G = [
+        [
+            'addRegTeam' => true,
+            'regTeamKey' => 'U11GClub04', 'regTeamNumber' => 4, 'regTeamName' => '#04',
+            'program' => 'Club', 'gender' => 'G', 'age' => 'U11','division' => 'U11G',
+            'addPoolTeam' => true,
+            'poolTypeKey'  => 'PP','poolKey' => 'U11GClubPPA','poolTeamKey' => 'U11GClubPPA4',
+            'poolTypeView' => 'PP','poolSlotView' => 'A', //7,
+            'poolView'     => 'U11-G Club PP A',
+            'poolTeamView' => 'U11-G Club PP A4',
+            'poolTeamSlotView' => 'A4',
+        ],
+        [
+            'add' => true,
+            'program'  => 'Club', 'gender' => 'G', 'age' => 'U11','division' => 'U11G',
+            'addPoolTeam'  => true,
+            'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1X',
+            'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+            'poolView'     => 'U11-G Club Final<br>Championship',
+            'poolTeamView' => 'U11-G Club Final A 1st',
+            'poolTeamSlotView' => 'A 1st',
+        ],
+        [
+            'add' => true,
+            'program'  => 'Club', 'gender' => 'G', 'age' => 'U11','division' => 'U11G',
+            'addPoolTeam'  => true,
+            'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1Y',
+            'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+            'poolView'     => 'U11-G Club Final<br>Championship',
+            'poolTeamView' => 'U11-G Club Final A 2nd',
+            'poolTeamSlotView' => 'A 2nd',
+        ],
+    ];
+    private $teamsClubU11G = [
+        'Club' => [
+            'U11G' => [ // Club Girls 07
+                'pools' => [
+                    'A' => ['count' => 1, 'start' => 3],
+                ],
+                'medals' => [
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1X',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U11-G Club Final<br>Championship',
+                        'poolTeamView' => 'U11-G Club Final A 1st',
+                        'poolTeamSlotView' => 'A 1st',
+                    ],
+                    [
+                        'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1Y',
+                        'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
+                        'poolView'     => 'U11-G Club Final<br>Championship',
+                        'poolTeamView' => 'U11-G Club Final A 2nd',
+                        'poolTeamSlotView' => 'A 2nd',
+                    ],
+                ]
+            ],
+        ],
+    ];
 
     private $teamsClub = [
         'Club' => [
@@ -274,8 +393,9 @@ class InitTeams2017Command extends Command
                     $age = 'Adult';
                     $gender = 'B';
                 }
-                $teamNumber = 0;
+
                 foreach($info['pools'] as $pool) {
+                    $teamNumber = isset($info['start']) ? $info['start'] : 0;
                     $count = $pool['count'];
                     for (; $count; $count--) {
                         $teamNumber++;
@@ -336,9 +456,13 @@ class InitTeams2017Command extends Command
                     $poolTypeView = 'PP';
                     $poolKey = $division . $program. $poolTypeKey . $poolName;
 
+                    $teamNumber = isset($info['start']) ? $info['start'] : 0;
+
                     for ($count = 1; $count <= $pool['count']; $count++) {
 
-                        $poolTeamKey = $poolKey . $count;
+                        $teamNumber++;
+
+                        $poolTeamKey = $poolKey . $teamNumber;
                         $poolTeamId = $projectId.':'.$poolTeamKey;
 
                         $poolView = sprintf('%s-%s %s PP %s',$age,$gender,$program,$poolName);
@@ -348,7 +472,7 @@ class InitTeams2017Command extends Command
                         if ($division === 'AdultCoed') {
                             $poolView = sprintf('Adult Coed PP %s',$poolName);
                         }
-                        $poolTeamView = $poolView . $count;
+                        $poolTeamView = $poolView . $teamNumber;
 
                         $poolTeam = [
                             'poolTeamId' => $poolTeamId,

@@ -26,4 +26,6 @@ If a reg team has not been assigned, consider adding pool team view to exported 
 Adult men vs youth boy or male vs female
 coed
 
+Test remove by assignor without clearing the referee name
+
 
