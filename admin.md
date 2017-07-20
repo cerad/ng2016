@@ -28,4 +28,5 @@ coed
 
 Test remove by assignor without clearing the referee name
 
+ROLE_REFEREE_ADMIN (me) should be ale to see the referee drop downs without signing up to referee.
 
