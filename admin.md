@@ -1,3 +1,6 @@
+25 July 2017
+Checkin from a droplet
+
 13 July 2017
 
 To approve assignments
