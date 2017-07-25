@@ -52,9 +52,9 @@ abstract class LoadAbstractCommand extends Command
 
         $this->conn = $conn;
 
-        $this->initStatements($conn);
+        //$this->initStatements($conn);
 
-        $this->initCerts();
+        //$this->initCerts();
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
