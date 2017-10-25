@@ -49,7 +49,7 @@ class ResultsPoolPlaySearchForm extends AbstractForm
 EOD;
         if ($this->isGranted('ROLE_ADMIN')) {
             $html .= <<<EOD
-<form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl('results_poolplay_2017')}" method="post">
+<form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl('results_poolplay_2018')}" method="post">
   <div class="form-group">
     <label for="projectId">Project</label>
     {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}

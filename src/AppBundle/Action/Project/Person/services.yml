@@ -1,7 +1,7 @@
 services:
 
     project_person_connection:
-        alias: doctrine.dbal.aoc2017_connection
+        alias: doctrine.dbal.noc2018_connection
 
     project_person_repository:
         class: AppBundle\Action\Project\Person\ProjectPersonRepository

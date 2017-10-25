@@ -1,31 +1,31 @@
-results_poolplay_2017:
+results_poolplay_2018:
     path: /poolplay
     defaults:
         _format: html
-        _controller: results_poolplay_controller_2017
-        _view_html:  results_poolplay_view_html_2017
+        _controller: results_poolplay_controller_2018
+        _view_html:  results_poolplay_view_html_2018
         _view_xls:   schedule_team_view_xls
         _view_csv:   schedule_team_view_csv
 
-results_medalround_2017:
+results_medalround_2018:
     path: /medalround
     defaults:
         _format: html
-        _controller: results_medalround_controller_2017
-        _view_html:  results_medalround_view_html_2017
+        _controller: results_medalround_controller_2018
+        _view_html:  results_medalround_view_html_2018
         _view_xls:   schedule_team_view_xls
         _view_csv:   schedule_team_view_csv
 
-results_sportsmanship_2017:
+results_sportsmanship_2018:
     path: /sportsmanship
     defaults:
         _format: html
-        _controller: results_sportsmanship_controller_2017
-        _view_html:  results_sportsmanship_view_html_2017
+        _controller: results_sportsmanship_controller_2018
+        _view_html:  results_sportsmanship_view_html_2018
 
-results_final_2017:
+results_final_2018:
     path: /final
     defaults:
         _format: html
-        _controller: results_final_controller_2017
-        _view_html:  results_final_view_html_2017
+        _controller: results_final_controller_2018
+        _view_html:  results_final_view_html_2018

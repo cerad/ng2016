@@ -55,7 +55,7 @@ class ScheduleAssignorController extends AbstractController2
         ];
 
         $session = $request->getSession();
-        $sessionKey = 'schedule_assignor_search_data_2017';
+        $sessionKey = 'schedule_assignor_search_data_2018';
 
         if ($session->has($sessionKey)) {
             $searchData = array_merge($searchData,$session->get($sessionKey));

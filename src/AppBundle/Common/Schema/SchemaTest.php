@@ -139,7 +139,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
         $this->createDatabase();
 
         $personKey  = 'person-0001';
-        $projectKey = 'AYSONationalOpenCup2017';
+        $projectKey = 'AYSONationalOpenCup2018';
 
         $sql = <<<EOD
 INSERT INTO users (name,email,username,personKey,roles) VALUES(?,?,?,?,?);
@@ -233,7 +233,7 @@ EOD;
             $insertUserStmt->execute($item);
         }
         $provider = new ProjectUserProvider(
-            'AYSONationalOpenCup2017',
+            'AYSONationalOpenCup2018',
             $conn, $conn, []
         );
         $user = $provider->loadUserByUsername('ahundiak');
@@ -248,7 +248,7 @@ EOD;
 
         $user = $provider->refreshUser($user);
         $this->assertEquals('Art Hundiak', $user['name']);
-        $this->assertEquals('AYSONationalOpenCup2017', $user['projectKey']);
+        $this->assertEquals('AYSONationalOpenCup2018', $user['projectKey']);
         $this->assertNull($user['registered']);
 
         $sql = <<<EOD

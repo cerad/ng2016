@@ -1,61 +1,61 @@
-schedule_team_2017:
+schedule_team_2018:
     path: /team.{_format}
     defaults:
         _format: html
-        _controller: schedule_team_controller_2017
-        _view_html:  schedule_team_view_html_2017
-        _view_xls:   schedule_team_view_xls_2017
-        _view_csv:   schedule_team_view_csv_2017
-        _view_txt:   schedule_team_view_txt_2017
+        _controller: schedule_team_controller_2018
+        _view_html:  schedule_team_view_html_2018
+        _view_xls:   schedule_team_view_xls_2018
+        _view_csv:   schedule_team_view_csv_2018
+        _view_txt:   schedule_team_view_txt_2018
 
-schedule_official_2017:
+schedule_official_2018:
     path: /official.{_format}
     defaults:
         _format: html
-        _controller: schedule_official_controller_2017
-        _view_html:  schedule_official_view_html_2017
-        _view_xls:   schedule_official_view_xls_2017
-        _view_csv:   schedule_official_view_csv_2017
-        _view_txt:   schedule_official_view_txt_2017
+        _controller: schedule_official_controller_2018
+        _view_html:  schedule_official_view_html_2018
+        _view_xls:   schedule_official_view_xls_2018
+        _view_csv:   schedule_official_view_csv_2018
+        _view_txt:   schedule_official_view_txt_2018
 
-schedule_assignor_2017:
+schedule_assignor_2018:
     path: /assignor.{_format}
     defaults:
         _format: html
-        _controller: schedule_assignor_controller_2017
-        _view_html:  schedule_assignor_view_html_2017
-        _view_xls:   schedule_assignor_view_excel_2017
-        #_view_csv:   schedule_assignor_view_csv_2017
-        #_view_txt:   schedule_assignor_view_txt_2017
+        _controller: schedule_assignor_controller_2018
+        _view_html:  schedule_assignor_view_html_2018
+        _view_xls:   schedule_assignor_view_excel_2018
+        #_view_csv:   schedule_assignor_view_csv_2018
+        #_view_txt:   schedule_assignor_view_txt_2018
 
-schedule_game_2017:
+schedule_game_2018:
     path: /game.{_format}
     defaults:
         _format: html
-        _controller: schedule_game_controller_2017
-        _view_html:  schedule_game_view_html_2017
-        _view_xls:   schedule_game_view_xls_2017
-        _view_csv:   schedule_game_view_csv_2017
-        _view_txt:   schedule_game_view_txt_2017
+        _controller: schedule_game_controller_2018
+        _view_html:  schedule_game_view_html_2018
+        _view_xls:   schedule_game_view_xls_2018
+        _view_csv:   schedule_game_view_csv_2018
+        _view_txt:   schedule_game_view_txt_2018
         _view_pdf:   schedule_game_view_pdf
         _view_json:  schedule_game_view_json
 
-schedule_my_2017:
+schedule_my_2018:
     path: /my.{_format}
     defaults:
         _format: html
-        _controller: schedule_my_controller_2017
-        _view_html:  schedule_my_view_html_2017
-        _view_txt:   schedule_game_view_txt_2017
+        _controller: schedule_my_controller_2018
+        _view_html:  schedule_my_view_html_2018
+        _view_txt:   schedule_game_view_txt_2018
 
-schedule_medalroundcalc_2017:
+schedule_medalroundcalc_2018:
     path: /medalroundcalc.{_format}
     defaults:
         _format: xls_qf
-        _controller:    schedule_medalroundcalc_controller_2017
-        _view_xls_qf:   schedule_medalroundcalc_view_xls_qf_2017
-        _view_xls_sf:   schedule_medalroundcalc_view_xls_sf_2017
-        _view_xls_fm:   schedule_medalroundcalc_view_xls_fm_2017
+        _controller:    schedule_medalroundcalc_controller_2018
+        _view_xls_qf:   schedule_medalroundcalc_view_xls_qf_2018
+        _view_xls_sf:   schedule_medalroundcalc_view_xls_sf_2018
+        _view_xls_fm:   schedule_medalroundcalc_view_xls_fm_2018
 
 field_map:
     path: /field_map

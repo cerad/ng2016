@@ -11,7 +11,7 @@ class GameReportUpdateTest extends WebTestCase
         $client = static::createClient();
 
         // This is protected
-        $crawler = $client->request('GET', '/game/report/update/AYSONationalOpenCup2017/13402');
+        $crawler = $client->request('GET', '/game/report/update/AYSONationalOpenCup2018/13402');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }

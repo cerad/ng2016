@@ -1,19 +1,19 @@
 services:
 
-    results_standings_calculator_2017:
+    results_standings_calculator_2018:
         class: AppBundle\Action\Results\ResultsStandingsCalculator
         arguments:
             - '@game_connection'
 
-    results_finder_2017:
+    results_finder_2018:
         class: AppBundle\Action\Results\ResultsFinder
         arguments:
             - '@game_connection'
-            - '@results_standings_calculator_2017'
+            - '@results_standings_calculator_2018'
 
     # ===============================================================
     # Pool Play Results
-    results_poolplay_search_form_2017:
+    results_poolplay_search_form_2018:
         class:  AppBundle\Action\Results\PoolPlay\ResultsPoolPlaySearchForm
         parent: abstract_form
         arguments:
@@ -21,24 +21,24 @@ services:
             - '%projects%'
             - '@game_connection'
 
-    results_poolplay_controller_2017:
+    results_poolplay_controller_2018:
         class:  AppBundle\Action\Results\PoolPlay\ResultsPoolPlayController
         parent: abstract_controller
         arguments:
-            - '@results_poolplay_search_form_2017'
-            - '@results_finder_2017'
+            - '@results_poolplay_search_form_2018'
+            - '@results_finder_2018'
             - '%project_choices%'
             - '%projects%'
 
-    results_poolplay_view_html_2017:
+    results_poolplay_view_html_2018:
         class:  AppBundle\Action\Results\PoolPlay\ResultsPoolPlayView
         parent: abstract_view2
         arguments:
-            - '@results_poolplay_search_form_2017'
+            - '@results_poolplay_search_form_2018'
 
     # ===============================================================
     # Medal Round Results
-    results_medalround_search_form_2017:
+    results_medalround_search_form_2018:
         class:  AppBundle\Action\Results\MedalRound\ResultsMedalRoundSearchForm
         parent: abstract_form
         arguments:
@@ -46,27 +46,27 @@ services:
             - '%projects%'
             - '@game_connection'
 
-    results_medalround_controller_2017:
+    results_medalround_controller_2018:
         class:  AppBundle\Action\Results\MedalRound\ResultsMedalRoundController
         parent: abstract_controller
         arguments:
-            - '@results_medalround_search_form_2017'
-            - '@results_finder_2017'
+            - '@results_medalround_search_form_2018'
+            - '@results_finder_2018'
             - '%project_choices%'
             - '%projects%'
 
-    results_medalround_view_html_2017:
+    results_medalround_view_html_2018:
         class:  AppBundle\Action\Results\MedalRound\ResultsMedalRoundView
         parent: abstract_view2
         arguments:
-            - '@results_medalround_search_form_2017'
+            - '@results_medalround_search_form_2018'
 
     # ===============================================================
     # Sportsmanship Results
-    results_sportsmanship_calculator_2017:
+    results_sportsmanship_calculator_2018:
         class: AppBundle\Action\Results\ResultsSportsmanshipCalculator
 
-    results_sportsmanship_search_form_2017:
+    results_sportsmanship_search_form_2018:
         class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipSearchForm
         parent: abstract_form
         arguments:
@@ -74,27 +74,27 @@ services:
             - '%projects%'
             - '@game_connection'
 
-    results_sportsmanship_controller_2017:
+    results_sportsmanship_controller_2018:
         class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipController
         parent: abstract_controller
         arguments:
-            - '@results_sportsmanship_search_form_2017'
-            - '@results_finder_2017'
+            - '@results_sportsmanship_search_form_2018'
+            - '@results_finder_2018'
             - '%project_choices%'
             - '%projects%'
 
-    results_sportsmanship_view_html_2017:
+    results_sportsmanship_view_html_2018:
         class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipView
         parent: abstract_view2
         arguments:
-            - '@results_sportsmanship_search_form_2017'
-            - '@results_sportsmanship_calculator_2017'
+            - '@results_sportsmanship_search_form_2018'
+            - '@results_sportsmanship_calculator_2018'
     # ===============================================================
     # Final Results
-    results_final_calculator_2017:
+    results_final_calculator_2018:
         class: AppBundle\Action\Results\ResultsFinalCalculator
 
-    results_final_search_form_2017:
+    results_final_search_form_2018:
         class:  AppBundle\Action\Results\FinalStandings\ResultsFinalSearchForm
         parent: abstract_form
         arguments:
@@ -102,18 +102,18 @@ services:
             - '%projects%'
             - '@game_connection'
 
-    results_final_controller_2017:
+    results_final_controller_2018:
         class:  AppBundle\Action\Results\FinalStandings\ResultsFinalController
         parent: abstract_controller
         arguments:
-            - '@results_final_search_form_2017'
-            - '@results_finder_2017'
+            - '@results_final_search_form_2018'
+            - '@results_finder_2018'
             - '%project_choices%'
             - '%projects%'
 
-    results_final_view_html_2017:
+    results_final_view_html_2018:
         class:  AppBundle\Action\Results\FinalStandings\ResultsFinalView
         parent: abstract_view2
         arguments:
-            - '@results_final_search_form_2017'
-            - '@results_final_calculator_2017'
+            - '@results_final_search_form_2018'
+            - '@results_final_calculator_2018'

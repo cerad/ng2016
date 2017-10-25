@@ -35,7 +35,7 @@ class ManageRolesCommand extends Command
         $sql = <<<EOD
 SELECT id,projectKey,personKey,name,email 
 FROM  projectPersons 
-WHERE projectKey = 'AYSONationalOpenCup2017' AND (email = ? OR name LIKE ? OR id = ?)
+WHERE projectKey = 'AYSONationalOpenCup2018' AND (email = ? OR name LIKE ? OR id = ?)
 EOD;
         $stmt = $this->conn->executeQuery($sql,[$identifier,'%' . $identifier . '%',$identifier]);
         $rows = $stmt->fetchAll();

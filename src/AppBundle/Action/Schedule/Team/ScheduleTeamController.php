@@ -41,7 +41,7 @@ class ScheduleTeamController extends AbstractController2
             'sortBy'       => 1,
         ];
         $session = $request->getSession();
-        $sessionKey = 'schedule_team_search_data_2017';
+        $sessionKey = 'schedule_team_search_data_2018';
 
         if ($request->query->has('reset')) {
             $session->remove($sessionKey);

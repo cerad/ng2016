@@ -22,7 +22,7 @@ class SeqGameNumbersCommand extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalOpenCup2017';
+    private $projectId = 'AYSONationalOpenCup2018';
 
     public function __construct(
         Connection  $ng2016GamesConn,

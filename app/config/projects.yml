@@ -2,6 +2,7 @@
 parameters:
 
     project_choices:
+        AYSONationalOpenCup2018 : NOC2018
         AYSONationalOpenCup2017 : AOC2017
         AYSONationalGames2016 : NG2016
         AYSONationalGames2014 : NG2014

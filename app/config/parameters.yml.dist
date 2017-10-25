@@ -11,7 +11,10 @@ parameters:
     database_password: ~
 
     database_name_ayso: ayso
-    database_name_test: aoc2017test
+    database_name_test: noc2018test
+
+    database_name_noc2018:      noc2018
+    database_name_noc2018games: noc2018games
 
     database_name_aoc2017:      aoc2017
     database_name_aoc2017games: aoc2017games

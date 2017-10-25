@@ -42,7 +42,7 @@ class GameReportUpdateController extends AbstractController2
                 ['projectId' => $projectId,'gameNumber' => $gameNumber]
             );
         }
-        $backRouteName = 'schedule_team_2017'; // Inject or results link
+        $backRouteName = 'schedule_team_2018'; // Inject or results link
         if ($session->has($sessionKey)) {
             $backRouteName = $session->get($sessionKey);
         }

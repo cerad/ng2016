@@ -1,7 +1,7 @@
 services:
 
     project_connection:
-        alias: doctrine.dbal.aoc2017_connection
+        alias: doctrine.dbal.noc2018_connection
 
     project_factory:
         class: AppBundle\Action\Project\ProjectFactory
@@ -15,5 +15,5 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.ng2014_connection'
-            - '@doctrine.dbal.aoc2017_connection'
+            - '@doctrine.dbal.noc2018_connection'
 

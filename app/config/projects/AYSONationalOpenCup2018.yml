@@ -1,0 +1,376 @@
+parameters:
+
+  app_project_key: AYSONationalOpenCup2018
+
+  app_project_fed_role_key: AYSOV
+
+  app_project:
+    info:
+        key: AYSONationalOpenCup2018 # For now until we migrate games
+
+        slugs: [opengames, noc2018]
+
+        status: Active
+
+        show_header_image: null
+                
+        fedId:     AYSO
+        fedRoleId: AYSOV
+
+        abbv:    "NOC2018"
+        title:   "AYSO National Open Cup 2018"
+        shortTitle: "Open Cup"
+        desc:    "AYSO National Open Cup 2018 - Lancaster, California - July 13th to July 16th"
+        prefix:  'NatOpenCup2018'
+        welcome: 'AYSO WELCOMES YOU TO LANCASTER, CALIFORNIA, JULY 13-15, 2018'
+        website: 'http://aysonationalopencup.org/'
+        logo:    '/images/National_Open_Cup.png'
+        firstDay: 'Friday, July 13'
+        lastDay: 'Sunday, July 15'
+        calendarLink: 'http://aysonationalopencup.org/national-open-cup-schedule/'
+
+        regYear: 'MY2016'
+
+        support:
+            name:  "Tom Bobadilla"
+            email: "thomasbobadilla@ayso.org"
+            subject: "NOC2018 zAYSO question..."
+            phone: 562-547-4457
+              
+        schedules:
+            name: "Andy Price"
+            email: "andyprice@ayso.org"
+            subject: "NOC2018 schedule question..."
+            phone: 310-529-3120
+            
+        assignor:
+            name:  "Tom Bobadilla"
+            email: "thomasbobadilla@ayso.org"
+            subject: "Referee Assignments"
+            phone: 562-547-4457
+
+        administrator:
+            name:  "Tom Bobadilla"
+            email: "thomasbobadilla@ayso.org"
+            subject: "Question for the Referee Administrator"
+            phone: 562-547-4457
+
+        feedback:
+            name:  "AOC Web Team"
+            email: "feedback.noc2018@gmail.com"
+            subject: "Feedback for the team"
+            phone: ""
+
+        registration:
+            name:  "AOC Web Team"
+            email: "web.noc2018@gmail.com"
+            subject: "Registration"
+            phone: ""
+
+        system:
+            name:  "zAYSO Admin"
+            email: "noreply@zayso.org"
+            phone:  ""
+
+        dates:
+            - '2018-07-13' # Fri Pool Play
+            - '2018-07-14' # Sat Pool Play and Quarter Finals
+            - '2018-07-15' # Sun Semi and Finals
+
+        programs:
+            Core: Core
+
+        genders:
+            B:  Boys
+            G:  Girls
+
+        ages:
+            VIP: VIP
+            U10: U10
+            U12: U12
+            U14: U14
+            U16: U16
+            U19: U19
+            Adult: Adult
+
+        search_defaults:
+            projects: ['AYSONationalOpenCup2018']
+            programs: ['Core']
+            dates:    ['2018-07-13']
+            genders:  ['B']
+            ages:     ['U12']
+
+        search_controls:
+            dates:
+                label: Days
+            programs:
+                label: Programs
+            genders:
+                label: Genders
+            ages:
+                label: Ages
+
+        choices:
+            dates:
+                '2018-07-13': Fri # Pool Play
+                '2018-07-14': Sat # Pool Play and Quarter Finals
+                '2018-07-15': Sun # Semi and Finals
+
+            programs:
+                Core:  Core
+                Extra: Extra
+
+            genders:
+                B: Boys
+                G: Girls
+
+            ages:
+                VIP: VIP
+                U10: U10
+                U12: U12
+                U14: U14
+                U16: U16
+                U19: U19
+                Adult: Adult
+
+            pools:
+                Core:
+                    B:
+                        U10: [A,B,C,D]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
+                    G:
+                        U10: [A,B,C,D]
+                        U12: [A,B,C,D]
+                        U14: [A,B,C,D]
+                        U16: [A,B,C,D]
+                        U19: [A,B,C,D]
+
+        levels:
+            AYSO_U10B_Core:
+                program: Core
+                gender:  B
+                age:     U10
+                div:     U10B
+
+            AYSO_U10G_Core:
+                program: Core
+                gender:  G
+                age:     U10
+                div:     U10G
+
+            AYSO_U12B_Core:
+                program: Core
+                gender:  B
+                age:     U12
+                div:     U12B
+
+            AYSO_U12G_Core:
+                program: Core
+                gender:  G
+                age:     U12
+                div:     U12G
+
+        pools:
+
+        venues:
+            Polo: Polo Grounds
+
+        fields:
+
+  # ==================================================
+  # Basic volunteer plan for the form
+  app_project_registration_form_controls:
+
+      name:
+          type:        text
+          label:       Registration Name
+          placeHolder: Your Name
+          required:    true
+          transformex: unique_project_name_transformer
+
+      email:
+          type:        email
+          label:       Registration Email
+          placeHolder: Your Email
+          required:    true
+
+      phone:
+          type:        phone
+          label:       Mobile Phone
+          placeHolder: Your Phone Number
+          required:    false
+          transformer: phone_transformer
+
+      fedKey: {}
+      orgKey: {}
+      refereeBadge: {}
+
+    # willAttend:    { group: plans }
+      willReferee:   { group: plans }
+      willVolunteer: { group: plans }
+      willCoach:     { group: plans }
+      adultExp:      { group: plans }
+      shirtSize: {}
+
+#      availWed:      { group: avail }
+      availThu:      { group: avail }
+      availFri:      { group: avail }
+      availSatMorn:  { group: avail }
+      availSatAfter: { group: avail }
+      availSunMorn:  { group: avail }
+      availSunAfter: { group: avail }
+
+      notesUser: {}
+
+  app_project_controls:
+
+        willAttend:
+            type:    select
+            label:   Will Attend
+            default: na
+            choices:
+                na:    Not yet answered
+                no:    No
+                yes:   Yes - For Sure
+                yesx:  Yes - If my team is selected
+                maybe: Maybe
+
+        willVolunteer:
+            type:    select
+            label:   Will Volunteer
+            default: no
+            choices: { no: No, yes: Yes (besides refereeing), maybe: Not Sure }
+
+        willCoach:
+            type:    select
+            label:   Will Coach
+            default: no
+            choices: { no: No, yes: Yes (or assist), maybe: Not Sure }
+
+        willReferee:
+            type:    select
+            label:   Will Referee
+            default: no
+            choices: { no: No, yes: Yes, maybe: Not Sure }
+
+        refereeBadge:
+            type:    select
+            label:   AYSO Referee Badge
+            default: na
+            choices:
+                None:         NA
+                Regional:     Regional
+                Intermediate: Intermediate
+                Advanced:     Advanced
+                National:     National
+                National_1:   National 1
+                National_2:   National 2
+                Assistant:    Assistant
+                U8Official:   U8 Official
+
+        adultExp:
+            type:     integer # years
+            label:    Years experience refereeing adult games
+            default:  0
+
+        shirtSize:
+            type:    select
+            label:   T-Shirt Size
+            default: na
+            choices:
+                na:         na
+                youths:     Youth Small
+                youthm:     Youth Medium
+                youthl:     Youth Large
+                adults:     Adult Small
+                adultm:     Adult Medium
+                adultl:     Adult Large
+                adultlx:    Adult Large X
+                adultlxx:   Adult Large XX
+                adultlxxx:  Adult Large XXX
+                adultlxxxx: Adult Large XXXX
+
+        notesUser:
+          type:  textarea
+          label: Notes
+          rows:  5
+          cols:  40
+
+        notes:
+          type:  textarea
+          label: Notes
+          rows:  5
+          cols:  60
+
+        fedKey:
+            type:        integer # aysoid
+            label:       AYSO Volunteer ID
+            href:        eayso.org
+            placeHolder: 8 digit number
+            transformer: cerad.ayso.volunteer_key_transformer
+            constraints: ['aysoid_constraint'] # Maybe class name?
+
+        orgKey:
+            type:        integer # region
+            label:       AYSO Region Number
+            href:        eayso.org
+            placeHolder: 1-4 digit number
+            transformer: cerad.ayso.region_key_transformer
+            constraints: ['aysoid_constraint'] # Maybe class name?
+
+        availSatMorn:
+            type:    select
+            label:   Available Saturday Morning (Pool Play)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe }
+
+        availSatAfter:
+            type:    select
+            label:   Available Saturday Afternoon (Qtr-Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe }
+
+        availSunMorn:
+            type:    select
+            label:   Available Sunday Morning (Semi-Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe }
+
+        availSunAfter:
+            type:    select
+            label:   Available Sunday Afternoon (Finals)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
+#        availWed:
+#            type:    select
+#            label:   Available Wednesday (Soccerfest)
+#            default: no
+#            choices: { no: No, yes: Yes, maybe: Maybe}
+#
+#        availThu:
+#            type:    select
+#            label:   Available Thursday (Pool Play)
+#            default: no
+#            choices: { no: No, yes: Yes, maybe: Maybe}
+
+        availFri:
+            type:    select
+            label:   Available Friday (Pool Play)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+            
+        YesNo:
+            type:    select
+            label:   Yes / No
+            default: no
+            choices: { yes: Yes, no: No, maybe: Maybe, nr: Not Required }
+        
+        regYear:
+            type: select
+            label: MemYear
+            default:  null
+            choices: { MY2018: MY2018, MY2017: MY2017, null: '***' }

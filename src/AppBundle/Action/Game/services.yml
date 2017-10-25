@@ -1,33 +1,33 @@
 services:
 
     game_connection:
-        alias: doctrine.dbal.aoc2017games_connection
+        alias: doctrine.dbal.noc2018games_connection
 
     game_migrate_ng2014_command:
         class: AppBundle\Action\Game\Migrate\MigrateGames2014Command
         tags: [{ name: console.command }]
         arguments:
             - '@doctrine.dbal.ng2014games_connection'
-            - '@doctrine.dbal.aoc2017games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
 
     game_init_ng2016_command:
         class: AppBundle\Action\Game\Migrate\InitGames2016Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
 
-    game_init_aoc2017_command:
-        class: AppBundle\Action\Game\Migrate\InitGames2017Command
+    game_init_noc2018_command:
+        class: AppBundle\Action\Game\Migrate\InitGames2018Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
 
     game_adjust_ng2016_command:
         class: AppBundle\Action\Game\Migrate\AdjustGames2016Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2017'
+            - '@doctrine.dbal.noc2018games_connection'
+            - '@schedule_finder_2018'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -35,8 +35,8 @@ services:
         class: AppBundle\Action\Game\Migrate\Soccerfest2016Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2017'
+            - '@doctrine.dbal.noc2018games_connection'
+            - '@schedule_finder_2018'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -44,8 +44,8 @@ services:
         class: AppBundle\Action\Game\Migrate\Approve2016Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2017'
+            - '@doctrine.dbal.noc2018games_connection'
+            - '@schedule_finder_2018'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -53,8 +53,8 @@ services:
         class: AppBundle\Action\Game\Migrate\Publish2016Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2017'
+            - '@doctrine.dbal.noc2018games_connection'
+            - '@schedule_finder_2018'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -62,8 +62,8 @@ services:
         class: AppBundle\Action\Game\Migrate\Open2016Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
-            - '@schedule_finder_2017'
+            - '@doctrine.dbal.noc2018games_connection'
+            - '@schedule_finder_2018'
             - '@game_updater'
             - '@reg_team_import_reader_excel'
 
@@ -71,7 +71,7 @@ services:
          class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
          tags: [{ name: console.command }]
          arguments:
-             - '@doctrine.dbal.aoc2017games_connection'
+             - '@doctrine.dbal.noc2018games_connection'
              - '@game_finder'
              - '@game_updater'
 
@@ -79,20 +79,20 @@ services:
         class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
             - '@game_finder'
             - '@game_updater'
 
     game_finder:
         class: AppBundle\Action\Game\GameFinder
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
-            - '@doctrine.dbal.aoc2017games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
 
     game_updater:
         class: AppBundle\Action\Game\GameUpdater
         arguments:
-            - '@doctrine.dbal.aoc2017games_connection'
+            - '@doctrine.dbal.noc2018games_connection'
 
 # Admin listing action
     game_listing_search_form:

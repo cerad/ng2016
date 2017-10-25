@@ -53,7 +53,7 @@ class ScheduleOfficialController extends AbstractController2
         ];
         // Save selected teams in session
         $session    = $request->getSession();
-        $sessionKey = 'schedule_official_search_data_2017';
+        $sessionKey = 'schedule_official_search_data_2018';
 
         if ($request->query->has('reset')) {
             $session->remove($sessionKey);

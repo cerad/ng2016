@@ -46,7 +46,7 @@ class ImportInfinityCommand extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = './var/data/InfinityReferees20170622.xlsx';
+        $filename = './var/data/InfinityReferees20180622.xlsx';
 
         echo sprintf("Import Infinity Registration from %s\n",$filename);
 
@@ -119,7 +119,7 @@ class ImportInfinityCommand extends Command
         'ckmajusiak@gmail.com'      => ['Chandler Majusiak', 'Kristen Majusiak'],
         'davidsasek@earthlink.net'  => ['David Sasek',       'DJ Sasek'],
     ];
-    private $projectId = 'AYSONationalOpenCup2017';
+    private $projectId = 'AYSONationalOpenCup2018';
 
     private function importRow($row)
     {
