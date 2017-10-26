@@ -62,16 +62,11 @@ EOT;
         }
         $html .= <<<EOT
 <p>
-  If you volunteered at the National Games in 2012, 2014 or 2016, 
+  If you volunteered at the National Games in 2012, 2014, 2016 or at the National Open Cup in 2017,
   you can simply sign in below and update your plans for the {$this->project['title']}.
   If you need help with your password, <a href="{$this->generateUrl('user_password_reset_request')}">click here</a>.
   Otherwise, <a href="{$this->generateUrl('user_create')}">click here to create a new zAYSO account</a> 
   and start the registration process to referee or volunteer.
-</p>
-<br/>
-<p>
-    If you have previously registered on the {$this->project['title']} website, 
-    your registration might not have been migrated to zAYSO. If your login fails then just register again here. 
 </p>
 <br>
     <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.</p>

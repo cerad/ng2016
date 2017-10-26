@@ -221,15 +221,15 @@ class SummaryWriterExcel
         $colStatSlotYc   = $col++;
         $colStatSlotRc   = $col++;
         $colSkip1        = $col++;
-        $colStatSlotWed  = $col++;
-        $colStatSlotThu  = $col++;
+//        $colStatSlotWed  = $col++;
+//        $colStatSlotThu  = $col++;
         $colStatSlotFri  = $col++;
         $colStatSlotSat  = $col++;
         $colStatSlotSun  = $col++;
         $colSkip2        = $col++;
         
-        $colAvailSlotWed  = $col++;
-        $colAvailSlotThu  = $col++;
+//        $colAvailSlotWed  = $col++;
+//        $colAvailSlotThu  = $col++;
         $colAvailSlotFri  = $col++;
         $colAvailSlotSat1 = $col++;
         $colAvailSlotSat2 = $col++;
@@ -252,14 +252,14 @@ class SummaryWriterExcel
         $this->setColAlignCenter($ws,$colStatSlotAr);
         $this->setColAlignCenter($ws,$colStatSlotYc);
         $this->setColAlignCenter($ws,$colStatSlotRc);
-        $this->setColAlignCenter($ws,$colStatSlotWed);
-        $this->setColAlignCenter($ws,$colStatSlotThu);
+//        $this->setColAlignCenter($ws,$colStatSlotWed);
+//        $this->setColAlignCenter($ws,$colStatSlotThu);
         $this->setColAlignCenter($ws,$colStatSlotFri);
         $this->setColAlignCenter($ws,$colStatSlotSat);
         $this->setColAlignCenter($ws,$colStatSlotSun);
         
-        $this->setColAlignCenter($ws,$colAvailSlotWed);
-        $this->setColAlignCenter($ws,$colAvailSlotThu);
+//        $this->setColAlignCenter($ws,$colAvailSlotWed);
+//        $this->setColAlignCenter($ws,$colAvailSlotThu);
         $this->setColAlignCenter($ws,$colAvailSlotFri);
         $this->setColAlignCenter($ws,$colAvailSlotSat1);
         $this->setColAlignCenter($ws,$colAvailSlotSat2);
@@ -280,14 +280,14 @@ class SummaryWriterExcel
         $this->setColWidth($ws,$colStatSlotYc,    5);
         $this->setColWidth($ws,$colStatSlotRc,    5);
         $this->setColWidth($ws,$colSkip1,         5);
-        $this->setColWidth($ws,$colStatSlotWed,   5);
-        $this->setColWidth($ws,$colStatSlotThu,   5);
+//        $this->setColWidth($ws,$colStatSlotWed,   5);
+//        $this->setColWidth($ws,$colStatSlotThu,   5);
         $this->setColWidth($ws,$colStatSlotFri,   5);
         $this->setColWidth($ws,$colStatSlotSat,   5);
         $this->setColWidth($ws,$colStatSlotSun,   5);
         $this->setColWidth($ws,$colSkip2,         5);
-        $this->setColWidth($ws,$colAvailSlotWed,  6);
-        $this->setColWidth($ws,$colAvailSlotThu,  6);
+//        $this->setColWidth($ws,$colAvailSlotWed,  6);
+//        $this->setColWidth($ws,$colAvailSlotThu,  6);
         $this->setColWidth($ws,$colAvailSlotFri,  6);
         $this->setColWidth($ws,$colAvailSlotSat1, 6);
         $this->setColWidth($ws,$colAvailSlotSat2, 6);
@@ -309,14 +309,14 @@ class SummaryWriterExcel
         $this->setCellValue($ws,$colStatSlotAr,   $row,'AR');
         $this->setCellValue($ws,$colStatSlotYc,   $row,'YC');
         $this->setCellValue($ws,$colStatSlotRc,   $row,'RC');
-        $this->setCellValue($ws,$colStatSlotWed,  $row,'WEN');
-        $this->setCellValue($ws,$colStatSlotThu,  $row,'THU');
+//        $this->setCellValue($ws,$colStatSlotWed,  $row,'WEN');
+//        $this->setCellValue($ws,$colStatSlotThu,  $row,'THU');
         $this->setCellValue($ws,$colStatSlotFri,  $row,'FRI');
         $this->setCellValue($ws,$colStatSlotSat,  $row,'SAT');
         $this->setCellValue($ws,$colStatSlotSun,  $row,'SUN');
         
-        $this->setCellValue($ws,$colAvailSlotWed,  $row,'Wen');
-        $this->setCellValue($ws,$colAvailSlotThu,  $row,'Thu');
+//        $this->setCellValue($ws,$colAvailSlotWed,  $row,'Wen');
+//        $this->setCellValue($ws,$colAvailSlotThu,  $row,'Thu');
         $this->setCellValue($ws,$colAvailSlotFri,  $row,'Fri');
         $this->setCellValue($ws,$colAvailSlotSat1, $row,'Sat M');
         $this->setCellValue($ws,$colAvailSlotSat2, $row,'Sat A');
@@ -340,13 +340,13 @@ class SummaryWriterExcel
             $this->setCellValueStat($ws,$colStatSlotYc,$row,$stats['yc']);
             $this->setCellValueStat($ws,$colStatSlotRc,$row,$stats['rc']);
 
-            $this->setCellValueStat($ws,$colStatSlotWed,$row,$stats['wed']);
-            $this->setCellValueStat($ws,$colStatSlotThu,$row,$stats['thu']);
+//            $this->setCellValueStat($ws,$colStatSlotWed,$row,$stats['wed']);
+//            $this->setCellValueStat($ws,$colStatSlotThu,$row,$stats['thu']);
             $this->setCellValueStat($ws,$colStatSlotFri,$row,$stats['fri']);
             $this->setCellValueStat($ws,$colStatSlotSat,$row,$stats['sat']);
             $this->setCellValueStat($ws,$colStatSlotSun,$row,$stats['sun']);
 
-            $availCol = $colAvailSlotWed;
+            $availCol = $colAvailSlotFri;
             foreach($regPerson->avail as $value) {
                 switch(strtolower($value)) {
                     case 'yes':
@@ -387,8 +387,8 @@ class SummaryWriterExcel
             'yc' => 0,
             'rc' => 0,
 
-            'wed' => 0,
-            'thu' => 0,
+//            'wed' => 0,
+//            'thu' => 0,
             'fri' => 0,
             'sat' => 0,
             'sun' => 0,

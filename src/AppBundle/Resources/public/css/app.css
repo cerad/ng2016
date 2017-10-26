@@ -13,7 +13,6 @@ border:none;
 html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,dl,pre,address,variable,form,fieldset,blockquote,label,img {
 color:#000;
 font-family:Arial,'Trebuchet MS',sans-serif;
-font-size:small;
 margin:0;
 padding:0;
 }
@@ -139,7 +138,7 @@ line-height:2em;
 vertical-align:middle;
 }
 
-.tbl-title th
+.tbl-title th,
 .row-hdr {
 background:#B90101;
 height:2em;

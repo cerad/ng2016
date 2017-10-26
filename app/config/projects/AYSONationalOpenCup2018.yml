@@ -216,7 +216,7 @@ parameters:
       shirtSize: {}
 
 #      availWed:      { group: avail }
-      availThu:      { group: avail }
+#      availThu:      { group: avail }
       availFri:      { group: avail }
       availSatMorn:  { group: avail }
       availSatAfter: { group: avail }

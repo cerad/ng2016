@@ -151,13 +151,13 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
 
         // And some games
         $fieldSlots = [
-            [1, 'Thu', '08:00', 'A1', 'A2', 'G'], [2, 'Thu', '08:00', 'A1', 'A2', 'G'],
-            [1, 'Thu', '12:00', 'A2', 'A3', 'G'], [2, 'Thu', '11:00', 'A2', 'A3', 'G'],
-            [1, 'Thu', '16:00', 'A3', 'A1', 'G'], [2, 'Thu', '09:15', 'A3', 'A1', 'G'],
+            [1, 'Fri', '08:00', 'A1', 'A2', 'G'], [2, 'Fri', '08:00', 'A1', 'A2', 'G'],
+            [1, 'Fri', '12:00', 'A2', 'A3', 'G'], [2, 'Fri', '11:00', 'A2', 'A3', 'G'],
+            [1, 'Fri', '16:00', 'A3', 'A1', 'G'], [2, 'Fri', '09:15', 'A3', 'A1', 'G'],
 
-            [1, 'Thu', '10:00', 'A1', 'A2', 'B'], [2, 'Thu', '10:00', 'A1', 'A2', 'B'],
-            [1, 'Thu', '14:00', 'A2', 'A3', 'B'], [2, 'Thu', '14:00', 'A2', 'A3', 'B'],
-            [1, 'Thu', '18:00', 'A3', 'A1', 'B'], [2, 'Thu', '18:15', 'A3', 'A1', 'B'],
+            [1, 'Fri', '10:00', 'A1', 'A2', 'B'], [2, 'Fri', '10:00', 'A1', 'A2', 'B'],
+            [1, 'Fri', '14:00', 'A2', 'A3', 'B'], [2, 'Fri', '14:00', 'A2', 'A3', 'B'],
+            [1, 'Fri', '18:00', 'A3', 'A1', 'B'], [2, 'Fri', '18:15', 'A3', 'A1', 'B'],
         ];
         $gameNumber = 0;
         foreach($programs as $program) {
@@ -178,8 +178,8 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
     private function initGame($projectId, $program, $age, $gender, $gameNumber, $fieldNumber, $dow, $time, $home, $away)
     {
         $dates = [
-            'Wed' => '2016-07-06',
-            'Thu' => '2016-07-07',
+//            'Wed' => '2016-07-06',
+//            'Thu' => '2016-07-07',
             'Fri' => '2016-07-08',
             'Sat' => '2016-07-09',
             'Sun' => '2016-07-10',

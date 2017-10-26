@@ -202,7 +202,7 @@ EOD;
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Availability Information</th></tr>
 <!--  <tr><td>Available Wed (Soccerfest) </td><td>{$personView->availWed}     </td></tr>-->
-  <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}     </td></tr>
+<!--  <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}     </td></tr>-->
   <tr><td>Available Fri (Pool Play)  </td><td>{$personView->availFri}     </td></tr>
   <tr><td>Available Sat Morning  (PP)</td><td>{$personView->availSatMorn} </td></tr>
   <tr><td>Available Sat Afternoon(QF)</td><td>{$personView->availSatAfter}</td></tr>
