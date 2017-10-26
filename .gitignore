@@ -1,6 +1,5 @@
 /node_modules
 /.idea
-/composer.lock
 /bin/symfony_requirements
 /app/config/parameters.yml
 /build/
