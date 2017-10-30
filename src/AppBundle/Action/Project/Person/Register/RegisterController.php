@@ -221,8 +221,11 @@ class RegisterController extends AbstractController2
             return $projectPerson;
         }
         // Search previous tournaments
-        $projectPerson = $projectPersonRepository->find('AYSONationalGames2016',$personKey);
+        $projectPerson = $projectPersonRepository->find('AYSONationalOpenCup2017',$personKey);
 
+        if (!$projectPerson) {
+            $projectPerson = $projectPersonRepository->find('AYSONationalGames2016', $personKey);
+        }
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->find('AYSONationalGames2014', $personKey);
         }

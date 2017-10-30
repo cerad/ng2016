@@ -48,7 +48,7 @@ monolog:
             type:       swift_mailer
             from_email: admin@zayso.org
             to_email:   ahundiak@gmail.com
-            subject:   '[AOC2017] Site Error'
+            subject:   '[NOC2018] Site Error'
             level:      debug
         console:
             type:  console
