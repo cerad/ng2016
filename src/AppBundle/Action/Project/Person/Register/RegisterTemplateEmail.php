@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractView2;
@@ -55,8 +56,7 @@ class RegisterTemplateEmail extends AbstractView2
 
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator
-    )
-    {
+    ) {
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
     }
 
@@ -68,6 +68,7 @@ class RegisterTemplateEmail extends AbstractView2
         $person = $person->fromArray($personArray);
         $personView = $this->projectPersonViewDecorator;
         $personView->setProjectPerson($person);
+
         return <<<EOD
 <html>
 <head>
@@ -92,12 +93,11 @@ class RegisterTemplateEmail extends AbstractView2
   {$this->renderHtmlGeneralInformation($personView)}
     
     <p style="{$this->styleP}">
-      I will provide additional updates in the coming weeks. 
       Please drop me a note if you have any questions about officiating at the {$this->project['shortTitle']} or with suggestions you have on how we can 
       better communicate the information you need.
     </p>
 
-    <p style="{$this->styleP}">I look forward to meeting you at the {$this->project['shortTitle']}.</p>
+    <p style="{$this->styleP}">I look forward to meeting you at the {$this->project['shortTitle']} in July.</p>
 
     <p style="{$this->styleP}">Sincerely,</p>
     
@@ -109,30 +109,28 @@ class RegisterTemplateEmail extends AbstractView2
 </html>
 EOD;
     }
-    private function renderHtmlGeneralInformation($personView) {
+
+    private function renderHtmlGeneralInformation($personView)
+    {
         return <<<EOT
   <p style="{$this->stylePStrong}">
     General Information
   </p>
   <p style="{$this->styleP}">
-    As you might expect, we have a full calendar of soccer and related activities starting {$this->project['firstDay']} and 
-    running through {$this->project['lastDay']}. 
-    On {$this->project['firstDay']}, we will have a mandatory meeting for Coaches and Referees on site 
-    to provide information to all volunteers on how to have a successful {$this->project['shortTitle']}. 
-    We will review important roles, procedures, safety and more! You will also receive your coach and referee bags at this meeting.
-    A full calendar may be viewed at <a href="{$this->project['calendarLink']}" target="_blank">{$this->project['shortTitle']} Calendar</a>.
-    General information about the {$this->project['shortTitle']} can be found at <a href="{$this->project['website']}" target="_blank">{$this->project['shortTitle']} website</a>.
-    </p>
+    Thank you for volunteering! We will have a full calendar of soccer activity starting on Friday, July 13th running through Sunday, July 15th. We will be reaching out to you intermittently throughout the registration period to review your role and update you on the latest information regarding the AYSO National Open Cup. As we get closer to the event, we will outline any required training or meetings that you will need to attend. 
+For more general information regarding the tournament, please visit the National Open Cup website, or contact me if you have any specific questions regarding officiating at the event. 
+</p>
 EOT;
-    } 
+    }
+
     private function renderHtmlPerson(ProjectPersonViewDecorator $personView)
     {
         $regYearProject = $this->getCurrentProjectInfo()['regYear'];
 
         $href = $this->generateUrlAbsoluteUrl('app_welcome');
-        
+
         $notes = nl2br($this->escape($personView->notesUser));
-        
+
         $msg = <<<EOD
 <table style="{$this->tableClass}">
   <tr><td>Name          </td><td>{$this->escape($personView->name)} </td></tr>
@@ -166,8 +164,8 @@ EOT;
 <br>
 EOD;
 
-    if ($personView->person->needsCerts()) {
-        $msg .= <<<EOT
+        if ($personView->person->needsCerts()) {
+            $msg .= <<<EOT
   <p style="{$this->stylePStrong}">
     Please Review Your Certifications
   </p>
@@ -186,10 +184,10 @@ EOD;
     When it's done, your records will be updated and you'll be ready to join us at the {$this->project['title']}.
 </p>
 EOT;
-    }
-    
-    if ($personView->person->needsCertSafeHaven()) {
-        $msg .= <<<EOT
+        }
+
+        if ($personView->person->needsCertSafeHaven()) {
+            $msg .= <<<EOT
   <p style="{$this->stylePStrong}">
     AYSO Safe Haven
   </p>
@@ -199,10 +197,10 @@ EOT;
     with your eAYSO ID {$personView->fedId} and your last name. You can then access the AYSO Safe Haven Training Course at <a href="https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven" target="_blank">https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven</a>.
 </p>
 EOT;
-    }
-    
-    if ($personView->person->needsCertConcussion()) {
-        $msg .= <<<EOT
+        }
+
+        if ($personView->person->needsCertConcussion()) {
+            $msg .= <<<EOT
   <p style="{$this->stylePStrong}">
     AYSO Concussion Awareness
   </p>
@@ -212,8 +210,8 @@ EOT;
     with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
 </p>
 EOT;
-    }
-    
-    return $msg;
+        }
+
+        return $msg;
     }
 }
