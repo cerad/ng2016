@@ -27,9 +27,10 @@ parameters:
         logo:    '/images/National_Open_Cup.png'
         firstDay: 'Friday, July 13'
         lastDay: 'Sunday, July 15'
-        calendarLink: 'http://aysonationalopencup.org/national-open-cup-schedule/'
+        calendarLink: 'http://aysonationalopencup.org/' #national-open-cup-schedule/'
+        emailGraphic: 'http://noc2018.zayso.org/images/header-ipad_01.png'
 
-        regYear: 'MY2016'
+        regYear: 'MY2017'
 
         support:
             name:  "Tom Bobadilla"
@@ -56,13 +57,13 @@ parameters:
             phone: 562-547-4457
 
         feedback:
-            name:  "AOC Web Team"
+            name:  "NOC Web Team"
             email: "feedback.noc2018@gmail.com"
             subject: "Feedback for the team"
             phone: ""
 
         registration:
-            name:  "AOC Web Team"
+            name:  "NOC Web Team"
             email: "web.noc2018@gmail.com"
             subject: "Registration"
             phone: ""

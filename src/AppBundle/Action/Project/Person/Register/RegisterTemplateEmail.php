@@ -80,10 +80,9 @@ class RegisterTemplateEmail extends AbstractView2
   <div style="align-content: center">
     <div style="{$this->styleSkHeader}">
       <h1>
-          <img src="http://noc2018.cerad.org/images/header-ipad_01.png" width="70%">
+          <img src="{$this->project['emailGraphic']}" width="70%">
       </h1>
-    <h1 style="{$this->styleSkFontEmail}">Thank you for registering to volunteer at the 
-    {$this->project['title']}!</h1>
+    <h1 style="{$this->styleSkFontEmail}">Thank you for registering to volunteer at the {$this->project['title']}!</h1>
     </div>
     <div style="{$this->styleClearBoth}"></div>
   </div>
