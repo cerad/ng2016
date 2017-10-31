@@ -16,6 +16,8 @@ class RegisterTemplateEmail extends AbstractView2
     /* define inline styling for gmail */
     protected $styleSkHeader = '
         position: relative;
+        text-align: center;
+        font-style: bold;
     ';
     protected $styleSkFontEmail = '
         font-size: 14px;
@@ -80,9 +82,9 @@ class RegisterTemplateEmail extends AbstractView2
       <h1>
           <img src="http://noc2018.cerad.org/images/header-ipad_01.png" width="70%">
       </h1>
-    </div>
     <br>
     <p style="{$this->styleSkFontEmail}">{$this->project['welcome']}</p>
+    </div>
     <div style="{$this->styleClearBoth}"></div>
   </div>
   <hr>
