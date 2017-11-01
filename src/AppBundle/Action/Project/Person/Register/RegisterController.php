@@ -245,6 +245,8 @@ class RegisterController extends AbstractController2
         $projectPerson->projectKey = $projectKey;
         $projectPerson->plans = [];
         $projectPerson->avail = [];
+        $projectPerson->notes = null;
+        $projectPerson->notesUser = null;
 
         $fedKey = $projectPerson->fedKey;
         $fedFinder = $this->fedFinder;
@@ -256,7 +258,7 @@ class RegisterController extends AbstractController2
             $projectPerson->gender  = $vol['gender'];
         }
         if ($projectPerson->age) {
-            $projectPerson->age += 2;
+            $projectPerson->age += 2; // This needs to be fixed up
         }
         // Xfer the certs
         foreach($projectPerson->getCerts() as $certKey => $projectPersonCert) {
