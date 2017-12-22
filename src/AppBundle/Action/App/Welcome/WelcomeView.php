@@ -61,6 +61,7 @@ EOT;
 EOT;
         }
         $html .= <<<EOT
+<legend>Register to Volunteer</legend>
 <p>
   If you volunteered at the National Games in 2012, 2014, 2016 or at the National Open Cup in 2017,
   you can simply sign in below and update your plans for the {$this->project['title']}.
