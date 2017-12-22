@@ -33,10 +33,10 @@ parameters:
         regYear: 'MY2017'
 
         support:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
+            name: "Andy Price"
+            email: "andyprice@ayso.org"
             subject: "NOC2018 zAYSO question..."
-            phone: 562-547-4457
+            phone: 310-529-3120
               
         schedules:
             name: "Andy Price"
@@ -45,16 +45,16 @@ parameters:
             phone: 310-529-3120
             
         assignor:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
+            name: "Andy Price"
+            email: "andyprice@ayso.org"
             subject: "Referee Assignments"
-            phone: 562-547-4457
+            phone: 310-529-3120
 
         administrator:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
+            name: "Andy Price"
+            email: "andyprice@ayso.org"
             subject: "Question for the Referee Administrator"
-            phone: 562-547-4457
+            phone: 310-529-3120
 
         feedback:
             name:  "NOC Web Team"
