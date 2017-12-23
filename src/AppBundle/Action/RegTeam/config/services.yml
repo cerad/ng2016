@@ -6,36 +6,36 @@ services:
         class:  AppBundle\Action\RegTeam\RegTeamUploadForm
         parent: abstract_form
         arguments:
-            - '@regteam_import_xls'
+            - "@regteam_import_xls"
             
     regteam_import_controller:
         class:  AppBundle\Action\RegTeam\RegTeamImportController
         parent: abstract_controller
         arguments:
-            - '@regteam_upload_form'
-            - '%project_choices%'
-            - '%projects%'
-            - '@reg_team_updater'
+            - "@regteam_upload_form"
+            - "%project_choices%"
+            - "%projects%"
+            - "@reg_team_updater"
 
     regteam_import_view:
         class:  AppBundle\Action\RegTeam\RegTeamImportView
         parent: abstract_view2
         arguments:
-            - '@regteam_upload_form'
+            - "@regteam_upload_form"
 
     regteam_export_controller:
         class:  AppBundle\Action\RegTeam\RegTeamExportController
         parent: abstract_controller
         arguments:
-            - '@game_finder'
-            - '%project_choices%'
-            - '%projects%'
+            - "@game_finder"
+            - "%project_choices%"
+            - "%projects%"
 
     regteam_export_xls:
         class:  AppBundle\Action\RegTeam\RegTeamExcelWriter
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_xls'
+            - "@abstract_exporter_xls"
 
     abstract_importer_xls:
         class: AppBundle\Action\AbstractImporter
@@ -47,27 +47,27 @@ services:
     reg_team_updater:
         class: AppBundle\Action\RegTeam\RegTeamUpdater
         arguments:
-            - '@reg_team_connection'
+            - "@reg_team_connection"
 
     # ===========================================
     # Reg Team Export V2
     reg_team_finder:
         class:  AppBundle\Action\RegTeam\RegTeamFinder
         arguments:
-            - '@game_connection'
-            - '@reg_team_connection'
+            - "@game_connection"
+            - "@reg_team_connection"
 
     reg_team_export_controller2:
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportController
         parent: abstract_controller
         arguments:
-            - '@reg_team_finder'
+            - "@reg_team_finder"
 
     reg_team_export_view_excel2:
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportViewExcel
         parent: abstract_view2
         arguments:
-            - '@reg_team_export_writer_excel2'
+            - "@reg_team_export_writer_excel2"
 
     reg_team_export_writer_excel2:
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportWriterExcel
@@ -82,29 +82,29 @@ services:
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportController
         parent: abstract_controller
         arguments:
-            - '@reg_team_import_form'
-            - '@reg_team_import_reader_excel'
-            - '@reg_team_import_updater'
+            - "@reg_team_import_form"
+            - "@reg_team_import_reader_excel"
+            - "@reg_team_import_updater"
 
     reg_team_import_view2:
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportView
         parent: abstract_view2
         arguments:
-            - '@reg_team_import_form'
+            - "@reg_team_import_form"
 
     reg_team_import_reader_excel:
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
         arguments:
-            - '@cerad.ayso.finder'
+            - "@cerad.ayso.finder"
 
     reg_team_import_updater:
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportUpdater
         arguments:
-            - '@reg_team_connection'
-            - '@game_connection'
+            - "@reg_team_connection"
+            - "@game_connection"
 
     # ===========================================
-    # Transform the team regstrar's spreadsheet to out spreadsheet
+    # Transform the team regstrar"s spreadsheet to out spreadsheet
     reg_team_transform_form:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformForm
         parent: abstract_form
@@ -112,7 +112,7 @@ services:
     reg_team_transform_reader_excel:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformReaderExcel
         arguments:
-            - '@cerad.ayso.finder'
+            - "@cerad.ayso.finder"
 
     reg_team_transform_writer_excel:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformWriterExcel
@@ -120,18 +120,18 @@ services:
     reg_team_transform_controller:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformController
         arguments:
-            - '@reg_team_transform_form'
-            - '@reg_team_transform_reader_excel'
+            - "@reg_team_transform_form"
+            - "@reg_team_transform_reader_excel"
 
     reg_team_transform_view:
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformView
         parent: abstract_view2
         arguments:
-            - '@reg_team_transform_form'
-            - '@reg_team_transform_writer_excel'
+            - "@reg_team_transform_form"
+            - "@reg_team_transform_writer_excel"
 
     reg_team_init_noc2018_command:
         class: AppBundle\Action\RegTeam\Init\InitTeams2018Command
         tags: [{ name: console.command }]
         arguments:
-            - '@doctrine.dbal.noc2018games_connection'
+            - "@doctrine.dbal.noc2018games_connection"

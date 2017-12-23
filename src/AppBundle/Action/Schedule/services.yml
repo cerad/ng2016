@@ -3,37 +3,37 @@ services:
     abstract_exporter_xls:
         class: AppBundle\Action\AbstractExporter
         arguments:
-            - 'xls'
+            - "xls"
 
     abstract_exporter_csv:
         class: AppBundle\Action\AbstractExporter
         arguments:
-            - 'csv'
+            - "csv"
 
     abstract_exporter_txt:
         class: AppBundle\Action\AbstractExporter
         arguments:
-            - 'txt'
+            - "txt"
 
     schedule_finder_2018:
         class: AppBundle\Action\Schedule\ScheduleFinder
         arguments:
-            - '@doctrine.dbal.noc2018games_connection' # gameConn
-            - '@doctrine.dbal.noc2018games_connection' # regTeamConn
-            - '@reg_person_finder'
+            - "@doctrine.dbal.noc2018games_connection" # gameConn
+            - "@doctrine.dbal.noc2018games_connection" # regTeamConn
+            - "@reg_person_finder"
 
     schedule_template_2018:
         abstract: true
         calls:
-            - ['setContainer',       ['@service_container']]
-            - ['setRegPersonFinder', ['@reg_person_finder']]
+            - ["setContainer",       ["@service_container"]]
+            - ["setRegPersonFinder", ["@reg_person_finder"]]
 
     schedule_search_form_2018:
         class:  AppBundle\Action\Schedule\ScheduleSearchForm
         parent: abstract_form
         arguments:
-            - '%project_choices%'
-            - '%projects%'
+            - "%project_choices%"
+            - "%projects%"
 
     # ===============================================================
     # Schedule Game
@@ -41,29 +41,29 @@ services:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameSearchForm
         parent: abstract_form
         arguments:
-            - '%project_choices%'
-            - '%projects%'
+            - "%project_choices%"
+            - "%projects%"
 
     schedule_game_controller_2018:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameController
         parent: abstract_controller
         arguments:
-            - '@schedule_search_form_2018'
-            - '@schedule_finder_2018'
-            - '%project_choices%'
-            - '%projects%'
+            - "@schedule_search_form_2018"
+            - "@schedule_finder_2018"
+            - "%project_choices%"
+            - "%projects%"
 
     schedule_game_template_2018:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2018
-        arguments: ['Game Schedule']
+        arguments: ["Game Schedule"]
 
     schedule_game_view_html_2018:
         class:  AppBundle\Action\Schedule\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_search_form_2018'
-            - '@schedule_game_template_2018'
+            - "@schedule_search_form_2018"
+            - "@schedule_game_template_2018"
 
     schedule_game_writer_excel:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameWriterExcel
@@ -72,19 +72,19 @@ services:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_xls'
+            - "@abstract_exporter_xls"
             
     schedule_game_view_csv_2018:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_csv'
+            - "@abstract_exporter_csv"
             
     schedule_game_view_txt_2018:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_txt'
+            - "@abstract_exporter_txt"
 
     # ===============================================================
     # Schedule Official
@@ -92,34 +92,34 @@ services:
         class:  AppBundle\Action\Schedule\Official\ScheduleOfficialController
         parent: abstract_controller
         arguments:
-            - '@schedule_search_form_2018'
-            - '@schedule_finder_2018'
-            - '%project_choices%'
-            - '%projects%'
+            - "@schedule_search_form_2018"
+            - "@schedule_finder_2018"
+            - "%project_choices%"
+            - "%projects%"
 
     schedule_official_template_2018:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2018
-        arguments: ['Referee Game Schedule', true, false, '@game_official_assign_workflow']
+        arguments: ["Referee Game Schedule", true, false, "@game_official_assign_workflow"]
 
     schedule_official_view_html_2018:
         class:  AppBundle\Action\Schedule\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_search_form_2018'
-            - '@schedule_official_template_2018'
+            - "@schedule_search_form_2018"
+            - "@schedule_official_template_2018"
 
     schedule_official_view_xls_2018:
         class:  AppBundle\Action\Schedule\Official\ScheduleOfficialViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_xls'
+            - "@abstract_exporter_xls"
 
     schedule_official_view_txt_2018:
         class:  AppBundle\Action\Schedule\Official\ScheduleOfficialViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_txt'
+            - "@abstract_exporter_txt"
 
     # ===============================================================
     # Schedule Assignor
@@ -127,48 +127,48 @@ services:
         class:  AppBundle\Action\Schedule\Assignor\ScheduleAssignorSearchForm
         parent: abstract_form
         arguments:
-            - '%project_choices%'
-            - '%projects%'
+            - "%project_choices%"
+            - "%projects%"
 
     schedule_assignor_controller_2018:
         class:  AppBundle\Action\Schedule\Assignor\ScheduleAssignorController
         parent: abstract_controller
         arguments:
-            - '@schedule_assignor_search_form_2018'
-            - '@schedule_finder_2018'
-            - '%project_choices%'
-            - '%projects%'
+            - "@schedule_assignor_search_form_2018"
+            - "@schedule_finder_2018"
+            - "%project_choices%"
+            - "%projects%"
 
     schedule_assignor_template_2018:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2018
         arguments:
-            - 'Assignor Game Schedule'
+            - "Assignor Game Schedule"
             -  true
             -  true
-            - '@game_official_assign_workflow'
-            - '@game_official_details_finder'
+            - "@game_official_assign_workflow"
+            - "@game_official_details_finder"
 
     schedule_assignor_view_html_2018:
         class:  AppBundle\Action\Schedule\ScheduleView
         parent: abstract_view2
         arguments:
-            - '@schedule_assignor_search_form_2018'
-            - '@schedule_assignor_template_2018'
+            - "@schedule_assignor_search_form_2018"
+            - "@schedule_assignor_template_2018"
 
     schedule_assignor_view_excel_2018:
         class:  AppBundle\Action\Schedule\Assignor\ScheduleAssignorViewExcel
         parent: abstract_view2
         arguments:
-            - '@schedule_assignor_writer_excel_2018'
+            - "@schedule_assignor_writer_excel_2018"
 
     schedule_assignor_writer_excel_2018:
         class:  AppBundle\Action\Schedule\Assignor\ScheduleAssignorWriterExcel
         arguments:
-            - '@game_official_assign_workflow'
-            - '@game_official_details_finder'
-            - '@phone_transformer'
-            - '@shirt_size_transformer'
+            - "@game_official_assign_workflow"
+            - "@game_official_details_finder"
+            - "@phone_transformer"
+            - "@shirt_size_transformer"
 
     # ===============================================================
     # Schedule My
@@ -180,26 +180,26 @@ services:
         class:  AppBundle\Action\Schedule\My\ScheduleMyController
         parent: abstract_controller
         arguments:
-            - '@schedule_my_search_form_2018'
-            - '@schedule_finder_2018'
+            - "@schedule_my_search_form_2018"
+            - "@schedule_finder_2018"
 
     schedule_my_template_2018:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2018
-        arguments: ['My Game Schedule', true, false, '@game_official_assign_workflow']
+        arguments: ["My Game Schedule", true, false, "@game_official_assign_workflow"]
 
     schedule_my_view_html_2018:
         class:  AppBundle\Action\Schedule\My\ScheduleMyView
         parent: abstract_view2
         arguments:
-            - '@schedule_my_search_form_2018'
-            - '@schedule_my_template_2018'
+            - "@schedule_my_search_form_2018"
+            - "@schedule_my_template_2018"
 
     schedule_my_view_txt_2018:
         class:  AppBundle\Action\Schedule\My\ScheduleMyViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_txt'
+            - "@abstract_exporter_txt"
 
     # ===============================================================
     # Schedule Team
@@ -207,48 +207,48 @@ services:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamSearchForm
         parent: abstract_form
         arguments:
-            - '%project_choices%'
-            - '%projects%'
-            - '@schedule_finder_2018'
+            - "%project_choices%"
+            - "%projects%"
+            - "@schedule_finder_2018"
 
     schedule_team_controller_2018:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamController
         parent: abstract_controller
         arguments:
-            - '@schedule_team_search_form_2018'
-            - '@schedule_finder_2018'
-            - '%project_choices%'
-            - '%projects%'
+            - "@schedule_team_search_form_2018"
+            - "@schedule_finder_2018"
+            - "%project_choices%"
+            - "%projects%"
 
     schedule_team_template_2018:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2018
-        arguments: ['Team Schedule']
+        arguments: ["Team Schedule"]
 
     schedule_team_view_html_2018:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamView
         parent: abstract_view2
         arguments:
-            - '@schedule_team_search_form_2018'
-            - '@schedule_team_template_2018'
+            - "@schedule_team_search_form_2018"
+            - "@schedule_team_template_2018"
 
     schedule_team_view_xls_2018:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_xls'
+            - "@abstract_exporter_xls"
             
     schedule_team_view_csv_2018:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_csv'
+            - "@abstract_exporter_csv"
 
     schedule_team_view_txt_2018:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamViewFile
         parent: abstract_view2
         arguments:
-            - '@abstract_exporter_txt'
+            - "@abstract_exporter_txt"
             
     # ===============================================================
     # Schedule MedalRoundLogic
@@ -256,8 +256,8 @@ services:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundController
         parent: abstract_controller
         arguments:
-            - '@results_finder_2018'
-            - '%project_choices%'
+            - "@results_finder_2018"
+            - "%project_choices%"
 
     schedule_medalround_calculator_2018:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundCalculator
@@ -266,27 +266,27 @@ services:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
-            - 'qf'
-            - '@schedule_medalround_calculator_2018'
-            - '@results_finder_2018'
-            - '@abstract_exporter_xls'
+            - "qf"
+            - "@schedule_medalround_calculator_2018"
+            - "@results_finder_2018"
+            - "@abstract_exporter_xls"
 
     schedule_medalroundcalc_view_xls_sf_2018:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
-            - 'sf'
-            - '@schedule_medalround_calculator_2018'
-            - '@results_finder_2018'
-            - '@abstract_exporter_xls'
+            - "sf"
+            - "@schedule_medalround_calculator_2018"
+            - "@results_finder_2018"
+            - "@abstract_exporter_xls"
 
     schedule_medalroundcalc_view_xls_fm_2018:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
-            - 'fm'
-            - '@schedule_medalround_calculator_2018'
-            - '@results_finder_2018'
-            - '@abstract_exporter_xls'
+            - "fm"
+            - "@schedule_medalround_calculator_2018"
+            - "@results_finder_2018"
+            - "@abstract_exporter_xls"
 
 

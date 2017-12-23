@@ -3,7 +3,7 @@ services:
     user_manager:
         class: AppBundle\Action\User\UserManager
         arguments:
-            - '@user_connection'
-            - '@user_encoder'
-            - '@user_repository'
-            - '%cerad_user_master_password%'
+            - "@user_connection"
+            - "@user_encoder"
+            - "@user_repository"
+            - "%cerad_user_master_password%"

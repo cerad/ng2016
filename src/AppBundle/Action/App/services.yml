@@ -7,43 +7,43 @@ services:
 
     app_kernel_listener:
         class:  AppBundle\Listener\KernelListener
-        calls: [[setContainer, ['@service_container']]]
+        calls: [[setContainer, ["@service_container"]]]
         tags:  [{ name: kernel.event_subscriber }]
-        arguments: ['%secure_routes%']
+        arguments: ["%secure_routes%"]
 
     app_base_template:
         class: AppBundle\Action\BaseTemplate
         calls:
-            - ['setRouter',  ['@router']]
-            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
-            - ['setProject', ['%app_project%']]
+            - ["setRouter",  ["@router"]]
+            - ["setSecurity",["@security.token_storage","@security.authorization_checker"]]
+            - ["setProject", ["%app_project%"]]
         arguments:
-            - '%show_header_image%'
-            - '%show_results_menu%'
-            - '%show_final_results%'
-            - '%app_version%'
+            - "%show_header_image%"
+            - "%show_results_menu%"
+            - "%show_final_results%"
+            - "%app_version%"
 
     abstract_form:
         abstract: true
         calls:
-           - ['setContainer',  ['@service_container']]
+           - ["setContainer",  ["@service_container"]]
 
     abstract_view:
         abstract: true
         calls:
-           - ['setRouter',  ['@router']]
-           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
-           - ['setBaseTemplate', ['@app_base_template']]
-           - ['setProject', ['%app_project%']]
+           - ["setRouter",  ["@router"]]
+           - ["setSecurity",["@security.token_storage","@security.authorization_checker"]]
+           - ["setBaseTemplate", ["@app_base_template"]]
+           - ["setProject", ["%app_project%"]]
 
     abstract_view2:
         abstract: true
         calls:
-           - ['setContainer', ['@service_container']]
+           - ["setContainer", ["@service_container"]]
 
     abstract_controller:
         abstract: true
-        calls: [[setContainer, ['@service_container']]]
+        calls: [[setContainer, ["@service_container"]]]
 
     # action index
     index_controller:
@@ -59,8 +59,8 @@ services:
         class:  AppBundle\Action\App\Welcome\WelcomeView
         parent: abstract_view2
         arguments:
-            - '@user_login_form'
-            - '%show_results_menu%'
+            - "@user_login_form"
+            - "%show_results_menu%"
 
     # action text alerts
     text_alerts_controller:
@@ -80,9 +80,9 @@ services:
         class:  AppBundle\Action\App\Home\HomeView
         parent: abstract_view2
         arguments:
-            - '@project_person_repository_v2'
-            - '@project_person_view_decorator'
-            - '@reg_person_finder'
+            - "@project_person_repository_v2"
+            - "@project_person_view_decorator"
+            - "@reg_person_finder"
 
     # action file
     file_controller:
@@ -93,14 +93,14 @@ services:
     admin_switch_user_form:
         class:  AppBundle\Action\App\Admin\AdminSwitchUserForm
         parent: abstract_form
-        arguments: ['@reg_person_finder']
+        arguments: ["@reg_person_finder"]
 
     admin_controller:
         class:  AppBundle\Action\App\Admin\AdminController
         parent: abstract_controller
-        arguments: ['@admin_switch_user_form']
+        arguments: ["@admin_switch_user_form"]
 
     admin_view:
         class:  AppBundle\Action\App\Admin\AdminView
         parent: abstract_view2
-        arguments: ['@admin_switch_user_form']
+        arguments: ["@admin_switch_user_form"]
