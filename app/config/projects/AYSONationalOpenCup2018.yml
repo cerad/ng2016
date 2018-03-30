@@ -42,25 +42,12 @@ parameters:
             name: "Taidgh Simpson"
             email: "taidghsimpsone@ayso.org"
             subject: "NOC2018 schedule question..."
-<<<<<<< HEAD
-            phone: 424-221-7960
-=======
             phone: 424-221-7940
->>>>>>> noc2018_update_poc
-            
+
         assignor:
             name: "Taidgh Simpson"
             email: "taidghsimpsone@ayso.org"
             subject: "Referee Assignments"
-<<<<<<< HEAD
-            phone: 424-221-7960
-
-        administrator:
-            name: "Andy Price"
-            email: "andyprice@ayso.org"
-            subject: "Question for the Administrator"
-            phone: 424-221-7960
-=======
             phone: 424-221-7940
 
         administrator:
@@ -68,7 +55,6 @@ parameters:
             email: "taidghsimpsone@ayso.org"
             subject: "Question for the Special Programs Administrator"
             phone: 424-221-7940
->>>>>>> noc2018_update_poc
 
         feedback:
             name:  "NOC Web Team"
