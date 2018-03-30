@@ -33,28 +33,28 @@ parameters:
         regYear: 'MY2017'
 
         support:
-            name: "Andy Price"
-            email: "andyprice@ayso.org"
+            name: "Taidgh Simpson"
+            email: "taidghsimpsone@ayso.org"
             subject: "NOC2018 zAYSO question..."
-            phone: 310-529-3120
+            phone: 424-221-7940
               
         schedules:
-            name: "Andy Price"
-            email: "andyprice@ayso.org"
+            name: "Taidgh Simpson"
+            email: "taidghsimpsone@ayso.org"
             subject: "NOC2018 schedule question..."
-            phone: 310-529-3120
+            phone: 424-221-7940
             
         assignor:
-            name: "Andy Price"
-            email: "andyprice@ayso.org"
+            name: "Taidgh Simpson"
+            email: "taidghsimpsone@ayso.org"
             subject: "Referee Assignments"
-            phone: 310-529-3120
+            phone: 424-221-7940
 
         administrator:
-            name: "Andy Price"
-            email: "andyprice@ayso.org"
-            subject: "Question for the Referee Administrator"
-            phone: 310-529-3120
+            name: "Taidgh Simpson"
+            email: "taidghsimpsone@ayso.org"
+            subject: "Question for the Special Programs Administrator"
+            phone: 424-221-7940
 
         feedback:
             name:  "NOC Web Team"
