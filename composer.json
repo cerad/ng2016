@@ -11,7 +11,7 @@
         "psr-4": { "Tests\\": "tests/" }
     },
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.2",
         "symfony/symfony": "~3.3",
         "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
@@ -21,8 +21,8 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "phpoffice/phpexcel": "^1.8",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "phpoffice/phpspreadsheet": "^1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -43,7 +43,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.5.9"
+            "php": "7.2"
         }
     },
     "extra": {

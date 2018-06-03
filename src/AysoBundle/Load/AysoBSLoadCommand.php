@@ -18,13 +18,20 @@ use Exception;
 class AysoBSLoadCommand extends Command
 {
     /** @var  Connection */
-    private $conn;
+    private $aysoConn;
 
-    public function __construct(Connection $conn)
+    /** @var  Connection */
+    private $nocConn;
+
+    private $project;
+
+    public function __construct(Connection $aysoConn, Connection $nocConn, $project)
     {
         parent::__construct();
 
-        $this->conn = $conn;
+        $this->aysoConn = $aysoConn;
+        $this->nocConn = $nocConn;
+        $this->project = $project['info'];
 
         //$this->projectPersonRepository = new ProjectPersonRepository($ng2016Conn);
     }
@@ -47,9 +54,9 @@ class AysoBSLoadCommand extends Command
         $sql = <<<EOD
 INSERT INTO vols
 (fedKey,name,email,phone,sar,regYear)
-VALUES (?,?,?,?,?,?,?)
+VALUES (?,?,?,?,?,?)
 EOD;
-        $this->insertVolStmt = $this->conn->prepare($sql);
+        $this->insertVolStmt = $this->aysoConn->prepare($sql);
 
 //        $sql = <<<EOD
 //UPDATE vols SET
@@ -62,25 +69,28 @@ UPDATE vols SET
   name = ?, email = ?, phone = ?, sar = ?, regYear = ?
 WHERE fedKey = ?
 EOD;
-        $this->updateVolStmt = $this->conn->prepare($sql);
+        $this->updateVolStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT regYear FROM vols WHERE fedKey = ?';
-        $this->checkVolStmt = $this->conn->prepare($sql);
+        $this->checkVolStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate) VALUES (?,?,?,?,?)';
-        $this->insertCertStmt = $this->conn->prepare($sql);
+        $this->insertCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT roleDate,badge,badgeDate FROM certs WHERE fedKey = ? AND role = ?';
-        $this->checkCertStmt = $this->conn->prepare($sql);
+        $this->checkCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ? WHERE fedKey = ? AND role = ?';
-        $this->updateCertStmt = $this->conn->prepare($sql);
+        $this->updateCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT sar FROM orgs WHERE orgKey = ?';
-        $this->checkOrgStmt = $this->conn->prepare($sql);
+        $this->checkOrgStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'INSERT INTO orgs (orgKey,sar) VALUES (?,?)';
-        $this->insertOrgStmt = $this->conn->prepare($sql);
+        $this->insertOrgStmt = $this->aysoConn->prepare($sql);
+
+        $sql = 'UPDATE projectPersons SET orgKey = ?, regYear = ?, name = ?, email = ?, phone = ? WHERE fedKey = ? AND projectKey = ?';
+        $this->updateProjectPersonStmt = $this->nocConn->prepare($sql);
 
         // Mess with badge list
         $badgeSorts = [];
@@ -124,6 +134,9 @@ EOD;
     private $checkOrgStmt;
 
     /** @var  Statement */
+    private $updateProjectPersonStmt;
+
+    /** @var  string */
     private $inputFileType;
 
     private function load($filename)
@@ -150,11 +163,12 @@ EOD;
                 $this->loadVol($data);
 //                $this->loadCerts($data);
                 $this->loadCert($data, trim($data[6]));
+                $this->refreshProjectPerson($data);
                 if (($row % 100) === 0) {
-                    echo sprintf("\rProcessed %4d of %d", $row, $rowMax - 1);
+                    echo sprintf("\nProcessed %4d of %d (%1.2f%%)", $row, $rowMax - 1, $row/($rowMax-1) * 100);
                 }
             }
-            echo sprintf("\rProcessed %4d rows      \n", $row - 1);
+            echo sprintf("\nProcessed %4d rows (100%%)\n", $row - 1);
         } catch (Exception $e) {
             echo "\n";
             echo 'Row Max: ', $rowMax, "\n";
@@ -191,7 +205,7 @@ EOD;
     {
         $fedKey = 'AYSOV:'.(string)$row[0]; // "AYSOID";
 
-       $regYear = $row[ 1]; // "Membership Year"
+        $regYear = $row[1]; // "Membership Year"
         if (substr($regYear, 0, 2) !== 'MY') {
             $regYear = 'MY'.(string)$regYear;
         }
@@ -328,21 +342,21 @@ EOD;
     ];
     private $badgeSorts = [];
 
-    private function loadCerts($row)
-    {
-//        $regYear = $row[1]; // "Membership Year"
-//        if (substr($regYear, 0, 2) !== 'MY') {
-//            return;
+//    private function loadCerts($row)
+//    {
+////        $regYear = $row[1]; // "Membership Year"
+////        if (substr($regYear, 0, 2) !== 'MY') {
+////            return;
+////        }
+//
+//        $certDescs = explode(',', $row[6]); //"CertificationDesc"
+//        $certDescs = str_replace(' & ', ',', $certDescs);
+//
+//        foreach ($certDescs as $certDesc) {
+//            $this->loadCert($row, trim($certDesc));
 //        }
-
-        $certDescs = explode(',', $row[6]); //"CertificationDesc"
-        $certDescs = str_replace(' & ', ',', $certDescs);
-
-        foreach ($certDescs as $certDesc) {
-            $this->loadCert($row, trim($certDesc));
-        }
-
-    }
+//
+//    }
 
     private function loadCert($row, $certDesc)
     {
@@ -395,7 +409,8 @@ EOD;
                 // Update earlier role date
                 $this->updateCertStmt->execute([$roleDate, $badgeExisting, $certExisting['badgeDate'], $fedKey, $role]);
 
-                echo sprintf('Update Role date %s %s > %s',$fedKey,$roleDate, $roleDateExisting) . "\n";
+//                echo sprintf("\n".'Update Role date %s %s > %s', $fedKey, $roleDate, $roleDateExisting);
+
                 return;
             }
 
@@ -408,6 +423,45 @@ EOD;
         // die(sprintf('Update Badge %s > %s',$badge, $badgeExisting));
     }
 
+    /**
+     * @param $row
+     * @throws Exception
+     */
+    private function refreshProjectPerson($row)
+    {
+//        TODO: finish this function
+
+        if (!$row) {
+            return;
+        }
+
+        $orgKey = $this->getOrgKey($row[9]);
+
+        $fedKey = 'AYSOV:'.(string)$row[0]; // "AYSOID";
+
+        $regYear = $row[1]; // "Membership Year"
+        if (substr($regYear, 0, 2) !== 'MY') {
+            $regYear = 'MY'.(string)$regYear;
+        }
+
+        $projectKey = $this->project['key'];
+
+        $item = [
+            $orgKey,        // "AYSOV:".Region
+            $regYear,       // "Program AYSO Membership Year"
+            $row[13],      // "Name"
+            $row[5],       // "Volunteer Email"
+            $row[4],       // "Volunteer Cell"
+            $fedKey,
+            $projectKey,
+        ];
+
+        $this->updateProjectPersonStmt->execute($item);
+
+        return;
+
+    }
+
     /* ==============================================================================
      * Quick and dirty mapping from sar to org key
      *
@@ -415,7 +469,7 @@ EOD;
     private function processOrgs()
     {
         $sql = 'SELECT DISTINCT sar FROM vols';
-        $stmt = $this->conn->executeQuery($sql);
+        $stmt = $this->aysoConn->executeQuery($sql);
         while ($row = $stmt->fetch()) {
             $sar = $row['SectionAreaRegion'];
             $this->processSar($sar);
@@ -424,25 +478,33 @@ EOD;
 
     private function processSar($sar)
     {
-        if (!$sar) {
-            return;
-        }
 
-        $sarParts = explode('/', $sar);
-        if (count($sarParts) != 3) {
-            die('sar error: '.$sar);
-        }
-        $region = (int)$sarParts[2];
-        if ($region < 1 || $region > 9999) {
-            die('sar region number error: '.$sar);
-        }
-        $orgKey = sprintf('AYSOR:%04d', $region);
+        $orgKey = $this->getOrgKey($sar);
 
         $this->checkOrgStmt->execute([$orgKey]);
         if ($this->checkOrgStmt->fetch()) {
             return;
         }
         $this->insertOrgStmt->execute([$orgKey, $sar]);
+    }
+
+    private function getOrgKey($sar)
+    {
+        if (!$sar) {
+            return null;
+        }
+        $sarParts = explode('/', $sar);
+        if (count($sarParts) != 3) {
+//            die('sar error (no Region found in SAR): '.$sar."\n");
+            return null;
+        }
+        $region = (int)$sarParts[2];
+        if ($region < 1 || $region > 9999) {
+            die('sar region number error: '.$sar."\n");
+        }
+        $orgKey = sprintf('AYSOR:%04d', $region);
+
+        return $orgKey;
     }
 
     protected function clearDatabase(Connection $conn)

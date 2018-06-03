@@ -3,6 +3,9 @@ services:
     cerad.ayso.connection:
         alias: doctrine.dbal.ayso_connection
 
+    cerad.noc.connection:
+        alias: doctrine.dbal.noc2018_connection
+
     cerad.ayso.finder:
         class: Cerad\Bundle\AysoBundle\AysoFinder
         arguments: ['@cerad.ayso.connection']
@@ -33,6 +36,8 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@cerad.ayso.connection'
+            - '@cerad.noc.connection'
+            - '%app_project%'
 
     cerad.ayso.region_key_transformer:
         class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionKeyTransformer
