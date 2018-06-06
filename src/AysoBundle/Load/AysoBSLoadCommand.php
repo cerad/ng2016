@@ -2,8 +2,8 @@
 
 namespace AysoBundle\Load;
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_NumberFormat;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -143,9 +143,9 @@ EOD;
     {
 //        $reader = IOFactory::createReaderForFile($filename);
         /**  Identify the type of $inputFileName  **/
-        $this->inputFileType = IOFactory::identify($filename);
+        $this->inputFileType = PHPExcel_IOFactory::identify($filename);
         /**  Create a new Reader of the type that has been identified  **/
-        $reader = IOFactory::createReader($this->inputFileType);
+        $reader = PHPExcel_IOFactory::createReader($this->inputFileType);
 
         $wb = $reader->load($filename);
         $ws = $wb->getSheet(0);
@@ -385,7 +385,7 @@ EOD;
         $badge = $certMeta['badge'];
 
         $badgeDate = $row[7];
-        $badgeDate = $badgeDate ? NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
+        $badgeDate = $badgeDate ? PHPExcel_Style_NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
 
         $roleDate = $badgeDate;
 
@@ -429,8 +429,6 @@ EOD;
      */
     private function refreshProjectPerson($row)
     {
-//        TODO: finish this function
-
         if (!$row) {
             return;
         }

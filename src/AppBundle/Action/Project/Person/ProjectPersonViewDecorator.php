@@ -74,13 +74,13 @@ class ProjectPersonViewDecorator
     public function getOrgKeyClass()
     {
         $sar = $this->orgKey;
-        $sarClass = ($sar && substr($sar,0,1) !== 'A') ? $this->successClass : $this->dangerClass;
+        $sarClass = ($sar && substr($sar,0,1) == 'A') ? $this->successClass : $this->dangerClass;
         return $sarClass;
     }
     public function getOrgKeyStyle()
     {
         $sar = $this->orgKey;
-        return ($sar && substr($sar,0,1) !== 'A') ? $this->successStyle : $this->dangerStyle;
+        return ($sar && substr($sar,0,1) == 'A') ? $this->successStyle : $this->dangerStyle;
     }
     public function getCertClass($certKey)
     {
