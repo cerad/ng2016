@@ -169,7 +169,7 @@ EOD;
 //                $this->loadCerts($data);
                 $this->loadCert($data, trim($data[6]));
                 $this->refreshProjectPerson($data);
-                if (($row % 100) === 0) {
+                if (($row % 1000) === 0) {
                     echo sprintf("\nProcessed %4d of %d (%1.2f%%)", $row, $rowMax - 1, $row/($rowMax-1) * 100);
                 }
             }
@@ -187,7 +187,11 @@ EOD;
             echo "\n";
 
             echo 'Exception: ', $e->getMessage(), "\n";
+
+            fclose($file);
         }
+
+        fclose($file);
     }
 
     /* ====================================
