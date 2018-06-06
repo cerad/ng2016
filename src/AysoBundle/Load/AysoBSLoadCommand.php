@@ -2,7 +2,7 @@
 
 namespace AysoBundle\Load;
 
-use PHPExcel_IOFactory;
+//use PHPExcel_IOFactory;
 use PHPExcel_Style_NumberFormat;
 
 use Symfony\Component\Console\Command\Command;
@@ -136,30 +136,35 @@ EOD;
     /** @var  Statement */
     private $updateProjectPersonStmt;
 
-    /** @var  string */
-    private $inputFileType;
+//    /** @var  string */
+//    private $inputFileType;
 
     private function load($filename)
     {
 //        $reader = IOFactory::createReaderForFile($filename);
         /**  Identify the type of $inputFileName  **/
-        $this->inputFileType = PHPExcel_IOFactory::identify($filename);
+//        $this->inputFileType = PHPExcel_IOFactory::identify($filename);
         /**  Create a new Reader of the type that has been identified  **/
-        $reader = PHPExcel_IOFactory::createReader($this->inputFileType);
+//        $reader = PHPExcel_IOFactory::createReader($this->inputFileType);
 
-        $wb = $reader->load($filename);
-        $ws = $wb->getSheet(0);
+//        $wb = $reader->load($filename);
+//        $ws = $wb->getSheet(0);
 
-        $rowMax = $ws->getHighestRow();
-        $colMax = $ws->getHighestColumn();
+        $file = file($filename, FILE_SKIP_EMPTY_LINES);
+        $rowMax = count($file);
+
+        //skip header and count the columns
+        $file = fopen($filename, 'r');
+        $colMax = count(fgetcsv($file));
         $range = null;
         $data = null;
         $loc = null;
 
         try {
             for ($row = 2; $row < $rowMax; $row++) {
+                $data = fgetcsv($file);
                 $range = sprintf('A%d:%s%d', $row, $colMax, $row);
-                $data = $ws->rangeToArray($range, null, false, false, false)[0];
+//                $data = $ws->rangeToArray($range, null, false, false, false)[0];
                 $this->loadVol($data);
 //                $this->loadCerts($data);
                 $this->loadCert($data, trim($data[6]));
@@ -464,27 +469,27 @@ EOD;
      * Quick and dirty mapping from sar to org key
      *
      */
-    private function processOrgs()
-    {
-        $sql = 'SELECT DISTINCT sar FROM vols';
-        $stmt = $this->aysoConn->executeQuery($sql);
-        while ($row = $stmt->fetch()) {
-            $sar = $row['SectionAreaRegion'];
-            $this->processSar($sar);
-        }
-    }
+//    private function processOrgs()
+//    {
+//        $sql = 'SELECT DISTINCT sar FROM vols';
+//        $stmt = $this->aysoConn->executeQuery($sql);
+//        while ($row = $stmt->fetch()) {
+//            $sar = $row['SectionAreaRegion'];
+//            $this->processSar($sar);
+//        }
+//    }
 
-    private function processSar($sar)
-    {
-
-        $orgKey = $this->getOrgKey($sar);
-
-        $this->checkOrgStmt->execute([$orgKey]);
-        if ($this->checkOrgStmt->fetch()) {
-            return;
-        }
-        $this->insertOrgStmt->execute([$orgKey, $sar]);
-    }
+//    private function processSar($sar)
+//    {
+//
+//        $orgKey = $this->getOrgKey($sar);
+//
+//        $this->checkOrgStmt->execute([$orgKey]);
+//        if ($this->checkOrgStmt->fetch()) {
+//            return;
+//        }
+//        $this->insertOrgStmt->execute([$orgKey, $sar]);
+//    }
 
     private function getOrgKey($sar)
     {
