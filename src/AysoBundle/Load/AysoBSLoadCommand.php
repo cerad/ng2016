@@ -2,7 +2,6 @@
 
 namespace AysoBundle\Load;
 
-//use PHPExcel_IOFactory;
 use PHPExcel_Style_NumberFormat;
 
 use Symfony\Component\Console\Command\Command;
@@ -136,62 +135,54 @@ EOD;
     /** @var  Statement */
     private $updateProjectPersonStmt;
 
-//    /** @var  string */
-//    private $inputFileType;
-
     private function load($filename)
     {
-//        $reader = IOFactory::createReaderForFile($filename);
-        /**  Identify the type of $inputFileName  **/
-//        $this->inputFileType = PHPExcel_IOFactory::identify($filename);
-        /**  Create a new Reader of the type that has been identified  **/
-//        $reader = PHPExcel_IOFactory::createReader($this->inputFileType);
-
-//        $wb = $reader->load($filename);
-//        $ws = $wb->getSheet(0);
-
         $file = file($filename, FILE_SKIP_EMPTY_LINES);
         $rowMax = count($file);
 
         //skip header and count the columns
         $file = fopen($filename, 'r');
-        $colMax = count(fgetcsv($file));
-        $range = null;
-        $data = null;
-        $loc = null;
 
-        try {
-            for ($row = 2; $row < $rowMax; $row++) {
-                $data = fgetcsv($file);
-                $range = sprintf('A%d:%s%d', $row, $colMax, $row);
-//                $data = $ws->rangeToArray($range, null, false, false, false)[0];
-                $this->loadVol($data);
-//                $this->loadCerts($data);
-                $this->loadCert($data, trim($data[6]));
-                $this->refreshProjectPerson($data);
-                if (($row % 1000) === 0) {
-                    echo sprintf("\nProcessed %4d of %d (%1.2f%%)", $row, $rowMax - 1, $row/($rowMax-1) * 100);
+        if ($file !== false) {
+            $colMax = count(fgetcsv($file));
+            $data = null;
+            $loc = null;
+
+            try {
+                for ($row = 2; $row < $rowMax; $row++) {
+                    $data = fgetcsv($file);
+                    if ($data !== false) {
+                        $this->loadVol($data);
+                        $this->loadCert($data, trim($data[6]));
+                        $this->refreshProjectPerson($data);
+                        if (($row % 1000) === 0) {
+                            echo sprintf(
+                                "\nProcessed %4d of %d (%1.2f%%)",
+                                $row,
+                                $rowMax - 1,
+                                $row / ($rowMax - 1) * 100
+                            );
+                        }
+                    }
                 }
+                echo sprintf("\nProcessed %4d rows (100%%)\n", $row - 1);
+
+            } catch (Exception $e) {
+                $range = sprintf('A%d:%s%d', $row, $colMax, $row);
+                echo "\n";
+                echo 'Row Max: ', $rowMax, "\n";
+                echo 'Column Max: ', $colMax, "\n";
+                echo 'Row: ', $row, "\n";
+                echo 'Range: ', $range, "\n";
+                echo 'Data: ', "\n";
+                var_dump($data);
+                echo "\n";
+
+                echo 'Exception: ', $e->getMessage(), "\n";
+
             }
-            echo sprintf("\nProcessed %4d rows (100%%)\n", $row - 1);
-        } catch (Exception $e) {
-            echo "\n";
-            echo 'Row Max: ', $rowMax, "\n";
-            echo 'Column Max: ', $colMax, "\n";
-            echo 'Row: ', $row, "\n";
-            echo 'Range: ', $range, "\n";
-            echo 'Data: ', "\n";
-//            echo '<pre>';
-            var_dump($data);
-//            echo '</pre>', "/n";
-            echo "\n";
 
-            echo 'Exception: ', $e->getMessage(), "\n";
-
-            fclose($file);
         }
-
-        fclose($file);
     }
 
     /* ====================================
@@ -441,7 +432,6 @@ EOD;
         if (!$row) {
             return;
         }
-
         $orgKey = $this->getOrgKey($row[9]);
 
         $fedKey = 'AYSOV:'.(string)$row[0]; // "AYSOID";

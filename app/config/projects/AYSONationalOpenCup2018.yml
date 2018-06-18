@@ -310,7 +310,7 @@ parameters:
             type:        integer # aysoid
             label:       AYSO Volunteer ID
             href:        eayso.org
-            placeHolder: 8 digit number
+            placeHolder: 8 digit eAYSO ID or 9 digit BlueSombrero ID
             transformer: cerad.ayso.volunteer_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
