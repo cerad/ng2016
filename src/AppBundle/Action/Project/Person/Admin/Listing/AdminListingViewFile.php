@@ -29,7 +29,8 @@ class AdminListingViewFile extends AbstractView
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
         AbstractExporter $exporter,
-        AdminViewFilters $adminViewFilters
+        AdminViewFilters $adminViewFilters,
+        $project
     )
     {
         $this->outFileName =  'RegisteredPeople' . '_' . date('Ymd_His') . '.' . $exporter->fileExtension;
@@ -37,8 +38,7 @@ class AdminListingViewFile extends AbstractView
         $this->personView = $projectPersonViewDecorator;
         $this->exporter = $exporter;
         $this->adminViewFilters = $adminViewFilters;
-
-        $this->regYearProject = $this->project['regYear'];
+        $this->regYearProject = $project['info']['regYear'];
     }
     public function __invoke(Request $request)
     {

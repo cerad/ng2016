@@ -20,7 +20,10 @@ abstract class AbstractView2 implements ContainerAwareInterface
      */
     protected function getBaseTemplate()
     {
-        return $this->container->get('app_base_template');
+        /* @var $bt BaseTemplate */
+        $bt = $this->container->get('app_base_template');
+
+        return $bt;
     }
     protected function renderBaseTemplate($content)
     {
