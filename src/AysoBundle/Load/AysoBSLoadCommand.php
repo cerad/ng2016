@@ -88,7 +88,8 @@ EOD;
         $sql = 'INSERT INTO orgs (orgKey,sar) VALUES (?,?)';
         $this->insertOrgStmt = $this->aysoConn->prepare($sql);
 
-        $sql = 'UPDATE projectPersons SET orgKey = ?, regYear = ?, name = ?, email = ?, phone = ? WHERE fedKey = ? AND projectKey = ?';
+        $sql = 'UPDATE projectPersons SET orgKey = ?, regYear = ?, name = ?, email = ?, phone = ?, verified=1 WHERE fedKey = ? AND projectKey
+ = ?';
         $this->updateProjectPersonStmt = $this->nocConn->prepare($sql);
 
         // Mess with badge list

@@ -264,13 +264,11 @@ EOD;
 <table>
 EOD;
         foreach($personView->getRoles() as $role) {
-
             $html .= <<<EOD
 <tr><td class="{$personView->getRoleClass($role, $regYearProject)}">{$role->role}</td></tr>   
 EOD;
         }
         foreach($personView->getCerts() as $cert) {
-
             $certKey = $cert->role;
 
             $html .= <<<EOD
