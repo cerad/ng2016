@@ -27,7 +27,7 @@ class ScheduleAssignorViewExcel extends AbstractView2
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'ScheduleAssignor2016_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = 'ScheduleAssignor2018_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

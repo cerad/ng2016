@@ -39,7 +39,7 @@ services:
             - '@cerad.noc.connection'
             - '%app_project%'
 
-    affinity_load_command:
+    affinity_transform_command:
         class: AysoBundle\Load\AffinityLoadCommand
         tags: [{ name: console.command }]
         arguments:

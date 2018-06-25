@@ -286,7 +286,7 @@ class ProjectPersonViewDecorator
                     case 'no':
                     case 'none':
                     case '0':
-                        return no;
+                        return 'no';
                 }
 
                 return 'Yes';

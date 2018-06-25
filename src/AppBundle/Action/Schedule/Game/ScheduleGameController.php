@@ -45,7 +45,7 @@ class ScheduleGameController extends AbstractController2
             'projectId' => $projectId,
             'programs'  => ['Core'],
             'genders'   => ['G'],
-            'ages'      => ['U14'],
+            'ages'      => ['14U'],
             'dates'     => [$date],
             'sortBy'    => 1,
             'filter'    => null,

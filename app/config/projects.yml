@@ -1,4 +1,7 @@
 # Pretend that this is a database and the app supports multiple projects
+imports:
+    - { resource: projects/AYSONationalOpenCup2018.yml }
+
 parameters:
 
     project_choices:
@@ -8,6 +11,42 @@ parameters:
         AYSONationalGames2014 : NG2014
 
     projects:
+
+        AYSONationalOpenCup2018:
+            programs:
+                Core:  Core
+                Extra:  Extra
+                Club:  Club
+                VIP:  VIP
+            genders:
+                B:  B
+                G:  G
+                C:  C
+            ages:
+                VIP: VIP
+                10U: 10U
+                11U: 11U
+                12U: 12U
+                13U: 13U
+                14U: 14U
+                16U: 16U
+                19U: U19
+                2008: 2008
+                2007: 2007
+                2006: 2006
+                2005: 2005
+                2004: 2004
+                2003: 2003
+                2002: 2002
+            dates:
+                '2018-07-13': Fri # Pool Play
+                '2018-07-14': Sat # Pool Play and Quarter Finals
+                '2018-07-15': Sun # Semi and Finals
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'
+                3: 'Field, Date, Time'
+                4: 'Game Number'
 
         AYSONationalOpenCup2017:
             programs:

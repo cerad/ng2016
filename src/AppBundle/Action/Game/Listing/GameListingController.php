@@ -34,7 +34,7 @@ class GameListingController extends AbstractController2
         $searchData = [
             'projectId' => $projectId,
             'program'   => $this->getDefaultProgramForProject($projectId),
-            'division'  => 'U14B',
+            'division'  => 'B14U',
             'show'      => 'all',
         ];
         // Override from session
@@ -64,7 +64,6 @@ class GameListingController extends AbstractController2
         if ($searchData['division']) {
             $criteria['divisions'] = [$searchData['division']];
         }
-
         switch($searchData['show']) {
             case 'all':
                 $regTeams = $this->finder->findRegTeams($criteria);

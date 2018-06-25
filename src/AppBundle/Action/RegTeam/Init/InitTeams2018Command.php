@@ -30,17 +30,17 @@ class InitTeams2018Command extends Command
     {
         echo sprintf("Init Teams NOC2018 ...\n");
 
-        $this->initTeams($this->allTeamsClubU16G);
+        $this->initTeams($this->allTeamsClubG16U);
 
-        //$commit = false;
+        $commit = false;
 
-        //$this->initRegTeams($this->teamsClubU11G, false);
+        $this->initRegTeams($this->teamsClubG11U, false);
 
-        //$this->initPoolTeams($this->teamsClubU11G,false);
+        $this->initPoolTeams($this->teamsClubG11U,false);
 
-        //$this->assignRegTeamsToPoolPlayTeams($commit || false);
+//        $this->assignRegTeamsToPoolPlayTeams($commit || false);
 
-        //$this->initGames($commit || true);
+//        $this->initGames($commit || true);
 
         echo sprintf("Init Teams NOC2018 Completed.\n");
     }
@@ -105,111 +105,111 @@ class InitTeams2018Command extends Command
         echo sprintf("Team Count: %d %d\n",$regTeamCount,$poolTeamCount);
     }
 
-    private $allTeamsClubU11G = [
+    private $allTeamsClubG11U = [
         [
             'addRegTeam' => true,
-            'regTeamKey' => 'U11GClub04', 'regTeamNumber' => 4, 'regTeamName' => '#04',
-            'program' => 'Club', 'gender' => 'G', 'age' => 'U11','division' => 'U11G',
+            'regTeamKey' => 'G11UClub04', 'regTeamNumber' => 4, 'regTeamName' => '#04',
+            'program' => 'Club', 'gender' => 'G', 'age' => '11U','division' => 'G11U',
             'addPoolTeam' => true,
-            'poolTypeKey'  => 'PP','poolKey' => 'U11GClubPPA','poolTeamKey' => 'U11GClubPPA4',
+            'poolTypeKey'  => 'PP','poolKey' => 'G11UClubPPA','poolTeamKey' => 'G11UClubPPA4',
             'poolTypeView' => 'PP','poolSlotView' => 'A', //7,
-            'poolView'     => 'U11-G Club PP A',
-            'poolTeamView' => 'U11-G Club PP A4',
+            'poolView'     => 'G11U Club PP A',
+            'poolTeamView' => 'G11U Club PP A4',
             'poolTeamSlotView' => 'A4',
         ],
         [
             'add' => true,
-            'program'  => 'Club', 'gender' => 'G', 'age' => 'U11','division' => 'U11G',
+            'program'  => 'Club', 'gender' => 'G', 'age' => '11U','division' => 'G11U',
             'addPoolTeam'  => true,
-            'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1X',
+            'poolTypeKey'  => 'TF','poolKey' => 'G11UClubTF1','poolTeamKey' => 'G11UClubTF1X',
             'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-            'poolView'     => 'U11-G Club Final<br>Championship',
-            'poolTeamView' => 'U11-G Club Final A 1st',
+            'poolView'     => 'G11U Club Final<br>Championship',
+            'poolTeamView' => 'G11U Club Final A 1st',
             'poolTeamSlotView' => 'A 1st',
         ],
         [
             'add' => true,
-            'program'  => 'Club', 'gender' => 'G', 'age' => 'U11','division' => 'U11G',
+            'program'  => 'Club', 'gender' => 'G', 'age' => '11U','division' => 'G11U',
             'addPoolTeam'  => true,
-            'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1Y',
+            'poolTypeKey'  => 'TF','poolKey' => 'G11UClubTF1','poolTeamKey' => 'G11UClubTF1Y',
             'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-            'poolView'     => 'U11-G Club Final<br>Championship',
-            'poolTeamView' => 'U11-G Club Final A 2nd',
+            'poolView'     => 'G11U Club Final<br>Championship',
+            'poolTeamView' => 'G11U Club Final A 2nd',
             'poolTeamSlotView' => 'A 2nd',
         ],
     ];
-    private $allTeamsClubU12G = [
+    private $allTeamsClubG12U = [
         [
-            'program'  => 'Club', 'gender' => 'G', 'age' => 'U12','division' => 'U12G',
+            'program'  => 'Club', 'gender' => 'G', 'age' => '12U','division' => 'G12U',
             'addPoolTeam'  => true,
-            'poolTypeKey'  => 'TF','poolKey' => 'U12GClubTF1','poolTeamKey' => 'U12GClubTF1X',
+            'poolTypeKey'  => 'TF','poolKey' => 'G12UClubTF1','poolTeamKey' => 'G12UClubTF1X',
             'poolTypeView' => 'FM','poolSlotView' => '', //7,
-            'poolView'     => 'U12-G Club Final<br>Championship',
-            'poolTeamView' => 'U12-G Club Final A 1st',
+            'poolView'     => 'G12U Club Final<br>Championship',
+            'poolTeamView' => 'G12U Club Final A 1st',
             'poolTeamSlotView' => 'A 1st',
         ],
         [
-            'program'  => 'Club', 'gender' => 'G', 'age' => 'U12','division' => 'U12G',
+            'program'  => 'Club', 'gender' => 'G', 'age' => '12U','division' => 'G12U',
             'addPoolTeam'  => true,
-            'poolTypeKey'  => 'TF','poolKey' => 'U12GClubTF1','poolTeamKey' => 'U12GClubTF1Y',
+            'poolTypeKey'  => 'TF','poolKey' => 'G12UClubTF1','poolTeamKey' => 'G12UClubTF1Y',
             'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-            'poolView'     => 'U12-G Club Final<br>Championship',
-            'poolTeamView' => 'U12-G Club Final A 2nd',
+            'poolView'     => 'G12U Club Final<br>Championship',
+            'poolTeamView' => 'G12U Club Final A 2nd',
             'poolTeamSlotView' => 'A 2nd',
         ],
     ];
-    private $allTeamsClubU16G = [
+    private $allTeamsClubG16U = [
         [
             'addRegTeam' => true,
-            'regTeamKey' => 'U16GClub04', 'regTeamNumber' => 4, 'regTeamName' => '#04',
-            'program' => 'Club', 'gender' => 'G', 'age' => 'U16','division' => 'U16G',
+            'regTeamKey' => 'G16UClub04', 'regTeamNumber' => 4, 'regTeamName' => '#04',
+            'program' => 'Club', 'gender' => 'G', 'age' => '16U','division' => 'G16U',
             'addPoolTeam' => true,
-            'poolTypeKey'  => 'PP','poolKey' => 'U16GClubPPA','poolTeamKey' => 'U16GClubPPA4',
+            'poolTypeKey'  => 'PP','poolKey' => 'G16UClubPPA','poolTeamKey' => 'G16UClubPPA4',
             'poolTypeView' => 'PP','poolSlotView' => 'A',
-            'poolView'     => 'U16-G Club Pool A',
-            'poolTeamView' => 'U16-G Club Pool A4',
+            'poolView'     => 'G16U Club Pool A',
+            'poolTeamView' => 'G16U Club Pool A4',
             'poolTeamSlotView' => 'A4',
         ],
         [
             'add' => true,
-            'program'  => 'Club', 'gender' => 'G', 'age' => 'U16','division' => 'U16G',
+            'program'  => 'Club', 'gender' => 'G', 'age' => '16U','division' => 'G16U',
             'addPoolTeam'  => true,
-            'poolTypeKey'  => 'TF','poolKey' => 'U16GClubTF1','poolTeamKey' => 'U16GClubTF1X',
+            'poolTypeKey'  => 'TF','poolKey' => 'G16UClubTF1','poolTeamKey' => 'G16UClubTF1X',
             'poolTypeView' => 'FM', 'poolSlotView' => '',
-            'poolView'     => 'U16-G Club Final',
-            'poolTeamView' => 'U16-G Club Final A 1st',
+            'poolView'     => 'G16U Club Final',
+            'poolTeamView' => 'G16U Club Final A 1st',
             'poolTeamSlotView' => 'A 1st',
         ],
         [
             'add' => true,
-            'program'  => 'Club', 'gender' => 'G', 'age' => 'U16','division' => 'U16G',
+            'program'  => 'Club', 'gender' => 'G', 'age' => '16U','division' => 'G16U',
             'addPoolTeam'  => true,
-            'poolTypeKey'  => 'TF','poolKey' => 'U16GClubTF1','poolTeamKey' => 'U16GClubTF1Y',
+            'poolTypeKey'  => 'TF','poolKey' => 'G16UClubTF1','poolTeamKey' => 'G16UClubTF1Y',
             'poolTypeView' => 'FM', 'poolSlotView' => '',
-            'poolView'     => 'U16-G Club Final',
-            'poolTeamView' => 'U16-G Club Final A 2nd',
+            'poolView'     => 'G16U Club Final',
+            'poolTeamView' => 'G16U Club Final A 2nd',
             'poolTeamSlotView' => 'A 2nd',
         ],
     ];
-    private $teamsClubU11G = [
+    private $teamsClubG11U = [
         'Club' => [
-            'U11G' => [ // Club Girls 07
+            'G11U' => [ // Club Girls 07
                 'pools' => [
                     'A' => ['count' => 1, 'start' => 3],
                 ],
                 'medals' => [
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1X',
+                        'poolTypeKey'  => 'TF','poolKey' => 'G11UClubTF1','poolTeamKey' => 'G11UClubTF1X',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U11-G Club Final<br>Championship',
-                        'poolTeamView' => 'U11-G Club Final A 1st',
+                        'poolView'     => 'G11U Club Final<br>Championship',
+                        'poolTeamView' => 'G11U Club Final A 1st',
                         'poolTeamSlotView' => 'A 1st',
                     ],
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U11GClubTF1','poolTeamKey' => 'U11GClubTF1Y',
+                        'poolTypeKey'  => 'TF','poolKey' => 'G11UClubTF1','poolTeamKey' => 'G11UClubTF1Y',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U11-G Club Final<br>Championship',
-                        'poolTeamView' => 'U11-G Club Final A 2nd',
+                        'poolView'     => 'G11U Club Final<br>Championship',
+                        'poolTeamView' => 'G11U Club Final A 2nd',
                         'poolTeamSlotView' => 'A 2nd',
                     ],
                 ]
@@ -219,90 +219,90 @@ class InitTeams2018Command extends Command
 
     private $teamsClub = [
         'Club' => [
-            'U10G' => [ // Club Girls 07
+            'G10U' => [ // Club Girls 07
                 'pools' => [
                     'A' => ['count' => 4],
                 ],
                 'medals' => [
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U10GClubTF1','poolTeamKey' => 'U10GClubTF1X',
+                        'poolTypeKey'  => 'TF','poolKey' => 'G10UClubTF1','poolTeamKey' => 'G10UClubTF1X',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U10-G Club Final<br>Championship',
-                        'poolTeamView' => 'U10-G Club Final A 1st',
+                        'poolView'     => 'G10U Club Final<br>Championship',
+                        'poolTeamView' => 'G10U Club Final A 1st',
                         'poolTeamSlotView' => 'A 1st',
                     ],
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U10GClubTF1','poolTeamKey' => 'U10GClubTF1Y',
+                        'poolTypeKey'  => 'TF','poolKey' => 'G10UClubTF1','poolTeamKey' => 'G10UClubTF1Y',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U10-G Club Final<br>Championship',
-                        'poolTeamView' => 'U10-G Club Final A 2nd',
+                        'poolView'     => 'G10U Club Final<br>Championship',
+                        'poolTeamView' => 'G10U Club Final A 2nd',
                         'poolTeamSlotView' => 'A 2nd',
                     ],
                 ]
             ],
-            'U11G' => [ // Club Girls 06 No finals
+            'G11U' => [ // Club Girls 06 No finals
                 'pools' => [
                     'A' => ['count' => 3],
                 ],
                 'medals' => [],
             ],
-            'U12G' => [ // Club Girls 05 No Finals
+            'G12U' => [ // Club Girls 05 No Finals
                 'pools' => [
                     'A' => ['count' => 4],
                 ],
                 'medals' => [],
             ],
-            'U14G' => [ // Club Girls 03-04 No Finals
+            'G14U' => [ // Club Girls 03-04 No Finals
                 'pools' => [
                     'A' => ['count' => 5],
                 ],
                 'medals' => [],
             ],
-            'U16G' => [ // Club Girls 01-02 No finals, 3 Games
+            'G16U' => [ // Club Girls 01-02 No finals, 3 Games
                 'pools' => [
                     'A' => ['count' => 3],
                 ],
                 'medals' => []
             ],
-            'U11B' => [ // Club Boys 06-07
+            'B11U' => [ // Club Boys 06-07
                 'pools' => [
                     'A' => ['count' => 3],
                     'B' => ['count' => 6],
                 ],
                 'medals' => [
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U11BClubTF1','poolTeamKey' => 'U11BClubTF1X',
+                        'poolTypeKey'  => 'TF','poolKey' => 'B11UClubTF1','poolTeamKey' => 'B11UClubTF1X',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U11-B Club Final<br>Championship',
-                        'poolTeamView' => 'U11-B Club Final A 1st',
+                        'poolView'     => 'B11U Club Final<br>Championship',
+                        'poolTeamView' => 'B11U Club Final A 1st',
                         'poolTeamSlotView' => 'A 1st',
                     ],
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U11BClubTF1','poolTeamKey' => 'U11BClubTF1Y',
+                        'poolTypeKey'  => 'TF','poolKey' => 'B11UClubTF1','poolTeamKey' => 'B11UClubTF1Y',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U11-B Club Final<br>Championship',
-                        'poolTeamView' => 'U11-B Club Final B 1st',
+                        'poolView'     => 'B11U Club Final<br>Championship',
+                        'poolTeamView' => 'B11U Club Final B 1st',
                         'poolTeamSlotView' => 'B 1st',
                     ],
                 ],
             ],
-            'U13B' => [ // Club Boys 04-05
+            'B13U' => [ // Club Boys 04-05
                 'pools' => [
                     'A' => ['count' => 4],
                 ],
                 'medals' => [
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U13BClubTF1','poolTeamKey' => 'U13BClubTF1X',
+                        'poolTypeKey'  => 'TF','poolKey' => 'B13UClubTF1','poolTeamKey' => 'B13UClubTF1X',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U13-B Club Final<br>Championship',
-                        'poolTeamView' => 'U13-B Club Final A 1st',
+                        'poolView'     => 'B13U Club Final<br>Championship',
+                        'poolTeamView' => 'B13U Club Final A 1st',
                         'poolTeamSlotView' => 'A 1st',
                     ],
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U13BClubTF1','poolTeamKey' => 'U13BClubTF1Y',
+                        'poolTypeKey'  => 'TF','poolKey' => 'B13UClubTF1','poolTeamKey' => 'B13UClubTF1Y',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U13-B Club Final<br>Championship',
-                        'poolTeamView' => 'U13-B Club Final A 2nd',
+                        'poolView'     => 'B13U Club Final<br>Championship',
+                        'poolTeamView' => 'B13U Club Final A 2nd',
                         'poolTeamSlotView' => 'A 2nd',
                     ],
                 ],
@@ -311,30 +311,30 @@ class InitTeams2018Command extends Command
     ];
     private $teamsExtra = [
         'Extra' => [
-            'U12B' => [
+            'B12U' => [
                 'pools' => [
                     'A' => ['count' => 4],
                     'B' => ['count' => 4],
                 ],
                 'medals' => [],
             ],
-            'U14G' => [
+            'G14U' => [
                 'pools' => [
                     'A' => ['count' => 6],
                 ],
                 'medals' => [
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U14GExtraTF1','poolTeamKey' => 'U14GExtraTF1X',
+                        'poolTypeKey'  => 'TF','poolKey' => 'G14UExtraTF1','poolTeamKey' => 'G14UExtraTF1X',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U14-G Extra Final<br>Championship',
-                        'poolTeamView' => 'U14-G Extra Final A 1st',
+                        'poolView'     => 'G14U Extra Final<br>Championship',
+                        'poolTeamView' => 'G14U Extra Final A 1st',
                         'poolTeamSlotView' => 'A 1st',
                     ],
                     [
-                        'poolTypeKey'  => 'TF','poolKey' => 'U14GExtraTF1','poolTeamKey' => 'U14GExtraTF1Y',
+                        'poolTypeKey'  => 'TF','poolKey' => 'G14UExtraTF1','poolTeamKey' => 'G14UExtraTF1Y',
                         'poolTypeView' => 'FM', 'poolSlotView' => '', //7,
-                        'poolView'     => 'U14-G Extra Final<br>Championship',
-                        'poolTeamView' => 'U14-G Extra Final A 2nd',
+                        'poolView'     => 'G14U Extra Final<br>Championship',
+                        'poolTeamView' => 'G14U Extra Final A 2nd',
                         'poolTeamSlotView' => 'A 2nd',
                     ],
                 ]
@@ -383,37 +383,37 @@ class InitTeams2018Command extends Command
             ],
         ]
     ];
-    private $teamsCoreU14B = [
+    private $teamsCoreB14U = [
         'Core' => [
-            'U14B' => [
+            'B14U' => [
                 'pools' => [],
                 'medals' => [
                     [
-                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA5',
+                        'poolTypeKey'  => 'PP','poolKey' => 'B14UCorePPA','poolTeamKey' => 'B14UCorePPA5',
                         'poolTypeView' => 'PP', 'poolSlotView' => 'A',
-                        'poolView'     => 'U14-B Pool Play A',
-                        'poolTeamView' => 'U14-B Pool Play A5',
+                        'poolView'     => 'B14U Pool Play A',
+                        'poolTeamView' => 'B14U Pool Play A5',
                         'poolTeamSlotView' => 'A5',
                     ],
                     [
-                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA6',
+                        'poolTypeKey'  => 'PP','poolKey' => 'B14UCorePPA','poolTeamKey' => 'B14UCorePPA6',
                         'poolTypeView' => 'PP', 'poolSlotView' => 'A',
-                        'poolView'     => 'U14-B Pool Play A',
-                        'poolTeamView' => 'U14-B Pool Play A6',
+                        'poolView'     => 'B14U Pool Play A',
+                        'poolTeamView' => 'B14U Pool Play A6',
                         'poolTeamSlotView' => 'A6',
                     ],
                     [
-                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA7',
+                        'poolTypeKey'  => 'PP','poolKey' => 'B14UCorePPA','poolTeamKey' => 'B14UCorePPA7',
                         'poolTypeView' => 'PP', 'poolSlotView' => 'A',
-                        'poolView'     => 'U14-B Pool Play A',
-                        'poolTeamView' => 'U14-B Pool Play A7',
+                        'poolView'     => 'B14U Pool Play A',
+                        'poolTeamView' => 'B14U Pool Play A7',
                         'poolTeamSlotView' => 'A7',
                     ],
                     [
-                        'poolTypeKey'  => 'PP','poolKey' => 'U14BCorePPA','poolTeamKey' => 'U14BCorePPA8',
+                        'poolTypeKey'  => 'PP','poolKey' => 'B14UCorePPA','poolTeamKey' => 'B14UCorePPA8',
                         'poolTypeView' => 'PP', 'poolSlotView' => 'A',
-                        'poolView'     => 'U14-B Pool Play A',
-                        'poolTeamView' => 'U14-B Pool Play A8',
+                        'poolView'     => 'B14U Pool Play A',
+                        'poolTeamView' => 'B14U Pool Play A8',
                         'poolTeamSlotView' => 'A8',
                     ],
                 ],

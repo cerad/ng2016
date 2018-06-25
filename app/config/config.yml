@@ -8,13 +8,12 @@ imports:
     - { resource: users.yml      }
     - { resource: providers.yml  }
     - { resource: projects.yml   }
-    - { resource: projects/AYSONationalOpenCup2018.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app_version: '2018.06.19.00'
+    app_version: '2018.06.24.00'
 
 framework:
     #esi:             ~

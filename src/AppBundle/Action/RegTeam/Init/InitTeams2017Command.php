@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class InitTeams2018Command extends Command
+class InitTeams2017Command extends Command
 {
     private $gameConn;
     private $regTeamConn;
@@ -22,13 +22,13 @@ class InitTeams2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('init:teams:noc2018')
-            ->setDescription('Init Teams NOC2018');
+            ->setName('init:teams:noc2017')
+            ->setDescription('Init Teams NOC2017');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Init Teams NOC2018 ...\n");
+        echo sprintf("Init Teams NOC2017 ...\n");
 
         $this->initTeams($this->allTeamsClubU16G);
 
@@ -42,10 +42,10 @@ class InitTeams2018Command extends Command
 
         //$this->initGames($commit || true);
 
-        echo sprintf("Init Teams NOC2018 Completed.\n");
+        echo sprintf("Init Teams NOC2017 Completed.\n");
     }
 
-    private $projectId = 'AYSONationalOpenCup2018';
+    private $projectId = 'AYSONationalOpenCup2017';
 
     private function initTeams($teams)
     {

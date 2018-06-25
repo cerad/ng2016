@@ -22,12 +22,18 @@ class PoolTeamExportViewExcel extends AbstractView2
         $response = new Response();
 
         $poolTeams = $request->attributes->get('poolTeams');
+        $program = $request->attributes->get('program');
+        if(!isset($program[0])) {
+            $prefix = '';
+        } else {
+            $prefix = $program[0].'_';
+        }
 
         $response->setContent($writer->write($poolTeams));
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'PoolTeams2016_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = $prefix.'PoolTeams2018_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

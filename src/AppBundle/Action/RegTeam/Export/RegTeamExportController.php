@@ -29,15 +29,15 @@ class RegTeamExportController extends AbstractController2
             return $this->redirectToRoute('game_listing');
         }
         $searchData = $session->get($sessionKey);
-        
         $criteria = [
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
-            'divisions'  => [$searchData['division']],
+//            'divisions'  => [$searchData['division']],
             'wantTeams'  => true,
         ];
         $regTeams = $this->finder->findRegTeams($criteria);
         $request->attributes->set('regTeams',$regTeams);
+        $request->attributes->set('program',$criteria['programs']);
 
         return null;
     }

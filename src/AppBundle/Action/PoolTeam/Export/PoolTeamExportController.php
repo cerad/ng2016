@@ -33,12 +33,13 @@ class PoolTeamExportController extends AbstractController2
         $criteria = [
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
-            'divisions'  => [$searchData['division']],
+//            'divisions'  => [$searchData['division']],
             'wantTeams'  => true,
         ];
         $poolTeams = $this->finder->findPoolTeams($criteria);
         $request->attributes->set('poolTeams',$poolTeams);
-        
+        $request->attributes->set('program',$criteria['programs']);
+
         return null;
     }
 }

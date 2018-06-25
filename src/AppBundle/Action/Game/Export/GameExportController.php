@@ -36,7 +36,7 @@ class GameExportController extends AbstractController2
         $searchData = [
             'projectId' => $projectId,
             'program'   => $this->getDefaultProgramForProject($projectId),
-            'division'  => 'U14B',
+            'division'  => 'B14U',
             'show'      => 'all',
         ];
         // Override from session
@@ -48,12 +48,13 @@ class GameExportController extends AbstractController2
         $criteria = [
             'projectIds' => [$searchData['projectId']],
             'programs'   => [$searchData['program']],
-            'divisions'  => [$searchData['division']],
+//            'divisions'  => [$searchData['division']],
             'wantTeams'  => true,
         ];
         $games = $this->finder->findGames($criteria);
         $request->attributes->set('games',$games);
-        
+        $request->attributes->set('program',$criteria['programs']);
+
         return null;
     }
     private function getDefaultProjectId()

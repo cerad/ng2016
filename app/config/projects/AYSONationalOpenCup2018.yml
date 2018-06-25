@@ -91,19 +91,27 @@ parameters:
 
         ages:
             VIP: VIP
-            U10: U10
-            U12: U12
-            U14: U14
-            U16: U16
-            U19: U19
-            Adult: Adult
+            10U: 10U
+            11U: 11U
+            12U: 12U
+            13U: 13U
+            14U: 14U
+            16U: 16U
+            19U: U19
+            2008: 2008
+            2007: 2007
+            2006: 2006
+            2005: 2005
+            2004: 2004
+            2003: 2003
+            2002: 2002
 
         search_defaults:
             projects: ['AYSONationalOpenCup2018']
             programs: ['Core']
             dates:    ['2018-07-13']
             genders:  ['B']
-            ages:     ['U12']
+            ages:     ['12U']
 
         search_controls:
             dates:
@@ -124,6 +132,7 @@ parameters:
             programs:
                 Core:  Core
                 Extra: Extra
+                Club:  Club
 
             genders:
                 B: Boys
@@ -131,30 +140,38 @@ parameters:
 
             ages:
                 VIP: VIP
-                U10: U10
-                U12: U12
-                U14: U14
-                U16: U16
-                U19: U19
-                Adult: Adult
+                10U: 10U
+                11U: 11U
+                12U: 12U
+                13U: 13U
+                14U: 14U
+                16U: 16U
+                19U: U19
+                2008: 2008
+                2007: 2007
+                2006: 2006
+                2005: 2005
+                2004: 2004
+                2003: 2003
+                2002: 2002
 
             pools:
                 Core:
                     B:
-                        U10: [A,B,C,D]
-                        U12: [A,B,C,D]
-                        U14: [A,B,C,D]
-                        U16: [A,B,C,D]
-                        U19: [A,B,C,D]
+                        10U: [A,B,C,D]
+                        12U: [A,B,C,D]
+                        14U: [A,B,C,D]
+                        16U: [A,B,C,D]
+                        19U: [A,B,C,D]
                     G:
-                        U10: [A,B,C,D]
-                        U12: [A,B,C,D]
-                        U14: [A,B,C,D]
-                        U16: [A,B,C,D]
-                        U19: [A,B,C,D]
+                        10U: [A,B,C,D]
+                        12U: [A,B,C,D]
+                        14U: [A,B,C,D]
+                        16U: [A,B,C,D]
+                        19U: [A,B,C,D]
 
         levels:
-            AYSO_U10B_Core:
+            AYSO_B10U_Core:
                 program: Core
                 gender:  B
                 age:     U10
@@ -181,7 +198,7 @@ parameters:
         pools:
 
         venues:
-            Polo: Polo Grounds
+            LNSC: Lancaster National Soccer Complex
 
         fields:
 
