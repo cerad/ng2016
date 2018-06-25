@@ -9,10 +9,11 @@ class PoolTeamExportWriterExcel
 
     /**
      * @param  PoolTeam[] $poolTeams
+     * @param string filename
      * @return string
      * @throws \PHPExcel_Exception
      */
-    public function write(array $poolTeams)
+    public function write(array $poolTeams, $filename='php://output')
     {
         // Not sure this is needed
         \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
@@ -23,7 +24,7 @@ class PoolTeamExportWriterExcel
 
         $this->writePoolTeams($ws, $poolTeams);
         
-        return $this->getContents();
+        return $this->getContents($filename);
     }
 
     /**
@@ -113,11 +114,11 @@ class PoolTeamExportWriterExcel
             $row += 2;
         }
     }
-    private function getContents()
+    private function getContents($filename)
     {
         $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
         ob_start();
-        $writer->save('php://output');
+        $writer->save($filename);
         return ob_get_clean();
     }
     public function getFileExtension()

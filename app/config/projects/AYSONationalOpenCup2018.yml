@@ -2,6 +2,8 @@ parameters:
 
   app_project_key: AYSONationalOpenCup2018
 
+  app_project_venue_name: 'Lancaster National'
+
   app_project_fed_role_key: AYSOV
 
   app_project:
@@ -80,6 +82,8 @@ parameters:
 
         programs:
             Core: Core
+            Extra: Extra
+            Club: Club
 
         genders:
             B:  Boys

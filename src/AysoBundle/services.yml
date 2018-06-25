@@ -39,6 +39,15 @@ services:
             - '@cerad.noc.connection'
             - '%app_project%'
 
+    affinity_load_command:
+        class: AysoBundle\Load\AffinityLoadCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - '%app_project%'
+            - '@reg_team_export_writer_excel2'
+            - '@pool_team_export_view_excel'
+            - '@game_export_writer_excel'
+
     cerad.ayso.region_key_transformer:
         class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionKeyTransformer
 
