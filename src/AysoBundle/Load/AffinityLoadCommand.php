@@ -63,17 +63,27 @@ class AffinityLoadCommand extends Command
         $this->load($filename);
 
         $games = $this->loadGames($this->dataValues);
+        $count = count($games);
+        echo "$count games loaded...\n";
+
         $regTeams = $this->loadRegTeams($this->dataValues);
+        $count = count($regTeams);
+        echo "$count regTeams loaded...\n";
+
         $gameTeams = $this->loadGameTeams($this->dataValues);
+        $count = count($gameTeams);
+        echo "$count gameTeams loaded...\n";
 
-        var_dump(count($gameTeams));
+        $poolTeams = $this->loadPoolTeams($this->dataValues);
+        $count = count($poolTeams);
+        echo "$count poolTeams loaded...\n";
 
-//        TODO: $poolTeams
+        var_dump($this->dataValues[0]);
 
 //        TODO: $gameOfficials
 
-        $contents = $this->prepOutFile($this->dataValues);
-        $this->writeCSV($contents, $this->contentsFilename);
+//        $contents = $this->prepOutFile($this->dataValues);
+//        $this->writeCSV($contents, $this->contentsFilename);
 
     }
 
@@ -157,125 +167,127 @@ class AffinityLoadCommand extends Command
     private $gameField;
 
     private $dataKeys = array(
-        'ProjectId',
-        'Date',
-        'Field',
-        'GameNum',
-        'Program',
-        'Gender',
-        'Age',
-        'Division',
-        'PType',
-        'HomePSlot',
-        'AwayPSlot',
-        'HomeTSlot',
-        'AwayTSlot',
-        'StartTime',
-        'FinishTime',
-        'HomeTeamName',
-        'AwayTeamName',
-        'HomeTeamKey',
-        'AwayTeamKey',
-        'HomePoolKey',
-        'AwayPoolKey',
-        'HomeTeamNumber',
-        'AwayTeamNumber',
+        'projectId',
+        'date',
+        'field',
+        'gameNum',
+        'program',
+        'gender',
+        'age',
+        'division',
+        'pType',
+        'homePSlot',
+        'awayPSlot',
+        'homeTSlot',
+        'awayTSlot',
+        'startTime',
+        'finishTime',
+        'homeTeamName',
+        'awayTeamName',
+        'homeTeamNumber',
+        'awayTeamNumber',
+        'homeTeamKey',
+        'awayTeamKey',
+        'homePoolKey',
+        'awayPoolKey',
+        'homePoolTeamKey',
+        'awayPoolTeamKey',
     );
 
     private $dataValues;
 
-    private $regTeamsKeys = array(
-        'regTeamId',
-        'projectId',
-        'teamKey',
-        'teamNumber',
-        'teamName',
-        'teamPoints',
-        'orgId',
-        'orgView',
-        'program',
-        'gender',
-        'age',
-        'division',
-    );
-    private $regTeamsValues;
-
-    private $poolTeamsKeys = array(
-        'poolTeamId',
-        'projectId',
-        'poolKey',
-        'poolTypeKey',
-        'poolTeamKey',
-        'poolView',
-        'poolSlotView',
-        'poolTypeView',
-        'poolTeamView',
-        'poolTeamSlotView',
-        'sourcePoolKeys',
-        'sourcePoolSlot',
-        'program',
-        'gender',
-        'age',
-        'division',
-        'regTeamId',
-        'regTeamName',
-        'regTeamPoints',
-    );
-
-    private $poolTeamsValues;
-
-    private $gamesKeys = array(
-        'gameId',
-        'projectId',
-        'gameNumber',
-        'role',
-        'fieldName',
-        'venueName',
-        'start',
-        'finish',
-        'state',
-        'status',
-        'reportText',
-        'reportState',
-    );
-
-    private $gamesValues;
-
-    private $gameTeamsKeys = array(
-        'gameTeamId',
-        'gameNumber',
-        'projectId',
-        'gameId',
-        'gameNumber',
-        'slot',
-        'poolTeamId',
-        'results',
-        'resultsDetail',
-        'pointsScored',
-        'pointsAllowed',
-        'pointsEarned',
-        'pointsDeducted',
-        'sportsmanship',
-        'injuries',
-        'misconduct',
-    );
-
-    private $gameTeamsValues;
-
-    private $gameOfficialsKeys = array(
-        'gameOfficialId',
-        'projectId',
-        'gameId',
-        'gameNumber',
-        'slot',
-        'phyPersonId',
-        'regPersonId',
-        'regPersonName',
-        'assignRole',
-        'assignState',
-    );
-
-    private $gameOfficialsValues;
+//    private $regTeamsKeys = array(
+//        'regTeamId',
+//        'projectId',
+//        'teamKey',
+//        'teamNumber',
+//        'teamName',
+//        'teamPoints',
+//        'orgId',
+//        'orgView',
+//        'program',
+//        'gender',
+//        'age',
+//        'division',
+//    );
+//    private $regTeamsValues;
+//
+//    private $poolTeamsKeys = array(
+//        'poolTeamId',
+//        'projectId',
+//        'poolKey',
+//        'poolTypeKey',
+//        'poolTeamKey',
+//        'poolView',
+//        'poolSlotView',
+//        'poolTypeView',
+//        'poolTeamView',
+//        'poolTeamSlotView',
+//        'sourcePoolKeys',
+//        'sourcePoolSlot',
+//        'program',
+//        'gender',
+//        'age',
+//        'division',
+//        'regTeamId',
+//        'regTeamName',
+//        'regTeamPoints',
+//    );
+//
+//    private $poolTeamsValues;
+//
+//    private $gamesKeys = array(
+//        'gameId',
+//        'projectId',
+//        'gameNumber',
+//        'role',
+//        'fieldName',
+//        'venueName',
+//        'start',
+//        'finish',
+//        'state',
+//        'status',
+//        'reportText',
+//        'reportState',
+//    );
+//
+//    private $gamesValues;
+//
+//    private $gameTeamsKeys = array(
+//        'gameTeamId',
+//        'gameNumber',
+//        'projectId',
+//        'gameId',
+//        'gameNumber',
+//        'slot',
+//        'poolTeamId',
+//        'results',
+//        'resultsDetail',
+//        'pointsScored',
+//        'pointsAllowed',
+//        'pointsEarned',
+//        'pointsDeducted',
+//        'sportsmanship',
+//        'injuries',
+//        'misconduct',
+//    );
+//
+//    private $gameTeamsValues;
+//
+//    private $gameOfficialsKeys = array(
+//        'gameOfficialId',
+//        'projectId',
+//        'gameId',
+//        'gameNumber',
+//        'slot',
+//        'phyPersonId',
+//        'regPersonId',
+//        'regPersonName',
+//        'assignRole',
+//        'assignState',
+//    );
+//
+//    private $gameOfficialsValues;
 
     private function processRow($row)
     {
@@ -342,10 +354,10 @@ class AffinityLoadCommand extends Command
                     $poolType = 'PP';
                     break;
                 case 'Semi-Final':
-                    $poolType = 'TF';
+                    $poolType = 'SF';
                     break;
                 case'Final':
-                    $poolType = 'FM';
+                    $poolType = 'TF';
                     break;
             }
 
@@ -384,8 +396,10 @@ class AffinityLoadCommand extends Command
             $awayTeamNumber = sprintf('%02d', $awayTeamNumber);
             $homeTeamKey = $division.$program.$homeTeamNumber;
             $awayTeamKey = $division.$program.$awayTeamNumber;
-            $homePoolKey = $division.$program.$poolType.$homeTeamSlot;
-            $awayPoolKey = $division.$program.$poolType.$awayTeamSlot;
+            $homePoolKey = $division.$program.$poolType.$homePoolSlot;
+            $awayPoolKey = $division.$program.$poolType.$awayPoolSlot;
+            $homePoolTeamKey = $division.$program.$poolType.$homeTeamSlot;
+            $awayPoolTeamKey = $division.$program.$poolType.$awayTeamSlot;
 
             $dataValues = [
                 $this->projectId,
@@ -405,12 +419,14 @@ class AffinityLoadCommand extends Command
                 $gameFinish,
                 $homeTeamName,
                 $awayTeamName,
+                $homeTeamNumber,
+                $awayTeamNumber,
                 $homeTeamKey,
                 $awayTeamKey,
                 $homePoolKey,
                 $awayPoolKey,
-                $homeTeamNumber,
-                $awayTeamNumber,
+                $homePoolTeamKey,
+                $awayPoolTeamKey,
             ];
 
             $this->dataValues[] = array_combine($this->dataKeys, $dataValues);
@@ -431,14 +447,14 @@ class AffinityLoadCommand extends Command
             $game = (object)array_combine($this->dataKeys, $row);
 
             $games[] = array(
-                $game->ProjectId.':'.$game->GameNum,
-                $game->ProjectId,
-                $game->GameNum,
+                $game->projectId.':'.$game->gameNum,
+                $game->projectId,
+                $game->gameNum,
                 'game',
-                $game->Field,
+                $game->field,
                 $this->venue,
-                sprintf('%s %s', $game->Date, $game->StartTime),
-                sprintf('%s %s', $game->Date, $game->FinishTime),
+                sprintf('%s %s', $game->date, $game->startTime),
+                sprintf('%s %s', $game->date, $game->finishTime),
                 'Published',
                 'Normal',
                 null,
@@ -492,34 +508,34 @@ class AffinityLoadCommand extends Command
             foreach ($gameTeams as $gameTeam) {
                 switch ($gameTeam) {
                     case 'home':
-                        $regTeamId = $teams->ProjectId.':'.$teams->HomeTeamKey;
-                        $teamKey = $teams->HomeTeamKey;
-                        $teamName = $teams->HomeTeamName;
-                        $teamNumber = $teams->HomeTeamNumber;
+                        $regTeamId = $teams->projectId.':'.$teams->homeTeamKey;
+                        $teamKey = $teams->homeTeamKey;
+                        $teamName = $teams->homeTeamName;
+                        $teamNumber = $teams->homeTeamNumber;
                         break;
                     default:
-                        $regTeamId = $teams->ProjectId.':'.$teams->AwayTeamKey;
-                        $teamKey = $teams->AwayTeamKey;
-                        $teamName = $teams->AwayTeamName;
-                        $teamNumber = $teams->AwayTeamNumber;
+                        $regTeamId = $teams->projectId.':'.$teams->awayTeamKey;
+                        $teamKey = $teams->awayTeamKey;
+                        $teamName = $teams->awayTeamName;
+                        $teamNumber = $teams->awayTeamNumber;
                 }
 
                 $rTeam = array(
                     $regTeamId,
-                    $teams->ProjectId,
+                    $teams->projectId,
                     $teamKey,
                     $teamNumber,
                     $teamName,
                     0,
                     null,
                     null,
-                    $teams->Program,
-                    $teams->Gender,
-                    $teams->Age,
-                    $teams->Division,
+                    $teams->program,
+                    $teams->gender,
+                    $teams->age,
+                    $teams->division,
                 );
 
-                if ($teams->PType == 'PP') {
+                if ($teams->pType == 'PP') {
                     //load new data
                     $sql = 'SELECT * FROM regTeams WHERE regTeamId = ?';
                     $checkRegTeamStmt = $this->nocGamesConn->prepare($sql);
@@ -563,25 +579,26 @@ class AffinityLoadCommand extends Command
         //set the data : game in each row
         foreach ($data as $row) {
             $games = (object)array_combine($this->dataKeys, $row);
-
+            $projectId = $games->projectId;
+            
             foreach ($gameTeams as $gameTeam) {
                 switch ($gameTeam) {
                     case 'home':
                         $slot = 1;
-                        $poolTeamId = $games->ProjectId.':'.$games->HomePoolKey;
+                        $poolTeamId = $projectId.':'.$games->homePoolKey;
                         break;
                     default:
                         $slot = 2;
-                        $poolTeamId = $games->ProjectId.':'.$games->AwayPoolKey;
+                        $poolTeamId = $projectId.':'.$games->awayPoolKey;
                 }
 
-                $gameId = $games->ProjectId.':'.$games->GameNum;
+                $gameId = $projectId.':'.$games->gameNum;
                 $gameTeamId = $gameId.':'.$slot;
                 $gTeam = array(
                     $gameTeamId,
-                    $games->ProjectId,
+                    $projectId,
                     $gameId,
-                    $games->GameNum,
+                    $games->gameNum,
                     $slot,
                     $poolTeamId,
                 );
@@ -605,10 +622,101 @@ class AffinityLoadCommand extends Command
         return $gameTeams;
     }
 
-    private
-    function prepOutFile(
-        $data
-    ) {
+    private function loadPoolTeams($data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        //delete old data from table
+        $sql = 'DELETE FROM poolTeams WHERE projectId = ?';
+        $deletePoolTeamsStmt = $this->nocGamesConn->prepare($sql);
+        $deletePoolTeamsStmt->execute([$this->projectId]);
+
+        $teams = null;
+        $gameTeams = ['home', 'away'];
+
+        //set the data : game in each row
+        foreach ($data as $row) {
+            $games = (object)array_combine($this->dataKeys, $row);
+            $projectId = $games->projectId;
+            
+            foreach ($gameTeams as $gameTeam) {
+                switch ($gameTeam) {
+                    case 'home':
+                        $poolTeamId = $projectId.':'.$games->homePoolTeamKey;
+                        $poolKey = $games->homePoolKey;
+                        $poolTeamKey = $games->homePoolTeamKey;
+                        $pSlot = $games->homePSlot;
+                        $tSlot = $games->homeTSlot;
+                        $regTeamName = $games->homeTeamName;
+                        $regTeamId = $projectId.':'.$games->homeTeamKey;
+                        break;
+                    default:
+                        $poolTeamId = $projectId.':'.$games->awayPoolTeamKey;
+                        $poolKey = $games->awayPoolKey;
+                        $poolTeamKey = $games->awayPoolTeamKey;
+                        $pSlot = $games->awayPSlot;
+                        $tSlot = $games->awayTSlot;
+                        $regTeamName = $games->awayTeamName;
+                        $regTeamId = $projectId.':'.$games->awayTeamKey;
+                }
+
+                $poolViewBase = sprintf('%s %s %s ', $games->division, $games->program, $games->pType);
+                $poolView = $poolViewBase.$pSlot;
+                $poolSlotView = $pSlot;
+                $poolTypeView = $games->pType;
+                $poolTeamView = $poolViewBase.$tSlot;
+                $poolTeamSlotView = $tSlot;
+
+                $pTeam = array(
+                    $poolTeamId,
+                    $projectId,
+                    $poolKey,
+                    $games->pType,
+                    $poolTeamKey,
+                    $poolView,
+                    $poolSlotView,
+                    $poolTypeView,
+                    $poolTeamView,
+                    $poolTeamSlotView,
+                    null,
+                    null,
+                    $games->program,
+                    $games->gender,
+                    $games->age,
+                    $games->division,
+                    $regTeamId,
+                    $regTeamName,
+                );
+
+                //load new data
+                $sql = 'SELECT * FROM poolTeams WHERE poolTeamId = ?';
+                $checkPoolTeamStmt = $this->nocGamesConn->prepare($sql);
+                $checkPoolTeamStmt->execute([$poolTeamId]);
+                $t = $checkPoolTeamStmt->fetch();
+                if (!$t) {
+                    $sql = 'INSERT INTO poolTeams (poolTeamId, projectId, poolKey, poolTypeKey, poolTeamKey, poolView, poolSlotView, poolTypeView, poolTeamView, poolTeamSlotView, sourcePoolKeys, sourcePoolSlot, program, gender, age, division, regTeamId, regTeamName) 
+                            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    $insertPoolTeamsStmt = $this->nocGamesConn->prepare($sql);
+                    $insertPoolTeamsStmt->execute($pTeam);
+                }
+            }
+        }
+
+        //get new data
+        $sql = 'SELECT * FROM poolTeams WHERE `projectId` = ?';
+        $selectPoolTeamsStmt = $this->nocGamesConn->prepare($sql);
+
+        $selectPoolTeamsStmt->execute([$this->projectId]);
+
+        $poolTeams = $selectPoolTeamsStmt->fetchAll();
+
+        return $poolTeams;
+    }
+
+    private function prepOutFile($data)
+    {
         if (empty($data)) {
             return null;
         }
@@ -625,17 +733,14 @@ class AffinityLoadCommand extends Command
     }
 
 
-    private
-    function writeCSV(
-        $data,
-        $filename
-    ) {
+    private function writeCSV($data, $filename)
+    {
 
 //        // Not sure this is needed
 //        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
 //
         if (is_null($data)) {
-            return;
+            return null;
         }
 
         $k = 0;
@@ -647,21 +752,7 @@ class AffinityLoadCommand extends Command
         }
 
         fclose($fp);
-        echo sprintf("%d rows written to %s\n", $k, $filename);
 
-        return;
+        return $k;
     }
-
-    protected
-    function clearDatabase(
-        Connection $conn
-    ) {
-        $databaseName = $conn->getDatabase();
-        $conn->exec('TRUNCATE TABLE games');
-        $conn->exec('TRUNCATE TABLE gameOfficials');
-        $conn->exec('TRUNCATE TABLE gameTeams');
-        $conn->exec('TRUNCATE TABLE poolTeams');
-        $conn->exec('TRUNCATE TABLE poolTeams');
-    }
-
 }
