@@ -30,6 +30,11 @@ class GameImportView extends AbstractView2
 </div>
 <hr>
 {$this->renderResults()}
+<legend>Notes on Import</legend>
+<ul class="cerad_common_help ul_bullets">
+  <li>Add a minus sign (-) in front of game number to delete the game.</li>
+</ul>
+
 EOD;
         return $this->renderBaseTemplate($content);
     }

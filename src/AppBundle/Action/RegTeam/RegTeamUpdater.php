@@ -31,8 +31,10 @@ class RegTeamUpdater
         // Need the name for performance
         $sql = 'SELECT regTeamId,projectId,teamKey,teamNumber,teamName,teamPoints,orgId,orgView,program,gender,age,division FROM regTeams WHERE teamKey = ?';
 
-        $stmt = $this->regTeamConn->executeQuery($sql,[$regTeamId]);
+        $stmt = $this->regTeamConn->executeQuery($sql,[$teamKey]);
         $row = $stmt->fetch();
+
+        var_dump($row); die();
         if (!$row) return 0; // Should not happen
         
         $orgKey = 'AYSOR';
@@ -42,7 +44,7 @@ class RegTeamUpdater
         $data['orgId'] = $orgId;
         $data['orgView'] = $row['orgView'];
 
-        //$this->regTeamConn->insert('regTeams',$data);
+        $this->regTeamConn->insert('regTeams',$data);
         return 1;
     }
     /* ===========================================

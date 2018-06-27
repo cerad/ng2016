@@ -121,7 +121,7 @@ class GameImportUpdater
             'projectId'  => $projectId,
             'gameNumber' => $gameNumber,
             'fieldName'  => $game['fieldName'],
-            'venueName'  => 'Polo',
+            'venueName'  => 'LNSC',
             'start'      => $game['start'],
             'finish'     => $this->calcFinish($game['start'],$homePoolTeam),
         ];

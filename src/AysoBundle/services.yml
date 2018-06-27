@@ -44,8 +44,9 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '%app_project%'
+            - '%app_project_venue_name%'
             - '@reg_team_export_writer_excel2'
-            - '@pool_team_export_view_excel'
+            - '@pool_team_export_writer_excel'
             - '@game_export_writer_excel'
 
     cerad.ayso.region_key_transformer:
