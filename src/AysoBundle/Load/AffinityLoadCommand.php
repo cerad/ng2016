@@ -13,6 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Exception;
 
+use Doctrine\DBAL\Connection;
+
 class AffinityLoadCommand extends Command
 {
     private $project;
@@ -20,14 +22,15 @@ class AffinityLoadCommand extends Command
 
     private $venueName;
 
-    private $regTeamFilename;
-    private $poolTeamFilename;
-    private $gameScheduleFilename;
+    /** @var  Connection */
+    private $nocGamesConn;
+
     private $contentsFilename;
 
     public function __construct(
         $project,
-        $venueName
+        $venueName,
+        Connection $nocGamesConn
     ) {
         parent::__construct();
 
@@ -35,6 +38,8 @@ class AffinityLoadCommand extends Command
         $this->venueName = $venueName;
 
         $this->projectId = $this->project['key'];
+
+        $this->nocGamesConn = $nocGamesConn;
 
     }
 
@@ -53,13 +58,16 @@ class AffinityLoadCommand extends Command
         $this->path_parts = pathinfo($filename);
 
         $this->ts = date("Ymd_His");
-        $this->regTeamFilename = $this->getCSVFilename('RegTeams');
-        $this->poolTeamFilename = $this->getCSVFilename('PoolTeams');
-        $this->gameScheduleFilename = $this->getCSVFilename('GameSchedule');
-
         $this->contentsFilename = $this->getCSVFilename('AffinityBaseValues');
 
         $this->load($filename);
+
+        $games = $this->loadGames($this->dataValues);
+
+        var_dump($games[0]);
+
+        $contents = $this->prepOutFile($this->dataValues);
+        $this->writeCSV($contents, $this->contentsFilename);
 
     }
 
@@ -69,7 +77,16 @@ class AffinityLoadCommand extends Command
 
     private function getCSVFilename($name)
     {
-        return $this->path_parts ['dirname'].'/'.$this->ts.'_'.$name.'_'.$this->path_parts ['filename'].'.csv';
+        $path = sprintf(
+            '%s/%s_%s_%s.csv',
+            $this->path_parts ['dirname'],
+            $this->ts,
+            $name,
+            $this->path_parts
+            ['filename']
+        );
+
+        return $path;
     }
 
     private function load($filename)
@@ -114,20 +131,7 @@ class AffinityLoadCommand extends Command
 
             }
 
-//            foreach ($this->dataValues as $data) {
-//                var_dump($data);
-//            };
-
             echo sprintf("Processed %4d rows\n", $row - 1);
-
-//            $this->regTeams = $this->getRegTeams($data);
-//            var_dump($regTeams);
-
-//            $this->poolTeams = $this->getPoolTeams($data);
-//            var_dump($poolTeams);
-
-            $contents = $this->prepOutFile($this->dataValues);
-            $this->writeCSV($contents, $this->contentsFilename);
 
         } catch (Exception $e) {
             echo 'Exception: ', $e->getMessage(), "\n";
@@ -184,7 +188,7 @@ class AffinityLoadCommand extends Command
         'program',
         'gender',
         'age',
-        'division'.
+        'division',
     );
     private $regTeamsValues;
 
@@ -209,6 +213,7 @@ class AffinityLoadCommand extends Command
         'regTeamName',
         'regTeamPoints',
     );
+
     private $poolTeamsValues;
 
     private $gamesKeys = array(
@@ -248,6 +253,21 @@ class AffinityLoadCommand extends Command
     );
 
     private $gameTeamsValues;
+
+    private $gameOfficialsKeys = array(
+        'gameOfficialId',
+        'projectId',
+        'gameId',
+        'gameNumber',
+        'slot',
+        'phyPersonId',
+        'regPersonId',
+        'regPersonName',
+        'assignRole',
+        'assignState',
+    );
+
+    private $gameOfficialsValues;
 
     private function processRow($row)
     {
@@ -325,8 +345,8 @@ class AffinityLoadCommand extends Command
             $poolTeamKeys = explode(' vs ', $game);
 
             $gameTime = explode(' -- ', $fields[4]);
-            $gameStart = date("H:i", strtotime($gameTime[0].'M'));
-            $gameFinish = date("H:i", strtotime($gameTime[1].'M'));
+            $gameStart = date("H:i:s", strtotime($gameTime[0].'M'));
+            $gameFinish = date("H:i:s", strtotime($gameTime[1].'M'));
 
             if ($poolType == 'PP') {
                 $homeTeamName = $fields[5];
@@ -396,8 +416,8 @@ class AffinityLoadCommand extends Command
         //set the header labels
         $regTeams = $this->regTeamsKeys;
 
-        foreach($data as $row) {
-            if (isset)
+        foreach ($data as $row) {
+            $regTeams[] = $row;
         }
 
         return $regTeams;
@@ -414,30 +434,80 @@ class AffinityLoadCommand extends Command
         $poolTeams[] = $this->poolTeamsKeys;
 
         //set the data : game in each row
-        foreach($data as $row) {
-            $poolTeams[] = array(
-            );
-
+        foreach ($data as $row) {
+            $poolTeams[] = $row;
         }
 
         return $poolTeams;
     }
 
-    private function getGames($data)
+    private function loadGames($data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $games = null;
+        //set the data : game in each row
+        foreach ($data as $row) {
+            $game = (object)array_combine($this->dataKeys, $row);
+
+            $games[] = array(
+                $game->ProjectId.':'.$game->GameNum,
+                $game->ProjectId,
+                $game->GameNum,
+                'game',
+                $game->Field,
+                $this->venueName,
+                sprintf('%s %s', $game->Date, $game->StartTime),
+                sprintf('%s %s', $game->Date, $game->FinishTime),
+                'Published',
+                'Normal',
+                null,
+                'Initial'
+            );
+        }
+
+        if(!is_null($games)) {
+            //delete old data from table
+            $sql = 'DELETE FROM games WHERE `projectId` = ?';
+            $deleteGamesStmt = $this->nocGamesConn->prepare($sql);
+            $deleteGamesStmt->execute([$this->projectId]);
+
+            //load new data
+            $sql = 'INSERT INTO games (gameId, projectId, gameNumber, role, fieldName, venueName, `start`, finish, state, `status`, reportText, reportState) 
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            $insertGamesStmt = $this->nocGamesConn->prepare($sql);
+            foreach ($games as $game) {
+                $insertGamesStmt->execute($game);
+            }
+            //get new data
+            $sql = 'SELECT * FROM games WHERE `projectId` = ?';
+            $selectGamesStmt = $this->nocGamesConn->prepare($sql);
+
+            $selectGamesStmt->execute([$this->projectId]);
+
+            $games = $selectGamesStmt->fetchAll();
+        }
+
+        return $games;
+    }
+
+    private function getGameOfficials($data)
     {
         if (empty($data)) {
             return null;
         }
 
         //set the header labels
-        $games[] = $this->gamesKeys;
+        $gameOfficials[] = $this->gameOfficialsKeys;
 
         //set the data : game in each row
         foreach ($data as $row) {
-            $games[] = $row;
+            $gameOfficials[] = $row;
         }
 
-        return $games;
+        return $gameOfficials;
     }
 
     private function prepOutFile($data)
@@ -480,6 +550,16 @@ class AffinityLoadCommand extends Command
         echo sprintf("%d rows written to %s\n", $k, $filename);
 
         return;
+    }
+
+    protected function clearDatabase(Connection $conn)
+    {
+        $databaseName = $conn->getDatabase();
+        $conn->exec('TRUNCATE TABLE games');
+        $conn->exec('TRUNCATE TABLE gameOfficials');
+        $conn->exec('TRUNCATE TABLE gameTeams');
+        $conn->exec('TRUNCATE TABLE poolTeams');
+        $conn->exec('TRUNCATE TABLE poolTeams');
     }
 
 }

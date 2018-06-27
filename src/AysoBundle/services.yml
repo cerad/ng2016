@@ -6,6 +6,9 @@ services:
     cerad.noc.connection:
         alias: doctrine.dbal.noc2018_connection
 
+    cerad.noc.games.connection:
+        alias: doctrine.dbal.noc2018games_connection
+
     cerad.ayso.finder:
         class: Cerad\Bundle\AysoBundle\AysoFinder
         arguments: ['@cerad.ayso.connection']
@@ -45,9 +48,7 @@ services:
         arguments:
             - '%app_project%'
             - '%app_project_venue_name%'
-            - '@reg_team_export_writer_excel2'
-            - '@pool_team_export_writer_excel'
-            - '@game_export_writer_excel'
+            - '@cerad.noc.games.connection'
 
     cerad.ayso.region_key_transformer:
         class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionKeyTransformer
