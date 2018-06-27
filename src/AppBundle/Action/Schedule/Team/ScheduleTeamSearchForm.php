@@ -52,12 +52,14 @@ class ScheduleTeamSearchForm extends AbstractForm
         ];
         // findProjectTeamChoices ???
         $regTeams = $this->finder->findRegTeams($criteria,true);
-        $regTeamChoices = [null => 'Select Team(s)'];
+        $regTeamChoices = [];
         foreach($regTeams as $regTeam) {
             $regTeamContent = sprintf('%s %s',$regTeam->division,$regTeam->teamName);
             $regTeamChoices[$regTeam->regTeamId] = $regTeamContent;
         }
-
+        if(empty($regTeamChoices)) {
+            $regTeamChoices = [null => "No Teams in $program"];
+        }
         $regTeamName = $this->formData['regTeamName'];
 
         $csrfToken = 'TODO';

@@ -43,9 +43,9 @@ class ScheduleGameController extends AbstractController2
 
         $searchData = [
             'projectId' => $projectId,
-            'programs'  => ['Core'],
-            'genders'   => ['G'],
-            'ages'      => ['14U'],
+            'programs'  => ['all'],
+            'genders'   => ['all'],
+            'ages'      => ['all'],
             'dates'     => [$date],
             'sortBy'    => 1,
             'filter'    => null,

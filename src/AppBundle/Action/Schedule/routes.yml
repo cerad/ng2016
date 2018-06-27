@@ -55,7 +55,7 @@ schedule_medalroundcalc_2018:
         _controller:    schedule_medalroundcalc_controller_2018
         _view_xls_qf:   schedule_medalroundcalc_view_xls_qf_2018
         _view_xls_sf:   schedule_medalroundcalc_view_xls_sf_2018
-        _view_xls_fm:   schedule_medalroundcalc_view_xls_fm_2018
+        _view_xls_tf:   schedule_medalroundcalc_view_xls_tf_2018
 
 field_map:
     path: /field_map

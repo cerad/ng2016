@@ -209,7 +209,6 @@ EOD;
   <th class="text-center">Pool Views</th>
   <th class="text-center">Slots</th>
   <th class="text-center">Reg Team Key</th>
-  <th class="text-center">Soccerfest<br/>Points</th>
 </tr>
 EOD;
         foreach($this->poolTeams as $poolTeam) {
@@ -234,7 +233,6 @@ EOD;
   <td class="text-left">  {$team->poolTypeView}<br/>{$team->poolView}<br/>{$team->poolTeamView}</td>
   <td class="text-left">  &nbsp;<br/>{$team->poolSlotView}<br/>{$team->poolTeamSlotView}</td>
   <td class="text-center">{$regTeamKey}<br/>{$this->escape($team->regTeamName)}</td>
-  <td class="text-center">{$team->extraPoints}</td>
 </tr>
 EOD;
     }

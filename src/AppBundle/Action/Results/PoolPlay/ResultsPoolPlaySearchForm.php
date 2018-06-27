@@ -116,7 +116,7 @@ EOD;
                     ];
                     $html .= <<<EOD
     <td style="border: 1px solid black;">
-      <a href="{$this->generateUrl($routeName,$linkParams)}">{$age}{$gender}</a>
+      <a href="{$this->generateUrl($routeName,$linkParams)}">{$gender}{$age}</a>
 EOD;
 
                     foreach ($poolsForAge as $poolKey => $pool) {

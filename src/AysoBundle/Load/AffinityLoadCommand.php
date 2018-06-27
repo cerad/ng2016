@@ -80,6 +80,8 @@ class AffinityLoadCommand extends Command
         $count = count($gameOfficials);
         echo "$count gameOfficials loaded...\n";
 
+        echo "... Affinity transform complete.\n";
+
 //        var_dump($this->dataValues[0]);
 
 //        $contents = $this->prepOutFile($this->dataValues);
@@ -96,7 +98,7 @@ class AffinityLoadCommand extends Command
         $path = sprintf(
             '%s/%s_%s_%s.csv',
             $this->path_parts ['dirname'],
-            $this->ts,
+            $ts,
             $name,
             $this->path_parts
             ['filename']
@@ -585,11 +587,11 @@ class AffinityLoadCommand extends Command
                 switch ($gameTeam) {
                     case 'home':
                         $slot = 1;
-                        $poolTeamId = $projectId.':'.$games->homePoolKey;
+                        $poolTeamId = $projectId.':'.$games->homePoolTeamKey;
                         break;
                     default:
                         $slot = 2;
-                        $poolTeamId = $projectId.':'.$games->awayPoolKey;
+                        $poolTeamId = $projectId.':'.$games->awayPoolTeamKey;
                 }
 
                 $gameId = $projectId.':'.$games->gameNum;

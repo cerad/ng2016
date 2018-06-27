@@ -55,7 +55,7 @@ class ScheduleMedalRoundTest extends PHPUnit_Framework_TestCase
         $this->criteria['projects'] = [$projectId];
         $this->criteria['programs'] = ['Core'];
         $this->criteria['genders'] = ['B', 'G'];
-        $this->criteria['ages'] = ['U10','U12','U14','U16','U19'];
+        $this->criteria['ages'] = ['10U','12U','14U','16U','19U'];
     }
     private function generateYaml($data, $dataFilename)
     {

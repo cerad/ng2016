@@ -17,16 +17,16 @@ class ScheduleMedalRoundCalculator
         $result = [];
 
         $keySet = array(
-            ['U10BCorePPA','U10BCorePPB','U10BCorePPC','U10BCorePPD'],
-            ['U10GCorePPA','U10GCorePPB','U10GCorePPC','U10GCorePPD'],
-            ['U12BCorePPA','U12BCorePPB','U12BCorePPC','U12BCorePPD'],
-            ['U12GCorePPA','U12GCorePPB','U12GCorePPC','U12GCorePPD'],
-            ['U14BCorePPA','U14BCorePPB','U14BCorePPC','U14BCorePPD'],
-            ['U14GCorePPA','U14GCorePPB','U14GCorePPC','U14GCorePPD'],
-            ['U16BCorePPA','U16BCorePPB','U16BCorePPC','U16BCorePPD'],
-            ['U16GCorePPA','U16GCorePPB','U16GCorePPC','U16GCorePPD'],
-            ['U19BCorePPA','U19BCorePPB','U19BCorePPC','U19BCorePPD'],
-            ['U19GCorePPA','U19GCorePPB','U19GCorePPC','U19GCorePPD'],
+            ['B10UCorePPA','B10UCorePPB','B10UCorePPC','B10UCorePPD'],
+            ['G10UCorePPA','G10UCorePPB','G10UCorePPC','G10UCorePPD'],
+            ['B12UCorePPA','B12UCorePPB','B12UCorePPC','B12UCorePPD'],
+            ['G12UCorePPA','G12UCorePPB','G12UCorePPC','G12UCorePPD'],
+            ['B14UCorePPA','B14UCorePPB','B14UCorePPC','B14UCorePPD'],
+            ['G14UCorePPA','G14UCorePPB','G14UCorePPC','G14UCorePPD'],
+            ['B16UCorePPA','B16UCorePPB','B16UCorePPC','B16UCorePPD'],
+            ['G16UCorePPA','G16UCorePPB','G16UCorePPC','G16UCorePPD'],
+            ['B19UCorePPA','B19UCorePPB','B19UCorePPC','B19UCorePPD'],
+            ['G19UCorePPA','G19UCorePPB','G19UCorePPC','G19UCorePPD'],
         );
 
         foreach($keySet as $keys) {

@@ -280,7 +280,7 @@ services:
             - "@results_finder_2018"
             - "@abstract_exporter_xls"
 
-    schedule_medalroundcalc_view_xls_fm_2018:
+    schedule_medalroundcalc_view_xls_tf_2018:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
