@@ -21,6 +21,7 @@ class AffinityLoadCommand extends Command
     private $projectId;
 
     private $venueName;
+    private $venue;
 
     /** @var  Connection */
     private $nocGamesConn;
@@ -29,15 +30,14 @@ class AffinityLoadCommand extends Command
 
     public function __construct(
         $project,
-        $venueName,
         Connection $nocGamesConn
     ) {
         parent::__construct();
 
         $this->project = $project['info'];
-        $this->venueName = $venueName;
-
         $this->projectId = $this->project['key'];
+        $this->venueName = $this->project['venue_name'];;
+        $this->venue = $this->project['venue'];;
 
         $this->nocGamesConn = $nocGamesConn;
 
@@ -63,8 +63,11 @@ class AffinityLoadCommand extends Command
         $this->load($filename);
 
         $games = $this->loadGames($this->dataValues);
+        $regTeams = $this->loadRegTeams($this->dataValues);
 
-        var_dump($games[0]);
+//        TODO: $poolTeams
+
+//        TODO: $gameOfficials
 
         $contents = $this->prepOutFile($this->dataValues);
         $this->writeCSV($contents, $this->contentsFilename);
@@ -172,6 +175,8 @@ class AffinityLoadCommand extends Command
         'AwayTeamKey',
         'HomePoolKey',
         'AwayPoolKey',
+        'HomeTeamNumber',
+        'AwayTeamNumber',
     );
 
     private $dataValues;
@@ -372,8 +377,10 @@ class AffinityLoadCommand extends Command
                 $awayTeamNumber = '';
             }
 
-            $homeTeamKey = $division.$program.sprintf('%02d', $homeTeamNumber);
-            $awayTeamKey = $division.$program.sprintf('%02d', $awayTeamNumber);
+            $homeTeamNumber = sprintf('%02d', $homeTeamNumber);
+            $awayTeamNumber = sprintf('%02d', $awayTeamNumber);
+            $homeTeamKey = $division.$program.$homeTeamNumber;
+            $awayTeamKey = $division.$program.$awayTeamNumber;
             $homePoolKey = $division.$program.$homeTeamSlot;
             $awayPoolKey = $division.$program.$awayTeamSlot;
 
@@ -399,46 +406,14 @@ class AffinityLoadCommand extends Command
                 $awayTeamKey,
                 $homePoolKey,
                 $awayPoolKey,
+                $homeTeamNumber,
+                $awayTeamNumber,
             ];
 
             $this->dataValues[] = array_combine($this->dataKeys, $dataValues);
         }
 
         return;
-    }
-
-    private function getRegTeams($data)
-    {
-        if (empty($data)) {
-            return null;
-        }
-
-        //set the header labels
-        $regTeams = $this->regTeamsKeys;
-
-        foreach ($data as $row) {
-            $regTeams[] = $row;
-        }
-
-        return $regTeams;
-    }
-
-    private function getPoolTeams($data)
-    {
-
-        if (empty($data)) {
-            return null;
-        }
-
-        //set the header labels
-        $poolTeams[] = $this->poolTeamsKeys;
-
-        //set the data : game in each row
-        foreach ($data as $row) {
-            $poolTeams[] = $row;
-        }
-
-        return $poolTeams;
     }
 
     private function loadGames($data)
@@ -458,17 +433,17 @@ class AffinityLoadCommand extends Command
                 $game->GameNum,
                 'game',
                 $game->Field,
-                $this->venueName,
+                $this->venue,
                 sprintf('%s %s', $game->Date, $game->StartTime),
                 sprintf('%s %s', $game->Date, $game->FinishTime),
                 'Published',
                 'Normal',
                 null,
-                'Initial'
+                'Initial',
             );
         }
 
-        if(!is_null($games)) {
+        if (!is_null($games)) {
             //delete old data from table
             $sql = 'DELETE FROM games WHERE `projectId` = ?';
             $deleteGamesStmt = $this->nocGamesConn->prepare($sql);
@@ -493,25 +468,84 @@ class AffinityLoadCommand extends Command
         return $games;
     }
 
-    private function getGameOfficials($data)
+    private function loadRegTeams($data)
     {
         if (empty($data)) {
             return null;
         }
 
-        //set the header labels
-        $gameOfficials[] = $this->gameOfficialsKeys;
+        //delete old data from table
+        $sql = 'DELETE FROM regTeams WHERE projectId = ?';
+        $deleteRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+        $deleteRegTeamsStmt->execute([$this->projectId]);
+
+        $teams = null;
+        $gameTeams = ['home', 'away'];
 
         //set the data : game in each row
         foreach ($data as $row) {
-            $gameOfficials[] = $row;
+            $teams = (object)array_combine($this->dataKeys, $row);
+
+            foreach ($gameTeams as $gameTeam) {
+                switch ($gameTeam) {
+                    case 'home':
+                        $regTeamId = $teams->ProjectId.':'.$teams->HomeTeamKey;
+                        $teamKey = $teams->HomeTeamKey;
+                        $teamName = $teams->HomeTeamName;
+                        $teamNumber = $teams->HomeTeamNumber;
+                        break;
+                    default:
+                        $regTeamId = $teams->ProjectId.':'.$teams->AwayTeamKey;
+                        $teamKey = $teams->AwayTeamKey;
+                        $teamName = $teams->AwayTeamName;
+                        $teamNumber = $teams->AwayTeamNumber;
+                }
+
+                $rTeam = array(
+                    $regTeamId,
+                    $teams->ProjectId,
+                    $teamKey,
+                    $teamNumber,
+                    $teamName,
+                    0,
+                    null,
+                    null,
+                    $teams->Program,
+                    $teams->Gender,
+                    $teams->Age,
+                    $teams->Division,
+                );
+
+                if($teams->PType == 'PP') {
+                    //load new data
+                    $sql = 'SELECT * FROM regTeams WHERE regTeamId = ?';
+                    $checkRegTeamStmt = $this->nocGamesConn->prepare($sql);
+                    $checkRegTeamStmt->execute([$regTeamId]);
+                    $t = $checkRegTeamStmt->fetch();
+                    if (!$t) {
+                        $sql = 'INSERT INTO regTeams (regTeamId, projectId, teamKey, teamNumber, teamName, teamPoints, orgId, orgView, program, gender, age, division) 
+                            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+                        $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+                        $insertRegTeamsStmt->execute($rTeam);
+                    }
+                }
+            }
         }
 
-        return $gameOfficials;
+        //get new data
+        $sql = 'SELECT * FROM regTeams WHERE `projectId` = ?';
+        $selectRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+
+        $selectRegTeamsStmt->execute([$this->projectId]);
+
+        $regTeams = $selectRegTeamsStmt->fetchAll();
+
+        return $regTeams;
     }
 
-    private function prepOutFile($data)
-    {
+    private function prepOutFile(
+        $data
+    ) {
         if (empty($data)) {
             return null;
         }
@@ -528,8 +562,10 @@ class AffinityLoadCommand extends Command
     }
 
 
-    private function writeCSV($data, $filename)
-    {
+    private function writeCSV(
+        $data,
+        $filename
+    ) {
 
 //        // Not sure this is needed
 //        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
@@ -552,8 +588,9 @@ class AffinityLoadCommand extends Command
         return;
     }
 
-    protected function clearDatabase(Connection $conn)
-    {
+    protected function clearDatabase(
+        Connection $conn
+    ) {
         $databaseName = $conn->getDatabase();
         $conn->exec('TRUNCATE TABLE games');
         $conn->exec('TRUNCATE TABLE gameOfficials');

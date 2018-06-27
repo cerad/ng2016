@@ -2,13 +2,15 @@ parameters:
 
   app_project_key: AYSONationalOpenCup2018
 
-  app_project_venue_name: 'Lancaster National'
-
   app_project_fed_role_key: AYSOV
 
   app_project:
     info:
         key: AYSONationalOpenCup2018 # For now until we migrate games
+
+        venue_name: 'Lancaster National' # Soccer Complex  -- used for switching on Affinity datafile export
+
+        venue: 'LNSC'
 
         slugs: [opengames, noc2018]
 

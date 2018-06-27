@@ -47,7 +47,6 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '%app_project%'
-            - '%app_project_venue_name%'
             - '@cerad.noc.games.connection'
 
     cerad.ayso.region_key_transformer:
