@@ -185,7 +185,7 @@ class ProjectPersonViewDecorator
                 $roleClass = (!$this->hasCertIssues() AND $this->isCurrentMY($regYearProject));
         }
 
-        return $roleClass ? $this->warningClass : $this->dangerClass;
+        return $roleClass ? $this->successClass : $this->dangerClass;
     }
 
     public function getRoleStyle($role)
