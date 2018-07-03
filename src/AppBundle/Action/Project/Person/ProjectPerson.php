@@ -148,9 +148,7 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         $cert = new ProjectPersonRole();
         $cert->active = false;
         $cert->role = $certKey;
-        //workaround for verification
-        $cert->verified = $this->verified;
-        //
+
         return $cert;
     }
     /**
@@ -168,9 +166,7 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         }
         $role = new ProjectPersonRole();
         $role->role = $roleKey;
-        //workaround for verification
-        $role->verified = $this->verified;
-        //
+
         return $role;
     }
 
@@ -182,7 +178,6 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         $roles = [];
         foreach($this->roles as $roleKey => $role) {
             if (substr($roleKey,0,5) === 'ROLE_') {
-                $role['verified'] = $this->verified;
                 $roles[$roleKey] = $role;
             }
         }
@@ -196,7 +191,6 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
         $certs = [];
         foreach($this->roles as $certKey => $cert) {
             if (substr($certKey,0,5) === 'CERT_') {
-                $cert['verified'] = $this->verified;
                 $certs[$certKey] = $cert;
             }
         }

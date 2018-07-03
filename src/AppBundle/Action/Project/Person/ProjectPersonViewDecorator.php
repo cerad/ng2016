@@ -247,7 +247,7 @@ class ProjectPersonViewDecorator
                     case 'no':
                     case 'none':
                     case '0':
-                        return 'no';
+                        return 'No';
                 }
 
                 return 'Yes';
@@ -259,6 +259,7 @@ class ProjectPersonViewDecorator
                 if (!$role) {
                     return null;
                 }
+                var_dump($role);
                 if ($role->verified) {
                     return 'Yes';
                 }
@@ -267,7 +268,7 @@ class ProjectPersonViewDecorator
                     case 'no':
                     case 'none':
                     case '0':
-                        return 'no';
+                        return 'No';
                 }
 
                 return 'Yes';
@@ -286,7 +287,7 @@ class ProjectPersonViewDecorator
                     case 'no':
                     case 'none':
                     case '0':
-                        return 'no';
+                        return 'No';
                 }
 
                 return 'Yes';
