@@ -25,6 +25,8 @@ class AdminViewFilters
     {
         $listPersons = [];
 
+        $yes = ['Yes'];
+
         $yesMaybe = ['Yes', 'Maybe'];
 
         $personView = $this->projectPersonViewDecorator;
@@ -67,7 +69,8 @@ class AdminViewFilters
                     }
                     break;
                 case 'Unapproved':
-                    if (isset($person['roles']['ROLE_REFEREE'])) {
+                    if ((isset($person['roles']['ROLE_REFEREE']) AND in_array($personView->willReferee, $yes)) OR
+                        (isset($person['roles']['ROLE_VOLUNTEER']) AND in_array($personView->willVolunteer, $yes))) {
                         if (!$personView->approved AND !$personView->hasCertIssues() AND $personView->isCurrentMY(
                                 $regYearProject
                             )
