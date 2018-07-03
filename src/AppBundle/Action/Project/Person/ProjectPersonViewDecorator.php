@@ -194,7 +194,7 @@ class ProjectPersonViewDecorator
             return $this->successStyle;
         }
 
-        return (!$this->hasCertIssues()) ? $this->warningStyle : $this->dangerStyle;
+        return (!$this->hasCertIssues()) ? $this->successStyle : $this->dangerStyle;
     }
 
     public function __get($name)
