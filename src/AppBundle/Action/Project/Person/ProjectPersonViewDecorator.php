@@ -259,7 +259,6 @@ class ProjectPersonViewDecorator
                 if (!$role) {
                     return null;
                 }
-                var_dump($role);
                 if ($role->verified) {
                     return 'Yes';
                 }

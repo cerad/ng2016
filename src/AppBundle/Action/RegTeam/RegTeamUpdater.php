@@ -34,7 +34,6 @@ class RegTeamUpdater
         $stmt = $this->regTeamConn->executeQuery($sql,[$teamKey]);
         $row = $stmt->fetch();
 
-        var_dump($row); die();
         if (!$row) return 0; // Should not happen
         
         $orgKey = 'AYSOR';
