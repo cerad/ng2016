@@ -202,14 +202,6 @@ EOD;
         return <<<EOD
 <table>
   <tr>
-    <td >Name</td>
-    <td  class="admin-listing">{$personView->name}</td>
-  </tr><tr>
-  <tr>
-    <td class="admin-listing">Email</td>
-    <td><a href="mailto:{$this->escape($personView->email)}">{$this->escape($personView->email)}</a></td>
-  </tr><tr>
-  <tr>
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
   </tr><tr>

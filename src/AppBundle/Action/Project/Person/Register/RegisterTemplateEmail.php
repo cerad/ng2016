@@ -142,7 +142,7 @@ EOT;
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
   </tr><tr>
-    <td>Section/Area/Region</td>
+    <td>Section/Area/Region/State</td>
     <td style="{$personView->getOrgKeyStyle()}">{$personView->orgKey}</td>
   </tr><tr>
     <td>Membership Year</td>

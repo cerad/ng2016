@@ -12,7 +12,7 @@ class ProjectPersonViewDecorator
     /** @var  ProjectPerson */
     public $person;
     public $regYear;
-    public $orgKey;
+    private $orgKey;
 
     private $phoneTransformer;
     private $fedKeyTransformer;
@@ -85,7 +85,10 @@ class ProjectPersonViewDecorator
     public function getOrgKeyClass()
     {
         $sar = $this->orgKey;
-        $sarClass = ($sar && substr($sar, 0, 1) == 'A') ? $this->successClass : $this->dangerClass;
+        if(is_null($this->sar)) {
+            return $this->warningClass;
+        }
+        $sarClass = ($sar && substr($sar, 0, 1) == 'A') ? $this->successClass : $this->warningClass;
 
         return $sarClass;
     }
@@ -94,7 +97,7 @@ class ProjectPersonViewDecorator
     {
         $sar = $this->orgKey;
 
-        return ($sar && substr($sar, 0, 1) == 'A') ? $this->successStyle : $this->dangerStyle;
+        return ($sar && substr($sar, 0, 1) == 'A') ? $this->successStyle : $this->warningStyle;
     }
 
     public function getCertClass($certKey)
