@@ -59,7 +59,7 @@ class ScheduleAssignorSearchForm extends ScheduleSearchForm
 
         $currentRouteName = $this->getCurrentRouteName();
         $action = $this->generateUrl($currentRouteName);
-        $txtUrl = $this->generateUrl($currentRouteName,['_format' => 'txt']);
+//        $txtUrl = $this->generateUrl($currentRouteName,['_format' => 'txt']);
         $xlsUrl = $this->generateUrl($currentRouteName,['_format' => 'xls']);
             
         $csrfToken = 'TODO';

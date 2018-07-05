@@ -176,14 +176,15 @@ EOD;
             'poolTeamIds' => 'gameTeam.poolTeamId', // TEST!
             'regTeamIds'  => 'regTeamId',
         ];
-
         // update criteria & sql to allow for Club ages like '2005/2006'
-        $criteria['ages'] = isset($criteria['ages']) ? array(implode('|',$criteria['ages'])) : array();
+        if(!empty($criteria['ages'])) {
+            $criteria['ages'] = isset($criteria['ages']) ? array(implode('|', $criteria['ages'])) : array();
+        }
         list($values, $types) = $this->addWhere($qb, $whereMeta, $criteria);
         if (!count($values)) {
             //return [];
         }
-        if(empty($criteria['ages'])) {
+        if(!empty($criteria['ages'])) {
             $sql = str_replace("age IN (?)", "age REGEXP (?)", $qb->getSQL());
         } else {
             $sql = $qb->getSQL();

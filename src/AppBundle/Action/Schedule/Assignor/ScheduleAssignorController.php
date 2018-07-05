@@ -47,7 +47,7 @@ class ScheduleAssignorController extends AbstractController2
             'projectId'  => $projectId,
             'programs'   => ['Core'],
             'genders'    => ['G'],
-            'ages'       => ['U14'],
+            'ages'       => ['14U'],
             'dates'      => [$date],
             'sortBy'     => 1,
             'filter'     => null,
@@ -144,7 +144,7 @@ class ScheduleAssignorController extends AbstractController2
         $reportKey = strtolower($this->reportKey);
         foreach($games as $game) {
             $officials = $game->getOfficials();
-            $next = false;
+//            $next = false;
             foreach($officials as $official) {
                 $assignState = strtolower($official->assignState);
                 switch ($reportKey) {

@@ -54,7 +54,6 @@ class ApproveVerifiedNOC2018Command extends Command
 
         $this->gameConn->update('projectPersonRoles',['approved' => '1', ],
             [
-                'projectId'   => $this->projectId,
                 'verified' => '1',
             ]);
     }

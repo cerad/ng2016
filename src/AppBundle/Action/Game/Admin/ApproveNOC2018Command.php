@@ -45,7 +45,7 @@ class ApproveNOC2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('noc2018:approve:officials')
+            ->setName('noc2018:approve:game:officials')
             ->setDescription('Approve Game Officials NOC2018');
     }
 
