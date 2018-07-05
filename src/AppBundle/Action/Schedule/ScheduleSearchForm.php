@@ -84,7 +84,6 @@ class ScheduleSearchForm extends AbstractForm
     <span>Search</span>
   </button>
     <a href="{$xlsUrl}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Excel</a>
-    <a href="{$txtUrl}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-share"></span> Export to Text</a>
   </div>
 </div>
 </form>
