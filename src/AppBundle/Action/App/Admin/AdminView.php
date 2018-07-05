@@ -100,6 +100,14 @@ EOT;
         <li><a href="{$this->generateUrl('schedule_game_2018')}">View Game Schedule</a></li>
         <li><a href="{$this->generateUrl('schedule_team_2018')}">View Team Schedule</a></li>
         <li><a href="{$this->generateUrl('schedule_game_2018',['_format' => 'xls'])}">Export Game Schedule</a></li>
+EOT;
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $html .= <<<EOT
+        <li><a href="{$this->generateUrl('game_import')}">Import Game Schedule</a></li>
+EOT;
+        }
+
+        $html .= <<<EOT
         <!--<li><a href = "{$this->generateUrl('schedule_medalroundcalc_2018',['_format' => 'xls_qf'])}">Export Quarter-Finals Schedule for review</a></li>-->
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2018',['_format' => 'xls_sf'])}">Export Semi-Finals Schedule for review</a></li>
         <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2018',['_format' => 'xls_fm'])}">Export Finals Schedule for review</a></li>

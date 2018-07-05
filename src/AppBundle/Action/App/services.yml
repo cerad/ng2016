@@ -19,6 +19,7 @@ services:
             - ["setProject", ["%app_project%"]]
         arguments:
             - "%show_header_image%"
+            - "%show_schedules_menu%"
             - "%show_results_menu%"
             - "%show_final_results%"
             - "%app_version%"
@@ -60,6 +61,7 @@ services:
         parent: abstract_view2
         arguments:
             - "@user_login_form"
+            - "%show_schedules_menu%"
             - "%show_results_menu%"
 
     # action text alerts

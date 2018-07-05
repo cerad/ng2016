@@ -8,6 +8,7 @@ use PHPExcel_Reader_Abstract;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Exception;
@@ -45,38 +46,41 @@ class AffinityLoadCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('affinity:transform')
-            ->setDescription('Transform Affinity Schedule Export to Import XLSX files')
-            ->addArgument('filename', InputArgument::REQUIRED, 'Affinity Schedule File');
+            ->setName('affinity:load')
+            ->setDescription('Load Affinity Schedule Export to Import XLSX files')
+            ->addArgument('filename', InputArgument::REQUIRED, 'Affinity Schedule File')
+            ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing data before update');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Start the processing
         $filename = $input->getArgument('filename');
+        $delete = $input->getOption('delete');
+
         $this->path_parts = pathinfo($filename);
 
         $this->contentsFilename = $this->getCSVFilename('AffinityBaseValues');
 
         $this->load($filename);
 
-        $regTeams = $this->loadRegTeams($this->dataValues);
+        $regTeams = $this->loadRegTeams($this->dataValues, $delete);
         $count = count($regTeams);
         echo "$count regTeams loaded...\n";
 
-        $gameTeams = $this->loadGameTeams($this->dataValues);
+        $gameTeams = $this->loadGameTeams($this->dataValues, $delete);
         $count = count($gameTeams);
         echo "$count gameTeams loaded...\n";
 
-        $poolTeams = $this->loadPoolTeams($this->dataValues);
+        $poolTeams = $this->loadPoolTeams($this->dataValues, $delete);
         $count = count($poolTeams);
         echo "$count poolTeams loaded...\n";
 
-        $games = $this->loadGames($this->dataValues);
+        $games = $this->loadGames($this->dataValues, $delete);
         $count = count($games);
         echo "$count games loaded...\n";
 
-        $gameOfficials = $this->loadGameOfficials($games);
+        $gameOfficials = $this->loadGameOfficials($games, $delete);
         $count = count($gameOfficials);
         echo "$count gameOfficials loaded...\n";
 
@@ -139,7 +143,7 @@ class AffinityLoadCommand extends Command
             for ($row = 2; $row < $rowMax; $row++) {
                 $range = sprintf('A%d:%s%d', $row, $colMax, $row);
                 $data = $ws->rangeToArray($range, null, false, false, false)[0];
-                if (!is_null($data[0])) {
+                if (!empty((trim($data[0])))) {
                     $this->processRow($data);
 
                     if (($row % 100) === 0) {
@@ -198,46 +202,6 @@ class AffinityLoadCommand extends Command
 
     private $dataValues;
 
-//    private $regTeamsKeys = array(
-//        'regTeamId',
-//        'projectId',
-//        'teamKey',
-//        'teamNumber',
-//        'teamName',
-//        'teamPoints',
-//        'orgId',
-//        'orgView',
-//        'program',
-//        'gender',
-//        'age',
-//        'division',
-//    );
-//    private $regTeamsValues;
-//
-//    private $poolTeamsKeys = array(
-//        'poolTeamId',
-//        'projectId',
-//        'poolKey',
-//        'poolTypeKey',
-//        'poolTeamKey',
-//        'poolView',
-//        'poolSlotView',
-//        'poolTypeView',
-//        'poolTeamView',
-//        'poolTeamSlotView',
-//        'sourcePoolKeys',
-//        'sourcePoolSlot',
-//        'program',
-//        'gender',
-//        'age',
-//        'division',
-//        'regTeamId',
-//        'regTeamName',
-//        'regTeamPoints',
-//    );
-//
-//    private $poolTeamsValues;
-
     private $gamesKeys = array(
         'gameId',
         'projectId',
@@ -252,44 +216,6 @@ class AffinityLoadCommand extends Command
         'reportText',
         'reportState',
     );
-
-    private $gamesValues;
-
-//    private $gameTeamsKeys = array(
-//        'gameTeamId',
-//        'gameNumber',
-//        'projectId',
-//        'gameId',
-//        'gameNumber',
-//        'slot',
-//        'poolTeamId',
-//        'results',
-//        'resultsDetail',
-//        'pointsScored',
-//        'pointsAllowed',
-//        'pointsEarned',
-//        'pointsDeducted',
-//        'sportsmanship',
-//        'injuries',
-//        'misconduct',
-//    );
-//
-//    private $gameTeamsValues;
-//
-//    private $gameOfficialsKeys = array(
-//        'gameOfficialId',
-//        'projectId',
-//        'gameId',
-//        'gameNumber',
-//        'slot',
-//        'phyPersonId',
-//        'regPersonId',
-//        'regPersonName',
-//        'assignRole',
-//        'assignState',
-//    );
-//
-//    private $gameOfficialsValues;
 
     private function processRow($row)
     {
@@ -437,7 +363,7 @@ class AffinityLoadCommand extends Command
         return;
     }
 
-    private function loadGames($data)
+    private function loadGames($data, $delete = false)
     {
         if (empty($data)) {
             return null;
@@ -465,40 +391,47 @@ class AffinityLoadCommand extends Command
         }
 
         if (!is_null($games)) {
-            //delete old data from table
-            $sql = 'DELETE FROM games WHERE `projectId` = ?';
-            $deleteGamesStmt = $this->nocGamesConn->prepare($sql);
-            $deleteGamesStmt->execute([$this->projectId]);
-
-            //load new data
-            $sql = 'INSERT INTO games (gameId, projectId, gameNumber, role, fieldName, venueName, `start`, finish, state, `status`, reportText, reportState) 
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-            $insertGamesStmt = $this->nocGamesConn->prepare($sql);
-            foreach ($games as $game) {
-                $insertGamesStmt->execute($game);
+            if ($delete) {
+                //delete old data from table
+                $sql = 'DELETE FROM games WHERE `projectId` = ?';
+                $deleteGamesStmt = $this->nocGamesConn->prepare($sql);
+                $deleteGamesStmt->execute([$this->projectId]);
             }
-            //get new data
-            $sql = 'SELECT * FROM games WHERE `projectId` = ?';
-            $selectGamesStmt = $this->nocGamesConn->prepare($sql);
+            //load new data
+            try {
+                $sql = 'INSERT INTO games (gameId, projectId, gameNumber, role, fieldName, venueName, `start`, finish, state, `status`, reportText, reportState) 
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+                $insertGamesStmt = $this->nocGamesConn->prepare($sql);
+                foreach ($games as $game) {
+                    $insertGamesStmt->execute($game);
+                }
+            } catch (Exception $e) {
 
-            $selectGamesStmt->execute([$this->projectId]);
-
-            $games = $selectGamesStmt->fetchAll();
+            }
         }
+        //get new data
+        $sql = 'SELECT * FROM games WHERE `projectId` = ?';
+        $selectGamesStmt = $this->nocGamesConn->prepare($sql);
+
+        $selectGamesStmt->execute([$this->projectId]);
+
+        $games = $selectGamesStmt->fetchAll();
 
         return $games;
     }
 
-    private function loadRegTeams($data)
+    private function loadRegTeams($data, $delete = false)
     {
         if (empty($data)) {
             return null;
         }
 
-        //delete old data from table
-        $sql = 'DELETE FROM regTeams WHERE projectId = ?';
-        $deleteRegTeamsStmt = $this->nocGamesConn->prepare($sql);
-        $deleteRegTeamsStmt->execute([$this->projectId]);
+        if ($delete) {
+            //delete old data from table
+            $sql = 'DELETE FROM regTeams WHERE projectId = ?';
+            $deleteRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+            $deleteRegTeamsStmt->execute([$this->projectId]);
+        }
 
         $teams = null;
         $gameTeams = ['home', 'away'];
@@ -522,32 +455,38 @@ class AffinityLoadCommand extends Command
                         $teamNumber = $teams->awayTeamNumber;
                 }
 
-                $rTeam = array(
-                    $regTeamId,
-                    $teams->projectId,
-                    $teamKey,
-                    $teamNumber,
-                    $teamName,
-                    0,
-                    null,
-                    null,
-                    $teams->program,
-                    $teams->gender,
-                    $teams->age,
-                    $teams->division,
-                );
+                if (!empty($teamName)) {
+                    $rTeam = array(
+                        $regTeamId,
+                        $teams->projectId,
+                        $teamKey,
+                        $teamNumber,
+                        $teamName,
+                        0,
+                        null,
+                        null,
+                        $teams->program,
+                        $teams->gender,
+                        $teams->age,
+                        $teams->division,
+                    );
 
-                if ($teams->pType == 'PP') {
-                    //load new data
-                    $sql = 'SELECT * FROM regTeams WHERE regTeamId = ?';
-                    $checkRegTeamStmt = $this->nocGamesConn->prepare($sql);
-                    $checkRegTeamStmt->execute([$regTeamId]);
-                    $t = $checkRegTeamStmt->fetch();
-                    if (!$t) {
-                        $sql = 'INSERT INTO regTeams (regTeamId, projectId, teamKey, teamNumber, teamName, teamPoints, orgId, orgView, program, gender, age, division) 
+                    if ($teams->pType == 'PP') {
+                        //load new data
+                        $sql = 'SELECT * FROM regTeams WHERE regTeamId = ?';
+                        $checkRegTeamStmt = $this->nocGamesConn->prepare($sql);
+                        $checkRegTeamStmt->execute([$regTeamId]);
+                        $t = $checkRegTeamStmt->fetch();
+                        if (!$t) {
+                            try {
+                                $sql = 'INSERT INTO regTeams (regTeamId, projectId, teamKey, teamNumber, teamName, teamPoints, orgId, orgView, program, gender, age, division) 
                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-                        $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
-                        $insertRegTeamsStmt->execute($rTeam);
+                                $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+                                $insertRegTeamsStmt->execute($rTeam);
+                            } catch (Exception $e) {
+
+                            }
+                        }
                     }
                 }
             }
@@ -564,24 +503,26 @@ class AffinityLoadCommand extends Command
         return $regTeams;
     }
 
-    private function loadGameTeams($data)
+    private function loadGameTeams($data, $delete = false)
     {
         if (empty($data)) {
             return null;
         }
 
-        //delete old data from table
-        $sql = 'DELETE FROM gameTeams WHERE projectId = ?';
-        $deleteGameTeamsStmt = $this->nocGamesConn->prepare($sql);
-        $deleteGameTeamsStmt->execute([$this->projectId]);
+        $projectId = $this->projectId;
 
+        if ($delete) {
+            //delete old data from table
+            $sql = 'DELETE FROM gameTeams WHERE projectId = ?';
+            $deleteGameTeamsStmt = $this->nocGamesConn->prepare($sql);
+            $deleteGameTeamsStmt->execute([$projectId]);
+        }
         $gTeams = null;
         $gameTeams = ['home', 'away'];
 
         //set the data : game in each row
         foreach ($data as $row) {
             $games = (object)array_combine($this->dataKeys, $row);
-            $projectId = $games->projectId;
 
             foreach ($gameTeams as $gameTeam) {
                 switch ($gameTeam) {
@@ -606,10 +547,14 @@ class AffinityLoadCommand extends Command
                 );
 
                 //load new data
-                $sql = 'INSERT INTO gameTeams (gameTeamId, projectId, gameId, gameNumber, slot, poolTeamId) 
+                try {
+                    $sql = 'INSERT INTO gameTeams (gameTeamId, projectId, gameId, gameNumber, slot, poolTeamId) 
                         VALUES (?,?,?,?,?,?)';
-                $insertGameTeamsStmt = $this->nocGamesConn->prepare($sql);
-                $insertGameTeamsStmt->execute($gTeam);
+                    $insertGameTeamsStmt = $this->nocGamesConn->prepare($sql);
+                    $insertGameTeamsStmt->execute($gTeam);
+                } catch (Exception $e) {
+
+                }
             }
         }
 
@@ -624,17 +569,20 @@ class AffinityLoadCommand extends Command
         return $gameTeams;
     }
 
-    private function loadPoolTeams($data)
+    private function loadPoolTeams($data, $delete = false)
     {
         if (empty($data)) {
             return null;
         }
 
         $projectId = $this->projectId;
-        //delete old data from table
-        $sql = 'DELETE FROM poolTeams WHERE projectId = ?';
-        $deletePoolTeamsStmt = $this->nocGamesConn->prepare($sql);
-        $deletePoolTeamsStmt->execute([$projectId]);
+
+        if ($delete) {
+            //delete old data from table
+            $sql = 'DELETE FROM poolTeams WHERE projectId = ?';
+            $deletePoolTeamsStmt = $this->nocGamesConn->prepare($sql);
+            $deletePoolTeamsStmt->execute([$projectId]);
+        }
 
         $teams = null;
         $gameTeams = ['home', 'away'];
@@ -693,15 +641,19 @@ class AffinityLoadCommand extends Command
                 );
 
                 //load new data
-                $sql = 'SELECT * FROM poolTeams WHERE poolTeamId = ?';
-                $checkPoolTeamStmt = $this->nocGamesConn->prepare($sql);
-                $checkPoolTeamStmt->execute([$poolTeamId]);
-                $t = $checkPoolTeamStmt->fetch();
-                if (!$t) {
-                    $sql = 'INSERT INTO poolTeams (poolTeamId, projectId, poolKey, poolTypeKey, poolTeamKey, poolView, poolSlotView, poolTypeView, poolTeamView, poolTeamSlotView, sourcePoolKeys, sourcePoolSlot, program, gender, age, division, regTeamId, regTeamName) 
+                try {
+                    $sql = 'SELECT * FROM poolTeams WHERE poolTeamId = ?';
+                    $checkPoolTeamStmt = $this->nocGamesConn->prepare($sql);
+                    $checkPoolTeamStmt->execute([$poolTeamId]);
+                    $t = $checkPoolTeamStmt->fetch();
+                    if (!$t) {
+                        $sql = 'INSERT INTO poolTeams (poolTeamId, projectId, poolKey, poolTypeKey, poolTeamKey, poolView, poolSlotView, poolTypeView, poolTeamView, poolTeamSlotView, sourcePoolKeys, sourcePoolSlot, program, gender, age, division, regTeamId, regTeamName) 
                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-                    $insertPoolTeamsStmt = $this->nocGamesConn->prepare($sql);
-                    $insertPoolTeamsStmt->execute($pTeam);
+                        $insertPoolTeamsStmt = $this->nocGamesConn->prepare($sql);
+                        $insertPoolTeamsStmt->execute($pTeam);
+                    }
+                } catch (Exception $e) {
+
                 }
             }
         }
@@ -717,19 +669,22 @@ class AffinityLoadCommand extends Command
         return $poolTeams;
     }
 
-    private function loadGameOfficials($games)
+    private function loadGameOfficials($games, $delete = false)
     {
         if (empty($games)) {
             return null;
         }
 
-        //delete old data from table
         $projectId = $this->projectId;
-        $sql = 'DELETE FROM gameOfficials WHERE projectId = ?';
-        $deleteRegTeamsStmt = $this->nocGamesConn->prepare($sql);
-        $deleteRegTeamsStmt->execute([$projectId]);
 
+        if ($delete) {
+            //delete old data from table
+            $sql = 'DELETE FROM gameOfficials WHERE projectId = ?';
+            $deleteRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+            $deleteRegTeamsStmt->execute([$projectId]);
+        }
         $gameOfficials = null;
+
         //set the data : game in each row
         foreach ($games as $row) {
             $game = (object)array_combine($this->gamesKeys, $row);
@@ -751,12 +706,16 @@ class AffinityLoadCommand extends Command
         }
 
         //load new data
-        if (count($gOfficials)>0) {
-            $sql = 'INSERT INTO gameOfficials (gameOfficialId, projectId, gameId, gameNumber, slot, phyPersonId, regPersonId, regPersonName, assignRole, assignState) 
+        if (count($gOfficials) > 0) {
+            try {
+                $sql = 'INSERT INTO gameOfficials (gameOfficialId, projectId, gameId, gameNumber, slot, phyPersonId, regPersonId, regPersonName, assignRole, assignState) 
                             VALUES (?,?,?,?,?,?,?,?,?,?)';
-            $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
-            foreach ($gOfficials as $official) {
-                $insertRegTeamsStmt->execute($official);
+                $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+                foreach ($gOfficials as $official) {
+                    $insertRegTeamsStmt->execute($official);
+                }
+            } catch (Exception $e) {
+
             }
         }
 

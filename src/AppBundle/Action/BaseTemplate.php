@@ -9,12 +9,14 @@ class BaseTemplate extends AbstractTemplate
     protected $version = null;
 
     private $showHeaderImage;
+    private $showSchedulesMenu;
     private $showResultsMenu;
     private $showFinalResults;
 
-    public function __construct($showHeaderImage, $showResultsMenu, $showFinalResults, $version)
+    public function __construct($showHeaderImage, $showSchedulesMenu, $showResultsMenu, $showFinalResults, $version)
     {
         $this->showHeaderImage = $showHeaderImage;
+        $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
         $this->version = $version;
@@ -243,7 +245,7 @@ EOT;
 
     protected function renderTopMenuSchedules()
     {
-        if (!$this->showResultsMenu) {
+        if (!$this->showSchedulesMenu) {
             return null;
         }
 

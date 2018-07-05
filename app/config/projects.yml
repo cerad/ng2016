@@ -15,19 +15,13 @@ parameters:
         AYSONationalOpenCup2018:
             programs:
                 Core:  Core
-                Extra:  Extra
                 Club:  Club
-                VIP:  VIP
             genders:
                 B:  B
                 G:  G
-                C:  C
             ages:
-                VIP: VIP
                 10U: 10U
-                11U: 11U
                 12U: 12U
-                13U: 13U
                 14U: 14U
                 16U: 16U
                 19U: 19U
@@ -37,7 +31,6 @@ parameters:
                 2005: 2005
                 2004: 2004
                 2003: 2003
-                2002: 2002
             dates:
                 '2018-07-13': Fri # Pool Play
                 '2018-07-14': Sat # Pool Play and Quarter Finals
@@ -53,7 +46,6 @@ parameters:
                 Core:  Core
                 Club:  Club
                 Adult: Adult
-            #   VIP:  VIP
             genders:
                 B:  B
                 G:  G

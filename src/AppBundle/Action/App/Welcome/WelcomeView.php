@@ -16,11 +16,15 @@ class WelcomeView extends AbstractView2
     /** @var  %show_results_menu% */
     private $showResultsMenu;
 
+    /** @var  %show_schedules_menu% */
+    private $showSchedulesMenu;
+
     private $project;
 
-    public function __construct(UserLoginForm $userLoginForm, $showResultsMenu)
+    public function __construct(UserLoginForm $userLoginForm, $showSchedulesMenu, $showResultsMenu)
     {
         $this->userLoginForm = $userLoginForm;
+        $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
     }
 
@@ -49,11 +53,21 @@ EOT;
         $html = <<<EOT
 <div id="notes">
 EOT;
-        if ($this->showResultsMenu) {
+        $srMenu = 'site';
+        if($this->showSchedulesMenu){
+            $srMenu = 'Schedules';
+        }
+        if($this->showResultsMenu){
+            $srMenu = 'Results';
+        }
+        if ($this->showSchedulesMenu && $this->showResultsMenu) {
+            $srMenu = 'Schedules and Results';
+        }
+        if ($this->showSchedulesMenu || $this->showResultsMenu) {
             $html .= <<<EOT
 <p>
-  If you just want to peruse the Schedules and Results, no need to go any further.  
-  You do not need to sign-in to access Schedules or Results above.  To volunteer, you will need to <a href="{$this->generateUrl('user_create')}">create a zAYSO account</a>.
+  If you just want to peruse the {$srMenu}, no need to go any further.  
+  You do not need to sign-in to access {$srMenu} above.  To volunteer, you will need to <a href="{$this->generateUrl('user_create')}">create a zAYSO account</a>.
   In either case, you should
 <a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to {$this->project['title']} text alerts on RainedOut</a>. 
 </p>

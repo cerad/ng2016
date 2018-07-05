@@ -17,7 +17,7 @@ parameters:
         status: Active
 
         show_header_image: null
-                
+
         fedId:     AYSO
         fedRoleId: AYSOV
 
@@ -84,7 +84,6 @@ parameters:
 
         programs:
             Core: Core
-            Extra: Extra
             Club: Club
 
         genders:
@@ -92,11 +91,8 @@ parameters:
             G:  Girls
 
         ages:
-            VIP: VIP
             10U: 10U
-            11U: 11U
             12U: 12U
-            13U: 13U
             14U: 14U
             16U: 16U
             19U: 19U
@@ -106,14 +102,13 @@ parameters:
             2005: 2005
             2004: 2004
             2003: 2003
-            2002: 2002
 
         search_defaults:
             projects: ['AYSONationalOpenCup2018']
             programs: ['Core']
             dates:    ['2018-07-13']
-            genders:  ['B']
-            ages:     ['12U']
+            genders:  ['G']
+            ages:     ['10U']
 
         search_controls:
             dates:
@@ -133,7 +128,6 @@ parameters:
 
             programs:
                 Core:  Core
-                Extra: Extra
                 Club:  Club
 
             genders:
@@ -141,11 +135,8 @@ parameters:
                 G: Girls
 
             ages:
-                VIP: VIP
                 10U: 10U
-                11U: 11U
                 12U: 12U
-                13U: 13U
                 14U: 14U
                 16U: 16U
                 19U: 19U
@@ -155,47 +146,23 @@ parameters:
                 2005: 2005
                 2004: 2004
                 2003: 2003
-                2002: 2002
 
             pools:
                 Core:
                     B:
-                        10U: [A,B,C,D]
-                        12U: [A,B,C,D]
-                        14U: [A,B,C,D]
-                        16U: [A,B,C,D]
-                        19U: [A,B,C,D]
+                        10U: [A]
+                        12U: [A]
+                        14U: [A]
+                        16U: [A]
+                        19U: [A]
                     G:
-                        10U: [A,B,C,D]
-                        12U: [A,B,C,D]
-                        14U: [A,B,C,D]
-                        16U: [A,B,C,D]
-                        19U: [A,B,C,D]
+                        10U: [A]
+                        12U: [A]
+                        14U: [A]
+                        16U: [A]
+                        19U: [A]
 
         levels:
-            AYSO_B10U_Core:
-                program: Core
-                gender:  B
-                age:     U10
-                div:     U10B
-
-            AYSO_U10G_Core:
-                program: Core
-                gender:  G
-                age:     U10
-                div:     U10G
-
-            AYSO_U12B_Core:
-                program: Core
-                gender:  B
-                age:     U12
-                div:     U12B
-
-            AYSO_U12G_Core:
-                program: Core
-                gender:  G
-                age:     U12
-                div:     U12G
 
         pools:
 

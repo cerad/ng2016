@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Action\Game\Migrate;
+namespace AppBundle\Action\Game\Admin;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +24,7 @@ class InitGames2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('init:games:noc2018')
+            ->setName('noc2018:init:games')
             ->setDescription('Init Games NOC2018');
     }
 

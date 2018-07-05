@@ -39,14 +39,14 @@ class ScheduleOfficialController extends AbstractController2
         // First project in list
         $projectId = array_keys($this->projectChoices)[0];
 
-        // Second date in project
-        $date = array_keys($this->projects[$projectId]['dates'])[1];
+        // First date in project
+        $date = array_keys($this->projects[$projectId]['dates'])[0];
 
         $searchData = [
             'projectId' => $projectId,
             'programs'   => ['Core'],
             'genders'    => ['G'],
-            'ages'       => ['U14'],
+            'ages'       => ['10U'],
             'dates'      => [$date],
             'sortBy'     => 1,
             'filter'     => null,
@@ -64,7 +64,6 @@ class ScheduleOfficialController extends AbstractController2
         $searchForm = $this->searchForm;
         $searchForm->setData($searchData);
         $searchForm->handleRequest($request);
-        
         if ($searchForm->isValid()) {
 
             $searchDataNew = $searchForm->getData();

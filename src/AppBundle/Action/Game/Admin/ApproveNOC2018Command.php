@@ -1,12 +1,11 @@
 <?php
-namespace AppBundle\Action\Game\Migrate;
+namespace AppBundle\Action\Game\Admin;
 
 use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
 use AppBundle\Action\Schedule\ScheduleFinder;
 
 use Symfony\Component\Console\Command\Command;
-//use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -46,7 +45,7 @@ class ApproveNOC2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('games:approve:noc2018')
+            ->setName('noc2018:approve:officials')
             ->setDescription('Approve Game Officials NOC2018');
     }
 
