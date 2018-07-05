@@ -41,6 +41,7 @@ services:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm
         parent: abstract_form
         arguments:
+            - '%app_project%'
             - '@game_official_assign_workflow'
             - '@game_official_assignee_finder'
             - '@game_official_conflicts_finder'
