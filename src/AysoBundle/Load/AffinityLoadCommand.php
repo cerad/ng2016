@@ -68,21 +68,21 @@ class AffinityLoadCommand extends Command
         $count = count($regTeams);
         echo "$count regTeams loaded...\n";
 
-        $gameTeams = $this->loadGameTeams($this->dataValues, $delete);
-        $count = count($gameTeams);
-        echo "$count gameTeams loaded...\n";
+//        $gameTeams = $this->loadGameTeams($this->dataValues, $delete);
+//        $count = count($gameTeams);
+//        echo "$count gameTeams loaded...\n";
 
         $poolTeams = $this->loadPoolTeams($this->dataValues, $delete);
         $count = count($poolTeams);
         echo "$count poolTeams loaded...\n";
 
-        $games = $this->loadGames($this->dataValues, $delete);
-        $count = count($games);
-        echo "$count games loaded...\n";
-
-        $gameOfficials = $this->loadGameOfficials($games, $delete);
-        $count = count($gameOfficials);
-        echo "$count gameOfficials loaded...\n";
+//        $games = $this->loadGames($this->dataValues, $delete);
+//        $count = count($games);
+//        echo "$count games loaded...\n";
+//
+//        $gameOfficials = $this->loadGameOfficials($games, $delete);
+//        $count = count($gameOfficials);
+//        echo "$count gameOfficials loaded...\n";
 
         echo "... Affinity transform complete.\n";
 
@@ -301,13 +301,41 @@ class AffinityLoadCommand extends Command
                 $homeTeamSlot = $poolTeamKeys[0];
                 $home = str_split($homeTeamSlot);
                 $homePoolSlot = $home[0];
-                $homeTeamNumber = $home[1];
+                switch ($homePoolSlot) {
+                    case 'A':
+                        $numBase = 0;
+                        break;
+                    case 'B':
+                        $numBase = 10;
+                        break;
+                    case 'C':
+                        $numBase = 20;
+                        break;
+                    case 'D':
+                        $numBase = 30;
+                        break;
+                }
+                $homeTeamNumber = $numBase + $home[1];
 
                 $awayTeamName = $fields[6];
                 $awayTeamSlot = $poolTeamKeys[1];
                 $away = str_split($awayTeamSlot);
                 $awayPoolSlot = $away[0];
-                $awayTeamNumber = $away[1];
+                switch ($awayPoolSlot) {
+                    case 'A':
+                        $numBase = 0;
+                        break;
+                    case 'B':
+                        $numBase = 10;
+                        break;
+                    case 'C':
+                        $numBase = 20;
+                        break;
+                    case 'D':
+                        $numBase = 30;
+                        break;
+                }
+                $awayTeamNumber = $numBase + $away[1];
             } else {
                 $homeTeamName = $poolTeamKeys[0];
                 $homeTeamSlot = '1X';
