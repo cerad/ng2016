@@ -163,7 +163,7 @@ class AffinityLoadCommand extends Command
             echo 'Row: ', $row, "\n";
             echo 'Range: ', $range, "\n";
             echo 'Data: ', "\n";
-            var_dump($data);
+            var_dump($data); //
             echo "\n";
         }
 

@@ -5,21 +5,18 @@ namespace AppBundle\Action;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
-/*
-
-    $excel = new AbstractImporter('path/to/file.xls');
-    
-    var_dump($excel->toArray());
-
-    // Sample array of data returned
-    $arrayData = array(
-        array(NULL,   2010, 2011, 2012),   //heading labels; NULL for row labels
-        array('Q1',   12,   15,   21),
-        array('Q2',   56,   73,   86),
-        array('Q3',   52,   61,   69),
-        array('Q4',   30,   32,    0),
-    );
-*/
+//    $excel = new AbstractImporter('path/to/file.xls');
+//
+//    var_dump($excel->toArray());
+//
+//    // Sample array of data returned
+//    $arrayData = array(
+//        array(NULL,   2010, 2011, 2012),   //heading labels; NULL for row labels
+//        array('Q1',   12,   15,   21),
+//        array('Q2',   56,   73,   86),
+//        array('Q3',   52,   61,   69),
+//        array('Q4',   30,   32,    0),
+//    );
 
 class AbstractImporter
 {

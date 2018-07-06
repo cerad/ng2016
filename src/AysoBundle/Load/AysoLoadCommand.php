@@ -288,7 +288,7 @@ EOD;
         
         $certMeta = isset($this->certMetas[$certDesc]) ? $this->certMetas[$certDesc] : null;
         if (!$certMeta) {
-            var_dump($row);
+            var_dump($row); //
             die('Missing cert: ' . $certDesc);
         }
 //if (1) return;

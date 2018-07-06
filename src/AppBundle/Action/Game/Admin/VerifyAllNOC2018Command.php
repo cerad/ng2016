@@ -37,7 +37,7 @@ class VerifyAllNOC2018Command extends Command
 
         $projectPersons = null;
 
-        $sql = 'SELECT * FROM projectPersons pp LEFT JOIN projectPersonRoles ppr ON ppr.projectPersonId = pp.id WHERE pp.projectKey LIKE  ?;';
+        $sql = 'SELECT * FROM projectPersons pp LEFT JOIN projectPersonRoles ppr ON ppr.projectPersonId = pp.id WHERE pp.projectKey LIKE ? AND NOT ppr.projectPersonId IS NULL;';
         $stmt = $this->Conn->executeQuery($sql, [$this->projectId]);
         $projectPersonRoles = [];
         while ($row = $stmt->fetch()) {
@@ -46,66 +46,60 @@ class VerifyAllNOC2018Command extends Command
 
         $projectPersons = [];
         foreach ($projectPersonRoles as $projectPersonRole) {
+            $projectPersons[$projectPersonRole['projectPersonId']]['regYear'] = $projectPersonRole['regYear'];
+            $projectPersons[$projectPersonRole['projectPersonId']]['currentMY'] = $projectPersonRole['regYear'] >= "MY2017";
             $projectPersons[$projectPersonRole['projectPersonId']][$projectPersonRole['role']] = $projectPersonRole['verified'];
         }
 
         $newProjectPersons = [];
         foreach ($projectPersons as $id => $projectPerson) {
-            $before[$id] = $projectPerson;
             $referee = isset($projectPerson['CERT_REFEREE']) ? $projectPerson['CERT_REFEREE'] == true : false;
             $safeHaven = isset($projectPerson['CERT_SAFE_HAVEN']) ? $projectPerson['CERT_SAFE_HAVEN'] == true : false;
             $concussion = isset($projectPerson['CERT_CONCUSSION']) ? $projectPerson['CERT_CONCUSSION'] == true : false;
+            $currentMY = $projectPerson['currentMY'];
 
-            $projectPerson['ROLE_REFEREE'] = $referee && $safeHaven && $concussion;
+            if (isset($projectPerson['ROLE_REFEREE'])) {
+                $projectPerson['ROLE_REFEREE'] = $referee && $safeHaven && $concussion && $currentMY;
+            }
 
-            if (isset($projectPerson[$id]['ROLE_VOLUNTEER'])) {
-                $projectPerson[$id]['ROLE_VOLUNTEER'] = $safeHaven && $concussion;
+            if (isset($projectPerson['ROLE_VOLUNTEER'])) {
+                $projectPerson['ROLE_VOLUNTEER'] = $safeHaven && $currentMY;
             }
 
             $newProjectPersons[$id] = $projectPerson;
         }
 
         foreach ($newProjectPersons as $projectPersonId => $certs) {
-            if(isset($certs['ROLE_REFEREE'])) {
+            if (isset($certs['ROLE_REFEREE'])) {
                 $this->Conn->update(
                     'projectPersonRoles',
                     ['verified' => $certs['ROLE_REFEREE']],
                     [
                         'projectPersonId' => $projectPersonId,
-                        'role' => 'ROLE_REFEREE'
-                    ]
-                );
-
-                $this->Conn->update(
-                    'projectPersons',
-                    ['verified' => $certs['ROLE_REFEREE']],
-                    [
-                        'id' => $projectPersonId,
-                        'registered' => 1
+                        'role' => 'ROLE_REFEREE',
                     ]
                 );
             }
 
-            if(isset($certs['ROLE_VOLUNTEER'])) {
+            if (isset($certs['ROLE_VOLUNTEER'])) {
                 $this->Conn->update(
                     'projectPersonRoles',
                     ['verified' => $certs['ROLE_VOLUNTEER']],
                     [
                         'projectPersonId' => $projectPersonId,
-                        'role' => 'ROLE_VOLUNTEER'
-                    ]
-                );
-
-                $this->Conn->update(
-                    'projectPersons',
-                    ['verified' => $certs['ROLE_VOLUNTEER']],
-                    [
-                        'id' => $projectPersonId,
-                        'registered' => 1
+                        'role' => 'ROLE_VOLUNTEER',
                     ]
                 );
             }
 
+            $this->Conn->update(
+                'projectPersons',
+                ['verified' => $certs['currentMY']],
+                [
+                    'id' => $projectPersonId,
+                    'registered' => 1,
+                ]
+            );
 
         }
     }

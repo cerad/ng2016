@@ -42,7 +42,7 @@ class LoadCertRickCommand extends LoadAbstractCommand
         }
         if (!isset($this->certMetas[$badge])) {
             echo "*** Missing cert meta\n";
-            var_dump($row);
+            var_dump($row); //
             exit();
         }
         $badge = $this->certMetas[$badge]['badge'];
