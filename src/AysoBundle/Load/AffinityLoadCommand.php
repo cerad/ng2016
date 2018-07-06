@@ -68,21 +68,21 @@ class AffinityLoadCommand extends Command
         $count = count($regTeams);
         echo "$count regTeams loaded...\n";
 
-//        $gameTeams = $this->loadGameTeams($this->dataValues, $delete);
-//        $count = count($gameTeams);
-//        echo "$count gameTeams loaded...\n";
+        $gameTeams = $this->loadGameTeams($this->dataValues, $delete);
+        $count = count($gameTeams);
+        echo "$count gameTeams loaded...\n";
 
         $poolTeams = $this->loadPoolTeams($this->dataValues, $delete);
         $count = count($poolTeams);
         echo "$count poolTeams loaded...\n";
 
-//        $games = $this->loadGames($this->dataValues, $delete);
-//        $count = count($games);
-//        echo "$count games loaded...\n";
-//
-//        $gameOfficials = $this->loadGameOfficials($games, $delete);
-//        $count = count($gameOfficials);
-//        echo "$count gameOfficials loaded...\n";
+        $games = $this->loadGames($this->dataValues, $delete);
+        $count = count($games);
+        echo "$count games loaded...\n";
+
+        $gameOfficials = $this->loadGameOfficials($games, $delete);
+        $count = count($gameOfficials);
+        echo "$count gameOfficials loaded...\n";
 
         echo "... Affinity transform complete.\n";
 
