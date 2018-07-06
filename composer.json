@@ -22,7 +22,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "guzzlehttp/guzzle": "^6.2",
-        "phpoffice/phpspreadsheet": "^1.2"
+        "phpoffice/phpexcel": "^1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
