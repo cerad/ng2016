@@ -141,8 +141,8 @@ EOD;
         $choices = [];
         while($row = $stmt->fetch())
         {
-            $choices[$row['regTeamId']] = sprintf('%s-%s %s',
-                $row['age'],$row['gender'],$row['teamName']);
+            $choices[$row['regTeamId']] = sprintf('%s%s %s',
+                $row['gender'],$row['age'],$row['teamName']);
         }
         return $choices;
     }
