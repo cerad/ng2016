@@ -86,7 +86,9 @@ class AdminListingViewFile extends AbstractView
                    'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
                    'Adult Exp Yrs',
                    'Shirt Size','Notes',
-                   'Will Coach', 'Will Referee', 'Will Volunteer', 'User Notes', 'Notes'
+                   'Will Coach', 'Will Referee', 'Will Volunteer',
+                    'Avail Fri', 'Avail Sat AM', 'Avail Sat PM','Avail Sun AM', 'Avail Sun PM',
+                    'User Notes', 'Notes'
             )
         );
 
@@ -117,11 +119,15 @@ class AdminListingViewFile extends AbstractView
                 $personView->willCoach,
                 $personView->willReferee,
                 $personView->willVolunteer,
+                $personView->availFri,
+                $personView->availSatMorn,
+                $personView->availSatAfter,
+                $personView->availSunMorn,
+                $personView->availSunAfter,
                 $personView->notesUser,
                 $personView->notes,
             );
         }
-        
         $workbook[$reportKey]['data'] = $data;
         $workbook[$reportKey]['options']['hideCols'] = array('B','C');
         
