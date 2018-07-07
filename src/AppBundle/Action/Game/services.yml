@@ -72,8 +72,8 @@ services:
             - "@game_updater"
             - "@reg_team_import_reader_excel"
 
-    game_officials_verify_ng2018_command:
-        class: AppBundle\Action\Game\Admin\VerifyAllNOC2018Command
+    game_verify_officials_ng2018_command:
+        class: AppBundle\Action\Game\Admin\VerifyOfficialsNOC2018Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
