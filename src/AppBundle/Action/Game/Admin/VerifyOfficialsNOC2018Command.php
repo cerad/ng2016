@@ -27,7 +27,7 @@ class VerifyAllNOC2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('noc2018:verify:game:officials')
+            ->setName('noc2018:verify:officials')
             ->setDescription('Verify Game Officials NOC2018');
     }
 
