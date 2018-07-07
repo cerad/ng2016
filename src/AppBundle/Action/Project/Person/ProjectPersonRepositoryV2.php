@@ -44,11 +44,12 @@ class ProjectPersonRepositoryV2
         $stmt = $this->conn->executeQuery($sql,$params);
         $personRows = [];
         while($personRow = $stmt->fetch()) {
-
-            $personRow['plans'] = isset($personRow['plans']) ? unserialize($personRow['plans']) : null;
-            $personRow['avail'] = isset($personRow['avail']) ? unserialize($personRow['avail']) : null;
-            $personRow['roles'] = [];
-            $personRows[$personRow['id']] = $personRow;
+            if(is_bool(strpos($personRow['name'],'test_account'))) {
+                $personRow['plans'] = isset($personRow['plans']) ? unserialize($personRow['plans']) : null;
+                $personRow['avail'] = isset($personRow['avail']) ? unserialize($personRow['avail']) : null;
+                $personRow['roles'] = [];
+                $personRows[$personRow['id']] = $personRow;
+            };
         }
         // Merge roles
         $personIds = array_keys($personRows);

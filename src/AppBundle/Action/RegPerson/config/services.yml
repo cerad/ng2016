@@ -19,6 +19,13 @@ services:
             - '@reg_person_connection'
             - '@reg_team_connection'
 
+    reg_person_norefrole_n02018_command:
+        class: AppBundle\Action\RegPerson\Admin\MissingRefRoleNOC2018Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '%app_project_key%'
+            - '@reg_person_connection'
+
     # ===========================================
     # RegPersonPerson Update
     reg_person_persons_update_form:

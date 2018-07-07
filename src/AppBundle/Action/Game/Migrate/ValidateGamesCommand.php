@@ -36,7 +36,7 @@ class ValidateGamesCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('games:validate:noc2018')
+            ->setName('validate:games')
             ->setDescription('Validate Games');
     }
 

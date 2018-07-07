@@ -13,33 +13,18 @@ use Doctrine\DBAL\Connection;
 
 class ApproveNOC2018Command extends Command
 {
-    private $reader;
-
     private $projectId;
 
     private $gameConn;
-    private $regTeamConn;
-    
-    private $gameFinder;
-    private $gameUpdater;
-    
+
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn,
-        ScheduleFinder $gameFinder,
-        GameUpdater    $gameUpdater,
-        RegTeamImportReaderExcel $reader
+        Connection $noc2018GamesConn
     ) {
         parent::__construct();
 
-        $this->reader = $reader;
-
         $this->projectId = $projectId;
         $this->gameConn    = $noc2018GamesConn;
-        $this->regTeamConn = $noc2018GamesConn;
-        
-        $this->gameFinder  = $gameFinder;
-        $this->gameUpdater = $gameUpdater;
     }
 
     protected function configure()
