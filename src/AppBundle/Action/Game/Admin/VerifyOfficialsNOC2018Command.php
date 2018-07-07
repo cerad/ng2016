@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class VerifyAllNOC2018Command extends Command
+class VerifyOfficialsNOC2018Command extends Command
 {
     private $projectId;
 
