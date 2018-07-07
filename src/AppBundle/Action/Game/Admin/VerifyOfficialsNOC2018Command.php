@@ -69,8 +69,10 @@ class VerifyOfficialsNOC2018Command extends Command
             $newProjectPersons[$id] = $projectPerson;
         }
 
+        $updateCount = null;
         foreach ($newProjectPersons as $projectPersonId => $certs) {
             if (isset($certs['ROLE_REFEREE'])) {
+                $updateCount += 1;
                 $this->Conn->update(
                     'projectPersonRoles',
                     ['verified' => $certs['ROLE_REFEREE']],
@@ -82,6 +84,7 @@ class VerifyOfficialsNOC2018Command extends Command
             }
 
             if (isset($certs['ROLE_VOLUNTEER'])) {
+                $updateCount += 1;
                 $this->Conn->update(
                     'projectPersonRoles',
                     ['verified' => $certs['ROLE_VOLUNTEER']],
@@ -100,7 +103,8 @@ class VerifyOfficialsNOC2018Command extends Command
                     'registered' => 1,
                 ]
             );
-
         }
+
+        echo sprintf("%d records updated\n", $updateCount);
     }
 }

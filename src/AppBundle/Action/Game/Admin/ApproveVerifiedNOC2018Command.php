@@ -30,9 +30,20 @@ class ApproveVerifiedNOC2018Command extends Command
     {
         echo sprintf("Approving Verified Game Officials NOC2018 ...\n");
 
+        $sql = 'SELECT * from projectPersonRoles WHERE approved =1';
+        $result = $this->gameConn->executeQuery($sql);
+        $countPre = count($result->fetchAll());
+
         $this->gameConn->update('projectPersonRoles',['approved' => '1', ],
             [
                 'verified' => '1'
             ]);
+
+        $sql = 'SELECT * from projectPersonRoles WHERE approved =1';
+        $result = $this->gameConn->executeQuery($sql);
+        $countPost = count($result->fetchAll());
+
+        echo sprintf("%d records updated\n", $countPost-$countPre);
+
     }
 }
