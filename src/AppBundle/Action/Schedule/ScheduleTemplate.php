@@ -159,7 +159,7 @@ EOD;
   <td class="schedule-field"><a href="{$this->generateUrl('field_map')}" target=_blank}>{$game->fieldName}</a></td>
   <td class="schedule-group">{$game->poolView}</td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
-  <td class="text-left">{$homeTeamName}<hr class="separator">{$awayTeamName}</td>
+  <td class="text-left">{$homeTeamName}&nbsp;<hr class="separator">{$awayTeamName}&nbsp;</td>
 EOD;
             // TODO: Move all this to a ScheduleOfficialTemplate
 

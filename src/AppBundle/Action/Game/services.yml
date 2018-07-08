@@ -49,8 +49,8 @@ services:
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 #
-    game_approve_n02018_command:
-        class: AppBundle\Action\Game\Admin\ApproveNOC2018Command
+    game_approve_requested_assignments_n02018_command:
+        class: AppBundle\Action\Game\Admin\ApproveRequestedAssignmentsNOC2018Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'

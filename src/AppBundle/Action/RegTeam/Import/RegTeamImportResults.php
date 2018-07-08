@@ -29,6 +29,10 @@ class RegTeamImportResults
     {
         $this->updatedRegTeams[$regTeam['regTeamKey']] = $regTeam;
     }
+    public function addUpdatedPoolTeam($poolTeam)
+    {
+        $this->updatedPoolTeams[$poolTeam['poolTeamKey']] = $poolTeam;
+    }
     public function calcCounts()
     {
         $this->totalCount   = count($this->totalRegTeams);

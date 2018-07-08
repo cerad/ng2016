@@ -118,7 +118,7 @@ EOD;
   <td class="text-center">{$game->fieldName} </td>
   <td class="text-center">{$game->poolView}  </td>
   <td>{$homeTeam->poolTeamSlotView}<hr class="separator">{$awayTeam->poolTeamSlotView}</td>
-  <td class="text-left">{$homeTeam->regTeamName}<hr class="separator">{$awayTeam->regTeamName}</td>
+  <td class="text-left">{$homeTeam->regTeamName}&nbsp;<hr class="separator">{$awayTeam->regTeamName}&nbsp;</td>
 </tr>
 EOD;
     }

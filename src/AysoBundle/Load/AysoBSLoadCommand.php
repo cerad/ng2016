@@ -73,13 +73,13 @@ EOD;
         $sql = 'SELECT regYear FROM vols WHERE fedKey = ?';
         $this->checkVolStmt = $this->aysoConn->prepare($sql);
 
-        $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate) VALUES (?,?,?,?,?)';
+        $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate,verified) VALUES (?,?,?,?,?,1)';
         $this->insertCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT roleDate,badge,badgeDate FROM certs WHERE fedKey = ? AND role = ?';
         $this->checkCertStmt = $this->aysoConn->prepare($sql);
 
-        $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ? WHERE fedKey = ? AND role = ?';
+        $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ?, verified=1 WHERE fedKey = ? AND role = ?';
         $this->updateCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT sar FROM orgs WHERE orgKey = ?';

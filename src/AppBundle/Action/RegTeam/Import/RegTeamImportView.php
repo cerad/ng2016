@@ -36,6 +36,12 @@ class RegTeamImportView extends AbstractView2
   <li>Region can either be a number or AYSOR:0894 or blank.</li>
   <li>Leave SARS column blank to generate from region.</li>
   <li>Add the literal string SARS to team name, it will be replaced with generated SARS</li>
+  <li>Add the literal string SARS to team name, it will be replaced with generated SARS</li>
+  <li>"Team Key" field should be space separated Gender, Age, Program, and team number like "G 19U Core 1"</li>
+  <li>"Team Key" and "Pool Team Key" fields should be space separated Gender, Age, Program, poolType, 
+  poolTeamSlotView like "G 19U Core PP A 1"</li>
+  <li><b><i>NOTE: Very little error checking is included so ill-formed or duplicate keys will have unpredictable 
+  results.</i></b></li>
 </ul>
 EOD;
         return $this->renderBaseTemplate($content);
