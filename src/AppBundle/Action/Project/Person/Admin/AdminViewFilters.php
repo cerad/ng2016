@@ -40,22 +40,37 @@ class AdminViewFilters
                 case null:
                     $listPersons[] = $person;
                     break;
-                case 'Referees':
+                case 'Available Referees':
+                case 'AvailableReferees':
                     if (in_array($personView->willReferee, $yesMaybe)) {
                         if ($personView->hasRoleReferee()) {
+                            if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
+                                $listPersons[] = $person;
+                            }
+                        }
+                    }
+                    break;
+                case 'Available Volunteers':
+                case 'AvailableVolunteers':
+                    if (in_array($personView->willVolunteer, $yesMaybe)) {
+                        if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }
                     break;
-                case 'Volunteers':
-                    if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        $listPersons[] = $person;
-                    }
-                    break;
-                case 'RefIssues':
+                case
+                'RefIssues':
                 case 'Referees with Issues':
                     if (in_array($personView->willReferee, $yesMaybe)) {
                         if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+                case 'RefCertIssues':
+                case 'Referees with Cert Issues':
+                    if($personView->getConflictedCertBadge()) {
+                        if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }
@@ -121,8 +136,10 @@ class AdminViewFilters
     }
 
 
-    private function hasIssues(ProjectPersonViewDecorator $personView)
-    {
+    private
+    function hasIssues(
+        ProjectPersonViewDecorator $personView
+    ) {
         $certs = $personView->getCerts();
         $issues = false;
         foreach ($certs as $cert) {
@@ -138,12 +155,15 @@ class AdminViewFilters
     }
 
 
-    public function cmp($a, $b)
-    {
-        $aName = explode (' ', ucwords($a->name));
+    public
+    function cmp(
+        $a,
+        $b
+    ) {
+        $aName = explode(' ', ucwords($a->name));
         $firstA = $aName[0];
         $lastA = isset($aName[1]) ? $aName[1] : $aName[0];
-        $bName = explode (' ', ucwords($b->name));
+        $bName = explode(' ', ucwords($b->name));
         $firstB = $bName[0];
         $lastB = isset($bName[1]) ? $bName[1] : $bName[0];
 

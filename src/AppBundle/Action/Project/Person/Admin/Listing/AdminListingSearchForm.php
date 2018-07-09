@@ -63,12 +63,13 @@ class AdminListingSearchForm extends AbstractForm
         $reportKey = $this->formData['reportKey'];
         $reportChoices = [
             'All'           =>  'All',
-            'Referees'      =>  'Referees',
-            'AdultRefs'     =>  'Referees with Adult Experience',
+            'AvailableReferees'      =>  'Available Referees',
 //            'Unverified'    =>  'Unverified',
 //            'Unapproved'    =>  'Unapproved',
+            'RefCertIssues' => 'Referees with Cert Issues',
             'RefIssues'     =>  'Referees with Issues',
-            'Volunteers'    =>  'Volunteers',
+            'AdultRefs'     =>  'Referees with Adult Experience',
+            'AvailableVolunteers'    =>  'Available Volunteers',
             'VolIssues'     =>  'Volunteers with Issues',
         ];
         

@@ -49,10 +49,10 @@ class AdminListingViewFile extends AbstractView
 
         $reportChoices = [
             'All'           =>  'All',
-            'Referees'      =>  'Referees',
+            'AvailableReferees'      =>  'Available Referees',
             'Volunteers'    =>  'Volunteers',
-            'Unverified'    =>  'Unverified',
-            'Unapproved'    =>  'Unapproved',
+//            'Unverified'    =>  'Unverified',
+//            'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
             'VolIssues'     =>  'Volunteers with Issues',
             'AdultRefs'     =>  'Referees with Adult Experience'

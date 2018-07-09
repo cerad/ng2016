@@ -172,10 +172,10 @@ parameters:
         fields:
 
         certifications:
-            Reg : { Core:12U, Club:2006 }
-            Int : { Core:14U, Club:2004 }
-            Adv : { Core:16U, Club:2003 }
-            Nat : { Core:19U, Club:2003 }
+            Reg : { Core:10U, Club:2008 }
+            Int : { Core:12U, Club:2006 }
+            Adv : { Core:14U, Club:2004 }
+            Nat : { Core:19U, Club:2002 }
 
   # ==================================================
   # Basic volunteer plan for the form

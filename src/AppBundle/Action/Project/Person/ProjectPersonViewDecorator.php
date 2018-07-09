@@ -118,6 +118,21 @@ class ProjectPersonViewDecorator
         return $this->person->getCert($certKey)->verified ? $this->successStyle : $this->dangerStyle;
     }
 
+    public function getConflictedCertBadge()
+    {
+        $certs = $this->getCerts();
+        if (empty($certs)) {
+            return null;
+        }
+        $cert = $this->person->getCert('CERT_REFEREE');
+        if ($cert->badgeUser != $cert->badge) {
+//            var_dump($cert);
+//            var_dump($cert->badgeUser);
+//            var_dump($cert->badge);
+            return true;
+        } else return false;
+    }
+
     public function getCertBadge($certKey)
     {
         if (!$this->person->hasCert($certKey)) {
