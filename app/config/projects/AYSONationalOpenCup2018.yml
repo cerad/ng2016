@@ -171,6 +171,12 @@ parameters:
 
         fields:
 
+        certifications:
+            Reg : { Core:12U, Club:2006 }
+            Int : { Core:14U, Club:2004 }
+            Adv : { Core:16U, Club:2003 }
+            Nat : { Core:19U, Club:2003 }
+
   # ==================================================
   # Basic volunteer plan for the form
   app_project_registration_form_controls:

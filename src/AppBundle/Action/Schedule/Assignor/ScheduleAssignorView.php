@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ScheduleAssignorView extends AbstractView2
 {
     private $games;
+    private $certifications;
 
     /** @var  ScheduleAssignorSearchForm */
     private $searchForm;
@@ -29,7 +30,7 @@ class ScheduleAssignorView extends AbstractView2
     public function __invoke(Request $request)
     {
         $this->games  = $request->attributes->get('games');
-
+        $this->certifications  = $request->attributes->get('certifications');
         return $this->newResponse($this->renderPage());
     }
     /* ========================================================
@@ -40,7 +41,7 @@ class ScheduleAssignorView extends AbstractView2
         $content = <<<EOD
 {$this->searchForm->render()}
 <hr>
-{$this->scheduleTemplate->render($this->games)}
+{$this->scheduleTemplate->render($this->games, $this->certifications)}
 EOD;
         $baseTemplate = $this->getBaseTemplate();
         $baseTemplate->setContent($content);

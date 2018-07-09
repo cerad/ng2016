@@ -21,6 +21,8 @@ class ScheduleAssignorController extends AbstractController2
     
     private $reportKey;
 
+    private $certifications;
+
     public function __construct(
         ScheduleAssignorSearchForm $searchForm,
         ScheduleFinder     $scheduleFinder,
@@ -33,9 +35,12 @@ class ScheduleAssignorController extends AbstractController2
 
         $this->projects       = $projects;
         $this->projectChoices = $projectChoices;
+
     }
     public function __invoke(Request $request)
     {
+        $this->certifications = $this->getCurrentProjectInfo()['certifications'];
+
         // First project in list
         $projectId = array_keys($this->projectChoices)[0];
 
@@ -110,8 +115,9 @@ class ScheduleAssignorController extends AbstractController2
         //apply report filters on assignState
         $this->reportKey = $searchData['reportKey'];
         $games = $this->filterGamesForReport($games);
-        
+
         $request->attributes->set('games',  $games);
+        $request->attributes->set('certifications',  $this->certifications);
         $request->attributes->set('filter', $searchData['filter']);
 
         return null;
