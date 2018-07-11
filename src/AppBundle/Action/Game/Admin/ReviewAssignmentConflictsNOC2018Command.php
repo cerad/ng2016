@@ -37,7 +37,8 @@ class ReviewAssignmentConflictsNOC2018Command extends Command
         echo "Review Official Assignments for Time Conflicts ... ";
 
         $this->gameConn->exec('SET @pid := NULL');
-        $this->gameConn->exec("SET @finish := '2018-01-01 00:00:00'");
+        $this->gameConn->exec("SET @lastFinish := '2018-01-01 00:00:00'");
+        $this->gameConn->exec("SET @lastField := 0");
         $this->gameConn->exec("SET @late := '00:15:00'");
 
         $sql = <<<SQL
@@ -49,10 +50,13 @@ SELECT
     fieldName,
     start,
     finish,
+    lastFinish,
+    lastField,
     minutes_late
 FROM
     (SELECT 
-        gameNumber,
+        projectId,
+            gameNumber,
             Role,
             name,
             assignState,
@@ -69,8 +73,9 @@ FROM
     FROM
         (SELECT DISTINCT
         gameNumber,
+            projectId,
             IF(slot = 1, 'Referee', 'AR') AS Role,
-            name,
+            regPersonName AS name,
             assignState,
             fieldName,
             start,
@@ -79,6 +84,8 @@ FROM
     FROM
         (SELECT 
         go.phyPersonId,
+            g.projectId,
+            regPersonName,
             go.gameOfficialId,
             g.gameNumber,
             slot,
@@ -89,13 +96,11 @@ FROM
     FROM
         noc2018games.gameOfficials go
     LEFT JOIN noc2018games.games g ON go.gameId = g.gameId) s
-    LEFT JOIN noc2018.projectPersons pp ON s.phyPersonId = pp.personKey
     WHERE
         assignState <> 'Open'
-    AND pp.projectKey LIKE '%2018'
-    ORDER BY s.phyPersonId ASC , start , fieldName) d ) f;
-    
-    
+    ORDER BY s.phyPersonId ASC , start , fieldName) d) f
+WHERE
+    projectId LIKE ?
 SQL;
         $keys = array(
             'gameNumber',
@@ -105,7 +110,9 @@ SQL;
             'fieldName',
             'start',
             'finish',
-            'conflict',
+            'lastFinish',
+            'lastField',
+            'minutes_late',
         );
         $stmt = $this->gameConn->executeQuery($sql, [$this->projectId]);
 
