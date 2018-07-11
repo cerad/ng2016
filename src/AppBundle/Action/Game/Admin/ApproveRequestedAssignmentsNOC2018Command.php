@@ -1,13 +1,10 @@
 <?php
 namespace AppBundle\Action\Game\Admin;
 
-use AppBundle\Action\Game\GameUpdater;
-use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
-use AppBundle\Action\Schedule\ScheduleFinder;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 use Doctrine\DBAL\Connection;
 
@@ -31,18 +28,41 @@ class ApproveRequestedAssignmentsNOC2018Command extends Command
     {
         $this
             ->setName('noc2018:approve:requested:assignments')
-            ->setDescription('Approve Assignments Requested by Officials NOC2018');
+            ->setDescription('Approve Assignments Requested by Officials NOC2018')
+            ->addOption('date','d',InputOption::VALUE_OPTIONAL,'Publish only by date', '%');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Approving Assignments Requested by Officials NOC2018 ...\n");
+        echo sprintf("Approving NOC2018 Assignments Requested by Officials ... ");
 
-        $this->gameConn->update('gameOfficials',
-            ['assignState' => 'Approved'],
-            [
-                'projectId'   => $this->projectId,
-                'assignState' => 'Requested',
-            ]);
+        $date = $input->getOption('date');
+
+        $sql = "
+SELECT gameOfficialId FROM ( 
+SELECT 
+        DATE(g.start) AS 'date', go.*
+    FROM
+        noc2018games.gameOfficials go
+    RIGHT JOIN noc2018games.games g ON go.gameId = g.gameId) s
+WHERE
+    projectId LIKE ?
+        AND date LIKE ?
+        AND assignState = 'Requested';
+        ";
+
+        $stmt = $this->gameConn->executeQuery($sql, [$this->projectId, $date]);
+
+        $updated = [];
+        while($row = $stmt->fetch()){
+            $updated[] = $row;
+            $this->gameConn->update('gameOfficials',['assignState' => 'Published'],
+                [
+                    'gameOfficialId' => $row['gameOfficialId']
+                ]);
+        }
+        $count  = count($updated);
+        echo sprintf("$count assignments updated.\n");
+
     }
 }
