@@ -86,6 +86,13 @@ services:
             - '%app_project_key%'
             - "@doctrine.dbal.noc2018games_connection"
 
+    game_assignment_conflicts_n02018_command:
+        class: AppBundle\Action\Game\Admin\ReviewAssignmentConflictsNOC2018Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '%app_project_key%'
+            - "@doctrine.dbal.noc2018games_connection"
+
 #    game_publish_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\Publish2016Command
 #        tags: [{ name: console.command }]

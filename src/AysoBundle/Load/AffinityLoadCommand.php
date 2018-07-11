@@ -842,19 +842,8 @@ class AffinityLoadCommand extends Command
                         if ($this->commit) {
                             $insertGameOfficialsStmt->execute($official);
                         }
-                    } else {
-                        $official = array_combine($this->gameOfficialsKeys, $official);
-                        if ($this->commit) {
-                            if ($this->commit) {
-                                $this->nocGamesConn->update(
-                                    'gameOfficials',
-                                    $official,
-                                    ['gameOfficialId' => $gameOfficialId]
-                                );
-                            }
-                        }
+                        $count += 1;
                     }
-                    $count += 1;
                 }
             } catch (Exception $e) {
                 echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
