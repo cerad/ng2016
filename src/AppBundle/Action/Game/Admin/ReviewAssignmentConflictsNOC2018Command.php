@@ -50,23 +50,24 @@ SELECT
     start,
     finish,
     minutes_late
-FROM (
-SELECT 
-    gameNumber,
-    Role,
-    name,
-    assignState,
-    fieldName,
-    start,
-    finish,
-    IF(@lastFinish = '2018-01-01 00:00:00',@lastFinish:=finish,@lastFinish) as lastFinish,
-    IF(@lastField = 0, fieldName, @lastField) as lastField,
-    IF ((@pid=phyPersonId) AND (addtime(@lastFinish, @late) > start),time_format(timediff(addtime(@lastFinish, @late),start),'%H:%i'), '') AS 'minutes_late',
-    @lastField := fieldName,
-    @lastFinish := finish,
-    @pid := phyPersonId
 FROM
-    (SELECT DISTINCT
+    (SELECT 
+        gameNumber,
+            Role,
+            name,
+            assignState,
+            fieldName,
+            start,
+            finish,
+            IF(@lastFinish = '2018-01-01 00:00:00', @lastFinish:=finish, @lastFinish) AS lastFinish,
+            IF(@lastField = 0, fieldName, @lastField) AS lastField,
+            IF((@pid = phyPersonId)
+                AND (ADDTIME(@lastFinish, @late) > start), TIME_FORMAT(TIMEDIFF(ADDTIME(@lastFinish, @late), start), '%H:%i'), '') AS 'minutes_late',
+            @lastField:=fieldName,
+            @lastFinish:=finish,
+            @pid:=phyPersonId
+    FROM
+        (SELECT DISTINCT
         gameNumber,
             IF(slot = 1, 'Referee', 'AR') AS Role,
             name,
@@ -87,13 +88,14 @@ FROM
             finish
     FROM
         noc2018games.gameOfficials go
-    LEFT JOIN noc2018games.games g ON go.gameId = g.gameId
-    WHERE
-        g.projectId LIKE '%2018') s
+    LEFT JOIN noc2018games.games g ON go.gameId = g.gameId) s
     LEFT JOIN noc2018.projectPersons pp ON s.phyPersonId = pp.personKey
     WHERE
         assignState <> 'Open'
-    ORDER BY s.phyPersonId ASC , start , fieldName) d) f;
+    AND pp.projectKey LIKE '%2018'
+    ORDER BY s.phyPersonId ASC , start , fieldName) d ) f;
+    
+    
 SQL;
         $keys = array(
             'gameNumber',
