@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Action\Game\Admin;
 
 use Symfony\Component\Console\Command\Command;
@@ -9,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 use Doctrine\DBAL\Connection;
 
-class ApproveRequestedAssignmentsNOC2018Command extends Command
+class AcceptPublishedAssignmentsNOC2018Command extends Command
 {
     private $projectId;
 
@@ -22,15 +21,15 @@ class ApproveRequestedAssignmentsNOC2018Command extends Command
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn = $noc2018GamesConn;
+        $this->gameConn    = $noc2018GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:approve:requested:assignments')
-            ->setDescription('Approve Assignments Requested by Officials NOC2018')
-            ->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Publish only by date', '%');
+            ->setName('noc2018:accept:published:assignments')
+            ->setDescription('Approve Assignments Published for Officials NOC2018')
+            ->addOption('date','d',InputOption::VALUE_OPTIONAL,'Publish only by date', '%');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,24 +48,22 @@ SELECT
 WHERE
     projectId LIKE ?
         AND date LIKE ?
-        AND assignState = 'Requested';
+        AND assignState = 'Published';
         ";
 
         $stmt = $this->gameConn->executeQuery($sql, [$this->projectId, $date]);
 
         $updated = [];
-        while ($row = $stmt->fetch()) {
+        while($row = $stmt->fetch()){
             $updated[] = $row;
-            $this->gameConn->update(
-                'gameOfficials',
-                ['assignState' => 'Approved'],
+            $this->gameConn->update('gameOfficials',
+                ['assignState' => 'Accepted'],
                 [
                     'gameOfficialId' => $row['gameOfficialId']
-                ]
-            );
+                ]);
         }
-        $count = count($updated);
-        echo sprintf("$count assignments approved.\n");
+        $count  = count($updated);
+        echo sprintf("$count assignments accepted.\n");
 
     }
 }
