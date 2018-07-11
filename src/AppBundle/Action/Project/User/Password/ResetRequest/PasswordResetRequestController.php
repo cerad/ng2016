@@ -74,8 +74,8 @@ EOD;
 
         $message->setTo([$user['email'] => $user['name']]);
 
-        $message->setBcc(['ahundiak@gmail.com' => 'Art Hundiak']);
-        
+        $message->setBcc(['web.noc2018@gmail.com' => 'Rick Roberts']);
+
         $mailer->send($message);
     }
 }
