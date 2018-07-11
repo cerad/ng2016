@@ -54,6 +54,7 @@ class AffinityLoadCommand extends Command
             ->setDescription('Load Affinity Schedule Export to Import XLSX files')
             ->addArgument('filename', InputArgument::REQUIRED, 'Affinity Schedule File')
             ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing data before update')
+            ->addOption('outfile', 'o', InputOption::VALUE_NONE, 'Export to output file')
             ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit data');
     }
 
@@ -62,6 +63,7 @@ class AffinityLoadCommand extends Command
         // Start the processing
         $filename = $input->getArgument('filename');
         $delete = $input->getOption('delete');
+        $writeCSV = $input->getOption('outfile');
         $this->commit = $input->getOption('commit');
 
         $this->path_parts = pathinfo($filename);
@@ -70,37 +72,38 @@ class AffinityLoadCommand extends Command
 
         $this->load($filename);
 
-        $count = $this->loadRegTeams($this->dataValues, $delete);
-        $i = $count['inserted'];
-        $u = $count['updated'];
-        echo "$i new regTeams loaded, $u existing regTeams updated...\n";
+        if ($writeCSV) {
+            $contents = $this->prepOutFile($this->dataValues);
+            $this->writeCSV($contents, $this->contentsFilename);
+            echo sprintf("Data written to %s ...\n", realpath($this->contentsFilename));
+        } else {
 
-        $count = $this->loadGameTeams($this->dataValues, $delete);
-        $i = $count['inserted'];
-        $u = $count['updated'];
-        echo "$i new gameTeams loaded, $u existing gameTeams updated...\n";
+            $count = $this->loadRegTeams($this->dataValues, $delete);
+            $i = $count['inserted'];
+            $u = $count['updated'];
+            echo "$i new regTeams loaded, $u existing regTeams updated...\n";
 
-        $count = $this->loadPoolTeams($this->dataValues, $delete);
-        $i = $count['inserted'];
-        $u = $count['updated'];
-        echo "$i new poolTeams loaded, $u existing poolTeams updated...\n";
+            $count = $this->loadGameTeams($this->dataValues, $delete);
+            $i = $count['inserted'];
+            $u = $count['updated'];
+            echo "$i new gameTeams loaded, $u existing gameTeams updated...\n";
 
-        $count = $this->loadGames($this->dataValues, $delete);
-        $i = $count['inserted'];
-        $u = $count['updated'];
-        echo "$i new games loaded, $u existing games updated...\n";
+            $count = $this->loadPoolTeams($this->dataValues, $delete);
+            $i = $count['inserted'];
+            $u = $count['updated'];
+            echo "$i new poolTeams loaded, $u existing poolTeams updated...\n";
 
-        $count = $this->loadGameOfficials($this->games, $delete);
-        $i = $count['inserted'];
-        echo "$i new gameOfficials loaded, existing gameOfficials are not updated...\n";
-        die();
+            $count = $this->loadGames($this->dataValues, $delete);
+            $i = $count['inserted'];
+            $u = $count['updated'];
+            echo "$i new games loaded, $u existing games updated...\n";
+
+            $count = $this->loadGameOfficials($this->games, $delete);
+            $i = $count['inserted'];
+            echo "$i new gameOfficials loaded, existing gameOfficials are not updated...\n";
+        }
 
         echo "... Affinity transform complete.\n";
-
-//        var_dump($this->dataValues[0]);
-
-//        $contents = $this->prepOutFile($this->dataValues);
-//        $this->writeCSV($contents, $this->contentsFilename);
 
     }
 
@@ -695,7 +698,7 @@ class AffinityLoadCommand extends Command
                             $countInserted += 1;
                         }
                     } else {
-                        $assoGameTeam =array_combine($this->gameTeamKeys, $gTeam);
+                        $assoGameTeam = array_combine($this->gameTeamKeys, $gTeam);
                         if (!empty(array_diff(array_slice($t, 0, 6), $assoGameTeam))) {
                             if ($this->commit) {
                                 $this->nocGamesConn->update(
@@ -921,14 +924,8 @@ class AffinityLoadCommand extends Command
     }
 
 
-    private function writeCSV(
-        $data,
-        $filename
-    ) {
-
-//        // Not sure this is needed
-//        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
-//
+    private function writeCSV($data, $filename)
+    {
         if (is_null($data)) {
             return null;
         }
