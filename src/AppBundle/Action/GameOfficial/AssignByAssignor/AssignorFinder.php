@@ -55,8 +55,10 @@ LEFT JOIN
   projectPersonRoles AS roleReferee ON roleReferee.projectPersonId = regPerson.id AND roleReferee.role = 'ROLE_REFEREE'
 
 WHERE
-  regPerson.projectKey = ? AND
-  roleReferee.role = 'ROLE_REFEREE'
+  regPerson.projectKey = ? 
+  AND roleReferee.role = 'ROLE_REFEREE'
+  AND roleReferee.approved = 1 
+  AND NOT regPerson.name LIKE '%(2)'
   
 ORDER BY regPerson.name
 EOD;

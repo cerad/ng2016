@@ -71,19 +71,29 @@ class AffinityLoadCommand extends Command
         $this->load($filename);
 
         $count = $this->loadRegTeams($this->dataValues, $delete);
-        echo "$count regTeams loaded...\n";
+        $i = $count['inserted'];
+        $u = $count['updated'];
+        echo "$i new regTeams loaded, $u existing regTeams updated...\n";
 
         $count = $this->loadGameTeams($this->dataValues, $delete);
-        echo "$count gameTeams loaded...\n";
+        $i = $count['inserted'];
+        $u = $count['updated'];
+        echo "$i new gameTeams loaded, $u existing gameTeams updated...\n";
 
         $count = $this->loadPoolTeams($this->dataValues, $delete);
-        echo "$count poolTeams loaded...\n";
+        $i = $count['inserted'];
+        $u = $count['updated'];
+        echo "$i new poolTeams loaded, $u existing poolTeams updated...\n";
 
         $count = $this->loadGames($this->dataValues, $delete);
-        echo "$count games loaded...\n";
+        $i = $count['inserted'];
+        $u = $count['updated'];
+        echo "$i new games loaded, $u existing games updated...\n";
 
         $count = $this->loadGameOfficials($this->games, $delete);
-        echo "$count gameOfficials loaded...\n";
+        $i = $count['inserted'];
+        echo "$i new gameOfficials loaded, existing gameOfficials are not updated...\n";
+        die();
 
         echo "... Affinity transform complete.\n";
 
@@ -457,7 +467,8 @@ class AffinityLoadCommand extends Command
         }
 
         $this->games = null;
-        $count = 0;
+        $countInserted = 0;
+        $countUpdated = 0;
 
         //set the data : game in each row
         foreach ($data as $row) {
@@ -502,23 +513,31 @@ class AffinityLoadCommand extends Command
                         if ($this->commit) {
                             $insertGamesStmt->execute($game);
                         }
+                        $countInserted += 1;
                     } else {
-                        if ($this->commit) {
-                            $this->nocGamesConn->update(
-                                'games',
-                                array_combine($this->gamesKeys, $game),
-                                ['gameId' => $gameId]
-                            );
+                        $assoGame = array_combine($this->gamesKeys, $game);
+                        if (!empty(array_diff($t, $assoGame))) {
+                            if ($this->commit) {
+                                $this->nocGamesConn->update(
+                                    'games',
+                                    $assoGame,
+                                    ['gameId' => $gameId]
+                                );
+                            }
+                            $countUpdated += 1;
                         }
                     }
-                    $count += 1;
                 }
             }
         } catch (Exception $e) {
             echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
         }
 
-        return $count;
+        return array(
+            'count' => $countInserted + $countUpdated,
+            'inserted' => $countInserted,
+            'updated' => $countUpdated,
+        );
     }
 
     private function loadRegTeams($data, $delete = false)
@@ -536,7 +555,8 @@ class AffinityLoadCommand extends Command
 
         $teams = null;
         $gameTeams = ['home', 'away'];
-        $count = 0;
+        $countInserted = 0;
+        $countUpdated = 0;
 
         //set the data : game in each row
         foreach ($data as $row) {
@@ -561,7 +581,7 @@ class AffinityLoadCommand extends Command
                         $regTeamId,
                         $teams->projectId,
                         $teamKey,
-                        $teamNumber,
+                        (string)(int)$teamNumber,
                         $teamName,
                         0,
                         null,
@@ -586,25 +606,33 @@ class AffinityLoadCommand extends Command
                                 if ($this->commit) {
                                     $insertRegTeamsStmt->execute($rTeam);
                                 }
+                                $countInserted += 1;
                             } else {
-                                if ($this->commit) {
-                                    $this->nocGamesConn->update(
-                                        'regTeams',
-                                        array_combine($this->regTeamKeys, $rTeam),
-                                        ['regTeamId' => $regTeamId]
-                                    );
+                                $assoRegTeam = array_combine($this->regTeamKeys, $rTeam);
+                                if (!empty(array_diff($t, $assoRegTeam))) {
+                                    if ($this->commit) {
+                                        $this->nocGamesConn->update(
+                                            'regTeams',
+                                            $assoRegTeam,
+                                            ['regTeamId' => $regTeamId]
+                                        );
+                                    }
+                                    $countUpdated += 1;
                                 }
                             }
                         }
                     } catch (Exception $e) {
                         echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
                     }
-                    $count += 1;
                 }
             }
         }
 
-        return $count;
+        return array(
+            'count' => $countInserted + $countUpdated,
+            'inserted' => $countInserted,
+            'updated' => $countUpdated,
+        );
     }
 
     private function loadGameTeams($data, $delete = false)
@@ -614,7 +642,8 @@ class AffinityLoadCommand extends Command
         }
 
         $projectId = $this->projectId;
-        $count = 0;
+        $countInserted = 0;
+        $countUpdated = 0;
 
         if ($delete) {
             //delete old data from table
@@ -663,25 +692,32 @@ class AffinityLoadCommand extends Command
                         $insertGameTeamsStmt = $this->nocGamesConn->prepare($sql);
                         if ($this->commit) {
                             $insertGameTeamsStmt->execute($gTeam);
+                            $countInserted += 1;
                         }
                     } else {
-                        if ($this->commit) {
-                            $this->nocGamesConn->update(
-                                'gameTeams',
-                                array_combine($this->gameTeamKeys, $gTeam),
-                                ['gameTeamId' => $gameTeamId]
-                            );
+                        $assoGameTeam =array_combine($this->gameTeamKeys, $gTeam);
+                        if (!empty(array_diff(array_slice($t, 0, 6), $assoGameTeam))) {
+                            if ($this->commit) {
+                                $this->nocGamesConn->update(
+                                    'gameTeams',
+                                    $assoGameTeam,
+                                    ['gameTeamId' => $gameTeamId]
+                                );
+                            }
+                            $countUpdated += 1;
                         }
                     }
                 } catch (Exception $e) {
                     echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
                 }
-                $count += 1;
             }
         }
 
-
-        return $count;
+        return array(
+            'count' => $countInserted + $countUpdated,
+            'inserted' => $countInserted,
+            'updated' => $countUpdated,
+        );
     }
 
     private function loadPoolTeams($data, $delete = false)
@@ -691,7 +727,8 @@ class AffinityLoadCommand extends Command
         }
 
         $projectId = $this->projectId;
-        $count = 0;
+        $countInserted = 0;
+        $countUpdated = 0;
 
         if ($delete) {
             //delete old data from table
@@ -768,26 +805,32 @@ class AffinityLoadCommand extends Command
                         $insertPoolTeamsStmt = $this->nocGamesConn->prepare($sql);
                         if ($this->commit) {
                             $insertPoolTeamsStmt->execute($pTeam);
+                            $countInserted += 1;
                         }
                     } else {
-                        if ($this->commit) {
-                            $pTeam = array_combine($this->poolTeamKeys, $pTeam);
-                            $this->nocGamesConn->update(
-                                'poolTeams',
-                                $pTeam,
-                                ['poolTeamId' => $poolTeamId]
-                            );
+                        $assoPoolTeam = array_combine($this->poolTeamKeys, $pTeam);
+                        if (!empty(array_diff(array_slice($t, 0, 18), $assoPoolTeam))) {
+                            if ($this->commit) {
+                                $this->nocGamesConn->update(
+                                    'poolTeams',
+                                    $assoPoolTeam,
+                                    ['poolTeamId' => $poolTeamId]
+                                );
+                            }
+                            $countUpdated += 1;
                         }
-                        $count += 1;
                     }
                 } catch (Exception $e) {
                     echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
                 }
-                $count += 1;
             }
         }
 
-        return $count;
+        return array(
+            'count' => $countInserted + $countUpdated,
+            'inserted' => $countInserted,
+            'updated' => $countUpdated,
+        );
     }
 
     private function loadGameOfficials($games, $delete = false)
@@ -797,6 +840,8 @@ class AffinityLoadCommand extends Command
         }
 
         $projectId = $this->projectId;
+        $countInserted = 0;
+        $countUpdated = 0;
 
         if ($delete) {
             //delete old data from table
@@ -842,7 +887,7 @@ class AffinityLoadCommand extends Command
                         if ($this->commit) {
                             $insertGameOfficialsStmt->execute($official);
                         }
-                        $count += 1;
+                        $countInserted += 1;
                     }
                 }
             } catch (Exception $e) {
@@ -850,7 +895,11 @@ class AffinityLoadCommand extends Command
             }
         }
 
-        return $count;
+        return array(
+            'count' => $countInserted + $countUpdated,
+            'inserted' => $countInserted,
+            'updated' => $countUpdated,
+        );
     }
 
     private function prepOutFile(

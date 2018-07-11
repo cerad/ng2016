@@ -47,7 +47,7 @@ class Publish2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('noc2018:publish:assignments')
+            ->setName('noc2018:publish:pending:assignments')
             ->setDescription('Publish Assignments NOC2018')
             ->addOption('date','d',InputOption::VALUE_OPTIONAL,'Publish only by date', '%');
     }
@@ -78,7 +78,8 @@ WHERE
             $updated[] = $row;
             $this->gameConn->update('gameOfficials',['assignState' => 'Published'],
             [
-                'gameOfficialId' => $row['gameOfficialId']
+                'gameOfficialId' => $row['gameOfficialId'],
+                'assignState' => 'Pending'
             ]);
         };
         $count  = count($updated);

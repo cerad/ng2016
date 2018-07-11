@@ -165,6 +165,9 @@ EOT;
       <li><a href="{$this->generateUrl('schedule_official_2018',['_format' => 'xls'])}">Export Referee Assignment Requests</a></li>
       <li><a href="{$this->generateUrl('schedule_assignor_2018')}">View Assignor Assignments</a></li>
       <li><a href="{$this->generateUrl('game_official_summary')}">Export Referee Summary</a></li>
+      <li><a href="{$this->generateUrl('assignor_instruction')}" target="_blank">Referee Assignor's 
+      Instruction</a></li>
+      <hr>
       <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">Referee Self-Assignment Instruction</a></li>
 EOT;
 
