@@ -58,11 +58,13 @@ class GameListingController extends AbstractController2
         }
         $criteria = [
             'projectIds' => [$searchData['projectId']],
-            'programs'   => [$searchData['program']],
             'wantTeams'  => true,
         ];
         if ($searchData['division']) {
             $criteria['divisions'] = [$searchData['division']];
+        }
+        if ($searchData['program']) {
+            $criteria['programs'] = [$searchData['program']];
         }
         switch($searchData['show']) {
             case 'all':

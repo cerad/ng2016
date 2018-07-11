@@ -31,13 +31,19 @@ class RegTeamExportController extends AbstractController2
         $searchData = $session->get($sessionKey);
         $criteria = [
             'projectIds' => [$searchData['projectId']],
-            'programs'   => [$searchData['program']],
-//            'divisions'  => [$searchData['division']],
             'wantTeams'  => true,
         ];
+        if ($searchData['division']) {
+            $criteria['divisions'] = [$searchData['division']];
+        }
+        if ($searchData['program']) {
+            $criteria['programs'] = [$searchData['program']];
+        }
         $regTeams = $this->finder->findRegTeams($criteria);
         $request->attributes->set('regTeams',$regTeams);
-        $request->attributes->set('program',$criteria['programs']);
+        if(isset($criteria['programs'])) {
+            $request->attributes->set('program', $criteria['programs']);
+        }
 
         return null;
     }

@@ -57,7 +57,7 @@ class GameListingSearchForm extends AbstractForm
   </div>
   <div class="form-group">
     <label for="program">Program</label>
-    {$this->renderInputSelect($project['programs'],$program,'program')}
+    {$this->renderInputSelect($this->programChoices,$program,'program')}
   </div>
   <div class="form-group">
     <label for="division">Div</label>
@@ -83,6 +83,11 @@ EOD;
         'poolTeams'   => 'Pool Teams',
         'games'       => 'Games',
         'gameNumbers' => 'Game Numbers',
+    ];
+    private $programChoices = [
+        null        => 'All',
+        'Core'    => 'Core',
+        'Club'    => 'Club',
     ];
     private $divisionChoices = [
          null  => 'All',
