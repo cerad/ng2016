@@ -298,8 +298,6 @@ class AffinityLoadCommand extends Command
         if (in_array($date, $this->project['dates'])) {
             $this->gameDate = $date;
 
-//            echo "Date: ".$this->gameDate."\n";
-
             return;
 
         }
@@ -310,8 +308,6 @@ class AffinityLoadCommand extends Command
             $r = preg_replace("/[^a-zA-Z0-9\s]/", '', $row[0]);
             $fields = explode(' ', $r);
             $this->gameField = $fields[3];
-
-//            echo 'Field = '.$this->gameField."\n";
 
             return;
 
@@ -420,6 +416,8 @@ class AffinityLoadCommand extends Command
                 $awayTeamNumber = '';
             }
 
+            $homeTeamName = sprintf('%s', $homeTeamName); //ensure not NULL
+            $awayTeamName = sprintf('%s', $awayTeamName);
             $homeTeamNumber = sprintf('%02d', $homeTeamNumber);
             $awayTeamNumber = sprintf('%02d', $awayTeamNumber);
             $homeTeamKey = $division.$program.$homeTeamNumber;
@@ -519,7 +517,7 @@ class AffinityLoadCommand extends Command
                         $countInserted += 1;
                     } else {
                         $assoGame = array_combine($this->gamesKeys, $game);
-                        if (!empty(array_diff($t, $assoGame))) {
+                        if ($t != $assoGame) {
                             if ($this->commit) {
                                 $this->nocGamesConn->update(
                                     'games',
@@ -579,54 +577,52 @@ class AffinityLoadCommand extends Command
                         $teamNumber = $teams->awayTeamNumber;
                 }
 
-                if (!empty($teamName)) {
-                    $rTeam = array(
-                        $regTeamId,
-                        $teams->projectId,
-                        $teamKey,
-                        (string)(int)$teamNumber,
-                        $teamName,
-                        0,
-                        null,
-                        null,
-                        $teams->program,
-                        $teams->gender,
-                        $teams->age,
-                        $teams->division,
-                    );
+                $rTeam = array(
+                    $regTeamId,
+                    $teams->projectId,
+                    $teamKey,
+                    (string)(int)$teamNumber,
+                    $teamName,
+                    0,
+                    null,
+                    null,
+                    $teams->program,
+                    $teams->gender,
+                    $teams->age,
+                    $teams->division,
+                );
 
-                    try {
-                        if ($teams->pType == 'PP') {
-                            $sql = 'SELECT * FROM regTeams WHERE regTeamId = ?';
-                            $checkRegTeamStmt = $this->nocGamesConn->prepare($sql);
-                            $checkRegTeamStmt->execute([$regTeamId]);
-                            $t = $checkRegTeamStmt->fetch();
-                            if (!$t) {
-                                //load new data
-                                $sql = 'INSERT INTO regTeams (regTeamId, projectId, teamKey, teamNumber, teamName, teamPoints, orgId, orgView, program, gender, age, division) 
+                try {
+                    if ($teams->pType == 'PP') {
+                        $sql = 'SELECT * FROM regTeams WHERE regTeamId = ?';
+                        $checkRegTeamStmt = $this->nocGamesConn->prepare($sql);
+                        $checkRegTeamStmt->execute([$regTeamId]);
+                        $t = $checkRegTeamStmt->fetch();
+                        if (!$t) {
+                            //load new data
+                            $sql = 'INSERT INTO regTeams (regTeamId, projectId, teamKey, teamNumber, teamName, teamPoints, orgId, orgView, program, gender, age, division) 
                             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-                                $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+                            $insertRegTeamsStmt = $this->nocGamesConn->prepare($sql);
+                            if ($this->commit) {
+                                $insertRegTeamsStmt->execute($rTeam);
+                            }
+                            $countInserted += 1;
+                        } else {
+                            $assoRegTeam = array_combine($this->regTeamKeys, $rTeam);
+                            if ($t != $assoRegTeam) {
                                 if ($this->commit) {
-                                    $insertRegTeamsStmt->execute($rTeam);
+                                    $this->nocGamesConn->update(
+                                        'regTeams',
+                                        $assoRegTeam,
+                                        ['regTeamId' => $regTeamId]
+                                    );
                                 }
-                                $countInserted += 1;
-                            } else {
-                                $assoRegTeam = array_combine($this->regTeamKeys, $rTeam);
-                                if (!empty(array_diff($t, $assoRegTeam))) {
-                                    if ($this->commit) {
-                                        $this->nocGamesConn->update(
-                                            'regTeams',
-                                            $assoRegTeam,
-                                            ['regTeamId' => $regTeamId]
-                                        );
-                                    }
-                                    $countUpdated += 1;
-                                }
+                                $countUpdated += 1;
                             }
                         }
-                    } catch (Exception $e) {
-                        echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
                     }
+                } catch (Exception $e) {
+                    echo sprintf("Line %s: %s\n", $e->getLine(), $e->getMessage());
                 }
             }
         }
@@ -699,7 +695,7 @@ class AffinityLoadCommand extends Command
                         }
                     } else {
                         $assoGameTeam = array_combine($this->gameTeamKeys, $gTeam);
-                        if (!empty(array_diff(array_slice($t, 0, 6), $assoGameTeam))) {
+                        if (array_slice($t, 0, 6) != $assoGameTeam) {
                             if ($this->commit) {
                                 $this->nocGamesConn->update(
                                     'gameTeams',
@@ -812,7 +808,7 @@ class AffinityLoadCommand extends Command
                         }
                     } else {
                         $assoPoolTeam = array_combine($this->poolTeamKeys, $pTeam);
-                        if (!empty(array_diff(array_slice($t, 0, 18), $assoPoolTeam))) {
+                        if (array_slice($t, 0, 18) != $assoPoolTeam) {
                             if ($this->commit) {
                                 $this->nocGamesConn->update(
                                     'poolTeams',
