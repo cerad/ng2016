@@ -63,6 +63,13 @@ services:
             - '%app_project_key%'
             - "@doctrine.dbal.noc2018games_connection"
 
+    game_delete_pool_n02018_command:
+        class: AppBundle\Action\Game\Admin\DeletePoolNOC2018Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '%app_project_key%'
+            - "@doctrine.dbal.noc2018games_connection"
+
     game_publish_pending_assignments_n02018_command:
         class: AppBundle\Action\Game\Admin\PublishPendingAssignmentsNOC2018Command
         tags: [{ name: console.command }]
