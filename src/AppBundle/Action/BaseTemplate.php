@@ -286,7 +286,7 @@ EOT;
           <ul class="dropdown-menu">
             <li><a href="{$this->generateUrl('results_poolplay_2018')}">POOL PLAY</a></li>
             <li><a href="{$this->generateUrl('results_medalround_2018')}">MEDAL ROUND</a></li>
-            <li><a href="{$this->generateUrl('results_sportsmanship_2018')}">SPORTSMANSHIP</a></li>
+            <!--<li><a href="{$this->generateUrl('results_sportsmanship_2018')}">SPORTSMANSHIP</a></li>-->
 EOT;
         if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
             $html .=
