@@ -45,8 +45,8 @@ EOD;
         <ul>
           <li>Enter score and other info then click "Save"</li>
           <li>Status fields will update themselves</li>
-          <br><br>
-          <li><strong>NOTE:</strong> Six points for proper participation in Soccerfest are added separately</li>
+          <!--<br><br>-->
+          <!--<li><strong>NOTE:</strong> Six points for proper participation in Soccerfest are added separately</li>-->
         </ul>
       </td>
       <td width="35%">

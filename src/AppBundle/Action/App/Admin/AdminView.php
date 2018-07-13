@@ -68,7 +68,7 @@ EOT;
 EOT;
         if ($this->isGranted('ROLE_SCORE_ENTRY')) {
             $html .= <<<EOT
-      <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
+      <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 482423])}">Enter Match Results</a></li>
 EOT;
       }
       
