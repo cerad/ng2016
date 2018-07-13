@@ -77,8 +77,6 @@ EOT;
 
       <li><a href="{$this->generateUrl('results_medalround_2018')}">Medal Round</a></li>
 
-      <li><a href="{$this->generateUrl('results_sportsmanship_2018')}">Sportsmanship</a></li>
-
       <li><a href="{$this->generateUrl('results_final_2018')}">Final Standings</a></li>
     </ul>
   </div>

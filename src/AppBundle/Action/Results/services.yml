@@ -63,32 +63,32 @@ services:
 
     # ===============================================================
     # Sportsmanship Results
-    results_sportsmanship_calculator_2018:
-        class: AppBundle\Action\Results\ResultsSportsmanshipCalculator
-
-    results_sportsmanship_search_form_2018:
-        class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipSearchForm
-        parent: abstract_form
-        arguments:
-            - "%project_choices%"
-            - "%projects%"
-            - "@game_connection"
-
-    results_sportsmanship_controller_2018:
-        class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipController
-        parent: abstract_controller
-        arguments:
-            - "@results_sportsmanship_search_form_2018"
-            - "@results_finder_2018"
-            - "%project_choices%"
-            - "%projects%"
-
-    results_sportsmanship_view_html_2018:
-        class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipView
-        parent: abstract_view2
-        arguments:
-            - "@results_sportsmanship_search_form_2018"
-            - "@results_sportsmanship_calculator_2018"
+#    results_sportsmanship_calculator_2018:
+#        class: AppBundle\Action\Results\ResultsSportsmanshipCalculator
+#
+#    results_sportsmanship_search_form_2018:
+#        class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipSearchForm
+#        parent: abstract_form
+#        arguments:
+#            - "%project_choices%"
+#            - "%projects%"
+#            - "@game_connection"
+#
+#    results_sportsmanship_controller_2018:
+#        class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipController
+#        parent: abstract_controller
+#        arguments:
+#            - "@results_sportsmanship_search_form_2018"
+#            - "@results_finder_2018"
+#            - "%project_choices%"
+#            - "%projects%"
+#
+#    results_sportsmanship_view_html_2018:
+#        class:  AppBundle\Action\Results\Sportsmanship\ResultsSportsmanshipView
+#        parent: abstract_view2
+#        arguments:
+#            - "@results_sportsmanship_search_form_2018"
+#            - "@results_sportsmanship_calculator_2018"
     # ===============================================================
     # Final Results
     results_final_calculator_2018:
