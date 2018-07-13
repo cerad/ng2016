@@ -50,7 +50,7 @@ EOD;
     {
         return <<<EOD
 <div class="results-legend">
-  <h2>GS=Goals Scored, YC=Caution, RC=Sendoff, TE=Total Ejections</h2>
+  <p><b>GS=Goals Scored, YC=Caution, RC=Sendoff, TE=Total Ejections</b></p>
 </div>
 <hr>
 EOD;

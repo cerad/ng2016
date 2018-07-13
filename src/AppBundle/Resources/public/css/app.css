@@ -278,6 +278,7 @@ background:inherit;
 .results-legend,.schedule-legend {
 text-align:center;
 line-height:1.5em;
+padding-top: 1.5rem;
 }
 
 .my_schedule {

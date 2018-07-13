@@ -61,7 +61,7 @@ EOT;
         $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
-    <h1>Match Reporting</h1>
+    <h1>Match Results/Standings</h1>
   </div>
   <div class="panel-body">
     <ul>
@@ -73,11 +73,11 @@ EOT;
       }
       
         $html .= <<<EOT
-      <li><a href="{$this->generateUrl('results_poolplay_2018')}">Pool Play</a></li>
+      <li><a href="{$this->generateUrl('results_poolplay_2018')}">View Pool Play Standings</a></li>
 
-      <li><a href="{$this->generateUrl('results_medalround_2018')}">Medal Round</a></li>
+      <li><a href="{$this->generateUrl('results_medalround_2018')}">View Medal Round Standings</a></li>
 
-      <li><a href="{$this->generateUrl('results_final_2018')}">Final Standings</a></li>
+      <li><a href="{$this->generateUrl('results_final_2018')}">View Final Standings</a></li>
     </ul>
   </div>
 </div>
