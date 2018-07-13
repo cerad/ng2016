@@ -219,7 +219,14 @@ EOD;
         }
 
         $assignState = $gameOfficial->assignState;
-        $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
+        try {
+            $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
+        } catch (\Exception $e) {
+            //shouldn't happen
+            var_dump($assignState);
+            var_dump($this->assignWorkflow->assignStateAbbreviations);
+            die();
+        }
 
         if ($assignState === 'Pending' && !$this->isGranted('ROLE_ASSIGNOR')) {
             $assignState = 'Open';
