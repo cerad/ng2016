@@ -17,15 +17,21 @@ class AssigneeController extends AbstractController2
     private $form;
     private $gameFinder;
     private $gameOfficialUpdater;
+    private $enableSelfAssign;
+    private $enableMedalRoundSelfAssign;
     
     public function __construct(
         AssigneeForm        $form,
         GameFinder          $gameFinder,
-        GameOfficialUpdater $gameOfficialUpdater
+        GameOfficialUpdater $gameOfficialUpdater,
+                            $enableSelfAssign,
+                            $enableMedalRoundSelfAssign
     ) {
         $this->form       = $form;
         $this->gameFinder = $gameFinder;
         $this->gameOfficialUpdater = $gameOfficialUpdater;
+        $this->enableSelfAssign = $enableSelfAssign;
+        $this->enableMedalRoundSelfAssign = $enableMedalRoundSelfAssign;
     }
     public function __invoke(Request $request, $projectId, $gameNumber, $slot)
     {
@@ -46,6 +52,7 @@ class AssigneeController extends AbstractController2
         if ($session->has($sessionKey)) {
             $backRouteName = $session->get($sessionKey);
         }
+
         $game = $this->gameFinder->findGame($projectId,$gameNumber);
         if (!$game) {
             return $this->redirectToRoute($backRouteName);
@@ -55,6 +62,11 @@ class AssigneeController extends AbstractController2
         
         $form = $this->form;
         $form->setGame($game);
+        $selfAssign = ($this->enableSelfAssign);
+        if($this->gameFinder->isMedalRound($projectId, $game)){
+            $selfAssign = $this->enableMedalRoundSelfAssign;
+        }
+        $form->setSelfAssign($selfAssign);
         $form->setGameOfficial($gameOfficialOriginal);
         $form->setBackRouteName($backRouteName);
         $form->handleRequest($request);

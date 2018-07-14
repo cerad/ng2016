@@ -352,6 +352,7 @@ class AffinityLoadCommand extends Command
                 case 'Semi-Final':
                     $poolType = 'SF';
                     break;
+                case'Consolation':
                 case'Final':
                     $poolType = 'TF';
                     break;

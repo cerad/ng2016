@@ -31,6 +31,9 @@ abstract class AbstractForm implements ContainerAwareInterface
         if (count($this->formDataErrors)) return false;
         return true;
     }
+    public function getErrors(){
+        return $this->formDataErrors;
+    }
     public function getSubmit()
     {
         return $this->submit;

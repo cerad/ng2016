@@ -33,6 +33,10 @@ EOD;
     }
     private function renderNotes()
     {
+        if(!$this->form->selfAssignEnabled()) {
+            return;
+        }
+
         return <<<EOD
 <div class="cerad-common-help">
 <legend>Notes on Referee Self-Assignment Procedure</legend>

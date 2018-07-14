@@ -176,4 +176,26 @@ EOD;
         }
         return $divs;
     }
+
+    public function isMedalRound($projectId, $game){
+        $sql = <<< SQL
+SELECT 
+    poolTypeKey
+FROM
+    poolTeams pt LEFT JOIN gameTeams gt ON pt.poolTeamId = gt.poolTeamId
+    LEFT JOIN games g ON gt.gameNumber = g.gameNumber
+WHERE
+    pt.projectID LIKE ? 
+    AND g.gameNumber = ?;
+SQL;
+
+        $search = [$projectId, $game->gameNumber];
+
+        $stmt = $this->gameConn->executeQuery($sql, $search);
+
+        $row = $stmt->fetch();
+
+        return $row['poolTypeKey'] != 'PP';
+
+    }
 }

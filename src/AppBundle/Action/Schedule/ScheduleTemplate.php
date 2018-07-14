@@ -218,14 +218,15 @@ EOD;
             $slotView = sprintf('<a href="%s">%s</a>', $assignUrl, $slotView);
         }
 
+        if (is_null($gameOfficial->assignState)) {
+            var_dump($gameOfficial);
+            echo 'gameOfficial assignState = NULL';
+            $gameOfficial->assignState = 'Open';
+        }
         $assignState = $gameOfficial->assignState;
         try {
             $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$assignState];
         } catch (\Exception $e) {
-            //shouldn't happen
-            var_dump($assignState);
-            var_dump($this->assignWorkflow->assignStateAbbreviations);
-            die();
         }
 
         if ($assignState === 'Pending' && !$this->isGranted('ROLE_ASSIGNOR')) {
@@ -249,7 +250,11 @@ EOD;
         $refereeBadge = substr($row['refereeBadge'], 0, 3);
 
         return $html.<<<EOD
-        <td class="text-left {$this->styleCertificationConflict($refereeBadge, $game, $gameOfficial->slot)}">{$refereeBadge}</td>
+        <td class="text-left {$this->styleCertificationConflict(
+                $refereeBadge,
+                $game,
+                $gameOfficial->slot
+            )}">{$refereeBadge}</td>
         <td class="text-right {$this->styleSectionConflict($row['orgView'], $game)}">{$row['orgView']}</td>
 EOD;
 
