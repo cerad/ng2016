@@ -353,8 +353,10 @@ class AffinityLoadCommand extends Command
                     $poolType = 'SF';
                     break;
                 case'Consolation':
+                    $poolType = 'CO';
+                    break;
                 case'Final':
-                    $poolType = 'TF';
+                    $poolType = 'FI';
                     break;
             }
 

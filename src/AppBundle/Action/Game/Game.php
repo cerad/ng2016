@@ -27,7 +27,8 @@ class Game
     public $status = 'Normal';
     public $reportText;
     public $reportState = 'Initial';
-    
+    public $selfAssign = 0;
+
     /** @var GameTeam[] */
     private $teams = [];
     
@@ -47,6 +48,7 @@ class Game
         'status'      => 'string', // Normal, Played, Forfeited, Cancelled, Weather, Delayed, ToBeRescheduled
         'reportText'  => 'string',
         'reportState' => 'ReportState',
+        'selfAssign'  => 'SelfAssign',
     ];
 
     public function getOfficial($slot)

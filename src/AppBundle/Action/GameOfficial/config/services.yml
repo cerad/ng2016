@@ -54,8 +54,6 @@ services:
             - '@game_official_assign_by_assignee_form'
             - '@game_finder'
             - '@game_official_updater'
-            - '%enable_pp_self_assign%'
-            - '%enable_medal_round_self_assign%'
 
     game_official_assign_by_assignee_view:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeView
