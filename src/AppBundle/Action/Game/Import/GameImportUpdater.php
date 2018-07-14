@@ -149,7 +149,7 @@ class GameImportUpdater
         $this->conn->insert('gameTeams',$gameTeam);
 
         // Officials
-        $isMedalRound = in_array($homePoolTeam['poolTypeKey'],['QF','SF','TF']);
+        $isMedalRound = in_array($homePoolTeam['poolTypeKey'],['QF','SF','CO','TF']);
         $gameOfficial = [
             'projectId'   => $projectId,
             'gameId'      => $gameId,
