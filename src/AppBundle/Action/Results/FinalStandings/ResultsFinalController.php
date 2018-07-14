@@ -64,7 +64,7 @@ class ResultsFinalController extends AbstractController2
         }
         $pools = [];
         $criteria = [
-            'poolTypeKeys' => ['TF'], // TODO: Pull from project
+            'poolTypeKeys' => ['CO','TF'], // TODO: Pull from project
             'projectIds'   => [$searchData['projectId']],
             'programs'     => [$searchData['program']],
         ];

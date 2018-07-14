@@ -216,7 +216,7 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
         $this->gameConn->insert('games',$game);
 
         // Game officials
-        $isMedalRound = in_array(substr($home,0,2),['QF','SF','TF']);
+        $isMedalRound = in_array(substr($home,0,2),['QF','SF','CO','TF']);
         $gameOfficial = [
             'projectId'   => $projectId,
             'gameNumber'  => $gameNumber,

@@ -57,7 +57,7 @@ class RegTeamExportWriterExcel
         $ws->getCell($this->colPoolTeamKey0 . '1')->setValue('PP Team Key');
         $ws->getCell($this->colPoolTeamKey1 . '1')->setValue('QF Team Key');
         $ws->getCell($this->colPoolTeamKey2 . '1')->setValue('SF Team Key');
-        $ws->getCell($this->colPoolTeamKey3 . '1')->setValue('TF Team Key');
+        $ws->getCell($this->colPoolTeamKey3 . '1')->setValue('CO/TF Team Key');
 
         $ws->getColumnDimension($this->colProjectId  )->setWidth(24);
         $ws->getColumnDimension($this->colRegTeamKey )->setWidth(16);
@@ -95,6 +95,7 @@ class RegTeamExportWriterExcel
 
                     case 'QF' : $ws->getCell($this->colPoolTeamKey1 . $row)->setValue($poolTeam->poolTeamKey); break;
                     case 'SF' : $ws->getCell($this->colPoolTeamKey2 . $row)->setValue($poolTeam->poolTeamKey); break;
+                    case 'CO':
                     case 'TF' : $ws->getCell($this->colPoolTeamKey3 . $row)->setValue($poolTeam->poolTeamKey); break;
                 }
             }

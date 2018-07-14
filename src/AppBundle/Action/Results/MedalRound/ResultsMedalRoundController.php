@@ -64,7 +64,7 @@ class ResultsMedalRoundController extends AbstractController2
         }
         $pools = [];
         $criteria = [
-            'poolTypeKeys' => ['QF','SF','TF'], // TODO: Pull from project
+            'poolTypeKeys' => ['QF','SF','CO','TF'], // TODO: Pull from project
             'projectIds'   => [$searchData['projectId']],
             'programs'     => [$searchData['program']],
         ];
