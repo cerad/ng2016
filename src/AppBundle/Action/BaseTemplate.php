@@ -275,24 +275,34 @@ EOT;
 
     protected function renderTopMenuResults()
     {
-        if (!$this->showResultsMenu) {
-            return null;
-        }
-
-        $html =
-            <<<EOT
+        $html = <<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('results_poolplay_2018')}">POOL PLAY</a></li>
-            <li><a href="{$this->generateUrl('results_medalround_2018')}">MEDAL ROUND</a></li>
+<li><a href="https://aysonoc18.sportsaffinity.com/Tour/public/info/accepted_list
+.asp?sessionguid=&tournamentguid=7316369B-BD83-4D83-818B-624C08342C1F&show=boys" target="_blank">Boys Results</a></li>
+<li><a href="https://aysonoc18.sportsaffinity.com/Tour/public/info/accepted_list
+.asp?sessionguid=&tournamentguid=7316369B-BD83-4D83-818B-624C08342C1F&show=girls" target="_blank">Girls Results</a></li>
 EOT;
-        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
-            $html .=
-                <<<EOT
-            <li><a href="{$this->generateUrl('results_final_2018')}">FINAL STANDINGS</a></li>
-EOT;
-        }
+
+//        if (!$this->showResultsMenu) {
+//            return null;
+//        }
+//
+//        $html =
+//            <<<EOT
+//        <li class="dropdown">
+//          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
+//          <ul class="dropdown-menu">
+//            <li><a href="{$this->generateUrl('results_poolplay_2018')}">POOL PLAY</a></li>
+//            <li><a href="{$this->generateUrl('results_medalround_2018')}">MEDAL ROUND</a></li>
+//EOT;
+//        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
+//            $html .=
+//                <<<EOT
+//            <li><a href="{$this->generateUrl('results_final_2018')}">FINAL STANDINGS</a></li>
+//EOT;
+//        }
 
         $html .=
             <<<EOT
