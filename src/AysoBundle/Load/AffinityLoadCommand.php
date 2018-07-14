@@ -407,12 +407,12 @@ class AffinityLoadCommand extends Command
                 $awayTeamNumber = $numBase + $away[1];
             } else {
                 $homeTeamName = $poolTeamKeys[0];
-                $homeTeamSlot = '1X';
+                $homeTeamSlot = $game_num.'X';
                 $homePoolSlot = '';
                 $homeTeamNumber = '';
 
                 $awayTeamName = $poolTeamKeys[1];
-                $awayTeamSlot = '1Y';
+                $awayTeamSlot = $game_num.'Y';
                 $awayPoolSlot = '';
                 $awayTeamNumber = '';
             }
