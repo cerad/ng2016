@@ -25,6 +25,7 @@ class ScheduleGame
     public $finish;
     public $state  = 'Pending';
     public $status = 'Normal';
+    public $selfAssign;
 
     /** @var ScheduleGameTeam[] */
     private $teams = [];
@@ -43,6 +44,7 @@ class ScheduleGame
         'finish'     => 'datetime',
         'state'      => 'string', // Pending, Published, InProgress, Played, Reported. Verified, Closed
         'status'     => 'string', // Normal, Played, Forfeited, Cancelled, Weather, Delayed, ToBeRescheduled
+        'selfAssign' => 'integer',
     ];
 
     /**
@@ -79,6 +81,9 @@ class ScheduleGame
                     return $homePoolView;
                 }
                 return sprintf('%s<hr class="separator">%s',$homePoolView,$awayPoolView);
+
+            case 'selfAssign':
+                return (bool)$this->selfAssign;
         }
         throw new \InvalidArgumentException('ScheduleGame::__get ' . $name);
     }

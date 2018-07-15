@@ -214,7 +214,10 @@ EOD;
         $assignUrl = $this->generateUrl($assignRouteName, $params);
 
         $slotView = $gameOfficial->slotView;
-        if ($this->isGranted('view', $gameOfficial)) {
+        $selfAssign = $this->showOfficialDetails ? true : $game->selfAssign;
+        $selfAssign = $this->isGranted('ROLE_ADMIN') || $selfAssign;
+
+        if ($selfAssign && $this->isGranted('view', $gameOfficial)) {
             $slotView = sprintf('<a href="%s">%s</a>', $assignUrl, $slotView);
         }
 

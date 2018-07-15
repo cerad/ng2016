@@ -34,7 +34,7 @@ EOD;
     private function renderNotes()
     {
         if(!$this->form->selfAssignEnabled()) {
-            return;
+            return null;
         }
 
         return <<<EOD
