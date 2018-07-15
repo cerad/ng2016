@@ -193,6 +193,7 @@ EOT;
             <<<EOT
               {$this->renderTopMenuSchedules()}
               {$this->renderTopMenuResults()}
+              {$this->renderRules()}
               {$this->renderTopMenuTextAlerts()}
             </ul>
 EOT;
@@ -404,9 +405,6 @@ EOT;
 
     protected function renderHome()
     {
-        //if (!$this->showResultsMenu) {
-        //    return null;
-        //}
         return
             <<<EOT
         <li>
@@ -417,9 +415,6 @@ EOT;
 
     protected function renderWelcome()
     {
-        //if (!$this->showResultsMenu) {
-        //    return null;
-        //}
         return
             <<<EOT
         <li>
@@ -428,6 +423,15 @@ EOT;
 EOT;
     }
 
+    protected function renderRules()
+    {
+        return
+            <<<EOT
+        <li>
+          <a href="http://aysonationalopencup.org/tournament-rules/" target="_blank">RULES</a>
+        </li>
+EOT;
+    }
     protected function renderAdmin()
     {
         return <<<EOT
