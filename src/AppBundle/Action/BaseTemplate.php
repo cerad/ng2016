@@ -12,13 +12,16 @@ class BaseTemplate extends AbstractTemplate
     private $showSchedulesMenu;
     private $showResultsMenu;
     private $showFinalResults;
+    private $showNavigation;
 
-    public function __construct($showHeaderImage, $showSchedulesMenu, $showResultsMenu, $showFinalResults, $version)
+    public function __construct($showHeaderImage, $showSchedulesMenu, $showResultsMenu, $showFinalResults,
+        $showNavigation, $version)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
+        $this->showNavigation = $showNavigation;
         $this->version = $version;
     }
 
@@ -138,6 +141,13 @@ EOT;
     /*  Bootstrap menu  */
     protected function renderTopMenu()
     {
+        if(!$this->showNavigation) {
+            $html = <<<EOT
+<hr>
+EOT;
+            return $html;
+        }
+
         $html =
             <<<EOT
         <nav class="navbar navbar-default">

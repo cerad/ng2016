@@ -7,8 +7,10 @@ app_index:
 app_welcome:
     path: /welcome
     defaults:
-        _view:       welcome_view
-        _controller: welcome_controller
+#        _view:       welcome_view
+#        _controller: welcome_controller
+        _view:       tnx_view
+        _controller: tnx_controller
 
 app_home:
     path: /home
@@ -24,6 +26,13 @@ app_admin:
         _view:       admin_view
         _controller: admin_controller
 
+#app_tnx:
+#    path: /tnx
+#    defaults:
+#        _role:       ROLE_USER
+#        _view:       tnx_view
+#        _controller: tnx_controller
+#
 app_text_alerts:
     path: /textalerts
     defaults:

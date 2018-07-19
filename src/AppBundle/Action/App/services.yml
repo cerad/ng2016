@@ -22,6 +22,7 @@ services:
             - "%show_schedules_menu%"
             - "%show_results_menu%"
             - "%show_final_results%"
+            - "%show_navigation%"
             - "%app_version%"
 
     abstract_form:
@@ -106,3 +107,13 @@ services:
         class:  AppBundle\Action\App\Admin\AdminView
         parent: abstract_view2
         arguments: ["@admin_switch_user_form"]
+
+    tnx_controller:
+        class:  AppBundle\Action\App\ThankYou\ThankYouController
+        parent: abstract_controller
+        arguments: ["@tnx_view"]
+
+    tnx_view:
+        class:  AppBundle\Action\App\ThankYou\ThankYouView
+        parent: abstract_view2
+
