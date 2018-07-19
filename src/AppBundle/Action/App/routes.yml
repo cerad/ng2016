@@ -26,13 +26,6 @@ app_admin:
         _view:       admin_view
         _controller: admin_controller
 
-#app_tnx:
-#    path: /tnx
-#    defaults:
-#        _role:       ROLE_USER
-#        _view:       tnx_view
-#        _controller: tnx_controller
-#
 app_text_alerts:
     path: /textalerts
     defaults:
