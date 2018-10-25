@@ -32,7 +32,7 @@ class WelcomeView extends AbstractView2
     {
         $content = <<<EOT
   <div id="welcome">
-    <legend>Welcome to the AYSO National Games 2016</legend>
+    <legend>Welcome to the AYSO National Games 2019</legend>
   </div>
   {$this->renderNotes()}      
   {$this->renderUser()}
@@ -51,15 +51,17 @@ EOT;
   If you just want to peruse the Schedules and Results, no need to go any further.  
   You do not need to sign-in to access Schedules or Results above.  To volunteer, you will need to <a href="{$this->generateUrl('user_create')}">create a zAYSO account</a>.
   In either case, you should
-<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to AYSO National Games 2016 text alerts on RainedOut</a>. 
+<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to AYSO National 
+Games 2019 text alerts on RainedOut</a>. 
 </p>
 <br/>
 EOT;
 }
         $html .= <<<EOT
 <p>
-  If you officiated at the 2012 National Games in Tennesee or 2014 National Games in Southern California, 
-  you can simply sign in below and update your plans for the 2016 National Games.
+  If you officiated at the 2012 National Games in Tennessee, 2014 National Games in Southern California, 2016 
+  National Games in West Palm Beach or the National Open Cup in 2018,
+  you can simply sign in below and update your plans for the 2019 National Games.
   If you need help remembering your password, 
   you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.
 </p>
@@ -71,7 +73,8 @@ EOT;
 </p>
 <br/>
 <p>
-    If you have previously registered on Blue Sombrero or WooFoo, your registration has been migrated to zAYSO.  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.
+    If you have previously registered on Blue Sombrero or WuFoo, your registration has been migrated to zAYSO.  <a 
+    href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.
     If you still need help, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a>.
 </div>
 EOT;
@@ -102,7 +105,7 @@ EOD;
             Once you create an account, you will be able to modify your information and availability.
         </li>
         <li>
-            If you have comments or suggestions, please submit them by <a href="mailto:feedback.ng2016@gmail.com?subject=Registration %20Feedback" target="_top">clicking here</a>.  Thank you for your support.
+            If you have comments or suggestions, please submit them by <a href="mailto:web.ng2019@gmail.com?subject=Registration %20Feedback" target="_top">clicking here</a>.  Thank you for your support.
         </li>
      </ul>
     </div>

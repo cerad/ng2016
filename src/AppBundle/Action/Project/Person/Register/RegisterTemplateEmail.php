@@ -77,11 +77,11 @@ class RegisterTemplateEmail extends AbstractView2
       </h1>
     </div>
     <br>
-    <p style="{$this->styleSkFontEmail}">AYSO WELCOMES YOU TO PALM BEACH COUNTY, FLORIDA, JULY 5-10, 2016</p>
+    <p style="{$this->styleSkFontEmail}">AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019</p>
     <div style="{$this->styleClearBoth}"></div>
   </center>
   <hr>
-  <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the 2016 National Games!</p>
+  <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the 2019 National Games!</p>
   <br>
   {$this->renderHtmlPerson($personView)}
 
@@ -99,7 +99,7 @@ class RegisterTemplateEmail extends AbstractView2
     
     <p style="{$this->styleP}">Tom Bobadilla<br>
       National Referee Administrator<br>
-      2016 National Games Referee Administrator<br>
+      2019 National Games Referee Administrator<br>
       <a href="mailto:ThomasBobadilla@ayso.org?subject=Question%20about%20the%202016%20National%Games">ThomasBobadilla@ayso.org</a>
     </p>
 </body>

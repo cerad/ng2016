@@ -17,36 +17,36 @@ parameters:
         fedId:     AYSO
         fedRoleId: AYSOV
 
-        abbv:    "NG2016"
-        title:   "AYSO National Games 2016"
-        desc:    "AYSO National Games 2016 - Palm Beach County, Florida - July 5th to July 10th"
-        prefix:  'NatGames2016'
+        abbv:    "NG2019"
+        title:   "AYSO National Games 2019"
+        desc:    "AYSO National Games 2019 - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7, 2019"
+        prefix:  'NatGames2019'
 
         regYear: 'MY2015'
 
         support:
             name: "Art Hundiak"
             email: "ahundiak@gmail.com"
-            subject: "NG2016 zAYSO question..."
+            subject: "NG2019 zAYSO question..."
             phone: 256-457-5943
               
         schedules:
-            name: "Rick Roberts"
-            email: "web.ng2016@gmail.com"
-            subject: "NG2016 schedule question..."
-            phone: 310-920-8209
+            name: "Robert McCarthy"
+            email: "soccer.ref62@yahoo.com"
+            subject: "NG2019 schedule question..."
+            phone: 808-286-9280
             
         assignor:
-            name:  "Pat Mullane"
-            email: "mullane.patrick@comcast.net"
+            name: "Robert McCarthy"
+            email: "soccer.ref62@yahoo.com"
             subject: "Referee Assignments"
-            phone:  312-217-1869
+            phone: 808-286-9280
 
         administrator:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
+            name: "Robert McCarthy"
+            email: "soccer.ref62@yahoo.com"
             subject: "Question for NG Referee Administrator"
-            phone:  562-547-4457
+            phone: 808-286-9280
 
         system:
             name:  "Zayso Admin"

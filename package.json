@@ -1,7 +1,7 @@
 {
-  "name": "ng2016",
+  "name": "ng2019",
   "version": "1.0.0",
-  "description": "AYSO National Games 2016",
+  "description": "AYSO National Games 2019",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -24,15 +24,15 @@
   },
   "homepage": "https://github.com/cerad/ng2016#readme",
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-concat": "^2.6.0",
-    "gulp-concat-css": "^2.2.0"
+    "gulp-concat-css": "^3.1.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "bootstrap-fileinput": "^4.2.8",
+    "bootstrap-fileinput": "^4.5.1",
     "bootstrap-vertical-tabs": "git+https://github.com/dbtek/bootstrap-vertical-tabs.git",
-    "jquery": "^2.2.2",
+    "jquery": "^3.3.1",
     "normalize.css": "^3.0.3"
   }
 }
