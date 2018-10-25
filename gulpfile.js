@@ -15,7 +15,7 @@ const appTask = function() {
             appPublicDir + '/css/schedule.css',
             appPublicDir + '/css/ng.css',
             appPublicDir + '/css/app.css',
-            appPublicDir + '/css/bs_custom.css',
+            appPublicDir + '/css/bs_custom.css'
         ])
         .pipe(concat("zayso.css"))
         .pipe(gulp.dest('web/css'));
@@ -25,7 +25,7 @@ const appTask = function() {
             appPublicDir + '/js/cerad-checkbox-all.js',
             appPublicDir + '/js/ie10-viewport-bug-workaround.js',
             appPublicDir + '/js/cerad-select-bgcolor.js',
-            appPublicDir + '/js/cerad-file-input.js',
+            appPublicDir + '/js/cerad-file-input.js'
         ])
         .pipe(concat("zayso.js"))
         .pipe(gulp.dest('web/js'));
@@ -33,10 +33,17 @@ const appTask = function() {
     // images
     gulp.src([
             appPublicDir + '/images/*.png',
-            appPublicDir + '/images/*.ico',
+            appPublicDir + '/images/*.ico'
             
         ])
         .pipe(gulp.dest('web/images'));
+
+    // PDFs
+    gulp.src([
+        appPublicDir + '/docs/*.pdf'
+
+    ])
+        .pipe(gulp.dest('web/pdf'));
 };
 gulp.task('app',appTask);
 
@@ -59,14 +66,16 @@ const nodeModulesTask = function() {
 };
 gulp.task('node_modules',nodeModulesTask);
 
-const buildTask = function()
+const buildTask = function(done)
 {
     appTask();
     nodeModulesTask();
+
+    done();
 };
 gulp.task('build',buildTask);
 
-const watchTask = function()
+const watchTask = function(done)
 {
     buildTask();
 
@@ -77,5 +86,7 @@ const watchTask = function()
         appPublicDir + '/images/*.png',
         appPublicDir + '/images/*.ico'
     ],  ['app']);
+
+    done();
 };
 gulp.task('watch',watchTask);
