@@ -59,9 +59,9 @@ EOT;
 }
         $html .= <<<EOT
 <p>
-  If you officiated at the 2012 National Games in Tennessee, 2014 National Games in Southern California, 2016 
-  National Games in West Palm Beach or the National Open Cup in 2018,
-  you can simply sign in below and update your plans for the 2019 National Games.
+  If you officiated at the 2012 National Games in Tennessee, the 2014 National Games in Southern California, the 2016 
+  National Games in West Palm Beach or the 2018 National Open Cup,
+  you can simply sign in below and update your plans & availability for the 2019 National Games.
   If you need help remembering your password, 
   you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.
 </p>
