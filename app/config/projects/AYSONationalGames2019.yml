@@ -31,19 +31,19 @@ parameters:
             phone: 256-457-5943
               
         schedules:
-            name: "Robert McCarthy"
+            name: "Rob McCarthy"
             email: "soccer.ref62@yahoo.com"
             subject: "NG2019 schedule question..."
             phone: 808-286-9280
             
         assignor:
-            name: "Robert McCarthy"
+            name: "Rob McCarthy"
             email: "soccer.ref62@yahoo.com"
             subject: "Referee Assignments"
             phone: 808-286-9280
 
         administrator:
-            name: "Robert McCarthy"
+            name: "Rob McCarthy"
             email: "soccer.ref62@yahoo.com"
             subject: "Question for NG Referee Administrator"
             phone: 808-286-9280
