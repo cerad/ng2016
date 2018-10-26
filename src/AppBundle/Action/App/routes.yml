@@ -30,6 +30,13 @@ app_text_alerts:
         _view:       text_alerts_view
         _controller: text_alerts_controller
 
+rules_of_competition:
+    path: /rules
+    defaults:
+        fileType: pdf # For future use, only pdf is currently supported
+        fileName: SAMPLE.2019_National_Games_Governing_Rules.pdf
+        _controller: file_controller
+
 detailed_instruction:
     path: /self-assigning
     defaults:

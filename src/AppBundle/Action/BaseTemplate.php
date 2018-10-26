@@ -167,6 +167,7 @@ EOT;
         
         $html .=
 <<<EOT
+              {$this->renderTopMenuRules()}
               {$this->renderTopMenuSchedules()}
               {$this->renderTopMenuResults()}
               {$this->renderTopMenuTextAlerts()}
@@ -217,7 +218,15 @@ EOT;
       }
       return $html;
     }
-    
+
+    protected function renderTopMenuRules()
+    {
+        return
+<<<EOT
+    <li><a href="{$this->generateUrl('rules_of_competition'    )}" target="_blank">RULES</a></li>
+EOT;
+    }
+
     protected function renderTopMenuSchedules()
     {
         if (!$this->showResultsMenu) {
@@ -326,6 +335,7 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
+            <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">INSTRUCTION: How to Sign up for Games</a></li>
             <li><a href="{$this->generateUrl('schedule_official_2016')}">REQUEST ASSIGNMENTS</a></li>
 EOT;
 
