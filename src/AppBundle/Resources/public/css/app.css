@@ -13,7 +13,7 @@ border:none;
 html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,dl,pre,address,variable,form,fieldset,blockquote,label,img {
 color:#000;
 font-family:Arial,'Trebuchet MS',sans-serif;
-font-size:small;
+font-size:14px;
 margin:0;
 padding:0;
 }
@@ -337,7 +337,7 @@ padding:.25em;
 }
 
 table {
-font-size:inherit;
+font-size:14px;
 table-layout:fixed;
 margin-left:auto;
 margin-right:auto;
@@ -518,3 +518,12 @@ table.person-update-form td { height: 34px; }
 .rainedout-logo-show { margin-right: 30px }
 .rainedout_logo { display: none }
 .rainedout-logo-menu { height: 2.2em; margin-top: -4px; }
+
+
+.form-control {
+    font-size: 14px;
+}
+
+.btn-group-sm>.btn, .btn-sm  {
+    font-size: 14px;
+}
