@@ -278,7 +278,7 @@ class RegisterController extends AbstractController2
         
         $update = $person['id'] ? ' Update' : null;
 
-        $subject = sprintf('[NG2016] Registration%s for: %s',$update,$person['name']);
+        $subject = sprintf('[NG2019] Registration%s for: %s',$update,$person['name']);
 
         $html = $this->templateEmail->renderHtml($person);
 
@@ -306,7 +306,7 @@ class RegisterController extends AbstractController2
 
         $message->setBcc([
             $support['email'] => $support['name'],
-            'web.ng2016@gmail.com' => 'Rick Roberts', // ???
+            'web.ng2019@gmail.com' => 'Rick Roberts', // ???
         ]);
 
         /**  noinspection PhpParamsInspection */
