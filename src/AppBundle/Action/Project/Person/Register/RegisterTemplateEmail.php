@@ -73,7 +73,7 @@ class RegisterTemplateEmail extends AbstractView2
   <center>
     <div style="{$this->styleSkHeader}">
       <h1>
-          <img src="http://ng2016.zayso.org/images/header-ipad_01.png" width="70%">
+          <img src="/images/header-ipad_01.png" width="70%">
       </h1>
     </div>
     <br>
@@ -97,10 +97,9 @@ class RegisterTemplateEmail extends AbstractView2
 
     <p style="{$this->styleP}">Sincerely,</p>
     
-    <p style="{$this->styleP}">Tom Bobadilla<br>
-      National Referee Administrator<br>
+    <p style="{$this->styleP}">Rob McCarthy<br>
       2019 National Games Referee Administrator<br>
-      <a href="mailto:ThomasBobadilla@ayso.org?subject=Question%20about%20the%202016%20National%Games">ThomasBobadilla@ayso.org</a>
+      <a href="mailto:soccer.ref62@yahoo.com?subject=Question%20about%20the%202016%20National%Games">soccer.ref62@yahoo.com</a>
     </p>
 </body>
 </html>
@@ -112,9 +111,9 @@ EOD;
     General Information
   </p>
   <p style="{$this->styleP}">
-    As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 5 and 
-    running through Sunday, July 10. 
-    On Tuesday, July 5, 2016, we will have a mandatory meeting for Coaches and Referees at the 
+    As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 2 and 
+    running through Sunday, July 7. 
+    On Tuesday, July 2, 2016, we will have a mandatory meeting for Coaches and Referees at the 
     <a href="http://www3.hilton.com/en/hotels/florida/hilton-west-palm-beach-PBIWPHH/index.html" target="_blank">Hilton West Palm Beach</a> 
     to provide information to all coaches and referees on how to have a successful National Games. 
     We will review important roles, procedures, safety and more! You will also receive your coach and referee bags at this meeting.

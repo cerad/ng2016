@@ -3,6 +3,7 @@ imports:
     - { resource: doctrine.yml   }
     - { resource: security.yml   }
     - { resource: services.yml   }
+    - { resource: '@CeradAysoBundle/services.yml' }
     - { resource: users.yml      }
     - { resource: providers.yml  }
     - { resource: projects.yml   }
@@ -12,7 +13,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app_version: '2018.10.29.00'
+    app_version: '2018.11.5.00'
 
 framework:
     #esi:             ~
