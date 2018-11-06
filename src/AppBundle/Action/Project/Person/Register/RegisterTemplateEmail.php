@@ -77,7 +77,8 @@ class RegisterTemplateEmail extends AbstractView2
       </h1>
     </div>
     <br>
-    <p style="{$this->styleSkFontEmail}">AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019</p>
+    <p style="{$this->styleSkFontEmail}">AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII<br>June 
+    30 - July 7, 2019</p>
     <div style="{$this->styleClearBoth}"></div>
   </center>
   <hr>
