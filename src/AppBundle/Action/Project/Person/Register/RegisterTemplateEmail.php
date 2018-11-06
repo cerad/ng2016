@@ -73,7 +73,7 @@ class RegisterTemplateEmail extends AbstractView2
   <center>
     <div style="{$this->styleSkHeader}">
       <h1>
-          <img src="/images/header-ipad_01.png" width="70%">
+          <img src="https://ng2019.zayso.org/images/header-ipad_01.png" width="70%">
       </h1>
     </div>
     <br>
@@ -99,7 +99,8 @@ class RegisterTemplateEmail extends AbstractView2
     
     <p style="{$this->styleP}">Rob McCarthy<br>
       2019 National Games Referee Administrator<br>
-      <a href="mailto:soccer.ref62@yahoo.com?subject=Question%20about%20the%202016%20National%Games">soccer.ref62@yahoo.com</a>
+      <a href="mailto:soccer.ref62@yahoo.com?subject=Question%20about%20the%202019%20National%Games">soccer
+      .ref62@yahoo.com</a>
     </p>
 </body>
 </html>
