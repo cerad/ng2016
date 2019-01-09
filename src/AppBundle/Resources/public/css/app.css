@@ -1,6 +1,6 @@
 /*
     * zAYSO CSS for 2019 National Games
-    * By: Rick Roberts  web.ng2016@gmail.com
+    * By: Rick Roberts  web.ng2019@gmail.com
     * Version: 24 Mar 2016
 */
 
@@ -345,8 +345,8 @@ margin-right:auto;
 
 table th,.row-hdr {
 width:auto;
-background-color:#DB352F;
-color:#fff;
+background-color: #dab22a;
+color: #03062b;
 font-weight:700;
 vertical-align:middle;
 overflow:hidden;
