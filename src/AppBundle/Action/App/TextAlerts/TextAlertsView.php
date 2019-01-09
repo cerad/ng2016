@@ -20,7 +20,7 @@ class TextAlertsView extends AbstractView2
     {
         $content = <<<EOT
     <legend><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank"><img 
-    src="http://www.rainedout.com/sites/default/files/RO_badge_grey.png" border="0" alt="RainedOut" class="rainedout-logo-show"></a>AYSO National Games 2019 Alert System</legend>
+    src="https://www.rainedout.net/admin/images/ro_logo.jpg" border="0" alt="RainedOut" class="rainedout-logo-show"></a>AYSO National Games 2019 Alert System</legend>
   <div class="textalerts">
     <p><strong>Create your RainedOut account by following the instructions shown below.</strong></p>
     <br>
