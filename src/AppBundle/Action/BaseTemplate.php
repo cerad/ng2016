@@ -72,7 +72,8 @@ EOT;
 <<<EOT
     <div id="banner">
           <h1>
-          <a href="http://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" height="30" alt="National Games"></a>
+          <a href="https://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" 
+          height="30" alt="National Games"></a>
           {$this->escape($this->project['title'])}
           </h1>
     </div>
@@ -81,7 +82,8 @@ EOT;
           $html =
 <<<EOT
     <div class="skBanners">
-        <a href="http://www.aysonationalgames.org/" target="_blank"><img class="width-90" src="/images/header-ipad_01.png"></a>
+        <a href="https://www.aysonationalgames.org/" target="_blank"><img class="width-90" 
+        src="/images/header-ipad_01.png"></a>
         <center class="skFont  width-90">AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019</center>
     </div>
 EOT;
