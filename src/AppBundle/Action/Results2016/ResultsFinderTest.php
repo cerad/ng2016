@@ -20,7 +20,7 @@ class ResultsFinderTest extends \PHPUnit_Framework_TestCase
         }
         if (!$this->conn) {
             // Cheat and use a live database for now
-            $this->conn = $this->getConnection('database_name_ng2016games');
+            $this->conn = $this->getConnection('database_name_ng2019games');
         }
         $standingsCalculator = new ResultsStandingsCalculator();
 

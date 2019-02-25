@@ -55,7 +55,7 @@ class RegTeamUpdater
         
 //        $sql = "
 //            SELECT ?
-//            FROM ng2016games.regTeams
+//            FROM ng2019games.regTeams
 //            WHERE teamKey = ?
 //        ";
 //        

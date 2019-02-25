@@ -23,7 +23,7 @@ class ScheduleMedalRoundTest extends PHPUnit_Framework_TestCase
     /** @var  ScheduleMedalRoundCalculator */
     private $scheduleMedalRoundCalculator;
     
-    private $databaseKey = 'database_name_ng2014games';
+    private $databaseKey = 'database_name_noc2018games';
 
     private $conn;
     

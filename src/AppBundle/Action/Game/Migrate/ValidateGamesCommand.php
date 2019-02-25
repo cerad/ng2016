@@ -21,13 +21,13 @@ class ValidateGamesCommand extends Command
     private $projectId = 'AYSONationalGames2016';
 
     public function __construct(
-        Connection  $ng2016GamesConn,
+        Connection  $ng2019GamesConn,
         GameFinder  $gameFinder,
         GameUpdater $gameUpdater
     ) {
         parent::__construct();
 
-        $this->gameConn    = $ng2016GamesConn;
+        $this->gameConn    = $ng2019GamesConn;
         
         $this->gameFinder  = $gameFinder;
         $this->gameUpdater = $gameUpdater;
@@ -36,7 +36,7 @@ class ValidateGamesCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('games:validate:ng2016')
+            ->setName('games:validate:ng2019')
             ->setDescription('Validate Games');
     }
 

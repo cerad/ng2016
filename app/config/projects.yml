@@ -15,11 +15,11 @@ parameters:
                 B:  B
                 G:  G
             ages:
-                U10: U10
-                U12: U12
-                U14: U14
-                U16: U16
-                U19: U19
+                10U: 10U
+                12U: 12U
+                14U: 14U
+                16U: 16U
+                19U: 19U
             dates:
                 '2016-07-06': Wed # Soccerfest
                 '2016-07-07': Thu # Pool Play

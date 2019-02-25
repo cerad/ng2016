@@ -312,7 +312,7 @@ EOD;
         }
         return null;
     }
-    // ng2014 format
+    // noc2018 format
     public function findOfficials($projectKey)
     {
         $qb = $this->conn->createQueryBuilder();

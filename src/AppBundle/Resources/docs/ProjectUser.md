@@ -8,7 +8,7 @@ Might be worth looking into later but for now keep it.
 
 Will implement array access in keeping with the array oriented approach for other code.
 
-MariaDB [ng2014]> describe users;
+MariaDB [noc2018]> describe users;
 +-----------------------------+--------------+------+-----+---------+----------------+
 | Field                       | Type         | Null | Key | Default | Extra          |
 +-----------------------------+--------------+------+-----+---------+----------------+

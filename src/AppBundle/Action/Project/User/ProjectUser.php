@@ -63,7 +63,7 @@ class ProjectUser implements AdvancedUserInterface, \ArrayAccess, \Serializable
     {
         return true;
     }
-    // For ng2014 code
+    // For noc2018 code
     public function getAccountName()
     {
         return $this->name;

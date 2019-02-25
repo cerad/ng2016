@@ -1,4 +1,3 @@
-
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -20,6 +19,10 @@ doctrine:
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
+                option:
+                    20: true     # PDO::ATTR_EMULATE_PREPARES
+                    1000: true     # PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
+                    1001: true     # PDO::MYSQL_ATTR_LOCAL_INFILE
             test:
                 driver:   %database_driver%
                 host:     %database_host%
@@ -28,55 +31,54 @@ doctrine:
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-            ng2014:
+            noc2018:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
-                dbname:   %database_name_ng2014%
+                dbname:   %database_name_noc2018%
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-            ng2014games:
+            noc2018games:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
-                dbname:   %database_name_ng2014games%
+                dbname:   %database_name_noc2018games%
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-            ng2016:
+            ng2019:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
-                dbname:   %database_name_ng2016%
+                dbname:   %database_name_ng2019%
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-            ng2016games:
+            ng2019games:
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
-                dbname:   %database_name_ng2016games%
+                dbname:   %database_name_ng2019games%
                 user:     %database_user%
                 password: %database_password%
                 charset:  UTF8
-
     orm:
         default_entity_manager:       default
         auto_generate_proxy_classes: %kernel.debug%
-                
+
         entity_managers:
-          
+
             default:
                 connection: default
                 mappings:
-                    #CeradOrgBundle:    ~
-                    #CeradUserBundle:   ~
-                    #CeradPersonBundle: ~
+                #CeradOrgBundle:    ~
+                #CeradUserBundle:   ~
+                #CeradPersonBundle: ~
 
-            #users:
-            #   connection: users
-            #   mappings:
-            #        CeradUserBundle: ~
+                #users:
+                #   connection: users
+                #   mappings:
+                #        CeradUserBundle: ~
                         
                        

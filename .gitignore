@@ -28,3 +28,4 @@ tests/tmp
 web/pdf
 src/AppBundle/Resources/pdf/archive
 *alias*
+dist.sh

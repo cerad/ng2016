@@ -12,17 +12,17 @@ class InitGames2016Command extends Command
     private $gameConn;
     private $regTeamConn;
 
-    public function __construct(Connection $ng2016GamesConn)
+    public function __construct(Connection $ng2019GamesConn)
     {
         parent::__construct();
 
-        $this->gameConn    = $ng2016GamesConn;
-        $this->regTeamConn = $ng2016GamesConn;
+        $this->gameConn    = $ng2019GamesConn;
+        $this->regTeamConn = $ng2019GamesConn;
     }
     protected function configure()
     {
         $this
-            ->setName('init:games:ng2016')
+            ->setName('init:games:ng2019')
             ->setDescription('Init Games NG2016');
     }
 

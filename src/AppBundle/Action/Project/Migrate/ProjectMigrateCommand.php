@@ -16,21 +16,21 @@ class ProjectMigrateCommand extends Command
 {
     private $maxCnt = 10000; //10000;
 
-    private $ng2014Conn;
-    private $ng2016Conn;
+    private $noc2018Conn;
+    private $ng2019Conn;
     private $users = [];
 
     private $projectUserRepository;
     private $projectPersonRepository;
 
-    public function __construct(Connection $ng2014Conn, Connection $ng2016Conn)
+    public function __construct(Connection $noc2018Conn, Connection $ng2019Conn)
     {
         parent::__construct();
-        $this->ng2014Conn = $ng2014Conn;
-        $this->ng2016Conn = $ng2016Conn;
+        $this->noc2018Conn = $noc2018Conn;
+        $this->ng2019Conn = $ng2019Conn;
 
-        $this->projectUserRepository   = new ProjectUserRepository  ($ng2016Conn);
-        $this->projectPersonRepository = new ProjectPersonRepository($ng2016Conn);
+        $this->projectUserRepository   = new ProjectUserRepository  ($ng2019Conn);
+        $this->projectPersonRepository = new ProjectPersonRepository($ng2019Conn);
     }
     protected function configure()
     {
@@ -58,8 +58,8 @@ class ProjectMigrateCommand extends Command
     {
         echo sprintf("Migrate Project...\n");
 
-        $this->clearDatabase ($this->ng2016Conn);
-        $this->createDatabase($this->ng2016Conn);
+        $this->clearDatabase ($this->ng2019Conn);
+        $this->createDatabase($this->ng2019Conn);
 
         $this->migrateUsers();
         $this->migrateProjectPersons();
@@ -69,9 +69,9 @@ class ProjectMigrateCommand extends Command
     private function migrateUsers()
     {
         $sql = 'INSERT INTO users (name,email,username,personKey,salt,password,roles) VALUES(?,?,?,?,?,?,?)';
-        $insertStmt = $this->ng2016Conn->prepare($sql);
+        $insertStmt = $this->ng2019Conn->prepare($sql);
 
-        $qb = $this->ng2014Conn->createQueryBuilder();
+        $qb = $this->noc2018Conn->createQueryBuilder();
 
         $qb->select([
             'user.username     AS username',
@@ -125,7 +125,7 @@ class ProjectMigrateCommand extends Command
     }
     private function migrateProjectPersons()
     {
-        $qb = $this->ng2014Conn->createQueryBuilder();
+        $qb = $this->noc2018Conn->createQueryBuilder();
 
         $qb->select([
             'projectPerson.id  AS projectPersonId',
@@ -176,14 +176,14 @@ INSERT INTO projectPersons
 (projectKey,personKey,orgKey,fedKey,regYear,registered,verified,name,email,phone,gender,age,shirtSize,plans,avail) 
 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 EOD;
-        $insertProjectPersonStmt = $this->ng2016Conn->prepare($sql);
+        $insertProjectPersonStmt = $this->ng2019Conn->prepare($sql);
 
         $sql = <<<EOD
 INSERT INTO projectPersonRoles
 (projectPersonId,role,roleDate,badge,badgeDate,active,verified)
 VALUES(?,?,?,?,?,?,?)
 EOD;
-        $insertProjectPersonRoleStmt = $this->ng2016Conn->prepare($sql);
+        $insertProjectPersonRoleStmt = $this->ng2019Conn->prepare($sql);
 
         $cnt = 0;
         while (($row = $retrieveStmt->fetch()) && ($cnt++ < $this->maxCnt)) { //var_dump($row); die();
@@ -252,7 +252,7 @@ EOD;
                 serialize($plansNew),
                 serialize($availNew),
             ]);
-            $projectPersonId = $this->ng2016Conn->lastInsertId();
+            $projectPersonId = $this->ng2019Conn->lastInsertId();
 
             switch($row['refereeBadge']) {
                 case null:

@@ -27,7 +27,7 @@ class AdjustGames2016Command extends Command
     private $projectId = 'AYSONationalGames2016';
 
     public function __construct(
-        Connection $ng2016GamesConn,
+        Connection $ng2019GamesConn,
         ScheduleFinder $gameFinder,
         GameUpdater    $gameUpdater,
         RegTeamImportReaderExcel $reader
@@ -36,8 +36,8 @@ class AdjustGames2016Command extends Command
 
         $this->reader = $reader;
         
-        $this->gameConn    = $ng2016GamesConn;
-        $this->regTeamConn = $ng2016GamesConn;
+        $this->gameConn    = $ng2019GamesConn;
+        $this->regTeamConn = $ng2019GamesConn;
         
         $this->gameFinder  = $gameFinder;
         $this->gameUpdater = $gameUpdater;
@@ -46,7 +46,7 @@ class AdjustGames2016Command extends Command
     protected function configure()
     {
         $this
-            ->setName('games:adjust:ng2016')
+            ->setName('games:adjust:ng2019')
             ->setDescription('Adjust Games NG2016')
             ->addArgument('filename',InputArgument::OPTIONAL);
     }

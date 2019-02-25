@@ -17,29 +17,29 @@ class MigrateGames2014Command extends Command
     use DirectoryTrait;
     use MigrateGames2014Trait;
 
-    private $ng2014ProjectId = 'AYSONationalGames2014';
-    private $ng2014GamesConn;
-    private $ng2016GamesConn;
+    private $noc2018ProjectId = 'AYSONationalGames2014';
+    private $noc2018GamesConn;
+    private $ng2019GamesConn;
 
     private $gameConn;
     private $regTeamConn;
     private $projectTeamConn;
 
-    public function __construct(Connection $ng2014GamesConn, Connection $ng2016GamesConn)
+    public function __construct(Connection $noc2018GamesConn, Connection $ng2019GamesConn)
     {
         parent::__construct();
 
-        $this->ng2014GamesConn = $ng2014GamesConn;
-        $this->ng2016GamesConn = $ng2016GamesConn;
+        $this->noc2018GamesConn = $noc2018GamesConn;
+        $this->ng2019GamesConn = $ng2019GamesConn;
 
-        $this->gameConn        = $ng2016GamesConn;
-        $this->regTeamConn     = $ng2016GamesConn;
-        $this->projectTeamConn = $ng2016GamesConn;
+        $this->gameConn        = $ng2019GamesConn;
+        $this->regTeamConn     = $ng2019GamesConn;
+        $this->projectTeamConn = $ng2019GamesConn;
     }
     protected function configure()
     {
         $this
-            ->setName('migrate:games:ng2014')
+            ->setName('migrate:games:noc2018')
             ->setDescription('Migrate Games NG2014');
     }
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,7 +49,7 @@ class MigrateGames2014Command extends Command
         $schemaFile = $this->getRootDirectory() . '/schema2016games.sql';
 
         if ($all || false) {
-            $this->resetDatabase($this->ng2016GamesConn, $schemaFile);
+            $this->resetDatabase($this->ng2019GamesConn, $schemaFile);
         }
         echo sprintf("Migrate Games NG2014 ...\n");
 
@@ -72,7 +72,7 @@ class MigrateGames2014Command extends Command
     {
         if (!$commit) return;
 
-        $this->regTeamConn->delete('regTeams',['projectId' => $this->ng2014ProjectId]);
+        $this->regTeamConn->delete('regTeams',['projectId' => $this->noc2018ProjectId]);
 
         $sql = <<<EOD
 SELECT 
@@ -84,7 +84,7 @@ SELECT
   status     AS status
 FROM teams ORDER BY keyx
 EOD;
-        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $stmt = $this->noc2018GamesConn->executeQuery($sql);
         $regTeams = [];
         while($row = $stmt->fetch()) {
 
@@ -142,7 +142,7 @@ EOD;
     {
         if (!$commit) return;
 
-        $this->gameConn->delete('poolTeams',['projectId' => $this->ng2014ProjectId]);
+        $this->gameConn->delete('poolTeams',['projectId' => $this->noc2018ProjectId]);
 
         $sql = <<<EOD
 SELECT
@@ -158,7 +158,7 @@ FROM games AS game
 LEFT JOIN game_teams AS team ON team.gameId = game.id
 ORDER  BY game.levelKey, game.groupType, game.groupName, team.groupSlot
 EOD;
-        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $stmt = $this->noc2018GamesConn->executeQuery($sql);
         $poolTeams = [];
         while($row = $stmt->fetch()) {
 
@@ -225,7 +225,7 @@ EOD;
     {
         if (!$commit) return;
 
-        $this->gameConn->delete('games',['projectId' => $this->ng2014ProjectId]);
+        $this->gameConn->delete('games',['projectId' => $this->noc2018ProjectId]);
 
         // The games
         $sql = <<<EOD
@@ -240,7 +240,7 @@ SELECT
   report     AS report
 FROM games ORDER BY gameNumber
 EOD;
-        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $stmt = $this->noc2018GamesConn->executeQuery($sql);
         $games = [];
         while ($row = $stmt->fetch()) {
 
@@ -300,7 +300,7 @@ EOD;
     {
         if (!$commit) return;
 
-        $this->gameConn->delete('gameTeams',['projectId' => $this->ng2014ProjectId]);
+        $this->gameConn->delete('gameTeams',['projectId' => $this->noc2018ProjectId]);
 
         $sql = <<<EOD
 SELECT 
@@ -314,7 +314,7 @@ FROM game_teams   AS team
 LEFT JOIN games   AS game ON game.id = team.gameId
 ORDER BY gameNumber,team.slot
 EOD;
-        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $stmt = $this->noc2018GamesConn->executeQuery($sql);
         $gameTeams = [];
         while($row = $stmt->fetch()) {
 
@@ -412,7 +412,7 @@ EOD;
     {
         if (!$commit) return;
 
-        $this->gameConn->delete('gameOfficials',['projectId' => $this->ng2014ProjectId]);
+        $this->gameConn->delete('gameOfficials',['projectId' => $this->noc2018ProjectId]);
 
         $sql = <<<EOD
 SELECT 
@@ -427,7 +427,7 @@ FROM game_officials AS official
 LEFT JOIN games AS game ON game.id = official.gameId
 ORDER BY gameNumber,official.slot
 EOD;
-        $stmt = $this->ng2014GamesConn->executeQuery($sql);
+        $stmt = $this->noc2018GamesConn->executeQuery($sql);
         $gameOfficials = [];
         while($row = $stmt->fetch()) {
 

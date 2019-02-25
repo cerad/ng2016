@@ -1,7 +1,7 @@
-For ng2014 we had a teams table initially loaded with the core teams.
+For noc2018 we had a teams table initially loaded with the core teams.
 This table ended up not being used mostly because I did not have a good understanding of the project context.
 
-In ng2014games (aka the project context)
+In noc2018games (aka the project context)
 
 mysql> describe project_teams;
 +------------+-------------+------+-----+---------+----------------+

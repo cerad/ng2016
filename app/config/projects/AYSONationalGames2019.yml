@@ -54,16 +54,11 @@ parameters:
             phone:  ""
 
         dates:
-            #- '2016-07-06' # Wed Soccerfest
-            #- '2016-07-07' # Thu Pool Play
-            #- '2016-07-08' # Fri Pool Play
-            #- '2016-07-09' # Sat Pool Play and Quarter Finals
-            #- '2016-07-10' # Sun Semi and Finals
-            '2014-07-02': Wed # Soccerfest 2014
-            '2014-07-03': Thu # Pool Play
-            '2014-07-04': Fri # Pool Play
-            '2014-07-05': Sat # Pool Play and Quarter Finals
-            '2014-07-06': Sun # Semi and Finals
+            '2019-07-03': Wed # Soccerfest 2019
+            '2019-07-04': Thu # Pool Play
+            '2019-07-05': Fri # Pool Play
+            '2019-07-06': Sat # Pool Play and Quarter Finals
+            '2019-07-07': Sun # Semi and Finals
 
         programs:
             Core: Core
@@ -74,24 +69,21 @@ parameters:
 
         ages:
             VIP: VIP
-            U10: U10
-            U12: U12
-            U14: U14
-            U16: U16
-            U19: U19
+            10U: 10U
+            12U: 12U
+            14U: 14U
+            16U: 16U
+            18U: 18U
 
         search_defaults:
             projects: ['AYSONationalGames2014']
-            programs: ['Core']
             dates:    ['2014-07-03']
             genders:  ['B']
-            ages:     ['U12']
+            ages:     ['12U']
 
         search_controls:
             dates:
                 label: Days
-            programs:
-                label: Programs
             genders:
                 label: Genders
             ages:
@@ -107,7 +99,6 @@ parameters:
 
             programs:
                 Core:  Core
-                Extra: Extra
 
             genders:
                 B: Boys
@@ -115,56 +106,56 @@ parameters:
 
             ages:
                 VIP: VIP
-                U10: U10
-                U12: U12
-                U14: U14
-                U16: U16
-                U19: U19
+                10U: 10U
+                12U: 12U
+                14U: 14U
+                16U: 16U
+                18U: 18U
 
             pools:
                 Core:
                     B:
-                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
-                        U12: [A,B,C,D]
-                        U14: [A,B,C,D]
-                        U16: [A,B,C,D]
-                        U19: [A,B,C,D]
+                        10U: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        12U: [A,B,C,D]
+                        14U: [A,B,C,D]
+                        16U: [A,B,C,D]
+                        18U: [A,B,C,D]
                     G:
-                        U10: [A,B,C,D,E,F,G,H,I,J,K,L]
-                        U12: [A,B,C,D]
-                        U14: [A,B,C,D]
-                        U16: [A,B,C,D]
-                        U19: [A,B,C,D]
+                        10U: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        12U: [A,B,C,D]
+                        14U: [A,B,C,D]
+                        16U: [A,B,C,D]
+                        18U: [A,B,C,D]
 
         levels:
-            AYSO_U10B_Core:
+            AYSO_B10U_Core:
                 program: Core
                 gender:  B
-                age:     U10
-                div:     U10B
+                age:     10U
+                div:     B10U
 
-            AYSO_U10G_Core:
+            AYSO_G10U_Core:
                 program: Core
                 gender:  G
-                age:     U10
-                div:     U10G
+                age:     10U
+                div:     G10U
 
-            AYSO_U12B_Core:
+            AYSO_B12U_Core:
                 program: Core
                 gender:  B
-                age:     U12
-                div:     U12B
+                age:     12U
+                div:     B12U
 
-            AYSO_U12G_Core:
+            AYSO_G12U_Core:
                 program: Core
                 gender:  G
-                age:     U12
-                div:     U12G
+                age:     12U
+                div:     G12U
 
         pools:
 
         venues:
-            Polo: Polo Grounds
+            Fields: Waipio
 
         fields:
 

@@ -24,7 +24,7 @@ class AysoLoadCommand extends Command
 
         $this->conn = $conn;
 
-        //$this->projectPersonRepository = new ProjectPersonRepository($ng2016Conn);
+        //$this->projectPersonRepository = new ProjectPersonRepository($ng2019Conn);
     }
     protected function configure()
     {

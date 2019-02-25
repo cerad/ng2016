@@ -17,7 +17,7 @@ to the game and gameTeam entities and store the report values as an array.  Can'
 Problem with this approach is that it becomes a bit of a mess to pull out the necessary information to
 calculate game points and team standings.  Fragile at best.
 
-For ng2016 I got a bit better.  There is now a game report repository which returns a game report data object.
+For ng2019 I got a bit better.  There is now a game report repository which returns a game report data object.
 The gameReport object has teamReport entities.
 The gameReport form now feeds off of the gameReport entity.
 Likewise, the points calculator works from the game report entities.
