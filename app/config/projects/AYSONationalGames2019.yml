@@ -1,12 +1,12 @@
 parameters:
 
-  app_project_key: AYSONationalGames2016
+  app_project_key: AYSONationalGames2019
 
   app_project_fed_role_key: AYSOV
 
   app_project:
     info:
-        key: AYSONationalGames2014 # For now until we migrate games
+        key: AYSONationalGames2019 # For now until we migrate games
 
         slugs: [natgames, ng2016]
 

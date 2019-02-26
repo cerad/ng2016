@@ -2,58 +2,36 @@
 parameters:
 
     project_choices:
-        AYSONationalGames2016 : NG2016
-#        AYSONationalGames2014 : NG2014
+        AYSONationalGames2019 : NG2019
 
     projects:
 
-        AYSONationalGames2016:
-            programs:
-                Core: Core
-            #   VIP:  VIP
-            genders:
-                B:  B
-                G:  G
-            ages:
-                10U: 10U
-                12U: 12U
-                14U: 14U
-                16U: 16U
-                19U: 19U
-            dates:
-                '2016-07-06': Wed # Soccerfest
-                '2016-07-07': Thu # Pool Play
-                '2016-07-08': Fri # Pool Play
-                '2016-07-09': Sat # Pool Play and Quarter Finals
-                '2016-07-10': Sun # Semi and Finals
-            sortBy:
-                1: 'Date, Time, Group, Field'
-                2: 'Date, Field, Time'
-                3: 'Field, Date, Time'
-                4: 'Game Number'
-
-        AYSONationalGames2014:
-            programs:
+        AYSONationalGames2019:
+             programs:
                 Core:  Core
-                Extra: Extra
-                VIP:   VIP
-            genders:
-                B:  B
-                G:  G
-            ages:
-                U10: U10
-                U12: U12
-                U14: U14
-                U16: U16
-                U19: U19
-            dates:
-                '2014-07-02': Wed # Soccerfest
-                '2014-07-03': Thu # Pool Play
-                '2014-07-04': Fri # Pool Play
-                '2014-07-05': Sat # Pool Play and Quarter Finals
-                '2014-07-06': Sun # Semi and Finals
-            sortBy:
-                1: 'Date, Time, Group, Field'
-                2: 'Date, Field, Time'
-                3: 'Field, Date, Time'
-                4: 'Game Number'
+
+                genders:
+                    B: Boys
+                    G: Girls
+
+                ages:
+                    VIP: VIP
+                    10U: 10U
+                    12U: 12U
+                    14U: 14U
+                    16U: 16U
+                    18U: 18U
+
+                dates:
+                    '2019-07-03': Wed # Soccerfest 2019
+                    '2019-07-04': Thu # Pool Play
+                    '2019-07-05': Fri # Pool Play
+                    '2019-07-06': Sat # Pool Play and Quarter Finals
+                    '2019-07-07': Sun # Semi and Finals
+
+                sortBy:
+                    1: 'Date, Time, Group, Field'
+                    2: 'Date, Field, Time'
+                    3: 'Field, Date, Time'
+                    4: 'Game Number'
+
