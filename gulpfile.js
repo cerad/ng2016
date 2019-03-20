@@ -40,7 +40,7 @@ const appTask = function() {
 
     // PDFs
     gulp.src([
-        appPublicDir + '/docs/*.pdf'
+        appPublicDir + '/pdf/*.pdf'
 
     ])
         .pipe(gulp.dest('web/pdf'));
@@ -84,7 +84,8 @@ const watchTask = function(done)
         appPublicDir + '/css/*.css',
         appPublicDir + '/js/*.js',
         appPublicDir + '/images/*.png',
-        appPublicDir + '/images/*.ico'
+        appPublicDir + '/images/*.ico',
+        appPublicDir + '/pdf/*.pdf'
     ],  ['app']);
 
     done();
