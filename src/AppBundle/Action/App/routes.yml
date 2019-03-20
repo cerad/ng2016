@@ -34,7 +34,7 @@ rules_of_competition:
     path: /rules
     defaults:
         fileType: pdf # For future use, only pdf is currently supported
-        fileName: SAMPLE.2019_National_Games_Governing_Rules.pdf
+        fileName: NG19_Governing_Rules_-_FINAL.pdf
         _controller: file_controller
 
 detailed_instruction:
