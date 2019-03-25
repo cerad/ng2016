@@ -119,6 +119,9 @@ class ProjectPersonRepositoryV2
     }
     private function saveRoleArray($row)
     {
+        $row['active'] = $row['active'] ? '1' : '0';
+        $row['verified'] = $row['verified'] ? '1' : '0';
+
         $id = $row['id'];
         unset($row['id']);
         if ($id) {

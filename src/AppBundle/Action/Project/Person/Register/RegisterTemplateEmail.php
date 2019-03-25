@@ -113,14 +113,14 @@ EOD;
     General Information
   </p>
   <p style="{$this->styleP}">
-    As you might expect, we have a full calendar of soccer and related activities starting Tuesday, July 2 and 
-    running through Sunday, July 7. 
-    On Tuesday, July 2, 2016, we will have a mandatory meeting for Coaches and Referees at the 
-    <a href="http://www3.hilton.com/en/hotels/florida/hilton-west-palm-beach-PBIWPHH/index.html" target="_blank">Hilton West Palm Beach</a> 
-    to provide information to all coaches and referees on how to have a successful National Games. 
-    We will review important roles, procedures, safety and more! You will also receive your coach and referee bags at this meeting.
-    A full calendar may be viewed at <a href="http://aysonationalgames.org/schedule-of-events/" target="_blank">National Games Calendar</a>.
-    General information about the Games can be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>.
+    As you might expect, we have a full calendar of soccer and related activities starting on Monday, July 1 and 
+    running through Sunday, July 7. On Monday, July 1, 2019, we will have a mandatory meeting for Coaches and 
+    Referees at the <b>Waipio Soccer Complex</b> to provide information to all coaches and referees on how to have a 
+    successful National Games. We will review important rules, procedures, safety and more! You will also receive 
+    your coach and referee bags at this meeting. A full calendar may be viewed at <a href="http://aysonationalgames
+    .org/schedule-of-events/" target="_blank">National Games Calendar</a>.  General information about the Games can 
+    be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>. Soccer fest will be 
+    held on 02 July and referees will be able to volunteer for those games in zAYSO.  Pool play games will begin on Wednesday 03 July.
     </p>
 EOT;
     } 
@@ -206,7 +206,7 @@ EOT;
     AYSO Concussion Awareness
   </p>
 <p style="{$this->styleP}">
-    By Florida law, all participating referees and coaches are required to have completed CDC Concussion Awareness training.
+    All participating referees and coaches are required to have completed CDC Concussion Awareness training.
     If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
     with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
 </p>
