@@ -117,8 +117,7 @@ EOD;
     running through Sunday, July 7. On Monday, July 1, 2019, we will have a mandatory meeting for Coaches and 
     Referees at the <b>Waipio Soccer Complex</b> to provide information to all coaches and referees on how to have a 
     successful National Games. We will review important rules, procedures, safety and more! You will also receive 
-    your coach and referee bags at this meeting. A full calendar may be viewed at <a href="http://aysonationalgames
-    .org/schedule-of-events/" target="_blank">National Games Calendar</a>.  General information about the Games can 
+    your coach and referee bags at this meeting. A full calendar may be viewed at <a href="http://aysonationalgames.org/schedule-of-events/" target="_blank">National Games Calendar</a>.  General information about the Games can 
     be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>. Soccer fest will be 
     held on 02 July and referees will be able to volunteer for those games in zAYSO.  Pool play games will begin on Wednesday 03 July.
     </p>
