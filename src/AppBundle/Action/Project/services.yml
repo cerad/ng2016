@@ -9,11 +9,3 @@ services:
     project_person_repository:
         class: AppBundle\Action\Project\Person\ProjectRersonRepository
         arguments: ['@project_connection','@project_factory']
-
-    project_migrate_command:
-        class: AppBundle\Action\Project\Migrate\ProjectMigrateCommand
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.noc2018_connection'
-            - '@doctrine.dbal.ng2019_connection'
-

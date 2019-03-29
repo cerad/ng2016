@@ -4,7 +4,7 @@ namespace AppBundle\Action\GameOfficial;
 
 use AppBundle\Action\Game\GameOfficial;
 use AppBundle\Action\RegPerson\RegPersonFinder;
-use AppBundle\Action\Schedule2016\ScheduleGameOfficial;
+use AppBundle\Action\Schedule2019\ScheduleGameOfficial;
 
 use AppBundle\Action\Project\User\ProjectUser as User;
 

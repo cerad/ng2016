@@ -23,7 +23,8 @@ parameters:
                     18U: 18U
 
                 dates:
-                    '2019-07-03': Wed # Soccerfest 2019
+                    '2019-07-02': Tue # Soccerfest 2019
+                    '2019-07-03': Wed # Pool Play
                     '2019-07-04': Thu # Pool Play
                     '2019-07-05': Fri # Pool Play
                     '2019-07-06': Sat # Pool Play and Quarter Finals

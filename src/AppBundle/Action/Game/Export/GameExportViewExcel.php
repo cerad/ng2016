@@ -27,7 +27,7 @@ class GameExportViewExcel extends AbstractView2
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'GameSchedule2016_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = 'GameSchedule2019_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

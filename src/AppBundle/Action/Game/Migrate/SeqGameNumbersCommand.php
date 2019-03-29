@@ -4,8 +4,8 @@ namespace AppBundle\Action\Game\Migrate;
 use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\Game\GameUpdater;
 
-use AppBundle\Action\Schedule2016\ScheduleGame;
-use AppBundle\Action\Schedule2016\ScheduleGameTeam;
+use AppBundle\Action\Schedule2019\ScheduleGame;
+use AppBundle\Action\Schedule2019\ScheduleGameTeam;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

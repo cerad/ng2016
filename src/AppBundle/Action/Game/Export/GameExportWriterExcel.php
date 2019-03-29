@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\Game\Export;
 
-use AppBundle\Action\Schedule2016\ScheduleGame;
+use AppBundle\Action\Schedule2019\ScheduleGame;
 
 class GameExportWriterExcel
 {
