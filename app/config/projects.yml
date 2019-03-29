@@ -2,37 +2,37 @@
 parameters:
 
     project_choices:
-        AYSONationalGames2019 : NG2019
+        AYSONationalGames2019: NG2019
 
     projects:
 
         AYSONationalGames2019:
-             programs:
+            programs:
                 Core:  Core
 
-                genders:
-                    B: Boys
-                    G: Girls
+            genders:
+                B: Boys
+                G: Girls
 
-                ages:
-                    VIP: VIP
-                    10U: 10U
-                    12U: 12U
-                    14U: 14U
-                    16U: 16U
-                    18U: 18U
+            ages:
+                VIP: VIP
+                10U: 10U
+                12U: 12U
+                14U: 14U
+                16U: 16U
+                18U: 18U
 
-                dates:
-                    '2019-07-02': Tue # Soccerfest 2019
-                    '2019-07-03': Wed # Pool Play
-                    '2019-07-04': Thu # Pool Play
-                    '2019-07-05': Fri # Pool Play
-                    '2019-07-06': Sat # Pool Play and Quarter Finals
-                    '2019-07-07': Sun # Semi and Finals
+            dates:
+                '2019-07-02': Tue # Soccerfest 2019
+                '2019-07-03': Wed # Pool Play
+                '2019-07-04': Thu # Pool Play
+                '2019-07-05': Fri # Pool Play
+                '2019-07-06': Sat # Pool Play and Quarter Finals
+                '2019-07-07': Sun # Semi and Finals
 
-                sortBy:
-                    1: 'Date, Time, Group, Field'
-                    2: 'Date, Field, Time'
-                    3: 'Field, Date, Time'
-                    4: 'Game Number'
+            sortBy:
+                1: 'Date, Time, Group, Field'
+                2: 'Date, Field, Time'
+                3: 'Field, Date, Time'
+                4: 'Game Number'
 
