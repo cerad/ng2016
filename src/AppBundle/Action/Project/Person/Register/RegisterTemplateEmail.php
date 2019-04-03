@@ -193,8 +193,9 @@ EOT;
   </p>
 <p style="{$this->styleP}">
     AYSO requires all participating referees and coaches to have completed <strong>the most current</strong> AYSO Safe Haven training.
-    If you have yet to complete the latest version of this training, the AYSO Safe Haven Training Course MT-02 is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
-    with your eAYSO ID {$personView->fedId} and your last name. You can then access the AYSO Safe Haven Training Course at <a href="https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven" target="_blank">https://www.aysotraining.org/training/safehaven/aysosafehaven.asp?course=safehaven</a>.
+    If you have yet to complete the latest version of this training, the AYSO Safe Haven Training is available online
+    . First, sign into <a href="https://aysou.org" target="_blank">https://aysou.org</a>
+    and then access the AYSO Safe Haven Course under "My Courses > AYSO's Safe Haven".
 </p>
 EOT;
     }
@@ -207,7 +208,9 @@ EOT;
 <p style="{$this->styleP}">
     All participating referees and coaches are required to have completed CDC Concussion Awareness training.
     If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
-    with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
+    with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness 
+    Training Course at <a href="https://aysou.org" target="_blank">https://aysou.org</a>.  After login, look under 
+    "My Courses > CDC: Concussion Course".
 </p>
 EOT;
     }
