@@ -68,7 +68,7 @@ class ProjectPersonRepositoryV2
         $e3Certs = array_combine(array_values($fedKeys), array_values($certs));
         foreach ($e3Certs as $key => $cert) {
             $ppid = $key;
-            $aysoid = $cert['AYSOID'];
+
             //Update MY
             $personRows[$ppid]['regYear'] = $e3Certs[$ppid]['MY'];
 
@@ -86,6 +86,24 @@ class ProjectPersonRepositoryV2
         $sql = 'SELECT * from projectPersonRoles WHERE projectPersonId IN (?)';
         $stmt = $this->conn->executeQuery($sql, [$personIds], [Connection::PARAM_INT_ARRAY]);
         while ($roleRow = $stmt->fetch()) {
+            if (isset($e3Certs[$roleRow['projectPersonId']])) {
+                switch ($roleRow['role']) {
+                    case 'CERT_REFEREE':
+                        $roleRow['badge'] = explode(' ', $e3Certs[$roleRow['projectPersonId']]['RefCertDesc'])[0];
+                        $roleRow['badgeDate'] = $e3Certs[$roleRow['projectPersonId']]['RefCertDate'];
+                        $roleRow['verified'] = (string)true;
+                        break;
+                    case 'CERT_SAFE_HAVEN':
+                        $roleRow['badgeDate'] = $e3Certs[$roleRow['projectPersonId']]['SafeHavenDate'];
+                        $roleRow['verified'] = (string)true;
+                        break;
+                    case 'CERT_CONCUSSION':
+                        $roleRow['badgeDate'] = $e3Certs[$roleRow['projectPersonId']]['CDCDate'];
+                        $roleRow['verified'] = (string)true;
+                        break;
+                }
+            }
+
             $personRows[$roleRow['projectPersonId']]['roles'][$roleRow['role']] = $roleRow;
         }
 
@@ -115,13 +133,58 @@ class ProjectPersonRepositoryV2
             return null;
         }
 
+        $e3Certs = [];
+        $ppid = null;
+
+        if (!empty($row['fedKey'])) {
+            $aysoid = explode(':', $row['fedKey'])[1];
+
+            //Verify MY, SAR, Certs
+            /** @var array $e3Certs */
+            $e3Certs[$row['id']] = $this->volCerts->retrieveVolCertData($aysoid);
+            foreach ($e3Certs as $key => $cert) {
+                $ppid = $key;
+                //Update MY
+                $row['regYear'] = $e3Certs[$ppid]['MY'];
+
+                //Update SAR
+                $SAR = explode('/', $e3Certs[$ppid]['SAR']);
+                if (count($SAR) == 3) {
+                    $row['orgKey'] = 'AYSOR:'.str_pad($SAR[2], 4, '0', $pad_type = STR_PAD_LEFT);
+                }
+
+                $row['verified'] = (string)true;
+            }
+        }
+
         $row['plans'] = isset($row['plans']) ? unserialize($row['plans']) : null;
         $row['avail'] = isset($row['avail']) ? unserialize($row['avail']) : null;
 
         $row['roles'] = [];
+
         $sql = 'SELECT * from projectPersonRoles WHERE projectPersonId = ?';
         $stmt = $this->conn->executeQuery($sql, [$row['id']]);
+
         while ($roleRow = $stmt->fetch()) {
+
+            if (!is_null($ppid) && !empty($e3Certs)) {
+                switch ($roleRow['role']) {
+                    case 'CERT_REFEREE':
+                        $roleRow['badge'] = explode(' ', $e3Certs[$roleRow['projectPersonId']]['RefCertDesc'])[0];
+                        $roleRow['badgeDate'] = $e3Certs[$roleRow['projectPersonId']]['RefCertDate'];
+                        $roleRow['verified'] = (string)true;
+                        break;
+                    case 'CERT_SAFE_HAVEN':
+                        $roleRow['badgeDate'] = $e3Certs[$roleRow['projectPersonId']]['SafeHavenDate'];
+                        $roleRow['verified'] = (string)true;
+                        break;
+                    case 'CERT_CONCUSSION':
+                        $roleRow['badgeDate'] = $e3Certs[$roleRow['projectPersonId']]['CDCDate'];
+                        $roleRow['verified'] = (string)true;
+                        break;
+                }
+            }
+
             $row['roles'][$roleRow['role']] = $roleRow;
         }
         $person = new ProjectPerson();
