@@ -13,7 +13,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app_version: '2019.04.03.10'
+    app_version: '2019.04.04.00'
 
 framework:
     #esi:             ~

@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer;
 
 
 class ScheduleGameWriterExcel
@@ -45,6 +46,9 @@ class ScheduleGameWriterExcel
         $ws->setTitle('Schedule');
 
         // Column alignment needs to go first?
+        $ws->getStyle('A' )->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle('B' )->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle('C1')->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
         $ws->getStyle('A' )->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
         $ws->getStyle('B' )->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
         $ws->getStyle('C1')->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
@@ -108,7 +112,7 @@ class ScheduleGameWriterExcel
 
     /**
      * @return false|string
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Writer\Exception
      */
     private function getContents()
     {
