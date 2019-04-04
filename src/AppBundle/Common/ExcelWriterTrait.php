@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use \PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -81,7 +81,6 @@ trait ExcelWriterTrait
         $ws->getStyle($col . $row)->applyFromArray([
             'fill' => [
                 'type'  => Fill::FILL_SOLID,
-
                 'color' => ['rgb' => $color]
             ] 
         ]);
@@ -101,7 +100,7 @@ trait ExcelWriterTrait
         
         $date = substr($dt, 0, 10);
         $dateValue = Date::stringToExcel($date);
-
+        
         $this->setCellFormat      ($ws,$col,$row,$format);
         $this->setCellValueNumeric($ws,$col,$row,$dateValue);
     }
@@ -126,6 +125,7 @@ trait ExcelWriterTrait
         $this->setCellFormat      ($ws,$col,$row,$format);
         $this->setCellValueNumeric($ws,$col,$row,$timeValue);
     }
+
 
     /**
      * @param Worksheet $ws

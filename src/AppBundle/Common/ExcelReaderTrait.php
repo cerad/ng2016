@@ -1,16 +1,16 @@
 <?php
 namespace AppBundle\Common;
 
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet_Style_NumberFormat;
 
 trait ExcelReaderTrait
 {
     private function processTime($time)
     {
-        return NumberFormat::toFormattedString($time, 'hh:mm:ss');
+        return PhpSpreadsheet_Style_NumberFormat::toFormattedString($time, 'hh:mm:ss');
     }
     private function processDate($date)
     {
-        return NumberFormat::toFormattedString($date, 'yyyy-MM-dd');
+        return PhpSpreadsheet_Style_NumberFormat::toFormattedString($date, 'yyyy-MM-dd');
     }
 }
