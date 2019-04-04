@@ -1,13 +1,19 @@
 <?php
+
 namespace AppBundle\Action\Physical\Ayso;
 
+use AppBundle\Action\Services\VolCerts;
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class PhysicalAysoRepository
 {
     /** @var  Connection */
     private $conn;
+
+    /** @var VolCerts */
+    private $volCerts;
 
     /** @var  Statement */
     private $findVolStmt;
@@ -18,17 +24,24 @@ class PhysicalAysoRepository
     /** @var  Statement */
     private $findOrgStmt;
 
-    public function __construct(Connection $conn)
+    public function __construct(Connection $conn, VolCerts $volCerts)
     {
         $this->conn = $conn;
+        $this->volCerts = $volCerts;
     }
 
+    /**
+     * @param $fedKey
+     * @return mixed|null
+     * @throws DBALException
+     */
     public function findVol($fedKey)
     {
         // Transform fedKey
-        if (strlen($fedKey) === 8) {
-            $fedKey = 'AYSOV:' . $fedKey;
+        if (strlen($fedKey) === 8 OR strlen($fedKey) === 9) {
+            $fedKey = 'AYSOV:'.$fedKey;
         }
+
         if (!$this->findVolStmt) {
             $sql = <<<EOD
 SELECT fedKey,name,email,phone,gender,sar,regYear
@@ -43,18 +56,30 @@ EOD;
         if (!$vol) {
             return null;
         }
-        // TOSO just add orgKey to record
-        $sarParts = explode('/',$vol['sar']);
 
-        $vol['orgKey'] = sprintf('AYSOR:%04d',$sarParts['2']);
+        $id = explode(':',$fedKey)[1];
+        /** @var array $e3Certs */
+        $e3Certs = $this->volCerts->retrieveVolCertData($id);
+
+        // TOSO just add orgKey to record
+        $sarParts = explode('/', $e3Certs['SAR']);
+
+        $vol['orgKey'] = sprintf('AYSOR:%04d', $sarParts['2']);
 
         return $vol;
     }
-    public function findVolCert($fedKey,$role)
+
+    /**
+     * @param $fedKey
+     * @param $role
+     * @return null
+     * @throws DBALException
+     */
+    public function findVolCert($fedKey, $role)
     {
         // Transform fedKey
-        if (strlen($fedKey) === 8) {
-            $fedKey = 'AYSOV:' . $fedKey;
+        if (strlen($fedKey) === 8 OR strlen($fedKey) === 9) {
+            $fedKey = 'AYSOV:'.$fedKey;
         }
 
         if (!$this->findVolCertStmt) {
@@ -65,10 +90,28 @@ WHERE  fedKey = ? AND role = ?
 EOD;
             $this->findVolCertStmt = $this->conn->prepare($sql);
         }
-        $this->findVolCertStmt->execute([$fedKey,$role]);
+        $this->findVolCertStmt->execute([$fedKey, $role]);
 
-        return $this->findVolCertStmt->fetch() ? : null;
+        $id = explode(':',$fedKey)[1];
+
+        /** @var array $e3Certs */
+        $e3Certs = $this->volCerts->retrieveVolCertData($id);
+
+        $volCert = $this->findVolCertStmt->fetch() ?: null;
+
+        $e3Cert = isset($e3Certs['RefCertDesc']) ? explode(' ',$e3Certs['RefCertDesc'])[0] : '';
+        $e3CertDate = isset($e3Certs['RefCertDate']) ? $e3Certs['RefCertDate'] : '';
+        $volCert['badge'] = $e3Cert;
+        $volCert['badgeDate'] = $e3CertDate;
+
+        return $volCert;
     }
+
+    /**
+     * @param $orgKey
+     * @return null
+     * @throws DBALException
+     */
     public function findOrg($orgKey)
     {
         if (!$this->findOrgStmt) {
@@ -77,8 +120,11 @@ SELECT orgKey,sar,state FROM orgs WHERE orgKey = ?
 EOD;
             $this->findOrgStmt = $this->conn->prepare($sql);
         }
+
         $this->findOrgStmt->execute([$orgKey]);
 
-        return $this->findOrgStmt->fetch() ? : null;
+        $org = $this->findOrgStmt->fetch() ?: null;;
+
+        return $org;
     }
 }

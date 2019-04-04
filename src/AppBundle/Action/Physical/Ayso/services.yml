@@ -6,12 +6,14 @@ services:
     ng2019_connection:
         alias: doctrine.dbal.ng2019_connection
 
-    ayso_repository:
-        class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
-        arguments: ['@ayso_connection']
-
     vol_certs:
         class: AppBundle\Action\Services\VolCerts
+
+    ayso_repository:
+        class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
+        arguments:
+            - '@ayso_connection'
+            - '@vol_certs'
 
     ayso_load_eayso_command:
         class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
