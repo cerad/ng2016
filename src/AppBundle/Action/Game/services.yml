@@ -3,57 +3,6 @@ services:
     game_connection:
         alias: doctrine.dbal.ng2019games_connection
 
-    game_init_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\InitGames2016Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-
-    game_adjust_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\AdjustGames2016Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@schedule_finder_2016'
-            - '@game_updater'
-            - '@reg_team_import_reader_excel'
-
-    game_soccerfest_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\Soccerfest2016Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@schedule_finder_2016'
-            - '@game_updater'
-            - '@reg_team_import_reader_excel'
-
-    game_approve_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\Approve2016Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@schedule_finder_2016'
-            - '@game_updater'
-            - '@reg_team_import_reader_excel'
-
-    game_publish_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\Publish2016Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@schedule_finder_2016'
-            - '@game_updater'
-            - '@reg_team_import_reader_excel'
-
-    game_open_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\Open2016Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@schedule_finder_2016'
-            - '@game_updater'
-            - '@reg_team_import_reader_excel'
-
     game_seq_numbers_command:
          class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
          tags: [{ name: console.command }]

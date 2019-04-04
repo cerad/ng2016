@@ -13,7 +13,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app_version: '2019.04.03.00'
+    app_version: '2019.04.03.10'
 
 framework:
     #esi:             ~
@@ -30,7 +30,6 @@ framework:
     #    engines: ['php']
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: ~
     session:
         handler_id:  session.handler.native_file
 # save_path in project path causes 500 Internal Server Error - ContextErrorException: Warning: SessionHandler::read(): Session data file is not created by your uid

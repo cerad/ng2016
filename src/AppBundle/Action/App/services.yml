@@ -12,6 +12,7 @@ services:
         arguments: ['%secure_routes%']
 
     app_base_template:
+        public: true;
         class: AppBundle\Action\BaseTemplate
         calls:
             - ['setRouter',  ['@router']]
@@ -53,10 +54,12 @@ services:
 
     # action welcome
     welcome_controller:
+        public: true
         class:  AppBundle\Action\App\Welcome\WelcomeController
         parent: abstract_controller
 
     welcome_view:
+        public: true
         class:  AppBundle\Action\App\Welcome\WelcomeView
         parent: abstract_view2
         arguments:

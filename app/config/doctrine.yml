@@ -4,52 +4,52 @@ doctrine:
         default_connection: default
         connections:
             default:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name%
-                user:     %database_user%
-                password: %database_password%
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name%'
+                user:     '%database_user%'
+                password: '%database_password%'
                 charset:  UTF8
             ayso:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name_ayso%
-                user:     %database_user%
-                password: %database_password%
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name_ayso%'
+                user:     '%database_user%'
+                password: '%database_password%'
                 charset:  UTF8
                 option:
                     20: true     # PDO::ATTR_EMULATE_PREPARES
                     1000: true     # PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
                     1001: true     # PDO::MYSQL_ATTR_LOCAL_INFILE
             test:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name_test%
-                user:     %database_user%
-                password: %database_password%
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name_test%'
+                user:     '%database_user%'
+                password: '%database_password%'
                 charset:  UTF8
             ng2019:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name_ng2019%
-                user:     %database_user%
-                password: %database_password%
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name_ng2019%'
+                user:     '%database_user%'
+                password: '%database_password%'
                 charset:  UTF8
             ng2019games:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name_ng2019games%
-                user:     %database_user%
-                password: %database_password%
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name_ng2019games%'
+                user:     '%database_user%'
+                password: '%database_password%'
                 charset:  UTF8
     orm:
         default_entity_manager:       default
-        auto_generate_proxy_classes: %kernel.debug%
+        auto_generate_proxy_classes: '%kernel.debug%'
 
         entity_managers:
 
