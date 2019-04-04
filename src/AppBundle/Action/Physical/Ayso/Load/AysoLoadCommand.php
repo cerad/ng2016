@@ -1,10 +1,11 @@
 <?php
 namespace AppBundle\Action\Physical\Ayso\Load;
 
-use PhpOffice\PhpSpreadsheet_IOFactory;
-use PhpOffice\PhpSpreadsheet_Reader_Abstract;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader;
+use PhpOffice\PhpSpreadsheet\Exception;
 
-use PhpOffice\PhpSpreadsheet_Style_NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class AysoLoadCommand extends Command
 {
@@ -27,6 +29,10 @@ class AysoLoadCommand extends Command
 
         //$this->projectPersonRepository = new ProjectPersonRepository($ng2019Conn);
     }
+
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -34,6 +40,14 @@ class AysoLoadCommand extends Command
             ->setDescription('Load AYSO Cert Data')
             ->addArgument('filename', InputArgument::REQUIRED, 'AYSO Cert File');
     }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws DBALException
+     * @throws Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sql = <<<EOD
@@ -81,7 +95,7 @@ EOD;
         $filename = $input->getArgument('filename');
 
         echo sprintf("Loading AYSO File: %s...\n",$filename);
-        //$this->load($filename);
+        $this->load($filename);
         $this->processOrgs();
     }
     /** @var  Statement */
@@ -108,10 +122,16 @@ EOD;
     /** @var  Statement */
     private $checkOrgStmt;
 
+    /**
+     * @param $filename
+     * @throws DBALException
+     * @throws Reader\Exception
+     * @throws Exception
+     */
     private function load($filename)
     {
-        /** @var PhpOffice\PhpSpreadsheet_Reader_Abstract $reader */
-        $reader = PhpOffice\PhpSpreadsheet_IOFactory::createReaderForFile($filename);
+        /** @var Reader\Xlsx $reader */
+        $reader = IOFactory::createReader($filename);
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);
@@ -152,6 +172,10 @@ EOD;
         [17]=> string(8)  "AreaName"
         [18]=> string(12) "RegionNumber"
         [19]=> string(15) "Membership Year"
+     */
+    /**
+     * @param $row
+     * @throws DBALException
      */
     private function loadVol($row)
     {
@@ -271,6 +295,10 @@ EOD;
     ];
     private $badgeSorts = [];
 
+    /**
+     * @param $row
+     * @throws DBALException
+     */
     private function loadCerts($row)
     {
         $regYear = $row[19]; // "Membership Year"
@@ -283,6 +311,12 @@ EOD;
             $this->loadCert($row,trim($certDesc));
         }
     }
+
+    /**
+     * @param $row
+     * @param $certDesc
+     * @throws DBALException
+     */
     private function loadCert($row,$certDesc)
     {
         $fedKey = 'AYSOV:' . (string)$row[0]; // "AYSOID";
@@ -300,7 +334,7 @@ EOD;
         $badge = $certMeta['badge'];
 
         $badgeDate = $row[12];
-        $badgeDate = $badgeDate ? PhpSpreadsheet_Style_NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
+        $badgeDate = $badgeDate ? NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
         $roleDate  = $badgeDate;
 
         $this->checkCertStmt->execute([$fedKey,$role]);
@@ -335,6 +369,9 @@ EOD;
      * Quick and dirty mapping from sar to org key
      *
      */
+    /**
+     * @throws DBALException
+     */
     private function processOrgs()
     {
         $sql = 'SELECT DISTINCT sar FROM vols';
@@ -344,6 +381,11 @@ EOD;
             $this->processSar($sar);
         }
     }
+
+    /**
+     * @param $sar
+     * @throws DBALException
+     */
     private function processSar($sar)
     {
         if (!$sar) return;
@@ -364,6 +406,11 @@ EOD;
         }
         $this->insertOrgStmt->execute([$orgKey,$sar]);
     }
+
+    /**
+     * @param Connection $conn
+     * @throws DBALException
+     */
     protected function clearDatabase(Connection $conn)
     {
         $databaseName = $conn->getDatabase();
@@ -371,6 +418,10 @@ EOD;
         $conn->exec('CREATE DATABASE ' . $databaseName);
         $conn->exec('USE '             . $databaseName);
     }
+
+    /**
+     * @param Connection $conn
+     */
     protected function createDatabase(Connection $conn)
     {
         $cmd = sprintf("mysql -u%s -p%s %s < schema2016.sql",

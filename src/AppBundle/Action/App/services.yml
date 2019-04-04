@@ -68,6 +68,7 @@ services:
 
     # action text alerts
     text_alerts_controller:
+        public: true
         class:  AppBundle\Action\App\TextAlerts\TextAlertsController
         parent: abstract_controller
 
@@ -77,10 +78,12 @@ services:
 
     # action home
     home_controller:
+        public: true
         class:  AppBundle\Action\App\Home\HomeController
         parent: abstract_controller
 
     home_view:
+        public: true
         class:  AppBundle\Action\App\Home\HomeView
         parent: abstract_view2
         arguments:
