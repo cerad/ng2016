@@ -5,6 +5,7 @@ services:
         class: AppBundle\Action\Project\Person\ProjectPersonRepositoryV2
         arguments:
             - '@project_person_connection'
+            - '@vol_certs'
 
     # reg stands for registered
     reg_person_import_sombero_command:

@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Action\Project\Person;
 
+use AppBundle\Action\Services\VolCerts;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 
@@ -9,9 +10,13 @@ class ProjectPersonRepositoryV2
     /** @var  Connection */
     private $conn;
 
-    public function __construct(Connection $conn)
+    /** @var  VolCerts */
+    private $volCerts;
+
+    public function __construct(Connection $conn, VolCerts $volCerts)
     {
         $this->conn = $conn;
+        $this->volCerts = $volCerts;
     }
 
     /**
@@ -44,13 +49,37 @@ class ProjectPersonRepositoryV2
 
         $stmt = $this->conn->executeQuery($sql,$params);
         $personRows = [];
-        while($personRow = $stmt->fetch()) {
-
+        $fedKeys = [];
+        while ($personRow = $stmt->fetch()) {
             $personRow['plans'] = isset($personRow['plans']) ? unserialize($personRow['plans']) : null;
             $personRow['avail'] = isset($personRow['avail']) ? unserialize($personRow['avail']) : null;
             $personRow['roles'] = [];
             $personRows[$personRow['id']] = $personRow;
+            if (!empty($personRow['fedKey'])) {
+                $aysoid = explode(':', $personRow['fedKey'])[1];
+                $fedKeys[$aysoid] = $personRow['id'];
+            }
         }
+
+        //Verify MY, SAR, Certs
+        /** @var array $e3Certs */
+        $certs = $this->volCerts->retrieveVolsCertData(array_keys($fedKeys));
+        $e3Certs = array_combine(array_values($fedKeys), array_values($certs));
+        foreach ($e3Certs as $key => $cert) {
+            $ppid = $key;
+            $aysoid = $cert['AYSOID'];
+            //Update MY
+            $personRows[$ppid]['regYear'] = $e3Certs[$ppid]['MY'];
+
+            //Update SAR
+            $SAR = explode('/', $e3Certs[$ppid]['SAR']);
+            if (count($SAR) == 3) {
+                $personRows[$ppid]['orgKey'] = 'AYSOR:'.str_pad($SAR[2], 4, '0', $pad_type = STR_PAD_LEFT);
+            }
+
+            $personRows[$ppid]['verified'] = (string)true;
+        }
+
         // Merge roles
         $personIds = array_keys($personRows);
         $sql = 'SELECT * from projectPersonRoles WHERE projectPersonId IN (?)';
@@ -58,6 +87,7 @@ class ProjectPersonRepositoryV2
         while($roleRow = $stmt->fetch()) {
             $personRows[$roleRow['projectPersonId']]['roles'][$roleRow['role']] = $roleRow;
         }
+
         // Make objects
         $persons = [];
         foreach($personRows as $personRow)
