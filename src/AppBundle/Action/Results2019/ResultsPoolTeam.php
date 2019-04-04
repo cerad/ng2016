@@ -1,5 +1,7 @@
 <?php
 namespace AppBundle\Action\Results2019;
+use InvalidArgumentException;
+
 /**
  * @property-read double winPercent
  * @property-read string winPercentView
@@ -99,7 +101,7 @@ class ResultsPoolTeam
                 return ($this->pointsScored * 1.0) / ($this->gamesPlayed * 1.0);
             
         }
-        throw new \InvalidArgumentException('ResultsPoolTeam::__get ' . $name);
+        throw new InvalidArgumentException('ResultsPoolTeam::__get ' . $name);
     }
 
     /**

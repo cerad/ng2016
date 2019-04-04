@@ -382,7 +382,8 @@ EOD;
 EOD;
         }
         $html .= <<<EOD
-    <div class="form-group">
+    <!--suppress ALL -->
+<div class="form-group">
       <label class="col-xs-3 control-label" for="userBackground">FL BkGrnd Check:</label>
       {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->backgroundChecked)),'userBackground','userBackground','col-xs-4 form-control'.$classBgCk)}
     </div>

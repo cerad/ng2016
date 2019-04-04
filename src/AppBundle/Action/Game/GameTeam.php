@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\Game;
 
+use InvalidArgumentException;
+
 class GameTeam
 {
     public $gameTeamId;
@@ -51,7 +53,7 @@ class GameTeam
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('GameTeam::__get ' . $name);
+        throw new InvalidArgumentException('GameTeam::__get ' . $name);
     }
 
     /**

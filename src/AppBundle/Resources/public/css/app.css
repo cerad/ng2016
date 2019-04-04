@@ -139,7 +139,7 @@ line-height:2em;
 vertical-align:middle;
 }
 
-.tbl-title th
+.tbl-title th,
 .row-hdr {
 background:#B90101;
 height:2em;

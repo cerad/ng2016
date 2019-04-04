@@ -3,6 +3,9 @@
 namespace AppBundle\Action\Game\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Reader;
 
 class GameImportReaderExcel
 {
@@ -10,6 +13,10 @@ class GameImportReaderExcel
 
     private $games = [];
 
+    /**
+     * @param $row
+     * @return void|null
+     */
     protected function processRow($row)
     {
         $colProjectId       = 0;
@@ -52,10 +59,17 @@ class GameImportReaderExcel
         ];
         $this->games[] = $game;
     }
+
+    /**
+     * @param $filename
+     * @return array
+     * @throws Exception
+     * @throws Reader\Exception
+     */
     public function read($filename)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

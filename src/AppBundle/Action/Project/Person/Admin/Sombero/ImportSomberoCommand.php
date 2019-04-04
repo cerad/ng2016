@@ -6,6 +6,8 @@ use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 use AppBundle\Action\User\UserManager;
 use AppBundle\Common\GuidGeneratorTrait;
+use PHPExcel_IOFactory;
+use PHPExcel_Reader_Abstract;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,8 +58,8 @@ class ImportSomberoCommand extends Command
     }
     private function import($filename)
     {
-        /** @var \PHPExcel_Reader_Abstract $reader */
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        /** @var PHPExcel_Reader_Abstract $reader */
+        $reader = PHPExcel_IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);

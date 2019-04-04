@@ -4,6 +4,9 @@ namespace AppBundle\Action\RegTeam\Import;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Reader;
 
 class RegTeamImportReaderExcel
 {
@@ -13,6 +16,10 @@ class RegTeamImportReaderExcel
 
     private $regionFinder;
 
+    /**
+     * RegTeamImportReaderExcel constructor.
+     * @param PhysicalAysoRepository $regionFinder
+     */
     public function __construct(
         PhysicalAysoRepository $regionFinder
     )
@@ -20,6 +27,9 @@ class RegTeamImportReaderExcel
         $this->regionFinder = $regionFinder;
     }
 
+    /**
+     * @param $row
+     */
     private function processRow($row)
     {
         $colProjectId    = 0;
@@ -87,10 +97,18 @@ class RegTeamImportReaderExcel
         ];
         $this->regTeams[] = $regTeam;
     }
+
+    /**
+     * @param $filename
+     * @param $sheet
+     * @return array
+     * @throws Exception
+     * @throws Reader\Exception
+     */
     public function read($filename,$sheet)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

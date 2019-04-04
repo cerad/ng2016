@@ -78,6 +78,7 @@ class AdminListingSearchForm extends AbstractForm
 
         $html = <<<EOD
 {$this->renderFormErrors()}
+<!--suppress ALL -->
 <form role="form" class="form-inline" action="{$this->generateUrl('project_person_admin_listing')}" method="post">
 <div class="col-xs-12">
   <div class="form-group">

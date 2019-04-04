@@ -4,6 +4,7 @@ namespace AppBundle\Action\User;
 use AppBundle\Action\Project\User\ProjectUserRepository;
 use AppBundle\Common\GuidGeneratorTrait;
 use Doctrine\DBAL\Connection;
+use Exception;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 class UserManager
@@ -51,7 +52,7 @@ class UserManager
     {
         // Validate email
         if (!$this->repository->isEmailUnique($email)) {
-            throw new \Exception('UserManager::createUser email already exists ' . $email);
+            throw new Exception('UserManager::createUser email already exists ' . $email);
         }
         // Build a username if needed
         if ($username) {

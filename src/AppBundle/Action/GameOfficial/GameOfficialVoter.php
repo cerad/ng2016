@@ -10,6 +10,7 @@ use AppBundle\Action\Project\User\ProjectUser as User;
 
 use Doctrine\DBAL\Connection;
 
+use LogicException;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
@@ -60,7 +61,7 @@ class GameOfficialVoter extends Voter
                 return $this->canEdit($subject, $token, $user);
         }
 
-        throw new \LogicException('This code should not be reached!');
+        throw new LogicException('This code should not be reached!');
     }
     // Determine if they can link or not
     private function canView($gameOfficial, TokenInterface $token, User $user)

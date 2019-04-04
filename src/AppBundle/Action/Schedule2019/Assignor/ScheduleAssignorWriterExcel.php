@@ -7,10 +7,17 @@ use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\ShirtSizeTransformer;
 use AppBundle\Action\Schedule2019\ScheduleGame;
 use AppBundle\Action\Schedule2019\ScheduleGameOfficial;
+use PhpOffice\PhpSpreadsheet\Cell;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ScheduleAssignorWriterExcel
 {
-    private $wb;
+    private $ws;
 
     private $colGameNumber     = 'A';
     private $colDate           = 'B';
@@ -51,16 +58,15 @@ class ScheduleAssignorWriterExcel
     /**
      * @param  ScheduleGame[] $games
      * @return string
-     * @throws \PHPExcel_Exception
+     * @throws Exception
      */
     public function write(array $games)
     {
         // Not sure this is needed
-        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
+        Cell\Cell::setValueBinder(new Cell\AdvancedValueBinder());
 
-        $this->wb = $wb = new \PHPExcel();
-
-        $ws = $wb->getSheet();
+        $this->ws = new Spreadsheet();
+        $ws = $this->ws->getActiveSheet();
 
         $this->writeGames($ws, $games);
         
@@ -69,19 +75,20 @@ class ScheduleAssignorWriterExcel
     }
 
     /**
-     * @param \PHPExcel_Worksheet $ws
+     * @param Worksheet $ws
      * @param ScheduleGame[] $games
-     * @throws \PHPExcel_Exception
+     * @throws Exception
      */
-    private function writeGames(\PHPExcel_Worksheet $ws,$games)
+    private function writeGames(Worksheet $ws,$games)
     {
+
         $ws->setTitle('Schedule');
 
         // Alignments
-        $ws->getStyle($this->colGameNumber)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($this->colDate      )->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($this->colTime . '1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($this->colAge       )->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($this->colGameNumber)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($this->colDate      )->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($this->colTime . '1')->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($this->colAge       )->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
 
         // Titles
         $ws->getCell($this->colGameNumber     . '1')->setValue('Game');
@@ -143,23 +150,31 @@ class ScheduleAssignorWriterExcel
             $row++;
        }
     }
-    private function writeGame(\PHPExcel_Worksheet $ws, $row, ScheduleGame $game, ScheduleGameOfficial $gameOfficial)
+
+    /**
+     * @param Worksheet $ws
+     * @param $row
+     * @param ScheduleGame $game
+     * @param ScheduleGameOfficial $gameOfficial
+     * @throws Exception
+     */
+    private function writeGame(Worksheet $ws, $row, ScheduleGame $game, ScheduleGameOfficial $gameOfficial)
     {
         $homeTeam = $game->homeTeam;
         $awayTeam = $game->awayTeam;
 
-        $ws->getCell($this->colGameNumber . $row)->setValueExplicit($game->gameNumber);
+        $ws->getCell($this->colGameNumber . $row)->setValueExplicit($game->gameNumber, Cell\DataType::TYPE_NUMERIC);
 
         // Copied from advanced binder
         $startDate = substr($game->start,0,10);
-        $startDateValue = \PHPExcel_Shared_Date::stringToExcel($startDate);
-        $ws->getCell($this->colDate . $row)->setValueExplicit($startDateValue, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $startDateValue = Date::stringToExcel($startDate);
+        $ws->getCell($this->colDate . $row)->setValueExplicit($startDateValue, Cell\DataType::TYPE_NUMERIC);
 
         // No built in conversion for time
         $startTime = substr($game->start,10);
         list($h, $m, $s) = explode(':', $startTime);
         $startTimeValue = $h / 24 + $m / 1440 + $s / 86400;
-        $ws->getCell($this->colTime . $row)->setValueExplicit($startTimeValue, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $ws->getCell($this->colTime . $row)->setValueExplicit($startTimeValue, Cell\DataType::TYPE_NUMERIC);
 
         $ws->getCell($this->colFieldName      . $row)->setValue($game->fieldName);
         $ws->getCell($this->colHomeTeamPoolId . $row)->setValue($homeTeam->poolTeamView);
@@ -188,17 +203,30 @@ class ScheduleAssignorWriterExcel
         $ws->getCell($this->colPhone    . $row)->setValue($this->phoneTransformer->transform($details['phone']));
         $ws->getCell($this->colEmail    . $row)->setValue($details['email']);
     }
+
+    /**
+     * @return false|string
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     private function getContents()
     {
-        $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
+        $writer = IOFactory::createWriter($this->ws, "Xlsx");
         ob_start();
         $writer->save('php://output');
         return ob_get_clean();
     }
+
+    /**
+     * @return string
+     */
     public function getFileExtension()
     {
         return 'xlsx';
     }
+
+    /**
+     * @return string
+     */
     public function getContentType()
     {
         return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

@@ -30,6 +30,8 @@ class AdminListingView extends AbstractView2
     
     private $adminViewFilters;
 
+    private $certURL;
+
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
         ProjectUserRepository      $projectUserRepository,
@@ -43,6 +45,8 @@ class AdminListingView extends AbstractView2
         $this->projectPersonRepository      = $projectPersonRepository;
         $this->projectPersonViewDecorator   = $projectPersonViewDecorator;
         $this->adminViewFilters             = $adminViewFilters;
+
+        $this->certURL = "https://national.ayso.org/Volunteers/ViewCertification?UserName=";
     }
     public function __invoke(Request $request)
     {
@@ -186,7 +190,7 @@ EOD;
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
         $regYearProject = $this->getCurrentProjectInfo()['regYear'];
-
+        $aysoId = is_null($personView->fedId) ? '' : "<a href='$this->certURL$personView->fedId' target='_blank'>$personView->fedId</a>";
         return <<<EOD
 <table>
   <tr>
@@ -199,7 +203,7 @@ EOD;
   </tr><tr>
   <tr>
     <td>AYSO ID</td>
-    <td>{$personView->fedId}</td>
+    <td>{$aysoId}</td>
   </tr><tr>
     <td>S/A/R/St</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
@@ -220,9 +224,9 @@ EOD;
 
         return <<<EOD
 <table>
-  <tr><td>Will  Referee  </td><td>{$personView->willReferee}  </td></tr>
-  <tr><td>Will  Volunteer</td><td>{$personView->willVolunteer}</td></tr>
-  <tr><td>Will  Coach    </td><td>{$personView->willCoach}    </td></tr>
+  <tr><td>Will Referee  </td><td>{$personView->willReferee}  </td></tr>
+  <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}</td></tr>
+  <tr><td>Will Coach    </td><td>{$personView->willCoach}    </td></tr>
   <tr><td colspan="2" style="max-width: 150px; ">{$notesUser}</td></tr>
 </table>
 EOD;

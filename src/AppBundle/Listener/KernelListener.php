@@ -2,6 +2,7 @@
 namespace AppBundle\Listener;
 
 
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -166,7 +167,7 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
 
         $event->setResponse($response);
     }
-    private function logException(\Exception $exception, $message)
+    private function logException(Exception $exception, $message)
     {
         $logger = $this->container->get('logger');
 

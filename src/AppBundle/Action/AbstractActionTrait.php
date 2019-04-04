@@ -2,6 +2,8 @@
 namespace AppBundle\Action;
 
 // Better name
+use LogicException;
+use Swift_Mailer;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -62,7 +64,7 @@ trait AbstractActionTrait
     /** ================================================================
      * This is good because mailer is a heavy object and only want to create when needed
      * 
-     * @return \Swift_Mailer 
+     * @return Swift_Mailer
      */
     protected function getMailer() 
     {
@@ -77,14 +79,14 @@ trait AbstractActionTrait
      *
      * @return mixed
      *
-     * @throws \LogicException If SecurityBundle is not available
+     * @throws LogicException If SecurityBundle is not available
      *
      * @see TokenInterface::getUser()
      */
     protected function getUser()
     {
         if (!$this->container->has('security.token_storage')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
+            throw new LogicException('The SecurityBundle is not registered in your application.');
         }
         /** @var TokenStorageInterface $tokenStorage */
         $tokenStorage = $this->container->get('security.token_storage');
@@ -116,12 +118,12 @@ trait AbstractActionTrait
      *
      * @return bool
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function isGranted($attributes, $object = null)
     {
         if (!$this->container->has('security.authorization_checker')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
+            throw new LogicException('The SecurityBundle is not registered in your application.');
         }
 
         return $this->container->get('security.authorization_checker')->isGranted($attributes, $object);

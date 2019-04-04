@@ -3,6 +3,9 @@
 namespace AppBundle\Action\PoolTeam\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Reader;
 
 class PoolTeamImportReaderExcel
 {
@@ -10,6 +13,10 @@ class PoolTeamImportReaderExcel
 
     private $poolTeams = [];
 
+    /**
+     * @param $row1
+     * @param $row2
+     */
     protected function processRow($row1,$row2)
     {
         $colProjectId     =  0;
@@ -64,10 +71,17 @@ class PoolTeamImportReaderExcel
         ];
         $this->poolTeams[] = $poolTeam;
     }
+
+    /**
+     * @param $filename
+     * @return array
+     * @throws Exception
+     * @throws Reader\Exception
+     */
     public function read($filename)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

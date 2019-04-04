@@ -1,7 +1,10 @@
 <?php
 namespace AppBundle\Common;
 
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Yaml\Yaml;
 
 trait DatabaseTrait
@@ -11,7 +14,7 @@ trait DatabaseTrait
     /**
      * @param  string $databaseNameKey
      * @return Connection
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function getConnection($databaseNameKey)
     {
@@ -32,7 +35,7 @@ trait DatabaseTrait
 
         /** @noinspection PhpInternalEntityUsedInspection */
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $config = new \Doctrine\DBAL\Configuration();
+        $config = new Configuration();
 
         $connectionParams = array(
             'dbname'   => $params[$databaseNameKey],
@@ -43,7 +46,7 @@ trait DatabaseTrait
             'driver'   => $params['database_driver'],
         );
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $this->conns[$databaseNameKey] = $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        $this->conns[$databaseNameKey] = $conn = DriverManager::getConnection($connectionParams, $config);
         
         return $conn;
     }

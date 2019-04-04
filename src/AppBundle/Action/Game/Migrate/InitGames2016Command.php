@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\Game\Migrate;
 
+use DateInterval;
+use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -534,9 +536,9 @@ class InitGames2016Command extends Command
             }
         }
         // Add playing time to game entity?
-        $finishDateTime = new \DateTime($start);
+        $finishDateTime = new DateTime($start);
         $interval = sprintf('PT%dM',$lengths[$age]);
-        $finishDateTime->add(new \DateInterval($interval));
+        $finishDateTime->add(new DateInterval($interval));
 
         $gameId = $projectId . ':' . $gameNumber;
         $game = [

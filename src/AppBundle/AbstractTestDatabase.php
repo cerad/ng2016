@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle;
 
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Yaml\Yaml;
 
 use Doctrine\DBAL\Connection;
@@ -22,7 +24,7 @@ abstract class AbstractTestDatabase extends PHPUnit_Framework_TestCase
 
         /** @noinspection PhpInternalEntityUsedInspection */
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $config = new \Doctrine\DBAL\Configuration();
+        $config = new Configuration();
 
         $connectionParams = array(
             'dbname'   => $params[$this->databaseNameKey],
@@ -33,7 +35,7 @@ abstract class AbstractTestDatabase extends PHPUnit_Framework_TestCase
             'driver'   => $params['database_driver'],
         );
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $this->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        $this->conn = DriverManager::getConnection($connectionParams, $config);
     }
     protected function dropDatabase(Connection $conn)
     {

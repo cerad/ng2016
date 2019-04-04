@@ -4,6 +4,8 @@ namespace AppBundle\Action\Game\Migrate;
 use AppBundle\Common\DatabaseTrait;
 
 use AppBundle\Common\DirectoryTrait;
+use DateInterval;
+use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -283,11 +285,11 @@ EOD;
             'U16' => 60 + 10,
             'U19' => 60 + 10,
         ];
-        $finishDateTime = new \DateTime($start);
+        $finishDateTime = new DateTime($start);
 
         $interval = sprintf('PT%dM',$gameLengths[$age]);
 
-        $finishDateTime->add(new \DateInterval($interval));
+        $finishDateTime->add(new DateInterval($interval));
 
         $finish = $finishDateTime->format('Y-m-d H:i:s');
 

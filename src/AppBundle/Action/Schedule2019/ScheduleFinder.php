@@ -4,6 +4,7 @@ namespace AppBundle\Action\Schedule2019;
 use AppBundle\Action\RegPerson\RegPersonFinder;
 use AppBundle\Common\QueryBuilderTrait;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class ScheduleFinder
 {
@@ -327,7 +328,7 @@ EOD;
      * @param  array $criteria
      * @param  bool  $objects
      * @return ScheduleRegTeam[]|array
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findRegTeams(array $criteria, $objects = true)
     {

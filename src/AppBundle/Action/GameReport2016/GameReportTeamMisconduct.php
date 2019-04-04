@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\GameReport2016;
 
+use InvalidArgumentException;
+
 /**
  */
 class GameReportTeamMisconduct
@@ -33,7 +35,7 @@ class GameReportTeamMisconduct
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('GameReportTeamMisconduct::__get ' . $name);
+        throw new InvalidArgumentException('GameReportTeamMisconduct::__get ' . $name);
     }
     public function toUpdateArray()
     {

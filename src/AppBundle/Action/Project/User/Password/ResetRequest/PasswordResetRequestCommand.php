@@ -3,6 +3,9 @@ namespace AppBundle\Action\Project\User\Password\ResetRequest;
 
 use AppBundle\Action\Project\User\ProjectUserRepository;
 
+use Swift_Mailer;
+use Swift_MemorySpool;
+use Swift_Transport_SpoolTransport;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PasswordResetRequestCommand extends Command
 {
-    /** @var \Swift_Mailer */
+    /** @var Swift_Mailer */
     private $mailer;
     //private $transportReal;
 
@@ -19,7 +22,7 @@ class PasswordResetRequestCommand extends Command
     private $projectUserRepository;
 
     public function __construct(
-        \Swift_Mailer    $mailer,
+        Swift_Mailer    $mailer,
         //\Swift_Transport $transport, // Does not work in production with no spool set
         ProjectUserRepository $projectUserRepository)
     {
@@ -74,12 +77,12 @@ class PasswordResetRequestCommand extends Command
         $status = $mailer->send($message);
 
         $transport = $mailer->getTransport();
-        if (!$transport instanceof \Swift_Transport_SpoolTransport) {
+        if (!$transport instanceof Swift_Transport_SpoolTransport) {
             echo sprintf("Not a spool transport\n");
             return;
         }
         $spool = $transport->getSpool();
-        if (!$spool instanceof \Swift_MemorySpool) {
+        if (!$spool instanceof Swift_MemorySpool) {
             echo sprintf("Not a spool memory\n");
             return;
         }

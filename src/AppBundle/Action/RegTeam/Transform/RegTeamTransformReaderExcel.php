@@ -4,6 +4,8 @@ namespace AppBundle\Action\RegTeam\Transform;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader;
 
 class RegTeamTransformReaderExcel
 {
@@ -13,12 +15,21 @@ class RegTeamTransformReaderExcel
 
     private $regionFinder;
 
+    /**
+     * RegTeamTransformReaderExcel constructor.
+     * @param PhysicalAysoRepository $regionFinder
+     */
     public function __construct(
         PhysicalAysoRepository $regionFinder
     )
     {
         $this->regionFinder = $regionFinder;
     }
+
+    /**
+     * @param $row
+     * @param $div
+     */
     protected function processRow($row,$div)
     {
         $colTeamNumber     =  9; // J
@@ -60,10 +71,17 @@ class RegTeamTransformReaderExcel
         ];
         $this->regTeams[] = $regTeam;
     }
+
+    /**
+     * @param $filename
+     * @param $sheet
+     * @return array
+     * @throws Reader\Exception
+     */
     public function read($filename,$sheet)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

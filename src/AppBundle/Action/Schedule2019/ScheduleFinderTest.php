@@ -4,6 +4,8 @@ namespace AppBundle\Action\Schedule2019;
 use AppBundle\Common\DatabaseTrait;
 use AppBundle\Common\DirectoryTrait;
 
+use DateInterval;
+use DateTime;
 use Doctrine\DBAL\Connection;
 
 use AppBundle\Action\RegPerson\RegPersonFinder;
@@ -194,9 +196,9 @@ class ScheduleFinderTest extends PHPUnit_Framework_TestCase
             'U19' => 60 + 10,
         ];
         // Add playing time to game entity?
-        $finishDateTime = new \DateTime($start);
+        $finishDateTime = new DateTime($start);
         $interval = sprintf('PT%dM',$lengths[$age]);
-        $finishDateTime->add(new \DateInterval($interval));
+        $finishDateTime->add(new DateInterval($interval));
 
         $gameId = $projectId . ':' . $gameNumber;
         $game = [

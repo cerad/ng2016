@@ -3,9 +3,11 @@ namespace AppBundle\Action\Project\User;
 
 use AppBundle\Common\ArrayAccessTrait;
 
+use ArrayAccess;
+use Serializable;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
-class ProjectUser implements AdvancedUserInterface, \ArrayAccess, \Serializable
+class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
 {
     use ArrayAccessTrait;
 

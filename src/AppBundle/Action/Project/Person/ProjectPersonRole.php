@@ -2,8 +2,10 @@
 namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Common\ArrayableInterface;
+use ArrayAccess;
+use InvalidArgumentException;
 
-class ProjectPersonRole implements ArrayableInterface,\ArrayAccess
+class ProjectPersonRole implements ArrayableInterface, ArrayAccess
 {
     private /** @noinspection PhpUnusedPrivateFieldInspection */ $id;
     private /** @noinspection PhpUnusedPrivateFieldInspection */ $projectPersonId;
@@ -97,7 +99,7 @@ class ProjectPersonRole implements ArrayableInterface,\ArrayAccess
     // ArrayAccess Interface
     public function offsetSet($offset, $value) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::set ' . $offset);
+            throw new InvalidArgumentException(get_class($this) . '::set ' . $offset);
         }
         // Be fun to make this immutable
         $this->$offset = $value;
@@ -106,19 +108,19 @@ class ProjectPersonRole implements ArrayableInterface,\ArrayAccess
     }
     public function offsetGet($offset) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::get ' . $offset);
+            throw new InvalidArgumentException(get_class($this) . '::get ' . $offset);
         }
         return $this->$offset;
     }
     public function offsetExists($offset) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::exists ' . $offset);
+            throw new InvalidArgumentException(get_class($this) . '::exists ' . $offset);
         }
         return isset($this->$offset);
     }
     public function offsetUnset($offset) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException(get_class($this) . '::unset ' . $offset);
+            throw new InvalidArgumentException(get_class($this) . '::unset ' . $offset);
         }
         $this->$offset = null;
         

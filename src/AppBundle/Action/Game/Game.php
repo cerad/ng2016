@@ -1,6 +1,9 @@
 <?php
 namespace AppBundle\Action\Game;
 
+use DateTime;
+use InvalidArgumentException;
+
 /**
  * @property-read GameTeam homeTeam
  * @property-read GameTeam awayTeam
@@ -73,11 +76,11 @@ class Game
             case 'ar2':       return $this->officials[3];
 
             case 'dow':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('D') : '???';
             
             case 'time':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('g:i A') : '???';
             
             case 'poolView':
@@ -89,7 +92,7 @@ class Game
                 }
                 return sprintf('%s<hr class="separator">%s',$homePoolView,$awayPoolView);
         }
-        throw new \InvalidArgumentException('Game::__get ' . $name);
+        throw new InvalidArgumentException('Game::__get ' . $name);
     }
     
     /** 

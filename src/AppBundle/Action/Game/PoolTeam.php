@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\Game;
 
+use InvalidArgumentException;
+
 class PoolTeam
 {
     public $poolTeamId;
@@ -67,7 +69,7 @@ class PoolTeam
                 return $this->regTeamPoints;
                 break;
         }
-        throw new \InvalidArgumentException('PoolTeam::__get ' . $name);
+        throw new InvalidArgumentException('PoolTeam::__get ' . $name);
     }
 
     /**

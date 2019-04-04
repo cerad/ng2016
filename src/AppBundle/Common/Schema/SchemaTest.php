@@ -5,6 +5,8 @@ namespace AppBundle\Common\Schema;
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 use AppBundle\Action\Project\User\ProjectUser;
 use AppBundle\Action\Project\User\ProjectUserProvider;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Yaml\Yaml;
 
 use Doctrine\DBAL\Connection;
@@ -31,7 +33,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
 
         /** @noinspection PhpInternalEntityUsedInspection */
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $config = new \Doctrine\DBAL\Configuration();
+        $config = new Configuration();
 
         $connectionParams = array(
             'dbname'   => $params['database_name_test'],
@@ -41,7 +43,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
             'driver'   => $params['database_driver'],
         );
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        $this->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        $this->conn = DriverManager::getConnection($connectionParams, $config);
 
     }
     private function clearDatabase(Connection $conn)

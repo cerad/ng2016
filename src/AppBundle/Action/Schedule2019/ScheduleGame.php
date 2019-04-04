@@ -1,6 +1,9 @@
 <?php
 namespace AppBundle\Action\Schedule2019;
 
+use DateTime;
+use InvalidArgumentException;
+
 /**
  * @property-read ScheduleGameTeam homeTeam
  * @property-read ScheduleGameTeam awayTeam
@@ -64,11 +67,11 @@ class ScheduleGame
             case 'ar2':       return $this->officials[3];
 
             case 'dow':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('D') : '???';
             
             case 'time':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('g:i A') : '???';
             
             case 'poolView':
@@ -80,7 +83,7 @@ class ScheduleGame
                 }
                 return sprintf('%s<hr class="separator">%s',$homePoolView,$awayPoolView);
         }
-        throw new \InvalidArgumentException('ScheduleGame::__get ' . $name);
+        throw new InvalidArgumentException('ScheduleGame::__get ' . $name);
     }
     
     /** 

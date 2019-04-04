@@ -2,8 +2,9 @@
 namespace AppBundle\Action\Physical\Person\PersonDataTransformer;
 
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
+use PHPUnit_Framework_TestCase;
 
-class PersonDataTransformerTest extends \PHPUnit_Framework_TestCase
+class PersonDataTransformerTest extends PHPUnit_Framework_TestCase
 {
     public function testPhoneTransformer()
     {

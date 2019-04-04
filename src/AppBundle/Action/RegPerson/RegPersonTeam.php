@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\RegPerson;
 
+use InvalidArgumentException;
+
 class RegPersonTeam
 {
     public $role = 'Family'; // Not used
@@ -22,7 +24,7 @@ class RegPersonTeam
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('RegPersonTeam::__get ' . $name);
+        throw new InvalidArgumentException('RegPersonTeam::__get ' . $name);
     }
 
     /**

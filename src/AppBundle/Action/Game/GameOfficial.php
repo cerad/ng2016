@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\Game;
 
+use InvalidArgumentException;
+
 /**
  *  property-read string $gameNumber
  */
@@ -45,7 +47,7 @@ class GameOfficial
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('GameOfficial::__get ' . $name);
+        throw new InvalidArgumentException('GameOfficial::__get ' . $name);
     }
 
     /**

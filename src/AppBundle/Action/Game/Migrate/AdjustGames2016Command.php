@@ -7,6 +7,8 @@ use AppBundle\Action\Schedule2019\ScheduleFinder;
 use AppBundle\Action\Schedule2019\ScheduleGame;
 use AppBundle\Action\Schedule2019\ScheduleGameTeam;
 
+use DateInterval;
+use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,9 +72,9 @@ class AdjustGames2016Command extends Command
         $stmt = $this->gameConn->executeQuery($sql,[$projectId,'2016-07-06']);
         while($row = $stmt->fetch()) {
 
-            $finishDateTime = new \DateTime($row['start']);
+            $finishDateTime = new DateTime($row['start']);
             $interval = sprintf('PT%dM',50);
-            $finishDateTime->add(new \DateInterval($interval));
+            $finishDateTime->add(new DateInterval($interval));
             $finish =  $finishDateTime->format('Y-m-d H:i:s');
 
             $this->gameConn->update('games',[
@@ -103,11 +105,11 @@ class AdjustGames2016Command extends Command
         $stmt = $this->gameConn->executeQuery($sql,[$projectId,$dt1]);
         while($row = $stmt->fetch()) {
 
-            $start1  = new \DateTime($row['start']);
-            $finish1 = new \DateTime($row['finish']);
+            $start1  = new DateTime($row['start']);
+            $finish1 = new DateTime($row['finish']);
             $interval = $start1->diff($finish1);
 
-            $finish2 = new \DateTime($dt2);
+            $finish2 = new DateTime($dt2);
             $finish2->add($interval);
             $dt2x = $finish2->format('Y-m-d H:i:s');
 

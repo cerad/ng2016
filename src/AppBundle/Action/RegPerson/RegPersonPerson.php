@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\RegPerson;
 
+use InvalidArgumentException;
+
 class RegPersonPerson
 {
     public $regPersonPersonId;
@@ -27,7 +29,7 @@ class RegPersonPerson
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('RegPersonPerson::__get ' . $name);
+        throw new InvalidArgumentException('RegPersonPerson::__get ' . $name);
     }
 
     /**

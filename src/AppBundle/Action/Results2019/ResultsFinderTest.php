@@ -2,8 +2,9 @@
 namespace AppBundle\Action\Results2019;
 
 use AppBundle\Common\DatabaseTrait;
+use PHPUnit_Framework_TestCase;
 
-class ResultsFinderTest extends \PHPUnit_Framework_TestCase
+class ResultsFinderTest extends PHPUnit_Framework_TestCase
 {
     use DatabaseTrait;
     

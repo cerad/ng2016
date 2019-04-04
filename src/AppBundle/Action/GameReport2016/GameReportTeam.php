@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\GameReport2016;
 
+use InvalidArgumentException;
+
 /**
  * @property-read string $projectId
  * @property-read string $gameNumber
@@ -98,7 +100,7 @@ class GameReportTeam
         switch($name) {
             case 'resultsView': return $this->resultsDetail;
         }
-        throw new \InvalidArgumentException('GameReportTeam::__get ' . $name);
+        throw new InvalidArgumentException('GameReportTeam::__get ' . $name);
     }
 
     public function toUpdateArray()

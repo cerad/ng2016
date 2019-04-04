@@ -31,7 +31,7 @@ class RegTeamUpdater
         // Need the name for performance
         $sql = 'SELECT regTeamId,projectId,teamKey,teamNumber,teamName,teamPoints,orgId,orgView,program,gender,age,division FROM regTeams WHERE teamKey = ?';
 
-        $stmt = $this->regTeamConn->executeQuery($sql,[$regTeamId]);
+        $stmt = $this->regTeamConn->executeQuery($sql,[$teamKey]);
         $row = $stmt->fetch();
         if (!$row) return 0; // Should not happen
         

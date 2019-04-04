@@ -4,6 +4,7 @@ namespace AppBundle\Action\Results2019;
 use AppBundle\Common\QueryBuilderTrait;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class ResultsFinder
 {
@@ -30,7 +31,7 @@ class ResultsFinder
      * 
      * @param  $criteria array
      * @return ResultsPool[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findPools($criteria)
     {
@@ -91,7 +92,7 @@ class ResultsFinder
     /**
      * @param  array $poolTeamIds
      * @return ResultsGame[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     private function findGames(array $poolTeamIds)
     {

@@ -2,24 +2,35 @@
 namespace AppBundle\Action\Game\Export;
 
 use AppBundle\Action\Schedule2019\ScheduleGame;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell;
+use PhpOffice\PhpSpreadsheet\Style;
+use PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class GameExportWriterExcel
 {
-    private $wb;
+    /** @var PhpSpreadsheet\Spreadsheet */
+    private $ws;
 
     /**
-     * @param  ScheduleGame[] $games
-     * @return string
-     * @throws \PHPExcel_Exception
+     * @param array $games
+     * @return false|string
+     * @throws PhpSpreadsheet\Exception
+     * @throws PhpSpreadsheet\Writer\Exception
      */
     public function write(array $games)
     {
+
         // Not sure this is needed
-        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
+        Cell\Cell::setValueBinder(new AdvancedValueBinder());
 
-        $this->wb = $wb = new \PHPExcel();
+        $this->ws = $ws = new Spreadsheet();
 
-        $ws = $wb->getSheet();
+        /** @var PhpSpreadsheet\Worksheet\Worksheet */
+        $ws = $ws->getSheet(0);
 
         $this->writeGames($ws, $games);
         
@@ -28,11 +39,11 @@ class GameExportWriterExcel
     }
 
     /**
-     * @param \PHPExcel_Worksheet $ws
+     * @param Worksheet $ws
      * @param ScheduleGame[] $games
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
-    private function writeGames(\PHPExcel_Worksheet $ws,$games)
+    private function writeGames(Worksheet $ws,$games)
     {
         $ws->setTitle('Schedule');
 
@@ -47,9 +58,9 @@ class GameExportWriterExcel
         $colAwayTeamPoolId = 'I';
 
         // Column alignment needs to go first?
-        $ws->getStyle($colGameNumber)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($colDate)      ->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $ws->getStyle($colTime . '1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($colGameNumber)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($colDate)      ->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($colTime . '1')->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
 
         // Not really sure about this ABC stuff but try for now
         $ws->getCell($colProjectId      . '1')->setValue('Project ID');
@@ -90,18 +101,18 @@ class GameExportWriterExcel
             $awayTeam = $game->awayTeam;
 
             $ws->getCell($colProjectId  . $row)->setValue($game->projectId);
-            $ws->getCell($colGameNumber . $row)->setValueExplicit($game->gameNumber);
+            $ws->getCell($colGameNumber . $row)->setValue($game->gameNumber);
 
             // Copied from advanced binder
             $startDate = substr($game->start,0,10);
-            $startDateValue = \PHPExcel_Shared_Date::stringToExcel($startDate);
-            $ws->getCell($colDate . $row)->setValueExplicit($startDateValue, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $startDateValue = PhpSpreadsheet\Shared\Date::stringToExcel($startDate);
+            $ws->getCell($colDate . $row)->setValueExplicit($startDateValue, Cell\DataType::TYPE_NUMERIC);
 
             // No built in conversion for time
             $startTime = substr($game->start,10);
             list($h, $m, $s) = explode(':', $startTime);
             $startTimeValue = $h / 24 + $m / 1440 + $s / 86400;
-            $ws->getCell($colTime . $row)->setValueExplicit($startTimeValue, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $ws->getCell($colTime . $row)->setValueExplicit($startTimeValue, Cell\DataType::TYPE_NUMERIC);
             
             $ws->getCell($colFieldName      . $row)->setValue($game->fieldName);
             $ws->getCell($colHomeTeamPoolId . $row)->setValue($homeTeam->poolTeamKey);
@@ -112,17 +123,30 @@ class GameExportWriterExcel
             $row++;
         }
     }
+
+    /**
+     * @return false|string
+     * @throws PhpSpreadsheet\Writer\Exception
+     */
     private function getContents()
     {
-        $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
+        $writer = IOFactory::createWriter($this->ws, "Xlsx");
         ob_start();
         $writer->save('php://output');
         return ob_get_clean();
     }
+
+    /**
+     * @return string
+     */
     public function getFileExtension()
     {
         return 'xlsx';
     }
+
+    /**
+     * @return string
+     */
     public function getContentType()
     {
         return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

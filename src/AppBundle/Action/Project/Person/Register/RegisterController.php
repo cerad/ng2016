@@ -7,6 +7,7 @@ use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
+use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterController extends AbstractController2
@@ -289,7 +290,7 @@ class RegisterController extends AbstractController2
 
         $mailer = $this->getMailer();
 
-        /** @var \Swift_Message $message */
+        /** @var Swift_Message $message */
         $message = $mailer->createMessage();
 
         $message->setBody($html,'text/html');

@@ -3,9 +3,15 @@ services:
     ayso_connection:
         alias: doctrine.dbal.ayso_connection
 
+    ng2019_connection:
+        alias: doctrine.dbal.ng2019_connection
+
     ayso_repository:
         class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
         arguments: ['@ayso_connection']
+
+    vol_certs:
+        class: AppBundle\Action\Services\VolCerts
 
     ayso_load_eayso_command:
         class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
@@ -13,10 +19,12 @@ services:
         arguments:
             - '@ayso_connection'
 
-    ayso_load_tom_command:
-        class: AppBundle\Action\Physical\Ayso\Load\LoadTomCommand
+    ayso_update_command:
+        class: AppBundle\Action\Physical\Ayso\Load\AYSOUpdateCommand
         tags: [{ name: console.command }]
-        arguments: ['@ayso_connection']
+        arguments:
+            - '@ng2019_connection'
+            - '@vol_certs'
 
     ayso_load_orgs_command:
         class: AppBundle\Action\Physical\Ayso\Load\LoadOrgsCommand

@@ -1,16 +1,32 @@
 <?php
 namespace AppBundle\Action\RegTeam\Transform;
 
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 class RegTeamTransformWriterExcel
 {
+    /** @var Spreadsheet */
+    private $wb;
+
+    /**
+     * @param array $regTeams
+     * @param $sheet
+     * @return false|string
+     * @throws PhpSpreadsheet\Exception
+     */
     public function write(array $regTeams, $sheet)
     {
         // Not sure this is needed
-        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
+        Cell::setValueBinder(new PhpSpreadsheet\Cell\AdvancedValueBinder());
 
-        $this->wb = $wb = new \PHPExcel();
+        $this->wb = new Spreadsheet();
 
-        $ws = $wb->getSheet();
+        $ws = $this->wb->getActiveSheet();
 
         $this->writeRegTeams($ws, $regTeams, $sheet);
         
@@ -18,11 +34,12 @@ class RegTeamTransformWriterExcel
     }
 
     /**
-     * @param  \PHPExcel_Worksheet $ws
-     * @param   array $regTeams
-     * @throws \PHPExcel_Exception
+     * @param Worksheet $ws
+     * @param array $regTeams
+     * @param $sheet
+     * @throws PhpSpreadsheet\Exception
      */
-    private function writeRegTeams(\PHPExcel_Worksheet $ws, array $regTeams,$sheet)
+    private function writeRegTeams(Worksheet $ws, array $regTeams,$sheet)
     {
         $ws->setTitle($sheet);
 
@@ -56,7 +73,7 @@ class RegTeamTransformWriterExcel
         $ws->getColumnDimension($colPoolTeam2  )->setWidth(16);
         $ws->getColumnDimension($colPoolTeam3  )->setWidth(16);
 
-        $ws->getStyle($colRegion)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($colRegion)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $row = 2;
         foreach($regTeams as $regTeam) {
@@ -73,17 +90,30 @@ class RegTeamTransformWriterExcel
             $row++;
         }
     }
+
+    /**
+     * @return false|string
+     * @throws PhpSpreadsheet\Writer\Exception
+     */
     private function getContents()
     {
-        $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
+        $writer = IOFactory::createWriter($this->wb, "Xlsx");
         ob_start();
         $writer->save('php://output');
         return ob_get_clean();
     }
+
+    /**
+     * @return string
+     */
     public function getFileExtension()
     {
         return 'xlsx';
     }
+
+    /**
+     * @return string
+     */
     public function getContentType()
     {
         return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

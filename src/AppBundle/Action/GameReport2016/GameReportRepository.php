@@ -2,6 +2,7 @@
 namespace AppBundle\Action\GameReport2016;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class GameReportRepository
 {
@@ -47,7 +48,7 @@ class GameReportRepository
      * @param  $projectId
      * @param  $gameNumber
      * @return GameReport|null
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findGameReport($projectId,$gameNumber)
     {

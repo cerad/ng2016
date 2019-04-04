@@ -3,8 +3,9 @@ namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRole;
+use PHPUnit_Framework_TestCase;
 
-class ProjectPersonTest extends \PHPUnit_Framework_TestCase
+class ProjectPersonTest extends PHPUnit_Framework_TestCase
 {
     public function testNewProjectPerson()
     {

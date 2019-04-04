@@ -2,6 +2,7 @@
 namespace AppBundle\Action\Game;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class GameFinder
 {
@@ -79,7 +80,7 @@ class GameFinder
     /** =======================================================================
      * @param  array $criteria
      * @return PoolTeam[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findPoolTeams(array $criteria)
     {
@@ -109,7 +110,7 @@ class GameFinder
     /** =======================================================================
      * @param  array $criteria
      * @return RegTeam[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findRegTeams(array $criteria)
     {

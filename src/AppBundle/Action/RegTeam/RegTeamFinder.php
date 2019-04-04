@@ -5,6 +5,7 @@ use AppBundle\Action\Game\GameFinderTrait;
 use AppBundle\Action\Game\PoolTeam;
 use AppBundle\Action\Game\RegTeam;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 /* ==============================================
  * Last minute hacking
@@ -28,7 +29,7 @@ class RegTeamFinder
     /** =======================================================================
      * @param  array $criteria
      * @return RegTeam[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findRegTeams(array $criteria)
     {

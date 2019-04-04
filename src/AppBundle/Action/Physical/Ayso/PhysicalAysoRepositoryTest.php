@@ -4,6 +4,7 @@ namespace AppBundleAction\Physical\Ayso;
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 
 use AppBundle\AbstractTestDatabase;
+use DateTime;
 
 class PhysicalAysoRepositoryTest extends AbstractTestDatabase
 {
@@ -61,7 +62,7 @@ EOD;
         $this->assertEquals('National Supreme',$cert['badge']);
         $this->assertEquals('2010-06-05',$cert['badgeDate']);
 
-        $badgeDate = new \DateTime($cert['badgeDate']);
+        $badgeDate = new DateTime($cert['badgeDate']);
         $this->assertEquals('Jun',$badgeDate->format('M'));
     }
     public function testFindOrg()

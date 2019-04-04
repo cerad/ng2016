@@ -5,6 +5,7 @@ use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Project\User\ProjectUserRepository;
 
+use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetRequestController extends AbstractController2
@@ -63,7 +64,7 @@ OR click here:
 EOD;
         $mailer  = $this->getMailer();
 
-        /** @var \Swift_Message $message */
+        /** @var Swift_Message $message */
         $message = $mailer->createMessage();
 
         $message->setBody($body);

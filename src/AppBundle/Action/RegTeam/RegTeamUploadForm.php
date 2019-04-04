@@ -3,10 +3,8 @@ namespace AppBundle\Action\RegTeam;
 
 use AppBundle\Action\AbstractForm;
 
-use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
-use AppBundle\Action\RegTeam\RegTeamFileReader;
 use Symfony\Component\Filesystem\Filesystem;
 
 class RegTeamUploadForm extends AbstractForm
@@ -44,7 +42,7 @@ class RegTeamUploadForm extends AbstractForm
         if (!$fs->exists($file) ) {
             $errors['upload'][] = [
                 'name' => 'upload',
-                'msg'  => 'Error uploading file ' . $file_name
+                'msg'  => 'Error uploading file ' . $inFilename
             ];                
         } else {
         

@@ -2,6 +2,7 @@
 namespace AppBundle\Action\Project\Person;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class ProjectPersonRepositoryV2
 {
@@ -19,7 +20,7 @@ class ProjectPersonRepositoryV2
      * @param  $registered boolean|null
      * @param  $verified   boolean|null
      * @return ProjectPerson[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findByProjectKey($projectKey, $name = null, $registered = null, $verified = null)
     {
@@ -66,6 +67,13 @@ class ProjectPersonRepositoryV2
         }
         return $persons;
     }
+
+    /**
+     * @param $projectKey
+     * @param $personKey
+     * @return ProjectPerson|null
+     * @throws DBALException
+     */
     public function find($projectKey,$personKey)
     {
         $sql = 'SELECT * FROM projectPersons WHERE projectKey = ? AND personKey = ?';
@@ -86,6 +94,12 @@ class ProjectPersonRepositoryV2
         $person = new ProjectPerson();
         return $person->fromArray($row);
     }
+
+    /**
+     * @param ProjectPerson $person
+     * @return ProjectPerson
+     * @throws DBALException
+     */
     public function save(ProjectPerson $person)
     {
         $row = $person->toArray();
@@ -117,6 +131,12 @@ class ProjectPersonRepositoryV2
         $person = new ProjectPerson();
         return $person->fromArray($row);
     }
+
+    /**
+     * @param $row
+     * @return mixed
+     * @throws DBALException
+     */
     private function saveRoleArray($row)
     {
         $row['active'] = $row['active'] ? '1' : '0';
@@ -134,6 +154,14 @@ class ProjectPersonRepositoryV2
         }
         return $row;
     }
+
+    /**
+     * @param $projectKey
+     * @param $personKey
+     * @param $name
+     * @param $email
+     * @return ProjectPerson
+     */
     public function create($projectKey,$personKey,$name,$email)
     {
         $person = new ProjectPerson();
@@ -145,6 +173,12 @@ class ProjectPersonRepositoryV2
             'email'      => $email,
         ]);
     }
+
+    /**
+     * @param $role
+     * @param $badge
+     * @return ProjectPersonRole
+     */
     public function createRole($role,$badge)
     {
         $personRole = new ProjectPersonRole();
@@ -154,6 +188,13 @@ class ProjectPersonRepositoryV2
             'badge' => $badge,
         ]);
     }
+
+    /**
+     * @param $projectKey
+     * @param $name
+     * @return null
+     * @throws DBALException
+     */
     public function generateUniqueName($projectKey,$name)
     {
         $sql = 'SELECT id FROM projectPersons WHERE projectKey = ? AND name = ?';

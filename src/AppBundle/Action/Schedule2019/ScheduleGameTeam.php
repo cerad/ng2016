@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\Schedule2019;
 
+use InvalidArgumentException;
+
 /**
  * @property-read string $projectKey
  * @property-read string $gameNumber
@@ -51,7 +53,7 @@ class ScheduleGameTeam
         switch($name) {
 
         }
-        throw new \InvalidArgumentException('GameTeam::__get ' . $name);
+        throw new InvalidArgumentException('GameTeam::__get ' . $name);
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace AppBundle\Action\RegPerson;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class RegPersonFinder
 {
@@ -25,7 +26,7 @@ class RegPersonFinder
      *
      * @param  $regPersonId string
      * @return RegPersonPerson[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findRegPersonPersons($regPersonId)
     {
@@ -76,7 +77,7 @@ EOD;
      *
      * @param  $regPersonId string
      * @return RegPersonTeam[]
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function findRegPersonTeams($regPersonId)
     {

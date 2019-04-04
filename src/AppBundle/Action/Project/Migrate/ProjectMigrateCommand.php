@@ -4,6 +4,7 @@ namespace AppBundle\Action\Project\Migrate;
 use AppBundle\Action\Project\User\ProjectUserRepository;
 use AppBundle\Action\Project\Person\ProjectPersonRepository;
 
+use DateTime;
 use Symfony\Component\Console\Command\Command;
 //  Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -192,8 +193,8 @@ EOD;
 
             $age = null;
             if ($row['dob']) {
-                $d1 = \DateTime::createFromFormat('Y-m-d', $row['dob']);
-                $d2 = \DateTime::createFromFormat('Y-m-d', '2014-07-01');
+                $d1 = DateTime::createFromFormat('Y-m-d', $row['dob']);
+                $d2 = DateTime::createFromFormat('Y-m-d', '2014-07-01');
                 $age = $d1->diff($d2)->y;
             }
             $registered = true;

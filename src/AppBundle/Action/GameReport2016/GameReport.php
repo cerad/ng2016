@@ -1,6 +1,9 @@
 <?php
 namespace AppBundle\Action\GameReport2016;
 
+use DateTime;
+use InvalidArgumentException;
+
 /**
  * @property-read GameReportTeam homeTeam
  * @property-read GameReportTeam awayTeam
@@ -71,14 +74,14 @@ class GameReport
             case 'awayTeam': return $this->teams[2];
 
             case 'dow':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('D') : '???';
             
             case 'time':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('g:i A') : '???';
         }
-        throw new \InvalidArgumentException('GameReport::__get ' . $name);
+        throw new InvalidArgumentException('GameReport::__get ' . $name);
     }
     public function toUpdateArray()
     {

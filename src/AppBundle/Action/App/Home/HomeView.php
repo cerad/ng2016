@@ -10,6 +10,7 @@ use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 
 use AppBundle\Action\Project\User\ProjectUser;
 use AppBundle\Action\RegPerson\RegPersonFinder;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Action\InstructionsView;
@@ -53,7 +54,7 @@ class HomeView extends AbstractView2
         $this->projectPerson = $this->projectPersonRepository->find($projectKey, $personKey);
 
         if (!$this->projectPerson) {
-            throw new \LogicException('No project person in the home view for '.$user['name']);
+            throw new LogicException('No project person in the home view for '.$user['name']);
         }
         $this->projectPersonViewDecorator->setProjectPerson($this->projectPerson);
 

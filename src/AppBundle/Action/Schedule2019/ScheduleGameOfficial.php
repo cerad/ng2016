@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Action\Schedule2019;
 
+use InvalidArgumentException;
+
 /**
  *  property-read string $gameNumber
  */
@@ -42,7 +44,7 @@ class ScheduleGameOfficial
         switch($name) {
             
         }
-        throw new \InvalidArgumentException('GameOfficial::__get ' . $name);
+        throw new InvalidArgumentException('GameOfficial::__get ' . $name);
     }
 
     /**

@@ -1,5 +1,8 @@
 <?php
 namespace AppBundle\Action\Results2019;
+use DateTime;
+use InvalidArgumentException;
+
 /**
  * @property-read ResultsGameTeam homeTeam
  * @property-read ResultsGameTeam awayTeam
@@ -47,14 +50,14 @@ class ResultsGame
             case 'awayTeam': return $this->teams[2];
 
             case 'dow':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('D') : '???';
 
             case 'time':
-                $start = \DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('g:i A') : '???';
         }
-        throw new \InvalidArgumentException('ResultsGame::__get ' . $name);
+        throw new InvalidArgumentException('ResultsGame::__get ' . $name);
     }
     
     /**
