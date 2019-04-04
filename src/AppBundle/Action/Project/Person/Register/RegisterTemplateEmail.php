@@ -208,7 +208,7 @@ EOT;
 <p style="{$this->styleP}">
     All participating referees and coaches are required to have completed CDC Concussion Awareness training.
     If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign 
-    into <a href="https://ausou.org" target="_blank">https://aysou.org</a>.  After login, look under 
+    into <a href="https://aysou.org" target="_blank">https://aysou.org</a>.  After login, look under 
     "My Courses > CDC: Concussion Course".
 </p>
 EOT;
