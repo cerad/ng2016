@@ -141,6 +141,7 @@ class ProjectPersonRepositoryV2
     {
         $row['active'] = $row['active'] ? '1' : '0';
         $row['verified'] = $row['verified'] ? '1' : '0';
+        $row['approved'] = $row['approved'] ? '1' : '0';
 
         $id = $row['id'];
         unset($row['id']);
