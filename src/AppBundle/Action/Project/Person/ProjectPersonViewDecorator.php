@@ -100,10 +100,12 @@ class ProjectPersonViewDecorator
         $suffix = $cert->verified ? null : ' ***';
         if ($certKey !== 'CERT_REFEREE') {
             return $cert->verified ? 'Yes' : 'No' . $suffix;
-        }    
-        if ((!$cert->badgeUser) || $cert->badge === $cert->badgeUser) {
+        }
+
+        if ((!$cert->badgeUser) || strpos($cert->badge, $cert->badgeUser) > -1) {
             return $cert->badge . $suffix;
         }
+
         return $cert->badge . '/' . $cert->badgeUser . $suffix;
     }
     public function hasCertIssues()

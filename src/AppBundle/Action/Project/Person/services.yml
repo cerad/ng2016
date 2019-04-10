@@ -28,6 +28,7 @@ services:
             - '@ayso_repository'
             - '%app_home_route%'
             - '@project_person_register_template_email'
+            - '@vol_certs'
 
     project_person_register_view:
         class:  AppBundle\Action\Project\Person\Register\RegisterView

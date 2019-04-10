@@ -65,15 +65,16 @@ class RegisterTemplateEmail extends AbstractView2
         $personView = $this->projectPersonViewDecorator;
         $personView->setProjectPerson($person);
         return <<<EOD
-<html>
+<html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <title=""/>
 </head>
 <body style="{$this->styleBodyEmail}" >
   <center>
     <div style="{$this->styleSkHeader}">
       <h1>
-          <img src="https://ng2019.zayso.org/images/header-ipad_01.png" width="90%">
+          <img src="https://ng2019.zayso.org/images/header-ipad_01.png" width="90%" alt="">
       </h1>
     </div>
     <br>
@@ -81,7 +82,7 @@ class RegisterTemplateEmail extends AbstractView2
     30 - July 7, 2019</p>
     <div style="{$this->styleClearBoth}"></div>
   </center>
-  <hr>
+  <hr>Thank you for registering to volunteer at the 2019 National Games!
   <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the 2019 National Games!</p>
   <br>
   {$this->renderHtmlPerson($personView)}
@@ -149,11 +150,11 @@ EOT;
     <td>Membership Year</td>
     <td style="{$personView->getRegYearStyle($regYearProject)}">{$personView->getRegYear($regYearProject)}</td>
   </tr><tr>
-    <td>Safe Haven</td>
-    <td style="{$personView->getCertStyle('CERT_SAFE_HAVEN')}">{$personView->getCertBadge('CERT_SAFE_HAVEN')}</td>
-  </tr><tr>
     <td>Referee Badge</td>
     <td style="{$personView->getCertStyle('CERT_REFEREE')}">{$personView->getCertBadge('CERT_REFEREE')}</td>
+  </tr><tr>
+    <td>Safe Haven</td>
+    <td style="{$personView->getCertStyle('CERT_SAFE_HAVEN')}">{$personView->getCertBadge('CERT_SAFE_HAVEN')}</td>
   </tr><tr>
     <td>Concussion Aware</td>
     <td style="{$personView->getCertStyle('CERT_CONCUSSION')}">{$personView->getCertBadge('CERT_CONCUSSION')}</td>

@@ -222,19 +222,19 @@ parameters:
             type:    select
             label:   Will Volunteer
             default: no
-            choices: { no: No, yes: Yes (besides refereeing), maybe: Not Sure }
+            choices: { no: No, yes: Yes (besides refereeing), maybe: Maybe }
 
         willCoach:
             type:    select
             label:   Will Coach
             default: no
-            choices: { no: No, yes: Yes (or assist), maybe: Not Sure }
+            choices: { no: No, yes: Yes (or assist), maybe: Maybe }
 
         willReferee:
             type:    select
             label:   Will Referee
             default: no
-            choices: { no: No, yes: Yes, maybe: Not Sure }
+            choices: { no: No, yes: Yes, maybe: Maybe }
 
         refereeBadge:
             type:    select
