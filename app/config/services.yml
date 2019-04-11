@@ -3,6 +3,9 @@
 parameters:
 #    parameter_name: value
 
+imports:
+    - { resource: '../../src/Ayso/services.yaml' }
+
 services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
