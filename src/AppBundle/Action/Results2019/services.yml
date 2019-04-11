@@ -1,11 +1,15 @@
 services:
 
+    _defaults: { public: true }
+
     results_standings_calculator_2016:
+        public: true
         class: AppBundle\Action\Results2019\ResultsStandingsCalculator
         arguments:
             - '@game_connection'
 
     results_finder_2016:
+        public: true
         class: AppBundle\Action\Results2019\ResultsFinder
         arguments:
             - '@game_connection'
@@ -14,6 +18,7 @@ services:
     # ===============================================================
     # Pool Play Results
     results_poolplay_search_form_2016:
+        public: true
         class:  AppBundle\Action\Results2019\PoolPlay\ResultsPoolPlaySearchForm
         parent: abstract_form
         arguments:
@@ -22,6 +27,7 @@ services:
             - '@game_connection'
 
     results_poolplay_controller_2016:
+        public: true
         class:  AppBundle\Action\Results2019\PoolPlay\ResultsPoolPlayController
         parent: abstract_controller
         arguments:
@@ -31,6 +37,7 @@ services:
             - '%projects%'
 
     results_poolplay_view_html_2016:
+        public: true
         class:  AppBundle\Action\Results2019\PoolPlay\ResultsPoolPlayView
         parent: abstract_view2
         arguments:
@@ -39,6 +46,7 @@ services:
     # ===============================================================
     # Medal Round Results
     results_medalround_search_form_2016:
+        public: true
         class:  AppBundle\Action\Results2019\MedalRound\ResultsMedalRoundSearchForm
         parent: abstract_form
         arguments:
@@ -47,6 +55,7 @@ services:
             - '@game_connection'
 
     results_medalround_controller_2016:
+        public: true
         class:  AppBundle\Action\Results2019\MedalRound\ResultsMedalRoundController
         parent: abstract_controller
         arguments:
@@ -56,6 +65,7 @@ services:
             - '%projects%'
 
     results_medalround_view_html_2016:
+        public: true
         class:  AppBundle\Action\Results2019\MedalRound\ResultsMedalRoundView
         parent: abstract_view2
         arguments:
@@ -64,9 +74,11 @@ services:
     # ===============================================================
     # Sportsmanship Results
     results_sportsmanship_calculator_2016:
+        public: true
         class: AppBundle\Action\Results2019\ResultsSportsmanshipCalculator
 
     results_sportsmanship_search_form_2016:
+        public: true
         class:  AppBundle\Action\Results2019\Sportsmanship\ResultsSportsmanshipSearchForm
         parent: abstract_form
         arguments:
@@ -75,6 +87,7 @@ services:
             - '@game_connection'
 
     results_sportsmanship_controller_2016:
+        public: true
         class:  AppBundle\Action\Results2019\Sportsmanship\ResultsSportsmanshipController
         parent: abstract_controller
         arguments:
@@ -84,6 +97,7 @@ services:
             - '%projects%'
 
     results_sportsmanship_view_html_2016:
+        public: true
         class:  AppBundle\Action\Results2019\Sportsmanship\ResultsSportsmanshipView
         parent: abstract_view2
         arguments:
@@ -92,9 +106,11 @@ services:
     # ===============================================================
     # Final Results
     results_final_calculator_2016:
+        public: true
         class: AppBundle\Action\Results2019\ResultsFinalCalculator
 
     results_final_search_form_2016:
+        public: true
         class:  AppBundle\Action\Results2019\FinalStandings\ResultsFinalSearchForm
         parent: abstract_form
         arguments:
@@ -103,6 +119,7 @@ services:
             - '@game_connection'
 
     results_final_controller_2016:
+        public: true
         class:  AppBundle\Action\Results2019\FinalStandings\ResultsFinalController
         parent: abstract_controller
         arguments:
@@ -112,6 +129,7 @@ services:
             - '%projects%'
 
     results_final_view_html_2016:
+        public: true
         class:  AppBundle\Action\Results2019\FinalStandings\ResultsFinalView
         parent: abstract_view2
         arguments:

@@ -43,6 +43,7 @@ security:
             security: false
 
         main:
+            logout_on_user_change: true
             pattern:  ^/ # Not sure if this actully does anything or not
             anonymous: ~
             switch_user: true

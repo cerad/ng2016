@@ -1,14 +1,19 @@
 services:
 
+    _defaults: { public: true }
+
     project_person_connection:
+        public: true;
         alias: doctrine.dbal.ng2019_connection
 
     project_person_repository:
+        public: true;
         class: AppBundle\Action\Project\Person\ProjectPersonRepository
         arguments:
             - '@project_person_connection'
 
     project_person_view_decorator:
+        public: true;
         class: AppBundle\Action\Project\Person\ProjectPersonViewDecorator
         arguments:
             - '@phone_transformer'
@@ -20,6 +25,7 @@ services:
 # Register
 
     project_person_register_controller:
+        public: true;
         class:  AppBundle\Action\Project\Person\Register\RegisterController
         parent: abstract_controller
         arguments:
@@ -31,18 +37,21 @@ services:
             - '@vol_certs'
 
     project_person_register_view:
+        public: true;
         class:  AppBundle\Action\Project\Person\Register\RegisterView
         parent: abstract_view2
         arguments:
             - '@project_person_register_form'
 
     project_person_register_template_email:
+        public: true;
         class:  AppBundle\Action\Project\Person\Register\RegisterTemplateEmail
         parent: abstract_view2
         arguments:
             - '@project_person_view_decorator'
 
     project_person_register_form:
+        public: true;
         class:  AppBundle\Action\Project\Person\Register\RegisterForm
         parent: abstract_form
         arguments:
@@ -50,4 +59,5 @@ services:
             - '%app_project_registration_form_controls%'
 
     project_person_will_referee_transformer:
-      class:  AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer
+        public: true;
+        class:  AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer

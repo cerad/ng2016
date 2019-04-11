@@ -1,14 +1,18 @@
 services:
 
+    _defaults: { public: true }
+
     # ===============================================================
     # Team Management
     regteam_upload_form:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamUploadForm
         parent: abstract_form
         arguments:
             - '@regteam_import_xls'
             
     regteam_import_controller:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamImportController
         parent: abstract_controller
         arguments:
@@ -18,12 +22,14 @@ services:
             - '@reg_team_updater'
 
     regteam_import_view:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamImportView
         parent: abstract_view2
         arguments:
             - '@regteam_upload_form'
 
     regteam_export_controller:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamExportController
         parent: abstract_controller
         arguments:
@@ -32,19 +38,23 @@ services:
             - '%projects%'
 
     regteam_export_xls:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamExcelWriter
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_xls'
 
     abstract_importer_xls:
+        public: true
         class: AppBundle\Action\AbstractImporter
 
     regteam_import_xls:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamFileReader
         parent: abstract_importer_xls
 
     reg_team_updater:
+        public: true
         class: AppBundle\Action\RegTeam\RegTeamUpdater
         arguments:
             - '@reg_team_connection'
@@ -52,33 +62,39 @@ services:
     # ===========================================
     # Reg Team Export V2
     reg_team_finder:
+        public: true
         class:  AppBundle\Action\RegTeam\RegTeamFinder
         arguments:
             - '@game_connection'
             - '@reg_team_connection'
 
     reg_team_export_controller2:
+        public: true
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportController
         parent: abstract_controller
         arguments:
             - '@reg_team_finder'
 
     reg_team_export_view_excel2:
+        public: true
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportViewExcel
         parent: abstract_view2
         arguments:
             - '@reg_team_export_writer_excel2'
 
     reg_team_export_writer_excel2:
+        public: true
         class:  AppBundle\Action\RegTeam\Export\RegTeamExportWriterExcel
 
     # ===========================================
     # Reg Team Import V2
     reg_team_import_form:
+        public: true
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportForm
         parent: abstract_form
 
     reg_team_import_controller2:
+        public: true
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportController
         parent: abstract_controller
         arguments:
@@ -87,17 +103,20 @@ services:
             - '@reg_team_import_updater'
 
     reg_team_import_view2:
+        public: true
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportView
         parent: abstract_view2
         arguments:
             - '@reg_team_import_form'
 
     reg_team_import_reader_excel:
+        public: true
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
         arguments:
             - '@ayso_repository'
 
     reg_team_import_updater:
+        public: true
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportUpdater
         arguments:
             - '@reg_team_connection'
@@ -106,24 +125,29 @@ services:
     # ===========================================
     # Transform the team regstrar's spreadsheet to out spreadsheet
     reg_team_transform_form:
+        public: true
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformForm
         parent: abstract_form
 
     reg_team_transform_reader_excel:
+        public: true
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformReaderExcel
         arguments:
             - '@ayso_repository'
 
     reg_team_transform_writer_excel:
+        public: true
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformWriterExcel
 
     reg_team_transform_controller:
+        public: true
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformController
         arguments:
             - '@reg_team_transform_form'
             - '@reg_team_transform_reader_excel'
 
     reg_team_transform_view:
+        public: true
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformView
         parent: abstract_view2
         arguments:

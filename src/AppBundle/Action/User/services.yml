@@ -1,6 +1,9 @@
 services:
 
+    _defaults: { public: true }
+
     user_manager:
+        public: true
         class: AppBundle\Action\User\UserManager
         arguments:
             - '@user_connection'

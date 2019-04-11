@@ -1,21 +1,27 @@
 services:
 
+    _defaults: { public: true }
+
     abstract_exporter_xls:
+        public: true
         class: AppBundle\Action\AbstractExporter
         arguments:
             - 'xls'
 
     abstract_exporter_csv:
+        public: true
         class: AppBundle\Action\AbstractExporter
         arguments:
             - 'csv'
 
     abstract_exporter_txt:
+        public: true
         class: AppBundle\Action\AbstractExporter
         arguments:
             - 'txt'
 
     schedule_finder_2016:
+        public: true
         class: AppBundle\Action\Schedule2019\ScheduleFinder
         arguments:
             - '@doctrine.dbal.ng2019games_connection' # gameConn
@@ -23,12 +29,14 @@ services:
             - '@reg_person_finder'
 
     schedule_template_2016:
+        public: true
         abstract: true
         calls:
             - ['setContainer',       ['@service_container']]
             - ['setRegPersonFinder', ['@reg_person_finder']]
 
     schedule_search_form_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleSearchForm
         parent: abstract_form
         arguments:
@@ -38,6 +46,7 @@ services:
     # ===============================================================
     # Schedule Game
     schedule_game_search_form_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Game\ScheduleGameSearchForm
         parent: abstract_form
         arguments:
@@ -45,6 +54,7 @@ services:
             - '%projects%'
 
     schedule_game_controller_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Game\ScheduleGameController
         parent: abstract_controller
         arguments:
@@ -54,11 +64,13 @@ services:
             - '%projects%'
 
     schedule_game_template_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleTemplate
         parent: schedule_template_2016
         arguments: ['Game Schedule']
 
     schedule_game_view_html_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleView
         parent: abstract_view2
         arguments:
@@ -66,21 +78,25 @@ services:
             - '@schedule_game_template_2016'
 
     schedule_game_writer_excel:
+        public: true
         class:  AppBundle\Action\Schedule2019\Game\ScheduleGameWriterExcel
 
     schedule_game_view_xls_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_xls'
             
     schedule_game_view_csv_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_csv'
             
     schedule_game_view_txt_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
@@ -89,6 +105,7 @@ services:
     # ===============================================================
     # Schedule Official
     schedule_official_controller_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Official\ScheduleOfficialController
         parent: abstract_controller
         arguments:
@@ -98,11 +115,13 @@ services:
             - '%projects%'
 
     schedule_official_template_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleTemplate
         parent: schedule_template_2016
         arguments: ['Referee Game Schedule', true, false, '@game_official_assign_workflow']
 
     schedule_official_view_html_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleView
         parent: abstract_view2
         arguments:
@@ -110,12 +129,14 @@ services:
             - '@schedule_official_template_2016'
 
     schedule_official_view_xls_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Official\ScheduleOfficialViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_xls'
 
     schedule_official_view_txt_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Official\ScheduleOfficialViewFile
         parent: abstract_view2
         arguments:
@@ -124,6 +145,7 @@ services:
     # ===============================================================
     # Schedule Assignor
     schedule_assignor_search_form_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Assignor\ScheduleAssignorSearchForm
         parent: abstract_form
         arguments:
@@ -131,6 +153,7 @@ services:
             - '%projects%'
 
     schedule_assignor_controller_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Assignor\ScheduleAssignorController
         parent: abstract_controller
         arguments:
@@ -140,6 +163,7 @@ services:
             - '%projects%'
 
     schedule_assignor_template_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleTemplate
         parent: schedule_template_2016
         arguments:
@@ -150,6 +174,7 @@ services:
             - '@game_official_details_finder'
 
     schedule_assignor_view_html_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleView
         parent: abstract_view2
         arguments:
@@ -157,12 +182,14 @@ services:
             - '@schedule_assignor_template_2016'
 
     schedule_assignor_view_excel_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Assignor\ScheduleAssignorViewExcel
         parent: abstract_view2
         arguments:
             - '@schedule_assignor_writer_excel_2016'
 
     schedule_assignor_writer_excel_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Assignor\ScheduleAssignorWriterExcel
         arguments:
             - '@game_official_assign_workflow'
@@ -173,10 +200,12 @@ services:
     # ===============================================================
     # Schedule My
     schedule_my_search_form_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\My\ScheduleMySearchForm
         parent: abstract_form
 
     schedule_my_controller_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\My\ScheduleMyController
         parent: abstract_controller
         arguments:
@@ -184,11 +213,13 @@ services:
             - '@schedule_finder_2016'
 
     schedule_my_template_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleTemplate
         parent: schedule_template_2016
         arguments: ['My Game Schedule', true, false, '@game_official_assign_workflow']
 
     schedule_my_view_html_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\My\ScheduleMyView
         parent: abstract_view2
         arguments:
@@ -196,6 +227,7 @@ services:
             - '@schedule_my_template_2016'
 
     schedule_my_view_txt_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\My\ScheduleMyViewFile
         parent: abstract_view2
         arguments:
@@ -204,6 +236,7 @@ services:
     # ===============================================================
     # Schedule Team
     schedule_team_search_form_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Team\ScheduleTeamSearchForm
         parent: abstract_form
         arguments:
@@ -212,6 +245,7 @@ services:
             - '@schedule_finder_2016'
 
     schedule_team_controller_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Team\ScheduleTeamController
         parent: abstract_controller
         arguments:
@@ -221,11 +255,13 @@ services:
             - '%projects%'
 
     schedule_team_template_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\ScheduleTemplate
         parent: schedule_template_2016
         arguments: ['Team Schedule']
 
     schedule_team_view_html_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Team\ScheduleTeamView
         parent: abstract_view2
         arguments:
@@ -233,18 +269,21 @@ services:
             - '@schedule_team_template_2016'
 
     schedule_team_view_xls_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Team\ScheduleTeamViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_xls'
             
     schedule_team_view_csv_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Team\ScheduleTeamViewFile
         parent: abstract_view2
         arguments:
             - '@abstract_exporter_csv'
 
     schedule_team_view_txt_2016:
+        public: true
         class:  AppBundle\Action\Schedule2019\Team\ScheduleTeamViewFile
         parent: abstract_view2
         arguments:
@@ -253,6 +292,7 @@ services:
     # ===============================================================
     # Schedule MedalRoundLogic
     schedule_medalroundcalc_controller_2016:
+        public: true
         class: AppBundle\Action\Schedule2019\MedalRound\ScheduleMedalRoundController
         parent: abstract_controller
         arguments:
@@ -260,9 +300,11 @@ services:
             - '%project_choices%'
 
     schedule_medalround_calculator_2016:
+        public: true
         class: AppBundle\Action\Schedule2019\MedalRound\ScheduleMedalRoundCalculator
         
     schedule_medalroundcalc_view_xls_qf_2016:
+        public: true
         class: AppBundle\Action\Schedule2019\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
@@ -272,6 +314,7 @@ services:
             - '@abstract_exporter_xls'
 
     schedule_medalroundcalc_view_xls_sf_2016:
+        public: true
         class: AppBundle\Action\Schedule2019\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
@@ -281,6 +324,7 @@ services:
             - '@abstract_exporter_xls'
 
     schedule_medalroundcalc_view_xls_fm_2016:
+        public: true
         class: AppBundle\Action\Schedule2019\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
         arguments:
@@ -288,5 +332,3 @@ services:
             - '@schedule_medalround_calculator_2016'
             - '@results_finder_2016'
             - '@abstract_exporter_xls'
-
-

@@ -1,15 +1,20 @@
 services:
 
+    _defaults: { public: true }
+
     game_official_assign_workflow:
+        public: true
         class: AppBundle\Action\GameOfficial\AssignWorkflow
 
     game_official_updater:
+        public: true
         class: AppBundle\Action\GameOfficial\GameOfficialUpdater
         arguments:
             - '@game_connection'
             - '@project_person_connection'
 
     game_official_details_finder:
+        public: true
         class: AppBundle\Action\GameOfficial\GameOfficialDetailsFinder
         arguments:
             - '@game_connection'
@@ -17,11 +22,13 @@ services:
             - '@ayso_region_to_sar_transformer'
 
     game_official_conflicts_finder:
+        public: true
         class: AppBundle\Action\GameOfficial\GameOfficialConflictsFinder
         arguments:
             - '@game_connection'
 
     game_official_voter:
+        public: true
         class: AppBundle\Action\GameOfficial\GameOfficialVoter
         tags: [{ name: security.voter }]
         arguments:
@@ -34,10 +41,12 @@ services:
     # Assign by assignee
 
     game_official_assignee_finder:
+        public: true
         class: AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeFinder
         arguments: ['@project_person_connection','@reg_person_finder']
 
     game_official_assign_by_assignee_form:
+        public: true
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm
         parent: abstract_form
         arguments:
@@ -47,6 +56,7 @@ services:
             - '@reg_person_finder'
 
     game_official_assign_by_assignee_controller:
+        public: true
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeController
         parent: abstract_controller
         arguments:
@@ -55,6 +65,7 @@ services:
             - '@game_official_updater'
 
     game_official_assign_by_assignee_view:
+        public: true
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeView
         parent: abstract_view2
         arguments:
@@ -64,12 +75,14 @@ services:
     # Assign by assignor
 
     game_official_assignor_finder:
+        public: true
         class: AppBundle\Action\GameOfficial\AssignByAssignor\AssignorFinder
         arguments:
             - '@project_person_connection'
             - '@ayso_region_to_sar_transformer'
 
     game_official_assign_by_assignor_form:
+        public: true
         class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorForm
         parent: abstract_form
         arguments:
@@ -78,6 +91,7 @@ services:
             - '@game_official_conflicts_finder'
 
     game_official_assign_by_assignor_controller:
+        public: true
         class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorController
         parent: abstract_controller
         arguments:
@@ -86,6 +100,7 @@ services:
             - '@game_official_updater'
 
     game_official_assign_by_assignor_view:
+        public: true
         class:  AppBundle\Action\GameOfficial\AssignByAssignor\AssignorView
         parent: abstract_view2
         arguments:
@@ -94,6 +109,7 @@ services:
     # =========================================================================
     # Export summary report
     game_official_summary_controller:
+        public: true
         class:  AppBundle\Action\GameOfficial\Summary\SummaryController
         parent: abstract_controller
         arguments:
@@ -101,12 +117,14 @@ services:
             - '@reg_person_finder'
 
     game_official_summary_view:
+        public: true
         class:  AppBundle\Action\GameOfficial\Summary\SummaryViewExcel
         parent: abstract_view2
         arguments:
             - '@game_official_summary_writer_excel'
 
     game_official_summary_writer_excel:
+        public: true
         class:  AppBundle\Action\GameOfficial\Summary\SummaryWriterExcel
         arguments:
             - '@ayso_region_to_sar_transformer'
