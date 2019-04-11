@@ -92,8 +92,8 @@ parameters:
 
         choices:
             dates:
-            '2019-07-02': Wed # Soccerfest 2019
-            '2019-07-03': Thu # Pool Play
+            '2019-07-02': Tue # Soccerfest 2019
+            '2019-07-03': Wed # Pool Play
             '2019-07-04': Thu # Pool Play
             '2019-07-05': Fri # Pool Play
             '2019-07-06': Sat # Quarter Finals
@@ -195,6 +195,7 @@ parameters:
       willCoach:     { group: plans }
       shirtSize: {}
 
+      availTue:     { group: avail }
       availWed:      { group: avail }
       availThu:      { group: avail }
       availFri:      { group: avail }
@@ -320,9 +321,15 @@ parameters:
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
 
+        availTue:
+            type:    select
+            label:   Available Tuesday (Soccerfest)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
         availWed:
             type:    select
-            label:   Available Wednesday (Soccerfest)
+            label:   Available Wednesday (Pool Play)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
 
