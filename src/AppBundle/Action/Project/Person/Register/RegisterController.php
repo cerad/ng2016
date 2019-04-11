@@ -137,7 +137,8 @@ class RegisterController extends AbstractController2
         }
         $projectPerson->regYear = $e3Certs->MY;
         if (isset($projectPerson->roles['CERT_REFEREE'])) {
-            $projectPerson->roles['CERT_REFEREE']->badge = $e3Certs->RefCertDesc;
+            $certDesc = explode(' ', $e3Certs->RefCertDesc);
+            $projectPerson->roles['CERT_REFEREE']->badge = isset($certDesc[0]) ? $certDesc[0] : '';
             $projectPerson->roles['CERT_REFEREE']->badgeDate = $e3Certs->RefCertDate;
             $projectPerson->roles['CERT_REFEREE']->verified = !empty($e3Certs->RefCertDate);
         }
