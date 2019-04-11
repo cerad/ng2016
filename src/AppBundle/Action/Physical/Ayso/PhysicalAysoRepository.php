@@ -56,12 +56,13 @@ EOD;
         if (!$vol) {
             return null;
         }
+        $fedKeyParts =  explode(':', $fedKey);
+        $id = isset($fedKeyParts[1]) ? $fedKeyParts[1] : null;
 
-        $id = explode(':',$fedKey)[1];
         /** @var array $e3Certs */
         $e3Certs = $this->volCerts->retrieveVolCertData($id);
 
-        // TOSO just add orgKey to record
+        // TODO just add orgKey to record
         $sarParts = explode('/', $e3Certs['SAR']);
 
         $vol['orgKey'] = sprintf('AYSOR:%04d', $sarParts['2']);
@@ -92,7 +93,8 @@ EOD;
         }
         $this->findVolCertStmt->execute([$fedKey, $role]);
 
-        $id = explode(':',$fedKey)[1];
+        $fedKeyParts =  explode(':', $fedKey);
+        $id = isset($fedKeyParts[1]) ? $fedKeyParts[1] : null;
 
         /** @var array $e3Certs */
         $e3Certs = $this->volCerts->retrieveVolCertData($id);
@@ -103,6 +105,7 @@ EOD;
         $e3CertDate = isset($e3Certs['RefCertDate']) ? $e3Certs['RefCertDate'] : '';
         $volCert['badge'] = $e3Cert;
         $volCert['badgeDate'] = $e3CertDate;
+        $volCert['roleDate']  = $e3CertDate;
 
         return $volCert;
     }
