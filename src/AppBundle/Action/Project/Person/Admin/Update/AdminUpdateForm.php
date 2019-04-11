@@ -120,6 +120,7 @@ class AdminUpdateForm extends AbstractForm
         //reset like this, Blue Sombrero does not have this field
         $projectPerson->avail = [];
         $projectPerson->avail = [
+            'availTue'      => 'no',
             'availWed'      => 'no',
             'availThu'      => 'no',
             'availFri'      => 'no',
@@ -428,7 +429,8 @@ EOD;
     private function renderAvailInfo(ProjectPersonViewDecorator $personView)
     {
         $avail = isset($personView->person->avail);
-        
+
+        $availTue       = $avail ? strtolower($personView->availTue) == 'yes' : false;
         $availWed       = $avail ? strtolower($personView->availWed) == 'yes' : false;
         $availThu       = $avail ? strtolower($personView->availThu) == 'yes' : false;
         $availFri       = $avail ? strtolower($personView->availFri) == 'yes' : false;
@@ -441,7 +443,9 @@ EOD;
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Availability Information</h1>
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Soccerfest)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availTue" type="checkbox" {$this->isChecked
+        ($availTue)}>Available Tue (Soccerfest)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" {$this->isChecked($availWed)}>Available Wed (Pool Play)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" {$this->isChecked($availThu)}>Available Thu (Pool Play)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" {$this->isChecked($availFri)}>Available Fri (Pool Play)</label>
     </div>    

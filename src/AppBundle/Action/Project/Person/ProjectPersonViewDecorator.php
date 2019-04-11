@@ -227,7 +227,8 @@ class ProjectPersonViewDecorator
             case 'willRefereeBadge':
                 $willRefereeTransformer = $this->willRefereeTransformer;
                 return $willRefereeTransformer($person);
-            
+
+            case 'availTue':
             case 'availWed':
             case 'availThu':
             case 'availFri':
