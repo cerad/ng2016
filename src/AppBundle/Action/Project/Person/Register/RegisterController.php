@@ -128,21 +128,27 @@ class RegisterController extends AbstractController2
         $projectPerson->registered = true;
 
         //Update MY, SAR, Certs with e3 data
-        $aysoid = explode(':', $fedKey)[1];
+        $fedKeyParts =  explode(':', $fedKey);
+        $aysoid = isset($fedKeyParts[1]) ? $fedKeyParts[1]: null;
         $e3Certs = (object) $this->volCerts->retrieveVolCertData($aysoid);
         $sar = explode('/', $e3Certs->SAR);
         if(isset($sar[2])){
             $projectPerson->orgKey = 'AYSOR:' . $sar[2];
         }
         $projectPerson->regYear = $e3Certs->MY;
-        $projectPerson->roles['CERT_REFEREE']->badge = $e3Certs->RefCertDesc;
-        $projectPerson->roles['CERT_REFEREE']->badgeDate = $e3Certs->RefCertDate;
-        $projectPerson->roles['CERT_REFEREE']->verified = !empty($e3Certs->RefCertDate);
-        $projectPerson->roles['CERT_SAFE_HAVEN']->badgeDate = $e3Certs->SafeHavenDate;
-        $projectPerson->roles['CERT_SAFE_HAVEN']->verified = !empty($e3Certs->SafeHavenDate);
-        $projectPerson->roles['CERT_CONCUSSION']->badgeDate = $e3Certs->CDCDate;
-        $projectPerson->roles['CERT_CONCUSSION']->verified = !empty($e3Certs->CDCDate);
-
+        if (isset($projectPerson->roles['CERT_REFEREE'])) {
+            $projectPerson->roles['CERT_REFEREE']->badge = $e3Certs->RefCertDesc;
+            $projectPerson->roles['CERT_REFEREE']->badgeDate = $e3Certs->RefCertDate;
+            $projectPerson->roles['CERT_REFEREE']->verified = !empty($e3Certs->RefCertDate);
+        }
+        if (isset($projectPerson->roles['CERT_SAFE_HAVEN'])) {
+            $projectPerson->roles['CERT_SAFE_HAVEN']->badgeDate = $e3Certs->SafeHavenDate;
+            $projectPerson->roles['CERT_SAFE_HAVEN']->verified = !empty($e3Certs->SafeHavenDate);
+        }
+        if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
+            $projectPerson->roles['CERT_CONCUSSION']->badgeDate = $e3Certs->CDCDate;
+            $projectPerson->roles['CERT_CONCUSSION']->verified = !empty($e3Certs->CDCDate);
+        }
         return $projectPerson;
     }
 

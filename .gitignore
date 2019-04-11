@@ -29,3 +29,4 @@ web/pdf
 src/AppBundle/Resources/pdf/archive
 *alias*
 dist.sh
+/.web-server-pid

@@ -1,14 +1,19 @@
 services:
 
+    _defaults: { public: true }
+
     user_connection:
+        public: true
         alias: doctrine.dbal.ng2019_connection
 
     user_repository:
+        public: true
         class: AppBundle\Action\Project\User\ProjectUserRepository
         arguments:
             - '@user_connection'
 
     user_provider:
+        public: true
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:
             - '%app_project_key%'
@@ -17,11 +22,13 @@ services:
             - '%users%'
 
     user_encoder:
+        public: true
         class:  AppBundle\Action\Project\User\ProjectUserEncoder
         arguments:
             - '%cerad_user_master_password%'
 
     user_login_user:
+        public: true
         class:  AppBundle\Action\Project\User\ProjectUserLoginUser
         arguments:
             - 'main'
@@ -29,6 +36,7 @@ services:
             - '@security.token_storage'
 
     user_login_form:
+        public: true
         class: AppBundle\Action\Project\User\Login\UserLoginForm
         arguments:
             - '@security.authentication_utils'
@@ -39,6 +47,7 @@ services:
 # User Create
 
     user_create_controller:
+        public: true
         class:  AppBundle\Action\Project\User\Create\UserCreateController
         parent: abstract_controller
         arguments:
@@ -48,10 +57,12 @@ services:
             - '@user_create_form'
 
     user_create_view:
+        public: true
         class:  AppBundle\Action\Project\User\Create\UserCreateView
         parent: abstract_view
 
     user_create_form:
+        public: true
         class:  AppBundle\Action\Project\User\Create\UserCreateForm
         parent: abstract_form
         arguments:
@@ -61,6 +72,7 @@ services:
 # Password management
 
     user_password_reset_request_command:
+        public: true
         class: AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestCommand
         tags: [{ name: console.command }]
         arguments:
@@ -68,12 +80,14 @@ services:
             - '@user_repository'
 
     user_password_reset_request_form:
+        public: true
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestForm
         parent: abstract_form
         arguments:
             - '@user_repository'
 
     user_password_reset_request_controller:
+        public: true
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestController
         parent: abstract_controller
         arguments:
@@ -81,18 +95,21 @@ services:
             - '@user_password_reset_request_form'
 
     user_password_reset_request_view:
+        public: true
         class:  AppBundle\Action\Project\User\Password\ResetRequest\PasswordResetRequestView
         parent: abstract_view2
         arguments:
             - '@user_password_reset_request_form'
 
     user_password_reset_response_form:
+        public: true
         class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseForm
         parent: abstract_form
         arguments:
             - '@user_repository'
 
     user_password_reset_response_controller:
+        public: true
         class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseController
         parent: abstract_controller
         arguments:
@@ -104,6 +121,7 @@ services:
             - 'app_home'
 
     user_password_reset_response_view:
+        public: true
         class:  AppBundle\Action\Project\User\Password\ResetResponse\PasswordResetResponseView
         parent: abstract_view2
         arguments:
@@ -111,15 +129,17 @@ services:
 
 
 # ==========================================================================
-# Socal network authentication
+# Social network authentication
 
     user_authen_connect_controller:
+        public: true
         class:  AppBundle\Action\Project\User\Authen\ConnectController
         parent: abstract_controller
         arguments:
             - '@user_authen_provider_factory'
 
     user_authen_callback_controller:
+        public: true
         class:  AppBundle\Action\Project\User\Authen\CallbackController
         parent: abstract_controller
         arguments:
@@ -127,12 +147,14 @@ services:
             - '@user_provider'
 
     user_authen_provider_factory:
+        public: true
         class: AppBundle\Action\Project\User\Authen\ProviderFactory
         arguments:
             - '@router'
             - '%user_authen_providers%'
 
     user_authen_provider_google:
+        public: true
         class: AppBundle\Action\Project\User\Authen\Provider\GoogleProvider
         arguments:
             - '@router'
@@ -140,6 +162,7 @@ services:
             - '%provider_google_client_secret%'
 
     user_authen_provider_facebook:
+        public: true
         class: AppBundle\Action\Project\User\Authen\Provider\FacebookProvider
         arguments:
             - '@router'

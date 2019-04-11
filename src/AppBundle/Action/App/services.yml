@@ -4,8 +4,10 @@ parameters:
     app_welcome_route: app_welcome
 
 services:
+    _defaults: { public: true }
 
     app_kernel_listener:
+        public: true;
         class:  AppBundle\Listener\KernelListener
         calls: [[setContainer, ['@service_container']]]
         tags:  [{ name: kernel.event_subscriber }]
@@ -26,11 +28,13 @@ services:
             - "%app_version%"
 
     abstract_form:
+        public: true;
         abstract: true
         calls:
            - ['setContainer',  ['@service_container']]
 
     abstract_view:
+        public: true;
         abstract: true
         calls:
            - ['setRouter',  ['@router']]
@@ -39,16 +43,19 @@ services:
            - ['setProject', ['%app_project%']]
 
     abstract_view2:
+        public: true;
         abstract: true
         calls:
            - ['setContainer', ['@service_container']]
 
     abstract_controller:
+        public:   true
         abstract: true
         calls: [[setContainer, ['@service_container']]]
 
     # action index
     index_controller:
+        public: true
         class:  AppBundle\Action\App\Index\IndexController
         parent: abstract_controller
 
@@ -73,6 +80,7 @@ services:
         parent: abstract_controller
 
     text_alerts_view:
+        public: true;
         class:  AppBundle\Action\App\TextAlerts\TextAlertsView
         parent: abstract_view2
 
@@ -93,21 +101,25 @@ services:
 
     # action file
     file_controller:
+        public: true;
         class:  AppBundle\Action\App\File\FilePdfController
         parent: abstract_controller
 
     # action admin
     admin_switch_user_form:
+        public: true;
         class:  AppBundle\Action\App\Admin\AdminSwitchUserForm
         parent: abstract_form
         arguments: ['@reg_person_finder']
 
     admin_controller:
+        public: true;
         class:  AppBundle\Action\App\Admin\AdminController
         parent: abstract_controller
         arguments: ['@admin_switch_user_form']
 
     admin_view:
+        public: true;
         class:  AppBundle\Action\App\Admin\AdminView
         parent: abstract_view2
         arguments: ['@admin_switch_user_form']

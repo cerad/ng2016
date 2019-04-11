@@ -287,7 +287,7 @@ class VolCerts
      * @param $certData
      * @return array|string
      */
-    private function parseCertData(int $id, $certData)
+    private function parseCertData(?int $id, $certData)
     {
         if (empty($certData)) {
             return '{}';
@@ -311,7 +311,7 @@ class VolCerts
      * @param $nodeValue
      * @return array
      */
-    private function parseNodeValue(int $id, $nodeValue)
+    private function parseNodeValue(?int $id, $nodeValue)
     {
         if (is_null($nodeValue)) {
             return null;

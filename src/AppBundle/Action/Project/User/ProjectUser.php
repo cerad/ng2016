@@ -74,8 +74,8 @@ class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
     {
         return serialize(array(
             $this->id,         // For refreshing
-            //$this->salt,
-            //$this->password,
+            $this->salt,
+            $this->password,
             $this->username,   // Debugging
         ));
     }
@@ -85,8 +85,8 @@ class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
 
         list(
             $this->id,
-            //$this->salt,
-            //$this->password,
+            $this->salt,
+            $this->password,
             $this->username
             ) = $data;
 

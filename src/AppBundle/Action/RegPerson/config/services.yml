@@ -1,12 +1,17 @@
 services:
 
+    _defaults: { public: true }
+
     reg_team_connection:
+        public: true
         alias: doctrine.dbal.ng2019games_connection
 
     reg_person_connection:
+        public: true
         alias: doctrine.dbal.ng2019_connection
 
     reg_person_finder:
+        public: true
         class: AppBundle\Action\RegPerson\RegPersonFinder
         arguments:
             - '@reg_person_connection'
@@ -14,6 +19,7 @@ services:
             - '@user_connection'
 
     reg_person_updater:
+        public: true
         class: AppBundle\Action\RegPerson\RegPersonUpdater
         arguments:
             - '@reg_person_connection'
@@ -22,12 +28,14 @@ services:
     # ===========================================
     # RegPersonPerson Update
     reg_person_persons_update_form:
+        public: true
         class:  AppBundle\Action\RegPerson\Persons\Update\PersonsUpdateForm
         parent: abstract_form
         arguments:
             - '@reg_person_finder'
 
     reg_person_persons_update_controller:
+        public: true
         class:  AppBundle\Action\RegPerson\Persons\Update\PersonsUpdateController
         parent: abstract_controller
         arguments:
@@ -36,6 +44,7 @@ services:
             - '@reg_person_updater'
 
     reg_person_persons_update_view:
+        public: true
         class:  AppBundle\Action\RegPerson\Persons\Update\PersonsUpdateView
         parent: abstract_view2
         arguments:
@@ -44,12 +53,14 @@ services:
     # ===========================================
     # RegPersonTeam Update
     reg_person_teams_update_form:
+        public: true
         class:  AppBundle\Action\RegPerson\Teams\Update\TeamsUpdateForm
         parent: abstract_form
         arguments:
             - '@reg_person_finder'
 
     reg_person_teams_update_controller:
+        public: true
         class:  AppBundle\Action\RegPerson\Teams\Update\TeamsUpdateController
         parent: abstract_controller
         arguments:
@@ -58,6 +69,7 @@ services:
             - '@reg_person_updater'
 
     reg_person_teams_update_view:
+        public: true
         class:  AppBundle\Action\RegPerson\Teams\Update\TeamsUpdateView
         parent: abstract_view2
         arguments:
