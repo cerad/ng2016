@@ -1,11 +1,16 @@
 services:
 
+    _defaults: { public: true }
+
     project_connection:
+        public: true
         alias: doctrine.dbal.ng2019_connection
 
     project_factory:
+        public: true
         class: AppBundle\Action\Project\ProjectFactory
 
     project_person_repository:
+        public: true
         class: AppBundle\Action\Project\Person\ProjectRersonRepository
         arguments: ['@project_connection','@project_factory']

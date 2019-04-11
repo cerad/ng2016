@@ -1,27 +1,35 @@
 services:
 
+    _defaults: { public: true }
+
     ayso_connection:
+        public: true
         alias: doctrine.dbal.ayso_connection
 
     ng2019_connection:
+        public: true
         alias: doctrine.dbal.ng2019_connection
 
     vol_certs:
+        public: true
         class: AppBundle\Action\Services\VolCerts
 
     ayso_repository:
+        public: true
         class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository
         arguments:
             - '@ayso_connection'
             - '@vol_certs'
 
     ayso_load_eayso_command:
+        public: true
         class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
         tags: [{ name: console.command }]
         arguments:
             - '@ayso_connection'
 
     ayso_update_command:
+        public: true
         class: AppBundle\Action\Physical\Ayso\Load\AYSOUpdateCommand
         tags: [{ name: console.command }]
         arguments:
@@ -29,16 +37,20 @@ services:
             - '@vol_certs'
 
     ayso_load_orgs_command:
+        public: true
         class: AppBundle\Action\Physical\Ayso\Load\LoadOrgsCommand
         tags: [{ name: console.command }]
         arguments: ['@ayso_connection']
 
     ayso_region_key_transformer:
+        public: true
         class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionKeyTransformer
 
     ayso_volunteer_key_transformer:
+        public: true
         class:  AppBundle\Action\Physical\Ayso\DataTransformer\VolunteerKeyTransformer
 
     ayso_region_to_sar_transformer:
+        public: true
         class:  AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer
         arguments: ['@ayso_repository']

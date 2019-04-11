@@ -1,20 +1,26 @@
 services:
 
+    _defaults: { public: true }
+
     pool_connection:
+        public: true
         alias: doctrine.dbal.ng2019games_connection
 
     # ===========================================
     # Pool Team Export
     pool_team_export_controller:
+        public: true
         class:  AppBundle\Action\PoolTeam\Export\PoolTeamExportController
         parent: abstract_controller
         arguments:
             - '@game_finder'
 
     pool_team_export_writer_excel:
+        public: true
         class:  AppBundle\Action\PoolTeam\Export\PoolTeamExportWriterExcel
 
     pool_team_export_view_excel:
+        public: true
         class:  AppBundle\Action\PoolTeam\Export\PoolTeamExportViewExcel
         parent: abstract_view2
         arguments:
@@ -23,17 +29,21 @@ services:
     # ===========================================
     # Pool Team Import
     pool_team_import_reader_excel:
+        public: true
         class:  AppBundle\Action\PoolTeam\Import\PoolTeamImportReaderExcel
 
     pool_team_import_updater:
+        public: true
         class:  AppBundle\Action\PoolTeam\Import\PoolTeamImportUpdater
         arguments: ['@pool_connection']
 
     pool_team_import_form:
+        public: true
         class:  AppBundle\Action\PoolTeam\Import\PoolTeamImportForm
         parent: abstract_controller
 
     pool_team_import_controller:
+        public: true
         class:  AppBundle\Action\PoolTeam\Import\PoolTeamImportController
         parent: abstract_controller
         arguments:
@@ -42,6 +52,7 @@ services:
             - '@pool_team_import_updater'
 
     pool_team_import_view:
+        public: true
         class:  AppBundle\Action\PoolTeam\Import\PoolTeamImportView
         parent: abstract_view2
         arguments:
