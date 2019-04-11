@@ -64,8 +64,7 @@ EOD;
 
         // TODO just add orgKey to record
         $sarParts = explode('/', $e3Certs['SAR']);
-
-        $vol['orgKey'] = sprintf('AYSOR:%04d', $sarParts['2']);
+        $vol['orgKey'] = isset($sarParts[2]) ? sprintf('AYSOR:%04d', $sarParts['2']) : null;
 
         return $vol;
     }
