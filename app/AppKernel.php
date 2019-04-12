@@ -1,9 +1,22 @@
 <?php
 
+use AppBundle\Action\AbstractController;
+use AppBundle\Action\AbstractController2;
+
+use AppBundle\Action\AbstractView;
+use AppBundle\Action\AbstractView2;
+
+use Zayso\Common\Locator\DataTransformerLocator;
+use Zayso\Common\Locator\ViewLocator;
+
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 
-class AppKernel extends Kernel
+class AppKernel extends Kernel implements CompilerPassInterface
 {
     public function registerBundles()
     {
@@ -51,5 +64,39 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+    }
+    protected function build(ContainerBuilder $container)
+    {
+        $container->registerForAutoconfiguration(AbstractController::class)
+            ->addTag('controller.service_arguments');
+        $container->registerForAutoconfiguration(AbstractController2::class)
+            ->addTag('controller.service_arguments');
+        $container->registerForAutoconfiguration(AbstractView::class)
+            ->addTag('zayso_view');
+        $container->registerForAutoconfiguration(AbstractView2::class)
+            ->addTag('zayso_view');
+        //$container->registerForAutoconfiguration(ProjectInterface::class)
+        //    ->addTag('project.base');
+        //$container->registerForAutoconfiguration(ProjectTemplateInterface::class)
+        //    ->addTag('project.template');
+        $container->registerForAutoconfiguration(DataTransformerInterface::class)
+            ->addTag('zayso_data_transformer');
+    }
+    public function process(ContainerBuilder $container)
+    {
+        $this->addLocator($container, DataTransformerLocator::class, ['zayso_data_transformer']);
+        $this->addLocator($container, ViewLocator::class, ['zayso_view']);
+
+    }
+    private function addLocator(ContainerBuilder $container, string $locatorId, array $tags ) : void
+    {
+        $ids = [];
+        foreach($tags as $tag) {
+            foreach ($container->findTaggedServiceIds($tag) as $id => $tagsUsed) {
+                $ids[$id] = new Reference($id);
+            }
+        }
+        $locator = $container->getDefinition($locatorId);
+        $locator->setArguments([$ids]);
     }
 }
