@@ -1,12 +1,16 @@
 <?php declare(strict_types=1);
 
 namespace Zayso\Fed;
+
+use InvalidArgumentException;
+
 /**
  * @property-read string $role
  * @property-read string $roleDate
  * @property-read string $badge
  * @property-read string $badgeDate
  * @property-read int    $sort
+ * @property-read bool   $isVerified
  *
  * TODO Add sport to generalize
  */
@@ -29,5 +33,13 @@ class FedPersonCert
     public function withRoleDate(string $roleDate) : FedPersonCert
     {
         return new FedPersonCert($this->role,$roleDate,$this->badge,$this->badgeDate,$this->sort);
+    }
+    public function __get($name)
+    {
+        switch($name) {
+            case 'isVerified':
+                return isset($this->date) ? true : false;
+        }
+        throw new InvalidArgumentException('FedPersonCert::' . $name);
     }
 }
