@@ -19,8 +19,9 @@ doctrine:
                 user:     '%database_user%'
                 password: '%database_password%'
                 charset:  UTF8
+                wrapper_class: Zayso\Fed\Ayso\AysoConnection
                 option:
-                    20: true     # PDO::ATTR_EMULATE_PREPARES
+                    20:   false    # PDO::ATTR_EMULATE_PREPARES
                     1000: true     # PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
                     1001: true     # PDO::MYSQL_ATTR_LOCAL_INFILE
             test:
@@ -39,6 +40,19 @@ doctrine:
                 user:     '%database_user%'
                 password: '%database_password%'
                 charset:  UTF8
+            reg_person:
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name_ng2019%'
+                user:     '%database_user%'
+                password: '%database_password%'
+                charset:  UTF8
+                wrapper_class: Zayso\Reg\Person\RegPersonConnection
+                option:
+                    20:   false    # PDO::ATTR_EMULATE_PREPARES
+                    1000: true     # PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
+                    1001: true     # PDO::MYSQL_ATTR_LOCAL_INFILE
             ng2019games:
                 driver:   '%database_driver%'
                 host:     '%database_host%'

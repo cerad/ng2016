@@ -4,6 +4,8 @@ parameters:
 #    parameter_name: value
 
 imports:
+    - { resource: '../../src/Fed/services.yaml' }
+    - { resource: '../../src/Reg/services.yaml' }
     - { resource: '../../src/Ayso/services.yaml' }
 
 services:

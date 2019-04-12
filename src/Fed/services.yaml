@@ -1,0 +1,9 @@
+# Fed
+services:
+
+    _defaults: { autowire: true, autoconfigure: true, public: false }
+
+    Zayso\Fed\:
+        resource: './*'
+
+    Zayso\Fed\Ayso\AysoConnection: '@doctrine.dbal.ayso_connection'

@@ -1,0 +1,9 @@
+# Fed
+services:
+
+    _defaults: { autowire: true, autoconfigure: true, public: false }
+
+    Zayso\Reg\:
+        resource: './*'
+
+    Zayso\Reg\Person\RegPersonConnection: '@doctrine.dbal.reg_person_connection'
