@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use Zayso\Fed\FedPerson;
+use Zayso\Fed\FedPersonCert;
 
 class AysoFinder
 {
@@ -61,44 +62,54 @@ class AysoFinder
             'AYSO:' . $details["VolunteerSAR"],
             $details["VolunteerMembershipYear"]
         );
-        return $fedPerson;
 
-        foreach($details as $key => $certs) {
+        foreach($details as $group => $certs) {
             if (is_array($certs)) {
                 foreach($certs as $certData) {
-                    $this->processCert($vol,$certData,$key);
+                    $cert = $this->createCert($group,$certData);
+                    if ($cert) {
+                        $fedPerson->certs->add($cert);
+                    }
                 }
             }
         }
-        //dump($details);
-        return $vol;
+        return $fedPerson;
     }
-    private function processCert(AysoVol $vol, array $certData, string $group) : void
+    // Make public for testing
+    public function createCert(string $group, array $certData) : ?FedPersonCert
     {
-        switch($group) {
-            case 'VolunteerCertificationsInstructor':
-            case 'VolunteerCertificationsManagement':
-                return;
-        }
-        $desc = $certData['CertificationDesc'];
+        $certMeta = $this->getCertMeta($group,$certData['CertificationDesc']);
+
+        if ($certMeta === null) return null;
+
         $date = $certData['CertificationDateIsNull'] ? null : $this->transformDate($certData['CertificationDate']);
 
-        $certMeta = isset($this->certMetas[$desc]) ? $this->certMetas[$desc] : null;
-        if ($certMeta === null) {
-            die('Unknown cert type ' . $desc . ' ' . $group . "\n");
-            // Lots of coaches and some older stuff
-            //return;
-        }
-        if ($certMeta['role'] === null) {
-            return;
-        }
-        $cert = new AysoVolCert(
+        $cert = new FedPersonCert(
             $certMeta['role'],  $date,
             $certMeta['badge'], $date,
             $certMeta['sort']
         );
-        $vol->certs->add($cert);
-        dump ($cert);
+        return $cert;
+    }
+    // public for testing
+    public function getCertMeta(string $group, string $desc) : ?array
+    {
+        switch($group) {
+            case 'VolunteerCertificationsCoach':
+            case 'VolunteerCertificationsInstructor':
+            case 'VolunteerCertificationsManagement':
+                return null;
+        }
+        $certMeta = isset($this->certMetas[$desc]) ? $this->certMetas[$desc] : null;
+        if ($certMeta === null) {
+            //die('Unknown cert type ' . $desc . ' ' . $group . "\n");
+            // Lots of coaches and some older stuff
+            return null;
+        }
+        if ($certMeta['sort'] === -1) {
+            return null;
+        }
+        return $certMeta;
     }
     private function transformDate(string $certDate) : string
     {
@@ -213,10 +224,14 @@ class AysoFinder
             'sort'  => 70,
         ],
         'Safe Haven Update' => [
+            'sort'  => -1,
             'role'  => null,
+            'badge' => null,
         ],
         'Webinar-Safe Haven Update' => [
+            'sort'  => -1,
             'role'  => null,
+            'badge' => null,
         ],
         'Z-Online CDC Concussion Awareness Training' => [
             'role'  => 'CERT_CONCUSSION',
@@ -246,7 +261,7 @@ class AysoFinder
         'Advanced Referee Course' => [
             'role'  => null,
             'badge' => null,
-            'sort'  => 30,
+            'sort'  => -1,
         ],
 
     ];

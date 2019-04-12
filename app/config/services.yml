@@ -6,7 +6,6 @@ parameters:
 imports:
     - { resource: '../../src/Fed/services.yaml' }
     - { resource: '../../src/Reg/services.yaml' }
-    - { resource: '../../src/Ayso/services.yaml' }
 
 services:
 #    service_name:

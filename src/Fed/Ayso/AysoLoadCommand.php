@@ -39,7 +39,41 @@ class AysoLoadCommand extends Command
     {
 
         echo "AYSO Test\n";
-        $this->loadMany();
+        $this->loadRawCerts();
+    }
+    private function loadRawCerts()
+    {
+        $sql = 'SELECT id,name,fedKey AS fedPersonId FROM projectPersons WHERE projectKey = ?';
+        $rows = $this->regPersonConn->executeQuery($sql,[self::projectIdNG2019])->fetchAll();
+        foreach($rows as $row) {
+            $fedPersonId = $row['fedPersonId'];
+            $this->loadRawCertForPerson($fedPersonId);
+        }
+    }
+    private function loadRawCertForPerson($fedPersonId)
+    {
+        $data = $this->finder->findData($fedPersonId);
+        if ($data === null) return;
+        $details = $data['VolunteerCertificationDetails'];
+        foreach($details as $group => $certDatas) {
+            if (is_array($certDatas)) {
+                foreach($certDatas as $certData) {
+                    $this->loadRawCert($group,$certData['CertificationDesc']);
+                }
+            }
+        }
+    }
+    private function loadRawCert(string $group, string $desc)
+    {
+        $sql = 'SELECT count(*) AS count FROM CertDesc WHERE `group` = ? AND `desc` = ?';
+        $row = $this->aysoConn->executeQuery($sql,[$group,$desc])->fetch();
+        if ($row['count'] !== 0) {
+            return;
+        }
+        $this->aysoConn->insert('CertDesc',[
+            '`group`' => $group,
+            '`desc`'  => $desc,
+        ]);
     }
     private function loadMany()
     {

@@ -1,26 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Ayso;
+namespace Zayso\Fed;
 
 use \ArrayIterator;
 
-class AysoVolCerts extends ArrayIterator
+class FedPersonCerts extends ArrayIterator
 {
-    public function __construct(AysoVolCert ...$items)
+    public function __construct(FedPersonCert ...$items)
     {
         parent::__construct($items);
     }
-    public function current() : AysoVolCert
+    public function current() : FedPersonCert
     {
         return parent::current();
     }
-    public function offsetGet($offset) : AysoVolCert
+    public function offsetGet($offset) : FedPersonCert
     {
         return parent::offsetGet($offset);
     }
+
     // Add a cert, only one cert per role, track oldest roleDate
-    public function add(AysoVolCert $cert) : void
+    public function add(FedPersonCert $cert) : void
     {
         $certKey = $cert->role;
         if ($certKey === null) {

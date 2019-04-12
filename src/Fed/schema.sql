@@ -17,3 +17,14 @@ CREATE TABLE FedPersons
   CONSTRAINT PK_FedPersons PRIMARY KEY(FedPersonId)
 
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS CertDesc;
+
+CREATE TABLE CertDesc
+(
+  `group`  VARCHAR( 40) NOT NULL,
+  `desc`   VARCHAR( 80) NOT NULL,
+
+  CONSTRAINT PK_CertDesc PRIMARY KEY(`group`,`desc`)
+
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;

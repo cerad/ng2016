@@ -9,7 +9,7 @@ namespace Zayso\Fed;
  * @property-read string $ageGroup
  * @property-read string $fedOrgId
  * @property-read string $memYear
- *  property-read AysoVolCerts $certs
+ * @property-read FedPersonCerts $certs
  */
 class FedPerson
 {
@@ -20,7 +20,7 @@ class FedPerson
     public $fedOrgId;    // 5/C/0894
     public $memYear;     // MY2016
 
-    //public $certs;
+    public $certs;
 
     public function __construct(
         string $fedPersonId,
@@ -37,6 +37,6 @@ class FedPerson
         $this->fedOrgId    = $fedOrgId;
         $this->memYear     = $memYear;
 
-        //$this->certs = new AysoVolCerts(); // Not immutable
+        $this->certs = new FedPersonCerts(); // Not immutable
     }
 }

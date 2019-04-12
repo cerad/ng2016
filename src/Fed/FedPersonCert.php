@@ -1,14 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace App\Ayso;
+namespace Zayso\Fed;
 /**
  * @property-read string $role
  * @property-read string $roleDate
  * @property-read string $badge
  * @property-read string $badgeDate
  * @property-read int    $sort
+ *
+ * TODO Add sport to generalize
  */
-class AysoVolCert
+class FedPersonCert
 {
     public $role;
     public $roleDate;
@@ -24,8 +26,8 @@ class AysoVolCert
         $this->badgeDate = $badgeDate;
         $this->sort      = $sort;
     }
-    public function withRoleDate(string $roleDate) : AysoVolCert
+    public function withRoleDate(string $roleDate) : FedPersonCert
     {
-        return new AysoVolCert($this->role,$roleDate,$this->badge,$this->badgeDate,$this->sort);
+        return new FedPersonCert($this->role,$roleDate,$this->badge,$this->badgeDate,$this->sort);
     }
 }
