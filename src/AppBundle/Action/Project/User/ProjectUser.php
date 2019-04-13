@@ -108,4 +108,11 @@ class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
     {
         return $this->projectKey . ':' . $this->personKey;
     }
+    public function __get($name)
+    {
+        switch($name) {
+            case 'projectId': return $this->projectKey;
+            case 'personId':  return $this->personKey;
+        }
+    }
 }

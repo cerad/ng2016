@@ -7,13 +7,18 @@ use AppBundle\Action\AbstractController2;
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
+
 use Doctrine\DBAL\DBALException;
 
 use AppBundle\Action\Services\VolCerts;
 
 use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+use Zayso\Reg\Person\RegPerson;
+use Zayso\Reg\Person\RegPersonFinder;
+use Zayso\Reg\Person\RegPersonMapper;
 
 class RegisterController extends AbstractController2
 {
@@ -21,28 +26,23 @@ class RegisterController extends AbstractController2
     private $fedRepository;
     private $projectPersonRepository;
     private $volCerts;
+    private $regPersonFinder;
+    private $regPersonMapper;
 
     private $successRouteName;
     private $templateEmail;
 
     private $refereeBadgeUser;
 
-    /**
-     * RegisterController constructor.
-     * @param RegisterForm $registerForm
-     * @param ProjectPersonRepositoryV2 $projectPersonRepository
-     * @param PhysicalAysoRepository $fedRepository
-     * @param $successRouteName
-     * @param RegisterTemplateEmail $templateEmail
-     * @param VolCerts $volCerts
-     */
     public function __construct(
         RegisterForm $registerForm,
         ProjectPersonRepositoryV2 $projectPersonRepository,
         PhysicalAysoRepository $fedRepository,
-        $successRouteName,
+        string $successRouteName,
         RegisterTemplateEmail $templateEmail,
-        VolCerts $volCerts
+        VolCerts $volCerts,
+        RegPersonFinder $regPersonFinder,
+        RegPersonMapper $regPersonMapper
     ) {
         $this->registerForm = $registerForm;
         $this->fedRepository = $fedRepository;
@@ -51,24 +51,27 @@ class RegisterController extends AbstractController2
         $this->successRouteName = $successRouteName;
         $this->templateEmail = $templateEmail;
         $this->volCerts = $volCerts;
+        $this->regPersonFinder = $regPersonFinder;
+        $this->regPersonMapper = $regPersonMapper;
     }
-
-    /**
-     * @param Request $request
-     * @return RedirectResponse|null
-     * @throws DBALException
-     */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request) : ?Response
     {
+        $regPerson = $this->findRegPersonForUser($this->getUser());
+        dump($regPerson);
+
+        $regPersonArray = $this->regPersonMapper->toArray2016($regPerson);
+
         $projectPerson = $this->findProjectPersonForUser($this->getUser());
 
         $projectPersonArray = $projectPerson->toArray();
 
         // Real hack here
+        $regPersonArray    ['refereeBadge'] = $regPerson->refereeBadgeUser;
         $projectPersonArray['refereeBadge'] = $projectPerson->getRefereeBadgeUser();
-
+        dump($projectPersonArray);
+        dump($regPersonArray);
         $registerForm = $this->registerForm;
-        $registerForm->setData($projectPersonArray);
+        $registerForm->setData($regPersonArray);
         $registerForm->handleRequest($request);
 
         if ($registerForm->isValid()) {
@@ -81,6 +84,9 @@ class RegisterController extends AbstractController2
             if ($this->refereeBadgeUser === 'None') {
                 $this->refereeBadgeUser = null;
             }
+            $regPerson = $this->regPersonMapper->fromArray2016($projectPersonArray);
+            dump($regPerson);
+
             $projectPerson = (new ProjectPerson)->fromArray($projectPersonArray);
             
             $projectPerson = $this->process($projectPerson);
@@ -264,6 +270,10 @@ class RegisterController extends AbstractController2
         return $projectPerson;
     }
 
+    private function findRegPersonForUser($user) : ?RegPerson
+    {
+        return $this->regPersonFinder->findByProjectPerson($user->projectId,$user->personId);
+    }
     /**
      * @param $user
      * @return ProjectPerson|null

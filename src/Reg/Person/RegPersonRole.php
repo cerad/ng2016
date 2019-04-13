@@ -48,8 +48,9 @@ class RegPersonRole
 
     public function __construct(array $data = [])
     {
-        $this->setArray($data);
+        $this->setFromArray($data);
     }
+    /*
     private function init(array $data) : void
     {
         if (isset($data['regPersonRoleId'])) $this->regPersonRoleId = (int)$data['regPersonRoleId'];
@@ -71,5 +72,5 @@ class RegPersonRole
         if (isset($data['misc']))  $this->misc  = $data['misc'];
         if (isset($data['notes'])) $this->notes = $data['notes'];
 
-    }
+    }*/
 }

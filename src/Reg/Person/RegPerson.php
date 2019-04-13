@@ -81,45 +81,7 @@ class RegPerson
     {
         $this->roles = new RegPersonRoles();
 
-        $this->setArray($data);
-    }
-    // Thanks to setter this should go away
-    private function init(array $data) : void
-    {
-        if (isset($data['regPersonId'])) $this->regPersonId = (int)$data['regPersonId'];
-
-        if (isset($data['projectId']))   $this->projectId   = $data['projectId'];
-        if (isset($data['personId']))    $this->personId    = $data['personId'];
-        if (isset($data['fedPersonId'])) $this->fedPersonId = $data['fedPersonId'];
-        if (isset($data['fedOrgId']))    $this->fedOrgId    = $data['fedOrgId'];
-
-        if (isset($data['regYear']))    $this->regYear    = $data['regYear'];
-        if (isset($data['registered'])) $this->registered = (bool)$data['registered'];
-        if (isset($data['verified']))   $this->verified   = (bool)$data['verified'];
-
-        if (isset($data['name']))      $this->name   = $data['name'];
-        if (isset($data['email']))     $this->email  = $data['email'];
-        if (isset($data['phone']))     $this->phone  = $data['phone'];
-        if (isset($data['gender']))    $this->gender = $data['gender'];
-        if (isset($data['dob']))       $this->dob    = $data['dob'];
-        if (isset($data['age']))       $this->age    = $data['age'];
-
-        if (isset($data['shirtSize'])) $this->shirtSize = $data['shirtSize'];
-        if (isset($data['notes']))     $this->notes     = $data['notes'];
-        if (isset($data['notesUser'])) $this->notesUser = $data['notesUser'];
-        if (isset($data['plans']))     $this->plans     = $data['plans'];
-        if (isset($data['avail']))     $this->avail     = $data['avail'];
-
-        if (isset($data['createdOn'])) $this->createdOn = $data['createdOn'];
-        if (isset($data['updatedOn'])) $this->updatedOn = $data['updatedOn'];
-        if (isset($data['version']))   $this->version   = (int)$data['version'];
-
-        if (isset($data['roles'])) {
-            foreach($data['roles'] as $roleData) {
-                $role = new RegPersonRole($roleData);
-                $this->roles[$role->role] = $role;
-            }
-        }
+        $this->setFromArray($data);
     }
     public function addRole(RegPersonRole $role)
     {
@@ -170,7 +132,7 @@ class RegPerson
             return null;
         }
         $cert = new RegPersonRole();
-        $cert->setArray(['role' => $certKey, 'active' => false]);
+        $cert->setFromArray(['role' => $certKey, 'active' => false]);
         return $cert;
     }
     /**
@@ -187,7 +149,7 @@ class RegPerson
             return null;
         }
         $role = new RegPersonRole();
-        $role->setArray(['role' => $roleKey]);
+        $role->setFromArray(['role' => $roleKey]);
         return $role;
     }
 

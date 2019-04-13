@@ -2,6 +2,11 @@
 
 namespace Zayso\Common\Traits;
 
+/*
+ * Basically a war to update readonly properties
+ * The assumption here is that data being passed is always the correct type
+ * And that the keys are always valid
+ */
 trait SetterTrait
 {
     public function set(string $key, $value) : self
@@ -9,7 +14,7 @@ trait SetterTrait
         $this->$key = $value;
         return $this;
     }
-    public function setArray(array $data = []) : self
+    public function setFromArray(array $data = []) : self
     {
         foreach($data as $key => $value) {
             $this->$key = $value;

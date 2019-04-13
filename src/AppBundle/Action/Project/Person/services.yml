@@ -2,6 +2,9 @@ services:
 
     _defaults: { public: true }
 
+    # This really does not like using parent service definitions
+    #_defaults: { autowire: true, autoconfigure: true, public: true }
+
     project_person_connection:
         public: true;
         alias: doctrine.dbal.ng2019_connection
@@ -35,6 +38,8 @@ services:
             - '%app_home_route%'
             - '@project_person_register_template_email'
             - '@vol_certs'
+            - '@Zayso\Reg\Person\RegPersonFinder'
+            - '@Zayso\Reg\Person\RegPersonMapper'
 
     project_person_register_view:
         public: true;
