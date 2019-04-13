@@ -19,7 +19,10 @@ class FedPersonCerts extends ArrayIterator
     {
         return parent::offsetGet($offset);
     }
-
+    public function get($key) : ?FedPersonCert
+    {
+        return $this->offsetExists($key) ? $this->offsetGet($key) : null;
+    }
     // Add a cert, only one cert per role, track oldest roleDate
     public function add(FedPersonCert $cert) : void
     {

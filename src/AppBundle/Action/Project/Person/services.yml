@@ -40,6 +40,8 @@ services:
             - '@vol_certs'
             - '@Zayso\Reg\Person\RegPersonFinder'
             - '@Zayso\Reg\Person\RegPersonMapper'
+            - '@Zayso\Reg\Person\RegPersonSaver'
+            - '@Zayso\Fed\Ayso\AysoFinder'
 
     project_person_register_view:
         public: true;

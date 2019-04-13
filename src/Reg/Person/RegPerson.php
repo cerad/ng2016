@@ -39,11 +39,17 @@ use DateTime;
  * @property-read int      version
  *
  * Virtual
+ * @property-read boolean willReferee
+ * @property-read boolean willVolunteer
+ *
+ * @property-read boolean isRegistered
+ * @property-read boolean isVerified
+ *
  * @property-read boolean isReferee
  * @property-read string  refereeBadge
  * @property-read string  refereeBadgeUser
  */
-class RegPerson
+final class RegPerson
 {
     use SetterTrait;
 
@@ -154,7 +160,7 @@ class RegPerson
     }
 
     /**
-     * TODO Use RegPersonRoles
+     * TODO Return RegPersonRoles
      * @return RegPersonRole[]
      */
     public function getRoles()
@@ -170,12 +176,24 @@ class RegPerson
     public function __get($name)
     {
         switch ($name) {
+
+            case 'isVerified':   return $this->verified;
+            case 'isRegistered': return $this->registered;
+
             case 'isReferee': 
                 return isset($this->roles['ROLE_REFEREE']) ? true : false;
+
             case 'refereeBadge':
                 return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badge : null;
+
             case 'refereeBadgeUser':
                 return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badgeUser : null;
+
+            case 'willReferee':
+                return strtolower($this->plans['willReferee']) !== 'no' ? true : false;
+
+            case 'willVolunteer':
+                return strtolower($this->plans['willVolunteer']) !== 'no' ? true : false;
         }
         return null;
     }

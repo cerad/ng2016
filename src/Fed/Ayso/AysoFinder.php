@@ -29,6 +29,9 @@ class AysoFinder
     // Mainly for trouble shooting
     public function findData(?string $aysoid) : ?array
     {
+        if ($aysoid === null) {
+            return null;
+        }
         $aysoidParts = explode(':', trim($aysoid));
         $aysoid = isset($aysoidParts[1]) ? $aysoidParts[1] : $aysoid;
 

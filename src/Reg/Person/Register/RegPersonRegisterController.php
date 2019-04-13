@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace AppBundle\Action\Project\Person\Register;
+namespace Zayso\Reg\Person\Register;
 
 use AppBundle\Action\AbstractController2;
 
@@ -8,7 +8,6 @@ use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
-use AppBundle\Action\Project\User\ProjectUser;
 use Doctrine\DBAL\DBALException;
 
 use AppBundle\Action\Services\VolCerts;
@@ -22,9 +21,8 @@ use Zayso\Fed\FedPerson;
 use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonFinder;
 use Zayso\Reg\Person\RegPersonMapper;
-use Zayso\Reg\Person\RegPersonSaver;
 
-class RegisterController extends AbstractController2
+class RegPersonRegisterController extends AbstractController2
 {
     private $registerForm;
     private $fedRepository;
@@ -33,7 +31,6 @@ class RegisterController extends AbstractController2
 
     private $regPersonFinder;
     private $regPersonMapper;
-    private $regPersonSaver;
     private $fedPersonFinder;
 
     private $successRouteName;
@@ -50,7 +47,6 @@ class RegisterController extends AbstractController2
         VolCerts $volCerts,
         RegPersonFinder $regPersonFinder,
         RegPersonMapper $regPersonMapper,
-        RegPersonSaver  $regPersonSaver,
         AysoFinder      $fedPersonFinder
     ) {
         $this->registerForm = $registerForm;
@@ -63,7 +59,6 @@ class RegisterController extends AbstractController2
 
         $this->regPersonFinder = $regPersonFinder;
         $this->regPersonMapper = $regPersonMapper;
-        $this->regPersonSaver  = $regPersonSaver;
         $this->fedPersonFinder = $fedPersonFinder;
     }
     public function __invoke(Request $request) : ?Response
@@ -80,7 +75,8 @@ class RegisterController extends AbstractController2
         // Real hack here
         $regPersonArray    ['refereeBadge'] = $regPerson->refereeBadgeUser;
         $projectPersonArray['refereeBadge'] = $projectPerson->getRefereeBadgeUser();
-
+        dump($projectPersonArray);
+        dump($regPersonArray);
         $registerForm = $this->registerForm;
         $registerForm->setData($regPersonArray);
         $registerForm->handleRequest($request);
@@ -104,23 +100,21 @@ class RegisterController extends AbstractController2
                     'verified'   => false, // was null ?
                 ]);
             }
-            dump($regPerson);
-            $this->regPersonSaver->save($regPerson);
-            dump($regPerson);
+            dump($regPerson); die();
 
-            //$projectPerson = (new ProjectPerson)->fromArray($projectPersonArray);
+            $projectPerson = (new ProjectPerson)->fromArray($projectPersonArray);
             
-            //$projectPerson = $this->process($projectPerson);
+            $projectPerson = $this->process($projectPerson);
 
             // Maybe reset referee info?
-            //if ($registerForm->getSubmit() == 'nope') {
-            //    $projectPerson->registered = false;
-            //    $projectPerson->verified   = null;
-            //}
-            //$this->projectPersonRepository->save($projectPerson);
+            if ($registerForm->getSubmit() == 'nope') {
+                $projectPerson->registered = false;
+                $projectPerson->verified   = null;
+            }
+            $this->projectPersonRepository->save($projectPerson);
 
-            if ($regPerson->isRegistered === true) {
-                //$this->sendEmail($projectPerson);
+            if ($projectPerson['registered'] === true) {
+                $this->sendEmail($projectPerson);
             }
             return $this->redirectToRoute($this->successRouteName);
         }
@@ -197,7 +191,7 @@ class RegisterController extends AbstractController2
                 'notes'    => $notes,
             ]);
         }
-
+        
         // Want to referee?
         $this->processRegReferee($regPerson,$fedPerson);
 
@@ -422,27 +416,9 @@ class RegisterController extends AbstractController2
         $regPerson->addCert($cert);
     }
 
-    private function findRegPersonForUser(ProjectUser $user) : ?RegPerson
+    private function findRegPersonForUser($user) : ?RegPerson
     {
-        $projectId = $user['projectKey'];
-        $personId  = $user['personKey'];
-
-        // Existing
-        $regPerson = $this->regPersonFinder->findByProjectPerson($projectId,$personId);
-        if ($regPerson) {
-            return $regPerson;
-        }
-        // Try to clone
-
-        // Brand new
-        $data = [
-            'projectKey' => $projectId,
-            'personKey'  => $personId,
-            'email'      => $user['email'],
-            'name'       => $this->regPersonSaver->generateUniqueName($projectId,$user['name']),
-        ];
-        return $this->regPersonMapper->fromArray2016($data);
-
+        return $this->regPersonFinder->findByProjectPerson($user->projectId,$user->personId);
     }
     /**
      * @param $user

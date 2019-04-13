@@ -41,7 +41,7 @@ class FedPersonCert
     {
         switch($name) {
             case 'isVerified':
-                return isset($this->date) ? true : false;
+                return isset($this->badgeDate) ? true : false;
         }
         throw new InvalidArgumentException('FedPersonCert::' . $name);
     }

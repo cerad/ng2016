@@ -5,5 +5,11 @@ services:
 
     Zayso\Reg\:
         resource: './*'
+        exclude:  './Person/Register/{*.php}'
 
     Zayso\Reg\Person\RegPersonConnection: '@doctrine.dbal.reg_person_connection'
+
+    Zayso\Reg\Person\Register\RegPersonRegisterForm:
+        arguments:
+            $projectControls: '%app_project_controls%'
+            $formControls:    '%app_project_registration_form_controls%'
