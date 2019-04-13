@@ -37,14 +37,14 @@ class FedPersonCerts extends ArrayIterator
         // Higher badge
         if ($cert->sort > $certOld->sort) {
             if ($cert->roleDate > $certOld->roleDate) {
-                $cert = $cert->withRoleDate($certOld->roleDate);
+                $cert->set('roleDate',$certOld->roleDate);
             }
             $this->offsetSet($certKey,$cert);
             return;
 
         }
         if ($certOld->roleDate > $cert->roleDate) {
-            $certOld = $certOld->withRoleDate($cert->roleDate);
+            $certOld->set('roleDate',$cert->roleDate);
             $this->offsetSet($certKey,$certOld);
         }
     }

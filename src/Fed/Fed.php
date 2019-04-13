@@ -2,6 +2,8 @@
 
 namespace Zayso\Fed;
 
+use Zayso\Common\Traits\SetterTrait;
+
 /**
  * @property-read string $fedId
  * @property-read string $desc
@@ -9,6 +11,8 @@ namespace Zayso\Fed;
  */
 class Fed
 {
+    use SetterTrait;
+
     public $fedId;
     public $desc;
     public $sport; // Maybe sports

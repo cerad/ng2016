@@ -3,6 +3,7 @@
 namespace Zayso\Fed;
 
 use InvalidArgumentException;
+use Zayso\Common\Traits\SetterTrait;
 
 /**
  * @property-read string $role
@@ -16,6 +17,8 @@ use InvalidArgumentException;
  */
 class FedPersonCert
 {
+    use SetterTrait;
+
     public $role;
     public $roleDate;
     public $badge;
