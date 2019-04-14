@@ -22,7 +22,7 @@ final class RegPersonSaver
     }
     public function save(RegPerson $regPerson) : RegPerson
     {
-        $regPersonArray = $this->regPersonMapper->toArray2016($regPerson);
+        $regPersonArray = $this->regPersonMapper->storeToArray2016($regPerson);
 
         $regPersonArray['plans'] = isset($regPersonArray['plans']) ? serialize($regPersonArray['plans']) : null;
         $regPersonArray['avail'] = isset($regPersonArray['avail']) ? serialize($regPersonArray['avail']) : null;

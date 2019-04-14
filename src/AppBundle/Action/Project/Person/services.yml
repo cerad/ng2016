@@ -42,6 +42,7 @@ services:
             - '@Zayso\Reg\Person\RegPersonMapper'
             - '@Zayso\Reg\Person\RegPersonSaver'
             - '@Zayso\Fed\Ayso\AysoFinder'
+            - '@Zayso\Fed\Ayso\AysoIdTransformer'
 
     project_person_register_view:
         public: true;

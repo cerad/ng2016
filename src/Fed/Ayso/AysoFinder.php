@@ -133,7 +133,6 @@ class AysoFinder
 
         return $date;
     }
-
     // Return array from either json or name-value
     private function getResponseData(ResponseInterface $guzzleResponse)
     {
@@ -142,7 +141,9 @@ class AysoFinder
         if (!$content) return [];
 
         $json = json_decode($content, true);
-        if (JSON_ERROR_NONE === json_last_error()) return $json;
+        if (JSON_ERROR_NONE === json_last_error()) {
+            return $json;
+        }
 
         $data = [];
         parse_str($content, $data);

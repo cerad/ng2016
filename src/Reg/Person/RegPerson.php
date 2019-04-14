@@ -173,6 +173,19 @@ final class RegPerson
         }
         return $roles;
     }
+    /**
+     * @return RegPersonRole[]
+     */
+    public function getCerts()
+    {
+        $certs = [];
+        foreach($this->roles as $certKey => $cert) {
+            if (substr($certKey,0,5) === 'CERT_') {
+                $certs[$certKey] = $cert;
+            }
+        }
+        return $certs;
+    }
     public function __get($name)
     {
         switch ($name) {

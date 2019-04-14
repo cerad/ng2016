@@ -2,7 +2,7 @@
 
 namespace Zayso\Reg\Person;
 
-class RegPersonFinder
+final class RegPersonFinder
 {
     private $regPersonConn;
 
@@ -85,5 +85,13 @@ EOT;
             $regPerson->addRole($regPersonRole);
         }
         return $regPerson;
+    }
+    public function findLatestProjectByPerson(string $personId) : ?string
+    {
+        $sql = 'SELECT projectKey,createdOn,updatedOn FROM projectPersons WHERE personKey = ? ORDER BY updatedOn DESC';
+
+        $row = $this->regPersonConn->executeQuery($sql,[$personId])->fetch();
+
+        return $row ? $row['projectKey'] : null;
     }
 }

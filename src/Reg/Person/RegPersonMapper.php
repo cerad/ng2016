@@ -14,7 +14,7 @@ class RegPersonMapper
         $this->regPersonRoleMapper = $regPersonRoleMapper;
     }
     // Return 2016 version of array data
-    public function toArray2016(RegPerson $regPerson) : array
+    public function storeToArray2016(RegPerson $regPerson) : array
     {
         $data = [
             'id'         => $regPerson->regPersonId,
@@ -48,7 +48,7 @@ class RegPersonMapper
         }
         return $data;
     }
-    public function fromArray2016(array $data) : RegPerson
+    public function createFromArray2016(array $data) : RegPerson
     {
         $datax = [];
 

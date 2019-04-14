@@ -24,4 +24,6 @@ Change region on registration form to sar
   e3 sars look like 5/C/0894
   it should also be possible to generate sar from region
   
+Todo
+  Find a place to store role can cert constants like CERT_REFEREE
   
