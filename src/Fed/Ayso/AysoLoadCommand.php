@@ -39,7 +39,8 @@ class AysoLoadCommand extends Command
     {
 
         echo "AYSO Test\n";
-        $this->loadRawCerts();
+        $this->loadMany();
+        //$this->loadRawCerts();
     }
     private function loadRawCerts()
     {
@@ -77,20 +78,37 @@ class AysoLoadCommand extends Command
     }
     private function loadMany()
     {
-        $sql = 'SELECT id,name,fedKey AS fedPersonId FROM projectPersons WHERE projectKey = ?';
-        $rows = $this->regPersonConn->executeQuery($sql,[self::projectIdNG2019])->fetchAll();
+        $sql = 'SELECT id,name,fedKey AS fedPersonId FROM projectPersons';//' WHERE projectKey = ?';
+        //$rows = $this->regPersonConn->executeQuery($sql,[self::projectIdNG2019])->fetchAll();
+        $rows = $this->regPersonConn->executeQuery($sql)->fetchAll();
         foreach($rows as $row) {
+
             $fedPersonId = $row['fedPersonId'];
-            $fedPerson = $this->finder->find($fedPersonId);
-            if ($fedPerson === null) {
-                dump($row);
-                ///echo sprintf("*** Invalid aysoid %s\n",$fedPersonId);
-            }
-            else {
-                $this->processFedPerson($fedPerson);
+            if ($fedPersonId === null) $fedPersonId = '';
+            if (!$this->haveFedPerson('AYSO:' . substr($fedPersonId,6))) {
+
+                echo sprintf("Load %s %s\n",$fedPersonId,$row['name']);
+
+                $fedPerson = $this->finder->find($fedPersonId);
+                if ($fedPerson === null) {
+                    dump($row);
+                    ///echo sprintf("*** Invalid aysoid %s\n",$fedPersonId);
+                } else {
+                    $this->processFedPerson($fedPerson);
+                    sleep(5);
+                }
             }
         }
         //dump($rows);
+    }
+    private function haveFedPerson(string $fedPersonId) : bool
+    {
+        $sql = 'SELECT count(*) AS count FROM FedPersons WHERE FedPersonId = ?';
+
+        $row = $this->aysoConn->executeQuery($sql,[$fedPersonId])->fetch();
+
+        return $row['count'] ? true : false;
+
     }
     private function loadOne(string $fedPersonId) : void
     {
@@ -100,16 +118,12 @@ class AysoLoadCommand extends Command
         }
         $this->processFedPerson($fedPerson);
     }
-    private function processFedPerson(FedPerson $fedPerson)
+    private function processFedPerson(FedPerson $fedPerson) : void
     {
-        $sql = 'SELECT count(*) AS count FROM FedPersons WHERE FedPersonId = ?';
-
         $fedPersonId = $fedPerson->fedPersonId;
 
-        $row = $this->aysoConn->executeQuery($sql,[$fedPersonId])->fetch();
-        if ($row['count'] !== 0) {
-            return;
-        }
+        if ($this->haveFedPerson($fedPersonId)) return;
+
         $this->aysoConn->insert('FedPersons',[
             'FedPersonId' => $fedPersonId,
             'FedId'       => $fedPerson->fedId,

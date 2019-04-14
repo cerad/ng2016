@@ -25,7 +25,7 @@ class FedPersonCert
     public $badgeDate;
     public $sort;
 
-    public function __construct(string $role, string $roleDate, string $badge, string $badgeDate, int $sort)
+    public function __construct(string $role, ?string $roleDate, string $badge, ?string $badgeDate, int $sort)
     {
         $this->role      = $role;
         $this->roleDate  = $roleDate;

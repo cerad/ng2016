@@ -17,9 +17,14 @@ class AysoFinder
     //private $urlVolCerts = "https://national.ayso.org/Volunteers/ViewCertification?UserName=";
 
     private $guzzleClient;
+    private $idTransformer;
+    private $orgViewTransformer;
 
-    public function __construct()
+    public function __construct(AysoIdTransformer $idTransformer, AysoOrgViewTransformer $orgViewTransformer)
     {
+        $this->idTransformer      = $idTransformer;
+        $this->orgViewTransformer = $orgViewTransformer;
+
         $this->guzzleClient = new GuzzleClient([
             'verify'  => true,
             'timeout' => 5.0,
@@ -27,21 +32,19 @@ class AysoFinder
         ]);
     }
     // Mainly for trouble shooting
-    public function findData(?string $aysoid) : ?array
+    public function findData(?string $fedPersonId) : ?array
     {
-        if ($aysoid === null) {
-            return null;
-        }
-        $aysoidParts = explode(':', trim($aysoid));
-        $aysoid = isset($aysoidParts[1]) ? $aysoidParts[1] : $aysoid;
+        $fedPersonKey = $this->idTransformer->transform($fedPersonId);
+        if ($fedPersonKey === '') return null;
 
         try {
             $guzzleResponse = $this->guzzleClient->get($this->urlCert, [
-                'query' => ['AYSOID' => $aysoid]
+                'query' => ['AYSOID' => $fedPersonKey]
             ]);
         } catch (ClientException $e) {
             return null;
             // Time out or what not
+            // For console commands at least the exception still goes through
             //die($e->getMessage());
         }
 
@@ -49,21 +52,26 @@ class AysoFinder
 
         return isset($results['VolunteerCertificationDetails']) ? $results : null;
     }
-    public function find(?string $aysoid) : ?FedPerson
+    public function find(?string $fedPersonId) : ?FedPerson
     {
-        $results = $this->findData($aysoid);
+        $results = $this->findData($fedPersonId);
 
         if ($results === null) return null;
 
         $details = $results['VolunteerCertificationDetails'];
 
+        $fedPersonId = $this->idTransformer->reverseTransform($details["VolunteerAYSOID"]);
+        $fedOrgId    = $this->idTransformer->reverseTransform($details["VolunteerSAR"]);
+        $fedOrgView  = $this->orgViewTransformer->transform($fedOrgId);
+
         $fedPerson = new FedPerson(
-            'AYSO:' . (string)$details["VolunteerAYSOID"],
+            $fedPersonId,
             'AYSO',
             $details["VolunteerFullName"],
             $details["Type"],
-            'AYSO:' . $details["VolunteerSAR"],
-            $details["VolunteerMembershipYear"]
+            $fedOrgId,
+            $details["VolunteerMembershipYear"],
+            $fedOrgView
         );
 
         foreach($details as $group => $certs) {
