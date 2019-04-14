@@ -3,12 +3,12 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractView2;
 
-use AppBundle\Action\Project\Person\ProjectPerson;
-use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
+use Zayso\Reg\Person\RegPerson;
+use Zayso\Reg\Person\RegPersonViewDecorator;
 
 class RegisterTemplateEmail extends AbstractView2
 {
-    private $projectPersonViewDecorator;
+    private $personView;
 
     /* define inline styling for gmail */
     protected $styleSkHeader = '
@@ -51,19 +51,16 @@ class RegisterTemplateEmail extends AbstractView2
         vertical-align: middle;
     ';
 
-    public function __construct(
-        ProjectPersonViewDecorator $projectPersonViewDecorator
-    )
+    public function __construct(RegPersonViewDecorator $personView)
     {
-        $this->projectPersonViewDecorator = $projectPersonViewDecorator;
+        $this->personView = $personView;
     }
 
-    public function renderHtml($personArray)
+    public function renderHtml(RegPerson $person)
     {
-        $person = new ProjectPerson();
-        $person = $person->fromArray($personArray);
-        $personView = $this->projectPersonViewDecorator;
-        $personView->setProjectPerson($person);
+        $personView = $this->personView;
+        $personView->setPerson($person);
+
         return <<<EOD
 <html lang="en">
 <head>
@@ -87,7 +84,7 @@ class RegisterTemplateEmail extends AbstractView2
   <br>
   {$this->renderHtmlPerson($personView)}
 
-  {$this->renderHtmlGeneralInformation($personView)}
+  {$this->renderHtmlGeneralInformation()}
     
     <p style="{$this->styleP}">
       I will provide additional updates in the coming weeks. 
@@ -108,7 +105,7 @@ class RegisterTemplateEmail extends AbstractView2
 </html>
 EOD;
     }
-    private function renderHtmlGeneralInformation($personView) {
+    private function renderHtmlGeneralInformation() {
         return <<<EOT
   <p style="{$this->stylePStrong}">
     General Information
@@ -124,7 +121,7 @@ EOD;
     </p>
 EOT;
     } 
-    private function renderHtmlPerson(ProjectPersonViewDecorator $personView)
+    private function renderHtmlPerson(RegPersonViewDecorator $personView)
     {
         $regYearProject = $this->getCurrentProjectInfo()['regYear'];
 

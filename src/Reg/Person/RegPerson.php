@@ -210,5 +210,24 @@ final class RegPerson
         }
         return null;
     }
-
+    /* =====================================================
+     * Added to support view
+     *
+     */
+    public function getKey() : string
+    {
+        return sprintf('%s.%s',$this->projectId,$this->personId);
+    }
+    public function needsCerts()
+    {
+        return $this->needsCertSafeHaven() OR $this->needsCertConcussion();
+    }
+    public function needsCertSafeHaven()
+    {
+        return !(bool) $this->getCert('CERT_SAFE_HAVEN')->verified;
+    }
+    public function needsCertConcussion()
+    {
+        return !(bool) $this->getCert('CERT_CONCUSSION')->verified;
+    }
 }

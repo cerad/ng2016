@@ -282,20 +282,20 @@ parameters:
           cols:  60
 
         fedKey:
-            type:        integer # aysoid
+            type:        text # aysoid
             label:       AYSO Volunteer ID
             href:        eayso.org
-            placeHolder: 8 digit number
-            transformer: ayso_volunteer_key_transformer
-            constraints: ['aysoid_constraint'] # Maybe class name?
+            placeHolder: 8-8 digit number
+            transformer: Zayso\Fed\Ayso\AysoIdTransformer
+            #constraints: ['aysoid_constraint'] # Maybe class name?
 
         orgKey:
-            type:        integer # region
-            label:       AYSO Region Number
+            type:        text # sar
+            label:       AYSO Section/Area/Region
             href:        eayso.org
-            placeHolder: 1-4 digit number
-            transformer: ayso_region_key_transformer
-            constraints: ['aysoid_constraint'] # Maybe class name?
+            placeHolder: 5/C/0894
+            transformer: Zayso\Fed\Ayso\AysoIdTransformer
+            #constraints: ['aysoid_constraint'] # Maybe class name?
 
         availSatMorn:
             type:    select

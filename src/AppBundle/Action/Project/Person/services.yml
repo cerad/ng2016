@@ -15,6 +15,16 @@ services:
         arguments:
             - '@project_person_connection'
 
+    AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer: '@phone_transformer'
+
+    Zayso\Reg\Person\RegPersonViewDecorator:
+        public: true;
+        arguments:
+            - '@Zayso\Common\DataTransformer\PhoneTransformer'
+            - '@Zayso\Fed\Ayso\AysoIdTransformer'
+            - '@Zayso\Fed\Ayso\AysoOrgViewTransformer'
+            - '@Zayso\Reg\Person\RegPersonWillRefereeViewTransformer'
+
     project_person_view_decorator:
         public: true;
         class: AppBundle\Action\Project\Person\ProjectPersonViewDecorator
@@ -56,7 +66,7 @@ services:
         class:  AppBundle\Action\Project\Person\Register\RegisterTemplateEmail
         parent: abstract_view2
         arguments:
-            - '@project_person_view_decorator'
+            - '@Zayso\Reg\Person\RegPersonViewDecorator'
 
     project_person_register_form:
         public: true;

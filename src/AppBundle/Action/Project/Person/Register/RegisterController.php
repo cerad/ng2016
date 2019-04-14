@@ -5,15 +5,13 @@ namespace AppBundle\Action\Project\Person\Register;
 use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
-use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 
 use AppBundle\Action\Project\User\ProjectUser;
-use Doctrine\DBAL\DBALException;
 
 use AppBundle\Action\Services\VolCerts;
 
-//  Swift_Message;
+use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -75,7 +73,6 @@ class RegisterController extends AbstractController2
     public function __invoke(Request $request) : ?Response
     {
         $regPerson = $this->findRegPersonForUser($this->getUser());
-        dump($regPerson);
 
         $regPersonArray = $this->regPersonMapper->storeToArray2016($regPerson);
 
@@ -89,13 +86,13 @@ class RegisterController extends AbstractController2
         if ($registerForm->isValid()) {
 
             $regPersonArray = $registerForm->getData();
-            dump($regPersonArray);
+
             $this->refereeBadgeUser = $regPersonArray['refereeBadge'];
             if ($this->refereeBadgeUser === 'None') {
                 $this->refereeBadgeUser = null;
             }
             $regPerson = $this->regPersonMapper->createFromArray2016($regPersonArray);
-            dump($regPerson);
+
             $this->processRegPerson($regPerson);
 
             // Maybe reset referee info?
@@ -105,13 +102,11 @@ class RegisterController extends AbstractController2
                     'verified'   => false, // was null ?
                 ]);
             }
-            dump($regPerson);
             $regPerson = $this->regPersonSaver->save($regPerson);
-            dump($regPerson);
 
-            //if ($regPerson->isRegistered === true) {
-                //$this->sendEmail($projectPerson);
-            //}
+            if ($regPerson->isRegistered === true) {
+                $this->sendEmail($regPerson);
+            }
             return $this->redirectToRoute($this->successRouteName);
         }
         return null;
@@ -261,20 +256,16 @@ class RegisterController extends AbstractController2
         }
         return $regPerson;
     }
-
-    /**
-     * @param $person
-     *//*
-    private function sendEmail($person)
+    private function sendEmail(RegPerson $person) : void
     {
         $projectInfo = $this->getCurrentProjectInfo();
-        $support = $projectInfo['support'];
+        $support  = $projectInfo['support'];
         $assignor = $projectInfo['assignor'];
         $refAdmin = $projectInfo['administrator'];
 
-        $update = $person['id'] ? ' Update' : null;
+        $update = $person->regPersonId ? ' Update' : null;
 
-        $subject = sprintf('[NG2019] Registration%s for: %s',$update,$person['name']);
+        $subject = sprintf('[NG2019] Registration%s for: %s',$update,$person->name);
 
         $html = $this->templateEmail->renderHtml($person);
 
@@ -285,7 +276,7 @@ class RegisterController extends AbstractController2
 
         $mailer = $this->getMailer();
 
-        // @var Swift_Message $message
+        /** @var Swift_Message $message */
         $message = $mailer->createMessage();
 
         $message->setBody($html, 'text/html');
@@ -294,7 +285,7 @@ class RegisterController extends AbstractController2
 
         $message->setFrom(['noreply@zayso.org' => 'zAYSO Admin']);
 
-        $message->setTo([$person['email'] => $person['name']]);
+        $message->setTo([$person->email => $person->name]);
 
         $message->setCc($toms);
 
@@ -306,9 +297,6 @@ class RegisterController extends AbstractController2
                 'web.ng2019@gmail.com' => 'Rick Roberts', // ???
             ]
         );
-
-        //noinspection PhpParamsInspection
         $mailer->send($message);
-
-    }*/
+    }
 }
