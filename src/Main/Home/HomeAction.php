@@ -17,10 +17,10 @@ class HomeAction implements ActionInterface
     private $regPersonFinder;
 
     public function __construct(
-        HomeTemplate $homeTemplate,
+        HomeTemplate    $homeTemplate,
         RegPersonFinder $regPersonFinder
     ){
-        $this->homeTemplate = $homeTemplate;
+        $this->homeTemplate    = $homeTemplate;
         $this->regPersonFinder = $regPersonFinder;
     }
     public function __invoke(Request $request)

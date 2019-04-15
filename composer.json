@@ -11,6 +11,7 @@
             "Zayso\\Main\\":    "src/Main/",
             "Zayso\\Project\\": "src/Project/",
             "Zayso\\Reg\\":     "src/Reg/",
+            "Zayso\\User\\":    "src/User/",
             "AppBundle\\":      "src/AppBundle/"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]

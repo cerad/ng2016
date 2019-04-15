@@ -3,14 +3,17 @@
 namespace Zayso\Main\Welcome;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zayso\Common\Contract\ActionInterface;
 use Zayso\Common\Traits\AuthorizationTrait;
 use Zayso\Common\Traits\RouterTrait;
+use Zayso\Project\CurrentProjectTrait;
 
 class WelcomeAction implements ActionInterface
 {
     use RouterTrait;
     use AuthorizationTrait;
+    use CurrentProjectTrait;
 
     public function __invoke(Request $request)
     {
@@ -22,6 +25,6 @@ class WelcomeAction implements ActionInterface
             return $this->redirectToRoute('app_home');
         }
 
-        return null;
+        return new Response($this->currentProject->welcomeTemplate->render());
     }
 }

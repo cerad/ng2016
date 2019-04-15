@@ -22,7 +22,8 @@ parameters:
 
         regYear: 'MY2018'
 
-        pageTemplate: 'Zayso\Project\NG2019\NG2019PageTemplate'
+        pageTemplate:    'Zayso\Project\NG2019\NG2019PageTemplate'
+        welcomeTemplate: 'Zayso\Project\NG2019\NG2019WelcomeTemplate'
 
         support:
             name: "Art Hundiak"

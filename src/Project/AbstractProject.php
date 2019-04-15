@@ -13,11 +13,14 @@ namespace Zayso\Project;
  * @property-read ProjectContact support
  *
  * Virtual
- * @property-read AbstractPageTemplate pageTemplate
+ * @property-read AbstractPageTemplate    pageTemplate
+ * @property-read AbstractContentTemplate welcomeTemplate
  *
  */
 abstract class AbstractProject //implements ProjectServiceInterface
 {
+    use ProjectServiceLocatorTrait;
+
     public $projectId;
     public $abbv;
     public $title;
@@ -31,14 +34,6 @@ abstract class AbstractProject //implements ProjectServiceInterface
     protected $projectData;
     protected $projectInfo;
 
-    /** @var ProjectServiceLocator  */
-    protected $projectServiceLocator;
-
-    /** @required */
-    public function setOnceProjectServiceLocator(ProjectServiceLocator $projectServiceLocator) : void
-    {
-        $this->projectServiceLocator = $this->projectServiceLocator ? $this->projectServiceLocator : $projectServiceLocator;
-    }
     public function __construct(array $projectData)
     {
         $this->projectData = $projectData;
@@ -59,8 +54,12 @@ abstract class AbstractProject //implements ProjectServiceInterface
     {
         switch($name) {
             case 'pageTemplate':
-                $pageTemplateServiceId = $this->projectInfo['pageTemplate'];
-                return $this->projectServiceLocator->get($pageTemplateServiceId);
+                $templateServiceId = $this->projectInfo['pageTemplate'];
+                return $this->projectServiceLocator->get($templateServiceId);
+
+            case 'welcomeTemplate':
+                $templateServiceId = $this->projectInfo['welcomeTemplate'];
+                return $this->projectServiceLocator->get($templateServiceId);
         }
         return null;
     }

@@ -10,7 +10,8 @@ services:
         tags: ['container.service_locator']
         arguments:
             -
-                Zayso\Project\NG2019\NG2019PageTemplate: '@Zayso\Project\NG2019\NG2019PageTemplate'
+                Zayso\Project\NG2019\NG2019PageTemplate:    '@Zayso\Project\NG2019\NG2019PageTemplate'
+                Zayso\Project\NG2019\NG2019WelcomeTemplate: '@Zayso\Project\NG2019\NG2019WelcomeTemplate'
 
     # This can later be replaced with a factory
     Zayso\Project\CurrentProject: '@Zayso\Project\NG2019\NG2019Project'
@@ -29,3 +30,8 @@ services:
             - '%show_results_menu%'
             - '%show_final_results%'
             - '%app_version%'
+
+    Zayso\Project\NG2019\NG2019WelcomeTemplate:
+        arguments:
+            - '@user_login_form'
+            - '%show_results_menu%'

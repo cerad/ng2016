@@ -7,6 +7,10 @@ use ArrayAccess;
 use Serializable;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
+/**
+ * @property-read string projectId
+ * @property-read string personId
+ */
 class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
 {
     use ArrayAccessTrait;
