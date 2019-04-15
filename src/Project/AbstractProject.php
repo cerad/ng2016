@@ -9,6 +9,8 @@ namespace Zayso\Project;
  * @property-read string desc
  *
  * @property-read string regYear
+ * @property-read string timeZone
+ * @property-read string rainedOutKey
  *
  * @property-read ProjectContact support
  *
@@ -60,6 +62,13 @@ abstract class AbstractProject //implements ProjectServiceInterface
             case 'welcomeTemplate':
                 $templateServiceId = $this->projectInfo['welcomeTemplate'];
                 return $this->projectServiceLocator->get($templateServiceId);
+
+            case 'timeZone':
+                return $this->projectInfo['timeZone'];
+
+            case 'rainedOutKey':
+                return $this->projectInfo['rainedOutKey'];
+
         }
         return null;
     }

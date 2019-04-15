@@ -3,14 +3,16 @@
 namespace Zayso\Main\Home;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\HttpFoundation\Response;
+
 use Zayso\Common\Contract\ActionInterface;
 use Zayso\Common\Traits\AuthenticationTrait;
+use Zayso\Project\CurrentProjectTrait;
 use Zayso\Reg\Person\RegPersonFinder;
 
 class HomeAction implements ActionInterface
 {
+    use CurrentProjectTrait;
     use AuthenticationTrait;
 
     private $homeTemplate;
@@ -27,10 +29,8 @@ class HomeAction implements ActionInterface
     {
         // Should check authorization?
         $user = $this->getUser();
-        $projectId = $user['projectKey'];
-        $personId  = $user['personKey'];
 
-        $regPerson = $this->regPersonFinder->findByProjectPerson($projectId, $personId);
+        $regPerson = $this->regPersonFinder->findByProjectPerson($this->currentProject->projectId, $user->personId);
 
         return new Response($this->homeTemplate->render($regPerson));
     }

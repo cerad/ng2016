@@ -7,12 +7,43 @@ app_index:
 app_welcome:
   path: /welcome
   defaults:
-    _view:       welcome_view
     _controller: Zayso\Main\Welcome\WelcomeAction
 
 app_home:
   path: /home
   defaults:
     _role:       ROLE_USER
-    _view:       home_view
     _controller: Zayso\Main\Home\HomeAction
+
+app_text_alerts:
+  path: /textalerts
+  defaults:
+    _controller: Zayso\Main\TextAlerts\TextAlertsAction
+
+rules_of_competition:
+  path: /rules
+  defaults:
+    fileType: pdf # For future use, only pdf is currently supported
+    fileName: NG19_Governing_Rules_-_FINAL.pdf # TODO Change name to Governing_Rules
+    _controller: file_controller
+
+detailed_instruction:
+  path: /self-assigning
+  defaults:
+    fileType: pdf # For future use, only pdf is currently supported
+    fileName: Referee_Self-Assigning.pdf
+    _controller: file_controller
+
+assignor_instruction:
+  path: /assigning
+  defaults:
+    fileType: pdf # For future use, only pdf is currently supported
+    fileName: referee_assigning.pdf
+    _controller: file_controller
+
+app_admin:
+  path: /admin
+  defaults:
+    _role:       ROLE_STAFF
+    _view:       admin_view
+    _controller: admin_controller

@@ -6,7 +6,7 @@ parameters:
 
   app_project:
     info:
-        key: AYSONationalGames2019 # For now until we migrate games
+        key: AYSONationalGames2019
 
         slugs: [natgames, ng2016]
 
@@ -24,6 +24,9 @@ parameters:
 
         pageTemplate:    'Zayso\Project\NG2019\NG2019PageTemplate'
         welcomeTemplate: 'Zayso\Project\NG2019\NG2019WelcomeTemplate'
+
+        timeZone:     'Eastern'
+        rainedOutKey: '0588afab19ee214eca29'
 
         support:
             name: "Art Hundiak"
