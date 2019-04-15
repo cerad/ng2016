@@ -22,6 +22,8 @@ parameters:
 
         regYear: 'MY2018'
 
+        pageTemplate: 'Zayso\Project\NG2019\NG2019PageTemplate'
+
         support:
             name: "Art Hundiak"
             email: "ahundiak@gmail.com"

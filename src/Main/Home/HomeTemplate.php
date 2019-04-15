@@ -8,10 +8,9 @@ use AppBundle\Action\InstructionsView;
 use Zayso\Common\Contract\TemplateInterface;
 use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\EscapeTrait;
-use Zayso\Common\Traits\RenderTrait;
 use Zayso\Common\Traits\RouterTrait;
 
-use Zayso\Project\CurrentProject;
+use Zayso\Project\CurrentProjectTrait;
 use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonFinder;
 use Zayso\Reg\Person\RegPersonViewDecorator;
@@ -20,12 +19,11 @@ class HomeTemplate implements TemplateInterface
 {
     use EscapeTrait;
     use RouterTrait;
-    use RenderTrait;
     use AuthenticationTrait;
+    use CurrentProjectTrait;
 
     /** @var  ProjectUser */
     private $user;
-    private $currentProject;
 
     /** @var  RegPerson */
     private $regPerson;
@@ -36,12 +34,10 @@ class HomeTemplate implements TemplateInterface
 
     public function __construct(
         RegPersonFinder        $regPersonFinder,
-        RegPersonViewDecorator $regPersonViewDecorator,
-        CurrentProject         $currentProject
+        RegPersonViewDecorator $regPersonViewDecorator
     ) {
         $this->regPersonFinder  = $regPersonFinder;
         $this->regPersonView    = $regPersonViewDecorator;
-        $this->currentProject   = $currentProject;
         $this->instructionsView = new InstructionsView;
     }
     public function render(RegPerson $regPerson) : string
@@ -67,8 +63,7 @@ class HomeTemplate implements TemplateInterface
 {$this->renderHotelInformation()}
 </div>
 EOD;
-
-        return $this->renderPageTemplate($content);
+        return $this->currentProject->pageTemplate->render($content);
     }
 
     /* ====================================================

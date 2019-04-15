@@ -1,16 +1,18 @@
 <?php
 
 use Zayso\Common\Contract\ActionInterface;
-use Zayso\Common\Contract\ViewInterface;
 
-use Zayso\Common\Locator\DataTransformerLocator;
-use Zayso\Common\Locator\ViewLocator;
+use Zayso\Project\ProjectServiceInterface;
+//  Zayso\Project\ProjectServiceLocator;
+
+//  Zayso\Common\Locator\DataTransformerLocator;
 
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+//  Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class AppKernel extends Kernel implements CompilerPassInterface
@@ -66,21 +68,19 @@ class AppKernel extends Kernel implements CompilerPassInterface
     {
         $container->registerForAutoconfiguration(ActionInterface::class)
             ->addTag('controller.service_arguments');
-        $container->registerForAutoconfiguration(ViewInterface::class)
-            ->addTag('zayso_view');
-        //$container->registerForAutoconfiguration(ProjectInterface::class)
-        //    ->addTag('project.base');
-        //$container->registerForAutoconfiguration(ProjectTemplateInterface::class)
-        //    ->addTag('project.template');
+
+        $container->registerForAutoconfiguration(ProjectServiceInterface::class)
+            ->addTag('zayso_project_service');
+
         $container->registerForAutoconfiguration(DataTransformerInterface::class)
             ->addTag('zayso_data_transformer');
     }
     public function process(ContainerBuilder $container)
     {
-        $this->addLocator($container, DataTransformerLocator::class, ['zayso_data_transformer']);
-        $this->addLocator($container, ViewLocator::class, ['zayso_view']);
-
+        //$this->addLocator($container, DataTransformerLocator::class, ['zayso_data_transformer']);
+        //$this->addLocator($container, ProjectServiceLocator::class,  ['zayso_project_service']);
     }
+    // This is not working in 3.4, works fine in 4.x
     private function addLocator(ContainerBuilder $container, string $locatorId, array $tags ) : void
     {
         $ids = [];
@@ -90,6 +90,9 @@ class AppKernel extends Kernel implements CompilerPassInterface
             }
         }
         $locator = $container->getDefinition($locatorId);
+
+        //$locator->addArgument(ServiceLocatorTagPass::register($container,$ids));
+
         $locator->setArguments([$ids]);
     }
 }

@@ -5,6 +5,13 @@ services:
     Zayso\Project\:
         resource: './*'
 
+    # Auto registering is not working in 3.4
+    Zayso\Project\ProjectServiceLocator:
+        tags: ['container.service_locator']
+        arguments:
+            -
+                Zayso\Project\NG2019\NG2019PageTemplate: '@Zayso\Project\NG2019\NG2019PageTemplate'
+
     # This can later be replaced with a factory
     Zayso\Project\CurrentProject: '@Zayso\Project\NG2019\NG2019Project'
 
@@ -13,3 +20,12 @@ services:
 
     Zayso\Project\NG2019\NG2019Project:
         $projectData: '%app_project%'
+
+    # Really need to do something about these display parameters
+    Zayso\Project\NG2019\NG2019PageTemplate:
+        arguments:
+            - '%show_header_image%'
+            - '%show_schedules_menu%'
+            - '%show_results_menu%'
+            - '%show_final_results%'
+            - '%app_version%'

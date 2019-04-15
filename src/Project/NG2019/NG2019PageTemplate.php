@@ -1,24 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Zayso\Common\Template;
+namespace Zayso\Project\NG2019;
 
-use Zayso\Common\Contract\TemplateInterface;
-use Zayso\Common\Traits\AuthenticationTrait;
-use Zayso\Common\Traits\AuthorizationTrait;
-use Zayso\Common\Traits\EscapeTrait;
-use Zayso\Common\Traits\RouterTrait;
-use Zayso\Project\CurrentProject;
+use Zayso\Project\AbstractPageTemplate;
 
-class PageTemplate implements TemplateInterface
+class NG2019PageTemplate extends AbstractPageTemplate
 {
-    use EscapeTrait;
-    use RouterTrait;
-    use AuthorizationTrait;
-    use AuthenticationTrait;
-
-    private $currentProject;
-
-    private $version = null;
+    private $version;
 
     private $showHeaderImage;
     private $showSchedulesMenu;
@@ -26,16 +14,13 @@ class PageTemplate implements TemplateInterface
     private $showFinalResults;
     
     public function __construct(
-        $showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,
-        $version,
-        CurrentProject $currentProject)
+        $showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,$version)
     {
         $this->showHeaderImage   = $showHeaderImage;
         $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu   = $showResultsMenu;
         $this->showFinalResults  = $showFinalResults;
         $this->version           = $version;
-        $this->currentProject    = $currentProject;
     }
     public function render(string $content) : string
     {
@@ -198,8 +183,6 @@ EOT;
      */
     protected function renderMenuForUser()
     {
-        $html = '';
-        
       if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
         $html =
 <<<EOT
@@ -223,13 +206,7 @@ EOT;
 <<<EOT
         </ul>
 EOT;
-      } else { // TODO Do not use _SERVER
-          /*
-        if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
-            $html = $this->renderCreateNewAccount();            
-        } else {
-            $html = $this->renderSignIn();
-        }*/
+      } else {
           $html = '';  //$this->renderSignIn();
       }
       return $html;

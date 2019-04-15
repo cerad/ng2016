@@ -6,4 +6,5 @@ use Zayso\Project\CurrentProject;
 
 class NG2019Project extends CurrentProject
 {
+
 }

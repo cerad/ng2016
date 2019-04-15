@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types=0);
 
 namespace Zayso\Project;
 
@@ -12,8 +12,11 @@ namespace Zayso\Project;
  *
  * @property-read ProjectContact support
  *
+ * Virtual
+ * @property-read AbstractPageTemplate pageTemplate
+ *
  */
-abstract class AbstractProject
+abstract class AbstractProject //implements ProjectServiceInterface
 {
     public $projectId;
     public $abbv;
@@ -24,11 +27,18 @@ abstract class AbstractProject
 
     public $support;
 
-
     // Local Data
     protected $projectData;
     protected $projectInfo;
 
+    /** @var ProjectServiceLocator  */
+    protected $projectServiceLocator;
+
+    /** @required */
+    public function setOnceProjectServiceLocator(ProjectServiceLocator $projectServiceLocator) : void
+    {
+        $this->projectServiceLocator = $this->projectServiceLocator ? $this->projectServiceLocator : $projectServiceLocator;
+    }
     public function __construct(array $projectData)
     {
         $this->projectData = $projectData;
@@ -44,5 +54,14 @@ abstract class AbstractProject
         $contact = $info['support'];
         $this->support = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
 
+    }
+    public function __get(string $name)
+    {
+        switch($name) {
+            case 'pageTemplate':
+                $pageTemplateServiceId = $this->projectInfo['pageTemplate'];
+                return $this->projectServiceLocator->get($pageTemplateServiceId);
+        }
+        return null;
     }
 }
