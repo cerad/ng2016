@@ -18,10 +18,15 @@ namespace Zayso\Project;
  * @property-read AbstractPageTemplate    pageTemplate
  * @property-read AbstractContentTemplate welcomeTemplate
  *
+ * @property-read bool showHeaderImage
+ * @property-read bool showSchedulesMenu
+ * @property-read bool showResultsMenu
+ * @property-read bool showFinalResults
  */
 abstract class AbstractProject //implements ProjectServiceInterface
 {
     use ProjectServiceLocatorTrait;
+    use ShowProjectFlagsTrait;
 
     public $projectId;
     public $abbv;
@@ -69,6 +74,17 @@ abstract class AbstractProject //implements ProjectServiceInterface
             case 'rainedOutKey':
                 return $this->projectInfo['rainedOutKey'];
 
+            case 'showHeaderImage':
+                return $this->showProjectFlags->showHeaderImage;
+
+            case 'showSchedulesMenu':
+                return $this->showProjectFlags->showSchedulesMenu;
+
+            case 'showResultsMenu':
+                return $this->showProjectFlags->showResultsMenu;
+
+            case 'showFinalResults':
+                return $this->showProjectFlags->showFinalResults;
         }
         return null;
     }

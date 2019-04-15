@@ -11,9 +11,9 @@ trait AuthenticationTrait
     protected $tokenStorage;
 
     /** @required */
-    public function setTokenStorage(TokenStorageInterface $tokenStorage)
+    public function setOnceTokenStorage(TokenStorageInterface $tokenStorage)
     {
-        $this->tokenStorage = $tokenStorage;
+        $this->tokenStorage = $this->tokenStorage ?: $tokenStorage;
     }
     /* Directly copied from ControllerTrait */
     protected function getUser() : ?ProjectUser
@@ -27,7 +27,7 @@ trait AuthenticationTrait
             return null;
         }
         /** @var ProjectUser $userx */
-        $userx = $user;
+        $userx = $user; // Just to keep the IDE code checker happy
         return $userx;
     }
 }

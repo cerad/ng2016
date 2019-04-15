@@ -5,3 +5,6 @@ services:
 
     Zayso\Common\:
         resource: './*'
+
+    Zayso\Common\AppVersion:
+        $version: '%app_version%'

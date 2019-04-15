@@ -11,13 +11,9 @@ class NG2019WelcomeTemplate extends AbstractContentTemplate
     /** @var  UserLoginForm */
     private $userLoginForm;
 
-    /** @var  %show_results_menu% */
-    private $showResultsMenu;
-
-    public function __construct(UserLoginForm $userLoginForm, $showResultsMenu)
+    public function __construct(UserLoginForm $userLoginForm)
     {
         $this->userLoginForm = $userLoginForm;
-        $this->showResultsMenu = $showResultsMenu;
     }
 
     public function render() : string
@@ -39,7 +35,7 @@ EOT;
         $html = <<<EOT
 <div id="notes">
 EOT;
-        if ($this->showResultsMenu) {
+        if ($this->currentProject->showResultsMenu) {
             $html .= <<<EOT
 <p>
   If you just want to peruse the Schedules and Results, no need to go any further.  
@@ -47,8 +43,8 @@ EOT;
                 'user_create'
             )}">create a zAYSO account</a>.
   In either case, you should
-<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to AYSO National 
-Games 2019 text alerts on RainedOut</a>. 
+<a href="https://www.rainedout.net/team_page.php?a={$this->currentProject->rainedOutKey}" target="_blank">
+subscribe to {$this->currentProject->title} text alerts on RainedOut</a>. 
 </p>
 <br/>
 EOT;

@@ -10,6 +10,6 @@ trait ProjectServiceLocatorTrait
     /** @required */
     public function setOnceProjectServiceLocator(ProjectServiceLocator $projectServiceLocator) : void
     {
-        $this->projectServiceLocator = $this->projectServiceLocator ? $this->projectServiceLocator : $projectServiceLocator;
+        $this->projectServiceLocator = $this->projectServiceLocator ?: $projectServiceLocator;
     }
 }

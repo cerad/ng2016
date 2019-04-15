@@ -12,9 +12,9 @@ trait RouterTrait
     protected $router;
 
     /** @required */
-    public function setRouter(RouterInterface $router)
+    public function setOnceRouter(RouterInterface $router)
     {
-        $this->router = $router;
+        $this->router = $this->router ?: $router;
     }
     protected function generateUrl(
         string $route,

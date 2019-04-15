@@ -22,16 +22,16 @@ services:
     Zayso\Project\NG2019\NG2019Project:
         $projectData: '%app_project%'
 
-    # Really need to do something about these display parameters
-    Zayso\Project\NG2019\NG2019PageTemplate:
+
+    #Zayso\Project\NG2019\NG2019PageTemplate:
+
+    Zayso\Project\ShowProjectFlags:
         arguments:
             - '%show_header_image%'
             - '%show_schedules_menu%'
             - '%show_results_menu%'
             - '%show_final_results%'
-            - '%app_version%'
 
     Zayso\Project\NG2019\NG2019WelcomeTemplate:
         arguments:
             - '@user_login_form'
-            - '%show_results_menu%'

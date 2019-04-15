@@ -13,9 +13,9 @@ trait AuthorizationTrait
     protected $authChecker;
 
     /** @required */
-    public function setAuthChecker(AuthorizationCheckerInterface $authChecker)
+    public function setOnceAuthChecker(AuthorizationCheckerInterface $authChecker)
     {
-        $this->authChecker = $authChecker;
+        $this->authChecker = $this->authChecker ?: $authChecker;
     }
     protected function isGranted($attributes, $subject = null): bool
     {

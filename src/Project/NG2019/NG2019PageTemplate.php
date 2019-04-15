@@ -6,22 +6,6 @@ use Zayso\Project\AbstractPageTemplate;
 
 class NG2019PageTemplate extends AbstractPageTemplate
 {
-    private $version;
-
-    private $showHeaderImage;
-    private $showSchedulesMenu;
-    private $showResultsMenu;
-    private $showFinalResults;
-    
-    public function __construct(
-        $showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,$version)
-    {
-        $this->showHeaderImage   = $showHeaderImage;
-        $this->showSchedulesMenu = $showSchedulesMenu;
-        $this->showResultsMenu   = $showResultsMenu;
-        $this->showFinalResults  = $showFinalResults;
-        $this->version           = $version;
-    }
     public function render(string $content) : string
     {
       return <<<EOT
@@ -66,7 +50,7 @@ EOT;
     
     protected function renderHeader()
     {
-      if (!$this->showHeaderImage) {
+      if (!$this->currentProject->showHeaderImage) {
         $html = 
 <<<EOT
     <div id="banner">
@@ -104,7 +88,7 @@ EOT;
       <p> zAYSO - For assistance contact {$support->name} at
       <a href="mailto:{$support->email}?subject={$support->subject}">{$support->email}</a>
       or {$support->phone} </p>
-      <p>Version {$this->version}</p>
+      <p>Version {$this->appVersion}</p>
     </div>
     <div class="clear-both"></div>
 </div>
@@ -222,7 +206,7 @@ EOT;
 
     protected function renderTopMenuSchedules()
     {
-        if (!$this->showSchedulesMenu) {
+        if (!$this->currentProject->showSchedulesMenu) {
             return null;
         }
         return
@@ -249,7 +233,7 @@ EOT;
 
     protected function renderTopMenuResults()
     {
-        if (!$this->showResultsMenu) {
+        if (!$this->currentProject->showResultsMenu) {
             return null;
         }
         
@@ -262,7 +246,7 @@ EOT;
             <li><a href="{$this->generateUrl('results_medalround_2016')}">MEDAL ROUND</a></li>
             <li><a href="{$this->generateUrl('results_sportsmanship_2016')}">SPORTSMANSHIP</a></li>
 EOT;
-        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
+        if ($this->isGranted('ROLE_ADMIN') OR $this->currentProject->showFinalResults) {
             $html .=
 <<<EOT
             <li><a href="{$this->generateUrl('results_final_2016')}">FINAL STANDINGS</a></li>
@@ -320,7 +304,7 @@ EOT;
     
     protected function renderRefereeSchedules()
     {
-        if (!$this->showResultsMenu) {
+        if (!$this->currentProject->showResultsMenu) {
             return null;
         }
         $html =
@@ -349,11 +333,10 @@ EOT;
 
     protected function renderMyAccount()
     {
-        if (!$this->showResultsMenu) {
+        if (!$this->currentProject->showResultsMenu) {
             return null;
         }
-        return
-<<<EOT
+        return <<<EOT
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
         <ul class="dropdown-menu">
@@ -368,11 +351,7 @@ EOT;
     
     protected function renderHome()
     {
-        //if (!$this->showResultsMenu) {
-        //    return null;
-        //}
-        return
-<<<EOT
+        return <<<EOT
         <li>
           <a href="{$this->generateUrl('app_home')}">HOME</a>
         </li>
@@ -380,11 +359,7 @@ EOT;
     }
     protected function renderWelcome()
     {
-        //if (!$this->showResultsMenu) {
-        //    return null;
-        //}
-        return
-<<<EOT
+        return <<<EOT
         <li>
           <a href="{$this->generateUrl('app_welcome')}">WELCOME</a>
         </li>

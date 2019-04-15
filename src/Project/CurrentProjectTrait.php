@@ -10,6 +10,6 @@ trait CurrentProjectTrait
     /** @required */
     public function setOnceCurrentProject(CurrentProject $currentProject) : void
     {
-        $this->currentProject = $this->currentProject ? $this->currentProject : $currentProject;
+        $this->currentProject = $this->currentProject ?: $currentProject;
     }
 }

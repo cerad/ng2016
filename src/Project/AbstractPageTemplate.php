@@ -2,6 +2,7 @@
 
 namespace Zayso\Project;
 
+use Zayso\Common\AppVersionTrait;
 use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\AuthorizationTrait;
 use Zayso\Common\Traits\EscapeTrait;
@@ -14,6 +15,7 @@ abstract class AbstractPageTemplate implements ProjectServiceInterface
     use AuthorizationTrait;
     use AuthenticationTrait;
     use CurrentProjectTrait;
+    use AppVersionTrait;
 
     abstract public function render(string $content) : string;
 }
