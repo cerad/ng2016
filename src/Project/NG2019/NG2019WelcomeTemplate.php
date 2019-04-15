@@ -2,20 +2,18 @@
 
 namespace Zayso\Project\NG2019;
 
-use AppBundle\Action\Project\User\Login\UserLoginForm;
+use Zayso\User\Login\UserLoginForm;
 
 use Zayso\Project\AbstractContentTemplate;
 
 class NG2019WelcomeTemplate extends AbstractContentTemplate
 {
-    /** @var  UserLoginForm */
     private $userLoginForm;
 
     public function __construct(UserLoginForm $userLoginForm)
     {
         $this->userLoginForm = $userLoginForm;
     }
-
     public function render() : string
     {
         $content = <<<EOT

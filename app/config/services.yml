@@ -9,6 +9,7 @@ imports:
     - { resource: '../../src/Main/services.yaml'    }
     - { resource: '../../src/Project/services.yaml' }
     - { resource: '../../src/Reg/services.yaml'     }
+    - { resource: '../../src/User/services.yaml'    }
 
 services:
 

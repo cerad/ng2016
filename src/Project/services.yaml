@@ -5,11 +5,20 @@ services:
     Zayso\Project\:
         resource: './*'
 
+    Zayso\Project\ShowProjectFlags:
+        arguments:
+            - '%show_header_image%'
+            - '%show_schedules_menu%'
+            - '%show_results_menu%'
+            - '%show_final_results%'
+
     # Auto registering is not working in 3.4
     Zayso\Project\ProjectServiceLocator:
         tags: ['container.service_locator']
         arguments:
             -
+                Zayso\Project\NG2016\NG2016Project:         '@Zayso\Project\NG2016\NG2016Project'
+                Zayso\Project\NG2019\NG2019Project:         '@Zayso\Project\NG2019\NG2019Project'
                 Zayso\Project\NG2019\NG2019PageTemplate:    '@Zayso\Project\NG2019\NG2019PageTemplate'
                 Zayso\Project\NG2019\NG2019WelcomeTemplate: '@Zayso\Project\NG2019\NG2019WelcomeTemplate'
 
@@ -23,15 +32,3 @@ services:
         $projectData: '%app_project%'
 
 
-    #Zayso\Project\NG2019\NG2019PageTemplate:
-
-    Zayso\Project\ShowProjectFlags:
-        arguments:
-            - '%show_header_image%'
-            - '%show_schedules_menu%'
-            - '%show_results_menu%'
-            - '%show_final_results%'
-
-    Zayso\Project\NG2019\NG2019WelcomeTemplate:
-        arguments:
-            - '@user_login_form'

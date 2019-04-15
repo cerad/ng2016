@@ -1,0 +1,8 @@
+# User
+services:
+
+    _defaults: { autowire: true, autoconfigure: true, public: false }
+
+    Zayso\User\:
+        resource: './*'
+    
