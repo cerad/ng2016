@@ -6,11 +6,12 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "Zayso\\Common\\": "src/Common/",
-            "Zayso\\Fed\\":    "src/Fed/",
-            "Zayso\\Main\\":   "src/Main/",
-            "Zayso\\Reg\\":    "src/Reg/",
-            "AppBundle\\":     "src/AppBundle/"
+            "Zayso\\Common\\":  "src/Common/",
+            "Zayso\\Fed\\":     "src/Fed/",
+            "Zayso\\Main\\":    "src/Main/",
+            "Zayso\\Project\\": "src/Project/",
+            "Zayso\\Reg\\":     "src/Reg/",
+            "AppBundle\\":      "src/AppBundle/"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },

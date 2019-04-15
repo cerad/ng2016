@@ -13,4 +13,3 @@ services:
             - '%show_results_menu%'
             - '%show_final_results%'
             - '%app_version%'
-            - '%app_project%'

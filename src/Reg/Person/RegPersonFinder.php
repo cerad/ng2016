@@ -94,11 +94,11 @@ EOT;
 
         return $row ? $row['projectKey'] : null;
     }
-    public function findRegPersonPersons(string $regPersonId) : array
+    public function findRegPersonPersons(int $regPersonId) : array
     {
         return [];
     }
-    public function findRegPersonTeams(string $regPersonId) : array
+    public function findRegPersonTeams(int $regPersonId) : array
     {
         return [];
     }

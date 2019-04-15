@@ -5,5 +5,3 @@ services:
     Zayso\Main\:
         resource: './*'
 
-    Zayso\Main\Home\HomeTemplate:
-        $project: '%app_project%'

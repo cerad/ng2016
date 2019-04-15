@@ -11,6 +11,7 @@ use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RenderTrait;
 use Zayso\Common\Traits\RouterTrait;
 
+use Zayso\Project\CurrentProject;
 use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonFinder;
 use Zayso\Reg\Person\RegPersonViewDecorator;
@@ -24,7 +25,7 @@ class HomeTemplate implements TemplateInterface
 
     /** @var  ProjectUser */
     private $user;
-    private $project;
+    private $currentProject;
 
     /** @var  RegPerson */
     private $regPerson;
@@ -36,11 +37,11 @@ class HomeTemplate implements TemplateInterface
     public function __construct(
         RegPersonFinder        $regPersonFinder,
         RegPersonViewDecorator $regPersonViewDecorator,
-        array $project
+        CurrentProject         $currentProject
     ) {
         $this->regPersonFinder  = $regPersonFinder;
         $this->regPersonView    = $regPersonViewDecorator;
-        $this->project          = $project['info'];
+        $this->currentProject   = $currentProject;
         $this->instructionsView = new InstructionsView;
     }
     public function render(RegPerson $regPerson) : string
@@ -75,7 +76,7 @@ EOD;
      */
     private function renderCrewInformation()
     {
-        $regPersonPersons = $this->regPersonFinder->findRegPersonPersons($this->user->getRegPersonId());
+        $regPersonPersons = $this->regPersonFinder->findRegPersonPersons($this->regPerson->regPersonId);
 
         $html = <<<EOD
 <table class="tableClass" >
@@ -104,7 +105,7 @@ EOD;
      */
     private function renderTeamInformation()
     {
-        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($this->user->getRegPersonId());
+        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($this->regPerson->regPersonId);
 
         $html = <<<EOD
 <table class="tableClass" >
@@ -130,7 +131,7 @@ EOD;
 
     /* ====================================================
      * Account Information
-     * TODO Move to own teamplate
+     * TODO Move to own template
      */
 
     private function renderAccountInformation()
@@ -210,7 +211,7 @@ EOD;
     {
         $personView = $this->regPersonView;
 
-        $regYearProject = $this->project['regYear'];
+        $regYearProject = $this->currentProject->regYear;
 
         return
             <<<EOD

@@ -1,0 +1,15 @@
+# Project
+services:
+    _defaults: { autowire: true, autoconfigure: true, public: false }
+
+    Zayso\Project\:
+        resource: './*'
+
+    # This can later be replaced with a factory
+    Zayso\Project\CurrentProject: '@Zayso\Project\NG2019\NG2019Project'
+
+    Zayso\Project\NG2016\NG2016Project:
+        $projectData: '%app_project%'
+
+    Zayso\Project\NG2019\NG2019Project:
+        $projectData: '%app_project%'

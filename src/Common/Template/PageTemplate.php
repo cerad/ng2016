@@ -7,6 +7,7 @@ use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\AuthorizationTrait;
 use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RouterTrait;
+use Zayso\Project\CurrentProject;
 
 class PageTemplate implements TemplateInterface
 {
@@ -15,7 +16,7 @@ class PageTemplate implements TemplateInterface
     use AuthorizationTrait;
     use AuthenticationTrait;
 
-    private $project = []; // Array for now
+    private $currentProject;
 
     private $version = null;
 
@@ -24,14 +25,17 @@ class PageTemplate implements TemplateInterface
     private $showResultsMenu;
     private $showFinalResults;
     
-    public function __construct($showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,$version,$project)
+    public function __construct(
+        $showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,
+        $version,
+        CurrentProject $currentProject)
     {
         $this->showHeaderImage   = $showHeaderImage;
         $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu   = $showResultsMenu;
         $this->showFinalResults  = $showFinalResults;
         $this->version           = $version;
-        $this->project           = $project['info'];
+        $this->currentProject    = $currentProject;
     }
     public function render(string $content) : string
     {
@@ -61,7 +65,7 @@ EOT;
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{$this->escape($this->project['abbv'])}</title>
+    <title>{$this->escape($this->currentProject->abbv)}</title>
     <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico">
     <link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-72x72.png"><!-- iPad -->
     <link rel="apple-touch-icon" type="image/png" sizes="114x114" href="/images/apple-touch-icon-114x114.png"><!-- iPhone4 -->
@@ -84,7 +88,7 @@ EOT;
           <h1>
           <a href="https://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" 
           height="30" alt="National Games"></a>
-          {$this->escape($this->project['title'])}
+          {$this->escape($this->currentProject->title)}
           </h1>
     </div>
 EOT;
@@ -106,21 +110,21 @@ EOT;
     /* Footer item go here */
     protected function renderFooter()
     {
+        $support = $this->currentProject->support;
         return
 <<<EOT
     <div class="cerad-footer">
       <br />
       <hr>
-      <p> zAYSO - For assistance contact {$this->project['support']['name']} at
-      <a href="mailto:{$this->project['support']['email']}?subject={$this->project['support']['subject']}">{$this->project['support']['email']}</a>
-      or {$this->project['support']['phone']} </p>
+      <p> zAYSO - For assistance contact {$support->name} at
+      <a href="mailto:{$support->email}?subject={$support->subject}">{$support->email}</a>
+      or {$support->phone} </p>
       <p>Version {$this->version}</p>
     </div>
-    
-				<div class="clear-both"></div>
-			</div>
-        </body>
-        </html>
+    <div class="clear-both"></div>
+</div>
+</body>
+</html>
 EOT;
     }
     

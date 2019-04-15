@@ -11,8 +11,6 @@ parameters:
         slugs: [natgames, ng2016]
 
         status: Active
-
-        show_header_image: null
                 
         fedId:     AYSO
         fedRoleId: AYSOV
