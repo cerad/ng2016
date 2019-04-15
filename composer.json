@@ -8,6 +8,7 @@
             "App\\": "src/",
             "Zayso\\Common\\": "src/Common/",
             "Zayso\\Fed\\":    "src/Fed/",
+            "Zayso\\Main\\":   "src/Main/",
             "Zayso\\Reg\\":    "src/Reg/",
             "AppBundle\\":     "src/AppBundle/"
         },

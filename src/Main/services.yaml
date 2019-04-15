@@ -1,0 +1,9 @@
+# Main
+services:
+    _defaults: { autowire: true, autoconfigure: true, public: false }
+
+    Zayso\Main\:
+        resource: './*'
+
+    Zayso\Main\Home\HomeTemplate:
+        $project: '%app_project%'

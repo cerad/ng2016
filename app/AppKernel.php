@@ -1,10 +1,7 @@
 <?php
 
-use AppBundle\Action\AbstractController;
-use AppBundle\Action\AbstractController2;
-
-use AppBundle\Action\AbstractView;
-use AppBundle\Action\AbstractView2;
+use Zayso\Common\Contract\ActionInterface;
+use Zayso\Common\Contract\ViewInterface;
 
 use Zayso\Common\Locator\DataTransformerLocator;
 use Zayso\Common\Locator\ViewLocator;
@@ -67,13 +64,9 @@ class AppKernel extends Kernel implements CompilerPassInterface
     }
     protected function build(ContainerBuilder $container)
     {
-        $container->registerForAutoconfiguration(AbstractController::class)
+        $container->registerForAutoconfiguration(ActionInterface::class)
             ->addTag('controller.service_arguments');
-        $container->registerForAutoconfiguration(AbstractController2::class)
-            ->addTag('controller.service_arguments');
-        $container->registerForAutoconfiguration(AbstractView::class)
-            ->addTag('zayso_view');
-        $container->registerForAutoconfiguration(AbstractView2::class)
+        $container->registerForAutoconfiguration(ViewInterface::class)
             ->addTag('zayso_view');
         //$container->registerForAutoconfiguration(ProjectInterface::class)
         //    ->addTag('project.base');

@@ -1,0 +1,18 @@
+# Main
+app_index:
+  path: /
+  defaults:
+    _controller: Zayso\Main\Index\IndexAction
+
+app_welcome:
+  path: /welcome
+  defaults:
+    _view:       welcome_view
+    _controller: Zayso\Main\Welcome\WelcomeAction
+
+app_home:
+  path: /home
+  defaults:
+    _role:       ROLE_USER
+    _view:       home_view
+    _controller: Zayso\Main\Home\HomeAction

@@ -5,3 +5,12 @@ services:
 
     Zayso\Common\:
         resource: './*'
+
+    Zayso\Common\Template\PageTemplate:
+        arguments:
+            - '%show_header_image%'
+            - '%show_schedules_menu%'
+            - '%show_results_menu%'
+            - '%show_final_results%'
+            - '%app_version%'
+            - '%app_project%'

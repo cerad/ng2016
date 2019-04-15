@@ -46,7 +46,11 @@ app_regteam_2016:
 app_app:
     resource: "@AppBundle/Action/App/routes.yml"
     prefix: /
-    
+
+zayso_main:
+    resource: "../../src/Main/routes.yaml"
+    prefix: /
+
 #   must load last
 app_mystery_routes:
     resource: "@AppBundle/Action/App/mystery_routes.yml"

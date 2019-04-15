@@ -5,10 +5,9 @@ parameters:
 
 imports:
     - { resource: '../../src/Common/services.yaml' }
-    - { resource: '../../src/Fed/services.yaml' }
-    - { resource: '../../src/Reg/services.yaml' }
+    - { resource: '../../src/Fed/services.yaml'    }
+    - { resource: '../../src/Main/services.yaml'   }
+    - { resource: '../../src/Reg/services.yaml'    }
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
