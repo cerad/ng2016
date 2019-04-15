@@ -5,7 +5,6 @@ services:
 
     Zayso\Reg\:
         resource: './*'
-        exclude:  './Person/Register/{*.php}'
 
     Zayso\Reg\Person\RegPersonConnection: '@doctrine.dbal.reg_person_connection'
 

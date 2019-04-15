@@ -13,6 +13,7 @@ namespace Zayso\Project;
  * @property-read string rainedOutKey
  *
  * @property-read ProjectContact support
+ * @property-read ProjectContact refAdmin
  *
  * Virtual
  * @property-read AbstractPageTemplate    pageTemplate
@@ -36,6 +37,8 @@ abstract class AbstractProject //implements ProjectServiceInterface
     public $regYear;
 
     public $support;
+    public $refAdmin;
+    public $refAssignor;
 
     // Local Data
     protected $projectData;
@@ -55,6 +58,12 @@ abstract class AbstractProject //implements ProjectServiceInterface
 
         $contact = $info['support'];
         $this->support = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
+
+        $contact = $info['administrator'];
+        $this->refAdmin = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
+
+        $contact = $info['assignor'];
+        $this->refAssignor = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
 
     }
     public function __get(string $name)

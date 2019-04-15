@@ -7,10 +7,27 @@ use Zayso\Common\DataTransformer\PhoneTransformer;
 use Zayso\Fed\Ayso\AysoIdTransformer;
 use Zayso\Fed\Ayso\AysoOrgViewTransformer;
 
+/**
+ * @property-read RegPerson person
+ *
+ * @property-read string name
+ * @property-read string email
+ * @property-read string phone
+ *
+ * @property-read string fedId
+ * @property-read string orgId
+ *
+ * @property-read bool willCoach
+ * @property-read bool willReferee
+ * @property-read bool willVolunteer
+ *
+ * @property-read string willRefereeBadge
+ *
+ * @property-read string notesUser
+ */
 final class RegPersonViewDecorator
 {
-    /** @var  RegPerson */
-    private $person;
+    public $person;
 
     private $phoneTransformer;
     private $fedIdTransformer;
@@ -148,7 +165,7 @@ final class RegPersonViewDecorator
                 return $this->phoneTransformer->transform($person->phone);
             
             case 'fedId':
-            case 'fedKey': 
+            case 'fedKey':
                 return $this->fedIdTransformer->transform($person->fedPersonId);
             
             case 'sar':
@@ -251,9 +268,6 @@ final class RegPersonViewDecorator
                     case 'adultlxxx': return 'Adult XXXL';
                 }
                 return 'na';
-            
-            case 'person':
-                return $person;
             
             case 'notes':
                 return $person->notes;

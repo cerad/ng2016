@@ -22,6 +22,7 @@ use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonFinder;
 use Zayso\Reg\Person\RegPersonMapper;
 use Zayso\Reg\Person\RegPersonSaver;
+use Zayso\Reg\Person\Register\RegisterTemplateEmail;
 
 class RegisterController extends AbstractController2
 {

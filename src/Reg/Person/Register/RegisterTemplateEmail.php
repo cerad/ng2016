@@ -2,14 +2,19 @@
 
 namespace Zayso\Reg\Person\Register;
 
-use AppBundle\Action\AbstractView2;
+use Zayso\Common\Traits\EscapeTrait;
+use Zayso\Common\Traits\RouterTrait;
+use Zayso\Project\CurrentProjectTrait;
+use Zayso\Reg\Person\RegPerson;
+use Zayso\Reg\Person\RegPersonViewDecorator;
 
-use AppBundle\Action\Project\Person\ProjectPerson;
-use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
-
-class RegPersonRegisterTemplateEmail extends AbstractView2
+class RegisterTemplateEmail
 {
-    private $projectPersonViewDecorator;
+    use RouterTrait;
+    use EscapeTrait;
+    use CurrentProjectTrait;
+
+    private $personView;
 
     /* define inline styling for gmail */
     protected $styleSkHeader = '
@@ -52,19 +57,17 @@ class RegPersonRegisterTemplateEmail extends AbstractView2
         vertical-align: middle;
     ';
 
-    public function __construct(
-        ProjectPersonViewDecorator $projectPersonViewDecorator
-    )
+    public function __construct(RegPersonViewDecorator $personView)
     {
-        $this->projectPersonViewDecorator = $projectPersonViewDecorator;
+        $this->personView = $personView;
     }
 
-    public function renderHtml($personArray)
+    public function renderHtml(RegPerson $person)
     {
-        $person = new ProjectPerson();
-        $person = $person->fromArray($personArray);
-        $personView = $this->projectPersonViewDecorator;
-        $personView->setProjectPerson($person);
+        $personView = $this->personView;
+        $personView->setPerson($person);
+        $refAdmin = $this->currentProject->refAdmin;
+
         return <<<EOD
 <html lang="en">
 <head>
@@ -88,7 +91,7 @@ class RegPersonRegisterTemplateEmail extends AbstractView2
   <br>
   {$this->renderHtmlPerson($personView)}
 
-  {$this->renderHtmlGeneralInformation($personView)}
+  {$this->renderHtmlGeneralInformation()}
     
     <p style="{$this->styleP}">
       I will provide additional updates in the coming weeks. 
@@ -100,16 +103,15 @@ class RegPersonRegisterTemplateEmail extends AbstractView2
 
     <p style="{$this->styleP}">Sincerely,</p>
     
-    <p style="{$this->styleP}">Rob McCarthy<br>
+    <p style="{$this->styleP}">{$this->escape($refAdmin->name)}<br>
       2019 National Games Referee Administrator<br>
-      <a href="mailto:soccer.ref62@yahoo.com?subject=Question%20about%20the%202019%20National%Games">soccer
-      .ref62@yahoo.com</a>
+      <a href="mailto:{$refAdmin->email}?subject={$refAdmin->subject}">{$refAdmin->email}</a>
     </p>
 </body>
 </html>
 EOD;
     }
-    private function renderHtmlGeneralInformation($personView) {
+    private function renderHtmlGeneralInformation() {
         return <<<EOT
   <p style="{$this->stylePStrong}">
     General Information
@@ -125,9 +127,9 @@ EOD;
     </p>
 EOT;
     } 
-    private function renderHtmlPerson(ProjectPersonViewDecorator $personView)
+    private function renderHtmlPerson(RegPersonViewDecorator $personView)
     {
-        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
+        $regYearProject = $this->currentProject->regYear;
 
         $href = $this->generateUrlAbsoluteUrl('app_welcome');
         
@@ -146,7 +148,7 @@ EOT;
     <td>{$personView->fedId}</td>
   </tr><tr>
     <td>Section/Area/Region</td>
-    <td style="{$personView->getOrgKeyStyle()}">{$personView->orgKey}</td>
+    <td style="{$personView->getOrgKeyStyle()}">{$personView->orgId}</td>
   </tr><tr>
     <td>Membership Year</td>
     <td style="{$personView->getRegYearStyle($regYearProject)}">{$personView->getRegYear($regYearProject)}</td>

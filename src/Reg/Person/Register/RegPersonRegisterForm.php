@@ -3,19 +3,16 @@
 namespace Zayso\Reg\Person\Register;
 
 use AppBundle\Action\AbstractForm;
-
 use Symfony\Component\HttpFoundation\Request;
 
 class RegPersonRegisterForm extends AbstractForm
 {
     private $projectControls;
-
     private $formControls = [];
 
     public function __construct($projectControls, $formControls)
     {
         $this->projectControls = $projectControls;
-
         foreach($formControls as $key => $meta)
         {
             if (!isset($meta['type'])) {
@@ -27,13 +24,10 @@ class RegPersonRegisterForm extends AbstractForm
     public function handleRequest(Request $request)
     {
         if (!$request->isMethod('POST')) return;
-
         $this->isPost = true;
-
         $data = $request->request->all();
-        
-        $this->submit = $data['register'];
 
+        $this->submit = $data['register'];
         foreach($data as $key => $value)
         {
             if (!is_array($value)) {
@@ -50,21 +44,16 @@ class RegPersonRegisterForm extends AbstractForm
         }
         // Validate
         // $errors = [];
-
         //dump($data);
         unset($data['register']);
         unset($data['_csrf_token']);
-
         $this->setData($data);
-
         return;
     }
     public function render()
     {
         $csrfToken = 'TODO';
-
         $submitLabel = $this->formData['id'] ? 'Update Registration Information' : 'Submit Registration';
-
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form 
@@ -103,12 +92,9 @@ EOD;
     private function renderFormControl($key,$meta)
     {
         $group = isset($meta['group']) ? $meta['group'] : null;
-
         $id   = $group ? sprintf('%s_%s', $group,$key) : $key;
         $name = $group ? sprintf('%s[%s]',$group,$key) : $key;
-
         $default = isset($meta['default']) ? $meta['default'] : null;
-
         if ($group) {
             $value = isset($this->formData[$group][$key]) ? $this->formData[$group][$key] : $default;
         }
@@ -120,7 +106,6 @@ EOD;
             $value = $transformer->transform($value);
         }
         $label = isset($meta['label']) ? $this->escape($meta['label']) : null;
-
         return <<<EOD
   <div class="form-group">
     <label class="control-label col-sm-4" for="{$id}">{$label}</label>
@@ -133,26 +118,19 @@ EOD;
     private function renderFormControlInput($meta,$value,$id,$name)
     {
         $type = $meta['type'];
-
         switch($type) {
-
             case 'select':
                 return $this->renderFormControlInputSelect($meta['choices'],$value,$id,$name);
-
             case 'textarea':
                 return $this->renderFormControlInputTextArea($meta,$value,$id,$name);
-
         }
         return $this->renderFormControlInputText($meta,$value,$id,$name);
     }
     private function renderFormControlInputText($meta,$value,$id,$name)
     {
         $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
-
         $placeHolder = isset($meta['placeHolder']) ? $this->escape($meta['placeHolder']) : null;
-
         $value = $this->escape($value);
-
         return  <<<EOD
 <input 
   type="{$meta['type']}" id="{$id}" class="form-control" {$required}
@@ -162,13 +140,9 @@ EOD;
     private function renderFormControlInputTextArea($meta,$value,$id,$name)
     {
         $required = (isset($meta['required']) && $meta['required']) ? 'required' : null;
-
         $placeHolder = isset($meta['placeHolder']) ? $this->escape($meta['placeHolder']) : null;
-
         $rows = isset($meta['rows']) ? $meta['rows'] : 5;
-
         $value = $this->escape($value);
-
         return  <<<EOD
 <textarea 
   id="{$id}" class="form-control" rows="{$rows}" {$required}
