@@ -5,7 +5,7 @@ namespace Zayso\Reg\Person\Register;
 use AppBundle\Action\AbstractForm;
 use Symfony\Component\HttpFoundation\Request;
 
-class RegPersonRegisterForm extends AbstractForm
+class RegisterForm extends AbstractForm
 {
     private $projectControls;
     private $formControls = [];

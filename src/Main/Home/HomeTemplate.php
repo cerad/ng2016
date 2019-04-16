@@ -10,7 +10,8 @@ use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RouterTrait;
 
-use Zayso\Project\CurrentProjectTrait;
+use Zayso\Project\CurrentProject;
+
 use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonFinder;
 use Zayso\Reg\Person\RegPersonViewDecorator;
@@ -20,7 +21,6 @@ class HomeTemplate implements TemplateInterface
     use EscapeTrait;
     use RouterTrait;
     use AuthenticationTrait;
-    use CurrentProjectTrait;
 
     /** @var  ProjectUser */
     private $user;
@@ -30,12 +30,16 @@ class HomeTemplate implements TemplateInterface
     private $regPersonView;
     private $regPersonFinder;
 
+    private $currentProject;
+
     private $instructionsView;
 
     public function __construct(
+        CurrentProject         $currentProject,
         RegPersonFinder        $regPersonFinder,
         RegPersonViewDecorator $regPersonViewDecorator
     ) {
+        $this->currentProject   = $currentProject;
         $this->regPersonFinder  = $regPersonFinder;
         $this->regPersonView    = $regPersonViewDecorator;
         $this->instructionsView = new InstructionsView;

@@ -5,7 +5,7 @@ services:
     Zayso\Project\:
         resource: './*'
 
-    Zayso\Project\ShowProjectFlags:
+    Zayso\Project\ProjectShowFlags:
         arguments:
             - '%show_header_image%'
             - '%show_schedules_menu%'

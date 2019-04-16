@@ -2,6 +2,7 @@
 
 namespace Zayso\Project;
 
+use Zayso\Common\AppVersion;
 use Zayso\Common\AppVersionTrait;
 use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\AuthorizationTrait;
@@ -14,8 +15,17 @@ abstract class AbstractPageTemplate implements ProjectServiceInterface
     use RouterTrait;
     use AuthorizationTrait;
     use AuthenticationTrait;
-    use CurrentProjectTrait;
-    use AppVersionTrait;
+
+    protected $currentProject;
+    protected $appVersion;
+
+    public function __construct(
+        CurrentProject $currentProject,
+        AppVersion     $appVersion)
+    {
+        $this->currentProject = $currentProject;
+        $this->appVersion     = $appVersion;
+    }
 
     abstract public function render(string $content) : string;
 }

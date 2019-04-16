@@ -2,6 +2,7 @@
 
 namespace Zayso\Project\NG2019;
 
+use Zayso\Project\CurrentProject;
 use Zayso\User\Login\UserLoginForm;
 
 use Zayso\Project\AbstractContentTemplate;
@@ -10,8 +11,12 @@ class NG2019WelcomeTemplate extends AbstractContentTemplate
 {
     private $userLoginForm;
 
-    public function __construct(UserLoginForm $userLoginForm)
+    public function __construct(
+        CurrentProject $currentProject,
+        UserLoginForm  $userLoginForm)
     {
+        parent::__construct($currentProject);
+
         $this->userLoginForm = $userLoginForm;
     }
     public function render() : string

@@ -7,14 +7,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Zayso\Common\Contract\ActionInterface;
 use Zayso\Common\Traits\AuthorizationTrait;
 use Zayso\Common\Traits\RouterTrait;
-use Zayso\Project\CurrentProjectTrait;
+use Zayso\Project\CurrentProject;
 
 class WelcomeAction implements ActionInterface
 {
     use RouterTrait;
     use AuthorizationTrait;
-    use CurrentProjectTrait;
 
+    private $currentProject;
+
+    public function __construct(CurrentProject $currentProject)
+    {
+        $this->currentProject = $currentProject;
+    }
     public function __invoke(Request $request)
     {
         // Verify not signed in

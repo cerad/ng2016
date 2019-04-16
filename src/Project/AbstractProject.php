@@ -24,11 +24,8 @@ namespace Zayso\Project;
  * @property-read bool showResultsMenu
  * @property-read bool showFinalResults
  */
-abstract class AbstractProject //implements ProjectServiceInterface
+abstract class AbstractProject implements ProjectServiceInterface
 {
-    use ProjectServiceLocatorTrait;
-    use ShowProjectFlagsTrait;
-
     public $projectId;
     public $abbv;
     public $title;
@@ -44,8 +41,18 @@ abstract class AbstractProject //implements ProjectServiceInterface
     protected $projectData;
     protected $projectInfo;
 
-    public function __construct(array $projectData)
+    protected $projectShowFlags;
+    protected $projectServiceLocator;
+
+    public function __construct(
+        array $projectData,
+        ProjectServiceLocator $projectServiceLocator,
+        ProjectShowFlags      $projectShowFlags
+)
     {
+        $this->projectShowFlags      = $projectShowFlags;
+        $this->projectServiceLocator = $projectServiceLocator;
+
         $this->projectData = $projectData;
         $this->projectInfo = $projectData['info'];
 
@@ -84,16 +91,16 @@ abstract class AbstractProject //implements ProjectServiceInterface
                 return $this->projectInfo['rainedOutKey'];
 
             case 'showHeaderImage':
-                return $this->showProjectFlags->showHeaderImage;
+                return $this->projectShowFlags->showHeaderImage;
 
             case 'showSchedulesMenu':
-                return $this->showProjectFlags->showSchedulesMenu;
+                return $this->projectShowFlags->showSchedulesMenu;
 
             case 'showResultsMenu':
-                return $this->showProjectFlags->showResultsMenu;
+                return $this->projectShowFlags->showResultsMenu;
 
             case 'showFinalResults':
-                return $this->showProjectFlags->showFinalResults;
+                return $this->projectShowFlags->showFinalResults;
         }
         return null;
     }

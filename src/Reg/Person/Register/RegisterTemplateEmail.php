@@ -4,7 +4,7 @@ namespace Zayso\Reg\Person\Register;
 
 use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RouterTrait;
-use Zayso\Project\CurrentProjectTrait;
+use Zayso\Project\CurrentProject;
 use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonViewDecorator;
 
@@ -12,8 +12,8 @@ class RegisterTemplateEmail
 {
     use RouterTrait;
     use EscapeTrait;
-    use CurrentProjectTrait;
 
+    private $currentProject;
     private $personView;
 
     /* define inline styling for gmail */
@@ -57,9 +57,12 @@ class RegisterTemplateEmail
         vertical-align: middle;
     ';
 
-    public function __construct(RegPersonViewDecorator $personView)
-    {
-        $this->personView = $personView;
+    public function __construct(
+        CurrentProject         $currentProject,
+        RegPersonViewDecorator $personView
+    ) {
+        $this->currentProject = $currentProject;
+        $this->personView     = $personView;
     }
 
     public function renderHtml(RegPerson $person)

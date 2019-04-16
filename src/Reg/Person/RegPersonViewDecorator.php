@@ -16,6 +16,7 @@ use Zayso\Fed\Ayso\AysoOrgViewTransformer;
  *
  * @property-read string fedId
  * @property-read string orgId
+ * @property-read string orgKey
  *
  * @property-read bool willCoach
  * @property-read bool willReferee
@@ -24,6 +25,15 @@ use Zayso\Fed\Ayso\AysoOrgViewTransformer;
  * @property-read string willRefereeBadge
  *
  * @property-read string notesUser
+ *
+ * @property-read string availTue
+ * @property-read string availWed
+ * @property-read string availThu
+ * @property-read string availFri
+ * @property-read string availSatMorn
+ * @property-read string availSatAfter
+ * @property-read string availSunMorn
+ * @property-read string availSunAfter
  */
 final class RegPersonViewDecorator
 {

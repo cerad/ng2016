@@ -2,8 +2,6 @@
 
 namespace Zayso\Project;
 
-use Zayso\Common\Traits\AuthenticationTrait;
-use Zayso\Common\Traits\AuthorizationTrait;
 use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RouterTrait;
 
@@ -11,7 +9,13 @@ abstract class AbstractContentTemplate implements ProjectServiceInterface
 {
     use EscapeTrait;
     use RouterTrait;
-    use CurrentProjectTrait;
+
+    protected $currentProject;
+
+    public function __construct(CurrentProject $currentProject)
+    {
+        $this->currentProject = $currentProject;
+    }
 
     abstract public function render() : string;
 }

@@ -8,7 +8,10 @@ services:
 
     Zayso\Reg\Person\RegPersonConnection: '@doctrine.dbal.reg_person_connection'
 
-    Zayso\Reg\Person\Register\RegPersonRegisterForm:
+    Zayso\Reg\Person\Register\RegisterForm:
         arguments:
             $projectControls: '%app_project_controls%'
             $formControls:    '%app_project_registration_form_controls%'
+
+    Zayso\Reg\Person\Register\RegisterAction:
+        $successRouteName: 'app_home'

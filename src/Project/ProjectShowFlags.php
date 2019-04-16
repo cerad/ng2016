@@ -11,7 +11,7 @@ namespace Zayso\Project;
  * @property-read bool showResultsMenu
  * @property-read bool showFinalResults
  */
-class ShowProjectFlags
+class ProjectShowFlags
 {
     public $showHeaderImage;
     public $showSchedulesMenu;

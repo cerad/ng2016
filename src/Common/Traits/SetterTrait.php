@@ -6,6 +6,8 @@ namespace Zayso\Common\Traits;
  * Basically a war to update readonly properties
  * The assumption here is that data being passed is always the correct type
  * And that the keys are always valid
+ *
+ * TODO Too many assumptions! make this go away
  */
 trait SetterTrait
 {

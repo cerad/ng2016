@@ -7,21 +7,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Zayso\Common\Contract\ActionInterface;
 use Zayso\Common\Traits\AuthenticationTrait;
-use Zayso\Project\CurrentProjectTrait;
+use Zayso\Project\CurrentProject;
 use Zayso\Reg\Person\RegPersonFinder;
 
 class HomeAction implements ActionInterface
 {
-    use CurrentProjectTrait;
     use AuthenticationTrait;
 
+    private $currentProject;
     private $homeTemplate;
     private $regPersonFinder;
 
     public function __construct(
+        CurrentProject  $currentProject,
         HomeTemplate    $homeTemplate,
         RegPersonFinder $regPersonFinder
     ){
+        $this->currentProject  = $currentProject;
         $this->homeTemplate    = $homeTemplate;
         $this->regPersonFinder = $regPersonFinder;
     }
