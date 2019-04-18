@@ -3,12 +3,14 @@
 namespace Zayso\Project;
 
 use Zayso\Common\AppVersion;
-use Zayso\Common\AppVersionTrait;
 use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\AuthorizationTrait;
 use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RouterTrait;
 
+// Instead of using current project, considering adding project to render method
+// Maybe even user as well
+// These could also be injected when pulling from the project
 abstract class AbstractPageTemplate implements ProjectServiceInterface
 {
     use EscapeTrait;

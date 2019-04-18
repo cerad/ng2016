@@ -34,6 +34,6 @@ class HomeAction implements ActionInterface
 
         $regPerson = $this->regPersonFinder->findByProjectPerson($this->currentProject->projectId, $user->personId);
 
-        return new Response($this->homeTemplate->render($regPerson));
+        return new Response($this->homeTemplate->render($user, $this->currentProject, $regPerson));
     }
 }

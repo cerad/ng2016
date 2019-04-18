@@ -9,6 +9,7 @@ use Zayso\Fed\Ayso\AysoOrgViewTransformer;
 
 /**
  * @property-read RegPerson person
+ * @property-read int       regPersonId
  *
  * @property-read string name
  * @property-read string email
@@ -21,6 +22,8 @@ use Zayso\Fed\Ayso\AysoOrgViewTransformer;
  * @property-read bool willCoach
  * @property-read bool willReferee
  * @property-read bool willVolunteer
+ *
+ * @property-read bool isReferee
  *
  * @property-read string willRefereeBadge
  *
@@ -173,7 +176,9 @@ final class RegPersonViewDecorator
                 
             case 'phone':  
                 return $this->phoneTransformer->transform($person->phone);
-            
+
+            case 'regPersonId': return $person->regPersonId;
+
             case 'fedId':
             case 'fedKey':
                 return $this->fedIdTransformer->transform($person->fedPersonId);
@@ -241,6 +246,8 @@ final class RegPersonViewDecorator
                         return null;
                 }
                 return 'Yes';
+
+            case 'isReferee': return $person->isReferee;
 
             case 'willCoach':
             case 'willAttend':

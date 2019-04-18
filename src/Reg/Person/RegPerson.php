@@ -49,6 +49,9 @@ use DateTime;
  * @property-read string  refereeBadge
  * @property-read string  refereeBadgeUser
  */
+/*
+ * TODO Consider inject Project and User since you cannot have a RegPerson without those
+ */
 final class RegPerson
 {
     use SetterTrait;

@@ -2,9 +2,9 @@
 
 namespace Zayso\Project\NG2019;
 
-use Zayso\Project\CurrentProject;
+use Zayso\Project\Project;
 
-class NG2019Project extends CurrentProject
+class NG2019Project extends Project
 {
 
 }

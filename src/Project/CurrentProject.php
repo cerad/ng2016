@@ -2,7 +2,7 @@
 
 namespace Zayso\Project;
 
-abstract class CurrentProject extends AbstractProject
+interface CurrentProject extends ProjectInterface
 {
 
 }

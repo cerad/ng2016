@@ -8,6 +8,14 @@ use Serializable;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
+ * @property-read int id
+ *
+ * @property-read string name
+ * @property-read string email
+ * @property-read string username
+ *
+ * @property-read bool isRegistered
+ *
  * @property-read string projectId
  * @property-read string personId
  */
@@ -16,23 +24,23 @@ class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
     use ArrayAccessTrait;
 
     // These should be all be private but phpstorm complains when they are unused
-    protected $id;
-    private   $name;
-    protected $email;
-    private   $username;
+    private $id;
+    private $name;
+    private $email;
+    private $username;
 
-    private   $salt;
-    private   $password;
-    protected $passwordToken;
+    private $salt;
+    private $password;
+    private $passwordToken;
 
     private $enabled = true;
     private $locked  = false;
     
     private $roles = ['ROLE_USER'];
     
-    protected $personKey;
-    protected $projectKey;
-    protected $registered;
+    private $personKey;
+    private $projectKey;
+    private $registered;
     
     public function getRoles()
     {
@@ -41,6 +49,10 @@ class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
     public function getPassword()
     {
         return $this->password;
+    }
+    public function getPasswordToken()
+    {
+        return $this->passwordToken;
     }
     public function getSalt()
     {
@@ -115,8 +127,16 @@ class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
     public function __get($name)
     {
         switch($name) {
+            case 'userId':    return $this->id;
             case 'projectId': return $this->projectKey;
             case 'personId':  return $this->personKey;
+
+            case 'name':     return $this->name;
+            case 'email':    return $this->email;
+            case 'username': return $this->username;
+
+            case 'isRegistered': return (bool)$this->registered;
         }
+        return null;
     }
 }

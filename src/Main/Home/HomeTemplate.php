@@ -3,15 +3,14 @@
 namespace Zayso\Main\Home;
 
 use AppBundle\Action\Project\User\ProjectUser;
-use AppBundle\Action\InstructionsView;
 
 use Zayso\Common\Contract\TemplateInterface;
 use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\EscapeTrait;
 use Zayso\Common\Traits\RouterTrait;
 
-use Zayso\Project\CurrentProject;
-
+use Zayso\Project\Project;
+use Zayso\Project\ProjectInterface;
 use Zayso\Reg\Person\RegPerson;
 use Zayso\Reg\Person\RegPersonFinder;
 use Zayso\Reg\Person\RegPersonViewDecorator;
@@ -22,60 +21,48 @@ class HomeTemplate implements TemplateInterface
     use RouterTrait;
     use AuthenticationTrait;
 
-    /** @var  ProjectUser */
-    private $user;
-
-    /** @var  RegPerson */
-    private $regPerson;
     private $regPersonView;
     private $regPersonFinder;
 
-    private $currentProject;
-
-    private $instructionsView;
-
     public function __construct(
-        CurrentProject         $currentProject,
         RegPersonFinder        $regPersonFinder,
         RegPersonViewDecorator $regPersonViewDecorator
     ) {
-        $this->currentProject   = $currentProject;
         $this->regPersonFinder  = $regPersonFinder;
         $this->regPersonView    = $regPersonViewDecorator;
-        $this->instructionsView = new InstructionsView;
     }
-    public function render(RegPerson $regPerson) : string
+    // TODO Pull user and project from RegPerson
+    public function render(ProjectUser $user, ProjectInterface $project, RegPerson $regPerson) : string
     {
-        $this->user = $this->getUser();
-        $this->regPerson = $regPerson;
-        $this->regPersonView->setPerson($this->regPerson);
+        $regPersonView = $this->regPersonView;
+        $regPersonView->setPerson($regPerson);
 
         $content = <<<EOD
-{$this->renderNotes()}<br />
+{$this->renderNotes($project)}<br />
 <div class="account-person-list">
-{$this->renderAccountInformation()}
-{$this->renderRegistration()}
-{$this->renderCrewInformation()}
-{$this->renderTeamInformation()}
-{$this->renderAysoInformation()}
-{$this->renderAvailability()}
+{$this->renderAccountInformation($user)}
+{$this->renderRegistration($regPersonView)}
+{$this->renderCrewInformation($regPersonView)}
+{$this->renderTeamInformation($regPersonView)}
+{$this->renderAysoInformation($project,$regPersonView)}
+{$this->renderAvailability($regPersonView)}
 </div>
 <div>
-{$this->renderInstructions()}
+{$this->renderInstructions($regPersonView)}
 </div>
 <div>
 {$this->renderHotelInformation()}
 </div>
 EOD;
-        return $this->currentProject->pageTemplate->render($content);
+        return $project->pageTemplate->render($content);
     }
 
     /* ====================================================
      * Crew Information
      */
-    private function renderCrewInformation()
+    private function renderCrewInformation(RegPersonViewDecorator $regPersonView)
     {
-        $regPersonPersons = $this->regPersonFinder->findRegPersonPersons($this->regPerson->regPersonId);
+        $regPersonPersons = $this->regPersonFinder->findRegPersonPersons($regPersonView->regPersonId);
 
         $html = <<<EOD
 <table class="tableClass" >
@@ -102,9 +89,9 @@ EOD;
     /* ====================================================
      * Crew Information
      */
-    private function renderTeamInformation()
+    private function renderTeamInformation(RegPersonViewDecorator $regPersonView) : string
     {
-        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($this->regPerson->regPersonId);
+        $regPersonTeams = $this->regPersonFinder->findRegPersonTeams($regPersonView->regPersonId);
 
         $html = <<<EOD
 <table class="tableClass" >
@@ -132,17 +119,14 @@ EOD;
      * Account Information
      * TODO Move to own template
      */
-
-    private function renderAccountInformation()
+    private function renderAccountInformation(ProjectUser $user) : string
     {
-        $user = $this->user;
-
         return <<<EOD
 <table class="tableClass" >
   <tr><th colspan="2" style="text-align: center;">zAYSO Account Information</th></tr>
-  <tr><td>Account Name </td><td>{$user['name']}</td></tr>
-  <tr><td>Account User </td><td>{$user['username']}</td></tr>
-  <tr><td>Account Email</td><td>{$user['email']}</td></tr>
+  <tr><td>Account Name </td><td>{$user->name}</td></tr>
+  <tr><td>Account User </td><td>{$user->username}</td></tr>
+  <tr><td>Account Email</td><td>{$user->email}</td></tr>
   <!--
   <tr><td style="text-align: center;" colspan="2">
     <a href="{$this->generateUrl('user_update')}">
@@ -154,10 +138,8 @@ EOD;
 EOD;
     }
 
-    private function renderRegistration()
+    private function renderRegistration(RegPersonViewDecorator $personView)
     {
-        $personView = $this->regPersonView;
-
         return <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Registration Information</th></tr>
@@ -176,25 +158,23 @@ EOD;
 EOD;
     }
 
-    private function renderAvailability()
+    private function renderAvailability(RegPersonViewDecorator $personView) : string
     {
-        $person = $this->regPerson;
-        if (!$person->isReferee) {
-            return null;
+        if (!$personView->isReferee) {
+            return '';
         }
-        $personView = $this->regPersonView;
-
+        // Todo - pull the availability list from the project
         return
             <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Availability Information</th></tr>
-  <tr><td>Available Tue (Soccerfest) </td><td>{$personView->availTue}</td></tr>
-  <tr><td>Available Wed (Pool Play) </td><td>{$personView->availWed}</td></tr>
-  <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}</td></tr>
-  <tr><td>Available Fri (Pool Play)  </td><td>{$personView->availFri}</td></tr>
-  <tr><td>Available Sat Morning  (PP)</td><td>{$personView->availSatMorn}</td></tr>
+  <tr><td>Available Tue (Soccerfest)  </td><td>{$personView->availTue}</td></tr>
+  <tr><td>Available Wed (Pool Play)   </td><td>{$personView->availWed}</td></tr>
+  <tr><td>Available Thu (Pool Play)   </td><td>{$personView->availThu}</td></tr>
+  <tr><td>Available Fri (Pool Play)   </td><td>{$personView->availFri}</td></tr>
+  <tr><td>Available Sat Morning   (PP)</td><td>{$personView->availSatMorn}</td></tr>
   <tr><td>Available Sat Afternoon (QF)</td><td>{$personView->availSatAfter}</td></tr>
-  <tr><td>Available Sun Morning  (SF)</td><td>{$personView->availSunMorn}</td></tr>
+  <tr><td>Available Sun Morning   (SF)</td><td>{$personView->availSunMorn}</td></tr>
   <tr><td>Available Sun Afternoon (FM)</td><td>{$personView->availSunAfter}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
@@ -206,11 +186,9 @@ EOD;
     }
 
     // TODO Key this off of roles
-    private function renderAysoInformation()
+    private function renderAysoInformation(ProjectInterface $project, RegPersonViewDecorator $personView) : string
     {
-        $personView = $this->regPersonView;
-
-        $regYearProject = $this->currentProject->regYear;
+        $regYearProject = $project->regYear;
 
         return
             <<<EOD
@@ -238,50 +216,21 @@ EOD;
 </table>
 EOD;
     }
-
-    /* ==========================================
-     * Rest of the info, break out later
-     *
-     */
-    protected function renderMoreInformation()
-    {
-        return
-            <<<EOD
-<table class="account-person-list app_table" border="1">
-  <tr><th colspan="2">My Teams</th></tr>
-  <tr class="trAction"><td style="text-align: center;" colspan="2" >
-    <a href="/project/natgames/person/1/teams?_back=%2Fhome">Add/Remove Teams
-    </a>
-  </td></tr>
-</table>
-
-<table class="account-person-list app_table" border="1">
-  <tr><th colspan="2">My Crew</th></tr>
-  <tr><td style="text-align: center;" colspan="2">
-    Primary: Art Hundiak
-  </td></tr>
-  <tr class="trAction"><td style="text-align: center;" colspan="2" >
-    <a href="/project/natgames/person/1/persons?_back=%2Fhome">Add/Remove People
-    </a>
-  </td></tr>
-</table>
-EOD;
-    }
-
-    private function renderNotes()
+    // This might be a candidate for a project specific template
+    private function renderNotes(Project $project) : string
     {
         return
             <<<EOD
 <div id="notes">
-  <legend>Thank you for registering to Volunteer at the 2019 National Games!</legend>
+  <legend>Thank you for registering to Volunteer at the {$project->title}!</legend>
   <p>
-    Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games.
+    Review your plans for the tournament to ensure we understand your availability and the roles you expect to play during the tournament.
    </p>
 <br>
    <p>
-    If you are not already registered as an AYSO volunteer for MY2018, please visit the <a href="https://www.aysosection7
+    If you are not already registered as an AYSO volunteer for {$project->regYear}, please visit the <a href="https://www.aysosection7
 .org/Default.aspx?tabid=724814" target="_blank">Section 7 website</a> and 
-register as a volunteer for the 2019 National Games, or go to your Region website and register as an AYSO volunteer. 
+register as a volunteer for the {$project->title}, or go to your Region website and register as an AYSO volunteer. 
 </p>
 <br>
    <p>
@@ -290,15 +239,10 @@ register as a volunteer for the 2019 National Games, or go to your Region websit
 </div>
 EOD;
     }
-
-    private function renderInstructions()
+    private function renderInstructions(RegPersonViewDecorator $personView) : string
     {
-        $personView = $this->regPersonView;
-
-        $isReferee = $personView->getCertBadge('CERT_REFEREE');
-
         $html = null;
-        if ($isReferee) {
+        if ($personView->isReferee) {
             $html =
                 <<<EOT
 <div id="clear-fix">
@@ -319,8 +263,7 @@ EOT;
 
         return $html;
     }
-
-    private function renderHotelInformation()
+    private function renderHotelInformation() : string
     {
         return
             <<<EOT
