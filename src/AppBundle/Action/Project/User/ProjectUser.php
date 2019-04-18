@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayAccessTrait;
 use ArrayAccess;
 use Serializable;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Zayso\Common\Contract\UserInterface;
 
 /**
  * @property-read int id
@@ -19,7 +20,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @property-read string projectId
  * @property-read string personId
  */
-class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable
+class ProjectUser implements AdvancedUserInterface, ArrayAccess, Serializable, UserInterface
 {
     use ArrayAccessTrait;
 

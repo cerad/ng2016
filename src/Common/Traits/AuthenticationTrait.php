@@ -2,8 +2,8 @@
 
 namespace Zayso\Common\Traits;
 
-use AppBundle\Action\Project\User\ProjectUser;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Zayso\Common\Contract\UserInterface;
 
 trait AuthenticationTrait
 {
@@ -16,7 +16,7 @@ trait AuthenticationTrait
         $this->tokenStorage = $this->tokenStorage ?: $tokenStorage;
     }
     /* Directly copied from ControllerTrait */
-    protected function getUser() : ?ProjectUser
+    protected function getUser() : ?UserInterface
     {
         if (null === $token = $this->tokenStorage->getToken()) {
             return null;
@@ -26,7 +26,7 @@ trait AuthenticationTrait
             // e.g. anonymous authentication
             return null;
         }
-        /** @var ProjectUser $userx */
+        /** @var UserInterface $userx */
         $userx = $user; // Just to keep the IDE code checker happy
         return $userx;
     }
