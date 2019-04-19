@@ -1,0 +1,18 @@
+# Reg
+reg_person_register:
+  path: /register
+  defaults:
+    _role:       ROLE_USER
+    _controller: Zayso\Reg\Person\Register\RegisterAction
+
+reg_person_update:
+  path: /update
+  defaults:
+    _role:       ROLE_USER
+    _controller: Zayso\Reg\Person\Register\RegisterAction
+
+reg_person_update_fed: # Is this even used?
+  path: /update-fed
+  defaults:
+    _role:       ROLE_USER
+    _controller: Zayso\Reg\Person\Register\RegisterAction

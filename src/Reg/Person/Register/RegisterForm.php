@@ -2,11 +2,16 @@
 
 namespace Zayso\Reg\Person\Register;
 
-use AppBundle\Action\AbstractForm;
+
 use Symfony\Component\HttpFoundation\Request;
 
-class RegisterForm extends AbstractForm
+use Zayso\Common\Contract\FormInterface;
+use Zayso\Common\Traits\FormTrait;
+
+class RegisterForm implements FormInterface
 {
+    use FormTrait;
+
     private $projectControls;
     private $formControls = [];
 
@@ -21,7 +26,7 @@ class RegisterForm extends AbstractForm
             $this->formControls[$key] = $meta;
         }
     }
-    public function handleRequest(Request $request)
+    public function handleRequest(Request $request) : void
     {
         if (!$request->isMethod('POST')) return;
         $this->isPost = true;
@@ -30,6 +35,7 @@ class RegisterForm extends AbstractForm
         $this->submit = $data['register'];
         foreach($data as $key => $value)
         {
+            // I think we have better filtering now
             if (!is_array($value)) {
                 $value = filter_var(trim($value), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
             }
@@ -50,14 +56,14 @@ class RegisterForm extends AbstractForm
         $this->setData($data);
         return;
     }
-    public function render()
+    public function render() : string
     {
         $csrfToken = 'TODO';
         $submitLabel = $this->formData['id'] ? 'Update Registration Information' : 'Submit Registration';
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form 
-  action="{$this->generateUrl('project_person_register')}" method="post" 
+  action="{$this->generateUrl('reg_person_register')}" method="post" 
   role="form" class="form-horizontal" novalidate>
   <div class="form-group"> 
     <div class="col-sm-offset-4 col-sm-8">
@@ -102,8 +108,9 @@ EOD;
             $value = isset($this->formData[$key]) ? $this->formData[$key] : $default;
         }
         if (isset($meta['transformer'])) {
-            $transformer = $this->getTransformer($meta['transformer']);
-            $value = $transformer->transform($value);
+            // TODO
+            //$transformer = $this->getTransformer($meta['transformer']);
+            //$value = $transformer->transform($value);
         }
         $label = isset($meta['label']) ? $this->escape($meta['label']) : null;
         return <<<EOD
@@ -149,7 +156,7 @@ EOD;
   name="{$name}" placeHolder="{$placeHolder}" >{$value}</textarea>
 EOD;
     }
-    protected function renderFormControlInputSelect($choices,$value,$id,$name)
+    private function renderFormControlInputSelect($choices,$value,$id,$name)
     {
         $html = <<<EOD
 <select id="{$id}" name="{$name}" class="form-control">

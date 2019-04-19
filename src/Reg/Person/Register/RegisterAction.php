@@ -2,13 +2,12 @@
 
 namespace Zayso\Reg\Person\Register;
 
-use AppBundle\Action\Project\User\ProjectUser;
-
 use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Zayso\Common\Contract\ActionInterface;
+use Zayso\Common\Contract\UserInterface;
 use Zayso\Common\Locator\MailerLocator;
 use Zayso\Common\Traits\AuthenticationTrait;
 use Zayso\Common\Traits\RouterTrait;
@@ -194,7 +193,7 @@ class RegisterAction implements ActionInterface
         ]);
         $regPerson->addCert($cert);
     }
-    private function findRegPersonForUser(ProjectUser $user) : ?RegPerson
+    private function findRegPersonForUser(UserInterface $user) : ?RegPerson
     {
         $projectId = $this->currentProject->projectId;
         $personId  = $user->personId;

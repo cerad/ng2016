@@ -14,4 +14,4 @@ services:
             $formControls:    '%app_project_registration_form_controls%'
 
     Zayso\Reg\Person\Register\RegisterAction:
-        $successRouteName: 'app_home'
+        $successRouteName: '%app_home_route%'
