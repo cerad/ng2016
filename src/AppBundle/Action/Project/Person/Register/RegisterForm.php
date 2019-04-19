@@ -67,7 +67,7 @@ class RegisterForm extends AbstractForm
         $html = <<<EOD
 {$this->renderFormErrors()}
 <form 
-  action="{$this->generateUrl('project_person_register')}" method="post" 
+  action="{$this->generateUrl('reg_person_register')}" method="post" 
   role="form" class="form-horizontal" novalidate>
   <div class="form-group"> 
     <div class="col-sm-offset-4 col-sm-8">

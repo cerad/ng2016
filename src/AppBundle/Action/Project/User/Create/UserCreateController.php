@@ -56,7 +56,7 @@ class UserCreateController extends AbstractController
             );
             $this->loginUser($request,$user);
 
-            return $this->redirectToRoute('project_person_register');
+            return $this->redirectToRoute('reg_person_register');
         }
         $request->attributes->set('userCreateForm',$userCreateForm);
         

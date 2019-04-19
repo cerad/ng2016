@@ -369,7 +369,7 @@ EOT;
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
-          <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS & AVAILABILITY</a></li>
+          <li><a href="{$this->generateUrl('reg_person_update')}">MY PLANS & AVAILABILITY</a></li>
           <li><a href="{$this->generateUrl('schedule_my_2016')}">MY SCHEDULE</a></li>
           <li><a href="{$this->generateUrl('reg_person_persons_update')}">MY CREW</a></li>
           <li><a href="{$this->generateUrl('reg_person_teams_update')}">MY TEAMS</a></li>

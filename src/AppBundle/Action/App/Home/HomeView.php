@@ -182,7 +182,7 @@ EOD;
   <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}   </td></tr>
   <tr><td>Will Coach    </td><td>{$personView->willCoach}       </td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
-    <a href="{$this->generateUrl('project_person_update')}">
+    <a href="{$this->generateUrl('reg_person_update')}">
         Update My Plans or Availability
     </a>
   </td></tr>
@@ -211,7 +211,7 @@ EOD;
   <tr><td>Available Sun Morning  (SF)</td><td>{$personView->availSunMorn}</td></tr>
   <tr><td>Available Sun Afternoon (FM)</td><td>{$personView->availSunAfter}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
-    <a href="{$this->generateUrl('project_person_update')}">
+    <a href="{$this->generateUrl('reg_person_update')}">
         Update My Plans or Availability
     </a>
   </td></tr>

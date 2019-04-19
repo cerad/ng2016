@@ -48,7 +48,7 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
     }
     /* ===================================================
      * Implements _role processing
-     * Implements mandatory project_person_register
+     * Implements mandatory reg_person_register
      */
     public function onRequest(GetResponseEvent $event)
     {
@@ -94,10 +94,10 @@ class KernelListener implements EventSubscriberInterface,ContainerAwareInterface
             return;
         }
         // Allow this one through
-        if ($request->attributes->get('_route') === 'project_person_register') {
+        if ($request->attributes->get('_route') === 'reg_person_register') {
             return;
         }
-        $event->setResponse($this->redirectToRoute('project_person_register'));
+        $event->setResponse($this->redirectToRoute('reg_person_register'));
         $event->stopPropagation();
         return;
     }
