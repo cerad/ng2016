@@ -25,16 +25,16 @@ parameters:
         regYear: 'MY2015'
 
         support:
-            name: "Art Hundiak"
-            email: "ahundiak@gmail.com"
-            subject: "NG2019 zAYSO question..."
-            phone: 256-457-5943
-              
-        schedules:
             name: "Rob McCarthy"
             email: "soccer.ref62@yahoo.com"
-            subject: "NG2019 schedule question..."
+            subject: "NG2019 zAYSO question..."
             phone: 808-286-9280
+              
+        schedules:
+            name: "Chris Lewis"
+            email: "chris.lewis575@gmail.com"
+            subject: "NG2019 schedule question..."
+            phone: 808-421-8008
             
         assignor:
             name: "Rob McCarthy"

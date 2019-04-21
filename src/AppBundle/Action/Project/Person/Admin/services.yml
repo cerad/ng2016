@@ -28,6 +28,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - '@project_person_connection'
+            - '%app_project_key%'
 
 # ==========================================================================
 # Listing (List throws exception)
