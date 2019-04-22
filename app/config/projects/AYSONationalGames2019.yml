@@ -33,7 +33,13 @@ parameters:
             email: "ahundiak@gmail.com"
             subject: "NG2019 zAYSO question..."
             phone: 256-457-5943
-              
+
+        support2:
+            name: "Rick Roberts"
+            email: "web.ng2019@gmail.com"
+            subject: "NG2019 zAYSO question..."
+            phone: 310-920-8209
+
         schedules:
             name: "Rob McCarthy"
             email: "soccer.ref62@yahoo.com"
@@ -53,9 +59,10 @@ parameters:
             phone: 808-286-9280
 
         system:
-            name:  "Zayso Admin"
-            email: "noreply@zayso.org"
-            phone:  ""
+            name:    "Zayso Admin"
+            email:   "noreply@zayso.org"
+            subject: ""
+            phone:   ""
 
         dates:
             '2019-07-02': Wed # Soccerfest 2019
@@ -290,7 +297,7 @@ parameters:
             label:       AYSO Volunteer ID
             href:        eayso.org
             placeHolder: 8-8 digit number
-            transformer: Zayso\Fed\Ayso\AysoIdTransformer
+            transformer: aysoid_transformer
             #constraints: ['aysoid_constraint'] # Maybe class name?
 
         orgKey:
@@ -298,7 +305,7 @@ parameters:
             label:       AYSO Section/Area/Region
             href:        eayso.org
             placeHolder: 5/C/0894
-            transformer: Zayso\Fed\Ayso\AysoIdTransformer
+            transformer: aysoid_transformer
             #constraints: ['aysoid_constraint'] # Maybe class name?
 
         availSatMorn:

@@ -26,7 +26,7 @@ class AysoFinder
         $this->orgViewTransformer = $orgViewTransformer;
 
         $this->guzzleClient = new GuzzleClient([
-            'verify'  => true,
+            'verify'  => false,
             'timeout' => 5.0,
             'headers' => ['Accept' => 'application/json'],
         ]);

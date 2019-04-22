@@ -2,28 +2,6 @@
 
 namespace Zayso\Project;
 
-/**
- *  property-read string projectId
- *  property-read string abbv
- *  property-read string title
- *  property-read string desc
- *
- *  property-read string regYear
- *  property-read string timeZone
- *  property-read string rainedOutKey
- *
- *  property-read ProjectContact support
- *  property-read ProjectContact refAdmin
- *
- * Virtual
- *  property-read AbstractPageTemplate    pageTemplate
- *  property-read AbstractContentTemplate welcomeTemplate
- *
- *  property-read bool showHeaderImage
- *  property-read bool showSchedulesMenu
- *  property-read bool showResultsMenu
- *  property-read bool showFinalResults
- */
 class Project implements ProjectInterface, CurrentProject, ProjectServiceInterface
 {
     public $projectId;
@@ -33,7 +11,10 @@ class Project implements ProjectInterface, CurrentProject, ProjectServiceInterfa
 
     public $regYear;
 
+    // Contacts
+    public $_system;
     public $support;
+    public $support2;
     public $refAdmin;
     public $refAssignor;
 
@@ -66,6 +47,9 @@ class Project implements ProjectInterface, CurrentProject, ProjectServiceInterfa
         $contact = $info['support'];
         $this->support = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
 
+        $contact = $info['support2'];
+        $this->support2 = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
+
         $contact = $info['administrator'];
         $this->refAdmin = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
 
@@ -90,6 +74,14 @@ class Project implements ProjectInterface, CurrentProject, ProjectServiceInterfa
             case 'rainedOutKey':
                 return $this->projectInfo['rainedOutKey'];
 
+                // Contacts
+            case 'system':
+                if ($this->_system) return $this->_system;
+                $contact = $this->projectInfo['system'];
+                $this->_system = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
+                return $this->_system;
+
+                // Show Booleans
             case 'showHeaderImage':
                 return $this->projectShowFlags->showHeaderImage;
 

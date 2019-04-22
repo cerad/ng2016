@@ -12,7 +12,10 @@ namespace Zayso\Project;
  * @property-read string timeZone
  * @property-read string rainedOutKey
  *
+ * TODO Move these into a lazy loaded contacts object
+ * @property-read ProjectContact system
  * @property-read ProjectContact support
+ * @property-read ProjectContact support2
  * @property-read ProjectContact refAdmin
  * @property-read ProjectContact refAssignor
  *

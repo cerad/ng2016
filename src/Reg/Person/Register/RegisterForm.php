@@ -43,7 +43,9 @@ class RegisterForm implements FormInterface
                 $meta = $this->formControls[$key];
                 if (isset($meta['transformer'])) {
                     $transformer = $this->getTransformer($meta['transformer']);
-                    $value = $transformer->reverseTransform($value);
+                    if ($transformer) {
+                        $value = $transformer->reverseTransform($value);
+                    }
                 }
             }
             $data[$key] = $value;
@@ -108,9 +110,12 @@ EOD;
             $value = isset($this->formData[$key]) ? $this->formData[$key] : $default;
         }
         if (isset($meta['transformer'])) {
-            // TODO
-            //$transformer = $this->getTransformer($meta['transformer']);
-            //$value = $transformer->transform($value);
+
+            $transformer = $this->getTransformer($meta['transformer']);
+            if ($transformer) {
+                $value = $transformer->transform($value);
+            }
+            else dump($meta['transformer']);
         }
         $label = isset($meta['label']) ? $this->escape($meta['label']) : null;
         return <<<EOD
@@ -122,6 +127,7 @@ EOD;
   </div>
 EOD;
     }
+    // TODO Merge this into the FormTrait
     private function renderFormControlInput($meta,$value,$id,$name)
     {
         $type = $meta['type'];

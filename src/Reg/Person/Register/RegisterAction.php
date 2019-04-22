@@ -264,6 +264,7 @@ class RegisterAction implements ActionInterface
     {
         $project  = $this->currentProject;
         $support  = $project->support;
+        $support2 = $project->support2;
         $assignor = $project->refAssignor;
         $refAdmin = $project->refAdmin;
 
@@ -287,7 +288,7 @@ class RegisterAction implements ActionInterface
 
         $message->setSubject($subject);
 
-        $message->setFrom(['noreply@zayso.org' => 'zAYSO Admin']);
+        $message->setFrom([$project->system->email => $project->system->name]);
 
         $message->setTo([$person->email => $person->name]);
 
@@ -297,8 +298,8 @@ class RegisterAction implements ActionInterface
 
         $message->setBcc(
             [
-                $support['email'] => $support['name'],
-                'web.ng2019@gmail.com' => 'Rick Roberts', // ???
+                $support->email  => $support->name,
+                $support2->email => $support2->name,
             ]
         );
         $mailer->send($message);

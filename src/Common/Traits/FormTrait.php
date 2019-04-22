@@ -3,11 +3,15 @@
 namespace Zayso\Common\Traits;
 
 use Symfony\Component\Form\DataTransformerInterface;
+use Zayso\Common\Locator\DataTransformerLocator;
 
 trait FormTrait
 {
     use EscapeTrait;
     use RouterTrait;
+
+    /** @var DataTransformerLocator */
+    protected $transformerLocator;
 
     protected $isPost = false;
 
@@ -17,6 +21,11 @@ trait FormTrait
     protected $formDataErrors = [];
     protected $formDataMessages = [];
 
+    /** @required */
+    public function injectTransformerLocator(DataTransformerLocator $transformerLocator)
+    {
+        $this->transformerLocator = $this->transformerLocator ?: $transformerLocator;
+    }
     public function setData(array $formData) : void
     {
         $this->formData = array_replace_recursive($this->formData, $formData);
@@ -40,9 +49,9 @@ trait FormTrait
      * @return DataTransformerInterface
      * Either transformer locator or just project for this
      */
-    protected function getTransformer($id) : void
+    protected function getTransformer($id) : ?DataTransformerInterface
     {
-        //return $this->container->get($id);
+        return $this->transformerLocator->has($id) ? $this->transformerLocator->get($id) : null;
     }
 
 
