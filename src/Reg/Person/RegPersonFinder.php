@@ -2,6 +2,8 @@
 
 namespace Zayso\Reg\Person;
 
+use Doctrine\DBAL\Connection;
+
 final class RegPersonFinder
 {
     private $regPersonConn;
@@ -101,5 +103,51 @@ EOT;
     public function findRegPersonTeams(int $regPersonId) : array
     {
         return [];
+    }
+    /* ==========================================
+ * Mainly for Switch User within a project
+ *
+ */
+    public function findUserChoices($projectId)
+    {
+        $sql = <<<EOD
+SELECT 
+  personKey AS personId,
+  name      AS name,
+  role      AS role
+FROM projectPersons AS regPerson
+LEFT JOIN projectPersonRoles AS regPersonRole ON regPersonRole.projectPersonId = regPerson.id
+WHERE projectKey = ? AND role LIKE 'ROLE_%'
+ORDER BY name,role
+EOD;
+        $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
+        $persons = [];
+        while($row = $stmt->fetch())
+        {
+            $personId = $row['personId'];
+
+            if (!isset($persons[$personId])) {
+                $person = [
+                    'personId' => $personId,
+                    'name'     => $row['name'],
+                    'roles'    => $row['role'],
+                ];
+                $persons[$personId] = $person;
+            }
+            else {
+                $persons[$personId]['roles'] .= ' ' . $row['role'];
+            }
+        }
+        // TODO change back to user connection once implemented or just join
+        $sql  = 'SELECT personKey AS personId, username FROM users WHERE personKey IN (?) ORDER BY name';
+        $stmt = $this->regPersonConn->executeQuery($sql,[array_keys($persons)],[Connection::PARAM_STR_ARRAY]);
+        $userChoices = [];
+        while($row = $stmt->fetch()) {
+
+            $person = $persons[$row['personId']];
+
+            $userChoices[$row['username']] = $person['name'] . ' ' . $person['roles'];
+        }
+        return $userChoices;
     }
 }

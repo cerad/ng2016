@@ -15,6 +15,12 @@ app_home:
     _role:       ROLE_USER
     _controller: Zayso\Main\Home\HomeAction
 
+app_admin:
+  path: /admin
+  defaults:
+    _role:       ROLE_STAFF
+    _controller: Zayso\Main\Admin\AdminAction
+
 app_text_alerts:
   path: /textalerts
   defaults:
@@ -41,9 +47,3 @@ assignor_instruction:
     fileName: referee_assigning.pdf
     _controller: file_controller
 
-app_admin:
-  path: /admin
-  defaults:
-    _role:       ROLE_STAFF
-    _view:       admin_view
-    _controller: admin_controller

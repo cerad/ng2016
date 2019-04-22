@@ -12,11 +12,12 @@ class Project implements ProjectInterface, CurrentProject, ProjectServiceInterfa
     public $regYear;
 
     // Contacts
-    public $_system;
-    public $support;
-    public $support2;
-    public $refAdmin;
-    public $refAssignor;
+    protected $_system;
+    public    $support;
+    public    $support2;
+    public    $refAdmin;
+    public    $refAssignor;
+    protected $_gameScheduler;
 
     // Local Data
     protected $projectData;
@@ -80,6 +81,11 @@ class Project implements ProjectInterface, CurrentProject, ProjectServiceInterfa
                 $contact = $this->projectInfo['system'];
                 $this->_system = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
                 return $this->_system;
+
+            case 'gameScheduler':
+                if ($this->_gameScheduler) return $this->_gameScheduler;
+                $contact = $this->projectInfo['schedules'];
+                return $this->_gameScheduler = new ProjectContact($contact['name'],$contact['email'],$contact['phone'],$contact['subject']);
 
                 // Show Booleans
             case 'showHeaderImage':

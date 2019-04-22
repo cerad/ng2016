@@ -18,6 +18,7 @@ namespace Zayso\Project;
  * @property-read ProjectContact support2
  * @property-read ProjectContact refAdmin
  * @property-read ProjectContact refAssignor
+ * @property-read ProjectContact gameScheduler
  *
  * Virtual
  * @property-read AbstractPageTemplate    pageTemplate
