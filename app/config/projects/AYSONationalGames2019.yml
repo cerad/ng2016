@@ -8,7 +8,7 @@ parameters:
     info:
         key: AYSONationalGames2019 # For now until we migrate games
 
-        slugs: [natgames, ng2016]
+        slugs: [natgames, ng2019]
 
         status: Active
 
@@ -22,7 +22,7 @@ parameters:
         desc:    "AYSO National Games 2019 - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7, 2019"
         prefix:  'NatGames2019'
 
-        regYear: 'MY2015'
+        regYear: 'MY2018'
 
         support:
             name: "Rob McCarthy"

@@ -118,6 +118,10 @@ class ProjectPersonViewDecorator
         }
         return false;
     }
+    public function hasRegistrationIssue($regYearProject)
+    {
+        return $this->regYear >= $regYearProject;
+    }
     public function getRoleClass($role)
     {
         if ($role->approved) {

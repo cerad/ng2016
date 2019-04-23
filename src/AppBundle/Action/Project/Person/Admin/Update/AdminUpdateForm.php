@@ -53,7 +53,7 @@ class AdminUpdateForm extends AbstractForm
             'type'      => 'select',
             'label'     => 'MemYear',
             'default'   =>  null,
-            'choices'   => ['MY2016'=>'MY2016','MY2015'=>'MY2015',null=>'***'],
+            'choices'   => ['MY2019'=>'MY2019','MY2018'=>'MY2018',null=>'***'],
         );
 
         $this->personView = $projectPersonViewDecorator;
@@ -143,9 +143,6 @@ class AdminUpdateForm extends AbstractForm
         }
         if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
             $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] === 'yes' ? true : null;            
-        }
-        if (isset($projectPerson->roles['CERT_BACKGROUND_CHECK'])) {
-            $projectPerson->roles['CERT_BACKGROUND_CHECK']['verified'] = $personData['userBackground'] === 'yes' ? true : null;            
         }
 
         //update roles
@@ -384,10 +381,6 @@ EOD;
         }
         $html .= <<<EOD
     <!--suppress ALL -->
-<div class="form-group">
-      <label class="col-xs-3 control-label" for="userBackground">FL BkGrnd Check:</label>
-      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->backgroundChecked)),'userBackground','userBackground','col-xs-4 form-control'.$classBgCk)}
-    </div>
     {$this->renderPanelFooter()}
 </div>
 EOD;
