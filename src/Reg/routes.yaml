@@ -30,3 +30,22 @@ reg_person_teams_update:
     _role:       ROLE_USER
     _view:       reg_person_teams_update_view
     _controller: reg_person_teams_update_controller
+
+reg_person_admin_listing:
+  path: /admin/listing.{_format}
+  defaults:
+    _role:       ROLE_ASSIGNOR
+    _format: html
+    _controller: Zayso\Reg\Person\Admin\Listing\AdminListingAction
+    _view_html:  project_person_admin_listing_view_html
+    _view_xls:   project_person_admin_listing_view_xls
+    _view_csv:   project_person_admin_listing_view_csv
+    _view_pdf:   project_person_admin_listing_view_pdf
+    _view_json:  project_person_admin_listing_view_json
+
+reg_person_admin_update:
+  path: /admin/update/{regPersonId}
+  defaults:
+    _role:       ROLE_ASSIGNOR
+    _view:       project_person_admin_update_view
+    _controller: Zayso\Reg\Person\Admin\Update\AdminUpdate\Action

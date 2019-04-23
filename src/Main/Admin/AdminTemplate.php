@@ -180,8 +180,8 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
-      <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People</a></li>
+      <li><a href="{$this->generateUrl('reg_person_admin_listing')}">Mangage Registered People</a></li>
+      <li><a href="{$this->generateUrl('reg_person_admin_listing',['_format' => 'xls'])}">Export Registered People</a></li>
     </ul>
   </div>
 </div>

@@ -3,6 +3,7 @@
 namespace Zayso\Reg\Person;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 final class RegPersonFinder
 {
@@ -12,48 +13,57 @@ final class RegPersonFinder
     {
         $this->regPersonConn = $regPersonConn;
     }
-    public function findByProjectPerson(string $projectId, string $personId): ?RegPerson
+    // Maybe should be in the mapper?
+    private function createRegPersonQueryBuilder() : QueryBuilder
     {
-        $sql = <<<EOT
-SELECT
-  id         AS regPersonId,
-  projectKey AS projectId,
-  personKey  AS personId,
-  orgKey     AS fedOrgId,
-  fedKey     AS fedPersonId,
-  regYear    AS regYear,
-  registered AS registered,
-  verified   AS verified,
-  name       AS name,
-  email      AS email,
-  phone      AS phone,
-  gender     AS gender,
-  dob        AS dob,
-  age        AS age,
-  shirtSize  AS shirtSize,
-  notes      AS notes,
-  notesUser  AS notesUser,
-  plans      AS plans,
-  avail      AS avail,
-  createdOn  AS createdOn,
-  updatedOn  AS updatedOn,
-  version    AS version
-FROM  projectPersons
-WHERE projectKey = ? AND personKey = ?
-EOT;
-        $row = $this->regPersonConn->executeQuery($sql, [$projectId, $personId])->fetch();
+        $qb = $this->regPersonConn->createQueryBuilder();
 
-        if (!$row) {
-            return null;
+        $qb->addSelect([
+            'id         AS regPersonId',
+            'projectKey AS projectId',
+            'personKey  AS personId',
+            'orgKey     AS fedOrgId',
+            'fedKey     AS fedPersonId',
+            'regYear    AS regYear',
+            'registered AS registered',
+            'verified   AS verified',
+            'name       AS name',
+            'email      AS email',
+            'phone      AS phone',
+            'gender     AS gender',
+            'dob        AS dob',
+            'age        AS age',
+            'shirtSize  AS shirtSize',
+            'notes      AS notes',
+            'notesUser  AS notesUser',
+            'plans      AS plans',
+            'avail      AS avail',
+            'createdOn  AS createdOn',
+            'updatedOn  AS updatedOn',
+            'version    AS version'
+        ]);
+        $qb->from('projectPersons', 'regPerson');
+
+        return $qb;
+    }
+    private function processRegPersonRows(array $rows) : RegPersons
+    {
+        $regPersons = new RegPersons();
+        $regPersonIds = [];
+        foreach($rows as $row) {
+
+            $row['registered'] = (bool)$row['registered'];
+            $row['verified']   = (bool)$row['verified'];
+
+            $row['avail'] = unserialize($row['avail']);
+            $row['plans'] = unserialize($row['plans']);
+
+            $regPersons[$row['regPersonId']] = new RegPerson($row);
+            $regPersonIds[] = $row['regPersonId'];
         }
-        $row['registered'] = (bool)$row['registered'];
-        $row['verified']   = (bool)$row['verified'];
+        if (count($regPersons) === 0) return $regPersons;
 
-        $row['avail'] = unserialize($row['avail']);
-        $row['plans'] = unserialize($row['plans']);
-
-        $regPerson = new RegPerson($row);
-
+        // Use qb if ever need to repeat
         $sql = <<<EOT
 SELECT
   id              AS regPersonRoleId,
@@ -71,11 +81,12 @@ SELECT
   misc            AS misc,
   notes           AS notes
 FROM     projectPersonRoles
-WHERE    projectPersonId = ?
-ORDER BY role
+WHERE    projectPersonId IN (?)
+ORDER BY projectPersonId,role
 EOT;
 
-        $rows = $this->regPersonConn->executeQuery($sql,[$row['regPersonId']])->fetchAll();
+        // Join the roles, not doing any e3 checks here for now
+        $rows = $this->regPersonConn->executeQuery($sql,[$regPersonIds],[Connection::PARAM_STR_ARRAY])->fetchAll();
         foreach($rows as $row) {
             $row['active']   = (bool)$row['active'];
             $row['approved'] = (bool)$row['approved'];
@@ -84,9 +95,50 @@ EOT;
 
             $regPersonRole = new RegPersonRole($row);
 
-            $regPerson->addRole($regPersonRole);
+            $regPersons[$row['regPersonId']]->addRole($regPersonRole);
         }
-        return $regPerson;
+        return $regPersons;
+    }
+    public function findByProjectPerson(string $projectId, string $personId): ?RegPerson
+    {
+        $qb = $this->createRegPersonQueryBuilder();
+        $qb->andWhere('projectKey = ?');
+        $qb->andWhere('personKey  = ?');
+
+        $rows = $this->regPersonConn->executeQuery($qb->getSQL(), [$projectId, $personId])->fetchAll();
+
+        $regPersons = $this->processRegPersonRows($rows);
+
+        // Better way to pop first element off the top?
+        foreach($regPersons as $regPerson) {
+            return $regPerson;
+        }
+        return null;
+    }
+    public function findByVarious(string $projectId, ?string $name = null, ?bool $registered = null, ?bool $verified = null) : RegPersons
+    {
+        $qb = $this->createRegPersonQueryBuilder();
+        $qb ->andWhere('projectKey = ?');
+        $params = [$projectId];
+        if ($name) {
+            $qb->andWhere('name LIKE ?');
+            $params[] = '%'.$name.'%';
+        }
+        if ($registered !== null) {
+            $qb->andWhere('registered = ?');
+            $params[] = $registered;
+        }
+        if ($verified !== null) {
+            $qb->andWhere('verified = ?');
+            $params[] = $verified;
+        }
+        $qb->orderBy('name');
+
+        $rows = $this->regPersonConn->executeQuery($qb->getSQL(),$params)->fetchAll();
+
+        $regPersons = $this->processRegPersonRows($rows);
+
+        return $regPersons;
     }
     public function findLatestProjectByPerson(string $personId) : ?string
     {
@@ -105,9 +157,9 @@ EOT;
         return [];
     }
     /* ==========================================
- * Mainly for Switch User within a project
- *
- */
+     * Mainly for Switch User within a project
+     *
+     */
     public function findUserChoices($projectId)
     {
         $sql = <<<EOD

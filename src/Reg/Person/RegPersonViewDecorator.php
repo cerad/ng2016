@@ -4,16 +4,22 @@ declare(strict_types=1);
 namespace Zayso\Reg\Person;
 
 use Zayso\Common\DataTransformer\PhoneTransformer;
+use Zayso\Common\DataTransformer\ShirtSizeTransformer;
 use Zayso\Fed\Ayso\AysoIdTransformer;
 use Zayso\Fed\Ayso\AysoOrgViewTransformer;
 
 /**
  * @property-read RegPerson person
  * @property-read int       regPersonId
+ * @property-read string    personId
  *
  * @property-read string name
  * @property-read string email
  * @property-read string phone
+ *
+ * @property-read string shirtSize
+ * @property-read string gender
+ * @property-read int    age
  *
  * @property-read string fedId
  * @property-read string orgId
@@ -43,18 +49,21 @@ final class RegPersonViewDecorator
     public $person;
 
     private $phoneTransformer;
+    private $shirtSizeTransformer;
     private $fedIdTransformer;
     private $fedOrgViewTransformer;
     private $willRefereeViewTransformer;
 
     public function __construct(
-        PhoneTransformer       $phoneTransformer,
+        PhoneTransformer        $phoneTransformer,
+        ShirtSizeTransformer    $shirtSizeTransformer,
         AysoIdTransformer       $fedIdTransformer,
         AysoOrgViewTransformer  $fedOrgViewTransformer,
         RegPersonWillRefereeViewTransformer $willRefereeViewTransformer
     )
     {
         $this->phoneTransformer      = $phoneTransformer;
+        $this->shirtSizeTransformer  = $shirtSizeTransformer;
         $this->fedIdTransformer      = $fedIdTransformer;
         $this->fedOrgViewTransformer = $fedOrgViewTransformer;
         $this->willRefereeViewTransformer = $willRefereeViewTransformer;
@@ -187,6 +196,7 @@ final class RegPersonViewDecorator
             case 'orgKey': 
                 return $this->fedOrgViewTransformer->transform($person->fedOrgId);
 
+            case 'personId':
             case 'personKey':
                 return $person->personId;
             
@@ -253,13 +263,14 @@ final class RegPersonViewDecorator
             case 'willAttend':
             case 'willReferee':
             case 'willVolunteer':
-                $will = isset($person->plans[$name]) ? $person->plans[$name] : null;
+                $will = isset($person->plans[$name]) ? $person->plans[$name] : '';
                 return ucfirst(strtolower($will));
             
             case 'willRefereeBadge':
                 $willRefereeViewTransformer = $this->willRefereeViewTransformer;
                 return $willRefereeViewTransformer($person);
 
+                // TODO some sort of view transformer or at least project based
             case 'availTue':
             case 'availWed':
             case 'availThu':
@@ -268,27 +279,21 @@ final class RegPersonViewDecorator
             case 'availSatAfter':
             case 'availSunMorn':
             case 'availSunAfter':
-                $will = isset($person->avail[$name]) ? $person->avail[$name] : null;
+                $will = isset($person->avail[$name]) ? $person->avail[$name] : '';
                 return ucfirst(strtolower($will));
             
             case 'shirtSize':
-                $size = strtolower($person->shirtSize);
-                switch($size) {
-                    case 'youths':    return 'Youth S';
-                    case 'youthm':    return 'Youth M';
-                    case 'youthl':    return 'Youth L';
-                    case 'adults':    return 'Adult S';
-                    case 'adultm':    return 'Adult M';
-                    case 'adultl':    return 'Adult L';
-                    case 'adultlx':   return 'Adult XL';
-                    case 'adultlxx':  return 'Adult XXL';
-                    case 'adultlxxx': return 'Adult XXXL';
-                }
-                return 'na';
-            
+                return $this->shirtSizeTransformer->transform($person->shirtSize);
+
+            case 'gender':
+                return $person->gender;
+
+            case 'age':
+                return $person->age;
+
             case 'notes':
                 return $person->notes;
-            
+
             case 'notesUser':
                 return $person->notesUser;
             

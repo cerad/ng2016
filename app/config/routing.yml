@@ -40,9 +40,9 @@ zayso_reg_person:
     resource: "../../src/Reg/routes.yaml"
     prefix: /reg/person
 
-app_project_person_admin:
-    resource: '@AppBundle/Action/Project/Person/Admin/routes.yml'
-    prefix: /project/person/admin
+#app_project_person_admin:
+#    resource: '@AppBundle/Action/Project/Person/Admin/routes.yml'
+#    prefix: /project/person/admin
 
 app_regteam_2016:
     resource: "@AppBundle/Action/RegTeam/config/routes.yml"

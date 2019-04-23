@@ -6,3 +6,4 @@ services:
     Zayso\User\:
         resource: './*'
     
+    Zayso\User\UserConnection: '@doctrine.dbal.user_connection'
