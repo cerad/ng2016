@@ -11,7 +11,6 @@ use Zayso\Common\Traits\RequestTrait;
 use Zayso\Common\Traits\RouterTrait;
 use Zayso\Project\CurrentProject;
 use Zayso\Reg\Person\RegPersonFinder;
-use Zayso\Reg\Person\RegPersonMapper;
 use Zayso\Reg\Person\RegPersonSaver;
 
 final class AdminUpdateAction implements ActionInterface
@@ -24,7 +23,6 @@ final class AdminUpdateAction implements ActionInterface
     private $template;
 
     private $regPersonFinder;
-    private $regPersonMapper;
     private $regPersonSaver;
 
     private $requestUrl;
@@ -32,7 +30,6 @@ final class AdminUpdateAction implements ActionInterface
     public function __construct(
         CurrentProject  $project,
         RegPersonFinder $regPersonFinder,
-        RegPersonMapper $regPersonMapper,
         RegPersonSaver  $regPersonSaver,
         AdminUpdateForm $updateForm,
         AdminUpdateTemplate $template
@@ -43,7 +40,6 @@ final class AdminUpdateAction implements ActionInterface
         $this->template   = $template;
 
         $this->regPersonFinder = $regPersonFinder;
-        $this->regPersonMapper = $regPersonMapper;
         $this->regPersonSaver  = $regPersonSaver;
     }
     public function __invoke(Request $request, int $regPersonId) : Response
@@ -54,21 +50,13 @@ final class AdminUpdateAction implements ActionInterface
             return $this->redirectToRoute('reg_person_admin_listing');
         }
 
-        //initialize the update form with the person data as array
         $updateForm = $this->updateForm;
         $updateForm->setRegPerson($regPerson);
-        $updateForm->setData($this->regPersonMapper->storeToArray2016($regPerson));
 
         //check for post or not
         $updateForm->handleRequest($request);
 
         if ($updateForm->isValid()) {
-            // if post
-            // get the data from the form
-            $regPersonArray = $updateForm->getData();
-
-            // convert to object
-            $regPerson = $this->regPersonMapper->createFromArray2016($regPersonArray);
 
             // Save the data
             $this->regPersonSaver->save($regPerson);
@@ -83,7 +71,7 @@ final class AdminUpdateAction implements ActionInterface
             }
 
             //respond to saveAndReturn
-            return $this->redirectToRoute('reg_person_admin_listing');
+            return $this->redirectToRoute('reg_person_admin_listing'); // TODO Add Fragment
         }
         $content = $this->template->render($regPerson,$updateForm);
 

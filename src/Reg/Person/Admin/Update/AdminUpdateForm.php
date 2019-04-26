@@ -2,8 +2,6 @@
 
 namespace Zayso\Reg\Person\Admin\Update;
 
-use AppBundle\Action\Project\Person\ProjectPerson;
-
 use Symfony\Component\HttpFoundation\Request;
 use Zayso\Common\Traits\FormTrait;
 use Zayso\Common\Traits\RequestTrait;
@@ -30,6 +28,7 @@ class AdminUpdateForm
 
     public $formControls;
 
+    /** @var RegPerson */
     private $person;
 
     public function setRegPerson(RegPerson $person)
@@ -58,119 +57,98 @@ class AdminUpdateForm
     }
     public function handleRequest(Request $request) : void
     {
-        //stash the request url
-        //$projectPersonKey = $request->attributes->get('projectPersonKey');
-        //$this->requestUrl = $this->generateUrl(
-        //    $this->getCurrentRouteName(),
-        //    ['projectPersonKey'=>$projectPersonKey]
-        //);
-
         //check for post action
         if (!$request->isMethod('POST')) return;
 
         $this->isPost = true;
     
         $errors = [];
+        $person = $this->person;
 
         //get the form data
-        $data = $request->request->all();
+        $data = $request->request->all(); dump($data);
 
-        //start with the original data as array
-        $projectPersonArray = $this->formData;
-        $projectPerson = new ProjectPerson;
-        $projectPerson->fromArray($projectPersonArray);
-
-        $orgKey = explode(':',$projectPerson->orgKey)[0];
-        $fedKey = explode(':',$projectPerson->fedKey)[0];
-
-        $orgKey = empty($orgKey) ? 'AYSOR' : $orgKey;
-        $fedKey = empty($fedKey) ? 'AYSOV' : $fedKey;
-        
         //update person array with form data
-        $personData = $data;
-
-        $strRegion = str_pad($this->filterScalarString($data,'orgKeyRegion'),4,'0',STR_PAD_LEFT);
-        
-        $projectPerson->name      = $this->filterScalarString($data,'name');
-        $projectPerson->email     = $this->filterScalarString($data,'email');
-        $projectPerson->age       = $this->filterScalarString($data,'age');
-        $projectPerson->phone     = $this->filterScalarString($data,'phone');
-        $projectPerson->shirtSize = $personData['shirtSize'];
-        $projectPerson->fedKey    = $fedKey . ":" . $this->filterScalarString($data,'fedKeyId');
-        $projectPerson->orgKey    = $orgKey . ":" . $strRegion;
-        $projectPerson->regYear   = strtoupper($personData['regYear']);
-
-        //update plans
-        $projectPersonPlans = &$projectPerson->plans;
-
-        $projectPersonPlans['willReferee']      = $personData['willReferee'];
-        $projectPersonPlans['willVolunteer']    = $personData['willVolunteer'];
-        $projectPersonPlans['willCoach']        = $personData['willCoach'];
-
-        $projectPerson['notesUser']             = $this->filterScalarString($data,'notesUser');
-
-        //update avail
-        $projectPersonAvail = &$projectPerson->avail;
-        
-        //reset like this, Blue Sombrero does not have this field
-        $projectPerson->avail = [];
-        $projectPerson->avail = [
-            'availTue'      => 'no',
-            'availWed'      => 'no',
-            'availThu'      => 'no',
-            'availFri'      => 'no',
-            'availSatMorn'  => 'no',
-            'availSatAfter' => 'no',
-            'availSunMorn'  => 'no',
-            'availSunAfter' => 'no',
+        $personData = [
+            'name'      => $this->filterScalarString ($data,'name'),
+            'email'     => $this->filterScalarString ($data,'email'),
+            'age'       => $this->filterScalarInteger($data,'age'),
+            'phone'     => $this->filterScalarString ($data,'phone'),
+            'shirtSize' => $this->filterScalarString ($data,'shirtSize'), // TODO Validate these
+            'regYear'   => $this->filterScalarString ($data,'regYear'),
+            'notes'     => $this->filterScalarString ($data,'notes'),
+            'notesUser' => $this->filterScalarString ($data,'notesUser'),
         ];
+        $fedIdTransformer = $this->getTransformer('aysoid_transformer');
+        $personData['fedPersonId'] = $fedIdTransformer->transform($this->filterScalarString ($data,'fedPersonId'));
+        //$personData['fedOrgId']    = $fedIdTransformer->transform($this->filterScalarString ($data,'fedOrgId'));
 
-        if (isset($data['avail'])) {
-            foreach ($data['avail'] as $avail) {
-                $projectPersonAvail[$avail] = 'yes';
-            }
-        };
+        $person->setFromArray($personData);
 
-        $projectPerson['notes']             = $this->filterScalarString($data,'notes');
-        //update certs
-        if (isset($projectPerson->roles['CERT_SAFE_HAVEN'])) {
-            $projectPerson->roles['CERT_SAFE_HAVEN']['verified'] = $personData['userSH'] === 'yes' ? true : null;
+        // Update plans
+        $plans = $person->plans;
+
+        $plans['willReferee']   = $this->filterScalarString ($data,'willReferee');
+        $plans['willVolunteer'] = $this->filterScalarString ($data,'willVolunteer');
+        $plans['willCoach']     = $this->filterScalarString ($data,'willCoach');
+
+        $person->set('plans',$plans);
+
+        // Update availability
+        $personAvail = $person->avail;
+
+        foreach($data['avail'] as $key => $value) {
+            $personAvail[$key] = $value;
         }
-        if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
-            $projectPerson->roles['CERT_CONCUSSION']['verified'] = $personData['userConc'] === 'yes' ? true : null;            
-        }
-        if (isset($projectPerson->roles['CERT_BACKGROUND_CHECK'])) {
-            $projectPerson->roles['CERT_BACKGROUND_CHECK']['verified'] = $personData['userBackground'] === 'yes' ? true : null;            
-        }
+        $person->set('avail',$personAvail);
 
-        //update roles
-        if (isset($projectPerson->roles['CERT_REFEREE']) and
-            isset($projectPerson->roles['ROLE_REFEREE'])
-            ) {
-            $projectPersonCertReferee   = &$projectPerson->roles['CERT_REFEREE'];
-            $projectPersonRoleReferee   = &$projectPerson->roles['ROLE_REFEREE'];
-    
-            $projectPersonCertReferee['badge']  = $personData['badge'];
-            $projectPersonRoleReferee['approved']   = isset($personData['approvedRef']) ? true : null;
-            if ($projectPersonRoleReferee['approved']) {
-                $projectPersonCertReferee['verified'] = true;
-            }
+        // A concussion element is only displayed for those with referee certs
+        if (isset($data['userConc'])) {
+            $verified = $data['userConc'] === 'yes' ? true : false;
+            $cert = $person->getCert('CERT_CONCUSSION',true);
+            $cert->set('verified',$verified);
+        }
+        // Safe haven is always displayed but check for consistency
+        if (isset($data['userSH'])) {
+            $verified = $data['userSH'] === 'yes' ? true : false;
+            $cert = $person->getCert('CERT_SAFE_HAVEN',true);
+            $cert->set('verified',$verified);
         }
 
-        if (isset($projectPerson->roles['ROLE_VOLUNTEER'])) {
-            $projectPersonRoleVolunteer   = &$projectPerson->roles['ROLE_VOLUNTEER'];
-
-            $projectPersonRoleVolunteer['approved']   = isset($personData['approvedVol']) ? true : null;
-            if ($projectPersonRoleVolunteer['approved']) {
-                $projectPersonRoleVolunteer['verified'] = true;
-            }
+        // Referee is a little bit trickier, create a cert if will referee is set by admin
+        if ($person->willReferee) {
+            $person->getCert('CERT_REFEREE',true); // Just creates if we need one
+            $person->getCert('CERT_SAFE_HAVEN',true); // Just creates if we need one
+            $person->getCert('CERT_CONCUSSION',true); // Just creates if we need one
         }
-        //update user info
-        //$projectPerson->username = $this->filterScalarString($data,'userInfoUsername');
-
-        //update form data
-        $this->setData($projectPerson->toArray());
-
+        if (isset($data['refereeBadge'])) {
+            $certRef = $person->getCert('CERT_REFEREE',true);
+            $certRef->set('badge',$data['refereeBadge']);
+        }
+        // If approved to referee then update role
+        if (isset($data['approvedRef'])) {
+            $role = $person->getRole('ROLE_REFEREE',true);
+            $role->set('approved',true);
+            $cert = $person->getCert('CERT_REFEREE');
+            if ($cert) $cert->set('verified',true);
+        }
+        else {
+            // Un approve
+            $role = $person->getRole('ROLE_REFEREE');
+            if ($role) $role->set('approved',false);
+        }
+        // Same for volunteer
+        if (isset($data['approvedVol'])) {
+            $role = $person->getRole('ROLE_VOLUNTEER',true);
+            $role->set('approved',true);
+            $cert = $person->getCert('CERT_VOLUNTEER');
+            if ($cert) $cert->set('verified',true);
+        }
+        else {
+            // Un approve
+            $role = $person->getRole('ROLE_VOLUNTEER');
+            if ($role) $role->set('approved',false);
+        }
         $this->formDataErrors = $errors;
     }
     public function render() : string
@@ -296,8 +274,8 @@ EOD;
 <div class="panel panel-default">
     <h1 class="panel-heading">Update AYSO Information</h1>
     <div class="form-group">
-      <label class="col-xs-3 control-label" for="userAYSOId">AYSO ID:</label>
-      <input name="fedKeyId" type="text" class="col-xs-2 form-control" id="userAYSOId" value="{$fedPersonId}">
+      <label class="col-xs-3 control-label" for="fedPersonId">AYSO ID:</label>
+      <input name="fedPersonId" type="text" class="col-xs-2 form-control" id="fedPersonId" value="{$fedPersonId}">
     </div>
     <div class="form-group">
       <label class="col-xs-3 control-label" for="regYear">Mem Year:</label>
@@ -307,8 +285,8 @@ EOD;
             'regYear','regYear','col-xs-2 form-control ' . $regYearClass)}
     </div>
     <div class="form-group">
-      <label class="col-xs-3 control-label" for="userRegion">AYSO SAR:</label>
-      <input name="orgKeyRegion" type="text" class="col-xs-3 form-control" id="userRegion" value="{$fedOrgId}">
+      <label class="col-xs-3 control-label" for="fedOrgId">AYSO SAR:</label>
+      <input name="fedOrgId" type="text" class="col-xs-3 form-control" id="fedOrgId" value="{$fedOrgId}">
       <label class="col-xs-3 control-label control-text" for="userSAR"><span style="font-weight: bold">S/A/R/St: </span>{TODO}</label>
     </div>
 EOD;
@@ -356,8 +334,10 @@ EOD;
       {$this->renderFormControlInputSelect(
           $this->formControls['concussionTrained']['choices'], 
           $certConcCertified, 
-          'userSH','userSH','col-xs-4 form-control ' . $certConcClass)}  
+          'userConc','userConc','col-xs-4 form-control ' . $certConcClass)}  
     </div>
+    {$this->renderPanelFooter()}
+</div>
 EOD;
         }
         return $html;
@@ -416,30 +396,20 @@ EOD;
 <div class="panel panel-default">
     <h1 class="panel-heading">Update Availability Information</h1>
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availTue" type="checkbox" 
-        {$avails['availTue'][1]}>{$avails['availTue'][0]}
-      </label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availWed" type="checkbox" 
-        {$avails['availWed'][1]}>{$avails['availWed'][0]}
-      </label>
+      {$this->renderAvailElement($personAvail, 'availTue')}
+      {$this->renderAvailElement($personAvail, 'availWed')}
     </div>
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availThu" type="checkbox" 
-        {$avails['availThu'][1]}>{$avails['availThu'][0]}</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" 
-        {$avails['availFri'][1]}>{$avails['availFri'][0]}</label>
+      {$this->renderAvailElement($personAvail, 'availThu')}
+      {$this->renderAvailElement($personAvail, 'availFri')}
     </div>    
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatMorn" type="checkbox" 
-        {$avails['availSatMorn'][1]}>{$avails['availSatMorn'][0]}</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatAfter" type="checkbox" 
-        {$avails['availSatAfter'][1]}>{$avails['availSatAfter'][0]}</label>
+      {$this->renderAvailElement($personAvail, 'availSatMorn')}
+      {$this->renderAvailElement($personAvail, 'availSatAfter')}
     </div>    
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" 
-        {$avails['availSunMorn'][1]}>{$avails['availSunMorn'][0]}</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunAfter" type="checkbox" 
-        {$avails['availSunAfter'][1]}>{$avails['availSunAfter'][0]}</label>
+      {$this->renderAvailElement($personAvail, 'availSunMorn')}
+      {$this->renderAvailElement($personAvail, 'availSunAfter')}
     </div>    
     <div class="form-group">
       <label class="col-xs-2 control-label" for="notes">Assignor Notes:</label>
@@ -449,6 +419,20 @@ EOD;
 </div>
 EOD;
         return $html;
+    }
+    private function renderAvailElement(array $personAvail, string $key) : string
+    {
+        $label = $this->formControls[$key]['label'];
+
+        $checked = (isset($personAvail[$key]) && strtolower($personAvail[$key]) === 'yes') ? 'checked="checked"' : '';
+
+        return <<<EOT
+      <input type="hidden" name="avail[{$key}]" value="no" />
+      <label class="col-xs-3 control-label">
+        <input name="avail[{$key}]" value="yes" type="checkbox" {$checked} />
+        {$label}
+      </label>
+EOT;
     }
     private function renderPanelFooter() : string
     {
