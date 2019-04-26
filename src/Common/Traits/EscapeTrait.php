@@ -4,8 +4,8 @@ namespace Zayso\Common\Traits;
 
 trait EscapeTrait
 {
-    protected function escape($content)
+    protected function escape(?string $content) : string
     {
-        return htmlspecialchars($content, ENT_COMPAT);
+        return $content !== null ? htmlspecialchars($content, ENT_COMPAT) : '';
     }
 }

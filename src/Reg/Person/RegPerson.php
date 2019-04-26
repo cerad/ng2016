@@ -39,6 +39,7 @@ use DateTime;
  * @property-read int      version
  *
  * Virtual
+ * @property-read boolean willCoach
  * @property-read boolean willReferee
  * @property-read boolean willVolunteer
  *
@@ -204,6 +205,9 @@ final class RegPerson
 
             case 'refereeBadgeUser':
                 return isset($this->roles['CERT_REFEREE']) ? $this->roles['CERT_REFEREE']->badgeUser : null;
+
+            case 'willCoach':
+                return strtolower($this->plans['willCoach']) !== 'no' ? true : false;
 
             case 'willReferee':
                 return strtolower($this->plans['willReferee']) !== 'no' ? true : false;

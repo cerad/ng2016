@@ -15,3 +15,7 @@ services:
 
     Zayso\Reg\Person\Register\RegisterAction:
         $successRouteName: '%app_home_route%'
+
+    Zayso\Reg\Person\Admin\Update\AdminUpdateForm:
+        $projectControls: '%app_project_controls%'
+        $formControls:    '%app_project_registration_form_controls%'

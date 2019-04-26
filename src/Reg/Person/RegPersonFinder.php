@@ -115,6 +115,23 @@ EOT;
         }
         return null;
     }
+    public function findByRegPersonId(int $regPersonId): ?RegPerson
+    {
+        if (!$regPersonId) return null;
+
+        $qb = $this->createRegPersonQueryBuilder();
+        $qb->andWhere('id = ?');
+
+        $rows = $this->regPersonConn->executeQuery($qb->getSQL(), [$regPersonId])->fetchAll();
+
+        $regPersons = $this->processRegPersonRows($rows);
+
+        // Better way to pop first element off the top?
+        foreach($regPersons as $regPerson) {
+            return $regPerson;
+        }
+        return null;
+    }
     public function findByVarious(string $projectId, ?string $name = null, ?bool $registered = null, ?bool $verified = null) : RegPersons
     {
         $qb = $this->createRegPersonQueryBuilder();

@@ -4,6 +4,8 @@ namespace Zayso\Common\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
+// TODO This needs to be project specific
+// And it should support generating a choice list
 class ShirtSizeTransformer implements DataTransformerInterface
 {
     private $shirtSizes = [

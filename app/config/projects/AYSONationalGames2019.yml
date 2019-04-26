@@ -204,7 +204,7 @@ parameters:
       willReferee:   { group: plans }
       willVolunteer: { group: plans }
       willCoach:     { group: plans }
-      shirtSize: {}
+      shirtSize:     {}
 
       availTue:      { group: avail }
       availWed:      { group: avail }
@@ -247,6 +247,28 @@ parameters:
             label:   Will Referee
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe }
+
+        yesNo:
+            type:    select
+            label:   Yes No
+            default: no
+            choices:
+                yes:   Yes
+                no:    No
+                maybe: Maybe
+                nr:    Not Required
+
+        regYear:
+            type:    select
+            label:   Mem Year
+            default: na
+            choices:
+                na:     na
+                MY2019: MY2019
+                MY2018: MY2018
+                MY2017: MY2017
+                MY2016: MY2016
+                MY2015: MY2015
 
         refereeBadge:
             type:    select
