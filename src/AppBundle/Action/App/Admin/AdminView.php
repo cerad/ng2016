@@ -61,23 +61,25 @@ EOT;
         $html = <<<EOT
 <div class="panel panel-default panel-float-left">
   <div class="panel-heading">
-    <h1>Match Results/Standings</h1>
+    <h1>Match Reporting</h1>
   </div>
   <div class="panel-body">
     <ul>
 EOT;
         if ($this->isGranted('ROLE_SCORE_ENTRY')) {
             $html .= <<<EOT
-      <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 482423])}">Enter Match Results</a></li>
+      <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
 EOT;
       }
       
         $html .= <<<EOT
-      <li><a href="{$this->generateUrl('results_poolplay_2018')}">View Pool Play Standings</a></li>
+      <li><a href="{$this->generateUrl('results_poolplay_2019')}">Pool Play</a></li>
 
-      <li><a href="{$this->generateUrl('results_medalround_2018')}">View Medal Round Standings</a></li>
+      <li><a href="{$this->generateUrl('results_medalround_2019')}">Medal Round</a></li>
 
-      <li><a href="{$this->generateUrl('results_final_2018')}">View Final Standings</a></li>
+      <li><a href="{$this->generateUrl('results_sportsmanship_2019')}">Sportsmanship</a></li>
+
+      <li><a href="{$this->generateUrl('results_final_2019')}">Final Standings</a></li>
     </ul>
   </div>
 </div>
@@ -95,20 +97,12 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-        <li><a href="{$this->generateUrl('schedule_game_2018')}">View Game Schedule</a></li>
-        <li><a href="{$this->generateUrl('schedule_team_2018')}">View Team Schedule</a></li>
-        <li><a href="{$this->generateUrl('schedule_game_2018',['_format' => 'xls'])}">Export Game Schedule</a></li>
-EOT;
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $html .= <<<EOT
-        <li><a href="{$this->generateUrl('game_import')}">Import Game Schedule</a></li>
-EOT;
-        }
-
-        $html .= <<<EOT
-        <!--<li><a href = "{$this->generateUrl('schedule_medalroundcalc_2018',['_format' => 'xls_qf'])}">Export Quarter-Finals Schedule for review</a></li>-->
-        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2018',['_format' => 'xls_sf'])}">Export Semi-Finals Schedule for review</a></li>
-        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2018',['_format' => 'xls_fm'])}">Export Finals Schedule for review</a></li>
+        <li><a href="{$this->generateUrl('schedule_game_2019')}">View Game Schedule</a></li>
+        <li><a href="{$this->generateUrl('schedule_team_2019')}">View Team Schedule</a></li>
+        <li><a href="{$this->generateUrl('schedule_game_2019',['_format' => 'xls'])}">Export Game Schedule</a></li>
+        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2019',['_format' => 'xls_qf'])}">Export Quarter-Finals Schedule for review</a></li>
+        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2019',['_format' => 'xls_sf'])}">Export Semi-Finals Schedule for review</a></li>
+        <li><a href = "{$this->generateUrl('schedule_medalroundcalc_2019',['_format' => 'xls_fm'])}">Export Finals Schedule for review</a></li>
         <li><a href="{$this->generateUrl('field_map')}" target="_blank">Field Map</a></li>
 EOT;
 
@@ -159,13 +153,10 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-      <li><a href="{$this->generateUrl('schedule_official_2018')}">View Referee Assignment Requests</a></li>
-      <li><a href="{$this->generateUrl('schedule_official_2018',['_format' => 'xls'])}">Export Referee Assignment Requests</a></li>
-      <li><a href="{$this->generateUrl('schedule_assignor_2018')}">View Assignor Assignments</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2019')}">View Referee Assignment Requests</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2019',['_format' => 'xls'])}">Export Referee Assignment Requests</a></li>
+      <li><a href="{$this->generateUrl('schedule_assignor_2019')}">View Assignor Assignments</a></li>
       <li><a href="{$this->generateUrl('game_official_summary')}">Export Referee Summary</a></li>
-      <li><a href="{$this->generateUrl('assignor_instruction')}" target="_blank">Referee Assignor's 
-      Instruction</a></li>
-      <hr>
       <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">Referee Self-Assignment Instruction</a></li>
 EOT;
 
@@ -192,7 +183,7 @@ EOT;
   <div class="panel-body">
     <ul>
       <li><a href="{$this->generateUrl('project_person_admin_listing')}">Mangage Registered People</a></li>
-      <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}?all">Export Registered People</a></li>
+      <li><a href="{$this->generateUrl('project_person_admin_listing',['_format' => 'xls'])}">Export Registered People</a></li>
     </ul>
   </div>
 </div>
@@ -228,8 +219,9 @@ EOT;
   <ul class="cerad-common-help">
     <ul class="ul_bullets">
       <li>For help with Referee Assignments, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a> or at {$this->project['administrator']['phone']}</li>
+      <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a 
+      href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a> or at {$this->project['schedules']['phone']}</li>
       <li>For help with Account Management,  contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a> or at {$this->project['support']['phone']}</li>
-      <li>For help with Schedule Management, contact {$this->project['schedules']['name']} at <a href="mailto:{$this->project['schedules']['email']}">{$this->project['schedules']['email']}</a></li>
     </ul>
   </ul>
 </div>

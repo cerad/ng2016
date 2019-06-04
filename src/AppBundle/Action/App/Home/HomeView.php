@@ -10,6 +10,7 @@ use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
 
 use AppBundle\Action\Project\User\ProjectUser;
 use AppBundle\Action\RegPerson\RegPersonFinder;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Action\InstructionsView;
@@ -22,7 +23,7 @@ class HomeView extends AbstractView2
     /** @var  ProjectPerson */
     private $projectPerson;
 
-    /** @var ProjectPersonRepositoryV2  */
+    /** @var ProjectPersonRepositoryV2 */
     private $projectPersonRepository;
 
     private $projectPersonViewDecorator;
@@ -31,38 +32,35 @@ class HomeView extends AbstractView2
 
     private $instructionsView;
 
-    private $project;
-
     public function __construct(
-        ProjectPersonRepositoryV2  $projectPersonRepository,
+        ProjectPersonRepositoryV2 $projectPersonRepository,
         ProjectPersonViewDecorator $projectPersonViewDecorator,
         RegPersonFinder $regPersonFinder
-    )
-    {
+    ) {
         $this->regPersonFinder = $regPersonFinder;
 
-        $this->projectPersonRepository    = $projectPersonRepository;
+        $this->projectPersonRepository = $projectPersonRepository;
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
 
         $this->instructionsView = new InstructionsView;
     }
+
     public function __invoke(Request $request)
     {
-        $this->project = $this->getCurrentProjectInfo();
-
         $this->user = $user = $this->getUser();
         $projectKey = $user['projectKey'];
-        $personKey  = $user['personKey'];
+        $personKey = $user['personKey'];
 
-        $this->projectPerson = $this->projectPersonRepository->find($projectKey,$personKey);
+        $this->projectPerson = $this->projectPersonRepository->find($projectKey, $personKey);
 
         if (!$this->projectPerson) {
-            throw new \LogicException('No project person in the home view for ' . $user['name']);
+            throw new LogicException('No project person in the home view for '.$user['name']);
         }
         $this->projectPersonViewDecorator->setProjectPerson($this->projectPerson);
 
         return $this->newResponse($this->renderPage());
     }
+
     protected function renderPage()
     {
         $content = <<<EOD
@@ -70,21 +68,19 @@ class HomeView extends AbstractView2
 <div class="account-person-list">
 {$this->renderAccountInformation()}
 {$this->renderRegistration()}
-<!--
 {$this->renderCrewInformation()}
 {$this->renderTeamInformation()}
--->
 {$this->renderAysoInformation()}
 {$this->renderAvailability()}
 </div>
-<!--
 <div>
 {$this->renderInstructions()}
 </div>
 <div>
 {$this->renderHotelInformation()}
-</div>-->
+</div>
 EOD;
+
         return $this->renderBaseTemplate($content);
     }
 
@@ -100,7 +96,7 @@ EOD;
   <tr><th colspan="2" style="text-align: center;">My Crew</th></tr>
 EOD;
 
-        foreach($regPersonPersons as $regPersonPerson) {
+        foreach ($regPersonPersons as $regPersonPerson) {
             $html .= <<<EOD
   <tr><td>{$regPersonPerson->role}</td><td>{$regPersonPerson->memberName}</td></tr>
 EOD;
@@ -113,8 +109,10 @@ EOD;
   </td></tr>
 </table>
 EOD;
+
         return $html;
     }
+
     /* ====================================================
      * Crew Information
      */
@@ -127,7 +125,7 @@ EOD;
   <tr><th colspan="2" style="text-align: center;">My Teams</th></tr>
 EOD;
 
-        foreach($regPersonTeams as $regPersonTeam) {
+        foreach ($regPersonTeams as $regPersonTeam) {
             $html .= <<<EOD
   <tr><td>{$regPersonTeam->role}</td><td>{$regPersonTeam->teamName}</td></tr>
 EOD;
@@ -140,8 +138,10 @@ EOD;
   </td></tr>
 </table>
 EOD;
+
         return $html;
     }
+
     /* ====================================================
      * Account Information
      * TODO Move to own teamplate
@@ -167,6 +167,7 @@ EOD;
 </table>
 EOD;
     }
+
     private function renderRegistration()
     {
         $personView = $this->projectPersonViewDecorator;
@@ -174,13 +175,12 @@ EOD;
         return <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Registration Information</th></tr>
-  <tr><td>Registration Name </td><td>{$this->escape($personView->name) }</td></tr>
+  <tr><td>Registration Name </td><td>{$this->escape($personView->name)}</td></tr>
   <tr><td>Registration Email</td><td>{$this->escape($personView->email)}</td></tr>
   <tr><td>Registration Phone</td><td>{$this->escape($personView->phone)}</td></tr>
   <tr><td>Will Referee  </td><td>{$personView->willRefereeBadge}</td></tr>
   <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}   </td></tr>
   <tr><td>Will Coach    </td><td>{$personView->willCoach}       </td></tr>
-  <tr><td>Yrs Exp Officiating Adults</td><td>{$personView->adultExp}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
         Update My Plans or Availability
@@ -189,6 +189,7 @@ EOD;
 </table>
 EOD;
     }
+
     private function renderAvailability()
     {
         $person = $this->projectPerson;
@@ -198,16 +199,17 @@ EOD;
         $personView = $this->projectPersonViewDecorator;
 
         return
-<<<EOD
+            <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">Availability Information</th></tr>
-<!--  <tr><td>Available Wed (Soccerfest) </td><td>{$personView->availWed}     </td></tr>-->
-<!--  <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}     </td></tr>-->
-  <tr><td>Available Fri (Pool Play)  </td><td>{$personView->availFri}     </td></tr>
-  <tr><td>Available Sat Morning  (PP)</td><td>{$personView->availSatMorn} </td></tr>
-  <tr><td>Available Sat Afternoon(QF)</td><td>{$personView->availSatAfter}</td></tr>
-  <tr><td>Available Sun Morning  (SF)</td><td>{$personView->availSunMorn }</td></tr>
-  <tr><td>Available Sun Afternoon(FM)</td><td>{$personView->availSunAfter}</td></tr>
+  <tr><td>Available Tue (Soccerfest) </td><td>{$personView->availTue}</td></tr>
+  <tr><td>Available Wed (Pool Play) </td><td>{$personView->availWed}</td></tr>
+  <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}</td></tr>
+  <tr><td>Available Fri (Pool Play)  </td><td>{$personView->availFri}</td></tr>
+  <tr><td>Available Sat Morning  (PP)</td><td>{$personView->availSatMorn}</td></tr>
+  <tr><td>Available Sat Afternoon (QF)</td><td>{$personView->availSatAfter}</td></tr>
+  <tr><td>Available Sun Morning  (SF)</td><td>{$personView->availSunMorn}</td></tr>
+  <tr><td>Available Sun Afternoon (FM)</td><td>{$personView->availSunAfter}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">
         Update My Plans or Availability
@@ -216,6 +218,7 @@ EOD;
 </table>
 EOD;
     }
+
     // TODO Key this off of roles
     private function renderAysoInformation()
     {
@@ -224,14 +227,14 @@ EOD;
         $regYearProject = $this->getCurrentProjectInfo()['regYear'];
 
         return
-<<<EOD
+            <<<EOD
 <table class="tableClass">
   <tr><th colspan="2" style="text-align: center;">AYSO Information</th></tr>
   <tr>
     <td>AYSO ID</td>
     <td>{$personView->fedId}</td>
   </tr><tr>
-    <td>Section/Area/Region/State</td>
+    <td>Section/Area/Region</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
   </tr><tr>
     <td>Membership Year</td>
@@ -249,6 +252,7 @@ EOD;
 </table>
 EOD;
     }
+
     /* ==========================================
      * Rest of the info, break out later
      *
@@ -256,7 +260,7 @@ EOD;
     protected function renderMoreInformation()
     {
         return
-<<<EOD
+            <<<EOD
 <table class="account-person-list app_table" border="1">
   <tr><th colspan="2">My Teams</th></tr>
   <tr class="trAction"><td style="text-align: center;" colspan="2" >
@@ -277,21 +281,30 @@ EOD;
 </table>
 EOD;
     }
+
     private function renderNotes()
     {
         return
-<<<EOD
+            <<<EOD
 <div id="notes">
-  <legend>Thank you for registering to Volunteer at the {$this->project['title']}!</legend>
+  <legend>Thank you for registering to Volunteer at the 2019 National Games!</legend>
   <p>
-    Review your plans for the {$this->project['title']} to ensure we understand your availability and the roles you expect to play during this event.
-    </p>
-    <p>
+    Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games.
+   </p>
+<br>
+   <p>
+    If you are not already registered as an AYSO volunteer for MY2018, please visit the <a href="https://www.aysosection7
+.org/Default.aspx?tabid=724814" target="_blank">Section 7 website</a> and 
+register as a volunteer for the 2019 National Games, or go to your Region website and register as an AYSO volunteer. 
+</p>
+<br>
+   <p>
     Update your plans and availability at any time.
-    </p>  
+   </p>  
 </div>
 EOD;
     }
+
     private function renderInstructions()
     {
         $personView = $this->projectPersonViewDecorator;
@@ -301,15 +314,17 @@ EOD;
         $html = null;
         if ($isReferee) {
             $html =
-<<<EOT
+                <<<EOT
 <div id="clear-fix">
     <legend>Instructions for Referees</legend>
       <ul class="cerad-common-help ul_bullets">
-            <li>Click on "<a href="{$this->generateUrl('schedule_official_2018')}">Request Assignments</a>" under the "Referees" menu item above.</li>
+            <li>Click on "<a href="{$this->generateUrl('schedule_official_2019')}">Request Assignments</a>" under the "Referees" menu item above.</li>
             <li>On any open match, click on the position you'd like to request, e.g. REF, AR1, AR2</li>
             <li>Click "Submit" button"</li>
-            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2018')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
-            <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl('detailed_instruction')}" target="_blank">by clicking here</a>.</ul>
+            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2019')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+            <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl(
+                    'detailed_instruction'
+                )}" target="_blank">by clicking here</a>.</ul>
       </ul>
 </div>
 <hr>
@@ -318,26 +333,14 @@ EOT;
 
         return $html;
     }
+
     private function renderHotelInformation()
     {
         return
-<<<EOT
+            <<<EOT
 <legend>Referee Hotel Discounts</legend>
-<p>Discounted hotel rates (double occupancy) are now available for the {$this->project['title']}. </p>
-<ul class="cerad-common-help ul_bullets">
-<li><a href="http://www.innatboyntonbeach.com/" target="_blank">Inn at Boynton Beach</a> at $65 per night using the code AYSO1660008. This hotel will feature complimentary breakfast.</li>
-<li><a href="http://www.hipalmbeachairport.com/" target="_blank">Holiday Inn West Palm Beach Airport</a> at $93 per night plus tax using the code AYSO1660008.</li>
-</ul>
-<br>
-<p>Make your reservations through Global JBS. Contact Information:</p>
-<div style="margin:5px 20px">
-<p>Trina King<br>
-Phone: (561) 290-0587<br>
-Email: <a href="mailto:trina@globaljbs.com">trina@globaljbs.com</a><br>
-Reservation link: <a href="http://www.globaljbs.com/event/AYSO16" target="_blank">http://www.globaljbs.com/event/AYSO16</a></p>
-<br>
-</div>
-<p>Additional information on booking discounted travel can be found at <a href="http://aysonationalgames.org/book-travel/" target="_blank">http://aysonationalgames.org/book-travel/</a></p>
+<p>Information on booking discounted travel can be found at <a href="https://aysonationalgames.org/travel-information/" 
+target="_blank">https://aysonationalgames.org/travel-information/</a></p>
 EOT;
     }
 }

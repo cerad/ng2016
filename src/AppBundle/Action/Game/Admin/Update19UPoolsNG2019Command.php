@@ -10,32 +10,32 @@ use Symfony\Component\Console\Input\InputArgument;
 
 use Doctrine\DBAL\Connection;
 
-class AffinityTweakNOC2018Command extends Command
+class Update19UPoolsNG2019Command extends Command
 {
     private $projectId;
     private $gameConn;
 
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn
+        Connection $ng2019GamesConn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn = $noc2018GamesConn;
+        $this->gameConn = $ng2019GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:affinity:tweak')
-            ->setDescription('Update Games and Pools NOC2018')
+            ->setName('ng2019:update:19u')
+            ->setDescription('Update 19U Game and Pools NG2019')
             ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit data');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Updating NOC2018 games and pools ... ");
+        echo sprintf("Updating NG2019 19U pools ... ");
 
         $commit = $input->getOption('commit');
 
@@ -63,22 +63,27 @@ class AffinityTweakNOC2018Command extends Command
     }
 
     private $poolKeyMap = array(
-        '478732 '=> '517333',
-        '478735 '=> '517334',
-        '283261 '=> '517335',
-        '283262 '=> '',
-        '283263 '=> '',
-        '283264 '=> '',
-        '283265 '=> '',
-        '283266 '=> '',
-        '478730 '=> '',
-        '478731 '=> '',
-        '478733 '=> '',
-        '478734 '=> '',
-
+        '492021 ' => '501047',
+        '492022 ' => '501056',
+        '492023 ' => '501050',
+        '492024 ' => '501049',
+        '492026 ' => '',
+        '492025 ' => '',
+        '478742 ' => '501281',
+        '478736 ' => '501276',
+        '478737 ' => '501290',
+        '478743 ' => '',
+        '478738 ' => '501285',
+        '478744 ' => '',
+        '478739 ' => '501287',
+        '478745 ' => '501286',
+        '478740 ' => '501277',
+        '478746 ' => '501282',
+        '478741 ' => '501289',
+        '478747 ' => '',
     );
     private $poolKeysToDelete = array(
-        'B16UCore',
+        'B19UCorePPB',
     );
 
     private function updateGameOfficials($commit)
@@ -156,13 +161,9 @@ SQL;
         $sql = <<<SQL
 DELETE 
 FROM regTeams
-WHERE 'teamKey' LIKE '?%'
+WHERE age = '19U' and teamNumber IN (11,12)
 SQL;
-        foreach ($this->poolKeysToDelete as $poolKey) {
-            if ($commit) {
-                $this->gameConn->exec($sql, [$poolKey]);
-            }
-        }
+        $this->gameConn->exec($sql);
 
     }
 }

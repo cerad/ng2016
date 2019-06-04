@@ -9,26 +9,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TextAlertsView extends AbstractView2
 {
-    private $project;
-
     public function __construct()
     {
     }
     public function __invoke(Request $request)
     {
-        $this->project = $this->getCurrentProjectInfo();
-
         return $this->newResponse($this->render());
     }
     private function render()
     {
         $content = <<<EOT
-    <legend><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank"><img src="http://www.rainedout.com/sites/default/files/RO_badge_grey.png" border="0" alt="RainedOut" class="rainedout-logo-show"></a>{$this->project['title']} Alert System</legend>
+    <legend><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank"><img 
+    src="https://www.rainedout.net/admin/images/ro_logo.jpg" border="0" alt="RainedOut" class="rainedout-logo-show"></a>AYSO National Games 2019 Alert System</legend>
   <div class="textalerts">
     <p><strong>Create your RainedOut account by following the instructions shown below.</strong></p>
     <br>
     <ul class="cerad-common-help ul_bullets">
-        <li><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">Subscribe to {$this->project['title']} text alerts on RainedOut</a></li>
+        <li><a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">Subscribe to 
+        AYSO National Games 2019 text alerts on RainedOut</a></li>
         <li>You will be able to subscribe and unsubscribe by logging in with your phone number or email address</li>
         <li>For customer support contact <a href="mailto:info@rainedout.com">info@rainedout.com</a> or 800-230-1933</li>
         <li>Messages and data rates may apply</li>
@@ -36,7 +34,7 @@ class TextAlertsView extends AbstractView2
 </div>    
     <legend>Latest Announcements</legend>
     <p><i><b>NOTE</b>: All times are Eastern Time Zone</i></p>
-    <script type="text/javascript" src="http://widgets.omnilert.net/0588afab19ee214eca29-11380"></script>
+    <script type="text/javascript" src="https://widgets.omnilert.net/0588afab19ee214eca29-11380"></script>
 
 EOT;
         return $this->renderBaseTemplate($content);

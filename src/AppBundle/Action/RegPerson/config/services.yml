@@ -1,10 +1,10 @@
 services:
 
     reg_team_connection:
-        alias: doctrine.dbal.noc2018games_connection
+        alias: doctrine.dbal.ng2019games_connection
 
     reg_person_connection:
-        alias: doctrine.dbal.noc2018_connection
+        alias: doctrine.dbal.ng2019_connection
 
     reg_person_finder:
         class: AppBundle\Action\RegPerson\RegPersonFinder
@@ -19,8 +19,8 @@ services:
             - '@reg_person_connection'
             - '@reg_team_connection'
 
-    reg_person_norefrole_n02018_command:
-        class: AppBundle\Action\RegPerson\Admin\MissingRefRoleNOC2018Command
+    reg_person_norefrole_ng2019_command:
+        class: AppBundle\Action\RegPerson\Admin\MissingRefRoleNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'

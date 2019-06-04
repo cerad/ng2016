@@ -1,7 +1,7 @@
 services:
 
     pool_connection:
-        alias: doctrine.dbal.noc2018games_connection
+        alias: doctrine.dbal.ng2019games_connection
 
     # ===========================================
     # Pool Team Export

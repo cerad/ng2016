@@ -12,12 +12,16 @@ class ManageRolesCommand extends Command
 {
     private $conn;
 
+    private $projectKey;
+
     public function __construct(
-        Connection  $conn
+        Connection  $conn,
+        string $projectKey
     ) {
         parent::__construct();
 
         $this->conn = $conn;
+        $this->projectKey = $projectKey;
     }
     protected function configure()
     {
@@ -35,9 +39,9 @@ class ManageRolesCommand extends Command
         $sql = <<<EOD
 SELECT id,projectKey,personKey,name,email 
 FROM  projectPersons 
-WHERE projectKey = 'AYSONationalOpenCup2018' AND (email = ? OR name LIKE ? OR id = ?)
+WHERE projectKey = ? AND (email = ? OR name LIKE ? OR id = ?)
 EOD;
-        $stmt = $this->conn->executeQuery($sql,[$identifier,'%' . $identifier . '%',$identifier]);
+        $stmt = $this->conn->executeQuery($sql,[$this->projectKey, $identifier,'%' . $identifier . '%',$identifier]);
         $rows = $stmt->fetchAll();
         if (count($rows) === 0) {
             echo sprintf("Identifier NOT FOUND: %s\n",$identifier);

@@ -2,8 +2,10 @@
 namespace AppBundle\Action\Project\Person;
 
 use AppBundle\Common\ArrayableInterface;
+use ArrayAccess;
+use InvalidArgumentException;
 
-class ProjectPerson implements ArrayableInterface,\ArrayAccess
+class ProjectPerson implements ArrayableInterface, ArrayAccess
 {
     private /** @noinspection PhpUnusedPrivateFieldInspection */ $id;
 
@@ -269,7 +271,7 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
     // ArrayAccess Interface
     public function offsetSet($offset, $value) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException('ProjectGame::set ' . $offset);
+            throw new InvalidArgumentException('ProjectGame::set ' . $offset);
         }
         // Be fun to make this immutable
         $this->$offset = $value;
@@ -286,19 +288,19 @@ class ProjectPerson implements ArrayableInterface,\ArrayAccess
                 return $this->getRefereeBadgeUser();
         }
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException('ProjectGame::get ' . $offset);
+            throw new InvalidArgumentException('ProjectGame::get ' . $offset);
         }
         return $this->$offset;
     }
     public function offsetExists($offset) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException('ProjectGame::exists ' . $offset);
+            throw new InvalidArgumentException('ProjectGame::exists ' . $offset);
         }
         return isset($this->$offset);
     }
     public function offsetUnset($offset) {
         if (!isset($this->propertyKeys[$offset])) {
-            throw new \InvalidArgumentException('ProjectGame::unset ' . $offset);
+            throw new InvalidArgumentException('ProjectGame::unset ' . $offset);
         }
         $this->$offset = null;
         

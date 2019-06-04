@@ -14,6 +14,9 @@ use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\ShirtSizeTransformer;
 
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
 class SummaryWriterExcel
 {
     use ExcelWriterTrait;
@@ -40,7 +43,7 @@ class SummaryWriterExcel
      * @param  RegPerson[] $regPersons
      * @param  Game[]      $games
      * @return string
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
     public function write(array $regPersons, array $games)
     {
@@ -93,12 +96,12 @@ class SummaryWriterExcel
         return $gameOfficialsMap;
     }
     /** =========================================
-     * @param  \PHPExcel_Worksheet $ws
+     * @param  Worksheet $ws
      * @param   RegPerson[]  $regPersons
      * @param   array        $gameOfficialsMap
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
-    private function writeGames(\PHPExcel_Worksheet $ws,$regPersons,$gameOfficialsMap)
+    private function writeGames(Worksheet $ws,$regPersons,$gameOfficialsMap)
     {
         $ws->setTitle('Referee Games');
 
@@ -203,12 +206,12 @@ class SummaryWriterExcel
         }
     }
     /** =========================================
-     * @param  \PHPExcel_Worksheet $ws
+     * @param  Worksheet $ws
      * @param   RegPerson[]  $regPersons
      * @param   array        $gameOfficialsMap
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
-    private function writeSummary(\PHPExcel_Worksheet $ws,$regPersons,$gameOfficialsMap)
+    private function writeSummary(Worksheet $ws,$regPersons,$gameOfficialsMap)
     {
         $ws->setTitle('Referee Summary');
 

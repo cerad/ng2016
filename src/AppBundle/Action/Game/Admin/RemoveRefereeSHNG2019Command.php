@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class RemoveRefereeSHNOC2018Command extends Command
+class RemoveRefereeSHNG2019Command extends Command
 {
     private $projectId;
 
@@ -16,28 +16,28 @@ class RemoveRefereeSHNOC2018Command extends Command
 
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn
+        Connection $ng2019GamesConn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn = $noc2018GamesConn;
+        $this->gameConn = $ng2019GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:remove:refereesafehaven')
-            ->setDescription('Remove Referee Safe Haven NOC2018');
+            ->setName('ng2019:remove:refereesafehaven')
+            ->setDescription('Remove Referee Safe Haven NG2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Removing Referee Safe Haven for Officials NOC2018 ... ");
+        echo sprintf("Removing Referee Safe Haven for Officials NG2019 ... ");
 
-        $sqlSelect = "SELECT * FROM noc2018.projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
+        $sqlSelect = "SELECT * FROM ng2019.projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
             projectPersonId IN 
-            (SELECT DISTINCT id FROM noc2018.projectPersons WHERE projectKey LIKE ?);";
+            (SELECT DISTINCT id FROM ng2019.projectPersons WHERE projectKey LIKE ?);";
 
         $result = $this->gameConn->executeQuery($sqlSelect, [$this->projectId]);
 
@@ -45,9 +45,9 @@ class RemoveRefereeSHNOC2018Command extends Command
         $count = count($rshRecords);
 
         if ($count) {
-            $sqlDelete = "DELETE FROM noc2018.projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
+            $sqlDelete = "DELETE FROM ng2019.projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
             projectPersonId IN 
-            (SELECT DISTINCT id FROM noc2018.projectPersons WHERE projectKey LIKE ?);";
+            (SELECT DISTINCT id FROM ng2019.projectPersons WHERE projectKey LIKE ?);";
 
             $this->gameConn->executeQuery($sqlDelete, [$this->projectId]);
         }

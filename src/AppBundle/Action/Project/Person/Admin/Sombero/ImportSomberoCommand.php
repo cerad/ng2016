@@ -9,6 +9,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 use Doctrine\DBAL\Connection;
 use Cerad\Bundle\AysoBundle\AysoFinder;
 
@@ -56,8 +59,8 @@ class ImportSomberoCommand extends Command
     }
     private function import($filename)
     {
-        /** @var \PHPExcel_Reader_Abstract $reader */
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        /** @var Xlsx $reader */
+        $reader = IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);
@@ -78,9 +81,9 @@ class ImportSomberoCommand extends Command
             if ($processed) {
                 $count++;
             }
-            if (($count % 10) === 0) {
-                //echo sprintf("\rProcessed %4d",$count);
-            }
+//            if (($count % 10) === 0) {
+//                echo sprintf("\rProcessed %4d",$count);
+//            }
         }
         //echo sprintf("\rProcessed %4d vols      \n",$count);
     }
@@ -154,9 +157,9 @@ class ImportSomberoCommand extends Command
         }
         // Volunteer record
         $vol = $this->aysoFinder->findVol($aysoId);
-        if (!$vol) {
-            //echo sprintf("*** No ayso record for %s %-32s %s\n",$aysoId,$name,$email);
-        }
+//        if (!$vol) {
+//            echo sprintf("*** No ayso record for %s %-32s %s\n",$aysoId,$name,$email);
+//        }
         $regYear = isset($vol['regYear']) ? $vol['regYear'] : null;
 
         $verified = $regYear >= 'MY2015' ? true : false;

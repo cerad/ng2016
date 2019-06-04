@@ -1,7 +1,7 @@
 services:
 
     project_connection:
-        alias: doctrine.dbal.noc2018_connection
+        alias: doctrine.dbal.ng2019_connection
 
     project_factory:
         class: AppBundle\Action\Project\ProjectFactory
@@ -10,10 +10,10 @@ services:
         class: AppBundle\Action\Project\Person\ProjectRersonRepository
         arguments: ['@project_connection','@project_factory']
 
-    project_migrate_command:
-        class: AppBundle\Action\Project\Migrate\ProjectMigrateCommand
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2014_connection'
-            - '@doctrine.dbal.noc2018_connection'
-
+#    project_migrate_command:
+#        class: AppBundle\Action\Project\Migrate\ProjectMigrateCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - '@doctrine.dbal.ng2014_connection'
+#            - '@doctrine.dbal.ng2019_connection'
+#

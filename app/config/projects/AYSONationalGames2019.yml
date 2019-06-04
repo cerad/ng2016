@@ -1,14 +1,14 @@
 parameters:
 
-  app_project_key: AYSONationalOpenCup2017
+  app_project_key: AYSONationalGames2019
 
   app_project_fed_role_key: AYSOV
 
   app_project:
     info:
-        key: AYSONationalOpenCup2017 # For now until we migrate games
+        key: AYSONationalGames2019 # For now until we migrate games
 
-        slugs: [natgames, ng2016, aoc2017]
+        slugs: [natgames, ng2019]
 
         status: Active
 
@@ -17,66 +17,63 @@ parameters:
         fedId:     AYSO
         fedRoleId: AYSOV
 
-        abbv:    "AOC2017"
-        title:   "AYSO National Open Cup 2017"
-        shortTitle: "Open Cup"
-        desc:    "AYSO National Open Cup 2017 - Lancaster, California - July 12th to July 16th"
-        prefix:  'NatOpenCup2017'
-        welcome: 'AYSO WELCOMES YOU TO LANCASTER, CALIFORNIA, JULY 12-16, 2017'
-        website: 'http://aysonationalopencup.org/'
+        abbv:    "NG2019"
+        title:   "AYSO National Games 2019"
+        desc:    "AYSO National Games 2019 - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7, 2019"
+        venue_name: "Waipio Peninsula Soccer Complex"
+        venue: "WPSC"
+        prefix:  'NatGames2019'
+        welcome: 'AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019'
+        website: 'https://www.aysonationalgames.org/'
         logo:    '/images/National_Open_Cup.png'
-        firstDay: 'Wednesday, July 12'
-        lastDay: 'Sunday, July 16'
-        calendarLink: 'http://aysonationalopencup.org/national-open-cup-schedule/'
+        firstDay: 'Tuesday, June30'
+        lastDay: 'Sunday, July 7'
+        calendarLink: 'https://aysonationalgames.org/schedule-of-events/'
 
-        regYear: 'MY2016'
+        regYear: 'MY2018'
 
         support:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
-            subject: "AOC2017 zAYSO question..."
-            phone: 562-547-4457
+            name: "Rob McCarthy"
+            email: "soccer.ref62@yahoo.com"
+            subject: "NG2019 zAYSO question..."
+            phone: 808-286-9280
               
         schedules:
-            name: "Andy Price"
-            email: "andyprice@ayso.org"
-            subject: "AOC2017 schedule question..."
-            phone: 310-529-3120
+            name: "Chris Lewis"
+            email: "chris.lewis575@gmail.com"
+            subject: "NG2019 schedule question..."
+            phone: 808-421-8008
             
         assignor:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
+            name: "Rob McCarthy"
+            email: "soccer.ref62@yahoo.com"
             subject: "Referee Assignments"
-            phone: 562-547-4457
+            phone: 808-286-9280
 
         administrator:
-            name:  "Tom Bobadilla"
-            email: "thomasbobadilla@ayso.org"
-            subject: "Question for the Referee Administrator"
-            phone: 562-547-4457
+            name: "Rob McCarthy"
+            email: "soccer.ref62@yahoo.com"
+            subject: "Question for NG Referee Administrator"
+            phone: 808-286-9280
 
         feedback:
-            name:  "AOC Web Team"
-            email: "feedback.aoc2017@gmail.com"
+            name:  "NG2019 Web Team"
+            email: "web.ng2019@gmail.com"
             subject: "Feedback for the team"
             phone: ""
 
-        registration:
-            name:  "AOC Web Team"
-            email: "web.aoc2017@gmail.com"
-            subject: "Registration"
-            phone: ""
-
         system:
-            name:  "zAYSO Admin"
+            name:  "Zayso Admin"
             email: "noreply@zayso.org"
             phone:  ""
 
         dates:
-            - '2017-07-13' # Thu Pool Play
-            - '2017-07-14' # Fri Pool Play
-            - '2017-07-15' # Sat Pool Play and Quarter Finals
-            - '2017-07-16' # Sun Semi and Finals
+            '2019-07-02': Tue # Soccerfest 2019
+            '2019-07-03': Wed # Pool Play
+            '2019-07-04': Thu # Pool Play
+            '2019-07-05': Fri # Pool Play
+            '2019-07-06': Sat # Quarter Finals
+            '2019-07-07': Sun # Semi and Finals
 
         programs:
             Core: Core
@@ -86,26 +83,21 @@ parameters:
             G:  Girls
 
         ages:
-            VIP: VIP
-            U10: U10
-            U12: U12
-            U14: U14
-            U16: U16
-            U19: U19
-            Adult: Adult
+            10U: 10U
+            12U: 12U
+            14U: 14U
+            16U: 16U
+            18U: 18U
 
         search_defaults:
-            projects: ['AYSONationalOpenCup2017']
-            programs: ['Core']
-            dates:    ['2017-07-12']
+            projects: ['AYSONationalGames2019']
+            dates:    ['2019-07-02']
             genders:  ['B']
-            ages:     ['U12']
+            ages:     ['12U']
 
         search_controls:
             dates:
                 label: Days
-            programs:
-                label: Programs
             genders:
                 label: Genders
             ages:
@@ -113,72 +105,71 @@ parameters:
 
         choices:
             dates:
-                '2017-07-13': Thu # Pool Play
-                '2017-07-14': Fri # Pool Play
-                '2017-07-15': Sat # Pool Play and Quarter Finals
-                '2017-07-16': Sun # Semi and Finals
+            '2019-07-02': Tue # Soccerfest 2019
+            '2019-07-03': Wed # Pool Play
+            '2019-07-04': Thu # Pool Play
+            '2019-07-05': Fri # Pool Play
+            '2019-07-06': Sat # Quarter Finals
+            '2019-07-07': Sun # Semi and Finals
 
             programs:
                 Core:  Core
-                Extra: Extra
 
             genders:
                 B: Boys
                 G: Girls
 
             ages:
-                VIP: VIP
-                U10: U10
-                U12: U12
-                U14: U14
-                U16: U16
-                U19: U19
-                Adult: Adult
+                10U: 10U
+                12U: 12U
+                14U: 14U
+                16U: 16U
+                18U: 18U
 
             pools:
                 Core:
                     B:
-                        U10: [A,B,C,D]
-                        U12: [A,B,C,D]
-                        U14: [A,B,C,D]
-                        U16: [A,B,C,D]
-                        U19: [A,B,C,D]
+                        10U: [A,B,C,D]
+                        12U: [A,B,C,D]
+                        14U: [A,B,C,D]
+                        16U: [A,B,C,D]
+                        18U: [A,B,C,D]
                     G:
-                        U10: [A,B,C,D]
-                        U12: [A,B,C,D]
-                        U14: [A,B,C,D]
-                        U16: [A,B,C,D]
-                        U19: [A,B,C,D]
+                        10U: [A,B,C,D]
+                        12U: [A,B,C,D]
+                        14U: [A,B,C,D]
+                        16U: [A,B,C,D]
+                        18U: [A,B,C,D]
 
         levels:
-            AYSO_U10B_Core:
+            AYSO_B10U_Core:
                 program: Core
                 gender:  B
-                age:     U10
-                div:     U10B
+                age:     10U
+                div:     B10U
 
-            AYSO_U10G_Core:
+            AYSO_G10U_Core:
                 program: Core
                 gender:  G
-                age:     U10
-                div:     U10G
+                age:     10U
+                div:     G10U
 
-            AYSO_U12B_Core:
+            AYSO_B12U_Core:
                 program: Core
                 gender:  B
-                age:     U12
-                div:     U12B
+                age:     12U
+                div:     B12U
 
-            AYSO_U12G_Core:
+            AYSO_G12U_Core:
                 program: Core
                 gender:  G
-                age:     U12
-                div:     U12G
+                age:     12U
+                div:     G12U
 
         pools:
 
         venues:
-            Polo: Polo Grounds
+            Fields: Waipio
 
         fields:
 
@@ -214,10 +205,10 @@ parameters:
       willReferee:   { group: plans }
       willVolunteer: { group: plans }
       willCoach:     { group: plans }
-      adultExp:      { group: plans }
       shirtSize: {}
 
-#      availWed:      { group: avail }
+      availTue:     { group: avail }
+      availWed:      { group: avail }
       availThu:      { group: avail }
       availFri:      { group: avail }
       availSatMorn:  { group: avail }
@@ -244,19 +235,19 @@ parameters:
             type:    select
             label:   Will Volunteer
             default: no
-            choices: { no: No, yes: Yes (besides refereeing), maybe: Not Sure }
+            choices: { no: No, yes: Yes (besides refereeing), maybe: Maybe }
 
         willCoach:
             type:    select
             label:   Will Coach
             default: no
-            choices: { no: No, yes: Yes (or assist), maybe: Not Sure }
+            choices: { no: No, yes: Yes (or assist), maybe: Maybe }
 
         willReferee:
             type:    select
             label:   Will Referee
             default: no
-            choices: { no: No, yes: Yes, maybe: Not Sure }
+            choices: { no: No, yes: Yes, maybe: Maybe }
 
         refereeBadge:
             type:    select
@@ -272,11 +263,6 @@ parameters:
                 National_2:   National 2
                 Assistant:    Assistant
                 U8Official:   U8 Official
-
-        adultExp:
-            type:     integer # years
-            label:    Years experience refereeing adult games
-            default:  0
 
         shirtSize:
             type:    select
@@ -320,7 +306,7 @@ parameters:
             label:       AYSO Region Number
             href:        eayso.org
             placeHolder: 1-4 digit number
-            transformer: cerad.ayso.region_key_transformer
+            transformer: cerad.ayso.volunteer_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
         availSatMorn:
@@ -347,12 +333,18 @@ parameters:
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
 
-#        availWed:
-#            type:    select
-#            label:   Available Wednesday (Soccerfest)
-#            default: no
-#            choices: { no: No, yes: Yes, maybe: Maybe}
-#
+        availTue:
+            type:    select
+            label:   Available Tuesday (Soccerfest)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
+        availWed:
+            type:    select
+            label:   Available Wednesday (Pool Play)
+            default: no
+            choices: { no: No, yes: Yes, maybe: Maybe}
+
         availThu:
             type:    select
             label:   Available Thursday (Pool Play)
@@ -364,15 +356,3 @@ parameters:
             label:   Available Friday (Pool Play)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
-            
-        YesNo:
-            type:    select
-            label:   Yes / No
-            default: no
-            choices: { yes: Yes, no: No, maybe: Maybe, nr: Not Required }
-        
-        regYear:
-            type: select
-            label: MemYear
-            default:  null
-            choices: { MY2017: MY2017, MY2016: MY2016, null: '***' }

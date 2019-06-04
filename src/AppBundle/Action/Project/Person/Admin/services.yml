@@ -18,8 +18,8 @@ services:
             - "@phone_transformer"
 
     # reg stands for registered
-    reg_person_import_infinity_command:
-        class: AppBundle\Action\Project\Person\Admin\Infinity\ImportInfinityCommand
+    reg_person_import_affinity_command:
+        class: AppBundle\Action\Project\Person\Admin\Affinity\ImportAffinityCommand
         tags: [{ name: console.command }]
         arguments:
             - "@user_manager"
@@ -33,6 +33,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - "@project_person_connection"
+            - "%app_project_key%"
 
 # ==========================================================================
 # Listing (List throws exception)

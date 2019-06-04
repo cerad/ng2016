@@ -30,7 +30,7 @@ class AdminListingView extends AbstractView2
     
     private $adminViewFilters;
 
-    private $regYearProject;
+    private $certURL;
 
     public function __construct(
         ProjectPersonRepositoryV2  $projectPersonRepository,
@@ -45,6 +45,8 @@ class AdminListingView extends AbstractView2
         $this->projectPersonRepository      = $projectPersonRepository;
         $this->projectPersonViewDecorator   = $projectPersonViewDecorator;
         $this->adminViewFilters             = $adminViewFilters;
+
+        $this->certURL = "https://national.ayso.org/Volunteers/ViewCertification?UserName=";
     }
     public function __invoke(Request $request)
     {
@@ -199,11 +201,12 @@ EOD;
     // TODO Pull ayso name,email,phone if available
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
+        $link = $this->certURL . $personView->fedId;
         return <<<EOD
 <table>
   <tr>
     <td>AYSO ID</td>
-    <td>{$personView->fedId}</td>
+    <td><a href="$link" target="_blank">$personView->fedId</a></td>
   </tr><tr>
     <td>S/A/R/St</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>
@@ -237,8 +240,9 @@ EOD;
 
         return <<<EOD
 <table>
-<!--  <tr><td>Avail Wednesday</td><td>{$personView->availWed}     </td></tr> -->
-<!--    <tr><td>Avail Thursday </td><td>{$personView->availThu}     </td></tr>  -->
+  <tr><td>Avail Tuesday</td><td>{$personView->availTues}     </td></tr>
+  <tr><td>Avail Wednesday</td><td>{$personView->availWed}     </td></tr>
+  <tr><td>Avail Thursday </td><td>{$personView->availThu}     </td></tr>
   <tr><td>Avail Friday   </td><td>{$personView->availFri}     </td></tr>
   <tr><td>Avail Sat Morn </td><td>{$personView->availSatMorn} </td></tr>
   <tr><td>Avail Sat After</td><td>{$personView->availSatAfter}</td></tr>
@@ -262,7 +266,6 @@ EOD;
         }
         foreach($personView->getCerts() as $cert) {
             $certKey = $cert->role;
-
             $html .= <<<EOD
 <tr><td class="{$personView->getCertClass($certKey)}">{$certKey}: {$personView->getCertBadge($certKey)}</td></tr>   
 EOD;
@@ -270,6 +273,7 @@ EOD;
         $html .= <<<EOD
 </table>
 EOD;
+//        die();
         return $html;
     }
     private function renderUserInfo(ProjectPersonViewDecorator $personView)

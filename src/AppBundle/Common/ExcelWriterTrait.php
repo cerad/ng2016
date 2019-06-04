@@ -1,51 +1,50 @@
 <?php
 namespace AppBundle\Common;
 
-use \PHPExcel as WorkBook;
-
-use \PHPExcel_Worksheet as WorkSheet;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 trait ExcelWriterTrait
 {
-    /** @var WorkBook */
+    /** @var PhpSpreadsheet\Spreadsheet */
     private $wb;
 
     private function setCellValue(Worksheet $ws,$col,$row,$value)
     {
         $ws->getCell($col . $row)->setValue($value);
     }
-    private function setCellValueNumeric(\PHPExcel_Worksheet $ws,$col,$row,$value)
+    private function setCellValueNumeric(Worksheet $ws,$col,$row,$value)
     {
-        $ws->getCell($col . $row)->setValueExplicit($value,\PHPExcel_Cell_DataType::TYPE_NUMERIC);
+        $ws->getCell($col . $row)->setValueExplicit($value,PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     }
-    private function setCellValueString(\PHPExcel_Worksheet $ws, $col, $row, $value)
+    private function setCellValueString(Worksheet $ws, $col, $row, $value)
     {
-        $ws->getCell($col . $row)->setValueExplicit($value,\PHPExcel_Cell_DataType::TYPE_STRING);
+        $ws->getCell($col . $row)->setValueExplicit($value,PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     }
-    private function setCellFormat(\PHPExcel_Worksheet $ws,$col,$row,$format)
+    private function setCellFormat(Worksheet $ws,$col,$row,$format)
     {
         $ws->getStyle($col . $row)->getNumberFormat()->setFormatCode($format);
     }
-    private function setCellFillColor(\PHPExcel_Worksheet $ws,$col,$row,$color)
+    private function setCellFillColor(Worksheet $ws,$col,$row,$color)
     {
         $ws->getStyle($col . $row)->applyFromArray([
             'fill' => [
-                'type'  => \PHPExcel_Style_Fill::FILL_SOLID,
+                'type'  => PhpSpreadsheet\Style\Fill::FILL_SOLID,
                 'color' => ['rgb' => $color]
             ] 
         ]);
     }
-    private function setCellValueDate(\PHPExcel_Worksheet $ws,$col,$row,$dt,$format = 'ddd')
+    private function setCellValueDate(Worksheet $ws,$col,$row,$dt,$format = 'ddd')
     {
         if (!$dt) return;
         
         $date = substr($dt, 0, 10);
-        $dateValue = \PHPExcel_Shared_Date::stringToExcel($date);
+        $dateValue = PhpSpreadsheet\Shared\Date::stringToExcel($date);
         
         $this->setCellFormat      ($ws,$col,$row,$format);
         $this->setCellValueNumeric($ws,$col,$row,$dateValue);
     }
-    private function setCellValueTime(\PHPExcel_Worksheet $ws,$col,$row,$dt,$format = '[$-409]h:mm AM/PM;@')
+    private function setCellValueTime(Worksheet $ws,$col,$row,$dt,$format = '[$-409]h:mm AM/PM;@')
     {
         if (!$dt) return;
         
@@ -57,26 +56,26 @@ trait ExcelWriterTrait
         $this->setCellFormat      ($ws,$col,$row,$format);
         $this->setCellValueNumeric($ws,$col,$row,$timeValue);
     }
-    private function setColWidth(\PHPExcel_Worksheet $ws,$col,$width)
+    private function setColWidth(Worksheet $ws,$col,$width)
     {
         $ws->getColumnDimension($col )->setWidth($width);
     }
-    private function setColAlignCenter(\PHPExcel_Worksheet $ws,$col)
+    private function setColAlignCenter(Worksheet $ws,$col)
     {
-        $ws->getStyle($col)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($col)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
     }
     private function createWorkBook()
     {
         // Not sure this is needed
-        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
+        PhpSpreadsheet\Cell\Cell::setValueBinder(new PhpSpreadsheet\Cell\AdvancedValueBinder());
 
-        $this->wb = $wb = new WorkBook();
+        $this->wb = $wb = new PhpSpreadsheet\Spreadsheet();
         
         return $wb;
     }
     private function getContents()
     {
-        $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
+        $writer = PhpSpreadsheet\IOFactory::createWriter($this->wb, "Xlsx");
         ob_start();
         $writer->save('php://output');
         return ob_get_clean();

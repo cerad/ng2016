@@ -1,7 +1,7 @@
 services:
 
     user_connection:
-        alias: doctrine.dbal.noc2018_connection
+        alias: doctrine.dbal.ng2019_connection
 
     user_repository:
         class: AppBundle\Action\Project\User\ProjectUserRepository
@@ -12,8 +12,8 @@ services:
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:
             - "%app_project_key%"
-            - "@doctrine.dbal.noc2018_connection" # user connection
-            - "@doctrine.dbal.noc2018_connection" # project person connection
+            - "@doctrine.dbal.ng2019_connection" # user connection
+            - "@doctrine.dbal.ng2019_connection" # project person connection
             - "%users%"
 
     user_encoder:

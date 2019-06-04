@@ -2,32 +2,45 @@
 
 namespace AppBundle\Action;
 
-use PHPExcel;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Symfony\Component\Finder\SplFileInfo;
+use PhpOffice\PhpSpreadsheet\Reader;
+use PhpOffice\PhpSpreadsheet\Exception;
 
-//    $excel = new AbstractImporter('path/to/file.xls');
-//
-//    var_dump($excel->toArray());
-//
-//    // Sample array of data returned
-//    $arrayData = array(
-//        array(NULL,   2010, 2011, 2012),   //heading labels; NULL for row labels
-//        array('Q1',   12,   15,   21),
-//        array('Q2',   56,   73,   86),
-//        array('Q3',   52,   61,   69),
-//        array('Q4',   30,   32,    0),
-//    );
+/*
+
+    $excel = new AbstractImporter('path/to/file.xls');
+    
+    var_dump($excel->toArray());
+
+    // Sample array of data returned
+    $arrayData = array(
+        array(NULL,   2010, 2011, 2012),   //heading labels; NULL for row labels
+        array('Q1',   12,   15,   21),
+        array('Q2',   56,   73,   86),
+        array('Q3',   52,   61,   69),
+        array('Q4',   30,   32,    0),
+    );
+*/
 
 class AbstractImporter
 {
-    private $objPHPExcel;
+    /** @var Spreadsheet */
+    private $ws;
 
+    /**
+     * @param $file
+     * @return null
+     * @throws Exception
+     * @throws Reader\Exception
+     */
     protected function import($file)
     {
         $wb = null;
         
         //accept file objects or filenames
-        if($file instanceof \SplFileInfo){
+        if($file instanceof SplFileInfo){
             $fileName = $file->getRealPath();
         }else{
             $fileName = $file;
@@ -35,8 +48,8 @@ class AbstractImporter
         
         //construct the importer object
         //load the file
-        $this->objPHPExcel = PHPExcel_IOFactory::load($fileName);
-        $xl = $this->objPHPExcel;
+        $this->ws = IOFactory::load($fileName);
+        $xl = $this->ws;
 
         //load the workbook into array
         $wbArray = [];
@@ -69,11 +82,19 @@ class AbstractImporter
      *                               True - Return rows and columns indexed by their actual row and column IDs
      * @return array
      */
+
+    /**
+     * @param null $nullValue
+     * @param bool $calculateFormulas
+     * @param bool $formatData
+     * @return mixed
+     * @throws Exception
+     */
     protected function importActiveSheet($nullValue = null, $calculateFormulas = true, $formatData = false)
 	{
 		$data = [];
 		
-        $ws = $this->objPHPExcel->getActiveSheet();
+        $ws = $this->ws->getActiveSheet();
         $wsName = $ws->getTitle();
 
     	$rows = $ws->toArray($nullValue,$calculateFormulas,$formatData,false);

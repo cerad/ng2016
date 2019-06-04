@@ -3,6 +3,7 @@
 namespace AppBundle\Action\Game\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class GameImportReaderExcel
 {
@@ -55,7 +56,7 @@ class GameImportReaderExcel
     public function read($filename)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

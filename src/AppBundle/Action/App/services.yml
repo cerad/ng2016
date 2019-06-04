@@ -1,119 +1,137 @@
 parameters:
-    # Eventually want to be able to customize thid
+    # Eventually want to be able to customize this
     app_home_route:    app_home
     app_welcome_route: app_welcome
 
 services:
+    _defaults: { public: true }
 
     app_kernel_listener:
+        public: true;
         class:  AppBundle\Listener\KernelListener
-        calls: [[setContainer, ["@service_container"]]]
+        calls: [[setContainer, ['@service_container']]]
         tags:  [{ name: kernel.event_subscriber }]
-        arguments: ["%secure_routes%"]
+        arguments: ['%secure_routes%']
 
     app_base_template:
+        public: true;
         class: AppBundle\Action\BaseTemplate
         calls:
-            - ["setRouter",  ["@router"]]
-            - ["setSecurity",["@security.token_storage","@security.authorization_checker"]]
-            - ["setProject", ["%app_project%"]]
+            - ['setRouter',  ['@router']]
+            - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+            - ['setProject', ['%app_project%']]
         arguments:
-            - "%show_header_image%"
-            - "%show_schedules_menu%"
-            - "%show_results_menu%"
-            - "%show_final_results%"
-            - "%show_navigation%"
+            - '%show_header_image%'
+            - '%show_schedules_menu%'
+            - '%show_results_menu%'
+            - '%show_final_results%'
             - "%app_version%"
 
     abstract_form:
+        public: true;
         abstract: true
         calls:
-           - ["setContainer",  ["@service_container"]]
+           - ['setContainer',  ['@service_container']]
 
     abstract_view:
+        public: true;
         abstract: true
         calls:
-           - ["setRouter",  ["@router"]]
-           - ["setSecurity",["@security.token_storage","@security.authorization_checker"]]
-           - ["setBaseTemplate", ["@app_base_template"]]
-           - ["setProject", ["%app_project%"]]
+           - ['setRouter',  ['@router']]
+           - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
+           - ['setBaseTemplate', ['@app_base_template']]
+           - ['setProject', ['%app_project%']]
 
     abstract_view2:
+        public: true;
         abstract: true
         calls:
-           - ["setContainer", ["@service_container"]]
+           - ['setContainer', ['@service_container']]
 
     abstract_controller:
+        public:   true
         abstract: true
-        calls: [[setContainer, ["@service_container"]]]
+        calls: [[setContainer, ['@service_container']]]
 
     # action index
     index_controller:
+        public: true
         class:  AppBundle\Action\App\Index\IndexController
         parent: abstract_controller
 
     # action welcome
     welcome_controller:
+        public: true
         class:  AppBundle\Action\App\Welcome\WelcomeController
         parent: abstract_controller
 
     welcome_view:
+        public: true
         class:  AppBundle\Action\App\Welcome\WelcomeView
         parent: abstract_view2
         arguments:
-            - "@user_login_form"
-            - "%show_schedules_menu%"
-            - "%show_results_menu%"
+            - '@user_login_form'
+            - '%show_results_menu%'
 
     # action text alerts
     text_alerts_controller:
+        public: true
         class:  AppBundle\Action\App\TextAlerts\TextAlertsController
         parent: abstract_controller
 
     text_alerts_view:
+        public: true;
         class:  AppBundle\Action\App\TextAlerts\TextAlertsView
         parent: abstract_view2
 
     # action home
     home_controller:
+        public: true
         class:  AppBundle\Action\App\Home\HomeController
         parent: abstract_controller
 
     home_view:
+        public: true
         class:  AppBundle\Action\App\Home\HomeView
         parent: abstract_view2
         arguments:
-            - "@project_person_repository_v2"
-            - "@project_person_view_decorator"
-            - "@reg_person_finder"
+            - '@project_person_repository_v2'
+            - '@project_person_view_decorator'
+            - '@reg_person_finder'
 
     # action file
     file_controller:
+        public: true;
         class:  AppBundle\Action\App\File\FilePdfController
         parent: abstract_controller
 
     # action admin
     admin_switch_user_form:
+        public: true;
         class:  AppBundle\Action\App\Admin\AdminSwitchUserForm
         parent: abstract_form
-        arguments: ["@reg_person_finder"]
+        arguments: ['@reg_person_finder']
 
     admin_controller:
+        public: true;
         class:  AppBundle\Action\App\Admin\AdminController
         parent: abstract_controller
-        arguments: ["@admin_switch_user_form"]
+        arguments: ['@admin_switch_user_form']
 
     admin_view:
+        public: true;
         class:  AppBundle\Action\App\Admin\AdminView
         parent: abstract_view2
-        arguments: ["@admin_switch_user_form"]
+        arguments: ['@admin_switch_user_form']
 
     tnx_controller:
+        public: true;
         class:  AppBundle\Action\App\ThankYou\ThankYouController
         parent: abstract_controller
-        arguments: ["@tnx_view"]
+        arguments: ['@tnx_view']
 
     tnx_view:
+        public: true;
         class:  AppBundle\Action\App\ThankYou\ThankYouView
         parent: abstract_view2
 

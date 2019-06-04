@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 use Doctrine\DBAL\Connection;
 
-class ReviewAssignmentConflictsNOC2018Command extends Command
+class ReviewAssignmentConflictsNG2019Command extends Command
 {
     private $projectId;
 
@@ -17,19 +17,19 @@ class ReviewAssignmentConflictsNOC2018Command extends Command
 
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn
+        Connection $ng2019GamesConn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn = $noc2018GamesConn;
+        $this->gameConn = $ng2019GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:review:assignment:conflicts')
-            ->setDescription('Review Official Assignments for Time Conflicts NOC2018');
+            ->setName('ng2019:review:assignment:conflicts')
+            ->setDescription('Review Official Assignments for Time Conflicts NG2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,7 +37,7 @@ class ReviewAssignmentConflictsNOC2018Command extends Command
         echo "Review Official Assignments for Time Conflicts ... ";
 
         $this->gameConn->exec('SET @pid := NULL');
-        $this->gameConn->exec("SET @lastFinish := '2018-01-01 00:00:00'");
+        $this->gameConn->exec("SET @lastFinish := '2019-01-01 00:00:00'");
         $this->gameConn->exec("SET @lastField := 0");
         $this->gameConn->exec("SET @late := '00:15:00'");
 
@@ -63,7 +63,7 @@ FROM
             fieldName,
             start,
             finish,
-            IF(@lastFinish = '2018-01-01 00:00:00', @lastFinish:=finish, @lastFinish) AS lastFinish,
+            IF(@lastFinish = '2019-01-01 00:00:00', @lastFinish:=finish, @lastFinish) AS lastFinish,
             IF(@lastField = 0, fieldName, @lastField) AS lastField,
             IF((@pid = phyPersonId)
                 AND (ADDTIME(@lastFinish, @late) > start), TIME_FORMAT(TIMEDIFF(ADDTIME(@lastFinish, @late), start), '%H:%i'), '') AS 'minutes_late',
@@ -94,8 +94,8 @@ FROM
             start,
             finish
     FROM
-        noc2018games.gameOfficials go
-    LEFT JOIN noc2018games.games g ON go.gameId = g.gameId) s
+        ng2019games.gameOfficials go
+    LEFT JOIN ng2019games.games g ON go.gameId = g.gameId) s
     WHERE
         assignState <> 'Open'
     ORDER BY s.phyPersonId ASC , start , fieldName) d) f

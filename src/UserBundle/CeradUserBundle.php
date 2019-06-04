@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerad\UserBundle;
+namespace Cerad\Bundle\UserBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

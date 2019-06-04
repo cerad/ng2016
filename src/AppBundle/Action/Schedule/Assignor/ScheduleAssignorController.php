@@ -39,7 +39,7 @@ class ScheduleAssignorController extends AbstractController2
     }
     public function __invoke(Request $request)
     {
-        $this->certifications = $this->getCurrentProjectInfo()['certifications'];
+//        $this->certifications = $this->getCurrentProjectInfo()['certifications'];
 
         // First project in list
         $projectId = array_keys($this->projectChoices)[0];
@@ -60,7 +60,7 @@ class ScheduleAssignorController extends AbstractController2
         ];
 
         $session = $request->getSession();
-        $sessionKey = 'schedule_assignor_search_data_2018';
+        $sessionKey = 'schedule_assignor_search_data_2019';
 
         if ($session->has($sessionKey)) {
             $searchData = array_merge($searchData,$session->get($sessionKey));
@@ -117,7 +117,7 @@ class ScheduleAssignorController extends AbstractController2
         $games = $this->filterGamesForReport($games);
 
         $request->attributes->set('games',  $games);
-        $request->attributes->set('certifications',  $this->certifications);
+//        $request->attributes->set('certifications',  $this->certifications);
         $request->attributes->set('filter', $searchData['filter']);
 
         return null;

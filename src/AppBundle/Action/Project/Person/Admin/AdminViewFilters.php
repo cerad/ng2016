@@ -58,8 +58,7 @@ class AdminViewFilters
                         }
                     }
                     break;
-                case
-                'RefIssues':
+                case 'RefIssues':
                 case 'Referees with Issues':
                     if (in_array($personView->willReferee, $yesMaybe)) {
                         if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
@@ -69,8 +68,16 @@ class AdminViewFilters
                     break;
                 case 'RefCertIssues':
                 case 'Referees with Cert Issues':
-                    if($personView->getConflictedCertBadge()) {
-                        if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
+                    if (in_array($personView->willReferee, $yesMaybe)) {
+                        if ($personView->hasCertIssues()) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+                case 'RefCertConflicts':
+                case 'Referees with Cert Conflicts':
+                    if (in_array($personView->willReferee, $yesMaybe)) {
+                        if ($personView->getConflictedCertBadge()) {
                             $listPersons[] = $person;
                         }
                     }
@@ -78,7 +85,7 @@ class AdminViewFilters
                 case 'VolIssues':
                 case 'Volunteers with Issues':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if ($personView->hasCertIssues()) {
+                        if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }
@@ -95,13 +102,13 @@ class AdminViewFilters
                     }
                     break;
                 case 'AdultRefs':
-                case 'Referees with Adult Experience':
-                    if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if ($personView->hasAdultExp() /*AND $personView->approved */) {
-                            $listPersons[] = $person;
-                        }
-                    }
-                    break;
+//                case 'Referees with Adult Experience':
+//                    if (isset($person['roles']['ROLE_REFEREE'])) {
+//                        if ($personView->hasAdultExp() /*AND $personView->approved */) {
+//                            $listPersons[] = $person;
+//                        }
+//                    }
+//                    break;
 //                case 'FL':
 //                case 'FL Residents':
 //                    //get the state

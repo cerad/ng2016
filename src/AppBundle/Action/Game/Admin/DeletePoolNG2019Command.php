@@ -9,33 +9,33 @@ use Symfony\Component\Console\Input\InputArgument;
 
 use Doctrine\DBAL\Connection;
 
-class DeletePoolNOC2018Command extends Command
+class DeletePoolNG2019Command extends Command
 {
     private $projectId;
     private $gameConn;
 
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn
+        Connection $ng2019GamesConn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn    = $noc2018GamesConn;
+        $this->gameConn    = $ng2019GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:delete:pool')
-            ->setDescription('Delete Pool NOC2018')
+            ->setName('ng2019:delete:pool')
+            ->setDescription('Delete Pool NG2019')
             ->addArgument('poolKey', InputArgument::REQUIRED, 'Pool Key to delete')
             ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit data');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Approving NOC2018 Assignments Requested by Officials ... \n");
+        echo sprintf("Deleting NG2019 Pool ... \n");
 
         $poolKey = $input->getArgument('poolKey');
         $commit = $input->getOption('commit');
@@ -58,13 +58,13 @@ SELECT
 SQL;
         $FROM = "
 FROM
-    noc2018games.poolTeams pt
+    ng2019games.poolTeams pt
         LEFT JOIN
-    noc2018games.gameTeams gt ON pt.poolTeamId = gt.poolTeamId
+    ng2019games.gameTeams gt ON pt.poolTeamId = gt.poolTeamId
     LEFT JOIN
-    noc2018games.games g ON gt.gameId = g.gameId
+    ng2019games.games g ON gt.gameId = g.gameId
     LEFT JOIN
-    noc2018games.gameOfficials go ON g.gameID = go.gameId
+    ng2019games.gameOfficials go ON g.gameID = go.gameId
 WHERE
     pt.projectID = ?
         AND poolKey = ?;

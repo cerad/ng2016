@@ -8,29 +8,34 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class InitGames2018Command extends Command
+use DateTime;
+use DateInterval;
+
+class InitGamesNG2019Command extends Command
 {
     private $gameConn;
     private $regTeamConn;
+    private $projectId;
 
-    public function __construct(Connection $conn)
+    public function __construct(Connection $conn, $projectId)
     {
         parent::__construct();
 
         $this->gameConn = $conn;
         $this->regTeamConn = $conn;
+        $this->projectId = $projectId;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:init:games')
-            ->setDescription('Init Games NOC2018');
+            ->setName('ng2019:init:games')
+            ->setDescription('Init Games ng2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Init Games NOC2018 ...\n");
+        echo sprintf("Init Games ng2019 ...\n");
 
         $commit = false;
 
@@ -42,17 +47,13 @@ class InitGames2018Command extends Command
 
         $this->initGames($commit || true);
 
-        echo sprintf("Init Games NOC2018 Completed.\n");
+        echo sprintf("Init Games ng2019 Completed.\n");
     }
 
-    private $projectId = 'AYSONationalOpenCup2018';
-    private $programs = ['Core', 'Extra', 'Club', 'VIP'];
+    private $programs = ['Core'];
     private $genders = ['B', 'G'];
     private $ages = [
         'Core' => ['10U', '12U', '14U', '16U', '19U'],
-        'Extra' => ['10U', '11U', '12U', '13U', '14U'],
-        'Club' => ['2008', '2007', '2006', '2005', '2004', '2003', '2002'],
-        'VIP' => ['VIP'],
     ];
 
     private function getPools($division)
@@ -677,9 +678,9 @@ class InitGames2018Command extends Command
             }
         }
         // Add playing time to game entity?
-        $finishDateTime = new \DateTime($start);
+        $finishDateTime = new DateTime($start);
         $interval = sprintf('PT%dM', $lengths[$age]);
-        $finishDateTime->add(new \DateInterval($interval));
+        $finishDateTime->add(new DateInterval($interval));
 
         $gameId = $projectId.':'.$gameNumber;
         $game = [

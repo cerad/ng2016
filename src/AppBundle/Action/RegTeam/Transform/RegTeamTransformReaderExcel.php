@@ -4,6 +4,7 @@ namespace AppBundle\Action\RegTeam\Transform;
 
 use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class RegTeamTransformReaderExcel
 {
@@ -63,7 +64,7 @@ class RegTeamTransformReaderExcel
     public function read($filename,$sheet)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

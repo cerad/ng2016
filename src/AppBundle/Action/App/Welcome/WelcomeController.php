@@ -11,8 +11,12 @@ class WelcomeController extends AbstractController
     {
         // Verify not signed in
         if ($this->isGranted('ROLE_USER')) {
+
+//            Request::setTrustedProxies(['~']);
+
             return $this->redirectToRoute('app_home');
         }
+
         return null;
     }
 }

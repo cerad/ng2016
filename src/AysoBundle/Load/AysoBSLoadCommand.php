@@ -2,7 +2,7 @@
 
 namespace AysoBundle\Load;
 
-use PHPExcel_Style_NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -73,13 +73,13 @@ EOD;
         $sql = 'SELECT regYear FROM vols WHERE fedKey = ?';
         $this->checkVolStmt = $this->aysoConn->prepare($sql);
 
-        $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate,verified) VALUES (?,?,?,?,?,1)';
+        $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate) VALUES (?,?,?,?,?)';
         $this->insertCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT roleDate,badge,badgeDate FROM certs WHERE fedKey = ? AND role = ?';
         $this->checkCertStmt = $this->aysoConn->prepare($sql);
 
-        $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ?, verified=1 WHERE fedKey = ? AND role = ?';
+        $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ? WHERE fedKey = ? AND role = ?';
         $this->updateCertStmt = $this->aysoConn->prepare($sql);
 
         $sql = 'SELECT sar FROM orgs WHERE orgKey = ?';
@@ -386,7 +386,7 @@ EOD;
         $badge = $certMeta['badge'];
 
         $badgeDate = $row[7];
-        $badgeDate = $badgeDate ? PHPExcel_Style_NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
+        $badgeDate = $badgeDate ? Style\NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
 
         $roleDate = $badgeDate;
 

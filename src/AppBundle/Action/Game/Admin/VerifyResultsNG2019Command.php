@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 use Doctrine\DBAL\Connection;
 
-class VerifyResultsNOC2018Command extends Command
+class VerifyResultsNG2019Command extends Command
 {
     private $projectId;
 
@@ -17,25 +17,25 @@ class VerifyResultsNOC2018Command extends Command
 
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn
+        Connection $ng2019GamesConn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn = $noc2018GamesConn;
+        $this->gameConn = $ng2019GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:verify:results')
-            ->setDescription('Verify Match Reports for NOC2018')
+            ->setName('ng2019:verify:results')
+            ->setDescription('Verify Match Reports for NG2019')
             ->addOption('state', 's', InputOption::VALUE_OPTIONAL, 'Verify where reportState is xxx', 'Submitted');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Verify Match Reports ... ");
+        echo sprintf("Verify NG2019 Match Reports ... ");
 
         $reportState = $input->getOption('state');
 

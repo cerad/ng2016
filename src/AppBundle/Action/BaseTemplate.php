@@ -1,38 +1,33 @@
 <?php
-
 namespace AppBundle\Action;
 
 class BaseTemplate extends AbstractTemplate
 {
-    protected $title = null;
+    protected $title = 'NG2019';
     protected $content = null;
     protected $version = null;
+
 
     private $showHeaderImage;
     private $showSchedulesMenu;
     private $showResultsMenu;
     private $showFinalResults;
-    private $showNavigation;
-
-    public function __construct($showHeaderImage, $showSchedulesMenu, $showResultsMenu, $showFinalResults,
-        $showNavigation, $version)
+    
+    public function __construct($showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,$version)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
-        $this->showNavigation = $showNavigation;
         $this->version = $version;
     }
-
     public function setContent($content)
     {
         $this->content = $content;
-        $this->title = $this->project['abbv'];
     }
     public function render()
     {
-        return <<<EOT
+      return <<<EOT
         {$this->renderHead()}
         {$this->renderHeader()}
         <body>
@@ -48,29 +43,11 @@ class BaseTemplate extends AbstractTemplate
 
 EOT;
     }
-
-    public function renderAndy()
-    {
-        return <<<EOT
-        {$this->renderHead()}
-
-EOT;
-    }
-
+    
     /*  DOC & Header  */
-    protected function renderHeadAndy()
-    {
-        return <<<EOT
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="refresh" content="0; url=http://aysonationalopencup.org/contact-ayso/">
-</head>
-EOT;
-    }
     protected function renderHead()
     {
-        return <<<EOT
+    return <<<EOT
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,45 +66,46 @@ EOT;
 </head>
 EOT;
     }
-
+    
     protected function renderHeader()
     {
-        if (!$this->showHeaderImage) {
-            $html =
-                <<<EOT
+      if (!$this->showHeaderImage) {
+        $html = 
+<<<EOT
     <div id="banner">
           <h1>
-          <a href="{$this->project['website']}" target="_blank"><img src="{$this->project['logo']}" height="36" alt="{$this->project['shortTitle']}"></a>     
+          <a href="https://www.aysonationalgames.org/" target="_blank"><img src="/images/National_Games.png" 
+          height="30" alt="National Games"></a>
           {$this->escape($this->project['title'])}
           </h1>
     </div>
 EOT;
-        } else {
-            $html =
-                <<<EOT
+      } else {
+          $html =
+<<<EOT
     <div class="skBanners">
-        <a href="http://www.aysonationalopencup.org/" target="_blank"><img class="width-90" src="/images/header-ipad_01.png"></a>
-        <br/>
-        <p class="subtitle skFont width-90">{$this->project['welcome']}</p>
+        <a href="https://www.aysonationalgames.org/" target="_blank"><img class="width-90" 
+        src="/images/header-ipad_01.png"></a>
+        <center class="skFont  width-90">AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019</center>
     </div>
 EOT;
-        }
-
-        return $html;
-
+      }
+  
+      return $html;
+  
     }
-
+    
     /* Footer item go here */
     protected function renderFooter()
     {
         return
-            <<<EOT
+<<<EOT
     <div class="cerad-footer">
       <br />
       <hr>
-      <p>For assistance contact {$this->project['administrator']['name']} at
-      <a href="mailto:{$this->project['administrator']['email']}?subject={$this->project['administrator']['subject']}">{$this->project['administrator']['email']}</a>
-      or {$this->project['administrator']['phone']} </p>
+      <p>For assistance contact {$this->project['support']['name']} at
+      <a href="mailto:{$this->project['support']['email']}?subject={$this->project['support']['subject']}">{$this->project['support']['email']}</a>
+      or {$this->project['support']['phone']} </p>
       <p>Version {$this->version}</p>
     </div>
     
@@ -137,19 +115,12 @@ EOT;
         </html>
 EOT;
     }
-
-    /*  Bootstrap menu  */
-    protected function renderTopMenu()
+    
+/*  Bootstrap menu  */
+  protected function renderTopMenu()
     {
-        if(!$this->showNavigation) {
-            $html = <<<EOT
-<hr>
-EOT;
-            return $html;
-        }
-
         $html =
-            <<<EOT
+<<<EOT
         <nav class="navbar navbar-default">
           
             <div class="navbar-header">
@@ -165,93 +136,99 @@ EOT;
             <div id="topmenu" class="collapse navbar-collapse">
 EOT;
         $html .= $this->renderMenuForGuest();
-
+        
         $html .= $this->renderMenuForUser();
-
+                
         $html .=
-            <<<EOT
+<<<EOT
             </div><!-- navbar-collapse -->
 
         </nav>
 EOT;
-
-        return $html;
+      return $html;
     }
-
+    
     /* ====================================================
      * Top Menu for Guest
      */
     protected function renderMenuForGuest()
     {
         $html =
-            <<<EOT
+<<<EOT
         <ul class="nav navbar-nav">
 EOT;
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $html .=
-                <<<EOT
+<<<EOT
                 {$this->renderHome()}
 EOT;
         } else {
             $html .=
-                <<<EOT
+<<<EOT
                 {$this->renderWelcome()}
 EOT;
         }
-
+        
         $html .=
-            <<<EOT
+<<<EOT
+              {$this->renderTopMenuRules()}
               {$this->renderTopMenuSchedules()}
               {$this->renderTopMenuResults()}
-              {$this->renderRules()}
               {$this->renderTopMenuTextAlerts()}
             </ul>
 EOT;
-
+        
         return $html;
     }
-
+    
     /* ====================================================
      * Top Menu for Users
      */
     protected function renderMenuForUser()
     {
         $html = '';
-
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $html =
-                <<<EOT
+        
+      if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        $html =
+<<<EOT
          <ul class="nav navbar-nav navbar-right">
 EOT;
-            if ($this->isGranted('ROLE_REFEREE')) {
-                $html .= $this->renderRefereeSchedules();
-            }
-
-            $html .=
-                <<<EOT
-           {$this->renderMyAccount()}
-EOT;
-            if ($this->isGranted('ROLE_STAFF')) {
-                $html .= $this->renderAdmin();
-            }
-
-            $html .= $this->renderSignOut();
-
-            $html .=
-                <<<EOT
-        </ul>
-EOT;
-        } else { // TODO Do not use _SERVER
-            /*
-          if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
-              $html = $this->renderCreateNewAccount();
-          } else {
-              $html = $this->renderSignIn();
-          }*/
-            $html = '';  //$this->renderSignIn();
+        if ($this->isGranted('ROLE_REFEREE')) {
+            $html .= $this->renderRefereeSchedules();
         }
 
-        return $html;
+        $html .=
+<<<EOT
+           {$this->renderMyAccount()}
+EOT;
+          if ( $this->isGranted('ROLE_STAFF') ) {
+              $html .= $this->renderAdmin();
+          }
+
+          $html .= $this->renderSignOut();
+
+        $html .=
+<<<EOT
+        </ul>
+EOT;
+      } else { // TODO Do not use _SERVER
+          /*
+        if (strpos($_SERVER['REQUEST_URI'], 'welcome')) {
+            $html = $this->renderCreateNewAccount();            
+        } else {
+            $html = $this->renderSignIn();
+        }*/
+          $html = '';  //$this->renderSignIn();
+      }
+      return $html;
+    }
+
+    protected function renderTopMenuRules()
+    {
+        return
+<<<EOT
+    <li><a href="{$this->generateUrl('rules_of_competition'    )}" target="_blank">RULES</a></li>
+EOT;
     }
 
     protected function renderTopMenuSchedules()
@@ -259,25 +236,22 @@ EOT;
         if (!$this->showSchedulesMenu) {
             return null;
         }
-
         return
-            <<<EOT
+<<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_game_2018')}">GAME    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_team_2018')}">TEAM    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_game_2019'    )}">GAME    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_team_2019'    )}">TEAM    SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
     }
-
+    
     protected function renderTopMenuTextAlerts()
     {
-        if (true) return null;
-
         $html =
-            <<<EOT
+<<<EOT
             <li><a href="{$this->generateUrl('app_text_alerts')}">TEXT ALERTS</a></li>
 EOT;
 
@@ -286,48 +260,39 @@ EOT;
 
     protected function renderTopMenuResults()
     {
-        $html = <<<EOT
+        if (!$this->showResultsMenu) {
+            return null;
+        }
+        
+        $html =
+<<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
-<li><a href="https://aysonoc18.sportsaffinity.com/Tour/public/info/accepted_list
-.asp?sessionguid=&tournamentguid=7316369B-BD83-4D83-818B-624C08342C1F&show=boys" target="_blank">Boys Results</a></li>
-<li><a href="https://aysonoc18.sportsaffinity.com/Tour/public/info/accepted_list
-.asp?sessionguid=&tournamentguid=7316369B-BD83-4D83-818B-624C08342C1F&show=girls" target="_blank">Girls Results</a></li>
+            <li><a href="{$this->generateUrl('results_poolplay_2019')}">POOL PLAY</a></li>
+            <li><a href="{$this->generateUrl('results_medalround_2019')}">MEDAL ROUND</a></li>
+            <li><a href="{$this->generateUrl('results_sportsmanship_2019')}">SPORTSMANSHIP</a></li>
 EOT;
-
-//        if (!$this->showResultsMenu) {
-//            return null;
-//        }
-//
-//        $html =
-//            <<<EOT
-//        <li class="dropdown">
-//          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
-//          <ul class="dropdown-menu">
-//            <li><a href="{$this->generateUrl('results_poolplay_2018')}">POOL PLAY</a></li>
-//            <li><a href="{$this->generateUrl('results_medalround_2018')}">MEDAL ROUND</a></li>
-//EOT;
-//        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
-//            $html .=
-//                <<<EOT
-//            <li><a href="{$this->generateUrl('results_final_2018')}">FINAL STANDINGS</a></li>
-//EOT;
-//        }
-
+        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
+            $html .=
+<<<EOT
+            <li><a href="{$this->generateUrl('results_final_2019')}">FINAL STANDINGS</a></li>
+EOT;
+        }
+            
         $html .=
-            <<<EOT
+<<<EOT
           </ul>
         </li>
 EOT;
 
         return $html;
     }
-
+    
     protected function renderCreateNewAccount()
     {
         return
-            <<<EOT
+<<<EOT
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{$this->generateUrl('user_create')}">CREATE NEW ACCOUNT</a></li>
           </ul>
@@ -337,51 +302,51 @@ EOT;
     protected function renderSignIn()
     {
         return
-            <<<EOT
+<<<EOT
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{$this->generateUrl('user_login')}">SIGN IN</a></li>
           </ul>
 EOT;
     }
-
+    
     protected function renderSignOut()
     {
         $userName = $this->escape($this->getUser()->getPersonName());
-        $userUrl = $this->generateUrl('user_logout');
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $userLabel = 'SIGN OUT '.$userName;
+        $userUrl  = $this->generateUrl('user_logout');
+        if ($this->isGranted('ROLE_ADMIN')){
+            $userLabel = 'SIGN OUT ' . $userName;            
         } else {
-            $userLabel = 'SIGN OUT ';
+            $userLabel = 'SIGN OUT ';                        
         }
 
         if ($this->isGranted('ROLE_PREVIOUS_ADMIN')) {
-            $userUrl = $this->generateUrl('app_admin', ['_switch_user' => '_exit']);
-            $userLabel = 'SU EXIT '.$userName;
+            $userUrl = $this->generateUrl('app_admin',['_switch_user' => '_exit']);
+            $userLabel = 'SU EXIT ' . $userName;
         }
-
         return
-            <<<EOT
+<<<EOT
             <li><a href="{$userUrl}">{$userLabel}</a></li>
 EOT;
     }
-
+    
     protected function renderRefereeSchedules()
     {
         if (!$this->showResultsMenu) {
-            //return null;
+            return null;
         }
         $html =
-            <<<EOT
+<<<EOT
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_official_2018')}">REQUEST ASSIGNMENTS</a></li>
+            <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">INSTRUCTION: How to Sign up for Games</a></li>
+            <li><a href="{$this->generateUrl('schedule_official_2019')}">REQUEST ASSIGNMENTS</a></li>
 EOT;
 
         if ($this->isGranted('ROLE_ASSIGNOR')) {
             $html .=
-                <<<EOT
-            <li><a href="{$this->generateUrl('schedule_assignor_2018')}">ASSIGNOR SCHEDULE</a></li>
+<<<EOT
+            <li><a href="{$this->generateUrl('schedule_assignor_2019')}">ASSIGNOR SCHEDULE</a></li>
 EOT;
         }
 
@@ -389,60 +354,53 @@ EOT;
          </ul>
        </li>
 EOT;
-
+        
         return $html;
     }
 
     protected function renderMyAccount()
     {
         if (!$this->showResultsMenu) {
-            //return null;
+            return null;
         }
-
         return
-            <<<EOT
+<<<EOT
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">MY STUFF<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
           <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS & AVAILABILITY</a></li>
-          <li><a href="{$this->generateUrl('schedule_my_2018')}">MY SCHEDULE</a></li>
+          <li><a href="{$this->generateUrl('schedule_my_2019')}">MY SCHEDULE</a></li>
           <li><a href="{$this->generateUrl('reg_person_persons_update')}">MY CREW</a></li>
           <li><a href="{$this->generateUrl('reg_person_teams_update')}">MY TEAMS</a></li>
         </ul>
 EOT;
     }
-
+    
     protected function renderHome()
     {
+        //if (!$this->showResultsMenu) {
+        //    return null;
+        //}
         return
-            <<<EOT
+<<<EOT
         <li>
           <a href="{$this->generateUrl('app_home')}">HOME</a>
         </li>
 EOT;
     }
-
     protected function renderWelcome()
     {
+        //if (!$this->showResultsMenu) {
+        //    return null;
+        //}
         return
-            <<<EOT
+<<<EOT
         <li>
           <a href="{$this->generateUrl('app_welcome')}">WELCOME</a>
         </li>
 EOT;
-    }
-
-    protected function renderRules()
-    {
-        return
-            <<<EOT
-        <li>
-          <a href="http://aysonationalopencup.org/tournament-rules/" target="_blank">RULES</a>
-        </li>
-EOT;
-    }
-    protected function renderAdmin()
+    }    protected function renderAdmin()
     {
         return <<<EOT
 <li>
@@ -450,11 +408,10 @@ EOT;
 </li>
 EOT;
     }
-
     protected function renderScripts()
     {
         return
-            <<<EOT
+<<<EOT
           <!-- Placed at the end of the document so the pages load faster -->
           <!-- Latest compiled and minified JQuery -->
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -465,7 +422,7 @@ EOT;
           <script src="/js/zayso.js"></script>
 EOT;
     }
-
+    
     /* ====================================================
      * Maybe implement blocks later
      */
@@ -474,9 +431,7 @@ EOT;
         return null;
     }
 
-    public function addStylesheet()
-    {
-    }
+    public function addStylesheet() {}
 
     public function addScript($script)
     {

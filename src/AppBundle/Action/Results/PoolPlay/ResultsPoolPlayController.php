@@ -38,7 +38,7 @@ class ResultsPoolPlayController extends AbstractController2
         ];
         // Override from session
         $session = $request->getSession();
-        $sessionKey = 'results_search_data_2018';
+        $sessionKey = 'results_search_data_2019';
         if ($session->has($sessionKey)) {
             $searchData = array_replace($searchData,$session->get($sessionKey));
         }
@@ -52,20 +52,20 @@ class ResultsPoolPlayController extends AbstractController2
                 $projectId = $searchDataNew['projectId'];
                 $searchDataNew['program'] = $this->getDefaultProgramForProject($projectId);
             }
-            $session->set('results_search_data_2018',$searchDataNew);
+            $session->set('results_search_data_2019',$searchDataNew);
             return $this->redirectToRoute($this->getCurrentRouteName());
         }
         // Deal with query parameters
         if ($request->query->has('division')) {
             $searchData['division'] = $request->query->get('division');
             $searchData['poolKey']  = null;
-            $session->set('results_search_data_2018', $searchData);
+            $session->set('results_search_data_2019', $searchData);
             return $this->redirectToRoute($this->getCurrentRouteName());
         }
         if ($request->query->has('poolKey')) {
             $searchData['poolKey'] = $request->query->get('poolKey');
             $searchData['division']  = null;
-            $session->set('results_search_data_2018', $searchData);
+            $session->set('results_search_data_2019', $searchData);
             return $this->redirectToRoute($this->getCurrentRouteName());
         }
         $pools = [];

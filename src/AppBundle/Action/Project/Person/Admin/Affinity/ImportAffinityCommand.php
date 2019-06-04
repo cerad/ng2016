@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Action\Project\Person\Admin\Infinity;
+namespace AppBundle\Action\Project\Person\Admin\Affinity;
 
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
@@ -9,10 +9,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use PhpOffice\PhpSpreadsheet\Reader;
+use PhpOffice\PhpSpreadsheet;
+
 use Doctrine\DBAL\Connection;
 use Cerad\Bundle\AysoBundle\AysoFinder;
 
-class ImportInfinityCommand extends Command
+class ImportAffinityCommand extends Command
 {
     private $userManager;
     private $regPersonConn;
@@ -41,14 +44,14 @@ class ImportInfinityCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('import:infinity')
-            ->setDescription('Import Infinity Registration Data');
+            ->setName('import:affinity')
+            ->setDescription('Import Affinity Registration Data');
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = './var/data/InfinityReferees20180622.xlsx';
+        $filename = './var/data/AffinityReferees20180622.xlsx';
 
-        echo sprintf("Import Infinity Registration from %s\n",$filename);
+        echo sprintf("Import Affinity Registration from %s\n",$filename);
 
         $this->import($filename);
 
@@ -56,8 +59,8 @@ class ImportInfinityCommand extends Command
     }
     private function import($filename)
     {
-        /** @var \PHPExcel_Reader_Abstract $reader */
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        /** @var Reader\Xlsx $reader */
+        $reader = PhpSpreadsheet\IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);
@@ -161,10 +164,10 @@ class ImportInfinityCommand extends Command
         $vol = $this->aysoFinder->findVol($aysoId);
         if (!$vol) {
             echo sprintf("*** No ayso record for %s %-32s %s\n",$aysoId,$name,$email);
-            return;
+
+            return null;
         }
-        dump($vol);
-        return;
+
 
         $regYear = isset($vol['regYear']) ? $vol['regYear'] : null;
 

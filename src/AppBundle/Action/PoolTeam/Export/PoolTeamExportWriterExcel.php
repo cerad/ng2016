@@ -2,25 +2,28 @@
 namespace AppBundle\Action\PoolTeam\Export;
 
 use AppBundle\Action\Game\PoolTeam;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PoolTeamExportWriterExcel
 {
+    /** @var PhpSpreadsheet\Spreadsheet */
     private $wb;
 
     /**
      * @param  PoolTeam[] $poolTeams
      * @param string filename
      * @return string
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
     public function write(array $poolTeams, $filename='php://output')
     {
         // Not sure this is needed
-        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
+        PhpSpreadsheet\Cell\Cell::setValueBinder(new PhpSpreadsheet\Cell\AdvancedValueBinder());
 
-        $this->wb = $wb = new \PHPExcel();
+        $this->wb = $wb = new PhpSpreadsheet\Spreadsheet();
 
-        $ws = $wb->getSheet();
+        $ws = $wb->getSheet(0);
 
         $this->writePoolTeams($ws, $poolTeams);
         
@@ -28,11 +31,11 @@ class PoolTeamExportWriterExcel
     }
 
     /**
-     * @param \PHPExcel_Worksheet $ws
+     * @param Worksheet $ws
      * @param PoolTeam[] $poolTeams
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
-    private function writePoolTeams(\PHPExcel_Worksheet $ws,$poolTeams)
+    private function writePoolTeams(Worksheet $ws,$poolTeams)
     {
         $ws->setTitle('PoolTeams');
 
@@ -104,10 +107,10 @@ class PoolTeamExportWriterExcel
 
             $ws->getCell($colProjectId    . $row)->setValue('Views');
             $ws->getCell($colPoolKey      . $row)->setValue($poolTeam->poolView);
-            $ws->getCell($colPoolSlot     . $row)->setValueExplicit($poolTeam->poolSlotView,\PHPExcel_Cell_DataType::TYPE_STRING);
+            $ws->getCell($colPoolSlot     . $row)->setValueExplicit($poolTeam->poolSlotView,PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $ws->getCell($colPoolTypeKey  . $row)->setValue($poolTeam->poolTypeView);
             $ws->getCell($colPoolTeamKey  . $row)->setValue($poolTeam->poolTeamView);
-            $ws->getCell($colPoolTeamSlot . $row)->setValueExplicit($poolTeam->poolTeamSlotView,\PHPExcel_Cell_DataType::TYPE_STRING);
+            $ws->getCell($colPoolTeamSlot . $row)->setValueExplicit($poolTeam->poolTeamSlotView,PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
             $ws->getCell($colRegTeamKey   . $row)->setValue($poolTeam->regTeamName);
 
@@ -116,7 +119,7 @@ class PoolTeamExportWriterExcel
     }
     private function getContents($filename)
     {
-        $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
+        $writer = new PhpSpreadsheet\Writer\Xlsx($this->wb);
         ob_start();
         $writer->save($filename);
         return ob_get_clean();

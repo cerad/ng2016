@@ -3,6 +3,7 @@
 namespace AppBundle\Action\PoolTeam\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PoolTeamImportReaderExcel
 {
@@ -67,7 +68,7 @@ class PoolTeamImportReaderExcel
     public function read($filename)
     {
         // Tosses exception
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader = IOFactory::createReaderForFile($filename);
         
         // Need this otherwise dates and such are returned formatted
         /** @noinspection PhpUndefinedMethodInspection */

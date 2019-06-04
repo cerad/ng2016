@@ -7,28 +7,28 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class ApproveVerifiedNOC2018Command extends Command
+class ApproveVerifiedNG2019Command extends Command
 {
     private $gameConn;
 
     public function __construct(
-        Connection $noc2018Conn
+        Connection $ng2019Conn
     ) {
         parent::__construct();
 
-        $this->gameConn    = $noc2018Conn;
+        $this->gameConn    = $ng2019Conn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:approve:verified:officials')
-            ->setDescription('Approve Verified Game Officials NOC2018');
+            ->setName('ng2019:approve:verified:officials')
+            ->setDescription('Approve Verified Game Officials NG2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Approving Verified Game Officials NOC2018 ...\n");
+        echo sprintf("Approving Verified Game Officials NG2019 ...\n");
 
         $sql = 'SELECT * from projectPersonRoles WHERE approved =1';
         $result = $this->gameConn->executeQuery($sql);

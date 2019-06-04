@@ -16,15 +16,11 @@ class WelcomeView extends AbstractView2
     /** @var  %show_results_menu% */
     private $showResultsMenu;
 
-    /** @var  %show_schedules_menu% */
-    private $showSchedulesMenu;
-
     private $project;
 
-    public function __construct(UserLoginForm $userLoginForm, $showSchedulesMenu, $showResultsMenu)
+    public function __construct(UserLoginForm $userLoginForm, $showResultsMenu)
     {
         $this->userLoginForm = $userLoginForm;
-        $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
     }
 
@@ -39,12 +35,13 @@ class WelcomeView extends AbstractView2
     {
         $content = <<<EOT
   <div id="welcome">
-    <legend>Welcome to the {$this->project['title']}</legend>
+    <legend>Welcome to the AYSO National Games 2019</legend>
   </div>
   {$this->renderNotes()}      
   {$this->renderUser()}
   {$this->renderHelp()}      
 EOT;
+
         return $this->renderBaseTemplate($content);
     }
 
@@ -53,42 +50,47 @@ EOT;
         $html = <<<EOT
 <div id="notes">
 EOT;
-        $srMenu = 'site';
-        if($this->showSchedulesMenu){
-            $srMenu = 'Schedules';
-        }
-        if($this->showResultsMenu){
-            $srMenu = 'Results';
-        }
-        if ($this->showSchedulesMenu && $this->showResultsMenu) {
-            $srMenu = 'Schedules and Results';
-        }
-        if ($this->showSchedulesMenu || $this->showResultsMenu) {
+        if ($this->showResultsMenu) {
             $html .= <<<EOT
 <p>
-  If you just want to peruse the {$srMenu}, no need to go any further.  
-  You do not need to sign-in to access {$srMenu} above.  To volunteer, you will need to <a href="{$this->generateUrl('user_create')}">create a zAYSO account</a>.
+  If you just want to peruse the Schedules and Results, no need to go any further.  
+  You do not need to sign-in to access Schedules or Results above.  To volunteer, you will need to <a href="{$this->generateUrl(
+                'user_create'
+            )}">create a zAYSO account</a>.
   In either case, you should
-<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to {$this->project['title']} text alerts on RainedOut</a>. 
+<a href="https://www.rainedout.net/team_page.php?a=0588afab19ee214eca29" target="_blank">subscribe to AYSO National 
+Games 2019 text alerts on RainedOut</a>. 
 </p>
 <br/>
 EOT;
         }
         $html .= <<<EOT
-<legend>Register to Volunteer</legend>
 <p>
-  If you volunteered at the National Games in 2012, 2014, 2016 or at the National Open Cup in 2017,
-  you can simply sign in below and update your plans for the {$this->project['title']}.
-  If you need help with your password, <a href="{$this->generateUrl('user_password_reset_request')}">click here</a>.
-  Otherwise, <a href="{$this->generateUrl('user_create')}">click here to create a new zAYSO account</a> 
+  If you officiated at the 2012 National Games in Tennessee, the 2014 National Games in Southern California, the 2016 
+  National Games in West Palm Beach or the 2018 National Open Cup,
+  you can simply sign in below and update your plans & availability for the 2019 National Games.
+  If you need help remembering your password, 
+  you can request help by <a href="{$this->generateUrl('user_password_reset_request')}">clicking here</a>.
+</p>
+<br/>
+<p>
+  If this is your first time to the National Games (you are in for a treat), 
+  <a href="{$this->generateUrl('user_create')}">click here to create a new zAYSO account</a> 
   and start the registration process to referee or volunteer.
 </p>
+<br/>
+<p>
+    If you have previously registered on Blue Sombrero or WuFoo, your registration has been migrated to zAYSO.  <a 
+    href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.
+    If you still need help, contact {$this->project['support']['name']} at <a href="mailto:{$this->project['support']['email']}">{$this->project['support']['email']}</a>.
+</p>
 <br>
-    <a href="{$this->generateUrl('user_password_reset_request')}">Click here to reset your zAYSO password</a>.</p>
-<br>
-    <p>If you need help, contact {$this->project['administrator']['name']} at <a href="mailto:{$this->project['administrator']['email']}">{$this->project['administrator']['email']}</a>.</p><br>
-    <p>Thank you for your support.</p>
-    <br>
+<p>
+If you are not already registered as an AYSO volunteer for MY2018, please visit the <a href="https://www.aysosection7
+.org/Default.aspx?tabid=724814" target="_blank">Section 7 website</a> and 
+register as a volunteer for the 2019 National Games, or go to your Region website and register as an AYSO volunteer. 
+</p>
+
 </div>
 EOT;
 
@@ -120,7 +122,7 @@ EOD;
             Once you create an account, you will be able to modify your information and availability.
         </li>
         <li>
-            Comments or suggestions?  <a href="mailto:{$this->project['feedback']['email']}?subject={$this->project['feedback']['subject']}" target="_top">Please send us feedback</a>.
+            If you have comments or suggestions, please submit them by <a href="mailto:web.ng2019@gmail.com?subject=Registration %20Feedback" target="_top">clicking here</a>.  Thank you for your support.
         </li>
      </ul>
     </div>

@@ -1,7 +1,7 @@
 services:
 
     game_connection:
-        alias: doctrine.dbal.noc2018games_connection
+        alias: doctrine.dbal.ng2019games_connection
 
 #    game_migrate_ng2014_command:
 #        class: AppBundle\Action\Game\Migrate\MigrateGames2014Command
@@ -9,121 +9,117 @@ services:
 #        arguments:
 #            - "@doctrine.dbal.ng2014games_connection"
 #            - "@doctrine.dbal.noc2014games_connection"
-#
-#    game_init_ng2016_command:
-#        class: AppBundle\Action\Game\Migrate\InitGames2016Command
-#        tags: [{ name: console.command }]
-#        arguments:
-#            - "@doctrine.dbal.noc2016games_connection"
 
-    game_init_noc2018_command:
-        class: AppBundle\Action\Game\Admin\InitGames2018Command
+    game_init_ng2019_command:
+        class: AppBundle\Action\Game\Admin\InitGamesNG2019Command
         tags: [{ name: console.command }]
         arguments:
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
+            - "%app_project_key%"
 
 #    game_adjust_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\AdjustGames2016Command
 #        tags: [{ name: console.command }]
 #        arguments:
 #            - "@doctrine.dbal.noc2016games_connection"
-#            - "@schedule_finder_2016"
+#            - "@schedule_finder_2019"
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
-#
-#    game_soccerfest_ng2016_command:
-#        class: AppBundle\Action\Game\Migrate\Soccerfest2016Command
-#        tags: [{ name: console.command }]
-#        arguments:
-#            - "@doctrine.dbal.noc2016games_connection"
-#            - "@schedule_finder_2016"
-#            - "@game_updater"
-#            - "@reg_team_import_reader_excel"
-#
+
+    game_soccerfest_ng2019_command:
+        class: AppBundle\Action\Game\Migrate\Soccerfest2019Command
+        tags: [{ name: console.command }]
+        arguments:
+            - "@doctrine.dbal.ng2019games_connection"
+            - "@schedule_finder_2019"
+            - "@game_updater"
+            - "@reg_team_import_reader_excel"
+            - "%app_project_key%"
+
 #    game_approve_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\Approve2016Command
 #        tags: [{ name: console.command }]
 #        arguments:
 #            - "@doctrine.dbal.noc2016games_connection"
-#            - "@schedule_finder_2016"
+#            - "@schedule_finder_2019"
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 #
-    game_approve_requested_assignments_n02018_command:
-        class: AppBundle\Action\Game\Admin\ApproveRequestedAssignmentsNOC2018Command
+    game_approve_requested_assignments_ng2019_command:
+        class: AppBundle\Action\Game\Admin\ApproveRequestedAssignmentsNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_accept_published_assignments_n02018_command:
-        class: AppBundle\Action\Game\Admin\AcceptPublishedAssignmentsNOC2018Command
+    game_accept_published_assignments_ng2019_command:
+        class: AppBundle\Action\Game\Admin\AcceptPublishedAssignmentsNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_delete_pool_n02018_command:
-        class: AppBundle\Action\Game\Admin\DeletePoolNOC2018Command
+    game_delete_pool_ng2019_command:
+        class: AppBundle\Action\Game\Admin\DeletePoolNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_publish_pending_assignments_n02018_command:
-        class: AppBundle\Action\Game\Admin\PublishPendingAssignmentsNOC2018Command
+    game_publish_pending_assignments_ng2019_command:
+        class: AppBundle\Action\Game\Admin\PublishPendingAssignmentsNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_approve_verified_n02018_command:
-        class: AppBundle\Action\Game\Admin\ApproveVerifiedNOC2018Command
+    game_approve_verified_ng2019_command:
+        class: AppBundle\Action\Game\Admin\ApproveVerifiedNG2019Command
         tags: [{ name: console.command }]
         arguments:
-            - "@doctrine.dbal.noc2018_connection"
+            - "@doctrine.dbal.ng2019_connection"
 
     game_verify_officials_ng2018_command:
-        class: AppBundle\Action\Game\Admin\VerifyOfficialsNOC2018Command
+        class: AppBundle\Action\Game\Admin\VerifyOfficialsNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018_connection"
+            - "@doctrine.dbal.ng2019_connection"
 
-    game_removesh_n02018_command:
-        class: AppBundle\Action\Game\Admin\RemoveRefereeSHNOC2018Command
+    game_removesh_ng2019_command:
+        class: AppBundle\Action\Game\Admin\RemoveRefereeSHNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_assignment_conflicts_n02018_command:
-        class: AppBundle\Action\Game\Admin\ReviewAssignmentConflictsNOC2018Command
+    game_assignment_conflicts_ng2019_command:
+        class: AppBundle\Action\Game\Admin\ReviewAssignmentConflictsNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_update_19u_pools_n02018_command:
-        class: AppBundle\Action\Game\Admin\Update19UPoolsNOC2018Command
+    game_update_19u_pools_ng2019_command:
+        class: AppBundle\Action\Game\Admin\Update19UPoolsNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
-    game_affinity_tweak_n02018_command:
-        class: AppBundle\Action\Game\Admin\AffinityTweakNOC2018Command
+    game_affinity_tweak_ng2019_command:
+        class: AppBundle\Action\Game\Admin\AffinityTweakNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - '%app_project_key%'
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
 #    game_publish_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\Publish2016Command
 #        tags: [{ name: console.command }]
 #        arguments:
 #            - "@doctrine.dbal.noc2016games_connection"
-#            - "@schedule_finder_2016"
+#            - "@schedule_finder_2019"
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 #
@@ -133,7 +129,7 @@ services:
 #        arguments:
 #            - '%app_project%'
 #            - "@doctrine.dbal.noc2016games_connection"
-#            - "@schedule_finder_2016"
+#            - "@schedule_finder_2019"
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 #
@@ -142,7 +138,7 @@ services:
 #        tags: [{ name: console.command }]
 #        arguments:
 #            - "@doctrine.dbal.noc2016games_connection"
-#            - "@schedule_finder_2016"
+#            - "@schedule_finder_2019"
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 
@@ -150,7 +146,7 @@ services:
          class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
          tags: [{ name: console.command }]
          arguments:
-             - "@doctrine.dbal.noc2018games_connection"
+             - "@doctrine.dbal.ng2019games_connection"
              - "@game_finder"
              - "@game_updater"
 
@@ -158,20 +154,20 @@ services:
         class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
         tags: [{ name: console.command }]
         arguments:
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
             - "@game_finder"
             - "@game_updater"
 
     game_finder:
         class: AppBundle\Action\Game\GameFinder
         arguments:
-            - "@doctrine.dbal.noc2018games_connection"
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
     game_updater:
         class: AppBundle\Action\Game\GameUpdater
         arguments:
-            - "@doctrine.dbal.noc2018games_connection"
+            - "@doctrine.dbal.ng2019games_connection"
 
 # Admin listing action
     game_listing_search_form:

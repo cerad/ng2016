@@ -22,13 +22,13 @@ class InitTeams2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('init:teams:noc2018')
-            ->setDescription('Init Teams NOC2018');
+            ->setName('init:teams:ng2019')
+            ->setDescription('Init Teams ng2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Init Teams NOC2018 ...\n");
+        echo sprintf("Init Teams ng2019 ...\n");
 
         $this->initTeams($this->allTeamsClubG16U);
 
@@ -42,7 +42,7 @@ class InitTeams2018Command extends Command
 
 //        $this->initGames($commit || true);
 
-        echo sprintf("Init Teams NOC2018 Completed.\n");
+        echo sprintf("Init Teams ng2019 Completed.\n");
     }
 
     private $projectId = 'AYSONationalOpenCup2018';

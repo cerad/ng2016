@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class Soccerfest2016Command extends Command
+class Soccerfest2019Command extends Command
 {
     private $reader;
     
@@ -22,13 +22,14 @@ class Soccerfest2016Command extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalOpenCup2017';
+    private $projectId;
 
     public function __construct(
         Connection $ng2016GamesConn,
         ScheduleFinder $gameFinder,
         GameUpdater    $gameUpdater,
-        RegTeamImportReaderExcel $reader
+        RegTeamImportReaderExcel $reader,
+        String $projecctId
     ) {
         parent::__construct();
 
@@ -39,6 +40,8 @@ class Soccerfest2016Command extends Command
         
         $this->gameFinder  = $gameFinder;
         $this->gameUpdater = $gameUpdater;
+
+        $this->projectId = $projecctId;
     }
 
     protected function configure()
@@ -56,20 +59,20 @@ class Soccerfest2016Command extends Command
         /** @noinspection PhpUnusedLocalVariableInspection */
         $filename = $input->getArgument(('filename'));
 
-        $this->addSoccerfestPoolTeams('U10B',24);
-        $this->addSoccerfestPoolTeams('U12G',24);
-        $this->addSoccerfestPoolTeams('U12B',24);
-        $this->addSoccerfestPoolTeams('U14B',24);
-        $this->addSoccerfestPoolTeams('U14G',24);
-        $this->addSoccerfestPoolTeams('U16G',24);
-        $this->addSoccerfestPoolTeams('U19B',24);
+        $this->addSoccerfestPoolTeams('B10U',24);
+        $this->addSoccerfestPoolTeams('G12U',24);
+        $this->addSoccerfestPoolTeams('B12U',24);
+        $this->addSoccerfestPoolTeams('B14U',24);
+        $this->addSoccerfestPoolTeams('G14U',24);
+        $this->addSoccerfestPoolTeams('G16U',24);
+        $this->addSoccerfestPoolTeams('B19U',24);
 
         $this->addSoccerfestPoolTeams('U10G',18);
-        $this->addSoccerfestPoolTeams('U19G',18);
+        $this->addSoccerfestPoolTeams('G19U',18);
 
-        $this->addSoccerfestPoolTeams('U16B',14);
+        $this->addSoccerfestPoolTeams('B16U',14);
 
-        foreach(['U10G','U10B','U12G','U12B','U14G','U14B','U16G','U16B','U19G','U19B'] as $div) {
+        foreach(['U10G','B10U','G12U','B12U','G14U','B14U','G16U','B16U','G19U','B19U'] as $div) {
             $this->deleteOldPoolTeams($div);
         }
     }
@@ -170,59 +173,59 @@ class Soccerfest2016Command extends Command
     }
 
     // Moving from 3 pools to two pools
-    private function adjustU16B()
+    private function adjustB16U()
     {
         $projectId = $this->projectId;
 
-        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC1');
-        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC2');
-        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC3');
-        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC4');
-        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC5');
-        $this->deletePoolTeam($projectId . ':' . 'U16BCorePPC6');
+        $this->deletePoolTeam($projectId . ':' . 'B16UCorePPC1');
+        $this->deletePoolTeam($projectId . ':' . 'B16UCorePPC2');
+        $this->deletePoolTeam($projectId . ':' . 'B16UCorePPC3');
+        $this->deletePoolTeam($projectId . ':' . 'B16UCorePPC4');
+        $this->deletePoolTeam($projectId . ':' . 'B16UCorePPC5');
+        $this->deletePoolTeam($projectId . ':' . 'B16UCorePPC6');
 
-        $this->deleteRegTeam($projectId . ':' . 'U16BCore15');
-        $this->deleteRegTeam($projectId . ':' . 'U16BCore16');
-        $this->deleteRegTeam($projectId . ':' . 'U16BCore17');
-        $this->deleteRegTeam($projectId . ':' . 'U16BCore18');
+        $this->deleteRegTeam($projectId . ':' . 'B16UCore15');
+        $this->deleteRegTeam($projectId . ':' . 'B16UCore16');
+        $this->deleteRegTeam($projectId . ':' . 'B16UCore17');
+        $this->deleteRegTeam($projectId . ':' . 'B16UCore18');
 
         $poolTeam = [
-            'poolTeamId'   => $projectId . ':' . 'U16BCorePPA7',
+            'poolTeamId'   => $projectId . ':' . 'B16UCorePPA7',
             'projectId'    => $projectId,
-            'poolKey'      => 'U16BCorePPA',
+            'poolKey'      => 'B16UCorePPA',
             'poolTypeKey'  => 'PP',
-            'poolTeamKey'  => 'U16BCorePPA7',
+            'poolTeamKey'  => 'B16UCorePPA7',
 
-            'poolView'         => 'U16-B Pool Play A',
+            'poolView'         => 'B16U Pool Play A',
             'poolSlotView'     => 'A',
             'poolTypeView'     => 'PP',
-            'poolTeamView'     => 'U16-B Pool Play A7',
+            'poolTeamView'     => 'B16U Pool Play A7',
             'poolTeamSlotView' => 'A7',
 
             'program'  => 'Core',
             'gender'   => 'B',
             'age'      => 'U16',
-            'division' => 'U16B',
+            'division' => 'B16U',
         ];
         $this->gameConn->insert('poolTeams',$poolTeam);
 
         $poolTeam = [
-            'poolTeamId'   => $projectId . ':' . 'U16BCorePPB7',
+            'poolTeamId'   => $projectId . ':' . 'B16UCorePPB7',
             'projectId'    => $projectId,
-            'poolKey'      => 'U16BCorePPB',
+            'poolKey'      => 'B16UCorePPB',
             'poolTypeKey'  => 'PP',
-            'poolTeamKey'  => 'U16BCorePPB7',
+            'poolTeamKey'  => 'B16UCorePPB7',
 
-            'poolView'         => 'U16-B Pool Play B',
+            'poolView'         => 'B16U Pool Play B',
             'poolSlotView'     => 'B',
             'poolTypeView'     => 'PP',
-            'poolTeamView'     => 'U16-B Pool Play B7',
+            'poolTeamView'     => 'B16U Pool Play B7',
             'poolTeamSlotView' => 'B7',
 
             'program'  => 'Core',
             'gender'   => 'B',
             'age'      => 'U16',
-            'division' => 'U16B',
+            'division' => 'B16U',
         ];
         $this->gameConn->insert('poolTeams',$poolTeam);
     }

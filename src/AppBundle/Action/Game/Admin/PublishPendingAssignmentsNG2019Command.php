@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 use Doctrine\DBAL\Connection;
 
-class AcceptPublishedAssignmentsNOC2018Command extends Command
+class PublishPendingAssignmentsNG2019Command extends Command
 {
     private $projectId;
 
@@ -16,25 +16,25 @@ class AcceptPublishedAssignmentsNOC2018Command extends Command
 
     public function __construct(
         $projectId,
-        Connection $noc2018GamesConn
+        Connection $ng2019GamesConn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->gameConn    = $noc2018GamesConn;
+        $this->gameConn    = $ng2019GamesConn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:accept:published:assignments')
-            ->setDescription('Approve Assignments Published for Officials NOC2018')
+            ->setName('ng2019:publish:pending:assignments')
+            ->setDescription('Publish Pending Assignments to Officials NG2019')
             ->addOption('date','d',InputOption::VALUE_OPTIONAL,'Publish only by date', '%');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Approving NOC2018 Assignments Requested by Officials ... ");
+        echo sprintf("Publishing NG2019 Pending Assignments to Officials ... ");
 
         $date = $input->getOption('date');
 
@@ -43,12 +43,12 @@ SELECT gameOfficialId FROM (
 SELECT 
         DATE(g.start) AS 'date', go.*
     FROM
-        noc2018games.gameOfficials go
-    RIGHT JOIN noc2018games.games g ON go.gameId = g.gameId) s
+        ng2019games.gameOfficials go
+    RIGHT JOIN ng2019games.games g ON go.gameId = g.gameId) s
 WHERE
     projectId LIKE ?
         AND date LIKE ?
-        AND assignState = 'Published';
+        AND assignState = 'Pending';
         ";
 
         $stmt = $this->gameConn->executeQuery($sql, [$this->projectId, $date]);
@@ -57,13 +57,13 @@ WHERE
         while($row = $stmt->fetch()){
             $updated[] = $row;
             $this->gameConn->update('gameOfficials',
-                ['assignState' => 'Accepted'],
+                ['assignState' => 'Published'],
                 [
                     'gameOfficialId' => $row['gameOfficialId']
                 ]);
         }
         $count  = count($updated);
-        echo sprintf("$count assignments accepted.\n");
+        echo sprintf("$count assignments published.\n");
 
     }
 }

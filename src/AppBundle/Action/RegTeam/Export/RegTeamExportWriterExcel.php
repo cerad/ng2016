@@ -2,25 +2,29 @@
 namespace AppBundle\Action\RegTeam\Export;
 
 use AppBundle\Action\Game\RegTeam;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class RegTeamExportWriterExcel
 {
+    /** @var Spreadsheet */
     private $wb;
 
     /**
      * @param  RegTeam[] regTeams
      * @param  string filename
      * @return string
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
     public function write(array $regTeams, $filename='php://output')
     {
         // Not sure this is needed
-        \PHPExcel_Cell::setValueBinder(new \PHPExcel_Cell_AdvancedValueBinder());
+        PhpSpreadsheet\Cell\Cell::setValueBinder(new PhpSpreadsheet\Cell\AdvancedValueBinder());
 
-        $this->wb = $wb = new \PHPExcel();
+        $this->wb = $wb = new Spreadsheet();
 
-        $ws = $wb->getSheet();
+        $ws = $wb->getSheet(0);
 
         $this->writeRegTeams($ws, $regTeams);
 
@@ -39,11 +43,11 @@ class RegTeamExportWriterExcel
     private $colPoolTeamKey3 = 'J';
 
     /**
-     * @param  \PHPExcel_Worksheet $ws
+     * @param  Worksheet $ws
      * @param   RegTeam[] $regTeams
-     * @throws \PHPExcel_Exception
+     * @throws PhpSpreadsheet\Exception
      */
-    private function writeRegTeams(\PHPExcel_Worksheet $ws,$regTeams)
+    private function writeRegTeams(Worksheet $ws,$regTeams)
     {
         $ws->setTitle('RegTeams');
 
@@ -72,7 +76,7 @@ class RegTeamExportWriterExcel
         $ws->getColumnDimension($this->colPoolTeamKey2)->setWidth(16);
         $ws->getColumnDimension($this->colPoolTeamKey3)->setWidth(16);
 
-        $ws->getStyle($this->colPoints)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($this->colPoints)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         $row = 2;
         foreach($regTeams as $regTeam) {
@@ -104,7 +108,7 @@ class RegTeamExportWriterExcel
     }
     private function getContents($filename)
     {
-        $writer = \PHPExcel_IOFactory::createWriter($this->wb, "Excel2007");
+        $writer = PhpSpreadsheet\IOFactory::createWriter($this->wb, "Xlsx");
         ob_start();
         $writer->save($filename);
         return ob_get_clean();

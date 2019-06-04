@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class VerifyOfficialsNOC2018Command extends Command
+class VerifyOfficialsNG2019Command extends Command
 {
     private $projectId;
 
@@ -16,24 +16,24 @@ class VerifyOfficialsNOC2018Command extends Command
 
     public function __construct(
         $projectId,
-        Connection $noc2018Conn
+        Connection $ng2019Conn
     ) {
         parent::__construct();
 
         $this->projectId = $projectId;
-        $this->Conn = $noc2018Conn;
+        $this->Conn = $ng2019Conn;
     }
 
     protected function configure()
     {
         $this
-            ->setName('noc2018:verify:officials')
-            ->setDescription('Verify Game Officials NOC2018');
+            ->setName('ng2019:verify:officials')
+            ->setDescription('Verify Game Officials NG2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Verifying Game Officials NOC2018 ...\n");
+        echo sprintf("Verifying Game Officials NG2019 ...\n");
 
         $projectPersons = null;
 

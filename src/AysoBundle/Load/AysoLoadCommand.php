@@ -1,8 +1,9 @@
 <?php
 namespace AppBundle\Action\Physical\Ayso\Load;
 
-use PHPExcel_IOFactory;
-use PHPExcel_Reader_Abstract;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -109,8 +110,8 @@ EOD;
 
     private function load($filename)
     {
-        /** @var PHPExcel_Reader_Abstract $reader */
-        $reader = PHPExcel_IOFactory::createReaderForFile($filename);
+        /** @var Xlsx $reader */
+        $reader = IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);
@@ -299,7 +300,7 @@ EOD;
         $badge = $certMeta['badge'];
 
         $badgeDate = $row[12];
-        $badgeDate = $badgeDate ? \PHPExcel_Style_NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
+        $badgeDate = $badgeDate ? Style\NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
         $roleDate  = $badgeDate;
 
         $this->checkCertStmt->execute([$fedKey,$role]);

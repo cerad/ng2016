@@ -37,6 +37,13 @@ const appTask = function() {
             
         ])
         .pipe(gulp.dest('web/images'));
+
+    // PDFs
+    gulp.src([
+        appPublicDir + '/pdf/*.pdf'
+
+    ])
+        .pipe(gulp.dest('web/pdf'));
 };
 gulp.task('app',appTask);
 

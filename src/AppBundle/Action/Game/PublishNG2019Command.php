@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
 
-class PublishNOC2018Command extends Command
+class PublishNG2019Command extends Command
 {
     private $reader;
 
@@ -46,13 +46,13 @@ class PublishNOC2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('games:publish:noc2018')
-            ->setDescription('Publish Assignments NOC 2018');
+            ->setName('games:publish:ng2019')
+            ->setDescription('Publish Assignments NG 2019');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo sprintf("Publishing Assignments NG2018 ...\n");
+        echo sprintf("Publishing Assignments NG2019 ...\n");
 
         $this->gameConn->update('gameOfficials',['assignState' => 'Published'],
             [
