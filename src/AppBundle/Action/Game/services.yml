@@ -11,11 +11,12 @@ services:
 #            - "@doctrine.dbal.noc2014games_connection"
 
     game_init_ng2019_command:
-        class: AppBundle\Action\Game\Admin\InitGamesNG2019Command
+        class: AppBundle\Action\Game\Admin\InitSOFNG2019Command
         tags: [{ name: console.command }]
         arguments:
             - "@doctrine.dbal.ng2019games_connection"
             - "%app_project_key%"
+            - "%app_project%"
 
 #    game_adjust_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\AdjustGames2016Command

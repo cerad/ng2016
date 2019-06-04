@@ -15,7 +15,6 @@ parameters:
                 G: Girls
 
             ages:
-                VIP: VIP
                 10U: 10U
                 12U: 12U
                 14U: 14U
