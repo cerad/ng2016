@@ -352,6 +352,8 @@ class Loade3CertsCommand extends LoadAbstractCommand
                 $this->insertProjectPersonRoleStmt->execute([$ppid, $role, $roleDate, $badge, $badgeDate]);
             } else {
                 $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, $role]);
+                $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, 'ROLE_REFEREE']);
+                $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, 'ROLE_VOLUNTEER']);
             }
         }
 
