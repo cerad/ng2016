@@ -64,8 +64,8 @@ class AdminListingSearchForm extends AbstractForm
         $reportChoices = [
             'All'           =>  'All',
             'AvailableReferees'      =>  'Available Referees',
-//            'Unverified'    =>  'Unverified',
-//            'Unapproved'    =>  'Unapproved',
+            'Unverified'    =>  'Unverified',
+            'Unapproved'    =>  'Unapproved',
             'RefCertIssues' => 'Referees with Cert Issues',
             'RefIssues'     =>  'Referees with Issues',
             'RefCertConflicts' => 'Referees with Cert Conflicts',
