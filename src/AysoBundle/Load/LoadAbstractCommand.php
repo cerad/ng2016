@@ -2,6 +2,8 @@
 
 namespace AysoBundle\Load;
 
+use Cerad\Bundle\AysoBundle\AysoFinder;
+use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -71,6 +73,20 @@ abstract class LoadAbstractCommand extends Command
     /** @var Statement */
     protected $clearPPROldSH;
 
+    /** @var boolean */
+    protected $delete;
+
+    /** @var boolean */
+    protected $commit;
+
+    /** @var AysoFinder */
+    protected $aysoFinder;
+
+    /** @var RegionToSarTransformer */
+    protected $regionToSarTransformer;
+
+
+
     public function __construct(Connection $connAyso, Connection $connNG2019)
     {
         parent::__construct();
@@ -78,6 +94,10 @@ abstract class LoadAbstractCommand extends Command
         $this->connAyso = $connAyso;
 
         $this->connNG2019 = $connNG2019;
+
+        $this->aysoFinder = new AysoFinder($connAyso);
+
+        $this->regionToSarTransformer = new RegionToSarTransformer($this->aysoFinder);
 
         $this->initStatements($connAyso, $connNG2019);
 
@@ -88,9 +108,10 @@ abstract class LoadAbstractCommand extends Command
     {
         // Start the processing
         $filename = $input->getArgument('filename');
+        $this->delete = $input->getOption('delete');
+        $this->commit = $input->getOption('commit');
 
         echo sprintf("Loading AYSO File: %s...\n", $filename);
-
 
         $this->load($filename);
     }

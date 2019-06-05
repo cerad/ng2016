@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use DateTime;
 
 class Loade3CertsCommand extends LoadAbstractCommand
@@ -17,33 +18,35 @@ class Loade3CertsCommand extends LoadAbstractCommand
     /** @var String */
     protected $appRegYear;
 
-
     public function __construct(Connection $connAyso, Connection $connNG2019, string $projectKey, array $project)
     {
         parent::__construct($connAyso, $connNG2019);
 
         $this->projectKey = $projectKey;
 
-        $this->appRegYear = $project['info']['regYear'];
-
-    }
+        $this->appRegYear = $project['info']['regYear'];}
 
     protected function configure()
     {
         $this
             ->setName('ayso:load:e3:certs')
             ->setDescription('Load AYSO e3 Cert Data')
-            ->addArgument('filename', InputArgument::REQUIRED, 'AYSO e3 Cert File');
+            ->addArgument('filename', InputArgument::REQUIRED, 'AYSO e3 Cert File')
+            ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing data before update')
+            ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit data');
     }
 
     protected function resetValues()
     {
+        if(!$this->delete) {
+            return;
+        }
 
-        echo "Resetting person roles verified ... ";
+        echo "  Resetting person roles verified ... ";
         $this->clearPPRVerified->execute();
         echo "done\n";
 
-        echo "Removing old Safe Haven certs ... ";
+        echo "  Removing old Safe Haven certs ... ";
         $this->clearPPROldSH->execute();
         echo "done\n";
 
@@ -51,30 +54,32 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
     protected function load($filename)
     {
-
         /* ====================================
         /*  vc.ayso1ref.com volunteer cert Export Fields // expected values
 
-            [ 0]=> "AYSOID"
-            [ 1]=> "Full Name"
-            [ 2]=> "Type"
-            [ 3]=> "MY"
-            [ 4]=> "SAR"
-            [ 5]=> "Safe Haven Date"
-            [ 6]=> "CDC Date"
-            [ 7]=> "Ref Cert Desc"
-            [ 8]=> "Ref Cert Date"
-        /* 9 - 15 not used
-            [ 9]=> "Assessor Cert Desc"
-            [ 10]=> "Assessor Cert Date"
-            [ 11]=> "Inst Cert Desc"
-            [ 12]=> "Inst Cert Date"
-            [ 13]=> "Inst Eval Cert Desc"
-            [ 14]=> "Inst Eval Cert Date"
-            [ 15]=> "Data Source"
-         */
+            Row 1: header
+                N/A
+            Row 2: header
+                [ 0]=> "AYSOID"
+                [ 1]=> "Full Name"
+                [ 2]=> "Type"
+                [ 3]=> "MY"
+                [ 4]=> "SAR"
+                [ 5]=> "Safe Haven Date"
+                [ 6]=> "CDC Date"
+                [ 7]=> "Ref Cert Desc"
+                [ 8]=> "Ref Cert Date"
+            /** 9 - 15 not used
+                [ 9]=> "Assessor Cert Desc"
+                [ 10]=> "Assessor Cert Date"
+                [ 11]=> "Inst Cert Desc"
+                [ 12]=> "Inst Cert Date"
+                [ 13]=> "Inst Eval Cert Desc"
+                [ 14]=> "Inst Eval Cert Date"
+                [ 15]=> "Data Source"
+            **/
 
-        echo sprintf("Loading e3 Data file: %s...\n", $filename);
+        echo sprintf("  Loading e3 Data file: %s...\n", $filename);
 
         $this->resetValues();
 
@@ -89,7 +94,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
         $colMax = $ws->getHighestColumn();
         $data = null;
         try {
-            for ($row = 2; $row <= $rowMax; $row++) {
+            for ($row = 3; $row <= $rowMax; $row++) {  //skip headers in e3Data file
                 $range = sprintf('A%d:%s%d', $row, $colMax, $row);
                 $data = $ws->rangeToArray($range, null, false, false, false)[0];
 
@@ -97,13 +102,13 @@ class Loade3CertsCommand extends LoadAbstractCommand
                     $this->processCert($data);
 
                     if (($row % 100) === 0) {
-                        echo sprintf("Processed %4d of %d rows\n", $row, $rowMax - 1);
+                        echo sprintf("\r  Processed %4d of %d rows", $row, $rowMax - 1);
                     }
                 }
 
             }
 
-            echo sprintf("Processed %4d rows\n", $row - 1);
+            echo sprintf("\r  %4d rows processed        \n", $row - 1);
 
         } catch (Exception $e) {
             echo 'Exception: ', $e->getMessage(), "\n";
@@ -129,7 +134,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
         //$type = $row[2]; // Adult or Youth
         $regYear = $row[3];
-        $sar = $row[0];
+        $sar = $row[4];
         $roleDate = '';
 
         $dt = DateTime::createFromFormat('Y-m-d', $row[5]);
@@ -211,63 +216,77 @@ class Loade3CertsCommand extends LoadAbstractCommand
         $badge = $this->certMetas[$badge]['badge'];
 
         // Update AYSO.Certs & NG2019.ProjectPersonRoles tables
+        if($this->commit) {
 
-        if (!empty($role)) {
-            $this->checkCertStmt->execute([$fedKey, $role]);
-            $cert = $this->checkCertStmt->fetch();
-            if (is_bool($cert)) {
+            if (!empty($role)) {
+                $this->checkCertStmt->execute([$fedKey, $role]);
+                $cert = $this->checkCertStmt->fetch();
+                if (is_bool($cert)) {
+                    $this->insertCert($fedKey, $role, $roleDate, $badge, $badgeDate);
+                } else {
+                    $this->updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert);
+                }
 
-                echo sprintf("Inserting %s %s %s...\n", $fedKey, $badge, $badgeDate);
-                $this->insertCert($fedKey, $role, $roleDate, $badge, $badgeDate);
-//                echo sprintf("Inserted Cert: %s %s %s %s %s\n", $fedKey, $role, $roleDate, $badge, $badgeDate);
-            } else {
-                $this->updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert);
+                $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate);
             }
+            if (!empty($roleSH)) {
+                $this->checkCertStmt->execute([$fedKey, $roleSH]);
+                $cert = $this->checkCertStmt->fetch();
 
-            $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate);
-        }
-        if (!empty($roleSH)) {
-            $this->checkCertStmt->execute([$fedKey, $roleSH]);
-            $cert = $this->checkCertStmt->fetch();
+                if (is_bool($cert)) {
+                    $this->insertCert($fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate);
+                } else {
+                    $this->updateCert($fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate, $cert);
+                }
 
-            if (is_bool($cert)) {
-                echo sprintf("Inserting %s %s %s...\n", $fedKey, $badgeSH, $badgeSHDate);
-                $this->insertCert($fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate);
-//                echo sprintf("Inserted Cert: %s %s %s %s %s\n", $fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate);
-            } else {
-                $this->updateCert($fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate, $cert);
+                $this->refreshProjectPersonsAndRole(
+                    $fedKey,
+                    $sar,
+                    $regYear,
+                    $roleSH,
+                    $roleDate,
+                    $badgeSH,
+                    $badgeSHDate
+                );
             }
+            if (!empty($roleCDC)) {
+                $this->checkCertStmt->execute([$fedKey, $roleCDC]);
+                $cert = $this->checkCertStmt->fetch();
+                if (is_bool($cert)) {
+                    $this->insertCert($fedKey, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate);
+                } else {
+                    $this->updateCert($fedKey, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate, $cert);
+                }
 
-            $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $roleSH, $roleDate, $badgeSH, $badgeSHDate);
-        }
-        if (!empty($roleCDC)) {
-            $this->checkCertStmt->execute([$fedKey, $roleCDC]);
-            $cert = $this->checkCertStmt->fetch();
-            if (is_bool($cert)) {
-                echo sprintf("Inserting %s %s %s...\n", $fedKey, $badgeCDC, $badgeCDCDate);
-                $this->insertCert($fedKey, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate);
-//                echo sprintf("Inserted Cert: %s %s %s %s %s\n",$fedKey,$roleCDC,$roleDate,$badgeCDC,$badgeCDCDate);
-            } else {
-                $this->updateCert($fedKey, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate, $cert);
+                $this->refreshProjectPersonsAndRole(
+                    $fedKey,
+                    $sar,
+                    $regYear,
+                    $roleCDC,
+                    $roleDate,
+                    $badgeCDC,
+                    $badgeCDCDate
+                );
             }
-
-            $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate);
         }
-
         return;
     }
 
     private function insertCert($fedKey, $role, $roleDate, $badge, $badgeDate)
     {
 
-        $this->insertCertStmt->execute([$fedKey, $role, $roleDate, $badge, $badgeDate]);
+        echo sprintf("\r  Inserting %s %s %s...     ", $fedKey, $badge, $badgeDate);
+
+        if($this->commit) {
+            $this->insertCertStmt->execute([$fedKey, $role, $roleDate, $badge, $badgeDate]);
+        }
 
         return;
     }
 
     private function updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert)
     {
-        echo sprintf("Updating %s...\n", $fedKey);
+        echo sprintf("\r  Updating %s...        ", $fedKey);
 
         if ($this->badgeSorts[$badge] > $this->badgeSorts[$cert['badge']]) {
             $cert['badge'] = $badge;
@@ -293,10 +312,9 @@ class Loade3CertsCommand extends LoadAbstractCommand
             $cert['roleDate'] = $roleDate;
         }
 
-//        echo sprintf("Updated Vols %s %s %s for %s as %s\n", $cert['roleDate'], $cert['badge'], $cert['badgeDate'],
-// $fedKey, $role);
-        $this->updateCertStmt->execute([$cert['roleDate'], $cert['badge'], $cert['badgeDate'], $fedKey, $role]);
-
+        if($this->commit) {
+            $this->updateCertStmt->execute([$cert['roleDate'], $cert['badge'], $cert['badgeDate'], $fedKey, $role]);
+        }
 //        echo sprintf("Updated Vols %s for %s\n", $regYear, $fedKey);
 //        $this->updateVolsRegYearStmt->execute([$regYear, $sar, $fedKey]);
 
@@ -304,8 +322,21 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
     private function refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate)
     {
+        if(!$this->commit){
+            return;
+        }
 
         $registered = $regYear >= $this->appRegYear ? 1 : 0;
+        switch(count(explode('/',$sar))) {
+            case 1:
+            case 2:
+                $sar = "e3:".$sar;
+                break;
+            case 3:
+                $sar = $this->regionToSarTransformer->reverseTransform($sar);
+                break;
+            default:
+        }
 
         $this->updateProjectPersonsStmt->execute([$sar, $regYear, $registered, $fedKey]);
 

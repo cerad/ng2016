@@ -25,11 +25,15 @@ class RegionToSarTransformer implements DataTransformerInterface
         if (!$orgKey) return null;
 
         $org = $this->finder->findOrg($orgKey);
+
         if ($org) {
             $state = $org['state'] ? : '??';
             return $org['sar'] . '/' . $state;
+        } else { // Unknown or invalid or from Section or Area registration
+            $e3 = explode(':', $orgKey);
+            return isset($e3[1]) ? $e3[1] : $orgKey;
         }
-        return $org; // Unknown or invalid, maybe toss exception
+
     }
     /**
      * @param string $sar 5/C/0894

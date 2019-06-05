@@ -125,12 +125,6 @@ class ProjectPersonRepositoryV2
         $row['approved'] = $row['approved'] ? '1' : '0';
         $row['roleDate'] = is_null($row['roleDate']) ? '0000-00-00' : $row['roleDate'];
 
-        try {
-            var_dump($row['roleDate']);
-        } catch (\Exception $e) {
-            die();
-        }
-
         $id = $row['id'];
         unset($row['id']);
         if ($id) {
