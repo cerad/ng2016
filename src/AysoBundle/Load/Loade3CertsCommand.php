@@ -119,7 +119,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
             echo 'Row: ', $row, "\n";
             echo 'Range: ', $range, "\n";
             echo 'Data: ', "\n";
-            var_dump($data); //
+            dump($data); //
             echo "\n";
         }
 
@@ -302,7 +302,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
             }
         }
         if ($cert['badgeDate'] === '0000-00-00') {
-            dump($cert);
+            $cert['badgeDate'] = $badgeDate;
 
             return;
         }
