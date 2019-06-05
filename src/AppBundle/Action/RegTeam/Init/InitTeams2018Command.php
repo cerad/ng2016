@@ -22,7 +22,7 @@ class InitTeams2018Command extends Command
     protected function configure()
     {
         $this
-            ->setName('init:teams:ng2019')
+            ->setName('ng2019:init:teams')
             ->setDescription('Init Teams ng2019');
     }
 
