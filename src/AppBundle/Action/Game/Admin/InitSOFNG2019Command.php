@@ -160,8 +160,8 @@ class InitSOFNG2019Command extends Command
         $division = substr($row[3], 4, 1).substr($row[3], 0, 3);
         $homeTeam = $row[4];
         $awayTeam = $row[5];
-        $homePoolTeamSlot = $this->generatePoolSlot($row[3], $homeTeam);
-        $awayPoolTeamSlot = $this->generatePoolSlot($row[3], $awayTeam);
+        $homePoolTeamSlot = $this->generatePoolSlot($division, $homeTeam);
+        $awayPoolTeamSlot = $this->generatePoolSlot($division, $awayTeam);
 
         $this->fieldSlots[] = [
             $dow,
@@ -377,32 +377,31 @@ class InitSOFNG2019Command extends Command
                         var_dump($age, $gender, count($regTeams), count($poolTeams));
                         die('RegTeam PoolTeam count mismatch'."\n");
                     }
-                    $teamCount = count($regTeams);
-                    foreach ($regTeams as $regTeam) {
+
+                    foreach ($regTeams as $key => $regTeam) {
                         $regTeamId = $regTeam['regTeamId'];
                         $tryAgain = true;
-                        while ($tryAgain) {
-                            $random = rand(0, $teamCount - 1);
-                            if (!isset($poolTeams[$random]['regTeamId'])) {
-
+//                        while ($tryAgain) {
+                            if (!isset($poolTeams['regTeamId'])) {
                                 $this->gameConn->update(
                                     'poolTeams',
                                     ['regTeamId' => $regTeamId, 'regTeamName' => $regTeam['teamName']],
-                                    ['poolTeamId' => $poolTeams[$random]['poolTeamId']]
+                                    ['poolTeamId' => $poolTeams[$key]['poolTeamId']]
                                 );
-                                $poolTeams[$random]['regTeamId'] = $regTeamId;
-                                $tryAgain = false;
+//                                $poolTeams['regTeamId'] = $regTeamId;
+//                                $tryAgain = false;
 
                                 $count++;
                                 if (($count % 100) === 0) {
                                     echo sprintf("\r%5d Soccerfest Teams Assigned...", $count);
                                 }
                             }
-                        }
+//                        }
                     }
                 }
             }
         }
+
         echo sprintf("\r%5d Soccerfest Teams Assigned            \n", $count);
     }
 
@@ -542,37 +541,31 @@ class InitSOFNG2019Command extends Command
 
     private function generatePoolSlot($div, $teamName)
     {
-        $division = substr($div, 0, 5);
-
-        switch ($division) {
-            case "10U B":
+        switch ($div) {
+            case "B10U":
+            case "G10U":
                 $poolSize = 5;
                 break;
-            case "10U G":
-                $poolSize = 5;
-                break;
-            case "12U B":
+            case "B12U":
+            case "G12U":
                 $poolSize = 6;
                 break;
-            case "12U G":
-                $poolSize = 6;
-                break;
-            case "14U B":
+            case "B14U":
                 $poolSize = 14;
                 break;
-            case "14U G":
+            case "G14U":
                 $poolSize = 18;
                 break;
-            case "16U B":
+            case "B16U":
                 $poolSize = 14;
                 break;
-            case "16U G":
+            case "G16U":
                 $poolSize = 8;
                 break;
-            case "19U B":
+            case "B19U":
                 $poolSize = 16;
                 break;
-            case "19U G":
+            case "G19U":
                 $poolSize = 12;
                 break;
             default:
@@ -583,8 +576,8 @@ class InitSOFNG2019Command extends Command
         $poolSlot = $teamNumber;
         $poolCode = ord("A");
         while ($poolSlot > $poolSize) {
-            $poolSlot = $poolSlot - $poolSize;
-            $poolCode = $poolCode + 1;
+            $poolSlot -= $poolSize;
+            $poolCode += 1;
         }
         $pool = chr($poolCode);
 
