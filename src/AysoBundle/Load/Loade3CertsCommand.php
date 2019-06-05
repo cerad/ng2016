@@ -24,7 +24,8 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
         $this->projectKey = $projectKey;
 
-        $this->appRegYear = $project['info']['regYear'];}
+        $this->appRegYear = $project['info']['regYear'];
+    }
 
     protected function configure()
     {
@@ -38,7 +39,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
     protected function resetValues()
     {
-        if(!$this->delete) {
+        if (!$this->delete) {
             return;
         }
 
@@ -216,19 +217,18 @@ class Loade3CertsCommand extends LoadAbstractCommand
         $badge = $this->certMetas[$badge]['badge'];
 
         // Update AYSO.Certs & NG2019.ProjectPersonRoles tables
-        if($this->commit) {
+        if ($this->commit) {
 
-            if (!empty($role)) {
-                $this->checkCertStmt->execute([$fedKey, $role]);
-                $cert = $this->checkCertStmt->fetch();
-                if (is_bool($cert)) {
-                    $this->insertCert($fedKey, $role, $roleDate, $badge, $badgeDate);
-                } else {
-                    $this->updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert);
-                }
-
-                $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate);
+            $this->checkCertStmt->execute([$fedKey, $role]);
+            $cert = $this->checkCertStmt->fetch();
+            if (is_bool($cert)) {
+                $this->insertCert($fedKey, $role, $roleDate, $badge, $badgeDate);
+            } else {
+                $this->updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert);
             }
+
+            $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate);
+
             if (!empty($roleSH)) {
                 $this->checkCertStmt->execute([$fedKey, $roleSH]);
                 $cert = $this->checkCertStmt->fetch();
@@ -269,6 +269,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
                 );
             }
         }
+
         return;
     }
 
@@ -277,7 +278,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
         echo sprintf("\r  Inserting %s %s %s...     ", $fedKey, $badge, $badgeDate);
 
-        if($this->commit) {
+        if ($this->commit) {
             $this->insertCertStmt->execute([$fedKey, $role, $roleDate, $badge, $badgeDate]);
         }
 
@@ -312,7 +313,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
             $cert['roleDate'] = $roleDate;
         }
 
-        if($this->commit) {
+        if ($this->commit) {
             $this->updateCertStmt->execute([$cert['roleDate'], $cert['badge'], $cert['badgeDate'], $fedKey, $role]);
         }
 //        echo sprintf("Updated Vols %s for %s\n", $regYear, $fedKey);
@@ -322,12 +323,12 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
     private function refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate)
     {
-        if(!$this->commit){
+        if (!$this->commit) {
             return;
         }
 
         $registered = $regYear >= $this->appRegYear ? 1 : 0;
-        switch(count(explode('/',$sar))) {
+        switch (count(explode('/', $sar))) {
             case 1:
             case 2:
                 $sar = "e3:".$sar;
