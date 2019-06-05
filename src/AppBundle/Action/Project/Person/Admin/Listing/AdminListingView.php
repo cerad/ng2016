@@ -193,7 +193,6 @@ EOD;
   <tr><td>Gender</td><td> {$this->escape($gender)}</td></tr>
   <tr><td>Age</td><td> {$this->escape($personView->age)}</td></tr>
   <tr><td>Shirt </td><td>{$this->escape($personView->shirtSize)}</td></tr>
-  <tr><td>Adult Ref Exp</td><td>{$personView->adultExp} yrs</td></tr>
 </table>
 EOD;
 

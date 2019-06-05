@@ -184,11 +184,6 @@ class ProjectPersonViewDecorator
         return !is_null($role);
     }
 
-    public function hasAdultExp()
-    {
-        return 0 < $this->adultExp;
-    }
-
     public function getRoleClass($role, $regYearProject)
     {
         if ($role->approved) {
@@ -330,11 +325,6 @@ class ProjectPersonViewDecorator
                 $will = isset($person->plans[$name]) ? $person->plans[$name] : null;
 
                 return ucfirst(strtolower($will));
-
-            case 'adultExp':
-                $adultExp = isset($person->plans[$name]) ? $person->plans[$name] : 0;
-
-                return $adultExp;
 
             case 'willRefereeBadge':
                 $willRefereeTransformer = $this->willRefereeTransformer;

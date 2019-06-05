@@ -113,7 +113,6 @@ class AdminListingViewFile extends AbstractView
                 $personView->refereeBadge,
                 $personView->safeHavenCertified,
                 $personView->concussionTrained,
-                $personView->adultExp,
                 $personView->shirtSize,
                 $personView->notes,
                 $personView->willCoach,
