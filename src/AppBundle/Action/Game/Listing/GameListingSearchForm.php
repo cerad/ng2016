@@ -97,8 +97,7 @@ EOD;
     ];
     private $programChoices = [
         null => 'All',
-        'Core' => 'Core',
-        'Club' => 'Club',
+        'Core' => 'Core'
     ];
 
     private function divisionChoices($program)
@@ -120,20 +119,6 @@ EOD;
                     'G14U' => 'Girls 14U',
                     'B19U' => 'Boys 19U',
                     'G19U' => 'Girls 19U',
-                ]
-            );
-        }
-        if ($program == 'All' || $program == 'Club') {
-            $divisionChoices = array_merge(
-                $divisionChoices,
-                [
-                    'B2004' => 'Boys 2004',
-                    'B2006' => 'Boys 2006',
-                    'B2007' => 'Boys 2007',
-                    'B2008' => 'Boys 2008',
-                    'G2003/2004' => 'Girls 2003/2004',
-                    'G2005/2006' => 'Girls 2005/2006',
-                    'G2007' => 'Girls 2007',
                 ]
             );
         }

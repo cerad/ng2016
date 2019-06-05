@@ -99,6 +99,8 @@ class InitSOFNG2019Command extends Command
             [3] => [Division]
             [4] => [Home Team]
             [5] => [Away Team]
+            [6] => [Home PoolTeamSlot]
+            [7] => [Away PoolTeamSlot]
 
          */
 
@@ -142,6 +144,7 @@ class InitSOFNG2019Command extends Command
             echo "\n";
         }
 
+        return;
     }
 
     private function processRow($row)
@@ -157,8 +160,17 @@ class InitSOFNG2019Command extends Command
         $division = substr($row[3], 4, 1).substr($row[3], 0, 3);
         $homeTeam = $row[4];
         $awayTeam = $row[5];
+        $homePoolTeamSlot = $this->generatePoolSlot($row[3], $homeTeam);
+        $awayPoolTeamSlot = $this->generatePoolSlot($row[3], $awayTeam);
 
-        $this->fieldSlots[] = [$dow, $time, $field, $division, $homeTeam, $awayTeam];
+        $this->fieldSlots[] = [
+            $dow,
+            $time,
+            $field,
+            $division,
+            $homePoolTeamSlot,
+            $awayPoolTeamSlot,
+        ];
 
         return;
     }
@@ -193,9 +205,10 @@ class InitSOFNG2019Command extends Command
                         $this->initRegTeam($this->projectId, $program, $gender, $age, $teamNumber);
                         $count++;
                         if (($count % 100) === 0) {
-                            echo sprintf("\r  Loading Soccerfest Team %5d", $count);
+                            echo sprintf("\r%5d Soccerfest Teams Loaded...", $count);
                         }
                     }
+
                 }
             }
         }
@@ -220,7 +233,7 @@ class InitSOFNG2019Command extends Command
             'projectId' => $projectId,
             'teamKey' => $teamKey,
             'teamNumber' => $teamNumber,
-            'teamName' => sprintf('Team %02d', $teamNumber),
+            'teamName' => sprintf('Team %d', $teamNumber),
             'teamPoints' => null,
 
             'orgId' => null,
@@ -249,22 +262,20 @@ class InitSOFNG2019Command extends Command
             foreach ($this->ages[$program] as $age) {
                 foreach ($this->genders as $gender) {
                     $pools = $this->getPools($gender.$age);
-                    foreach ($pools as $poolSlot => $poolTeamCount) {
+                    foreach ($pools as $pool => $poolTeamCount) {
                         for ($p = 0; $p < $poolTeamCount; $p++) {
-                            $poolTeamSlot = $poolSlot.$count;
                             $this->initPoolTeam(
                                 $projectId,
                                 'ZZ',
-                                $poolSlot,
-                                $count,
-                                $poolTeamSlot,
+                                $pool,
+                                $p + 1,
                                 $program,
                                 $age,
                                 $gender
                             );
 
                             if (($count % 100) === 0) {
-                                echo sprintf("\r  Loading Soccerfest Pool Team %5d", $count);
+                                echo sprintf("\r%5d Soccerfest Pool Teams Loaded...", $count);
                             }
                             $count++;
                         }
@@ -274,14 +285,13 @@ class InitSOFNG2019Command extends Command
             }
         }
 
-        echo sprintf("\r%5d Soccerfest Pool Teams Loaded        \n", $count-1);
+        echo sprintf("\r%5d Soccerfest Pool Teams Loaded        \n", $count - 1);
     }
 
     private function initPoolTeam(
         $projectId,
         $poolType,
         $poolName,
-        $poolTeamName,
         $poolSlot,
         $program,
         $age,
@@ -289,48 +299,47 @@ class InitSOFNG2019Command extends Command
         $game = null
     ) {
         $division = $gender.$age;
-
-        $poolTypeView = $poolType;
-
-        switch ($poolType) {
-            case 'ZZ':
-                $poolTypeView = 'SOF';
-                break;
-        }
-        $poolNameView = $game ? sprintf('%2s', $game) : $poolName;
+        $poolTypeKey = $poolType;
         switch ($poolType) {
             case 'ZZ':
                 $poolTypeDesc = 'Soccerfest';
+                $poolTypeView = 'SOF';
                 break;
             default:
                 $poolTypeDesc = 'UNKNOWN POOL DESC';
+                $poolTypeView = 'UNK';
         }
-        $poolView = sprintf('%s%s %s %s', $gender, $age, $poolTypeDesc, $poolNameView);
-        $poolTeamView = sprintf('%s%s %s %s', $gender, $age, $poolTypeDesc, $poolSlot);
-
-        $bracket = 'Soccerfest';
+        $poolTeamSlotView = $poolName.$poolSlot;
 
         // Append bracket, probably should use new line here, adjust view later
-        $poolView = $bracket ? $poolView.'<br>'.$bracket : $poolView;
 
-        $poolKey = sprintf('%s%s%s%s', $division, $program, $poolType, $poolName);
-        $poolTeamKey = sprintf('%s%s%s%s%s', $division, $program, $poolType, $poolName, $poolTeamName);
+        $poolTeamId = sprintf('%s:%s%s%s%s', $projectId, $gender, $age, $program, $poolTeamSlotView);
 
-        $poolTeamId = $projectId.':'.$poolTeamKey;
+        //$projectId
+
+        $poolKey = sprintf('%s%s%s%s', $division, $program, $poolTypeView, $poolName);
+
+        $poolTeamKey = sprintf('%s%s%s%s', $division, $program, $poolTypeView, $poolTeamSlotView);
+
+        $poolNameView = $game ? sprintf('%2s', $game) : $poolName;
+
+        $poolView = sprintf('%s%s %s %s %s', $gender, $age, $program, $poolTypeView, $poolName);
+
+        $poolTeamView = sprintf('%s%s %s %s %s', $gender, $age, $program, $poolTypeView, $poolTeamSlotView);
 
         $poolTeam = [
             'poolTeamId' => $poolTeamId,
             'projectId' => $projectId,
 
             'poolKey' => $poolKey,
-            'poolTypeKey' => $poolType,
+            'poolTypeKey' => $poolTypeKey,
             'poolTeamKey' => $poolTeamKey,
 
             'poolView' => $poolView,
             'poolSlotView' => $poolNameView,
-            'poolTypeView' => $poolTypeView,
+            'poolTypeView' => $poolType,
             'poolTeamView' => $poolTeamView,
-            'poolTeamSlotView' => $poolSlot,
+            'poolTeamSlotView' => $poolTeamSlotView,
 
             'program' => $program,
             'gender' => $gender,
@@ -386,7 +395,7 @@ class InitSOFNG2019Command extends Command
 
                                 $count++;
                                 if (($count % 100) === 0) {
-                                    echo sprintf("\r  Assigning Soccerfest Teams %5d", $count);
+                                    echo sprintf("\r%5d Soccerfest Teams Assigned...", $count);
                                 }
                             }
                         }
@@ -404,8 +413,9 @@ class InitSOFNG2019Command extends Command
             return;
         }
 
+        echo sprintf("\r  Loading Games...");
         $projectId = $this->projectId;
-        if($this->delete) {
+        if ($this->delete) {
             $this->gameConn->delete('games', ['projectId' => $projectId]);
             $this->gameConn->delete('gameTeams', ['projectId' => $projectId]);
             $this->gameConn->delete('gameOfficials', ['projectId' => $projectId]);
@@ -421,7 +431,10 @@ class InitSOFNG2019Command extends Command
                         $gameNumber += 1000;
                     }
                     foreach ($this->fieldSlots as $fieldSlot) {
-                        list($dow, $time, $field, $div, $home, $away) = $fieldSlot;
+                        list(
+                            $dow, $time, $field, $div, $homePoolTeamSlot, $awayPoolTeamSlot
+                            ) =
+                            $fieldSlot;
                         if ($div === $gender.$age) {
                             $gameNumber++;
                             $this->initGame(
@@ -433,17 +446,14 @@ class InitSOFNG2019Command extends Command
                                 $field,
                                 $dow,
                                 $time,
-                                $home,
-                                $away
+                                $homePoolTeamSlot,
+                                $awayPoolTeamSlot
                             );
 
                             $count++;
                             if (($count % 100) === 0) {
-                                echo sprintf("\r  Loading Game %5d", $count);
+                                echo sprintf("\r%5d Games Loaded...    ", $count);
                             }
-                            //if ($age === '19U') {
-                            //    echo sprintf("Game Number %d %s%s\n",$gameNumber,$age,$gender);
-                            //}
                         }
                     }
                 }
@@ -461,8 +471,8 @@ class InitSOFNG2019Command extends Command
         $fieldNumber,
         $dow,
         $time,
-        $home,
-        $away
+        $homePoolTeamSlot,
+        $awayPoolTeamSlot
     ) {
         $dates = $this->dates;
 
@@ -518,11 +528,9 @@ class InitSOFNG2019Command extends Command
         ];
 
         foreach ([1, 2] as $slot) {
-            $team = $slot === 1 ? $home : $away;
+            $poolTeamSlot = $slot === 1 ? $homePoolTeamSlot : $awayPoolTeamSlot;
 
-            $poolTeamName = $team;
-
-            $poolTeamId = sprintf('%s:%s%s%s%s', $projectId, $gender, $age, $program, $poolTeamName);
+            $poolTeamId = sprintf('%s:%s%s%s%s', $projectId, $gender, $age, $program, $poolTeamSlot);
 
             $gameTeam['gameTeamId'] = $gameId.':'.$slot;
             $gameTeam['slot'] = $slot;
@@ -530,5 +538,59 @@ class InitSOFNG2019Command extends Command
             $this->gameConn->insert('gameTeams', $gameTeam);
 
         }
+    }
+
+    private function generatePoolSlot($div, $teamName)
+    {
+        $division = substr($div, 0, 5);
+
+        switch ($division) {
+            case "10U B":
+                $poolSize = 5;
+                break;
+            case "10U G":
+                $poolSize = 5;
+                break;
+            case "12U B":
+                $poolSize = 6;
+                break;
+            case "12U G":
+                $poolSize = 6;
+                break;
+            case "14U B":
+                $poolSize = 14;
+                break;
+            case "14U G":
+                $poolSize = 18;
+                break;
+            case "16U B":
+                $poolSize = 14;
+                break;
+            case "16U G":
+                $poolSize = 8;
+                break;
+            case "19U B":
+                $poolSize = 16;
+                break;
+            case "19U G":
+                $poolSize = 12;
+                break;
+            default:
+                $poolSize = 6;
+        }
+
+        $teamNumber = trim(substr($teamName, -2));
+        $poolSlot = $teamNumber;
+        $poolCode = ord("A");
+        while ($poolSlot > $poolSize) {
+            $poolSlot = $poolSlot - $poolSize;
+            $poolCode = $poolCode + 1;
+        }
+        $pool = chr($poolCode);
+
+        $poolTeamSlot = $pool.$poolSlot;
+
+        return $poolTeamSlot;
+
     }
 }
