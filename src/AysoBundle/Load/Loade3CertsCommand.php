@@ -26,14 +26,6 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
         $this->appRegYear = $project['info']['regYear'];
 
-        echo "Resetting person roles verified ... ";
-        $this->clearPPRVerified->execute();
-        echo "done\n";
-
-        echo "Removing old Safe Haven certs ... ";
-        $this->clearPPROldSH->execute();
-        echo "done\n";
-
     }
 
     protected function configure()
@@ -42,6 +34,19 @@ class Loade3CertsCommand extends LoadAbstractCommand
             ->setName('ayso:load:e3:certs')
             ->setDescription('Load AYSO e3 Cert Data')
             ->addArgument('filename', InputArgument::REQUIRED, 'AYSO e3 Cert File');
+    }
+
+    protected function resetValues()
+    {
+
+        echo "Resetting person roles verified ... ";
+        $this->clearPPRVerified->execute();
+        echo "done\n";
+
+        echo "Removing old Safe Haven certs ... ";
+        $this->clearPPROldSH->execute();
+        echo "done\n";
+
     }
 
     protected function load($filename)
@@ -70,6 +75,8 @@ class Loade3CertsCommand extends LoadAbstractCommand
          */
 
         echo sprintf("Loading e3 Data file: %s...\n", $filename);
+
+        $this->resetValues();
 
         /** @var Xlsx $reader */
         $reader = new Xlsx();

@@ -91,6 +91,7 @@ abstract class LoadAbstractCommand extends Command
 
         echo sprintf("Loading AYSO File: %s...\n", $filename);
 
+
         $this->load($filename);
     }
 
@@ -160,7 +161,7 @@ EOD;
         $sql = 'UPDATE projectPersonRoles SET roleDate = ?, badge = ?, badgeDate = ?, verified = 1 WHERE projectPersonId = ? AND role = ?';
         $this->updateProjectPersonRoleStmt = $connNG2019->prepare($sql);
 
-        $sql = 'UPDATE projectPersonRoles SET verified = 0';
+        $sql = 'UPDATE projectPersonRoles SET verified = 0 WHERE verified = 1';
         $this->clearPPRVerified = $connNG2019->prepare($sql);
 
         $sql = "DELETE FROM projectPersonRoles WHERE role LIKE 'CERT_SAFE_HAVEN_%'";
