@@ -3,7 +3,8 @@
 # mod_rewrite). Additionally, this reduces the matching process for the
 # start page (path "/") because otherwise Apache will apply the rewriting rules
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
-DirectoryIndex app.php
+#DirectoryIndex zAYSO.maintenance.html
+ DirectoryIndex app.php
 
 # By default, Apache does not evaluate symbolic links if you did not enable this
 # feature in your server configuration. Uncomment the following line if you
@@ -55,6 +56,10 @@ DirectoryIndex app.php
 
     # Rewrite all other queries to the front controller.
     RewriteRule ^ %{ENV:BASE}/app.php [L]
+    # Maintenance screen
+#    RewriteRule ^ %{ENV:BASE}/zAYSO.maintenance.html [L]
+
+
 </IfModule>
 
 <IfModule !mod_rewrite.c>
