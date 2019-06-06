@@ -27,7 +27,7 @@ class VerifyOfficialsNG2019Command extends Command
     protected function configure()
     {
         $this
-            ->setName('ng2019:verify:officials')
+            ->setName('ng2019:officials:verify')
             ->setDescription('Verify Game Officials NG2019');
     }
 
@@ -99,6 +99,7 @@ class VerifyOfficialsNG2019Command extends Command
                 'projectPersons',
                 ['verified' => $certs['currentMY']],
                 [
+                    'projectKey' => $this->projectId,
                     'id' => $projectPersonId,
                     'registered' => 1,
                 ]

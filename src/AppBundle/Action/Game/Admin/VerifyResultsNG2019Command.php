@@ -39,6 +39,12 @@ class VerifyResultsNG2019Command extends Command
 
         $reportState = $input->getOption('state');
 
+        $result = $this->gameConn->executeQuery("SELECT * FROM games WHERE `projectId` = ? AND reportState = 'Verified'",[$this->projectId]);
+        $reportCount = count($result->fetchAll());
+
+        $result = $this->gameConn->executeQuery("SELECT * FROM games WHERE projectId = ? AND reportState = 'Verified'", [$this->projectId]);
+        $countPre = count($result->fetchAll());
+
         $this->gameConn->update(
             'games',
             ['reportState' => 'Verified'],
@@ -48,7 +54,10 @@ class VerifyResultsNG2019Command extends Command
             ]
         );
 
-        echo sprintf(" verified.\n");
+        $result = $this->gameConn->executeQuery("SELECT * FROM games WHERE projectId = ? AND reportState = 'Verified'", [$this->projectId]);
+        $countPost = count($result->fetchAll());
+
+        echo sprintf("%d verified of %d match reports submitted.\n", abs($countPost-$countPre), $reportCount);
 
     }
 }

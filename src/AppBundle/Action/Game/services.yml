@@ -27,15 +27,15 @@ services:
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 
-    game_soccerfest_ng2019_command:
-        class: AppBundle\Action\Game\Migrate\Soccerfest2019Command
-        tags: [{ name: console.command }]
-        arguments:
-            - "@doctrine.dbal.ng2019games_connection"
-            - "@schedule_finder_2019"
-            - "@game_updater"
-            - "@reg_team_import_reader_excel"
-            - "%app_project_key%"
+#    game_soccerfest_ng2019_command:
+#        class: AppBundle\Action\Game\Migrate\Soccerfest2019Command
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - "@doctrine.dbal.ng2019games_connection"
+#            - "@schedule_finder_2019"
+#            - "@game_updater"
+#            - "@reg_team_import_reader_excel"
+#            - "%app_project_key%"
 
 #    game_approve_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\Approve2016Command
@@ -60,12 +60,12 @@ services:
             - '%app_project_key%'
             - "@doctrine.dbal.ng2019games_connection"
 
-    game_delete_pool_ng2019_command:
-        class: AppBundle\Action\Game\Admin\DeletePoolNG2019Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '%app_project_key%'
-            - "@doctrine.dbal.ng2019games_connection"
+#    game_delete_pool_ng2019_command:
+#        class: AppBundle\Action\Game\Admin\DeletePoolNG2019Command
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - '%app_project_key%'
+#            - "@doctrine.dbal.ng2019games_connection"
 
     game_publish_pending_assignments_ng2019_command:
         class: AppBundle\Action\Game\Admin\PublishPendingAssignmentsNG2019Command
@@ -79,6 +79,7 @@ services:
         tags: [{ name: console.command }]
         arguments:
             - "@doctrine.dbal.ng2019_connection"
+            - "%app_project_key%"
 
     game_verify_officials_ng2018_command:
         class: AppBundle\Action\Game\Admin\VerifyOfficialsNG2019Command
@@ -101,19 +102,19 @@ services:
             - '%app_project_key%'
             - "@doctrine.dbal.ng2019games_connection"
 
-    game_update_19u_pools_ng2019_command:
-        class: AppBundle\Action\Game\Admin\Update19UPoolsNG2019Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '%app_project_key%'
-            - "@doctrine.dbal.ng2019games_connection"
+#    game_update_19u_pools_ng2019_command:
+#        class: AppBundle\Action\Game\Admin\Update19UPoolsNG2019Command
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - '%app_project_key%'
+#            - "@doctrine.dbal.ng2019games_connection"
 
-    game_affinity_tweak_ng2019_command:
-        class: AppBundle\Action\Game\Admin\AffinityTweakNG2019Command
-        tags: [{ name: console.command }]
-        arguments:
-            - '%app_project_key%'
-            - "@doctrine.dbal.ng2019games_connection"
+#    game_affinity_tweak_ng2019_command:
+#        class: AppBundle\Action\Game\Admin\AffinityTweakNG2019Command
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - '%app_project_key%'
+#            - "@doctrine.dbal.ng2019games_connection"
 
 #    game_publish_ng2016_command:
 #        class: AppBundle\Action\Game\Migrate\Publish2016Command
@@ -143,21 +144,28 @@ services:
 #            - "@game_updater"
 #            - "@reg_team_import_reader_excel"
 
-    game_seq_numbers_command:
-         class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
-         tags: [{ name: console.command }]
-         arguments:
-             - "@doctrine.dbal.ng2019games_connection"
-             - "@game_finder"
-             - "@game_updater"
+#    game_seq_numbers_command:
+#         class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
+#         tags: [{ name: console.command }]
+#         arguments:
+#             - "@doctrine.dbal.ng2019games_connection"
+#             - "@game_finder"
+#             - "@game_updater"
+
+#    game_validate_command:
+#        class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - "@doctrine.dbal.ng2019games_connection"
+#            - "@game_finder"
+#            - "@game_updater"
 
     game_validate_command:
-        class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
+        class: AppBundle\Action\Game\Admin\VerifyResultsNG2019Command
         tags: [{ name: console.command }]
         arguments:
+            - "%app_project_key%"
             - "@doctrine.dbal.ng2019games_connection"
-            - "@game_finder"
-            - "@game_updater"
 
     game_finder:
         class: AppBundle\Action\Game\GameFinder

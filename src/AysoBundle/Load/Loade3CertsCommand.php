@@ -30,7 +30,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
     protected function configure()
     {
         $this
-            ->setName('ayso:load:e3:certs')
+            ->setName('ng2019:load:e3certs')
             ->setDescription('Load AYSO e3 Cert Data')
             ->addArgument('filename', InputArgument::REQUIRED, 'AYSO e3 Cert File')
             ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing data before update')
@@ -339,7 +339,8 @@ class Loade3CertsCommand extends LoadAbstractCommand
             default:
         }
 
-        $this->updateProjectPersonsStmt->execute([$sar, $regYear, $registered, $fedKey]);
+        $this->updateProjectPersonsStmt->execute([$sar, $regYear, $registered, $this->projectKey, $fedKey]);
+        $this->checkProjectPersonsRegistered->execute([$this->projectKey, $this->appRegYear]);
 
         $this->selectProjectPersonIDStmt->execute([$this->projectKey, $fedKey]);
         $pp = $this->selectProjectPersonIDStmt->fetch();

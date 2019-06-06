@@ -84,7 +84,6 @@ class AdminListingViewFile extends AbstractView
             array ('AYSO ID','projectKey','personKey','Name','eMail','Phone','Age',
                    'Approved','Verified', 'Created On',
                    'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
-                   'Adult Exp Yrs',
                    'Shirt Size','Notes',
                    'Will Coach', 'Will Referee', 'Will Volunteer',
                     'Avail Fri', 'Avail Sat AM', 'Avail Sat PM','Avail Sun AM', 'Avail Sun PM',

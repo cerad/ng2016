@@ -130,8 +130,8 @@ services:
             - "@reg_team_transform_form"
             - "@reg_team_transform_writer_excel"
 
-    reg_team_init_ng2019_command:
-        class: AppBundle\Action\RegTeam\Init\InitTeams2018Command
-        tags: [{ name: console.command }]
-        arguments:
-            - "@doctrine.dbal.ng2019games_connection"
+#    reg_team_init_ng2019_command:
+#        class: AppBundle\Action\RegTeam\Init\InitTeams2018Command
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - "@doctrine.dbal.ng2019games_connection"

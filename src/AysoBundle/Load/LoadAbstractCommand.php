@@ -73,6 +73,9 @@ abstract class LoadAbstractCommand extends Command
     /** @var Statement */
     protected $clearPPROldSH;
 
+    /** @var Statement */
+    protected $checkProjectPersonsRegistered;
+
     /** @var boolean */
     protected $delete;
 
@@ -84,8 +87,6 @@ abstract class LoadAbstractCommand extends Command
 
     /** @var RegionToSarTransformer */
     protected $regionToSarTransformer;
-
-
 
     public function __construct(Connection $connAyso, Connection $connNG2019)
     {
@@ -170,7 +171,7 @@ EOD;
         $sql = 'SELECT id FROM projectPersons WHERE projectKey = ? AND fedKey = ?';
         $this->selectProjectPersonIDStmt = $connNG2019->prepare($sql);
 
-        $sql = 'UPDATE projectPersons SET verified = 1, orgKey = ?, regYear = ?, registered = ? WHERE fedKey = ?';
+        $sql = 'UPDATE projectPersons SET verified = 1, orgKey = ?, regYear = ?, registered = ? WHERE projectKey = ? AND fedKey = ?';
         $this->updateProjectPersonsStmt = $connNG2019->prepare($sql);
 
         $sql = 'SELECT role, roleDate, badge, badgeDate FROM projectPersonRoles WHERE projectPersonId = ? AND role = ?';
@@ -187,6 +188,9 @@ EOD;
 
         $sql = "DELETE FROM projectPersonRoles WHERE role LIKE 'CERT_SAFE_HAVEN_%'";
         $this->clearPPROldSH = $connNG2019->prepare($sql);
+
+        $sql = "UPDATE projectPersons SET registered = 0 WHERE projectKey = ? AND (regYear = '' OR regYear < ?)";
+        $this->checkProjectPersonsRegistered = $connNG2019->prepare($sql);
     }
 
     protected function initCerts()

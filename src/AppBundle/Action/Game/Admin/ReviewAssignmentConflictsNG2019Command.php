@@ -5,7 +5,6 @@ namespace AppBundle\Action\Game\Admin;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
 
 use Doctrine\DBAL\Connection;
 
@@ -28,7 +27,7 @@ class ReviewAssignmentConflictsNG2019Command extends Command
     protected function configure()
     {
         $this
-            ->setName('ng2019:review:assignment:conflicts')
+            ->setName('ng2019:assignments:review:conflicts')
             ->setDescription('Review Official Assignments for Time Conflicts NG2019');
     }
 
@@ -94,8 +93,8 @@ FROM
             start,
             finish
     FROM
-        ng2019games.gameOfficials go
-    LEFT JOIN ng2019games.games g ON go.gameId = g.gameId) s
+        gameOfficials go
+    LEFT JOIN games g ON go.gameId = g.gameId) s
     WHERE
         assignState <> 'Open'
     ORDER BY s.phyPersonId ASC , start , fieldName) d) f

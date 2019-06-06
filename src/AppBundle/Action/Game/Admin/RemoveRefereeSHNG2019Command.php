@@ -35,9 +35,9 @@ class RemoveRefereeSHNG2019Command extends Command
     {
         echo sprintf("Removing Referee Safe Haven for Officials NG2019 ... ");
 
-        $sqlSelect = "SELECT * FROM ng2019.projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
+        $sqlSelect = "SELECT * FROM projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
             projectPersonId IN 
-            (SELECT DISTINCT id FROM ng2019.projectPersons WHERE projectKey LIKE ?);";
+            (SELECT DISTINCT id FROM projectPersons WHERE projectKey LIKE ?);";
 
         $result = $this->gameConn->executeQuery($sqlSelect, [$this->projectId]);
 
@@ -45,9 +45,9 @@ class RemoveRefereeSHNG2019Command extends Command
         $count = count($rshRecords);
 
         if ($count) {
-            $sqlDelete = "DELETE FROM ng2019.projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
+            $sqlDelete = "DELETE FROM projectPersonRoles WHERE role LIKE '%SAFE_HAVEN_REFEREE' AND 
             projectPersonId IN 
-            (SELECT DISTINCT id FROM ng2019.projectPersons WHERE projectKey LIKE ?);";
+            (SELECT DISTINCT id FROM projectPersons WHERE projectKey LIKE ?);";
 
             $this->gameConn->executeQuery($sqlDelete, [$this->projectId]);
         }

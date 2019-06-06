@@ -28,7 +28,7 @@ class ApproveRequestedAssignmentsNG2019Command extends Command
     protected function configure()
     {
         $this
-            ->setName('ng2019:approve:requested:assignments')
+            ->setName('ng2019:assignments:approve:requested')
             ->setDescription('Approve Assignments Requested by Officials NG2019')
             ->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Publish only by date', '%');
     }
@@ -44,8 +44,8 @@ SELECT gameOfficialId FROM (
 SELECT 
         DATE(g.start) AS 'date', go.*
     FROM
-        ng2019games.gameOfficials go
-    RIGHT JOIN ng2019games.games g ON go.gameId = g.gameId) s
+        gameOfficials go
+    RIGHT JOIN games g ON go.gameId = g.gameId) s
 WHERE
     projectId LIKE ?
         AND date LIKE ?
@@ -61,6 +61,7 @@ WHERE
                 'gameOfficials',
                 ['assignState' => 'Approved'],
                 [
+                    'projectId' => $this->projectId,
                     'gameOfficialId' => $row['gameOfficialId']
                 ]
             );

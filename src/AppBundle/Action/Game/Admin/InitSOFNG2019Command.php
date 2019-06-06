@@ -40,7 +40,7 @@ class InitSOFNG2019Command extends Command
     protected function configure()
     {
         $this
-            ->setName('ng2019:init:sof')
+            ->setName('ng2019:load:sof')
             ->setDescription('Init Soccerfest NG2019')
             ->addArgument('filename', InputArgument::REQUIRED, 'Affinity Schedule File')
             ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing data before update')

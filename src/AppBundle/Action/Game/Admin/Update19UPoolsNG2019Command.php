@@ -107,7 +107,11 @@ SQL;
                                 'regPersonName' => $official['regPersonName'],
                                 'assignState' => $official['assignState'],
                             ],
-                            ['gameNumber' => $newGameNumber, 'slot' => $official['slot']]
+                            [
+                                'projectKey' => $this->projectId,
+                                'gameNumber' => $newGameNumber,
+                                'slot' => $official['slot'],
+                            ]
                         );
 
                         $this->gameConn->delete(
