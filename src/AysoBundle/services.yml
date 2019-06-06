@@ -34,13 +34,13 @@ services:
 #        tags: [{ name: console.command }]
 #        arguments: ["@ayso_connection"]
 
-    ayso_load_bs_command:
-        class: AysoBundle\Load\AysoBSLoadCommand
-        tags: [{ name: console.command }]
-        arguments:
-            - "@ayso.connection"
-            - "@ng.connection"
-            - "%app_project%"
+#    ayso_load_bs_command:
+#        class: AysoBundle\Load\AysoBSLoadCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - "@ayso.connection"
+#            - "@ng.connection"
+#            - "%app_project%"
 
     affinity_transform_command:
         class: AysoBundle\Load\AffinityLoadCommand
