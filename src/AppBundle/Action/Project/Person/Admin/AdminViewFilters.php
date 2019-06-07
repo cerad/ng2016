@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Action\Project\Person\Admin;
 
 use AppBundle\Action\Project\Person\ProjectPersonViewDecorator;
@@ -8,10 +9,11 @@ class AdminViewFilters
 {
     /** var ProjectPersonViewDecorator **/
     private $projectPersonViewDecorator;
-    
+
     /** var ProjectPersonRepositoryV2 **/
     private $projectPersonRepository;
 
+<<<<<<< HEAD
     /** var string $regYearProject */
     private $regYearProject;
 
@@ -21,14 +23,23 @@ class AdminViewFilters
         array $appProject
     )
     {
+=======
+    public function __construct(
+        ProjectPersonViewDecorator $projectPersonViewDecorator,
+        ProjectPersonRepositoryV2 $projectPersonRepository
+    ) {
+>>>>>>> ng2019x2
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
         $this->projectPersonRepository = $projectPersonRepository;
         $this->regYearProject = $appProject['info']['regYear'];
     }
-    public function getPersonListByReport(array $projectPersons, $reportKey = null)
+
+    public function getPersonListByReport(array $projectPersons, $regYearProject, $reportKey = null)
     {
         $listPersons = [];
-        
+
+        $yes = ['Yes'];
+
         $yesMaybe = ['Yes', 'Maybe'];
 
         $personView = $this->projectPersonViewDecorator;
@@ -42,20 +53,44 @@ class AdminViewFilters
                 case null:
                     $listPersons[] = $person;
                     break;
-                case 'Referees':
+                case 'Available Referees':
+                case 'AvailableReferees':
                     if (in_array($personView->willReferee, $yesMaybe)) {
-                        $listPersons[] = $person;
+                        if ($personView->hasRoleReferee()) {
+                            if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
+                                $listPersons[] = $person;
+                            }
+                        }
                     }
                     break;
-                case 'Volunteers':
+                case 'Available Volunteers':
+                case 'AvailableVolunteers':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        $listPersons[] = $person;
+                        if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
+                            $listPersons[] = $person;
+                        }
                     }
                     break;
                 case 'RefIssues':
                 case 'Referees with Issues':
                     if (in_array($personView->willReferee, $yesMaybe)) {
-                        if ( $this->hasIssues($personView) ) {
+                        if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+                case 'RefCertIssues':
+                case 'Referees with Cert Issues':
+                    if (in_array($personView->willReferee, $yesMaybe)) {
+                        if ($personView->hasCertIssues()) {
+                            $listPersons[] = $person;
+                        }
+                    }
+                    break;
+                case 'RefCertConflicts':
+                case 'Referees with Cert Conflicts':
+                    if (in_array($personView->willReferee, $yesMaybe)) {
+                        if ($personView->getConflictedCertBadge()) {
                             $listPersons[] = $person;
                         }
                     }
@@ -63,18 +98,37 @@ class AdminViewFilters
                 case 'VolIssues':
                 case 'Volunteers with Issues':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if ( $personView->hasCertIssues() ) {
+                        if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }
                     break;
                 case 'Unapproved':
-                    if (isset($person['roles']['ROLE_REFEREE'])) {
-                        if (!$personView->approved AND !$personView->hasCertIssues()) {
+                    if ((isset($person['roles']['ROLE_REFEREE']) AND in_array($personView->willReferee, $yesMaybe)) OR
+                        (isset($person['roles']['ROLE_VOLUNTEER']) AND in_array($personView->willVolunteer, $yesMaybe)
+                        )) {
+                        if (!$personView->approved
+                            AND $personView->verified
+                            AND !$personView->hasCertIssues()
+                            AND $personView->isCurrentMY(
+                                $regYearProject
+                            )
+                        ) {
                             $listPersons[] = $person;
                         }
                     }
                     break;
+<<<<<<< HEAD
+=======
+                case 'AdultRefs':
+//                case 'Referees with Adult Experience':
+//                    if (isset($person['roles']['ROLE_REFEREE'])) {
+//                        if ($personView->hasAdultExp() /*AND $personView->approved */) {
+//                            $listPersons[] = $person;
+//                        }
+//                    }
+//                    break;
+>>>>>>> ng2019x2
 //                case 'FL':
 //                case 'FL Residents':
 //                    //get the state
@@ -102,9 +156,12 @@ class AdminViewFilters
                     break;
             }
         }
-        
+
+        uasort($listPersons, array($this, 'cmp'));
+
         return $listPersons;
     }
+<<<<<<< HEAD
     private function hasIssues(ProjectPersonViewDecorator $personView)
     {
         if($personView->hasRegistrationIssue($this->regYearProject)) {
@@ -112,9 +169,17 @@ class AdminViewFilters
             return true;
         }
         
+=======
+
+
+    private
+    function hasIssues(
+        ProjectPersonViewDecorator $personView
+    ) {
+>>>>>>> ng2019x2
         $certs = $personView->getCerts();
         $issues = false;
-        foreach($certs as $cert) {
+        foreach ($certs as $cert) {
             $issues |= !(bool)$cert->verified;
         }
 
@@ -125,5 +190,25 @@ class AdminViewFilters
 
         return boolval($issues);
     }
-    
+
+
+    public
+    function cmp(
+        $a,
+        $b
+    ) {
+        $aName = explode(' ', ucwords($a->name));
+        $firstA = $aName[0];
+        $lastA = isset($aName[1]) ? $aName[1] : $aName[0];
+        $bName = explode(' ', ucwords($b->name));
+        $firstB = $bName[0];
+        $lastB = isset($bName[1]) ? $bName[1] : $bName[0];
+
+        if ($lastA == $lastB) {
+            return ($firstA < $firstB) ? -1 : 1;
+        }
+
+        return ($lastA < $lastB) ? -1 : 1;
+    }
+
 }

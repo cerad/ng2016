@@ -28,22 +28,27 @@ class AppExtension extends Extension
 
         $actionLoader->load('Game/services.yml');
         $actionLoader->load('GameOfficial/config/services.yml');
-        $actionLoader->load('GameReport2016/services.yml');
+        $actionLoader->load('GameReport/services.yml');
         
         $actionLoader->load('User/services.yml');
 
         $actionLoader->load('RegTeam/config/services.yml');
         $actionLoader->load('RegPerson/config/services.yml');
         
+<<<<<<< HEAD
         $actionLoader->load('Results2019/services.yml');
         $actionLoader->load('Schedule2019/services.yml');
+=======
+        $actionLoader->load('Results/services.yml');
+        $actionLoader->load('Schedule/services.yml');
+>>>>>>> ng2019x2
         
         $actionLoader->load('Project/services.yml');
         $actionLoader->load('Project/User/services.yml');
         $actionLoader->load('Project/Person/services.yml');
         $actionLoader->load('Project/Person/Admin/services.yml');
 
-        $actionLoader->load('Physical/Ayso/services.yml');
+        //$actionLoader->load('Physical/Ayso/services.yml');
         $actionLoader->load('Physical/Person/services.yml');
         
         $actionLoader->load('PoolTeam/config/services.yml');

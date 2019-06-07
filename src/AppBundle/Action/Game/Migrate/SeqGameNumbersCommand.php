@@ -4,8 +4,13 @@ namespace AppBundle\Action\Game\Migrate;
 use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\Game\GameUpdater;
 
+<<<<<<< HEAD
 use AppBundle\Action\Schedule2019\ScheduleGame;
 use AppBundle\Action\Schedule2019\ScheduleGameTeam;
+=======
+use AppBundle\Action\Schedule\ScheduleGame;
+use AppBundle\Action\Schedule\ScheduleGameTeam;
+>>>>>>> ng2019x2
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,7 +27,7 @@ class SeqGameNumbersCommand extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2018';
 
     public function __construct(
         Connection  $ng2019GamesConn,

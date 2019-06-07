@@ -11,11 +11,14 @@ use AppBundle\Action\RegPerson\RegPerson;
 use AppBundle\Common\ExcelConstants;
 use AppBundle\Common\ExcelWriterTrait;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
+use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\ShirtSizeTransformer;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Exception;
+
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class SummaryWriterExcel
 {
@@ -23,11 +26,12 @@ class SummaryWriterExcel
 
     private $phoneTransformer;
     private $shirtSizeTransformer;
-    private $regionToSarTransformer;
+    private $orgTransformer;
 
     private $assignWorkflow;
 
     public function __construct(
+<<<<<<< HEAD
         RegionToSarTransformer $regionToSarTransformer,
         PhoneTransformer $phoneTransformer,
         ShirtSizeTransformer $shirtSizeTransformer,
@@ -38,19 +42,36 @@ class SummaryWriterExcel
         $this->phoneTransformer = $phoneTransformer;
         $this->shirtSizeTransformer = $shirtSizeTransformer;
         $this->regionToSarTransformer = $regionToSarTransformer;
+=======
+        RegionToSarTransformer $orgTransformer,
+        PhoneTransformer       $phoneTransformer,
+        ShirtSizeTransformer   $shirtSizeTransformer,
+        AssignWorkflow         $assignWorkflow
+    ) {
+        $this->assignWorkflow = $assignWorkflow;
+
+        $this->phoneTransformer     = $phoneTransformer;
+        $this->shirtSizeTransformer = $shirtSizeTransformer;
+        $this->orgTransformer       = $orgTransformer;
+>>>>>>> ng2019x2
     }
 
     /**
      * @param RegPerson[] $regPersons
      * @param Game[] $games
      * @return string
+<<<<<<< HEAD
      * @throws Exception
+=======
+     * @throws PhpSpreadsheet\Exception
+>>>>>>> ng2019x2
      */
     public function write(array $regPersons, array $games)
     {
         $wb = $this->createWorkBook();
 
         // Only referees
+<<<<<<< HEAD
         $regPersons = array_filter(
             $regPersons,
             function (RegPerson $regPerson) {
@@ -80,6 +101,24 @@ class SummaryWriterExcel
                 }
             }
         );
+=======
+        $regPersons = array_filter($regPersons,function(RegPerson $regPerson)
+        {
+            if ($regPerson->isReferee) return true;
+
+            return false;
+        });
+        usort($regPersons,function(RegPerson $regPerson1, RegPerson $regPerson2)
+        {
+            return strcmp(strtolower($regPerson1->name),strtolower($regPerson2->name));
+        });
+        usort($games,function(Game $game1, Game $game2)
+        {
+            if ($game1->start < $game2->start) return -1;
+            if ($game1->start > $game2->start) return +1;
+            return 0;
+        });
+>>>>>>> ng2019x2
         $gameOfficialsMap = $this->generateGameOfficialsMap($games);
 
         $ws = $wb->createSheet(0);
@@ -111,6 +150,7 @@ class SummaryWriterExcel
 
         return $gameOfficialsMap;
     }
+<<<<<<< HEAD
 
     /**
      * @param Worksheet $ws
@@ -119,6 +159,15 @@ class SummaryWriterExcel
      * @throws Exception
      */
     private function writeGames(Worksheet $ws, $regPersons, $gameOfficialsMap)
+=======
+    /** =========================================
+     * @param  Worksheet $ws
+     * @param   RegPerson[]  $regPersons
+     * @param   array        $gameOfficialsMap
+     * @throws PhpSpreadsheet\Exception
+     */
+    private function writeGames(Worksheet $ws,$regPersons,$gameOfficialsMap)
+>>>>>>> ng2019x2
     {
         $ws->setTitle('Referee Games');
 
@@ -186,9 +235,15 @@ class SummaryWriterExcel
                     $this->setCellValue($ws, $colOfficialName, $row, $regPerson->name);
                     $this->setCellValue($ws, $colOfficialBadge, $row, substr($regPerson->refereeBadge, 0, 3));
 
+<<<<<<< HEAD
                     $orgView = $this->regionToSarTransformer->transform(($regPerson->orgId));
                     $this->setCellValue($ws, $colOfficialSars, $row, $orgView);
                     $this->setCellValue($ws, $colOfficialAge, $row, $regPerson->age);
+=======
+                    $orgView = $this->orgTransformer->transform(($regPerson->orgId));
+                    $this->setCellValue($ws,$colOfficialSars,$row,$orgView);
+                    $this->setCellValue($ws,$colOfficialAge, $row,$regPerson->age);
+>>>>>>> ng2019x2
 
                     $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$gameOfficial->assignState];
                     switch ($assignStateView) {
@@ -221,6 +276,7 @@ class SummaryWriterExcel
             }
         }
     }
+<<<<<<< HEAD
 
     /**
      * @param Worksheet $ws
@@ -229,12 +285,22 @@ class SummaryWriterExcel
      * @throws Exception
      */
     private function writeSummary(Worksheet $ws, $regPersons, $gameOfficialsMap)
+=======
+    /** =========================================
+     * @param  Worksheet $ws
+     * @param   RegPerson[]  $regPersons
+     * @param   array        $gameOfficialsMap
+     * @throws PhpSpreadsheet\Exception
+     */
+    private function writeSummary(Worksheet $ws,$regPersons,$gameOfficialsMap)
+>>>>>>> ng2019x2
     {
         $ws->setTitle('Referee Summary');
 
         $col = 'A';
         $colRegPersonName = $col++;
 
+<<<<<<< HEAD
         $colStatSlotAll = $col++;
         $colStatSlotRef = $col++;
         $colStatSlotAr = $col++;
@@ -251,6 +317,24 @@ class SummaryWriterExcel
         $colAvailSlotWed = $col++;
         $colAvailSlotThu = $col++;
         $colAvailSlotFri = $col++;
+=======
+        $colStatSlotAll  = $col++;
+        $colStatSlotRef  = $col++;
+        $colStatSlotAr   = $col++;
+        $colStatSlotYc   = $col++;
+        $colStatSlotRc   = $col++;
+        $colSkip1        = $col++;
+//        $colStatSlotWed  = $col++;
+//        $colStatSlotThu  = $col++;
+        $colStatSlotFri  = $col++;
+        $colStatSlotSat  = $col++;
+        $colStatSlotSun  = $col++;
+        $colSkip2        = $col++;
+        
+//        $colAvailSlotWed  = $col++;
+//        $colAvailSlotThu  = $col++;
+        $colAvailSlotFri  = $col++;
+>>>>>>> ng2019x2
         $colAvailSlotSat1 = $col++;
         $colAvailSlotSat2 = $col++;
         $colAvailSlotSun1 = $col++;
@@ -264,6 +348,7 @@ class SummaryWriterExcel
         $colPhone = $col++;
         $colShirt = $col;
 
+<<<<<<< HEAD
         $this->setColAlignCenter($ws, $colAge);
         $this->setColAlignCenter($ws, $colBadge);
 
@@ -342,6 +427,86 @@ class SummaryWriterExcel
         $this->setCellValue($ws, $colAvailSlotSat2, $row, 'Sat A');
         $this->setCellValue($ws, $colAvailSlotSun1, $row, 'Sun M');
         $this->setCellValue($ws, $colAvailSlotSun2, $row, 'Sun A');
+=======
+        $this->setColAlignCenter($ws,$colAge);
+        $this->setColAlignCenter($ws,$colBadge);
+
+        $this->setColAlignCenter($ws,$colStatSlotAll);
+        $this->setColAlignCenter($ws,$colStatSlotRef);
+        $this->setColAlignCenter($ws,$colStatSlotAr);
+        $this->setColAlignCenter($ws,$colStatSlotYc);
+        $this->setColAlignCenter($ws,$colStatSlotRc);
+//        $this->setColAlignCenter($ws,$colStatSlotWed);
+//        $this->setColAlignCenter($ws,$colStatSlotThu);
+        $this->setColAlignCenter($ws,$colStatSlotFri);
+        $this->setColAlignCenter($ws,$colStatSlotSat);
+        $this->setColAlignCenter($ws,$colStatSlotSun);
+        
+//        $this->setColAlignCenter($ws,$colAvailSlotWed);
+//        $this->setColAlignCenter($ws,$colAvailSlotThu);
+        $this->setColAlignCenter($ws,$colAvailSlotFri);
+        $this->setColAlignCenter($ws,$colAvailSlotSat1);
+        $this->setColAlignCenter($ws,$colAvailSlotSat2);
+        $this->setColAlignCenter($ws,$colAvailSlotSun1);
+        $this->setColAlignCenter($ws,$colAvailSlotSun2);
+
+        $this->setColWidth($ws,$colRegPersonName,24);
+        $this->setColWidth($ws,$colBadge,         6);
+        $this->setColWidth($ws,$colSars,         16);
+        $this->setColWidth($ws,$colAge,           5);
+        $this->setColWidth($ws,$colEmail,        32);
+        $this->setColWidth($ws,$colPhone,        14);
+        $this->setColWidth($ws,$colShirt,         6);
+
+        $this->setColWidth($ws,$colStatSlotAll,   5);
+        $this->setColWidth($ws,$colStatSlotRef,   5);
+        $this->setColWidth($ws,$colStatSlotAr,    5);
+        $this->setColWidth($ws,$colStatSlotYc,    5);
+        $this->setColWidth($ws,$colStatSlotRc,    5);
+        $this->setColWidth($ws,$colSkip1,         5);
+//        $this->setColWidth($ws,$colStatSlotWed,   5);
+//        $this->setColWidth($ws,$colStatSlotThu,   5);
+        $this->setColWidth($ws,$colStatSlotFri,   5);
+        $this->setColWidth($ws,$colStatSlotSat,   5);
+        $this->setColWidth($ws,$colStatSlotSun,   5);
+        $this->setColWidth($ws,$colSkip2,         5);
+//        $this->setColWidth($ws,$colAvailSlotWed,  6);
+//        $this->setColWidth($ws,$colAvailSlotThu,  6);
+        $this->setColWidth($ws,$colAvailSlotFri,  6);
+        $this->setColWidth($ws,$colAvailSlotSat1, 6);
+        $this->setColWidth($ws,$colAvailSlotSat2, 6);
+        $this->setColWidth($ws,$colAvailSlotSun1, 6);
+        $this->setColWidth($ws,$colAvailSlotSun2, 6);
+        $this->setColWidth($ws,$colSkip3,         5);
+
+        $row = 1;
+        $this->setCellValue($ws,$colRegPersonName,$row,'Name');
+        $this->setCellValue($ws,$colBadge,        $row,'Badge');
+        $this->setCellValue($ws,$colSars,         $row,'SARS');
+        $this->setCellValue($ws,$colAge,          $row,'Age');
+        $this->setCellValue($ws,$colEmail,        $row,'Email');
+        $this->setCellValue($ws,$colPhone,        $row,'Phone');
+        $this->setCellValue($ws,$colShirt,        $row,'Shirt');
+
+        $this->setCellValue($ws,$colStatSlotAll,  $row,'ALL');
+        $this->setCellValue($ws,$colStatSlotRef,  $row,'REF');
+        $this->setCellValue($ws,$colStatSlotAr,   $row,'AR');
+        $this->setCellValue($ws,$colStatSlotYc,   $row,'YC');
+        $this->setCellValue($ws,$colStatSlotRc,   $row,'RC');
+//        $this->setCellValue($ws,$colStatSlotWed,  $row,'WEN');
+//        $this->setCellValue($ws,$colStatSlotThu,  $row,'THU');
+        $this->setCellValue($ws,$colStatSlotFri,  $row,'FRI');
+        $this->setCellValue($ws,$colStatSlotSat,  $row,'SAT');
+        $this->setCellValue($ws,$colStatSlotSun,  $row,'SUN');
+        
+//        $this->setCellValue($ws,$colAvailSlotWed,  $row,'Wen');
+//        $this->setCellValue($ws,$colAvailSlotThu,  $row,'Thu');
+        $this->setCellValue($ws,$colAvailSlotFri,  $row,'Fri');
+        $this->setCellValue($ws,$colAvailSlotSat1, $row,'Sat M');
+        $this->setCellValue($ws,$colAvailSlotSat2, $row,'Sat A');
+        $this->setCellValue($ws,$colAvailSlotSun1, $row,'Sun M');
+        $this->setCellValue($ws,$colAvailSlotSun2, $row,'Sun A');
+>>>>>>> ng2019x2
 
         $ws->freezePane('A2');
 
@@ -360,6 +525,7 @@ class SummaryWriterExcel
             $this->setCellValueStat($ws, $colStatSlotYc, $row, $stats['yc']);
             $this->setCellValueStat($ws, $colStatSlotRc, $row, $stats['rc']);
 
+<<<<<<< HEAD
             $this->setCellValueStat($ws, $colStatSlotWed, $row, $stats['wed']);
             $this->setCellValueStat($ws, $colStatSlotThu, $row, $stats['thu']);
             $this->setCellValueStat($ws, $colStatSlotFri, $row, $stats['fri']);
@@ -369,6 +535,17 @@ class SummaryWriterExcel
             $availCol = $colAvailSlotWed;
             foreach ($regPerson->avail as $value) {
                 switch (strtolower($value)) {
+=======
+//            $this->setCellValueStat($ws,$colStatSlotWed,$row,$stats['wed']);
+//            $this->setCellValueStat($ws,$colStatSlotThu,$row,$stats['thu']);
+            $this->setCellValueStat($ws,$colStatSlotFri,$row,$stats['fri']);
+            $this->setCellValueStat($ws,$colStatSlotSat,$row,$stats['sat']);
+            $this->setCellValueStat($ws,$colStatSlotSun,$row,$stats['sun']);
+
+            $availCol = $colAvailSlotFri;
+            foreach($regPerson->avail as $value) {
+                switch(strtolower($value)) {
+>>>>>>> ng2019x2
                     case 'yes':
                     case 'maybe':
                         $this->setCellValueStat($ws, $availCol, $row, 'Y');
@@ -377,8 +554,13 @@ class SummaryWriterExcel
                 $availCol++;
             }
 
+<<<<<<< HEAD
             $orgView = $this->regionToSarTransformer->transform(($regPerson->orgId));
             $this->setCellValue($ws, $colSars, $row, $orgView);
+=======
+            $orgView = $this->orgTransformer->transform(($regPerson->orgId));
+            $this->setCellValue($ws,$colSars,$row,$orgView);
+>>>>>>> ng2019x2
 
             $this->setCellValue($ws, $colAge, $row, $regPerson->age);
             $this->setCellValue($ws, $colEmail, $row, $regPerson->email);
@@ -423,8 +605,8 @@ class SummaryWriterExcel
             'yc' => 0,
             'rc' => 0,
 
-            'wed' => 0,
-            'thu' => 0,
+//            'wed' => 0,
+//            'thu' => 0,
             'fri' => 0,
             'sat' => 0,
             'sun' => 0,

@@ -4,7 +4,11 @@ namespace AppBundle\Action\Game\Listing;
 use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Game\GameFinder;
+<<<<<<< HEAD
 use AppBundle\Action\Results2019\ResultsFinder;
+=======
+use AppBundle\Action\Results\ResultsFinder;
+>>>>>>> ng2019x2
 use Symfony\Component\HttpFoundation\Request;
 
 class GameListingController extends AbstractController2
@@ -34,7 +38,7 @@ class GameListingController extends AbstractController2
         $searchData = [
             'projectId' => $projectId,
             'program'   => $this->getDefaultProgramForProject($projectId),
-            'division'  => 'U14B',
+            'division'  => 'B14U',
             'show'      => 'all',
         ];
         // Override from session
@@ -58,13 +62,14 @@ class GameListingController extends AbstractController2
         }
         $criteria = [
             'projectIds' => [$searchData['projectId']],
-            'programs'   => [$searchData['program']],
             'wantTeams'  => true,
         ];
         if ($searchData['division']) {
             $criteria['divisions'] = [$searchData['division']];
         }
-
+        if ($searchData['program']) {
+            $criteria['programs'] = [$searchData['program']];
+        }
         switch($searchData['show']) {
             case 'all':
                 $regTeams = $this->finder->findRegTeams($criteria);

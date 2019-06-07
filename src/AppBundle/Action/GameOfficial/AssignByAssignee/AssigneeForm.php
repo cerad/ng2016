@@ -21,18 +21,23 @@ class AssigneeForm extends AbstractForm
 
     private $backRouteName;
 
+    private $selfAssignEnabled;
+
+    private $projectInfo;
     private $assignWorkflow;
     private $assigneeFinder;
     private $conflictsFinder;
     private $regPersonFinder;
 
     public function __construct(
+        $project,
         AssignWorkflow $assignWorkflow,
         AssigneeFinder $assigneeFinder,
         GameOfficialConflictsFinder $conflictsFinder,
         RegPersonFinder $regPersonFinder
     )
     {
+        $this->projectInfo = $project['info'];
         $this->assignWorkflow  = $assignWorkflow;
         $this->assigneeFinder  = $assigneeFinder;
         $this->conflictsFinder = $conflictsFinder;
@@ -54,6 +59,15 @@ class AssigneeForm extends AbstractForm
         $this->backRouteName = $backRouteName;
     }
 
+    public function setSelfAssign($enableSelfAssign)
+    {
+        $this->selfAssignEnabled = $enableSelfAssign;
+    }
+
+    public function selfAssignEnabled()
+    {
+        return $this->selfAssignEnabled;
+    }
     /**
      * @return GameOfficial
      */
@@ -95,6 +109,9 @@ class AssigneeForm extends AbstractForm
         $userRegPersonId = $this->getUserRegPersonId();
         if (!$this->regPersonFinder->isApprovedForRole('ROLE_REFEREE',$userRegPersonId)) {
             return $this->renderNotApproved($this->game);
+        }
+        if(!$this->selfAssignEnabled) {
+            return $this->renderNotEnabled($this->game);
         }
         $game = $this->game;
         $gameOfficial = $this->gameOfficial;
@@ -184,13 +201,35 @@ EOD;
 <div class="app_help">
   <ul class="cerad-common-help ul_bullets">
     <li>The assignor needs to review your certifications and approve you.</li>
-    <li>Contact the assignor (Tom Tobin, spsoccerref@earthlink.net) to expedite the process.</li>
+    <li>Contact the assignor ({$this->projectInfo['assignor']['name']} at  
+    <a href="mailto:{$this->projectInfo['assignor']['email']}?subject=Approval to Referee at NOC 2018")
+    >{$this->projectInfo['assignor']['email']}</a>) to expedite the 
+    process.</li>
   </ul>
 </div>
 <a href="{$backUrl}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back To Schedule</a>
 
 EOD;
     }
+    private function renderNotEnabled(Game $game)
+    {
+        $backUrl = $this->generateUrl($this->backRouteName);
+        $backUrl .= '#game-' . $game->gameId;
+
+        return <<<EOD
+<legend class="text-warning">This game is not currently available to self-assign.</legend>
+<div class="app_help">
+  <ul class="cerad-common-help ul_bullets">
+    <li>Contact the assignor ({$this->projectInfo['assignor']['name']} at  
+    <a href="mailto:{$this->projectInfo['assignor']['email']}?subject=Available to Referee at NOC 2018")
+    >{$this->projectInfo['assignor']['email']}</a>) if you available to officiate this match.</li>
+  </ul>
+</div>
+<a href="{$backUrl}" class="btn bth-sm btn-default" ><span class="glyphicon glyphicon-chevron-left"></span>Back To Schedule</a>
+
+EOD;
+    }
+
     protected function renderFormErrors()
     {
         $html = null;

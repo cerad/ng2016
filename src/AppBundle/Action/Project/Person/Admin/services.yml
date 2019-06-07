@@ -7,8 +7,12 @@ services:
         public: true
         class: AppBundle\Action\Project\Person\ProjectPersonRepositoryV2
         arguments:
+<<<<<<< HEAD
             - '@project_person_connection'
             - '@vol_certs'
+=======
+            - "@project_person_connection"
+>>>>>>> ng2019x2
 
     # reg stands for registered
     reg_person_import_sombero_command:
@@ -16,19 +20,35 @@ services:
         class: AppBundle\Action\Project\Person\Admin\Sombero\ImportSomberoCommand
         tags: [{ name: console.command }]
         arguments:
-            - '@user_manager'
-            - '@project_person_connection'
-            - '@project_person_repository_v2'
-            - '@ayso_repository'
-            - '@phone_transformer'
+            - "@user_manager"
+            - "@project_person_connection"
+            - "@project_person_repository_v2"
+            - "@cerad.ayso.finder"
+            - "@phone_transformer"
+
+    # reg stands for registered
+    reg_person_import_affinity_command:
+        class: AppBundle\Action\Project\Person\Admin\Affinity\ImportAffinityCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - "@user_manager"
+            - "@project_person_connection"
+            - "@project_person_repository_v2"
+            - "@cerad.ayso.finder"
+            - "@phone_transformer"
 
     reg_person_manage_roles_command:
         public: true
         class: AppBundle\Action\Project\Person\Admin\ManageRoles\ManageRolesCommand
         tags: [{ name: console.command }]
         arguments:
+<<<<<<< HEAD
             - '@project_person_connection'
             - '%app_project_key%'
+=======
+            - "@project_person_connection"
+            - "%app_project_key%"
+>>>>>>> ng2019x2
 
 # ==========================================================================
 # Listing (List throws exception)
@@ -37,44 +57,46 @@ services:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingSearchForm
         parent: abstract_form
-        arguments: ['%project_choices%']
+        arguments: ["%project_choices%"]
 
     project_person_admin_listing_controller:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingController
         parent: abstract_controller
         arguments:
-            - '@project_person_repository_v2'
-            - '@project_person_admin_listing_search_form'
+            - "@project_person_repository_v2"
+            - "@project_person_admin_listing_search_form"
 
     project_person_admin_listing_view_html:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\Listing\AdminListingView
         parent: abstract_view2
         arguments:
-            - '@project_person_repository_v2'
-            - '@user_repository'
-            - '@project_person_admin_listing_search_form'
-            - '@project_person_view_decorator'
-            - '@project_person_admin_view_filters'
+            - "@project_person_repository_v2"
+            - "@user_repository"
+            - "@project_person_admin_listing_search_form"
+            - "@project_person_view_decorator"
+            - "@project_person_admin_view_filters"
     
     project_person_admin_listing_view_xls:
         public: true
         class: AppBundle\Action\Project\Person\Admin\Listing\AdminListingViewFile
         parent: abstract_view
         arguments:
-            - '@project_person_view_decorator'
-            - '@abstract_exporter_xls'
-            - '@project_person_admin_view_filters'
+            - "@project_person_view_decorator"
+            - "@abstract_exporter_xls"
+            - "@project_person_admin_view_filters"
+            - '%app_project%'
 
     project_person_admin_listing_view_csv:
         public: true
         class: AppBundle\Action\Project\Person\Admin\Listing\AdminListingViewFile
         parent: abstract_view
         arguments:
-            - '@project_person_view_decorator'
-            - '@abstract_exporter_csv'
-            - '@project_person_admin_view_filters'
+            - "@project_person_view_decorator"
+            - "@abstract_exporter_csv"
+            - "@project_person_admin_view_filters"
+            - '%app_project%'
 
 # ==========================================================================
 # Update
@@ -84,25 +106,25 @@ services:
         class:  AppBundle\Action\Project\Person\Admin\Update\AdminUpdateForm
         parent: abstract_form
         arguments:
-            - '%app_project_controls%'
-            - '%app_project_registration_form_controls%'
-            - '@project_person_view_decorator'
-            - '@user_repository'
+            - "%app_project_controls%"
+            - "%app_project_registration_form_controls%"
+            - "@project_person_view_decorator"
+            - "@user_repository"
 
     project_person_admin_update_controller:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\Update\AdminUpdateController
         parent: abstract_controller
         arguments:
-            - '@project_person_repository_v2'
-            - '@project_person_admin_update_form'
+            - "@project_person_repository_v2"
+            - "@project_person_admin_update_form"
 
     project_person_admin_update_view:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\Update\AdminUpdateView
         parent: abstract_view2
         arguments:
-            - '@project_person_admin_update_form'
+            - "@project_person_admin_update_form"
 
 # ==========================================================================
 # Filters
@@ -111,7 +133,12 @@ services:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\AdminViewFilters
         arguments:
+<<<<<<< HEAD
             - '@project_person_view_decorator'
             - '@project_person_repository_v2'
             - '%app_project%'
+=======
+            - "@project_person_view_decorator"
+            - "@project_person_repository_v2"
+>>>>>>> ng2019x2
             

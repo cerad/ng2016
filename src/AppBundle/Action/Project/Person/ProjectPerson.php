@@ -149,6 +149,7 @@ class ProjectPerson implements ArrayableInterface, ArrayAccess
         $cert = new ProjectPersonRole();
         $cert->active = false;
         $cert->role = $certKey;
+
         return $cert;
     }
     /**
@@ -166,6 +167,7 @@ class ProjectPerson implements ArrayableInterface, ArrayAccess
         }
         $role = new ProjectPersonRole();
         $role->role = $roleKey;
+
         return $role;
     }
 

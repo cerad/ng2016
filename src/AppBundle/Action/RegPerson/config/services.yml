@@ -3,11 +3,17 @@ services:
     _defaults: { public: true }
 
     reg_team_connection:
+<<<<<<< HEAD
         public: true
         alias: doctrine.dbal.ng2019games_connection
 
     reg_person_connection:
         public: true
+=======
+        alias: doctrine.dbal.ng2019games_connection
+
+    reg_person_connection:
+>>>>>>> ng2019x2
         alias: doctrine.dbal.ng2019_connection
 
     reg_person_finder:
@@ -24,6 +30,13 @@ services:
         arguments:
             - '@reg_person_connection'
             - '@reg_team_connection'
+
+    reg_person_norefrole_ng2019_command:
+        class: AppBundle\Action\RegPerson\Admin\MissingRefRoleNG2019Command
+        tags: [{ name: console.command }]
+        arguments:
+            - '%app_project_key%'
+            - '@reg_person_connection'
 
     # ===========================================
     # RegPersonPerson Update

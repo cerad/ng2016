@@ -4,7 +4,7 @@
 }
 .panel-float-left {
     float: left;
-    height: 260px;
+    height: 310px;
     width: 300px;
     margin-left: auto;
     margin-right: auto;
@@ -24,7 +24,7 @@
  
  .row label.text-center, .row p.text-center  { text-align: center !important }
 
-.no-disc li { list-style: none }
+.no-disc li { list-style: none; list-style-position: inside; margin-bottom: 5px; line-height: 1.5rem; }
 
 form { width: 100%; margin-left:auto; margin-right: auto; }
 
@@ -64,7 +64,7 @@ form { width: 100%; margin-left:auto; margin-right: auto; }
 .tableClass {
   width: 80%;
   max-width: 100%;
-  border: 2px solid black;
+  border: 2px solid #314c6c;
   margin-bottom: 0px;
 }
 

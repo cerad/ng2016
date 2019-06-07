@@ -23,11 +23,14 @@ class AdminListingViewFile extends AbstractView
     private $adminViewFilters;
     
     private $outFileName;
+
+    private $regYearProject;
     
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
         AbstractExporter $exporter,
-        AdminViewFilters $adminViewFilters
+        AdminViewFilters $adminViewFilters,
+        $project
     )
     {
         $this->outFileName =  'RegisteredPeople' . '_' . date('Ymd_His') . '.' . $exporter->fileExtension;
@@ -35,27 +38,40 @@ class AdminListingViewFile extends AbstractView
         $this->personView = $projectPersonViewDecorator;
         $this->exporter = $exporter;
         $this->adminViewFilters = $adminViewFilters;
+        $this->regYearProject = $project['info']['regYear'];
     }
     public function __invoke(Request $request)
     {
+        $reportKey = $request->attributes->get('reportKey');
+
         $projectPersons = $request->attributes->get('projectPersons');
+        $exportAll = !is_bool(strpos($request->getQueryString(), 'all'));
 
         $reportChoices = [
             'All'           =>  'All',
-            'Referees'      =>  'Referees',
+            'AvailableReferees'      =>  'Available Referees',
             'Volunteers'    =>  'Volunteers',
-            'Unverified'    =>  'Unverified',
-            'Unapproved'    =>  'Unapproved',
+//            'Unverified'    =>  'Unverified',
+//            'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
+<<<<<<< HEAD
             'VolIssues'     =>  'Volunteers with Issues'
+=======
+            'VolIssues'     =>  'Volunteers with Issues',
+//            'AdultRefs'     =>  'Referees with Adult Experience'
+>>>>>>> ng2019x2
         ];
-        
-        $content = [];
-        foreach($reportChoices as $reportKey => $report) {
-            $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons,$reportKey);
 
-            $content = array_merge($content, $this->generateResponse($listPersons, $report));        
-        }
+
+        $reportKey = $exportAll ? 'All' : $reportKey;
+
+        $listPersons = $this->adminViewFilters->getPersonListByReport($projectPersons, $this->regYearProject, $reportKey);
+        $report = is_null($reportKey) ? 'All' : $reportChoices[$reportKey];
+
+        $content = $this->generateResponse($listPersons, $report);
+
+        $this->outFileName = str_replace(' ', '_', $report) . '.' . $this->outFileName;
+
         $content = $this->exporter->export($content);
 
         $response = new Response();
@@ -73,7 +89,9 @@ class AdminListingViewFile extends AbstractView
                    'Approved','Verified', 'Created On',
                    'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
                    'Shirt Size','Notes',
-                   'Will Coach', 'Will Referee', 'Will Volunteer', 'User Notes', 'Notes'
+                   'Will Coach', 'Will Referee', 'Will Volunteer',
+                    'Avail Fri', 'Avail Sat AM', 'Avail Sat PM','Avail Sun AM', 'Avail Sun PM',
+                    'User Notes', 'Notes'
             )
         );
 
@@ -103,11 +121,15 @@ class AdminListingViewFile extends AbstractView
                 $personView->willCoach,
                 $personView->willReferee,
                 $personView->willVolunteer,
+                $personView->availFri,
+                $personView->availSatMorn,
+                $personView->availSatAfter,
+                $personView->availSunMorn,
+                $personView->availSunAfter,
                 $personView->notesUser,
                 $personView->notes,
             );
         }
-        
         $workbook[$reportKey]['data'] = $data;
         $workbook[$reportKey]['options']['hideCols'] = array('B','C');
         

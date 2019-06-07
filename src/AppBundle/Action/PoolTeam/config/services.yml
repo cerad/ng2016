@@ -3,7 +3,10 @@ services:
     _defaults: { public: true }
 
     pool_connection:
+<<<<<<< HEAD
         public: true
+=======
+>>>>>>> ng2019x2
         alias: doctrine.dbal.ng2019games_connection
 
     # ===========================================

@@ -36,7 +36,7 @@ parameters:
                 email_verified: verified
                 gender:         gender
 
-            user_info_url:     'https://graph.facebook.com/me'
+            user_info_url:     'https://graph.facebook.com/me?fields=email,name,gender,verified'
             access_token_url:  'https://graph.facebook.com/oauth/access_token'
             revoke_token_url:  'https://graph.facebook.com/me/permissions'
             authorization_url: 'https://www.facebook.com/dialog/oauth'

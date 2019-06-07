@@ -1,5 +1,5 @@
 parameters:
-    # Eventually want to be able to customize thid
+    # Eventually want to be able to customize this
     app_home_route:    app_home
     app_welcome_route: app_welcome
 
@@ -123,3 +123,15 @@ services:
         class:  AppBundle\Action\App\Admin\AdminView
         parent: abstract_view2
         arguments: ['@admin_switch_user_form']
+
+    tnx_controller:
+        public: true;
+        class:  AppBundle\Action\App\ThankYou\ThankYouController
+        parent: abstract_controller
+        arguments: ['@tnx_view']
+
+    tnx_view:
+        public: true;
+        class:  AppBundle\Action\App\ThankYou\ThankYouView
+        parent: abstract_view2
+

@@ -28,7 +28,7 @@ game_official_assign_by_import:
 game_official_summary:
     path: /summary/{projectId}/{program}
     defaults:
-        projectId:   AYSONationalGames2016
+        projectId:   AYSONationalOpenCup2018
         program:     Core
         _controller: game_official_summary_controller
         _view:       game_official_summary_view

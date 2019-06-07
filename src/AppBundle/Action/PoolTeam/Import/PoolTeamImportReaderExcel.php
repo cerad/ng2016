@@ -4,8 +4,11 @@ namespace AppBundle\Action\PoolTeam\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+<<<<<<< HEAD
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Reader;
+=======
+>>>>>>> ng2019x2
 
 class PoolTeamImportReaderExcel
 {

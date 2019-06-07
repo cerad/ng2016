@@ -20,7 +20,15 @@ parameters:
         abbv:    "NG2019"
         title:   "AYSO National Games 2019"
         desc:    "AYSO National Games 2019 - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7, 2019"
+        venue_name: "Waipio Peninsula Soccer Complex"
+        venue: "WPSC"
         prefix:  'NatGames2019'
+        welcome: 'AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019'
+        website: 'https://www.aysonationalgames.org/'
+        logo:    '/images/National_Open_Cup.png'
+        firstDay: 'Tuesday, June30'
+        lastDay: 'Sunday, July 7'
+        calendarLink: 'https://aysonationalgames.org/schedule-of-events/'
 
         regYear: 'MY2018'
 
@@ -47,6 +55,11 @@ parameters:
             email: "soccer.ref62@yahoo.com"
             subject: "Question for NG Referee Administrator"
             phone: 808-286-9280
+        feedback:
+            name:  "NG2019 Web Team"
+            email: "web.ng2019@gmail.com"
+            subject: "Feedback for the team"
+            phone: ""
 
         system:
             name:  "Zayso Admin"
@@ -54,8 +67,8 @@ parameters:
             phone:  ""
 
         dates:
-            '2019-07-02': Wed # Soccerfest 2019
-            '2019-07-03': Thu # Pool Play
+            '2019-07-02': Tue # Soccerfest 2019
+            '2019-07-03': Wed # Pool Play
             '2019-07-04': Thu # Pool Play
             '2019-07-05': Fri # Pool Play
             '2019-07-06': Sat # Quarter Finals
@@ -69,7 +82,6 @@ parameters:
             G:  Girls
 
         ages:
-            VIP: VIP
             10U: 10U
             12U: 12U
             14U: 14U
@@ -107,7 +119,6 @@ parameters:
                 G: Girls
 
             ages:
-                VIP: VIP
                 10U: 10U
                 12U: 12U
                 14U: 14U
@@ -117,13 +128,13 @@ parameters:
             pools:
                 Core:
                     B:
-                        10U: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        10U: [A,B,C,D]
                         12U: [A,B,C,D]
                         14U: [A,B,C,D]
                         16U: [A,B,C,D]
                         18U: [A,B,C,D]
                     G:
-                        10U: [A,B,C,D,E,F,G,H,I,J,K,L]
+                        10U: [A,B,C,D]
                         12U: [A,B,C,D]
                         14U: [A,B,C,D]
                         16U: [A,B,C,D]
@@ -286,7 +297,7 @@ parameters:
             label:       AYSO Volunteer ID
             href:        eayso.org
             placeHolder: 8 digit number
-            transformer: ayso_volunteer_key_transformer
+            transformer: cerad.ayso.volunteer_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
         orgKey:
@@ -294,7 +305,7 @@ parameters:
             label:       AYSO Region Number
             href:        eayso.org
             placeHolder: 1-4 digit number
-            transformer: ayso_region_key_transformer
+            transformer: cerad.ayso.volunteer_key_transformer
             constraints: ['aysoid_constraint'] # Maybe class name?
 
         availSatMorn:

@@ -20,16 +20,16 @@ class RegTeamExportController extends AbstractController2
     private $projects = [];
 
     private $divisionChoices = [
-        'U10B' => 'U-10 Boys',
-        'U10G' => 'U-10 Girls',
-        'U12B' => 'U-12 Boys',
-        'U12G' => 'U-12 Girls',
-        'U14B' => 'U-14 Boys',
-        'U14G' => 'U-14 Girls',
-        'U16B' => 'U-16 Boys',
-        'U16G' => 'U-16 Girls',
-        'U19B' => 'U-19 Boys',
-        'U19G' => 'U-19 Girls',
+        'B10U' => '10UU Boys',
+        'G10U' => '10UU Girls',
+        'B12U' => '12U Boys',
+        'G12U' => '12U Girls',
+        'B14U' => '14U Boys',
+        'G14U' => '14U Girls',
+        'B16U' => '16U Boys',
+        'G16U' => '16U Girls',
+        'B19U' => '19U Boys',
+        'G19U' => '19U Girls',
     ];
     
     public function __construct(

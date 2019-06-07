@@ -167,3 +167,6 @@ assignorStateTransitions:
   StateTurnBackRejected:
     StateTurnBackRejected:     { desc: 'Turnback Request Was Rejected' }
     StateTurnBackApproved:     { desc: 'Approve Turn Back', modState: StateOpen }
+
+  StateRemovedByAssignor:
+    StateOpen:                { desc: 'Slot Is Open' }

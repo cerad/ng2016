@@ -241,8 +241,8 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_game_2016'    )}">GAME    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_team_2016'    )}">TEAM    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_game_2019'    )}">GAME    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_team_2019'    )}">TEAM    SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
@@ -269,14 +269,14 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('results_poolplay_2016')}">POOL PLAY</a></li>
-            <li><a href="{$this->generateUrl('results_medalround_2016')}">MEDAL ROUND</a></li>
-            <li><a href="{$this->generateUrl('results_sportsmanship_2016')}">SPORTSMANSHIP</a></li>
+            <li><a href="{$this->generateUrl('results_poolplay_2019')}">POOL PLAY</a></li>
+            <li><a href="{$this->generateUrl('results_medalround_2019')}">MEDAL ROUND</a></li>
+            <li><a href="{$this->generateUrl('results_sportsmanship_2019')}">SPORTSMANSHIP</a></li>
 EOT;
         if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
             $html .=
 <<<EOT
-            <li><a href="{$this->generateUrl('results_final_2016')}">FINAL STANDINGS</a></li>
+            <li><a href="{$this->generateUrl('results_final_2019')}">FINAL STANDINGS</a></li>
 EOT;
         }
             
@@ -340,13 +340,17 @@ EOT;
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
             <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">INSTRUCTION: How to Sign up for Games</a></li>
+<<<<<<< HEAD
             <li><a href="{$this->generateUrl('schedule_official_2016')}">REQUEST ASSIGNMENTS</a></li>
+=======
+            <li><a href="{$this->generateUrl('schedule_official_2019')}">REQUEST ASSIGNMENTS</a></li>
+>>>>>>> ng2019x2
 EOT;
 
         if ($this->isGranted('ROLE_ASSIGNOR')) {
             $html .=
 <<<EOT
-            <li><a href="{$this->generateUrl('schedule_assignor_2016')}">ASSIGNOR SCHEDULE</a></li>
+            <li><a href="{$this->generateUrl('schedule_assignor_2019')}">ASSIGNOR SCHEDULE</a></li>
 EOT;
         }
 
@@ -370,7 +374,7 @@ EOT;
         <ul class="dropdown-menu">
           <li><a href="{$this->generateUrl('app_home')}">MY INFO</a></li>
           <li><a href="{$this->generateUrl('project_person_update')}">MY PLANS & AVAILABILITY</a></li>
-          <li><a href="{$this->generateUrl('schedule_my_2016')}">MY SCHEDULE</a></li>
+          <li><a href="{$this->generateUrl('schedule_my_2019')}">MY SCHEDULE</a></li>
           <li><a href="{$this->generateUrl('reg_person_persons_update')}">MY CREW</a></li>
           <li><a href="{$this->generateUrl('reg_person_teams_update')}">MY TEAMS</a></li>
         </ul>

@@ -2,10 +2,13 @@
 
 namespace AppBundle\Action\RegTeam\Transform;
 
-use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\Common\ExcelReaderTrait;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+<<<<<<< HEAD
 use PhpOffice\PhpSpreadsheet\Reader;
+=======
+>>>>>>> ng2019x2
 
 class RegTeamTransformReaderExcel
 {
@@ -20,7 +23,7 @@ class RegTeamTransformReaderExcel
      * @param PhysicalAysoRepository $regionFinder
      */
     public function __construct(
-        PhysicalAysoRepository $regionFinder
+        AysoFinder $regionFinder
     )
     {
         $this->regionFinder = $regionFinder;

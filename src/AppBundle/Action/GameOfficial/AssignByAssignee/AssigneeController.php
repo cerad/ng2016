@@ -5,9 +5,9 @@ use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\GameOfficial\GameOfficialUpdater;
-use AppBundle\Action\GameReport2016\GameReport;
-use AppBundle\Action\GameReport2016\GameReportRepository;
-use AppBundle\Action\GameReport2016\GameReportPointsCalculator;
+use AppBundle\Action\GameReport\GameReport;
+use AppBundle\Action\GameReport\GameReportRepository;
+use AppBundle\Action\GameReport\GameReportPointsCalculator;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,8 @@ class AssigneeController extends AbstractController2
     private $form;
     private $gameFinder;
     private $gameOfficialUpdater;
-    
+    private $enableSelfAssign;
+
     public function __construct(
         AssigneeForm        $form,
         GameFinder          $gameFinder,
@@ -42,10 +43,11 @@ class AssigneeController extends AbstractController2
             $session->set($sessionKey,$request->query->get('back'));
             return $redirect;
         }
-        $backRouteName = 'schedule_official_2016'; // Inject or results link
+        $backRouteName = 'schedule_official_2019'; // Inject or results link
         if ($session->has($sessionKey)) {
             $backRouteName = $session->get($sessionKey);
         }
+
         $game = $this->gameFinder->findGame($projectId,$gameNumber);
         if (!$game) {
             return $this->redirectToRoute($backRouteName);
@@ -55,6 +57,8 @@ class AssigneeController extends AbstractController2
         
         $form = $this->form;
         $form->setGame($game);
+
+        $form->setSelfAssign($game->selfAssign);
         $form->setGameOfficial($gameOfficialOriginal);
         $form->setBackRouteName($backRouteName);
         $form->handleRequest($request);

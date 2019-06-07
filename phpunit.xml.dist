@@ -16,6 +16,7 @@
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
             <directory>src/AppBundle/Action</directory>
+            <directory>src/AysoBundle</directory>
         </testsuite>
     </testsuites>
 

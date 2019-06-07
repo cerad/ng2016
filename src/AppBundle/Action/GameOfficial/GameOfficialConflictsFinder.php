@@ -3,7 +3,6 @@ namespace AppBundle\Action\GameOfficial;
 
 use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
 use Doctrine\DBAL\Connection;
 
 class GameOfficialConflictsFinder
@@ -62,7 +61,7 @@ EOD;
         }
         // Need game details
         return $games;
-        
+/*
         $sql = <<<EOD
 SELECT 
   regPerson.id AS regPersonId,
@@ -93,5 +92,6 @@ EOD;
         $row['orgView'] = $this->orgFinder->transform($row['orgId']);
 
         return $row;
+*/
     }
 }

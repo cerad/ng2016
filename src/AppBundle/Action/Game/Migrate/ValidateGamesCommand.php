@@ -18,7 +18,7 @@ class ValidateGamesCommand extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2018';
 
     public function __construct(
         Connection  $ng2019GamesConn,
@@ -36,7 +36,11 @@ class ValidateGamesCommand extends Command
     protected function configure()
     {
         $this
+<<<<<<< HEAD
             ->setName('games:validate:ng2019')
+=======
+            ->setName('validate:games')
+>>>>>>> ng2019x2
             ->setDescription('Validate Games');
     }
 

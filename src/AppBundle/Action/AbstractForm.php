@@ -31,14 +31,14 @@ abstract class AbstractForm implements ContainerAwareInterface
         if (count($this->formDataErrors)) return false;
         return true;
     }
+    public function getErrors(){
+        return $this->formDataErrors;
+    }
     public function getSubmit()
     {
         return $this->submit;
     }
-    /**
-     * @param string $id
-     * @return DataTransformerInterface
-     */
+
     protected function getTransformer($id)
     {
         return $this->container->get($id);

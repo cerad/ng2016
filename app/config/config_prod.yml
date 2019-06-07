@@ -47,7 +47,7 @@ monolog:
         swift:
             type:       swift_mailer
             from_email: admin@zayso.org
-            to_email:   ahundiak@gmail.com
+            to_email:   web.noc2018@gmail.com
             subject:   '[NG2019] Site Error'
             level:      debug
         console:

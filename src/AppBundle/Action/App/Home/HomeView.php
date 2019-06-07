@@ -318,10 +318,14 @@ EOD;
 <div id="clear-fix">
     <legend>Instructions for Referees</legend>
       <ul class="cerad-common-help ul_bullets">
-            <li>Click on "<a href="{$this->generateUrl('schedule_official_2016')}">Request Assignments</a>" under the "Referees" menu item above.</li>
+            <li>Click on "<a href="{$this->generateUrl('schedule_official_2019')}">Request Assignments</a>" under the "Referees" menu item above.</li>
             <li>On any open match, click on the position you'd like to request, e.g. REF, AR1, AR2</li>
             <li>Click "Submit" button"</li>
+<<<<<<< HEAD
             <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2016')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+=======
+            <li>Check back on your schedule under "<a href="{$this->generateUrl('schedule_my_2019')}">My Schedule</a>" under the "My Stuff" menu item above to see the assignments.
+>>>>>>> ng2019x2
             <li>Detailed instructions for self-assigning are available <a href="{$this->generateUrl(
                     'detailed_instruction'
                 )}" target="_blank">by clicking here</a>.</ul>

@@ -1,0 +1,69 @@
+services:
+
+    ayso.connection:
+        alias: doctrine.dbal.ayso_connection
+
+    ng.connection:
+        alias: doctrine.dbal.ng2019_connection
+
+    ng.games.connection:
+        alias: doctrine.dbal.ng2019games_connection
+
+    cerad.ayso.finder:
+        class: Cerad\Bundle\AysoBundle\AysoFinder
+        arguments: ["@ayso.connection"]
+
+#    ayso_load_eayso_command:
+#        class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - "@ayso_connection"
+
+#    cerad.ayso.load_certs.command:
+#        class: AysoBundle\Load\LoadCertBSCommand
+#        tags: [{ name: console.command }]
+#        arguments: ["@ayso.connection"]
+
+#    cerad.ayso.load_vols.command:
+#        class: AysoBundle\Load\LoadVolsBSCommand
+#        tags: [{ name: console.command }]
+#        arguments: ["@ayso.connection"]
+
+#    ayso_load_orgs_command:
+#        class: AppBundle\Action\Physical\Ayso\Load\LoadOrgsCommand
+#        tags: [{ name: console.command }]
+#        arguments: ["@ayso_connection"]
+
+#    ayso_load_bs_command:
+#        class: AysoBundle\Load\AysoBSLoadCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - "@ayso.connection"
+#            - "@ng.connection"
+#            - "%app_project%"
+
+    affinity_transform_command:
+        class: AysoBundle\Load\AffinityLoadCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - "%app_project%"
+            - "@ng.games.connection"
+
+    ayso_load_e3_certs_command:
+        class: AysoBundle\Load\Loade3CertsCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - "@ayso.connection"
+            - "@ng.connection"
+            - "%app_project_key%"
+            - "%app_project%"
+
+    cerad.ayso.region_key_transformer:
+        class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionKeyTransformer
+
+    cerad.ayso.volunteer_key_transformer:
+        class:  Cerad\Bundle\AysoBundle\DataTransformer\VolunteerKeyTransformer
+
+    cerad.ayso.region_to_sar_transformer:
+        class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer
+        arguments: ["@cerad.ayso.finder"]

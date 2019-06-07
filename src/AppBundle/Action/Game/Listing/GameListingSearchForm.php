@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Action\Game\Listing;
 
 use AppBundle\Action\AbstractForm;
@@ -14,37 +15,45 @@ class GameListingSearchForm extends AbstractForm
 
     public function __construct(
         $projectChoices,
-        $projects, Connection $conn
+        $projects,
+        Connection $conn
     ) {
-        $this->projects       = $projects;
+        $this->projects = $projects;
         $this->projectChoices = $projectChoices;
-        $this->conn           = $conn;
+        $this->conn = $conn;
     }
+
     public function handleRequest(Request $request)
     {
-        if (!$request->isMethod('POST')) return;
-        
+        if (!$request->isMethod('POST')) {
+            return;
+        }
+
         $this->isPost = true;
-        
+
         $data = $request->request->all();
         $errors = [];
 
-        $this->formData = array_replace($this->formData,[
-            'projectId'   => $this->filterScalarString($data,'projectId'),
-            'program'     => $this->filterScalarString($data,'program'),
-            'division'    => $this->filterScalarString($data,'division'),
-            'show'        => $this->filterScalarString($data,'show'),
-        ]);
+        $this->formData = array_replace(
+            $this->formData,
+            [
+                'projectId' => $this->filterScalarString($data, 'projectId'),
+                'program' => $this->filterScalarString($data, 'program'),
+                'division' => $this->filterScalarString($data, 'division'),
+                'show' => $this->filterScalarString($data, 'show'),
+            ]
+        );
         $this->formDataErrors = $errors;
     }
+
     public function render()
     {
-        $show      = $this->formData['show'];
-        $program   = $this->formData['program'];
+        $show = $this->formData['show'];
+        $program = $this->formData['program'];
         $projectId = $this->formData['projectId'];
-        $division  = $this->formData['division'];
+        $division = $this->formData['division'];
 
-        $project   = $this->projects[$projectId];
+//        $project = $this->projects[$projectId];
 
         $csrfToken = 'TODO';
 
@@ -53,19 +62,19 @@ class GameListingSearchForm extends AbstractForm
 <form role="form" class="form-inline" style="width: 1200px;" action="{$this->generateUrl($this->getCurrentRouteName())}" method="post">
   <div class="form-group">
     <label for="projectId">Project</label>
-    {$this->renderInputSelect($this->projectChoices,$projectId,'projectId')}
+    {$this->renderInputSelect($this->projectChoices, $projectId, 'projectId')}
   </div>
   <div class="form-group">
     <label for="program">Program</label>
-    {$this->renderInputSelect($project['programs'],$program,'program')}
+    {$this->renderInputSelect($this->programChoices, $program, 'program')}
   </div>
   <div class="form-group">
     <label for="division">Div</label>
-    {$this->renderInputSelect($this->divisionChoices,$division,'division')}
+    {$this->renderInputSelect($this->divisionChoices($program), $division, 'division')}
   </div>
   <div class="form-group">
     <label for="show">Show</label>
-    {$this->renderInputSelect($this->showChoices,$show,'show')}
+    {$this->renderInputSelect($this->showChoices, $show, 'show')}
   </div>
   <input type="hidden" name="_csrf_token" value="{$csrfToken}" />
   <button type="submit" class="btn btn-sm btn-primary submit">
@@ -75,26 +84,45 @@ class GameListingSearchForm extends AbstractForm
 </form>
 <br/>
 EOD;
+
         return $html;
     }
+
     private $showChoices = [
-        'all'         => 'All',
-        'regTeams'    => 'Registered Teams',
-        'poolTeams'   => 'Pool Teams',
-        'games'       => 'Games',
+        'all' => 'All',
+        'regTeams' => 'Registered Teams',
+        'poolTeams' => 'Pool Teams',
+        'games' => 'Games',
         'gameNumbers' => 'Game Numbers',
     ];
-    private $divisionChoices = [
-         null  => 'All',
-        'U10B' => 'U-10 Boys',
-        'U10G' => 'U-10 Girls',
-        'U12B' => 'U-12 Boys',
-        'U12G' => 'U-12 Girls',
-        'U14B' => 'U-14 Boys',
-        'U14G' => 'U-14 Girls',
-        'U16B' => 'U-16 Boys',
-        'U16G' => 'U-16 Girls',
-        'U19B' => 'U-19 Boys',
-        'U19G' => 'U-19 Girls',
+    private $programChoices = [
+        null => 'All',
+        'Core' => 'Core'
     ];
+
+    private function divisionChoices($program)
+    {
+        $program = is_null($program)? 'All': $program;
+
+        $divisionChoices = [
+            null => 'All',
+        ];
+        if ($program == 'All' || $program == 'Core') {
+            $divisionChoices = array_merge(
+                $divisionChoices,
+                [
+                    'B10U' => 'Boys 10U',
+                    'G10U' => 'Girls 10U',
+                    'B12U' => 'Boys 12U',
+                    'G12U' => 'Girls 12U',
+                    'B14U' => 'Boys 14U',
+                    'G14U' => 'Girls 14U',
+                    'B19U' => 'Boys 19U',
+                    'G19U' => 'Girls 19U',
+                ]
+            );
+        }
+
+        return $divisionChoices;
+    }
 }

@@ -22,12 +22,18 @@ class GameExportViewExcel extends AbstractView2
         $response = new Response();
 
         $games = $request->attributes->get('games');
+        $program = $request->attributes->get('program');
+        if(!isset($program[0])) {
+            $prefix = '';
+        } else {
+            $prefix = $program[0].'_';
+        }
 
         $response->setContent($writer->write($games));
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'GameSchedule2019_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = $prefix.'GameSchedule_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

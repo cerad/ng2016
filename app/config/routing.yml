@@ -8,7 +8,7 @@ app_game:
     prefix: /game
 
 app_game_report:
-    resource: "@AppBundle/Action/GameReport2016/routes.yml"
+    resource: "@AppBundle/Action/GameReport/routes.yml"
     prefix: /game/report
 
 app_game_official:
@@ -39,7 +39,7 @@ app_project_person_admin:
     resource: '@AppBundle/Action/Project/Person/Admin/routes.yml'
     prefix: /project/person/admin
 
-app_regteam_2016:
+app_regteam_2017:
     resource: "@AppBundle/Action/RegTeam/config/routes.yml"
     prefix: /regteam
 

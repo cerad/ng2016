@@ -112,7 +112,10 @@ SELECT
   role      AS role
 FROM projectPersons AS regPerson
 LEFT JOIN projectPersonRoles AS regPersonRole ON regPersonRole.projectPersonId = regPerson.id
-WHERE projectKey = ? AND role = 'ROLE_REFEREE'
+WHERE projectKey = ? 
+AND role = 'ROLE_REFEREE'
+AND regPersonRole.approved = 1
+AND NOT name LIKE '%(2)'
 ORDER BY name,role
 EOD;
         $stmt = $this->regPersonConn->executeQuery($sql,[$projectId]);
@@ -142,8 +145,8 @@ EOD;
         $choices = [];
         while($row = $stmt->fetch())
         {
-            $choices[$row['regTeamId']] = sprintf('%s-%s %s',
-                $row['age'],$row['gender'],$row['teamName']);
+            $choices[$row['regTeamId']] = sprintf('%s%s %s',
+                $row['gender'],$row['age'],$row['teamName']);
         }
         return $choices;
     }

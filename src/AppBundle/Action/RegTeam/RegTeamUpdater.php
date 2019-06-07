@@ -33,6 +33,7 @@ class RegTeamUpdater
 
         $stmt = $this->regTeamConn->executeQuery($sql,[$teamKey]);
         $row = $stmt->fetch();
+
         if (!$row) return 0; // Should not happen
         
         $orgKey = 'AYSOR';
@@ -42,7 +43,7 @@ class RegTeamUpdater
         $data['orgId'] = $orgId;
         $data['orgView'] = $row['orgView'];
 
-        //$this->regTeamConn->insert('regTeams',$data);
+        $this->regTeamConn->insert('regTeams',$data);
         return 1;
     }
     /* ===========================================

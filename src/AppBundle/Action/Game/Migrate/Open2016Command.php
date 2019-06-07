@@ -3,7 +3,11 @@ namespace AppBundle\Action\Game\Migrate;
 
 use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
+<<<<<<< HEAD
 use AppBundle\Action\Schedule2019\ScheduleFinder;
+=======
+use AppBundle\Action\Schedule\ScheduleFinder;
+>>>>>>> ng2019x2
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,7 +26,7 @@ class Open2016Command extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2017';
 
     public function __construct(
         Connection $ng2019GamesConn,

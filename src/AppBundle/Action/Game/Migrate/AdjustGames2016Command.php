@@ -3,9 +3,15 @@ namespace AppBundle\Action\Game\Migrate;
 
 use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
+<<<<<<< HEAD
 use AppBundle\Action\Schedule2019\ScheduleFinder;
 use AppBundle\Action\Schedule2019\ScheduleGame;
 use AppBundle\Action\Schedule2019\ScheduleGameTeam;
+=======
+use AppBundle\Action\Schedule\ScheduleFinder;
+use AppBundle\Action\Schedule\ScheduleGame;
+use AppBundle\Action\Schedule\ScheduleGameTeam;
+>>>>>>> ng2019x2
 
 use DateInterval;
 use DateTime;
@@ -26,7 +32,7 @@ class AdjustGames2016Command extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalGames2016';
+    private $projectId = 'AYSONationalOpenCup2017';
 
     public function __construct(
         Connection $ng2019GamesConn,

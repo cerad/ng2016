@@ -34,9 +34,9 @@ EOD;
 <div class="app_help">
   <ul class="cerad-common-help">
     <ul class="ul_bullets">
-          <li>Note: No real point in adding teams until we get the actual team names from national.</li>
           <li>Adding teams will cause games involving those teams to show up on your schedule.</li>
-          <li>This can be handy when choosing which games to officiate.</li>
+          <li>Adding teams will cause games involving those teams to be highlighted when requesting assignments.</li>
+          <li>This can be handy to avoid conflicts when requesting games to officiate.</li>
         </ul>
     </ul>
 </div>

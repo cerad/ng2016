@@ -19,7 +19,7 @@ services:
         arguments:
             - '@game_connection'
             - '@project_person_connection'
-            - '@ayso_region_to_sar_transformer'
+            - '@cerad.ayso.region_to_sar_transformer'
 
     game_official_conflicts_finder:
         public: true
@@ -50,6 +50,7 @@ services:
         class:  AppBundle\Action\GameOfficial\AssignByAssignee\AssigneeForm
         parent: abstract_form
         arguments:
+            - '%app_project%'
             - '@game_official_assign_workflow'
             - '@game_official_assignee_finder'
             - '@game_official_conflicts_finder'
@@ -79,7 +80,7 @@ services:
         class: AppBundle\Action\GameOfficial\AssignByAssignor\AssignorFinder
         arguments:
             - '@project_person_connection'
-            - '@ayso_region_to_sar_transformer'
+            - '@cerad.ayso.region_to_sar_transformer'
 
     game_official_assign_by_assignor_form:
         public: true
@@ -127,7 +128,7 @@ services:
         public: true
         class:  AppBundle\Action\GameOfficial\Summary\SummaryWriterExcel
         arguments:
-            - '@ayso_region_to_sar_transformer'
+            - '@cerad.ayso.region_to_sar_transformer'
             - '@phone_transformer'
             - '@shirt_size_transformer'
             - '@game_official_assign_workflow'

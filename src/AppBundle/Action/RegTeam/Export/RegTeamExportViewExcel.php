@@ -22,12 +22,18 @@ class RegTeamExportViewExcel extends AbstractView2
         $response = new Response();
 
         $regTeams = $request->attributes->get('regTeams');
+        $program = $request->attributes->get('program');
+        if(!isset($program[0])) {
+            $prefix = '';
+        } else {
+            $prefix = $program[0].'_';
+        }
 
         $response->setContent($writer->write($regTeams));
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'RegTeams2016_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = $prefix.'RegTeams2018_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

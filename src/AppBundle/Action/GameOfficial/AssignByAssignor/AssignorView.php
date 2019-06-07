@@ -36,7 +36,8 @@ EOD;
 <div class="cerad-common-help">
 <legend>Notes on Referee Assignment Procedures</legend>
     <ul class= "ul_bullets">
-        <li>All registered officials will be vetted for current registration and Safe Haven</li>
+        <li>All registered officials will be vetted for current registration, Safe Haven and Concussion Awareness 
+        Training</li>
         <li>Soccerfest and Pool Play games are open-assignment:
             <ul>
                 <li>Referees get to pick their own matches as individuals or as teams</li>

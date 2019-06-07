@@ -34,3 +34,5 @@ parameters:
     show_schedules_menu: true
     show_results_menu: true
     show_final_results: false
+    enable_pp_self_assign: false
+    enable_medal_round_self_assign: false

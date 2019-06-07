@@ -11,9 +11,12 @@ border:none;
 #status { border: 1px solid red; padding: 10px; margin: 5px;}
 
 html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,dl,pre,address,variable,form,fieldset,blockquote,label,img {
-color:#000;
+color:#394A55;
 font-family:Arial,'Trebuchet MS',sans-serif;
+<<<<<<< HEAD
 font-size:14px;
+=======
+>>>>>>> ng2019x2
 margin:0;
 padding:0;
 }
@@ -95,7 +98,7 @@ table-layout:auto;
 }
 
 .schedule, .standings, .results {
-  outline: thin solid #B90101;
+  outline: thin solid #C5A800;
 }
 
 
@@ -105,9 +108,9 @@ padding:0 8px;
 }
 
 .standings tr,.schedule tr,.results tr {
-  border-left: thin solid #B90101;
-  border-right: thin solid #B90101;
-  border-bottom: thin solid #B90101;
+  border-left: thin solid #314c6c;
+  border-right: thin solid #314c6c;
+  border-bottom: thin solid #314c6c;
   border: none;
 }
 
@@ -126,7 +129,7 @@ line-height:2em;
 .schedule tr,.standings tr,.results tr {
 line-height:2em;
 height:2em;
-border: black;
+border: #C5A800;
 }
 
 .schedule tr:nth-child(odd),.standings tr:nth-child(odd),.results tr:nth-child(odd),#person-list tr:nth-child(odd),.my_schedule tr:nth-child(odd) {
@@ -141,14 +144,14 @@ vertical-align:middle;
 
 .tbl-title th,
 .row-hdr {
-background:#B90101;
+background:#C5A7FF;
 height:2em;
 }
 
 .tbl-hdr th {
-background:#DB352F;
+background:#FFE963;
 height:3em;
-border:1px solid #B90101;
+border:1px solid #FFE023;
 }
 
 .schedule table tr:nth-child(odd),#person-list table tr:nth-child(odd),.my_schedule table tr:nth-child(odd) {
@@ -279,6 +282,7 @@ background:inherit;
 .results-legend,.schedule-legend {
 text-align:center;
 line-height:1.5em;
+padding-top: 1.5rem;
 }
 
 .my_schedule {
@@ -345,13 +349,18 @@ margin-right:auto;
 
 table th,.row-hdr {
 width:auto;
+<<<<<<< HEAD
 background-color: #dab22a;
 color: #03062b;
+=======
+background-color:#FFE963;
+color:#394A55;
+>>>>>>> ng2019x2
 font-weight:700;
 vertical-align:middle;
 overflow:hidden;
 height:2.5em;
-border:1px solid #B90101;
+border:1px solid #C5A800;
 padding:0 10px;
 }
 
@@ -495,13 +504,16 @@ p.email {
   text-align: center;
 }
 td.admin-listing {
-    width: 100px;
+    width: 100%;
     display: inline-block;
     overflow: visible;
-    white-space: nowrap;
+    white-space: normal;
     margin:0;
-}
 
+}
+td.admin-listing.plans {
+    width: 20px;
+}
 .approved { margin-right: 20px; text-align: left }
 
 .schedule-search { width: inherit; min-width: 400px; padding-bottom: 10px; margin-left: auto; margin-right: auto; }
@@ -519,6 +531,7 @@ table.person-update-form td { height: 34px; }
 .rainedout_logo { display: none }
 .rainedout-logo-menu { height: 2.2em; margin-top: -4px; }
 
+<<<<<<< HEAD
 
 .form-control {
     font-size: 14px;
@@ -526,4 +539,9 @@ table.person-update-form td { height: 34px; }
 
 .btn-group-sm>.btn, .btn-sm  {
     font-size: 14px;
+=======
+.subtitle {
+    margin-top: 20px;
+    text-align: center;
+>>>>>>> ng2019x2
 }

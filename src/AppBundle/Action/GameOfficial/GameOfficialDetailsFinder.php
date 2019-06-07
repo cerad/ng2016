@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\Action\GameOfficial;
 
-use AppBundle\Action\Physical\Ayso\DataTransformer\RegionToSarTransformer;
+use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
 use Doctrine\DBAL\Connection;
 
 class GameOfficialDetailsFinder
 {
-    private $orgFinder;
+    private $orgTransformer;
     
     private $gameConn;
     private $regPersonConn;
@@ -14,12 +14,12 @@ class GameOfficialDetailsFinder
     public function __construct(
         Connection $gameConn,
         Connection $regPersonConn,
-        RegionToSarTransformer $orgFinder
+        RegionToSarTransformer $orgTransformer
     ) {
         $this->gameConn      = $gameConn;
         $this->regPersonConn = $regPersonConn;
         
-        $this->orgFinder = $orgFinder;
+        $this->orgTransformer = $orgTransformer;
     }
     public function findGameOfficialDetails($regPersonId)
     {
@@ -60,7 +60,7 @@ EOD;
             return null; // Exception
         }
         // Really need a sars view property
-        $row['orgView'] = $this->orgFinder->transform($row['orgId']);
+        $row['orgView'] = $this->orgTransformer->transform($row['orgId']);
 
         return $row;
     }

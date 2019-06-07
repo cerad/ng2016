@@ -272,6 +272,8 @@ EOD;
     }
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
+        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
+
         $certSH         = $personView->getCertClass('CERT_SAFE_HAVEN');
         $classSH        = ' '. (is_null($certSH) ? $personView->dangerClass : $certSH);
 
@@ -288,7 +290,7 @@ EOD;
         $roleRef        = isset($roleRef['ROLE_REFEREE']) ? $roleRef['ROLE_REFEREE'] : null;
         $approvedRef    = isset($roleRef['approved']) ? (bool) $roleRef['approved'] : false;
 
-        $roleRef        = !is_null($roleRef) ? $personView->getRoleClass($roleRef) : null;
+        $roleRef        = !is_null($roleRef) ? $personView->getRoleClass($roleRef, $regYearProject) : null;
         $classRoleRef   = ' '. (is_null($roleRef) ? $personView->successClass : $roleRef);
 
         $roleVol        = $personView->getRoles();
@@ -379,8 +381,18 @@ EOD;
     </div>
 EOD;
         }
+//        $html .= <<<EOD
+//    <div class="form-group">
+//      <label class="col-xs-3 control-label" for="userBackground">FL BkGrnd Check:</label>
+//      {$this->renderFormControlInput($this->formControls['YesNo'],strtolower($this->escape($personView->backgroundChecked)),'userBackground','userBackground','col-xs-4 form-control'.$classBgCk)}
+//    </div>
+//EOD;
+
         $html .= <<<EOD
+<<<<<<< HEAD
     <!--suppress ALL -->
+=======
+>>>>>>> ng2019x2
     {$this->renderPanelFooter()}
 </div>
 EOD;

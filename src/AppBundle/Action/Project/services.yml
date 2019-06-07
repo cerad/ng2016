@@ -3,7 +3,10 @@ services:
     _defaults: { public: true }
 
     project_connection:
+<<<<<<< HEAD
         public: true
+=======
+>>>>>>> ng2019x2
         alias: doctrine.dbal.ng2019_connection
 
     project_factory:
@@ -14,3 +17,14 @@ services:
         public: true
         class: AppBundle\Action\Project\Person\ProjectRersonRepository
         arguments: ['@project_connection','@project_factory']
+<<<<<<< HEAD
+=======
+
+#    project_migrate_command:
+#        class: AppBundle\Action\Project\Migrate\ProjectMigrateCommand
+#        tags: [{ name: console.command }]
+#        arguments:
+#            - '@doctrine.dbal.ng2014_connection'
+#            - '@doctrine.dbal.ng2019_connection'
+#
+>>>>>>> ng2019x2

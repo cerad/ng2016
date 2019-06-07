@@ -7,7 +7,7 @@ framework:
         strict_requirements: true
     profiler: { only_exceptions: false }
     templating:
-        engines: ['twig']
+        engines: ["twig"]
 
 web_profiler:
     toolbar: true
@@ -19,10 +19,17 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
+<<<<<<< HEAD
             channels: ['!event']
         console:
             type:   console
             channels: ['!event', '!doctrine']
+=======
+            channels: ["!event"]
+        console:
+            type:   console
+            channels: ["!event", "!doctrine"]
+>>>>>>> ng2019x2
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -33,6 +40,6 @@ monolog:
         #    level:  info
 
 swiftmailer:
-    disable_delivery: '%mailer_disable_delivery%'
-    delivery_address: '%mailer_delivery_address%'
+    disable_delivery: "%mailer_disable_delivery%"
+    delivery_address: "%mailer_delivery_address%"
     spool: { type: memory }

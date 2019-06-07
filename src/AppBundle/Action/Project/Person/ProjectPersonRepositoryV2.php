@@ -50,6 +50,7 @@ class ProjectPersonRepositoryV2
 
         $stmt = $this->conn->executeQuery($sql, $params);
         $personRows = [];
+<<<<<<< HEAD
         $fedKeys = [];
         while ($personRow = $stmt->fetch()) {
             $personRow['plans'] = isset($personRow['plans']) ? unserialize($personRow['plans']) : null;
@@ -60,6 +61,15 @@ class ProjectPersonRepositoryV2
                 $aysoid = explode(':', $personRow['fedKey'])[1];
                 $fedKeys[$aysoid] = $personRow['id'];
             }
+=======
+        while($personRow = $stmt->fetch()) {
+            if(is_bool(strpos($personRow['name'],'test_account'))) {
+                $personRow['plans'] = isset($personRow['plans']) ? unserialize($personRow['plans']) : null;
+                $personRow['avail'] = isset($personRow['avail']) ? unserialize($personRow['avail']) : null;
+                $personRow['roles'] = [];
+                $personRows[$personRow['id']] = $personRow;
+            };
+>>>>>>> ng2019x2
         }
 
         //Verify MY, SAR, Certs
@@ -240,6 +250,10 @@ class ProjectPersonRepositoryV2
         $row['active'] = $row['active'] ? '1' : '0';
         $row['verified'] = $row['verified'] ? '1' : '0';
         $row['approved'] = $row['approved'] ? '1' : '0';
+<<<<<<< HEAD
+=======
+        $row['roleDate'] = is_null($row['roleDate']) ? '0000-00-00' : $row['roleDate'];
+>>>>>>> ng2019x2
 
         $id = $row['id'];
         unset($row['id']);

@@ -30,3 +30,4 @@ src/AppBundle/Resources/pdf/archive
 *alias*
 dist.sh
 /.web-server-pid
+src/AppBundle/Resources/public/images/iOS icons (National_Open_Cup.2017)

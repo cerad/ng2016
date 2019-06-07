@@ -123,7 +123,7 @@ class GameImportUpdater
             'projectId'  => $projectId,
             'gameNumber' => $gameNumber,
             'fieldName'  => $game['fieldName'],
-            'venueName'  => 'Polo',
+            'venueName'  => 'LNSC',
             'start'      => $game['start'],
             'finish'     => $this->calcFinish($game['start'],$homePoolTeam),
         ];
@@ -151,7 +151,7 @@ class GameImportUpdater
         $this->conn->insert('gameTeams',$gameTeam);
 
         // Officials
-        $isMedalRound = in_array($homePoolTeam['poolTypeKey'],['QF','SF','TF']);
+        $isMedalRound = in_array($homePoolTeam['poolTypeKey'],['QF','SF','CO','TF']);
         $gameOfficial = [
             'projectId'   => $projectId,
             'gameId'      => $gameId,
@@ -203,15 +203,24 @@ class GameImportUpdater
     private function calcFinish($start,$poolTeam)
     {
         $lengths = [
-            'U10' => 40 +  5,
-            'U12' => 50 +  5,
-            'U14' => 50 + 10,
-            'U16' => 60 + 10,
-            'U19' => 60 + 10,
+            '10U' => 40 + 5,
+            '11U' => 50 + 5,
+            '12U' => 50 + 5,
+            '13U' => 50 + 5,
+            '14U' => 50 + 10,
+            '16U' => 60 + 10,
+            '19U' => 60 + 10,
+            '2008' => 40 + 5,
+            '2007' => 40 + 5,
+            '2005/2006' => 50 + 5,
+            '2006' => 50 + 5,
+            '2005' => 50 + 5,
+            '2003/2004' => 50 + 5,
+            '2004' => 50 + 5,
         ];
         $finishDateTime = new DateTime($start);
 
-        $age = $poolTeam['age'];
+        $age = (string) $poolTeam['age'];
 
         $interval = sprintf('PT%dM',$lengths[$age]);
 

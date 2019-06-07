@@ -2,6 +2,7 @@
 namespace AppBundle\Action\PoolTeam\Export;
 
 use AppBundle\Action\Game\PoolTeam;
+<<<<<<< HEAD
 use PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -14,29 +15,55 @@ use PhpOffice\PhpSpreadsheet\Exception;
 class PoolTeamExportWriterExcel
 {
     private $ws;
+=======
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
+class PoolTeamExportWriterExcel
+{
+    /** @var PhpSpreadsheet\Spreadsheet */
+    private $wb;
+>>>>>>> ng2019x2
 
     /**
      * @param  PoolTeam[] $poolTeams
+     * @param string filename
      * @return string
+<<<<<<< HEAD
      * @throws Exception
+=======
+     * @throws PhpSpreadsheet\Exception
+>>>>>>> ng2019x2
      */
-    public function write(array $poolTeams)
+    public function write(array $poolTeams, $filename='php://output')
     {
         // Not sure this is needed
+<<<<<<< HEAD
         Cell::setValueBinder(new AdvancedValueBinder());
 
         $this->ws = new Spreadsheet();
         $ws = $this->ws->getActiveSheet();
+=======
+        PhpSpreadsheet\Cell\Cell::setValueBinder(new PhpSpreadsheet\Cell\AdvancedValueBinder());
+
+        $this->wb = $wb = new PhpSpreadsheet\Spreadsheet();
+
+        $ws = $wb->getSheet(0);
+>>>>>>> ng2019x2
 
         $this->writePoolTeams($ws, $poolTeams);
         
-        return $this->getContents();
+        return $this->getContents($filename);
     }
 
     /**
      * @param Worksheet $ws
      * @param PoolTeam[] $poolTeams
+<<<<<<< HEAD
      * @throws Exception
+=======
+     * @throws PhpSpreadsheet\Exception
+>>>>>>> ng2019x2
      */
     private function writePoolTeams(Worksheet $ws,$poolTeams)
     {
@@ -111,16 +138,24 @@ class PoolTeamExportWriterExcel
 
             $ws->getCell($colProjectId    . $row)->setValue('Views');
             $ws->getCell($colPoolKey      . $row)->setValue($poolTeam->poolView);
+<<<<<<< HEAD
             $ws->getCell($colPoolSlot     . $row)->setValueExplicit($poolTeam->poolSlotView,DataType::TYPE_STRING);
             $ws->getCell($colPoolTypeKey  . $row)->setValue($poolTeam->poolTypeView);
             $ws->getCell($colPoolTeamKey  . $row)->setValue($poolTeam->poolTeamView);
             $ws->getCell($colPoolTeamSlot . $row)->setValueExplicit($poolTeam->poolTeamSlotView,DataType::TYPE_STRING);
+=======
+            $ws->getCell($colPoolSlot     . $row)->setValueExplicit($poolTeam->poolSlotView,PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $ws->getCell($colPoolTypeKey  . $row)->setValue($poolTeam->poolTypeView);
+            $ws->getCell($colPoolTeamKey  . $row)->setValue($poolTeam->poolTeamView);
+            $ws->getCell($colPoolTeamSlot . $row)->setValueExplicit($poolTeam->poolTeamSlotView,PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+>>>>>>> ng2019x2
 
             $ws->getCell($colRegTeamKey   . $row)->setValue($poolTeam->regTeamName);
 
             $row += 2;
         }
     }
+<<<<<<< HEAD
 
     /**
      * @return false|string
@@ -129,8 +164,13 @@ class PoolTeamExportWriterExcel
     private function getContents()
     {
         $writer = IOFactory::createWriter($this->ws, "Xlsx");
+=======
+    private function getContents($filename)
+    {
+        $writer = new PhpSpreadsheet\Writer\Xlsx($this->wb);
+>>>>>>> ng2019x2
         ob_start();
-        $writer->save('php://output');
+        $writer->save($filename);
         return ob_get_clean();
     }
 
