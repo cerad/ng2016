@@ -10,7 +10,7 @@ use AppBundle\Action\Game\GameOfficial;
 
 use AppBundle\Common\ExcelWriterTrait;
 
-use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
+use AysoBundle\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\ShirtSizeTransformer;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;

@@ -4,11 +4,19 @@
     "type": "project",
     "description": "AYSO National Games 2019",
     "autoload": {
-        "psr-4": { "": "src/", "Cerad\\Bundle\\": "src/" },
+        "psr-4": { "": "src/",
+            "AppBundle\\": "src/AppBundle",
+            "AysoBundle\\": "src/AysoBundle",
+            "UserBundle\\": "src/UserBundle"
+        },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" }
+        "psr-4": { "": "src/",
+            "AppBundle\\": "src/AppBundle",
+            "AysoBundle\\": "src/AysoBundle",
+            "UserBundle\\": "src/UserBundle",
+            "Tests\\": "tests/"}
     },
     "require": {
         "php": ">=7.2",

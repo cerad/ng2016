@@ -113,7 +113,7 @@ services:
         public: true
         class:  AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel
         arguments:
-            - "@cerad.ayso.finder"
+            - "@ayso.finder"
 
     reg_team_import_updater:
         public: true
@@ -133,7 +133,7 @@ services:
         public: true
         class:  AppBundle\Action\RegTeam\Transform\RegTeamTransformReaderExcel
         arguments:
-            - "@cerad.ayso.finder"
+            - "@ayso.finder"
 
     reg_team_transform_writer_excel:
         public: true

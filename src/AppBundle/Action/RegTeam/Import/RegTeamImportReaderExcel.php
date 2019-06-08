@@ -3,7 +3,7 @@
 namespace AppBundle\Action\RegTeam\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
-use Cerad\Bundle\AysoBundle\AysoFinder;
+use AysoBundle\AysoFinder;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class RegTeamImportReaderExcel

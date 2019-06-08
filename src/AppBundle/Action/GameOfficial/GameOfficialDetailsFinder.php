@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Action\GameOfficial;
 
-use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
+use AysoBundle\DataTransformer\RegionToSarTransformer;
 use Doctrine\DBAL\Connection;
 
 class GameOfficialDetailsFinder

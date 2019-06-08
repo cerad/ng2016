@@ -2,8 +2,8 @@
 
 namespace AppBundle\Action\Project\Person;
 
-use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
-use Cerad\Bundle\AysoBundle\DataTransformer\VolunteerKeyTransformer;
+use AysoBundle\DataTransformer\RegionToSarTransformer;
+use AysoBundle\DataTransformer\VolunteerKeyTransformer;
 use AppBundle\Action\Physical\Person\DataTransformer\PhoneTransformer;
 use AppBundle\Action\Project\Person\ViewTransformer\WillRefereeTransformer;
 

@@ -8,7 +8,7 @@ use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 use Doctrine\DBAL\DBALException;
 
-use Cerad\Bundle\AysoBundle\AysoFinder;
+use AysoBundle\AysoFinder;
 
 use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;

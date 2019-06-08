@@ -2,7 +2,7 @@
 
 namespace AppBundle\Action\RegTeam\Transform;
 
-use Cerad\Bundle\AysoBundle\AysoFinder;
+use AysoBundle\AysoFinder;
 use AppBundle\Common\ExcelReaderTrait;
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;

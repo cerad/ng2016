@@ -1,5 +1,5 @@
 <?php
-namespace Cerad\Bundle\PersonBundle\DataTransformer;
+namespace PersonBundle\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 

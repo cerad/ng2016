@@ -1,8 +1,8 @@
 <?php
 
-namespace Cerad\Bundle\GameBundle\Action\Project\GameOfficials\Assign;
+namespace GameBundle\Action\Project\GameOfficials\Assign;
 
-use Cerad\Bundle\CoreBundle\Event\Person\FindProjectPersonEvent;
+use CoreBundle\Event\Person\FindProjectPersonEvent;
 
 class AssignByAssignorWorkflow extends AssignWorkflow
 {

@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Reader;
 use PhpOffice\PhpSpreadsheet;
 
 use Doctrine\DBAL\Connection;
-use Cerad\Bundle\AysoBundle\AysoFinder;
+use AysoBundle\AysoFinder;
 
 class ImportAffinityCommand extends Command
 {

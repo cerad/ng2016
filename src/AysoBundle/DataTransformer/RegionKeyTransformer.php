@@ -1,5 +1,5 @@
 <?php
-namespace Cerad\Bundle\AysoBundle\DataTransformer;
+namespace AysoBundle\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 

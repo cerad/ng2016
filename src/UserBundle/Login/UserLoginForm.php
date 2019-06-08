@@ -1,5 +1,5 @@
 <?php
-namespace Cerad\UserBundle\Login;
+namespace UserBundle\Login;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;

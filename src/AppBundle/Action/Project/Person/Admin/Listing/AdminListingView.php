@@ -226,9 +226,9 @@ EOD;
 
         return <<<EOD
 <table>
-  <tr><td>Will Referee  </td><td>{$personView->willReferee}  </td></tr>
-  <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}</td></tr>
-  <tr><td>Will Coach    </td><td>{$personView->willCoach}    </td></tr>
+  <tr><td>Will  Referee  </td><td>{$personView->willReferee}  </td></tr>
+  <tr><td>Will  Volunteer</td><td>{$personView->willVolunteer}</td></tr>
+  <tr><td>Will  Coach    </td><td>{$personView->willCoach}    </td></tr>
   <tr><td colspan="2" style="max-width: 150px; ">{$notesUser}</td></tr>
 </table>
 EOD;

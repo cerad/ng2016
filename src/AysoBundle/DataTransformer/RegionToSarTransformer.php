@@ -1,7 +1,7 @@
 <?php
-namespace Cerad\Bundle\AysoBundle\DataTransformer;
+namespace AysoBundle\DataTransformer;
 
-use Cerad\Bundle\AysoBundle\AysoFinder;
+use AysoBundle\AysoFinder;
 
 use Symfony\Component\Form\DataTransformerInterface;
 

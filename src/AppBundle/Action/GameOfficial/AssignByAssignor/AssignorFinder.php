@@ -3,7 +3,7 @@ namespace AppBundle\Action\GameOfficial\AssignByAssignor;
 
 use AppBundle\Action\Game\Game;
 use AppBundle\Action\Game\GameOfficial;
-use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
+use AysoBundle\DataTransformer\RegionToSarTransformer;
 use AppBundle\Action\Project\User\ProjectUser;
 use Doctrine\DBAL\Connection;
 

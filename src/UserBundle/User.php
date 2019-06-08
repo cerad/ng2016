@@ -1,5 +1,5 @@
 <?php
-namespace Cerad\UserBundle;;
+namespace UserBundle;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 

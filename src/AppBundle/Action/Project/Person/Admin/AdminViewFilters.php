@@ -13,9 +13,13 @@ class AdminViewFilters
     /** var ProjectPersonRepositoryV2 **/
     private $projectPersonRepository;
 
+    /** string regYearProject */
+    private $regYearProject;
+
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
-        ProjectPersonRepositoryV2 $projectPersonRepository
+        ProjectPersonRepositoryV2 $projectPersonRepository,
+        array $appProject
     ) {
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
         $this->projectPersonRepository = $projectPersonRepository;

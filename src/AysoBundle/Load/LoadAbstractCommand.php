@@ -2,8 +2,8 @@
 
 namespace AysoBundle\Load;
 
-use Cerad\Bundle\AysoBundle\AysoFinder;
-use Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer;
+use AysoBundle\AysoFinder;
+use AysoBundle\DataTransformer\RegionToSarTransformer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

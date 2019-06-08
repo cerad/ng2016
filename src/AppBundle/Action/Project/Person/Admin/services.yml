@@ -18,7 +18,7 @@ services:
             - "@user_manager"
             - "@project_person_connection"
             - "@project_person_repository_v2"
-            - "@cerad.ayso.finder"
+            - "@ayso.finder"
             - "@phone_transformer"
 
     # reg stands for registered
@@ -29,7 +29,7 @@ services:
             - "@user_manager"
             - "@project_person_connection"
             - "@project_person_repository_v2"
-            - "@cerad.ayso.finder"
+            - "@ayso.finder"
             - "@phone_transformer"
 
     reg_person_manage_roles_command:
@@ -125,3 +125,4 @@ services:
         arguments:
             - "@project_person_view_decorator"
             - "@project_person_repository_v2"
+            - "%app_project%"

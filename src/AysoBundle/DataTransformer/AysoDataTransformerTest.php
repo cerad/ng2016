@@ -1,8 +1,8 @@
 <?php
 
-namespace Cerad\Bundle\AysoBundle\DataTransformer;
+namespace AysoBundle\DataTransformer;
 
-use Cerad\Bundle\AysoBundle\AysoFinder;
+use AysoBundle\AysoFinder;
 use AppBundle\AbstractTestDatabase;
 
 class AysoDataTransformerTest extends AbstractTestDatabase

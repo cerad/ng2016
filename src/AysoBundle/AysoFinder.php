@@ -1,5 +1,5 @@
 <?php
-namespace Cerad\Bundle\AysoBundle;
+namespace AysoBundle;
 
 use AppBundle\Action\Services\VolCerts;
 use Doctrine\DBAL\Statement;
@@ -23,10 +23,9 @@ class AysoFinder
     /** @var  Statement */
     private $findOrgStmt;
 
-    public function __construct(Connection $conn, VolCerts $volCerts)
+    public function __construct(Connection $conn)
     {
         $this->conn = $conn;
-        $this->volCerts = $volCerts;
     }
 
     /**

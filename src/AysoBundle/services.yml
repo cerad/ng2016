@@ -9,8 +9,8 @@ services:
     ng.games.connection:
         alias: doctrine.dbal.ng2019games_connection
 
-    cerad.ayso.finder:
-        class: Cerad\Bundle\AysoBundle\AysoFinder
+    ayso.finder:
+        class: AysoBundle\AysoFinder
         arguments: ["@ayso.connection"]
 
 #    ayso_load_eayso_command:
@@ -19,12 +19,12 @@ services:
 #        arguments:
 #            - "@ayso_connection"
 
-#    cerad.ayso.load_certs.command:
+#    ayso.load_certs.command:
 #        class: AysoBundle\Load\LoadCertBSCommand
 #        tags: [{ name: console.command }]
 #        arguments: ["@ayso.connection"]
 
-#    cerad.ayso.load_vols.command:
+#    ayso.load_vols.command:
 #        class: AysoBundle\Load\LoadVolsBSCommand
 #        tags: [{ name: console.command }]
 #        arguments: ["@ayso.connection"]
@@ -58,12 +58,12 @@ services:
             - "%app_project_key%"
             - "%app_project%"
 
-    cerad.ayso.region_key_transformer:
-        class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionKeyTransformer
+    ayso.region_key_transformer:
+        class:  AysoBundle\DataTransformer\RegionKeyTransformer
 
-    cerad.ayso.volunteer_key_transformer:
-        class:  Cerad\Bundle\AysoBundle\DataTransformer\VolunteerKeyTransformer
+    ayso.volunteer_key_transformer:
+        class:  AysoBundle\DataTransformer\VolunteerKeyTransformer
 
-    cerad.ayso.region_to_sar_transformer:
-        class:  Cerad\Bundle\AysoBundle\DataTransformer\RegionToSarTransformer
-        arguments: ["@cerad.ayso.finder"]
+    ayso.region_to_sar_transformer:
+        class:  AysoBundle\DataTransformer\RegionToSarTransformer
+        arguments: ["@ayso.finder"]

@@ -3,10 +3,10 @@
 namespace AppBundle\Action\GameOfficial\Workflow;
 
 use AppBundle\Action\Game\GameOfficial;
-use Cerad\Bundle\GameBundle\GameEvents;
-use Cerad\Bundle\GameBundle\Event\GameOfficial\AssignSlotEvent;
+use GameBundle\GameEvents;
+use GameBundle\Event\GameOfficial\AssignSlotEvent;
 
-use Cerad\Bundle\CoreBundle\Event\Person\FindProjectPersonEvent;
+use CoreBundle\Event\Person\FindProjectPersonEvent;
 
 class AssignByAssigneeWorkflow extends AssignWorkflow
 {

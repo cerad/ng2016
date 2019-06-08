@@ -1,5 +1,5 @@
 <?php
-namespace Cerad\Bundle\AysoBundle;
+namespace AysoBundle;
 
 use AppBundle\Action\Physical\Ayso\PhysicalAysoRepository;
 
