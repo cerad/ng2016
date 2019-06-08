@@ -4,12 +4,11 @@ namespace AppBundle\Action\Project\Person\Register;
 
 use AppBundle\Action\AbstractController2;
 
-use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\Action\Project\Person\ProjectPerson;
 use AppBundle\Action\Project\Person\ProjectPersonRepositoryV2;
 use Doctrine\DBAL\DBALException;
 
-use AppBundle\Action\Services\VolCerts;
+use Cerad\Bundle\AysoBundle\AysoFinder;
 
 use Swift_Message;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,32 +26,11 @@ class RegisterController extends AbstractController2
 
     private $refereeBadgeUser;
 
-<<<<<<< HEAD
-    /**
-     * RegisterController constructor.
-     * @param RegisterForm $registerForm
-     * @param ProjectPersonRepositoryV2 $projectPersonRepository
-     * @param PhysicalAysoRepository $fedRepository
-     * @param $successRouteName
-     * @param RegisterTemplateEmail $templateEmail
-     * @param VolCerts $volCerts
-     */
-=======
     private $project;
 
->>>>>>> ng2019x2
     public function __construct(
         RegisterForm $registerForm,
         ProjectPersonRepositoryV2 $projectPersonRepository,
-<<<<<<< HEAD
-        PhysicalAysoRepository $fedRepository,
-        $successRouteName,
-        RegisterTemplateEmail $templateEmail,
-        VolCerts $volCerts
-    ) {
-        $this->registerForm = $registerForm;
-        $this->fedRepository = $fedRepository;
-=======
         AysoFinder                $fedFinder,
                                   $successRouteName,
         RegisterTemplateEmail     $templateEmail
@@ -60,12 +38,10 @@ class RegisterController extends AbstractController2
     {
         $this->registerForm            = $registerForm;
         $this->fedFinder               = $fedFinder;
->>>>>>> ng2019x2
         $this->projectPersonRepository = $projectPersonRepository;
 
         $this->successRouteName = $successRouteName;
         $this->templateEmail = $templateEmail;
-        $this->volCerts = $volCerts;
     }
 
     /**
@@ -144,29 +120,6 @@ class RegisterController extends AbstractController2
         // Need some notifications here?
         $projectPerson->registered = true;
 
-        //Update MY, SAR, Certs with e3 data
-        $fedKeyParts =  explode(':', $fedKey);
-        $aysoid = isset($fedKeyParts[1]) ? $fedKeyParts[1]: null;
-        $e3Certs = (object) $this->volCerts->retrieveVolCertData($aysoid);
-        $sar = explode('/', $e3Certs->SAR);
-        if(isset($sar[2])){
-            $projectPerson->orgKey = 'AYSOR:' . $sar[2];
-        }
-        $projectPerson->regYear = $e3Certs->MY;
-        if (isset($projectPerson->roles['CERT_REFEREE'])) {
-            $certDesc = explode(' ', $e3Certs->RefCertDesc);
-            $projectPerson->roles['CERT_REFEREE']->badge = isset($certDesc[0]) ? $certDesc[0] : '';
-            $projectPerson->roles['CERT_REFEREE']->badgeDate = $e3Certs->RefCertDate;
-            $projectPerson->roles['CERT_REFEREE']->verified = !empty($e3Certs->RefCertDate);
-        }
-        if (isset($projectPerson->roles['CERT_SAFE_HAVEN'])) {
-            $projectPerson->roles['CERT_SAFE_HAVEN']->badgeDate = $e3Certs->SafeHavenDate;
-            $projectPerson->roles['CERT_SAFE_HAVEN']->verified = !empty($e3Certs->SafeHavenDate);
-        }
-        if (isset($projectPerson->roles['CERT_CONCUSSION'])) {
-            $projectPerson->roles['CERT_CONCUSSION']->badgeDate = $e3Certs->CDCDate;
-            $projectPerson->roles['CERT_CONCUSSION']->verified = !empty($e3Certs->CDCDate);
-        }
         return $projectPerson;
     }
 
@@ -218,11 +171,7 @@ class RegisterController extends AbstractController2
 
         $safeHavenCert->active = false;
 
-<<<<<<< HEAD
-        $cert = $this->fedRepository->findVolCert($fedKey, $certKey);
-=======
         $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
->>>>>>> ng2019x2
 
         if ($cert) {
             $safeHavenCert->badge = $cert['badge'];
@@ -236,11 +185,7 @@ class RegisterController extends AbstractController2
 
         $concCert->active = false;
 
-<<<<<<< HEAD
-        $cert = $this->fedRepository->findVolCert($fedKey, $certKey);
-=======
         $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
->>>>>>> ng2019x2
 
         if ($cert) {
             $concCert->badge = $cert['badge'];
@@ -277,11 +222,7 @@ class RegisterController extends AbstractController2
 
         $safeHavenCert->active = false;
 
-<<<<<<< HEAD
-        $cert = $this->fedRepository->findVolCert($fedKey, $certKey);
-=======
         $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
->>>>>>> ng2019x2
 
         if ($cert) {
             $safeHavenCert->badge = $cert['badge'];
@@ -311,9 +252,6 @@ class RegisterController extends AbstractController2
             return $projectPerson;
         }
         // Search previous tournaments
-<<<<<<< HEAD
-        $projectPerson = $projectPersonRepository->find('AYSONationalGames2014', $personKey);
-=======
         $projectPerson = $projectPersonRepository->find('AYSONationalOpenCup2017',$personKey);
 
         if (!$projectPerson) {
@@ -322,7 +260,6 @@ class RegisterController extends AbstractController2
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->find('AYSONationalGames2014', $personKey);
         }
->>>>>>> ng2019x2
 
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->find('AYSONationalGames2012', $personKey);
@@ -385,15 +322,6 @@ class RegisterController extends AbstractController2
     private function sendEmail($person)
     {
         $projectInfo = $this->getCurrentProjectInfo();
-<<<<<<< HEAD
-        $support = $projectInfo['support'];
-        $assignor = $projectInfo['assignor'];
-        $refAdmin = $projectInfo['administrator'];
-
-        $update = $person['id'] ? ' Update' : null;
-
-        $subject = sprintf('[NG2019] Registration%s for: %s',$update,$person['name']);
-=======
         $support  = $projectInfo['support'];
         $registration = $projectInfo['registration'];
         $assignor = $projectInfo['assignor'];
@@ -402,7 +330,6 @@ class RegisterController extends AbstractController2
         $update = $person['id'] ? 'Update' : null;
 
         $subject = sprintf("[{$this->project['abbv']}] Registration %s for: %s",$update,$person['name']);
->>>>>>> ng2019x2
 
         $html = $this->templateEmail->renderHtml($person);
 
@@ -428,19 +355,10 @@ class RegisterController extends AbstractController2
 
         $message->setReplyTo($toms);
 
-<<<<<<< HEAD
-        $message->setBcc(
-            [
-                $support['email'] => $support['name'],
-                'web.ng2019@gmail.com' => 'Rick Roberts', // ???
-            ]
-        );
-=======
         $message->setBcc([
             $support['email'] => $support['name'],
             $registration['email'] => $registration['name'], // ???
         ]);
->>>>>>> ng2019x2
 
         /**  noinspection PhpParamsInspection */
         $mailer->send($message);

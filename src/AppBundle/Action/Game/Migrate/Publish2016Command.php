@@ -3,11 +3,7 @@ namespace AppBundle\Action\Game\Migrate;
 
 use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
-<<<<<<< HEAD
-use AppBundle\Action\Schedule2019\ScheduleFinder;
-=======
 use AppBundle\Action\Schedule\ScheduleFinder;
->>>>>>> ng2019x2
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,19 +11,45 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL;
 
 class Publish2016Command extends Command
 {
+    /**
+     * @var RegTeamImportReaderExcel
+     */
     private $reader;
-    
+
+    /**
+     * @var Connection
+     */
     private $gameConn;
+    /**
+     * @var Connection
+     */
     private $regTeamConn;
-    
+
+    /**
+     * @var ScheduleFinder
+     */
     private $gameFinder;
+    /**
+     * @var GameUpdater
+     */
     private $gameUpdater;
-    
+
+    /**
+     * @var string
+     */
     private $projectId = 'AYSONationalOpenCup2017';
 
+    /**
+     * Publish2016Command constructor.
+     * @param Connection $ng2019GamesConn
+     * @param ScheduleFinder $gameFinder
+     * @param GameUpdater $gameUpdater
+     * @param RegTeamImportReaderExcel $reader
+     */
     public function __construct(
         Connection $ng2019GamesConn,
         ScheduleFinder $gameFinder,
@@ -45,6 +67,9 @@ class Publish2016Command extends Command
         $this->gameUpdater = $gameUpdater;
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -53,6 +78,12 @@ class Publish2016Command extends Command
             ->addArgument('filename',InputArgument::OPTIONAL);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws DBAL\DBALException
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         echo sprintf("Publish Assignments NG2016 ...\n");

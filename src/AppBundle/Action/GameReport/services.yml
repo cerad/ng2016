@@ -3,7 +3,6 @@ services:
     _defaults: { public: true }
 
     game_report_repository:
-<<<<<<< HEAD:src/AppBundle/Action/GameReport2016/services.yml
         public: true
         class: AppBundle\Action\GameReport2016\GameReportRepository
         arguments: ['@game_connection']
@@ -15,37 +14,19 @@ services:
     game_report_update_form:
         public: true
         class: AppBundle\Action\GameReport2016\Update\GameReportUpdateForm
-=======
-        class: AppBundle\Action\GameReport\GameReportRepository
-        arguments: ['@game_connection']
-
-    game_report_points_calculator:
-        class: AppBundle\Action\GameReport\GameReportPointsCalculator
-
-    game_report_update_form:
-        class: AppBundle\Action\GameReport\Update\GameReportUpdateForm
->>>>>>> ng2019x2:src/AppBundle/Action/GameReport/services.yml
         parent: abstract_form
         arguments: ['@game_report_repository']
 
     game_report_update_view:
-<<<<<<< HEAD:src/AppBundle/Action/GameReport2016/services.yml
         public: true
         class: AppBundle\Action\GameReport2016\Update\GameReportUpdateView
-=======
-        class: AppBundle\Action\GameReport\Update\GameReportUpdateView
->>>>>>> ng2019x2:src/AppBundle/Action/GameReport/services.yml
         parent: abstract_view2
         arguments:
             - '@game_report_update_form'
 
     game_report_update_controller:
-<<<<<<< HEAD:src/AppBundle/Action/GameReport2016/services.yml
         public: true
         class:  AppBundle\Action\GameReport2016\Update\GameReportUpdateController
-=======
-        class:  AppBundle\Action\GameReport\Update\GameReportUpdateController
->>>>>>> ng2019x2:src/AppBundle/Action/GameReport/services.yml
         parent: abstract_controller
         arguments:
             - '@game_report_update_form'

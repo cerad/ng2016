@@ -145,16 +145,6 @@ class ProjectPersonViewDecorator
         $cert = $this->person->getCert($certKey);
         $suffix = $cert->verified ? null : ' ***';
         if ($certKey !== 'CERT_REFEREE') {
-<<<<<<< HEAD
-            return $cert->verified ? 'Yes' : 'No' . $suffix;
-        }
-
-        if ((!$cert->badgeUser) || strpos($cert->badge, $cert->badgeUser) > -1) {
-            return $cert->badge . $suffix;
-        }
-
-        return $cert->badge . '/' . $cert->badgeUser . $suffix;
-=======
             return $cert->verified ? 'Yes' : 'No'.$suffix;
         }
         if ((!$cert->badgeUser) || $cert->badge === $cert->badgeUser) {
@@ -162,7 +152,6 @@ class ProjectPersonViewDecorator
         }
 
         return $cert->badge.'/'.$cert->badgeUser.$suffix;
->>>>>>> ng2019x2
     }
 
     public function hasCertIssues()
@@ -180,13 +169,6 @@ class ProjectPersonViewDecorator
 
         return false;
     }
-<<<<<<< HEAD
-    public function hasRegistrationIssue($regYearProject)
-    {
-        return $this->regYear >= $regYearProject;
-    }
-    public function getRoleClass($role)
-=======
 
     public function isCurrentMY($regYearProject)
     {
@@ -203,7 +185,7 @@ class ProjectPersonViewDecorator
     }
 
     public function getRoleClass($role, $regYearProject)
->>>>>>> ng2019x2
+
     {
         if ($role->approved) {
             return $this->successClass;

@@ -61,13 +61,9 @@ class ImportSomberoCommand extends Command
     }
     private function import($filename)
     {
-<<<<<<< HEAD
-        /** @var PHPExcel_Reader_Abstract $reader */
-        $reader = PHPExcel_IOFactory::createReaderForFile($filename);
-=======
         /** @var Xlsx $reader */
         $reader = IOFactory::createReaderForFile($filename);
->>>>>>> ng2019x2
+
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);

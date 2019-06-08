@@ -7,12 +7,7 @@ services:
         public: true
         class: AppBundle\Action\Project\Person\ProjectPersonRepositoryV2
         arguments:
-<<<<<<< HEAD
-            - '@project_person_connection'
-            - '@vol_certs'
-=======
             - "@project_person_connection"
->>>>>>> ng2019x2
 
     # reg stands for registered
     reg_person_import_sombero_command:
@@ -42,13 +37,8 @@ services:
         class: AppBundle\Action\Project\Person\Admin\ManageRoles\ManageRolesCommand
         tags: [{ name: console.command }]
         arguments:
-<<<<<<< HEAD
-            - '@project_person_connection'
-            - '%app_project_key%'
-=======
             - "@project_person_connection"
             - "%app_project_key%"
->>>>>>> ng2019x2
 
 # ==========================================================================
 # Listing (List throws exception)
@@ -133,12 +123,5 @@ services:
         public: true
         class:  AppBundle\Action\Project\Person\Admin\AdminViewFilters
         arguments:
-<<<<<<< HEAD
-            - '@project_person_view_decorator'
-            - '@project_person_repository_v2'
-            - '%app_project%'
-=======
             - "@project_person_view_decorator"
             - "@project_person_repository_v2"
->>>>>>> ng2019x2
-            

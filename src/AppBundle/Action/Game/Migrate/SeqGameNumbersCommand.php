@@ -4,14 +4,6 @@ namespace AppBundle\Action\Game\Migrate;
 use AppBundle\Action\Game\GameFinder;
 use AppBundle\Action\Game\GameUpdater;
 
-<<<<<<< HEAD
-use AppBundle\Action\Schedule2019\ScheduleGame;
-use AppBundle\Action\Schedule2019\ScheduleGameTeam;
-=======
-use AppBundle\Action\Schedule\ScheduleGame;
-use AppBundle\Action\Schedule\ScheduleGameTeam;
->>>>>>> ng2019x2
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,8 +12,6 @@ use Doctrine\DBAL\Connection;
 
 class SeqGameNumbersCommand extends Command
 {
-    private $reader;
-    
     private $gameConn;
 
     private $gameFinder;

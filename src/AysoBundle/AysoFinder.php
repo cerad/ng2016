@@ -1,10 +1,5 @@
 <?php
-<<<<<<< HEAD:src/AppBundle/Action/Physical/Ayso/PhysicalAysoRepository.php
-
-namespace AppBundle\Action\Physical\Ayso;
-=======
 namespace Cerad\Bundle\AysoBundle;
->>>>>>> ng2019x2:src/AysoBundle/AysoFinder.php
 
 use AppBundle\Action\Services\VolCerts;
 use Doctrine\DBAL\Statement;

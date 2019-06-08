@@ -13,22 +13,10 @@ class AdminViewFilters
     /** var ProjectPersonRepositoryV2 **/
     private $projectPersonRepository;
 
-<<<<<<< HEAD
-    /** var string $regYearProject */
-    private $regYearProject;
-
-    public function __construct(
-        ProjectPersonViewDecorator $projectPersonViewDecorator,
-        ProjectPersonRepositoryV2 $projectPersonRepository,
-        array $appProject
-    )
-    {
-=======
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
         ProjectPersonRepositoryV2 $projectPersonRepository
     ) {
->>>>>>> ng2019x2
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
         $this->projectPersonRepository = $projectPersonRepository;
         $this->regYearProject = $appProject['info']['regYear'];
@@ -118,8 +106,6 @@ class AdminViewFilters
                         }
                     }
                     break;
-<<<<<<< HEAD
-=======
                 case 'AdultRefs':
 //                case 'Referees with Adult Experience':
 //                    if (isset($person['roles']['ROLE_REFEREE'])) {
@@ -128,7 +114,6 @@ class AdminViewFilters
 //                        }
 //                    }
 //                    break;
->>>>>>> ng2019x2
 //                case 'FL':
 //                case 'FL Residents':
 //                    //get the state
@@ -161,22 +146,10 @@ class AdminViewFilters
 
         return $listPersons;
     }
-<<<<<<< HEAD
-    private function hasIssues(ProjectPersonViewDecorator $personView)
-    {
-        if($personView->hasRegistrationIssue($this->regYearProject)) {
 
-            return true;
-        }
-        
-=======
-
-
-    private
-    function hasIssues(
+    private function hasIssues(
         ProjectPersonViewDecorator $personView
     ) {
->>>>>>> ng2019x2
         $certs = $personView->getCerts();
         $issues = false;
         foreach ($certs as $cert) {

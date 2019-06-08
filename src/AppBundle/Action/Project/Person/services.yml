@@ -3,10 +3,7 @@ services:
     _defaults: { public: true }
 
     project_person_connection:
-<<<<<<< HEAD
         public: true;
-=======
->>>>>>> ng2019x2
         alias: doctrine.dbal.ng2019_connection
 
     project_person_repository:
@@ -32,20 +29,11 @@ services:
         class:  AppBundle\Action\Project\Person\Register\RegisterController
         parent: abstract_controller
         arguments:
-<<<<<<< HEAD
-            - '@project_person_register_form'
-            - '@project_person_repository_v2'
-            - '@ayso_repository'
-            - '%app_home_route%'
-            - '@project_person_register_template_email'
-            - '@vol_certs'
-=======
             - "@project_person_register_form"
             - "@project_person_repository_v2"
             - "@cerad.ayso.finder"
             - "%app_home_route%"
             - "@project_person_register_template_email"
->>>>>>> ng2019x2
 
     project_person_register_view:
         public: true;

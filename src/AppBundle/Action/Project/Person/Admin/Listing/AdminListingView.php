@@ -200,21 +200,12 @@ EOD;
     // TODO Pull ayso name,email,phone if available
     private function renderAysoInfo(ProjectPersonViewDecorator $personView)
     {
-<<<<<<< HEAD
-        $regYearProject = $this->getCurrentProjectInfo()['regYear'];
-        $aysoId = is_null($personView->fedId) ? '' : "<a href='$this->certURL$personView->fedId' target='_blank'>$personView->fedId</a>";
-=======
         $link = $this->certURL . $personView->fedId;
->>>>>>> ng2019x2
         return <<<EOD
 <table>
   <tr>
     <td>AYSO ID</td>
-<<<<<<< HEAD
-    <td>{$aysoId}</td>
-=======
     <td><a href="$link" target="_blank">$personView->fedId</a></td>
->>>>>>> ng2019x2
   </tr><tr>
     <td>S/A/R/St</td>
     <td class="{$personView->getOrgKeyClass()}">{$personView->orgKey}</td>

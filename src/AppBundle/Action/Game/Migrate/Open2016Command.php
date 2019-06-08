@@ -3,11 +3,7 @@ namespace AppBundle\Action\Game\Migrate;
 
 use AppBundle\Action\Game\GameUpdater;
 use AppBundle\Action\RegTeam\Import\RegTeamImportReaderExcel;
-<<<<<<< HEAD
-use AppBundle\Action\Schedule2019\ScheduleFinder;
-=======
 use AppBundle\Action\Schedule\ScheduleFinder;
->>>>>>> ng2019x2
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

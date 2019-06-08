@@ -2,28 +2,6 @@ services:
     _defaults: { public: true }
 
     game_connection:
-<<<<<<< HEAD
-        public: true
-        alias: doctrine.dbal.ng2019games_connection
-
-    game_seq_numbers_command:
-        public: true
-        class: AppBundle\Action\Game\Migrate\SeqGameNumbersCommand
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@game_finder'
-            - '@game_updater'
-
-    game_validate_command:
-        public: true
-        class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
-        tags: [{ name: console.command }]
-        arguments:
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@game_finder'
-            - '@game_updater'
-=======
         alias: doctrine.dbal.ng2019games_connection
 
 #    game_migrate_ng2014_command:
@@ -189,29 +167,19 @@ services:
         arguments:
             - "%app_project_key%"
             - "@doctrine.dbal.ng2019games_connection"
->>>>>>> ng2019x2
 
     game_finder:
         public: true
         class: AppBundle\Action\Game\GameFinder
         arguments:
-<<<<<<< HEAD
-            - '@doctrine.dbal.ng2019games_connection'
-            - '@doctrine.dbal.ng2019games_connection'
-=======
             - "@doctrine.dbal.ng2019games_connection"
             - "@doctrine.dbal.ng2019games_connection"
->>>>>>> ng2019x2
 
     game_updater:
         public: true
         class: AppBundle\Action\Game\GameUpdater
         arguments:
-<<<<<<< HEAD
-            - '@doctrine.dbal.ng2019games_connection'
-=======
             - "@doctrine.dbal.ng2019games_connection"
->>>>>>> ng2019x2
 
 # Admin listing action
     game_listing_search_form:

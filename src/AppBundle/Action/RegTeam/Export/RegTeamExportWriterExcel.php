@@ -2,52 +2,29 @@
 namespace AppBundle\Action\RegTeam\Export;
 
 use AppBundle\Action\Game\RegTeam;
-<<<<<<< HEAD
-use PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder;
-use PhpOffice\PhpSpreadsheet\Cell\Cell;
-use PhpOffice\PhpSpreadsheet\Exception;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-=======
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
->>>>>>> ng2019x2
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class RegTeamExportWriterExcel
 {
-<<<<<<< HEAD
-    private $ws;
-=======
     /** @var Spreadsheet */
     private $wb;
->>>>>>> ng2019x2
 
     /**
      * @param  RegTeam[] regTeams
      * @param  string filename
      * @return string
-<<<<<<< HEAD
-     * @throws Exception
-=======
      * @throws PhpSpreadsheet\Exception
->>>>>>> ng2019x2
      */
     public function write(array $regTeams, $filename='php://output')
     {
         // Not sure this is needed
-<<<<<<< HEAD
-        Cell::setValueBinder(new AdvancedValueBinder());
-
-        $this->ws = new Spreadsheet();
-=======
         PhpSpreadsheet\Cell\Cell::setValueBinder(new PhpSpreadsheet\Cell\AdvancedValueBinder());
 
         $this->wb = $wb = new Spreadsheet();
 
         $ws = $wb->getSheet(0);
->>>>>>> ng2019x2
 
         $ws = $this->ws->getActiveSheet();
         $this->writeRegTeams($ws, $regTeams);
@@ -69,11 +46,7 @@ class RegTeamExportWriterExcel
     /**
      * @param  Worksheet $ws
      * @param   RegTeam[] $regTeams
-<<<<<<< HEAD
-     * @throws Exception
-=======
      * @throws PhpSpreadsheet\Exception
->>>>>>> ng2019x2
      */
     private function writeRegTeams(Worksheet $ws,$regTeams)
     {
@@ -104,11 +77,7 @@ class RegTeamExportWriterExcel
         $ws->getColumnDimension($this->colPoolTeamKey2)->setWidth(16);
         $ws->getColumnDimension($this->colPoolTeamKey3)->setWidth(16);
 
-<<<<<<< HEAD
-        $ws->getStyle($this->colPoints)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-=======
         $ws->getStyle($this->colPoints)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
->>>>>>> ng2019x2
 
         $row = 2;
         foreach($regTeams as $regTeam) {
@@ -138,20 +107,10 @@ class RegTeamExportWriterExcel
             $row++;
         }
     }
-<<<<<<< HEAD
 
-    /**
-     * @return false|string
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     */
-    private function getContents()
-    {
-        $writer = IOFactory::createWriter($this->ws, "Xlsx");
-=======
     private function getContents($filename)
     {
         $writer = PhpSpreadsheet\IOFactory::createWriter($this->wb, "Xlsx");
->>>>>>> ng2019x2
         ob_start();
         $writer->save($filename);
         return ob_get_clean();

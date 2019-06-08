@@ -4,11 +4,6 @@ namespace AppBundle\Action\Game\Listing;
 use AppBundle\Action\AbstractController2;
 
 use AppBundle\Action\Game\GameFinder;
-<<<<<<< HEAD
-use AppBundle\Action\Results2019\ResultsFinder;
-=======
-use AppBundle\Action\Results\ResultsFinder;
->>>>>>> ng2019x2
 use Symfony\Component\HttpFoundation\Request;
 
 class GameListingController extends AbstractController2

@@ -340,11 +340,7 @@ EOT;
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">REFEREES <span class="caret"></span></a>
          <ul class="dropdown-menu">
             <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">INSTRUCTION: How to Sign up for Games</a></li>
-<<<<<<< HEAD
-            <li><a href="{$this->generateUrl('schedule_official_2016')}">REQUEST ASSIGNMENTS</a></li>
-=======
             <li><a href="{$this->generateUrl('schedule_official_2019')}">REQUEST ASSIGNMENTS</a></li>
->>>>>>> ng2019x2
 EOT;
 
         if ($this->isGranted('ROLE_ASSIGNOR')) {

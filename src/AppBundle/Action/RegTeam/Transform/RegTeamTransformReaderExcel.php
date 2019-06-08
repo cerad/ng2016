@@ -4,23 +4,28 @@ namespace AppBundle\Action\RegTeam\Transform;
 
 use Cerad\Bundle\AysoBundle\AysoFinder;
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-<<<<<<< HEAD
-use PhpOffice\PhpSpreadsheet\Reader;
-=======
->>>>>>> ng2019x2
+
+use Doctrine\DBAL;
 
 class RegTeamTransformReaderExcel
 {
     use ExcelReaderTrait;
 
+    /**
+     * @var array
+     */
     private $regTeams = [];
 
+    /**
+     * @var AysoFinder
+     */
     private $regionFinder;
 
     /**
      * RegTeamTransformReaderExcel constructor.
-     * @param PhysicalAysoRepository $regionFinder
+     * @param AysoFinder $regionFinder
      */
     public function __construct(
         AysoFinder $regionFinder
@@ -32,6 +37,7 @@ class RegTeamTransformReaderExcel
     /**
      * @param $row
      * @param $div
+     * @throws DBAL\DBALException
      */
     protected function processRow($row,$div)
     {
@@ -79,7 +85,8 @@ class RegTeamTransformReaderExcel
      * @param $filename
      * @param $sheet
      * @return array
-     * @throws Reader\Exception
+     * @throws DBAL\DBALException
+     * @throws PhpSpreadsheet\Reader\Exception
      */
     public function read($filename,$sheet)
     {

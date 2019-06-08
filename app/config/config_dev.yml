@@ -19,17 +19,10 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-<<<<<<< HEAD
-            channels: ['!event']
-        console:
-            type:   console
-            channels: ['!event', '!doctrine']
-=======
             channels: ["!event"]
         console:
             type:   console
             channels: ["!event", "!doctrine"]
->>>>>>> ng2019x2
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:

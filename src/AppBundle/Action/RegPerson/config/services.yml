@@ -3,17 +3,11 @@ services:
     _defaults: { public: true }
 
     reg_team_connection:
-<<<<<<< HEAD
         public: true
         alias: doctrine.dbal.ng2019games_connection
 
     reg_person_connection:
         public: true
-=======
-        alias: doctrine.dbal.ng2019games_connection
-
-    reg_person_connection:
->>>>>>> ng2019x2
         alias: doctrine.dbal.ng2019_connection
 
     reg_person_finder:

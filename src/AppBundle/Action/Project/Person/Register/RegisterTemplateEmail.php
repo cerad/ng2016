@@ -81,15 +81,10 @@ class RegisterTemplateEmail extends AbstractView2
   <div style="align-content: center">
     <div style="{$this->styleSkHeader}">
       <h1>
-<<<<<<< HEAD
-          <img src="https://ng2019.zayso.org/images/header-ipad_01.png" width="90%" alt="">
-=======
           <img src="{$this->project['emailGraphic']}" width="70%">
->>>>>>> ng2019x2
       </h1>
     <h1 style="{$this->styleSkFontEmail}">Thank you for registering to volunteer at the {$this->project['title']}!</h1>
     </div>
-<<<<<<< HEAD
     <br>
     <p style="{$this->styleSkFontEmail}">AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII<br>June 
     30 - July 7, 2019</p>
@@ -98,11 +93,6 @@ class RegisterTemplateEmail extends AbstractView2
   <hr>Thank you for registering to volunteer at the 2019 National Games!
   <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the 2019 National Games!</p>
   <br>
-=======
-    <div style="{$this->styleClearBoth}"></div>
-  </div>
-  <hr>
->>>>>>> ng2019x2
   {$this->renderHtmlPerson($personView)}
 
   {$this->renderHtmlGeneralInformation($personView)}
@@ -116,16 +106,9 @@ class RegisterTemplateEmail extends AbstractView2
 
     <p style="{$this->styleP}">Sincerely,</p>
     
-<<<<<<< HEAD
-    <p style="{$this->styleP}">Rob McCarthy<br>
-      2019 National Games Referee Administrator<br>
-      <a href="mailto:soccer.ref62@yahoo.com?subject=Question%20about%20the%202019%20National%Games">soccer
-      .ref62@yahoo.com</a>
-=======
     <p style="{$this->styleP}">{$this->project['administrator']['name']}<br>
       Referee Administrator / {$this->project['title']}<br>
       <a href="mailto:{$this->project['administrator']['email']}?subject=Question%20about%20the%20{$this->project['title']}">{$this->project['administrator']['email']}</a>
->>>>>>> ng2019x2
     </p>
 </body>
 </html>
@@ -139,7 +122,6 @@ EOD;
     General Information
   </p>
   <p style="{$this->styleP}">
-<<<<<<< HEAD
     As you might expect, we have a full calendar of soccer and related activities starting on Monday, July 1 and 
     running through Sunday, July 7. On Monday, July 1, 2019, we will have a mandatory meeting for Coaches and 
     Referees at the <b>Waipio Soccer Complex</b> to provide information to all coaches and referees on how to have a 
@@ -148,11 +130,6 @@ EOD;
     be found at <a href="http://www.aysonationalgames.org/" target="_blank">National Games</a>. Soccer fest will be 
     held on 02 July and referees will be able to volunteer for those games in zAYSO.  Pool play games will begin on Wednesday 03 July.
     </p>
-=======
-    Thank you for volunteering! We will have a full calendar of soccer activity starting on Friday, July 13th running through Sunday, July 15th. We will be reaching out to you intermittently throughout the registration period to review your role and update you on the latest information regarding the AYSO National Open Cup. As we get closer to the event, we will outline any required training or meetings that you will need to attend. 
-For more general information regarding the tournament, please visit the National Open Cup website, or contact me if you have any specific questions regarding officiating at the event. 
-</p>
->>>>>>> ng2019x2
 EOT;
     }
 
@@ -239,16 +216,10 @@ EOT;
     AYSO Concussion Awareness
   </p>
 <p style="{$this->styleP}">
-<<<<<<< HEAD
     All participating referees and coaches are required to have completed CDC Concussion Awareness training.
     If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign 
     into <a href="https://aysou.org" target="_blank">https://aysou.org</a>.  After login, look under 
     "My Courses > CDC: Concussion Course".
-=======
-    By California law, all participating administrators and coaches are required to have completed CDC Concussion Awareness training.  It is strongly recommended for Referees as well.
-    If you have yet to complete training, the AYSO CDC Concussion Training Course is available online. First, sign into <a href="https://www.aysotraining.org" target="_blank">https://www.aysotraining.org</a>
-    with your eAYSO ID {$personView->fedId} and last name. Then you can access the AYSO CDC Concussion Awareness Training Course at <a href="https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp" target="_blank">https://www.aysotraining.org/training/CDC/cdcfiles/cdc.asp</a>.
->>>>>>> ng2019x2
 </p>
 EOT;
         }

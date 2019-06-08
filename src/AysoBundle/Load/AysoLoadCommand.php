@@ -1,20 +1,14 @@
 <?php
 namespace AppBundle\Action\Physical\Ayso\Load;
 
+use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-<<<<<<< HEAD:src/AppBundle/Action/Physical/Ayso/Load/AysoLoadCommand.php
-use PhpOffice\PhpSpreadsheet\Reader;
-use PhpOffice\PhpSpreadsheet\Exception;
-=======
 use PhpOffice\PhpSpreadsheet\Style;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
->>>>>>> ng2019x2:src/AysoBundle/Load/AysoLoadCommand.php
 
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-//  Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Statement;
@@ -51,7 +45,7 @@ class AysoLoadCommand extends Command
      * @param OutputInterface $output
      * @return int|void|null
      * @throws DBALException
-     * @throws Exception
+     * @throws PhpSpreadsheet\Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -130,18 +124,13 @@ EOD;
     /**
      * @param $filename
      * @throws DBALException
-     * @throws Reader\Exception
-     * @throws Exception
+     * @throws PhpSpreadsheet\Exception
+     * @throws PhpSpreadsheet\Reader\Exception
      */
     private function load($filename)
     {
-<<<<<<< HEAD:src/AppBundle/Action/Physical/Ayso/Load/AysoLoadCommand.php
-        /** @var Reader\Xlsx $reader */
-        $reader = IOFactory::createReader($filename);
-=======
         /** @var Xlsx $reader */
         $reader = IOFactory::createReaderForFile($filename);
->>>>>>> ng2019x2:src/AysoBundle/Load/AysoLoadCommand.php
         $reader->setReadDataOnly(true);
 
         $wb = $reader->load($filename);
@@ -344,11 +333,7 @@ EOD;
         $badge = $certMeta['badge'];
 
         $badgeDate = $row[12];
-<<<<<<< HEAD:src/AppBundle/Action/Physical/Ayso/Load/AysoLoadCommand.php
-        $badgeDate = $badgeDate ? NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
-=======
         $badgeDate = $badgeDate ? Style\NumberFormat::toFormattedString($badgeDate, 'YYYY-MM-DD') : null;
->>>>>>> ng2019x2:src/AysoBundle/Load/AysoLoadCommand.php
         $roleDate  = $badgeDate;
 
         $this->checkCertStmt->execute([$fedKey,$role]);

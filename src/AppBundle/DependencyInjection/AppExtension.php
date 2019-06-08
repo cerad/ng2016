@@ -35,14 +35,9 @@ class AppExtension extends Extension
         $actionLoader->load('RegTeam/config/services.yml');
         $actionLoader->load('RegPerson/config/services.yml');
         
-<<<<<<< HEAD
-        $actionLoader->load('Results2019/services.yml');
-        $actionLoader->load('Schedule2019/services.yml');
-=======
         $actionLoader->load('Results/services.yml');
         $actionLoader->load('Schedule/services.yml');
->>>>>>> ng2019x2
-        
+
         $actionLoader->load('Project/services.yml');
         $actionLoader->load('Project/User/services.yml');
         $actionLoader->load('Project/Person/services.yml');

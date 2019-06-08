@@ -68,14 +68,10 @@ class AdminListingSearchForm extends AbstractForm
             'Unapproved'    =>  'Unapproved',
             'RefCertIssues' => 'Referees with Cert Issues',
             'RefIssues'     =>  'Referees with Issues',
-<<<<<<< HEAD
-            'VolIssues'     =>  'Volunteers with Issues'
-=======
             'RefCertConflicts' => 'Referees with Cert Conflicts',
 //            'AdultRefs'     =>  'Referees with Adult Experience',
             'AvailableVolunteers'    =>  'Available Volunteers',
             'VolIssues'     =>  'Volunteers with Issues',
->>>>>>> ng2019x2
         ];
         
         $name = $this->formData['name'];

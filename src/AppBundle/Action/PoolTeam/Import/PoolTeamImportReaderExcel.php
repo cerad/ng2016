@@ -3,17 +3,16 @@
 namespace AppBundle\Action\PoolTeam\Import;
 
 use AppBundle\Common\ExcelReaderTrait;
+use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-<<<<<<< HEAD
-use PhpOffice\PhpSpreadsheet\Exception;
-use PhpOffice\PhpSpreadsheet\Reader;
-=======
->>>>>>> ng2019x2
 
 class PoolTeamImportReaderExcel
 {
     use ExcelReaderTrait;
 
+    /**
+     * @var array
+     */
     private $poolTeams = [];
 
     /**
@@ -78,8 +77,8 @@ class PoolTeamImportReaderExcel
     /**
      * @param $filename
      * @return array
-     * @throws Exception
-     * @throws Reader\Exception
+     * @throws PhpSpreadsheet\Exception
+     * @throws PhpSpreadsheet\Reader\Exception
      */
     public function read($filename)
     {

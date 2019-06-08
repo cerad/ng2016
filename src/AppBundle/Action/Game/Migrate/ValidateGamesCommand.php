@@ -35,12 +35,7 @@ class ValidateGamesCommand extends Command
 
     protected function configure()
     {
-        $this
-<<<<<<< HEAD
-            ->setName('games:validate:ng2019')
-=======
-            ->setName('validate:games')
->>>>>>> ng2019x2
+        $this->setName('validate:games')
             ->setDescription('Validate Games');
     }
 

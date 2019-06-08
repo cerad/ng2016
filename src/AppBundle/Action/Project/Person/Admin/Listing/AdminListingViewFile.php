@@ -11,6 +11,8 @@ use AppBundle\Action\Project\Person\Admin\AdminViewFilters;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use PhpOffice\PhpSpreadsheet;
+
 class AdminListingViewFile extends AbstractView
 {
     /** var ProjectPersonViewDecorator **/
@@ -21,11 +23,24 @@ class AdminListingViewFile extends AbstractView
     
     /** AdminViewFilters **/
     private $adminViewFilters;
-    
+
+    /**
+     * @var string
+     */
     private $outFileName;
 
+    /**
+     * @var mixed
+     */
     private $regYearProject;
-    
+
+    /**
+     * AdminListingViewFile constructor.
+     * @param ProjectPersonViewDecorator $projectPersonViewDecorator
+     * @param AbstractExporter $exporter
+     * @param AdminViewFilters $adminViewFilters
+     * @param $project
+     */
     public function __construct(
         ProjectPersonViewDecorator $projectPersonViewDecorator,
         AbstractExporter $exporter,
@@ -40,6 +55,13 @@ class AdminListingViewFile extends AbstractView
         $this->adminViewFilters = $adminViewFilters;
         $this->regYearProject = $project['info']['regYear'];
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws PhpSpreadsheet\Exception
+     * @throws PhpSpreadsheet\Writer\Exception
+     */
     public function __invoke(Request $request)
     {
         $reportKey = $request->attributes->get('reportKey');
@@ -54,12 +76,8 @@ class AdminListingViewFile extends AbstractView
 //            'Unverified'    =>  'Unverified',
 //            'Unapproved'    =>  'Unapproved',
             'RefIssues'     =>  'Referees with Issues',
-<<<<<<< HEAD
-            'VolIssues'     =>  'Volunteers with Issues'
-=======
             'VolIssues'     =>  'Volunteers with Issues',
 //            'AdultRefs'     =>  'Referees with Adult Experience'
->>>>>>> ng2019x2
         ];
 
 
@@ -81,6 +99,12 @@ class AdminListingViewFile extends AbstractView
 
         return $response;
     }
+
+    /**
+     * @param $projectPersons
+     * @param $reportKey
+     * @return mixed
+     */
     protected function generateResponse($projectPersons, $reportKey)
     {
         //set the header labels

@@ -13,10 +13,6 @@ border:none;
 html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,dl,pre,address,variable,form,fieldset,blockquote,label,img {
 color:#394A55;
 font-family:Arial,'Trebuchet MS',sans-serif;
-<<<<<<< HEAD
-font-size:14px;
-=======
->>>>>>> ng2019x2
 margin:0;
 padding:0;
 }
@@ -349,13 +345,8 @@ margin-right:auto;
 
 table th,.row-hdr {
 width:auto;
-<<<<<<< HEAD
-background-color: #dab22a;
-color: #03062b;
-=======
 background-color:#FFE963;
 color:#394A55;
->>>>>>> ng2019x2
 font-weight:700;
 vertical-align:middle;
 overflow:hidden;
@@ -531,17 +522,7 @@ table.person-update-form td { height: 34px; }
 .rainedout_logo { display: none }
 .rainedout-logo-menu { height: 2.2em; margin-top: -4px; }
 
-<<<<<<< HEAD
-
-.form-control {
-    font-size: 14px;
-}
-
-.btn-group-sm>.btn, .btn-sm  {
-    font-size: 14px;
-=======
 .subtitle {
     margin-top: 20px;
     text-align: center;
->>>>>>> ng2019x2
 }

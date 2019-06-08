@@ -3,10 +3,7 @@ services:
     _defaults: { public: true }
 
     user_connection:
-<<<<<<< HEAD
         public: true
-=======
->>>>>>> ng2019x2
         alias: doctrine.dbal.ng2019_connection
 
     user_repository:
@@ -19,17 +16,10 @@ services:
         public: true
         class:  AppBundle\Action\Project\User\ProjectUserProvider
         arguments:
-<<<<<<< HEAD
-            - '%app_project_key%'
-            - '@doctrine.dbal.ng2019_connection' # user connection
-            - '@doctrine.dbal.ng2019_connection' # project person connection
-            - '%users%'
-=======
             - "%app_project_key%"
             - "@doctrine.dbal.ng2019_connection" # user connection
             - "@doctrine.dbal.ng2019_connection" # project person connection
             - "%users%"
->>>>>>> ng2019x2
 
     user_encoder:
         public: true

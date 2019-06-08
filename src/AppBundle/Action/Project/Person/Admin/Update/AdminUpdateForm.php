@@ -389,10 +389,6 @@ EOD;
 //EOD;
 
         $html .= <<<EOD
-<<<<<<< HEAD
-    <!--suppress ALL -->
-=======
->>>>>>> ng2019x2
     {$this->renderPanelFooter()}
 </div>
 EOD;

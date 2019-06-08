@@ -4,11 +4,7 @@ namespace AppBundle\Action\GameOfficial;
 
 use AppBundle\Action\Game\GameOfficial;
 use AppBundle\Action\RegPerson\RegPersonFinder;
-<<<<<<< HEAD
-use AppBundle\Action\Schedule2019\ScheduleGameOfficial;
-=======
 use AppBundle\Action\Schedule\ScheduleGameOfficial;
->>>>>>> ng2019x2
 
 use AppBundle\Action\Project\User\ProjectUser as User;
 
