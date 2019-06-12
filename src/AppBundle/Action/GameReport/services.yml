@@ -4,29 +4,29 @@ services:
 
     game_report_repository:
         public: true
-        class: AppBundle\Action\GameReport2016\GameReportRepository
+        class: AppBundle\Action\GameReport\GameReportRepository
         arguments: ['@game_connection']
 
     game_report_points_calculator:
         public: true
-        class: AppBundle\Action\GameReport2016\GameReportPointsCalculator
+        class: AppBundle\Action\GameReport\GameReportPointsCalculator
 
     game_report_update_form:
         public: true
-        class: AppBundle\Action\GameReport2016\Update\GameReportUpdateForm
+        class: AppBundle\Action\GameReport\Update\GameReportUpdateForm
         parent: abstract_form
         arguments: ['@game_report_repository']
 
     game_report_update_view:
         public: true
-        class: AppBundle\Action\GameReport2016\Update\GameReportUpdateView
+        class: AppBundle\Action\GameReport\Update\GameReportUpdateView
         parent: abstract_view2
         arguments:
             - '@game_report_update_form'
 
     game_report_update_controller:
         public: true
-        class:  AppBundle\Action\GameReport2016\Update\GameReportUpdateController
+        class:  AppBundle\Action\GameReport\Update\GameReportUpdateController
         parent: abstract_controller
         arguments:
             - '@game_report_update_form'
