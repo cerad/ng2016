@@ -21,10 +21,11 @@ services:
             - ['setSecurity',['@security.token_storage','@security.authorization_checker']]
             - ['setProject', ['%app_project%']]
         arguments:
-            - '%show_header_image%'
-            - '%show_schedules_menu%'
-            - '%show_results_menu%'
-            - '%show_final_results%'
+            - "%show_header_image%"
+            - "%show_schedules_menu%"
+            - "%show_results_menu%"
+            - "%show_user_menu%"
+            - "%show_final_results%"
             - "%app_version%"
 
     abstract_form:

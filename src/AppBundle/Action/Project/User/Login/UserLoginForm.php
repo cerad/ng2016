@@ -64,6 +64,7 @@ EOT;
     <button type="submit" class="btn btn-sm btn-primary submit" tabIndex="3">
       <span class="glyphicon glyphicon-edit"></span> Sign In
     </button>
+<!--
     <a href="{$loginGoogle}" class="btn btn-sm btn-default btn-provider" role="button">
       <span class="glyphicon glyphicon-edit"></span>
       Sign In (Google)
@@ -72,6 +73,7 @@ EOT;
       <span class="glyphicon glyphicon-edit"></span>
       Sign In (Facebook)
     </a>
+-->
   </div>
 </form>
 EOT;

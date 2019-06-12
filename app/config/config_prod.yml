@@ -1,7 +1,10 @@
 imports:
     - { resource: config.yml }
 
-#framework:
+framework:
+    session:
+        save_path:    "/var/lib/php/sessions"
+#        save_path:   "%kernel.project_dir%/var/sessions/%kernel.environment%"
 #    validation:
 #        cache: validator.mapping.cache.doctrine.apc
 #    serializer:

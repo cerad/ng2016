@@ -7,18 +7,22 @@ class BaseTemplate extends AbstractTemplate
     protected $content = null;
     protected $version = null;
 
-
     private $showHeaderImage;
     private $showSchedulesMenu;
     private $showResultsMenu;
     private $showFinalResults;
-    
-    public function __construct($showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showFinalResults,$version)
+    /** @var  %show_user_menu% */
+    private $showUserMenu;
+
+
+    public function __construct($showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showUserMenu,$showFinalResults,$version)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
+        $this->showUserMenu = $showUserMenu;
+
         $this->version = $version;
     }
     public function setContent($content)
@@ -331,7 +335,7 @@ EOT;
     
     protected function renderRefereeSchedules()
     {
-        if (!$this->showResultsMenu) {
+        if (!$this->showUserMenu) {
             return null;
         }
         $html =
@@ -360,7 +364,7 @@ EOT;
 
     protected function renderMyAccount()
     {
-        if (!$this->showResultsMenu) {
+        if (!$this->showUserMenu) {
             return null;
         }
         return
@@ -379,11 +383,12 @@ EOT;
     
     protected function renderHome()
     {
-        //if (!$this->showResultsMenu) {
-        //    return null;
-        //}
+//        if (!$this->showResultsMenu || !$this->showUserMenu) {
+//            return null;
+//        }
+
         return
-<<<EOT
+            <<<EOT
         <li>
           <a href="{$this->generateUrl('app_home')}">HOME</a>
         </li>
@@ -391,11 +396,12 @@ EOT;
     }
     protected function renderWelcome()
     {
-        //if (!$this->showResultsMenu) {
-        //    return null;
-        //}
+//        if (!$this->showResultsMenu || !$this->showUserMenu) {
+//            return null;
+//        }
+
         return
-<<<EOT
+            <<<EOT
         <li>
           <a href="{$this->generateUrl('app_welcome')}">WELCOME</a>
         </li>

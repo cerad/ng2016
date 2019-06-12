@@ -42,7 +42,7 @@ EOD;
         </li>
         <li>
             If you still need help, request support by <a 
-            href="mailto:{$this->project['registration']['email']}?subject=Password%20Reset%20Help" 
+            href="mailto:{$this->project['admin']['email']}?subject=Password%20Reset%20Help" 
             target="_top">clicking here</a>.
         </li>
      </ul>

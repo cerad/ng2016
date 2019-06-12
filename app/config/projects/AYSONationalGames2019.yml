@@ -27,7 +27,7 @@ parameters:
         welcome: 'AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019'
         website: 'https://www.aysonationalgames.org/'
         logo:    '/images/National_Games.png'
-        emailGraphic:   '/images/National_Games.png'
+        emailGraphic:   'https://ng2019.ayso1ref.com/images/header-ipad_01.png'
         firstDay: 'Tuesday, June30'
         lastDay: 'Sunday, July 7'
         calendarLink: 'https://aysonationalgames.org/schedule-of-events/'

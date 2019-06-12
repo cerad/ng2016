@@ -19,7 +19,6 @@ class RegisterController extends AbstractController2
     private $registerForm;
     private $fedFinder;
     private $projectPersonRepository;
-    private $volCerts;
 
     private $successRouteName;
     private $templateEmail;
@@ -322,21 +321,18 @@ class RegisterController extends AbstractController2
     private function sendEmail($person)
     {
         $projectInfo = $this->getCurrentProjectInfo();
-        $support  = $projectInfo['support'];
-        $registration = $projectInfo['registration'];
-        $assignor = $projectInfo['assignor'];
+//        $support  = $projectInfo['support'];
+        $system = $projectInfo['system'];
         $refAdmin = $projectInfo['administrator'];
-        
+        $staff = [
+            $refAdmin['email'] => $refAdmin['name'],
+        ];
+
         $update = $person['id'] ? 'Update' : null;
 
         $subject = sprintf("[{$this->project['abbv']}] Registration %s for: %s",$update,$person['name']);
 
         $html = $this->templateEmail->renderHtml($person);
-
-        $toms = [
-            $refAdmin['email'] => $refAdmin['name'], // Tom B
-            $assignor['email'] => $assignor['name'], // Tom B
-        ];
 
         $mailer = $this->getMailer();
 
@@ -351,16 +347,14 @@ class RegisterController extends AbstractController2
 
         $message->setTo([$person['email'] => $person['name']]);
 
-        $message->setCc($toms);
+        $message->setCc($staff);
 
-        $message->setReplyTo($toms);
+        $message->setReplyTo($staff);
 
         $message->setBcc([
-            $support['email'] => $support['name'],
-            $registration['email'] => $registration['name'], // ???
+            $system['email'] => $system['name'],
         ]);
 
-        /**  noinspection PhpParamsInspection */
         $mailer->send($message);
 
     }
