@@ -17,16 +17,18 @@ class SeqGameNumbersCommand extends Command
     private $gameFinder;
     private $gameUpdater;
     
-    private $projectId = 'AYSONationalOpenCup2018';
+    private $projectId;
 
     public function __construct(
         Connection  $ng2019GamesConn,
         GameFinder  $gameFinder,
-        GameUpdater $gameUpdater
+        GameUpdater $gameUpdater,
+        string $projectId
     ) {
         parent::__construct();
 
         $this->gameConn    = $ng2019GamesConn;
+        $this->projectId = $projectId;
         
         $this->gameFinder  = $gameFinder;
         $this->gameUpdater = $gameUpdater;

@@ -152,7 +152,8 @@ services:
 #             - "@doctrine.dbal.ng2019games_connection"
 #             - "@game_finder"
 #             - "@game_updater"
-
+#             - '%app_project_key%'
+#
 #    game_validate_command:
 #        class: AppBundle\Action\Game\Migrate\ValidateGamesCommand
 #        tags: [{ name: console.command }]
