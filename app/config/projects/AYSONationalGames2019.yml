@@ -19,13 +19,15 @@ parameters:
 
         abbv:    "NG2019"
         title:   "AYSO National Games 2019"
+        shortTitle: "National Games"
         desc:    "AYSO National Games 2019 - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7, 2019"
         venue_name: "Waipio Peninsula Soccer Complex"
         venue: "WPSC"
         prefix:  'NatGames2019'
         welcome: 'AYSO WELCOMES YOU TO WAIPIO PENINSULA SOCCER COMPLEX, WAIPAHU, HAWAII, June 30 - July 7, 2019'
         website: 'https://www.aysonationalgames.org/'
-        logo:    '/images/National_Open_Cup.png'
+        logo:    '/images/National_Games.png'
+        emailGraphic:   '/images/National_Games.png'
         firstDay: 'Tuesday, June30'
         lastDay: 'Sunday, July 7'
         calendarLink: 'https://aysonationalgames.org/schedule-of-events/'
@@ -38,6 +40,12 @@ parameters:
             subject: "NG2019 zAYSO question..."
             phone: 808-286-9280
               
+        registration:
+            name: "Rob McCarthy"
+            email: "soccer.ref62@yahoo.com"
+            subject: "NG2019 zAYSO question..."
+            phone: 808-286-9280
+
         schedules:
             name: "Chris Lewis"
             email: "chris.lewis575@gmail.com"
@@ -55,6 +63,7 @@ parameters:
             email: "soccer.ref62@yahoo.com"
             subject: "Question for NG Referee Administrator"
             phone: 808-286-9280
+
         feedback:
             name:  "NG2019 Web Team"
             email: "web.ng2019@gmail.com"

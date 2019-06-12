@@ -11,7 +11,9 @@ services:
 
     ayso.finder:
         class: AysoBundle\AysoFinder
-        arguments: ["@ayso.connection"]
+        arguments:
+            - "@ayso.connection"
+            - "@vol_certs"
 
 #    ayso_load_eayso_command:
 #        class: AppBundle\Action\Physical\Ayso\Load\AysoLoadCommand

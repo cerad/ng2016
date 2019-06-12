@@ -1,0 +1,6 @@
+services:
+
+    vol_certs:
+        public: true
+        class: AppBundle\Action\Services\VolCerts
+

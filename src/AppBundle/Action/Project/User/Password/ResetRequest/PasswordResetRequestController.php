@@ -71,7 +71,7 @@ EOD;
 
         $message->setSubject($subject);
 
-        $message->setFrom(['noreply@zayso.org' => 'zAYSO Admin']);
+        $message->setFrom(['web.ng2019@gmail.com' => 'zAYSO Admin']);
 
         $message->setTo([$user['email'] => $user['name']]);
 

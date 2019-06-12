@@ -23,9 +23,10 @@ class AysoFinder
     /** @var  Statement */
     private $findOrgStmt;
 
-    public function __construct(Connection $conn)
+    public function __construct(Connection $conn, VolCerts $volCerts)
     {
         $this->conn = $conn;
+        $this->volCerts = $volCerts;
     }
 
     /**
@@ -63,7 +64,8 @@ EOD;
         // TODO just add orgKey to record
         $sarParts = explode('/', $e3Certs['SAR']);
         $vol['orgKey'] = isset($sarParts[2]) ? sprintf('AYSOR:%04d', $sarParts['2']) : null;
-
+        $vol['regYear'] = $e3Certs['MY'];
+        $vol['sar'] = $e3Certs['SAR'];
         return $vol;
     }
 

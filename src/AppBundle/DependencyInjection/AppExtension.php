@@ -47,5 +47,8 @@ class AppExtension extends Extension
         $actionLoader->load('Physical/Person/services.yml');
         
         $actionLoader->load('PoolTeam/config/services.yml');
+
+        $actionLoader->load('Services/services.yml');
+
     }
 }

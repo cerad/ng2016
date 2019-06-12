@@ -10,10 +10,6 @@ services:
         public: true
         alias: doctrine.dbal.ng2019_connection
 
-    vol_certs:
-        public: true
-        class: AppBundle\Action\Services\VolCerts
-
     ayso_repository:
         public: true
         class: AppBundle\Action\Physical\Ayso\PhysicalAysoRepository

@@ -2,6 +2,7 @@
 
 namespace AysoBundle\Load;
 
+use AppBundle\Action\Services\VolCerts;
 use AysoBundle\AysoFinder;
 use AysoBundle\DataTransformer\RegionToSarTransformer;
 use Symfony\Component\Console\Command\Command;
@@ -79,7 +80,9 @@ abstract class LoadAbstractCommand extends Command
 
         $this->connNG2019 = $connNG2019;
 
-        $this->aysoFinder = new AysoFinder($connAyso);
+        $volCerts = new VolCerts();
+
+        $this->aysoFinder = new AysoFinder($connAyso, $volCerts);
 
         $this->regionToSarTransformer = new RegionToSarTransformer($this->aysoFinder);
 
