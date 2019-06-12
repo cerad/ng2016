@@ -420,7 +420,7 @@ class InitSOFNG2019Command extends Command
                 foreach ($this->genders as $gender) {
 
                     // Fetch the reg teams
-                    $sql = 'SELECT regTeamId,teamName FROM noc2018games.regTeams WHERE projectId = ? AND program = ? AND age = ? AND gender = ?';
+                    $sql = 'SELECT regTeamId,teamName FROM regTeams WHERE projectId = ? AND program = ? AND age = ? AND gender = ?';
                     $stmt = $this->gameConn->executeQuery($sql, [$projectId, $program, $age, $gender]);
                     $regTeams = $stmt->fetchAll();
 
