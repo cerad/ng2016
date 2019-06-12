@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use AysoBundle\DataTransformer\TimeValueToTime;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL;
 
 use DateTime;
 use DateInterval;
@@ -19,7 +20,6 @@ use DateInterval;
 class InitSOFNG2019Command extends Command
 {
     private $gameConn;
-    private $regTeamConn;
     private $projectId;
     private $venue;
     private $dates;
@@ -31,12 +31,14 @@ class InitSOFNG2019Command extends Command
         parent::__construct();
 
         $this->gameConn = $conn;
-        $this->regTeamConn = $conn;
         $this->projectId = $projectId;
         $this->venue = $project['info']['venue'];
         $this->dates = $project['info']['dates'];
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -48,6 +50,15 @@ class InitSOFNG2019Command extends Command
 
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws DBAL\DBALException
+     * @throws DBAL\Exception\InvalidArgumentException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         echo sprintf("Init Soccerfest NG2019 ...\n");
@@ -84,10 +95,15 @@ class InitSOFNG2019Command extends Command
         'B16U' => ['A' => 14],
         'G16U' => ['A' => 8],
         'B19U' => ['A' => 16],
-        'G19U' => ['A' => 12],
+        'G19U' => ['A' => 16],
     ];
 
 
+    /**
+     * @param $filename
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     private function load($filename)
     {
         /* ====================================
@@ -121,7 +137,7 @@ class InitSOFNG2019Command extends Command
             for ($row = 2; $row <= $rowMax; $row++) {
                 $range = sprintf('A%d:%s%d', $row, $colMax, $row);
                 $data = $ws->rangeToArray($range, null, false, false, false)[0];
-                if (!empty((trim($data[0])))) {
+                if (!empty(trim($data[0]))) {
                     $this->processRow($data);
 
                     if (($row % 100) === 0) {
@@ -147,6 +163,9 @@ class InitSOFNG2019Command extends Command
         return;
     }
 
+    /**
+     * @param $row
+     */
     private function processRow($row)
     {
         $xlTime = new TimeValueToTime();
@@ -176,16 +195,25 @@ class InitSOFNG2019Command extends Command
     }
 
 
+    /**
+     * @param $division
+     * @return mixed
+     */
     private function getPools($division)
     {
 
         return $this->poolSize[$division];
     }
 
+    /**
+     * @param $commit
+     * @throws DBAL\DBALException
+     * @throws DBAL\Exception\InvalidArgumentException
+     */
     private function initRegTeams($commit)
     {
         if ($this->delete) {
-            $this->regTeamConn->delete('regTeams', ['projectId' => $this->projectId]);
+            $this->gameConn->delete('regTeams', ['projectId' => $this->projectId]);
         }
 
         if (!$commit) {
@@ -215,6 +243,14 @@ class InitSOFNG2019Command extends Command
         echo sprintf("\r%5d Soccerfest Teams Loaded         \n", $count);
     }
 
+    /**
+     * @param $projectId
+     * @param $program
+     * @param $gender
+     * @param $age
+     * @param $teamNumber
+     * @throws DBAL\DBALException
+     */
     private function initRegTeam(
         $projectId,
         $program,
@@ -244,9 +280,14 @@ class InitSOFNG2019Command extends Command
             'age' => $age,
             'division' => $division,
         ];
-        $this->regTeamConn->insert('regTeams', $regTeam);
+        $this->gameConn->insert('regTeams', $regTeam);
     }
 
+    /**
+     * @param $commit
+     * @throws DBAL\DBALException
+     * @throws DBAL\Exception\InvalidArgumentException
+     */
     private function initPoolTeams(
         $commit
     ) {
@@ -288,6 +329,17 @@ class InitSOFNG2019Command extends Command
         echo sprintf("\r%5d Soccerfest Pool Teams Loaded        \n", $count - 1);
     }
 
+    /**
+     * @param $projectId
+     * @param $poolType
+     * @param $poolName
+     * @param $poolSlot
+     * @param $program
+     * @param $age
+     * @param $gender
+     * @param null $game
+     * @throws DBAL\DBALException
+     */
     private function initPoolTeam(
         $projectId,
         $poolType,
@@ -351,6 +403,10 @@ class InitSOFNG2019Command extends Command
         $this->gameConn->insert('poolTeams', $poolTeam);
     }
 
+    /**
+     * @param $commit
+     * @throws DBAL\DBALException
+     */
     private function assignRegTeamsToPoolPlayTeams(
         $commit
     ) {
@@ -364,8 +420,8 @@ class InitSOFNG2019Command extends Command
                 foreach ($this->genders as $gender) {
 
                     // Fetch the reg teams
-                    $sql = 'SELECT regTeamId,teamName FROM regTeams WHERE projectId = ? AND program = ? AND age = ? AND gender = ?';
-                    $stmt = $this->regTeamConn->executeQuery($sql, [$projectId, $program, $age, $gender]);
+                    $sql = 'SELECT regTeamId,teamName FROM noc2018games.regTeams WHERE projectId = ? AND program = ? AND age = ? AND gender = ?';
+                    $stmt = $this->gameConn->executeQuery($sql, [$projectId, $program, $age, $gender]);
                     $regTeams = $stmt->fetchAll();
 
                     // Fetch the pool teams
@@ -382,20 +438,20 @@ class InitSOFNG2019Command extends Command
                         $regTeamId = $regTeam['regTeamId'];
                         $tryAgain = true;
 //                        while ($tryAgain) {
-                            if (!isset($poolTeams['regTeamId'])) {
-                                $this->gameConn->update(
-                                    'poolTeams',
-                                    ['regTeamId' => $regTeamId, 'regTeamName' => $regTeam['teamName']],
-                                    ['poolTeamId' => $poolTeams[$key]['poolTeamId']]
-                                );
+                        if (!isset($poolTeams['regTeamId'])) {
+                            $this->gameConn->update(
+                                'poolTeams',
+                                ['regTeamId' => $regTeamId, 'regTeamName' => $regTeam['teamName']],
+                                ['poolTeamId' => $poolTeams[$key]['poolTeamId']]
+                            );
 //                                $poolTeams['regTeamId'] = $regTeamId;
 //                                $tryAgain = false;
 
-                                $count++;
-                                if (($count % 100) === 0) {
-                                    echo sprintf("\r%5d Soccerfest Teams Assigned...", $count);
-                                }
+                            $count++;
+                            if (($count % 100) === 0) {
+                                echo sprintf("\r%5d Soccerfest Teams Assigned...", $count);
                             }
+                        }
 //                        }
                     }
                 }
@@ -405,6 +461,11 @@ class InitSOFNG2019Command extends Command
         echo sprintf("\r%5d Soccerfest Teams Assigned            \n", $count);
     }
 
+    /**
+     * @param $commit
+     * @throws DBAL\DBALException
+     * @throws DBAL\Exception\InvalidArgumentException
+     */
     private function initGames(
         $commit
     ) {
@@ -461,6 +522,20 @@ class InitSOFNG2019Command extends Command
         echo sprintf("\r%5d Games Loaded         \n", $count);
     }
 
+    /**
+     * @param $projectId
+     * @param $program
+     * @param $age
+     * @param $gender
+     * @param $gameNumber
+     * @param $fieldNumber
+     * @param $dow
+     * @param $time
+     * @param $homePoolTeamSlot
+     * @param $awayPoolTeamSlot
+     * @throws DBAL\DBALException
+     * @throws Exception
+     */
     private function initGame(
         $projectId,
         $program,
@@ -539,49 +614,28 @@ class InitSOFNG2019Command extends Command
         }
     }
 
+    /**
+     * @param $div
+     * @param $teamName
+     * @return string
+     */
     private function generatePoolSlot($div, $teamName)
     {
-        switch ($div) {
-            case "B10U":
-            case "G10U":
-                $poolSize = 5;
-                break;
-            case "B12U":
-            case "G12U":
-                $poolSize = 6;
-                break;
-            case "B14U":
-                $poolSize = 14;
-                break;
-            case "G14U":
-                $poolSize = 18;
-                break;
-            case "B16U":
-                $poolSize = 14;
-                break;
-            case "G16U":
-                $poolSize = 8;
-                break;
-            case "B19U":
-                $poolSize = 16;
-                break;
-            case "G19U":
-                $poolSize = 12;
-                break;
-            default:
-                $poolSize = 6;
-        }
-
         $teamNumber = trim(substr($teamName, -2));
+        $poolCode = 'A';
         $poolSlot = $teamNumber;
-        $poolCode = ord("A");
-        while ($poolSlot > $poolSize) {
-            $poolSlot -= $poolSize;
-            $poolCode += 1;
-        }
-        $pool = chr($poolCode);
+        $poolSizes = $this->poolSize[$div];
 
-        $poolTeamSlot = $pool.$poolSlot;
+        foreach ($poolSizes as $pool => $poolSize) {
+            $poolCode = $pool;
+            if ($poolSlot > $poolSize) {
+                $poolSlot -= $poolSize;
+            } else {
+                break;
+            }
+        }
+
+        $poolTeamSlot = $poolCode.$poolSlot;
 
         return $poolTeamSlot;
 
