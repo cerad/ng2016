@@ -1,5 +1,6 @@
 <?php
 
+use Composer\Autoload\ClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 

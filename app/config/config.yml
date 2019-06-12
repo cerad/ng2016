@@ -14,7 +14,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app_version: '2019.06.11.10'
+    app_version: '2019.06.11.20'
 
 framework:
     #esi:             ~
@@ -35,8 +35,8 @@ framework:
         handler_id:  session.handler.native_file
 # save_path in project path causes 500 Internal Server Error - ContextErrorException: Warning: SessionHandler::read(): Session data file is not created by your uid
 # set save_path in parameters.yml
-#        save_path:    "/var/lib/php/sessions"
-        save_path:   "%kernel.project_dir%/var/sessions/%kernel.environment%"
+        save_path:    "/var/lib/php/sessions"
+#        save_path:   "%kernel.project_dir%/var/sessions/%kernel.environment%"
         name:        zayso_session
     fragments:       ~
     http_method_override: true

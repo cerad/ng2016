@@ -57,8 +57,8 @@ class PasswordResetRequestCommand extends Command
         
         $message = $mailer->createMessage()
             ->setSubject($subject)
-            ->setFrom('ahundiak@gmail.com')
-            ->setTo  ('ahundiak@gmail.com')
+            ->setFrom('web.ng2019@gmail.com')
+            ->setTo  ('web.ng2019@gmail.com')
             ->setBody('WTF')
             //->setBody('<h3>The Body</h3>','text/html');
             /*

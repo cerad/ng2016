@@ -98,7 +98,7 @@ class ProjectMigrateCommand extends Command
             $roles = implode(',',$roles);
 */
             switch($row['email']) {
-                case 'ahundiak@gmail.com':
+                case 'web.ng2019@gmail.com':
                 case 'ayso1sra@gmail.com':
                 //case 'spsoccerref@earthlink.net':
                     $roles = 'ROLE_ADMIN';
