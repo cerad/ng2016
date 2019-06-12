@@ -86,7 +86,7 @@ parameters:
             12U: 12U
             14U: 14U
             16U: 16U
-            18U: 18U
+            19U: 19U
 
         search_defaults:
             projects: ['AYSONationalGames2019']
@@ -123,7 +123,7 @@ parameters:
                 12U: 12U
                 14U: 14U
                 16U: 16U
-                18U: 18U
+                19U: 19U
 
             pools:
                 Core:
@@ -132,13 +132,13 @@ parameters:
                         12U: [A,B,C,D]
                         14U: [A,B,C,D]
                         16U: [A,B,C,D]
-                        18U: [A,B,C,D]
+                        19U: [A,B,C,D]
                     G:
                         10U: [A,B,C,D]
                         12U: [A,B,C,D]
                         14U: [A,B,C,D]
                         16U: [A,B,C,D]
-                        18U: [A,B,C,D]
+                        19U: [A,B,C,D]
 
         levels:
             AYSO_B10U_Core:

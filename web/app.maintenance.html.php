@@ -17,7 +17,7 @@
         
             <div class="container">
                  <div style="text-align: center;margin: 40px 0">
-    <h3 style="color: navy">The AYSO National Games 2019 site is down for maintenance.</h3>
+    <h3 style="color: navy">The AYSO National Games 2019 site is undergoing maintenance.</h3>
     <h3 style="color: navy; padding-top: 40px">Please check back in a while.</h3>
 </div>
             </div>

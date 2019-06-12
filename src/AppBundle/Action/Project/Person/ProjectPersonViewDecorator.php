@@ -113,7 +113,7 @@ class ProjectPersonViewDecorator
     public function getCertStyle($certKey)
     {
         $cert = $this->person->getCert($certKey);
-        if (is_null($cert) || is_null($cert->badgeDate || $cert->badgeDate == '0000-00-00') ) {
+        if (is_null($cert) || is_null($cert->badgeDate || $cert->badgeDate == '0000-00-00')) {
             return $this->dangerClass;
         };
 
@@ -127,7 +127,8 @@ class ProjectPersonViewDecorator
             return null;
         }
         $cert = $this->person->getCert('CERT_REFEREE');
-        if (!empty($cert) && $cert->badgeUser != $cert->badge) {
+
+        if (!empty($cert) && ($cert->badgeUser != $cert->badge) && !empty($cert->badgeUser)) {
 //            var_dump($cert);
 //            var_dump($cert->badgeUser);
 //            var_dump($cert->badge);
@@ -145,9 +146,12 @@ class ProjectPersonViewDecorator
         $cert = $this->person->getCert($certKey);
         $suffix = $cert->verified ? null : ' ***';
         if ($certKey !== 'CERT_REFEREE') {
-            return $cert->verified ? 'Yes' : 'No'.$suffix;
+            $isCert = !is_null($cert->badgeDate) && ($cert->badgeDate <> '0000-00-00') AND $cert->verified ;
+
+            return $isCert ? 'Yes': 'No'.$suffix;
         }
         if ((!$cert->badgeUser) || $cert->badge === $cert->badgeUser) {
+
             return $cert->badge.$suffix;
         }
 
@@ -185,7 +189,6 @@ class ProjectPersonViewDecorator
     }
 
     public function getRoleClass($role, $regYearProject)
-
     {
         if ($role->approved) {
             return $this->successClass;
@@ -196,12 +199,13 @@ class ProjectPersonViewDecorator
                 if ($this->person->needsCerts() || !$this->isCurrentMY($regYearProject)) {
                     $roleClass = $this->dangerClass;
                 } elseif (
-                    (bool)!$this->person->getCert('ROLE_REFEREE')['verified'] ||
-                    (bool)!$this->person->getCert('ROLE_REFEREE')['approved']
+                    (bool)$this->person->getCert('ROLE_REFEREE')['verified'] &&
+                    (bool)$this->person->getCert('ROLE_REFEREE')['approved'] &&
+                    (bool)$this->person->getCert('ROLE_REFEREE')['badge'] <> 'None'
                 ) {
-                    $roleClass = $this->warningClass;
-                } else {
                     $roleClass = $this->successClass;
+                } else {
+                    $roleClass = $this->warningClass;
                 };
                 break;
             case 'ROLE_VOLUNTEER':
@@ -270,11 +274,12 @@ class ProjectPersonViewDecorator
                 if (!$role) {
                     return null;
                 }
-                switch (strtolower($role->verified)) {
+                switch (strtolower($role->approved)) {
                     case  null:
                     case 'no':
                     case 'none':
                     case '0':
+                    case '0000-00-00':
                         return 'No';
                 }
 
@@ -287,14 +292,15 @@ class ProjectPersonViewDecorator
                 if (!$role) {
                     return null;
                 }
-                if ($role->verified) {
+                if ($role->approved) {
                     return 'Yes';
                 }
-                switch (strtolower($role->verified)) {
+                switch (strtolower($role->approved)) {
                     case  null:
                     case 'no':
                     case 'none':
                     case '0':
+                    case '0000-00-00':
                         return 'No';
                 }
 
@@ -309,7 +315,7 @@ class ProjectPersonViewDecorator
                 if ($role->verified) {
                     return 'Yes';
                 }
-                switch (strtolower($role->verified)) {
+                switch (strtolower($role->approved)) {
                     case  null:
                     case 'no':
                     case 'none':

@@ -60,7 +60,7 @@ class ApproveVerifiedNG2019Command extends Command
         $ppidStr = implode(',', $ppids);
 
         if (!empty($ppids)) {
-            $sql = "UPDATE projectPersonRoles SET approved = ? WHERE verified = 1 AND role LIKE 'ROLE_%' AND projectPersonId IN ($ppidStr)";
+            $sql = "UPDATE projectPersonRoles SET approved = ? WHERE verified = 1 AND role LIKE 'ROLE_%' AND NOT badgeDate IS NULL and badgeDate <> '0000-00-00' AND projectPersonId IN ($ppidStr)";
             $stmt = $this->ngConn->prepare($sql);
             $stmt->execute([$this->approve]);
         }

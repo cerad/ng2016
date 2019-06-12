@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Doctrine\DBAL\Statement;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL;
 
 abstract class LoadAbstractCommand extends Command
 {
@@ -18,39 +19,6 @@ abstract class LoadAbstractCommand extends Command
 
     /** @var  Connection */
     protected $connNG2019;
-
-    /** @var Statement */
-    protected $checkVolsStmt;
-
-    /** @var  Statement */
-    protected $insertVolsStmt;
-
-    /** @var  Statement */
-    protected $updateVolStmt;
-
-    /** @var  Statement */
-    protected $insertCertStmt;
-
-    /** @var  Statement */
-    protected $updateCertStmt;
-
-    /** @var  Statement */
-    protected $checkCertStmt;
-
-    /** @var  Statement */
-    protected $insertOrgStmt;
-
-    /** @var  Statement */
-    protected $checkOrgStmt;
-
-    /** @var  Statement */
-    protected $updateOrgStmt;
-
-    /** @var  Statement */
-    protected $insertOrgStateStmt;
-
-    /** @var  Statement */
-    protected $checkOrgStateStmt;
 
     /** @var Statement */
     protected $selectProjectPersonIDStmt;
@@ -74,7 +42,16 @@ abstract class LoadAbstractCommand extends Command
     protected $clearPPROldSH;
 
     /** @var Statement */
-    protected $checkProjectPersonsRegistered;
+    protected $checkProjectPersonsRegisteredStmt;
+
+    /** @var Statement */
+    protected $resetProjectPersonRolesRoleDatedStmt;
+
+    /** @var Statement */
+    protected $resetProjectPersonRolesBadgeDateStmt;
+
+    /** @var Statement */
+    protected $resetProjectPersonRolesVerifiedStmt;
 
     /** @var boolean */
     protected $delete;
@@ -88,6 +65,12 @@ abstract class LoadAbstractCommand extends Command
     /** @var RegionToSarTransformer */
     protected $regionToSarTransformer;
 
+    /**
+     * LoadAbstractCommand constructor.
+     * @param Connection $connAyso
+     * @param Connection $connNG2019
+     * @throws DBAL\DBALException
+     */
     public function __construct(Connection $connAyso, Connection $connNG2019)
     {
         parent::__construct();
@@ -100,11 +83,16 @@ abstract class LoadAbstractCommand extends Command
 
         $this->regionToSarTransformer = new RegionToSarTransformer($this->aysoFinder);
 
-        $this->initStatements($connAyso, $connNG2019);
+        $this->initStatements($connNG2019);
 
         $this->initCerts();
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Start the processing
@@ -117,57 +105,18 @@ abstract class LoadAbstractCommand extends Command
         $this->load($filename);
     }
 
+    /**
+     * @param $filename
+     * @return mixed
+     */
     abstract protected function load($filename);
 
-    protected function initStatements(Connection $connAyso, Connection $connNG2019)
+    /**
+     * @param Connection $connNG2019
+     * @throws DBAL\DBALException
+     */
+    protected function initStatements(Connection $connNG2019)
     {
-        $sql = <<<EOD
-INSERT INTO vols
-(fedKey,name,email,phone,gender,sar,regYear)
-VALUES (?,?,?,?,?,?,?)
-EOD;
-        $this->insertVolsStmt = $connAyso->prepare($sql);
-
-        $sql = <<<EOD
-UPDATE vols SET 
-  name = ?, email = ?, phone = ?, gender = ?, sar = ?, regYear = ?
-WHERE fedKey = ?
-EOD;
-        $this->updateVolStmt = $connAyso->prepare($sql);
-
-        $sql = 'SELECT * FROM vols WHERE fedKey = ?';
-        $this->checkVolsStmt = $connAyso->prepare($sql);
-
-//        $sql = 'INSERT INTO vols (fedKey,name,phone,email,sar,regYear) VALUES (?,?,?,?,?,?)';
-//        $this->insertVolsStmt = $connAyso->prepare($sql);
-//
-//        $sql = 'UPDATE vols SET sar = ?, regYear = ? WHERE fedKey = ?';
-//        $this->updateVolsStmt = $connAyso->prepare($sql);
-//
-        $sql = 'SELECT roleDate,badge,badgeDate FROM certs WHERE fedKey = ? AND role = ?';
-        $this->checkCertStmt = $connAyso->prepare($sql);
-
-        $sql = 'INSERT INTO certs (fedKey,role,roleDate,badge,badgeDate) VALUES (?,?,?,?,?)';
-        $this->insertCertStmt = $connAyso->prepare($sql);
-
-        $sql = 'UPDATE certs SET roleDate = ?, badge = ?, badgeDate = ? WHERE fedKey = ? AND role = ?';
-        $this->updateCertStmt = $connAyso->prepare($sql);
-
-        $sql = 'SELECT state FROM orgs WHERE orgKey = ?';
-        $this->checkOrgStmt = $connAyso->prepare($sql);
-
-        $sql = 'INSERT INTO orgs (orgKey,sar,state) VALUES (?,?,?)';
-        $this->insertOrgStmt = $connAyso->prepare($sql);
-
-        $sql = 'UPDATE orgs SET state = ? WHERE orgKey = ?';
-        $this->updateOrgStmt = $connAyso->prepare($sql);
-
-        $sql = 'SELECT orgKey FROM orgStates WHERE orgKey = ? AND state = ?';
-        $this->checkOrgStateStmt = $connAyso->prepare($sql);
-
-        $sql = 'INSERT INTO orgStates (orgKey,state) VALUES (?,?)';
-        $this->insertOrgStateStmt = $connAyso->prepare($sql);
-
         $sql = 'SELECT id FROM projectPersons WHERE projectKey = ? AND fedKey = ?';
         $this->selectProjectPersonIDStmt = $connNG2019->prepare($sql);
 
@@ -190,9 +139,16 @@ EOD;
         $this->clearPPROldSH = $connNG2019->prepare($sql);
 
         $sql = "UPDATE projectPersons SET registered = 0 WHERE projectKey = ? AND (regYear = '' OR regYear < ?)";
-        $this->checkProjectPersonsRegistered = $connNG2019->prepare($sql);
+        $this->checkProjectPersonsRegisteredStmt = $connNG2019->prepare($sql);
+
+        $sql = 'UPDATE projectPersonRoles SET roleDate = null, badge = null, badgeDate = null, verified = 0 WHERE projectPersonId = ? AND role = ? AND approved = 0';
+        $this->resetProjectPersonRolesVerifiedStmt = $connNG2019->prepare($sql);
+
     }
 
+    /**
+     *
+     */
     protected function initCerts()
     {
         // Mess with badge list

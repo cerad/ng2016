@@ -3,6 +3,7 @@
 namespace AysoBundle\Load;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,6 +28,9 @@ class Loade3CertsCommand extends LoadAbstractCommand
         $this->appRegYear = $project['info']['regYear'];
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -37,6 +41,9 @@ class Loade3CertsCommand extends LoadAbstractCommand
             ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit data');
     }
 
+    /**
+     * @throws DBAL\DBALException
+     */
     protected function resetValues()
     {
         if (!$this->delete) {
@@ -53,6 +60,12 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
     }
 
+    /**
+     * @param $filename
+     * @throws DBAL\DBALException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     protected function load($filename)
     {
         /* ====================================
@@ -125,6 +138,10 @@ class Loade3CertsCommand extends LoadAbstractCommand
 
     }
 
+    /**
+     * @param array $row
+     * @throws DBAL\DBALException
+     */
     protected function processCert(array $row = [])
     {
         if (empty($row) || empty($row[0]) || $row[0] == 'AYSOID' || $row[1] == '*** Volunteer not found ***') {
@@ -136,37 +153,34 @@ class Loade3CertsCommand extends LoadAbstractCommand
         //$type = $row[2]; // Adult or Youth
         $regYear = $row[3];
         $sar = $row[4];
-        $roleDate = '';
+        $roleDate = null;
 
         $dt = DateTime::createFromFormat('Y-m-d', $row[5]);
+        $roleSH = 'CERT_SAFE_HAVEN';
         $badgeSHDate = $dt !== false ? $dt->format('Y-m-d') : '';
         if (!empty($badgeSHDate)) {
-            $roleSH = 'CERT_SAFE_HAVEN';
             $badgeSH = 'AYSO';
             $roleDate = $badgeSHDate;
         } else {
-            $roleSH = '';
-            $badgeSH = '';
+            $badgeSH = null;
         }
 
         $dt = DateTime::createFromFormat('Y-m-d', $row[6]);
+        $roleCDC = 'CERT_CONCUSSION';
         $badgeCDCDate = $dt !== false ? $dt->format('Y-m-d') : '';
         if (!empty($badgeCDCDate)) {
-            $roleCDC = 'CERT_CONCUSSION';
             $badgeCDC = 'CDC Concussion';
             $roleDate = $badgeCDCDate;
         } else {
-            $roleCDC = '';
-            $badgeCDC = '';
+            $badgeCDC = null;
         }
 
         $dt = DateTime::createFromFormat('Y-m-d', $row[8]);
         $badgeDate = $dt !== false ? $dt->format('Y-m-d') : explode('/', $row[8])[0];
+        $role = "CERT_REFEREE";
         if (empty($badgeDate)) {
             $badge = 'None';
-            $role = '';
         } else {
-            $role = "CERT_REFEREE";
             $badge = trim(explode('/', $row[7])[0]);
 
             switch ($badge) {
@@ -207,123 +221,53 @@ class Loade3CertsCommand extends LoadAbstractCommand
             $roleDate = $badgeDate;
         }
 
-        if (!isset($this->certMetas[$badge])) {
-//            echo "*** Missing cert meta: \n";
-//            dump($row);
-
-            return;
-        }
-
-        $badge = $this->certMetas[$badge]['badge'];
+        $badge = isset($this->certMetas[$badge]) ? $this->certMetas[$badge]['badge'] : null;
 
         // Update AYSO.Certs & NG2019.ProjectPersonRoles tables
         if ($this->commit) {
+            $this->updateCert($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate);
 
-            $this->checkCertStmt->execute([$fedKey, $role]);
-            $cert = $this->checkCertStmt->fetch();
-            if (is_bool($cert)) {
-                $this->insertCert($fedKey, $role, $roleDate, $badge, $badgeDate);
-            } else {
-                $this->updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert);
-            }
+            $this->updateCert($fedKey, $sar, $regYear, $roleSH, $roleDate, $badgeSH, $badgeSHDate);
 
+            $this->updateCert($fedKey, $sar, $regYear, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate);
+        }
+
+        return;
+    }
+
+    /**
+     * @param $fedKey
+     * @param $sar
+     * @param $regYear
+     * @param $role
+     * @param $roleDate
+     * @param $badge
+     * @param $badgeDate
+     * @throws DBAL\DBALException
+     */
+    private function updateCert($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate)
+    {
+        echo sprintf("\r  Updating %s...                                  ", $fedKey);
+
+        if ($this->commit) {
             $this->refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate);
-
-            if (!empty($roleSH)) {
-                $this->checkCertStmt->execute([$fedKey, $roleSH]);
-                $cert = $this->checkCertStmt->fetch();
-
-                if (is_bool($cert)) {
-                    $this->insertCert($fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate);
-                } else {
-                    $this->updateCert($fedKey, $roleSH, $roleDate, $badgeSH, $badgeSHDate, $cert);
-                }
-
-                $this->refreshProjectPersonsAndRole(
-                    $fedKey,
-                    $sar,
-                    $regYear,
-                    $roleSH,
-                    $roleDate,
-                    $badgeSH,
-                    $badgeSHDate
-                );
-            }
-            if (!empty($roleCDC)) {
-                $this->checkCertStmt->execute([$fedKey, $roleCDC]);
-                $cert = $this->checkCertStmt->fetch();
-                if (is_bool($cert)) {
-                    $this->insertCert($fedKey, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate);
-                } else {
-                    $this->updateCert($fedKey, $roleCDC, $roleDate, $badgeCDC, $badgeCDCDate, $cert);
-                }
-
-                $this->refreshProjectPersonsAndRole(
-                    $fedKey,
-                    $sar,
-                    $regYear,
-                    $roleCDC,
-                    $roleDate,
-                    $badgeCDC,
-                    $badgeCDCDate
-                );
-            }
         }
-
-        return;
-    }
-
-    private function insertCert($fedKey, $role, $roleDate, $badge, $badgeDate)
-    {
-
-        echo sprintf("\r  Inserting %s %s %s...     ", $fedKey, $badge, $badgeDate);
-
-        if ($this->commit) {
-            $this->insertCertStmt->execute([$fedKey, $role, $roleDate, $badge, $badgeDate]);
-        }
-
-        return;
-    }
-
-    private function updateCert($fedKey, $role, $roleDate, $badge, $badgeDate, $cert)
-    {
-        echo sprintf("\r  Updating %s...        ", $fedKey);
-
-        if ($this->badgeSorts[$badge] > $this->badgeSorts[$cert['badge']]) {
-            $cert['badge'] = $badge;
-            $cert['badgeDate'] = $badgeDate;
-        }
-        if ($badge === $cert['badge']) {
-            if ($cert['badgeDate'] === '0000-00-00' && $badgeDate) {
-                $cert['badgeDate'] = $badgeDate;
-            }
-            if (($cert['badgeDate'] === null) && $badgeDate) {
-                $cert['badgeDate'] = $badgeDate;
-            }
-        }
-        if ($cert['badgeDate'] === '0000-00-00') {
-            $cert['badgeDate'] = $badgeDate;
-
-            return;
-        }
-        if ($cert['roleDate'] === '0000-00-00' && $roleDate) {
-            $cert['roleDate'] = $roleDate;
-        }
-        if ($roleDate > $cert['roleDate'] && $roleDate) { // Get here, not really sure why
-            $cert['roleDate'] = $roleDate;
-        }
-
-        if ($this->commit) {
-            $this->updateCertStmt->execute([$cert['roleDate'], $cert['badge'], $cert['badgeDate'], $fedKey, $role]);
-        }
-//        echo sprintf("Updated Vols %s for %s\n", $regYear, $fedKey);
-//        $this->updateVolsRegYearStmt->execute([$regYear, $sar, $fedKey]);
 
     }
 
+    /**
+     * @param $fedKey
+     * @param $sar
+     * @param $regYear
+     * @param $role
+     * @param $roleDate
+     * @param $badge
+     * @param $badgeDate
+     * @throws DBAL\DBALException
+     */
     private function refreshProjectPersonsAndRole($fedKey, $sar, $regYear, $role, $roleDate, $badge, $badgeDate)
     {
-        if (!$this->commit) {
+        if (!$this->commit || empty($role)) {
             return;
         }
 
@@ -340,7 +284,7 @@ class Loade3CertsCommand extends LoadAbstractCommand
         }
 
         $this->updateProjectPersonsStmt->execute([$sar, $regYear, $registered, $this->projectKey, $fedKey]);
-        $this->checkProjectPersonsRegistered->execute([$this->projectKey, $this->appRegYear]);
+        $this->checkProjectPersonsRegisteredStmt->execute([$this->projectKey, $this->appRegYear]);
 
         $this->selectProjectPersonIDStmt->execute([$this->projectKey, $fedKey]);
         $pp = $this->selectProjectPersonIDStmt->fetch();
@@ -352,9 +296,11 @@ class Loade3CertsCommand extends LoadAbstractCommand
             if (is_bool($ppr)) {
                 $this->insertProjectPersonRoleStmt->execute([$ppid, $role, $roleDate, $badge, $badgeDate]);
             } else {
+                $this->resetProjectPersonRolesVerifiedStmt->execute([$role, $ppid]);
                 $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, $role]);
-                $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, 'ROLE_REFEREE']);
-                $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, 'ROLE_VOLUNTEER']);
+                if ($role == 'CERT_REFEREE') {
+                    $this->updateProjectPersonRoleStmt->execute([$roleDate, $badge, $badgeDate, $ppid, 'ROLE_REFEREE']);
+                }
             }
         }
 
