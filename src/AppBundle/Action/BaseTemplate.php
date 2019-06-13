@@ -232,6 +232,7 @@ EOT;
         return
 <<<EOT
     <li><a href="{$this->generateUrl('rules_of_competition' )}" target="_blank">RULES</a></li>
+    <li><a href="{$this->generateUrl('field_map' )}" target="_blank">FIELD MAP</a></li>
 EOT;
     }
 
@@ -245,8 +246,8 @@ EOT;
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_game_2019'    )}">GAME    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_team_2019'    )}">TEAM    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_game_2019')}">GAME    SCHEDULES</a></li>
+            <li><a href="{$this->generateUrl('schedule_team_2019')}">TEAM    SCHEDULES</a></li>
           </ul>
         </li>
 EOT;
