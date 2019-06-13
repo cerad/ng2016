@@ -231,7 +231,7 @@ EOT;
     {
         return
 <<<EOT
-    <li><a href="{$this->generateUrl('rules_of_competition'    )}" target="_blank">RULES</a></li>
+    <li><a href="{$this->generateUrl('rules_of_competition' )}" target="_blank">RULES</a></li>
 EOT;
     }
 

@@ -36,7 +36,7 @@ rules_of_competition:
     path: /rules
     defaults:
         fileType: pdf # For future use, only pdf is currently supported
-        fileName: NG19_Governing_Rules_-_FINAL.pdf
+        fileName: NG19_Governing_Rules_-_FINAL2.pdf
         _controller: file_controller
 
 detailed_instruction:

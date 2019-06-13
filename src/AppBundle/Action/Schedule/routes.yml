@@ -61,5 +61,5 @@ field_map:
     path: /field_map
     defaults:
         fileType: pdf # For future use, only pdf is currently supported
-        fileName: master_field_layout.pdf
+        fileName: 2019NG_FieldMap_Final.pdf
         _controller: file_controller
