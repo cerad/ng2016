@@ -34,6 +34,8 @@ class InitSOFNG2019Command extends Command
         $this->projectId = $projectId;
         $this->venue = $project['info']['venue'];
         $this->dates = $project['info']['dates'];
+
+        date_default_timezone_set ( 'Europe/London' );
     }
 
     /**
