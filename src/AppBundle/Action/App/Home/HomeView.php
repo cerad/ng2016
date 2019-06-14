@@ -26,22 +26,29 @@ class HomeView extends AbstractView2
     /** @var ProjectPersonRepositoryV2 */
     private $projectPersonRepository;
 
+    /** @var ProjectPersonViewDecorator */
     private $projectPersonViewDecorator;
 
+    /** @var RegPersonFinder */
     private $regPersonFinder;
 
+    /** @var string */
+    private $bannerMessage;
+
+    /** @var InstructionsView  */
     private $instructionsView;
 
     public function __construct(
         ProjectPersonRepositoryV2 $projectPersonRepository,
         ProjectPersonViewDecorator $projectPersonViewDecorator,
-        RegPersonFinder $regPersonFinder
+        RegPersonFinder $regPersonFinder,
+        array $appProject
     ) {
         $this->regPersonFinder = $regPersonFinder;
 
         $this->projectPersonRepository = $projectPersonRepository;
         $this->projectPersonViewDecorator = $projectPersonViewDecorator;
-
+        $this->bannerMessage = $appProject['info']['bannerMessage'];
         $this->instructionsView = new InstructionsView;
     }
 
@@ -284,18 +291,10 @@ EOD;
 
     private function renderNotes()
     {
-        return
-            <<<EOD
-<div id="banner" style="text-align: center">
-<legend>
-<p>Aloha all. The schedule is not ready for assignments at this time. We will notify you when 
-you can sign up. 
-</p><p>Mahalo NG
- Referee Staff</p>
- </legend>
-</div>
+        $html = <<<EOD
 <div id="notes">
   <legend>Thank you for registering to Volunteer at the 2019 National Games!</legend>
+{$this->bannerMessage}
   <p>
     Review your plans for the National Games to ensure we understand your availability and the roles you expect to play during the Games.
    </p>
@@ -311,6 +310,8 @@ register as a volunteer for the 2019 National Games, or go to your Region websit
    </p>  
 </div>
 EOD;
+
+        return $html;
     }
 
     private function renderInstructions()

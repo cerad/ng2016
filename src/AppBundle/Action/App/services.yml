@@ -73,6 +73,7 @@ services:
         arguments:
             - '@user_login_form'
             - '%show_results_menu%'
+            - "%app_project%"
 
     # action text alerts
     text_alerts_controller:
@@ -99,6 +100,7 @@ services:
             - '@project_person_repository_v2'
             - '@project_person_view_decorator'
             - '@reg_person_finder'
+            - "%app_project%"
 
     # action file
     file_controller:
