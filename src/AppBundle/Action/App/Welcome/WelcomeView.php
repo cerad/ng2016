@@ -37,6 +37,14 @@ class WelcomeView extends AbstractView2
   <div id="welcome">
     <legend>Welcome to the AYSO National Games 2019</legend>
   </div>
+<div id="banner" style="text-align: center">
+<legend>
+<p>Aloha all. The schedule is not ready for assignments at this time. We will notify you when 
+you can sign up. 
+</p><p>Mahalo NG
+ Referee Staff</p>
+ </legend>
+</div>
   {$this->renderNotes()}      
   {$this->renderUser()}
   {$this->renderHelp()}      

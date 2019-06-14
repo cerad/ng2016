@@ -286,6 +286,14 @@ EOD;
     {
         return
             <<<EOD
+<div id="banner" style="text-align: center">
+<legend>
+<p>Aloha all. The schedule is not ready for assignments at this time. We will notify you when 
+you can sign up. 
+</p><p>Mahalo NG
+ Referee Staff</p>
+ </legend>
+</div>
 <div id="notes">
   <legend>Thank you for registering to Volunteer at the 2019 National Games!</legend>
   <p>
