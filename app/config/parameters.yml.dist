@@ -18,7 +18,6 @@ parameters:
     database_name_ng2019test: ng2019test
 
     mailer_transport:  gmail
-    mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
     mailer_disable_delivery: false
