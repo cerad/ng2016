@@ -121,7 +121,7 @@ EOD;
             Forgot your zAYSO account password?  <a href="{$this->generateUrl('user_password_reset_request')}">Click here to recover your zAYSO password.</a>
         </li>
       <li>
-            Need to create an account? <a href="{$this->generateUrl('user_create')}">Click here to create a new zAYSO account</a> .
+            Need to create an account? <a href="{$this->generateUrl('user_create')}">Click here to create a new zAYSO account</a>.
       </li>
         <li>
             Once you create an account, you will be able to modify your information and availability.

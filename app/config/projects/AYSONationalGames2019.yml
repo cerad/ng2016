@@ -77,6 +77,11 @@ parameters:
             subject: "Feedback for the team"
             phone: ""
 
+        admin:
+            name:  "zAYSO Admin"
+            email: "web.ng2019@gmail.com"
+            phone:  ""
+
         system:
             name:  "NG2019 Web Team"
             email: "web.ng2019@gmail.com"

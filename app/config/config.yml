@@ -14,7 +14,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app_version: '2019.06.13.30'
+    app_version: '2019.06.14.00'
 
 framework:
     #esi:             ~
@@ -46,7 +46,6 @@ framework:
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
-    host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
 

@@ -30,13 +30,12 @@ class RegisterController extends AbstractController2
     public function __construct(
         RegisterForm $registerForm,
         ProjectPersonRepositoryV2 $projectPersonRepository,
-        AysoFinder                $fedFinder,
-                                  $successRouteName,
-        RegisterTemplateEmail     $templateEmail
-    )
-    {
-        $this->registerForm            = $registerForm;
-        $this->fedFinder               = $fedFinder;
+        AysoFinder $fedFinder,
+        $successRouteName,
+        RegisterTemplateEmail $templateEmail
+    ) {
+        $this->registerForm = $registerForm;
+        $this->fedFinder = $fedFinder;
         $this->projectPersonRepository = $projectPersonRepository;
 
         $this->successRouteName = $successRouteName;
@@ -74,19 +73,20 @@ class RegisterController extends AbstractController2
                 $this->refereeBadgeUser = null;
             }
             $projectPerson = (new ProjectPerson)->fromArray($projectPersonArray);
-            
+
             $projectPerson = $this->process($projectPerson);
 
             // Maybe reset referee info?
             if ($registerForm->getSubmit() == 'nope') {
                 $projectPerson->registered = false;
-                $projectPerson->verified   = null;
+                $projectPerson->verified = null;
             }
             $this->projectPersonRepository->save($projectPerson);
             // Careful about the id
             if ($projectPerson['registered'] === true) {
                 $this->sendEmail($projectPerson);
             }
+
             return $this->redirectToRoute($this->successRouteName);
         }
 
@@ -143,17 +143,17 @@ class RegisterController extends AbstractController2
 
         // Referee Cert
         $certKey = 'CERT_REFEREE';
-        $refereeCert = $projectPerson->getCert($certKey,true);
+        $refereeCert = $projectPerson->getCert($certKey, true);
         $refereeCert->active = false;
 
-        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey, $certKey);
 
         if ($cert) {
-            $refereeCert->roleDate  = $cert['roleDate'];
-            $refereeCert->badge     = $cert['badge'];
+            $refereeCert->roleDate = $cert['roleDate'];
+            $refereeCert->badge = $cert['badge'];
             $refereeCert->badgeUser = $cert['badge'];
             $refereeCert->badgeDate = $cert['badgeDate'];
-            $refereeCert->verified  = true;
+            $refereeCert->verified = true;
         }
         // User selected badge on registration form
         if ($this->refereeBadgeUser) {
@@ -170,7 +170,7 @@ class RegisterController extends AbstractController2
 
         $safeHavenCert->active = false;
 
-        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey, $certKey);
 
         if ($cert) {
             $safeHavenCert->badge = $cert['badge'];
@@ -184,7 +184,7 @@ class RegisterController extends AbstractController2
 
         $concCert->active = false;
 
-        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey, $certKey);
 
         if ($cert) {
             $concCert->badge = $cert['badge'];
@@ -221,7 +221,7 @@ class RegisterController extends AbstractController2
 
         $safeHavenCert->active = false;
 
-        $cert = $this->fedFinder->findVolCert($fedKey,$certKey);
+        $cert = $this->fedFinder->findVolCert($fedKey, $certKey);
 
         if ($cert) {
             $safeHavenCert->badge = $cert['badge'];
@@ -251,7 +251,7 @@ class RegisterController extends AbstractController2
             return $projectPerson;
         }
         // Search previous tournaments
-        $projectPerson = $projectPersonRepository->find('AYSONationalOpenCup2017',$personKey);
+        $projectPerson = $projectPersonRepository->find('AYSONationalOpenCup2017', $personKey);
 
         if (!$projectPerson) {
             $projectPerson = $projectPersonRepository->find('AYSONationalGames2016', $personKey);
@@ -321,16 +321,24 @@ class RegisterController extends AbstractController2
     private function sendEmail($person)
     {
         $projectInfo = $this->getCurrentProjectInfo();
+
 //        $support  = $projectInfo['support'];
         $system = $projectInfo['system'];
         $refAdmin = $projectInfo['administrator'];
         $staff = [
             $refAdmin['email'] => $refAdmin['name'],
         ];
+        $admin = [
+            $system['email'] => $system['name'],
+        ];
+
+        $user = [
+            $person['email'] => $person['name'],
+        ];
 
         $update = $person['id'] ? 'Update' : null;
 
-        $subject = sprintf("[{$this->project['abbv']}] Registration %s for: %s",$update,$person['name']);
+        $subject = sprintf("[{$this->project['abbv']}] Registration %s for: %s", $update, $person['name']);
 
         $html = $this->templateEmail->renderHtml($person);
 
@@ -345,15 +353,13 @@ class RegisterController extends AbstractController2
 
         $message->setFrom(['web.NG2019@gmail.com' => 'zAYSO Admin']);
 
-        $message->setTo([$person['email'] => $person['name']]);
+        $message->setTo($user);
 
         $message->setCc($staff);
 
         $message->setReplyTo($staff);
 
-        $message->setBcc([
-            $system['email'] => $system['name'],
-        ]);
+        $message->setBcc($admin);
 
         $mailer->send($message);
 

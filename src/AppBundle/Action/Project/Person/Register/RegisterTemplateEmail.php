@@ -90,7 +90,7 @@ class RegisterTemplateEmail extends AbstractView2
     30 - July 7, 2019</p>
     <div style="{$this->styleClearBoth}"></div>
   </center>
-  <hr>Thank you for registering to volunteer at the 2019 National Games!
+  <hr>
   <p style="{$this->stylePEmail}">Thank you for registering to volunteer at the 2019 National Games!</p>
   <br>
   {$this->renderHtmlPerson($personView)}

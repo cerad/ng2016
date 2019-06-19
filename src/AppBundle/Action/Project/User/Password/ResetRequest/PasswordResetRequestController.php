@@ -47,9 +47,25 @@ class PasswordResetRequestController extends AbstractController2
     }
     private function sendEmail($user)
     {
+        $mailer = $this->getMailer();
+
+        $users = [
+            $user['email'] => $user['name']
+        ];
+
+        $admin = [
+            'admin@zayso.org' => 'zAYSO Admin'
+        ];
+
+        $bcc = [
+            'web.ng2019@gmail.com' => 'Rick Roberts'
+        ];
+
+        $subject = sprintf('[zAYSOAdmin] Password Reset Request for: %s', $user['name']);
+
         $token = $user['passwordToken'];
 
-        $subject = sprintf('[zAYSOAdmin] Password Reset Request for: %s',$user['name']);
+        $resetURL = $this->generateUrlAbsoluteUrl('user_password_reset_response', ['token' => $token]);
 
         $body = <<<EOD
 A zAYSO password reset request has been made.
@@ -60,22 +76,20 @@ Please enter this token on the site password reset confirmation page.
 
 OR click here: 
 
-{$this->generateUrlAbsoluteUrl('user_password_reset_response',['token' => $token])}
+{$resetURL}
 EOD;
-        $mailer  = $this->getMailer();
-
         /** @var Swift_Message $message */
         $message = $mailer->createMessage();
 
-        $message->setBody($body);
+        $message->setTo($users);
+
+        $message->setFrom($admin);
+
+        $message->setBcc($bcc);
 
         $message->setSubject($subject);
 
-        $message->setFrom(['web.ng2019@gmail.com' => 'zAYSO Admin']);
-
-        $message->setTo([$user['email'] => $user['name']]);
-
-        $message->setBcc(['web.ng2019@gmail.com' => 'Rick Roberts']);
+        $message->setBody($body);
 
         $mailer->send($message);
     }
