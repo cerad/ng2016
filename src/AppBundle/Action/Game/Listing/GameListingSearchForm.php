@@ -111,14 +111,14 @@ EOD;
             $divisionChoices = array_merge(
                 $divisionChoices,
                 [
-                    'B10U' => 'Boys 10U',
-                    'G10U' => 'Girls 10U',
-                    'B12U' => 'Boys 12U',
-                    'G12U' => 'Girls 12U',
-                    'B14U' => 'Boys 14U',
-                    'G14U' => 'Girls 14U',
-                    'B19U' => 'Boys 19U',
-                    'G19U' => 'Girls 19U',
+                    '10UB' => 'Boys 10U',
+                    '10UG' => 'Girls 10U',
+                    '12UB' => 'Boys 12U',
+                    '12UG' => 'Girls 12U',
+                    '14UB' => 'Boys 14U',
+                    '14UG' => 'Girls 14U',
+                    '19UB' => 'Boys 19U',
+                    '19UG' => 'Girls 19U',
                 ]
             );
         }
