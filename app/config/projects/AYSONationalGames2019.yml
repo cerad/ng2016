@@ -331,25 +331,25 @@ parameters:
 
         availSatMorn:
             type:    select
-            label:   Available Saturday Morning (Pool Play)
+            label:   Available Saturday Morning (Quarter-Finals)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe }
 
         availSatAfter:
             type:    select
-            label:   Available Saturday Afternoon (Qtr-Finals)
+            label:   Available Saturday Afternoon (Semi-Finals & Consolations)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe }
 
         availSunMorn:
             type:    select
-            label:   Available Sunday Morning (Semi-Finals)
+            label:   Available Sunday Morning (Finals & Consolations)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe }
 
         availSunAfter:
             type:    select
-            label:   Available Sunday Afternoon (Finals)
+            label:   Available Sunday Afternoon (Finals & Consolations)
             default: no
             choices: { no: No, yes: Yes, maybe: Maybe}
 

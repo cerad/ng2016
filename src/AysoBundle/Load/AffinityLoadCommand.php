@@ -15,11 +15,13 @@ use DateTime;
 use Exception;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class AffinityLoadCommand extends Command
 {
     private $project;
     private $projectId;
+    private $projectRoot;
 
     private $venueName;
     private $venue;
@@ -33,6 +35,11 @@ class AffinityLoadCommand extends Command
 
     private $commit;
 
+    /**
+     * AffinityLoadCommand constructor.
+     * @param $project
+     * @param Connection $ngGamesConn
+     */
     public function __construct(
         $project,
         Connection $ngGamesConn
@@ -46,19 +53,32 @@ class AffinityLoadCommand extends Command
 
         $this->ngGamesConn = $ngGamesConn;
 
+        $this->projectRoot = realpath(__DIR__.'/../../../');
+
     }
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
-            ->setName('affinity:load')
-            ->setDescription('Load Affinity Schedule Export to Import XLSX files')
-            ->addArgument('filename', InputArgument::REQUIRED, 'Affinity Schedule File')
+            ->setName('ng2019:affinity:load')
+            ->setDescription('Load NG2019 Affinity Schedule Export to Import XLSX files')
+            ->addArgument('filename', InputArgument::REQUIRED, 'NG2019 Affinity Schedule Excel File')
             ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing data before update')
             ->addOption('outfile', 'o', InputOption::VALUE_NONE, 'Export to output file')
             ->addOption('commit', 'c', InputOption::VALUE_NONE, 'Commit data');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws DBALException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Start the processing
@@ -69,14 +89,14 @@ class AffinityLoadCommand extends Command
 
         $this->path_parts = pathinfo($filename);
 
-        $this->contentsFilename = $this->getCSVFilename('AffinityBaseValues');
+        $this->contentsFilename = $this->getCSVFilename();
 
         $this->load($filename);
 
         if ($writeCSV) {
             $contents = $this->prepOutFile($this->dataValues);
             $this->writeCSV($contents, $this->contentsFilename);
-            echo sprintf("Data written to %s ...\n", realpath($this->contentsFilename));
+            echo sprintf("Data written to %s ...\n", $this->contentsFilename);
         } else {
 
             $count = $this->loadRegTeams($this->dataValues, $delete);
@@ -104,18 +124,22 @@ class AffinityLoadCommand extends Command
             echo "$i new gameOfficials loaded, existing gameOfficials are not updated...\n";
         }
 
-        echo "... Affinity transform complete.\n";
+        echo "... Affinity import complete.\n";
 
     }
 
     private $path_parts;
 
-    private function getCSVFilename($name)
+    /**
+     * @param $name
+     * @return string
+     */
+    private function getCSVFilename($name = '')
     {
         $ts = date("Ymd_His");
 
-        $path = sprintf(
-            '%s/%s_%s_%s.csv',
+        $path = $this->projectRoot . sprintf(
+            '/%s/%s_%s_%s.csv',
             $this->path_parts ['dirname'],
             $ts,
             $name,
@@ -126,22 +150,36 @@ class AffinityLoadCommand extends Command
         return $path;
     }
 
+    /**
+     * @param $filename
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     private function load($filename)
     {
         /* ====================================
-        /*  Affinity Schedule Export Fields // expected values
+        /*  Affinity NG2019 Schedule Export Fields // expected values
 
-            [ 0]=> "GameNum" // ["Thursday, July 13, 2017", "Lancaster National - 19       (8A -- 6P)", "7249"]
-            [ 1]=> "Flight" // ["B10U - Core", "B10U - Extra", ""Club Girls 03-04", "VIP"]
-            [ 2]=> "Round" // ["Soccerfest","Bracket", "Semi-Final", "Final"]
-            [ 3]=> "Game" // ["A4 vs A2", "1st of Pool vs 4th of Pool", "2nd of Pool vs 3rd of Pool", "Winner SF Game# 7258
-        vs Winner SF Game# 7259"]
-            [ 4]=> "Game Time" // ["10:15A"}
-            [ 5]=> "Home Team"
-            [ 6]=> "Away Team"
+        [01] => "Game #"
+        [02] => "Venue"
+        [03] => "Field #"
+        [04] => "Field ID"
+        [05] => "Date"
+        [06] => "Day"
+        [07] => "Time"
+        [08] => "Flight"
+        [09] => "Home Club"
+        [10] => "Home Team"
+        [11] => "Home Team Description"
+        [12] => "Visitor Club"
+        [13] => "Visitors"
+        [14] => "Visitor Team Description"
+        [15] => "Round Type Code"
+        [16] => "Reschedule Reason"
+
          */
 
-        echo sprintf("Loading Affinity Schedule file: %s...\n", $filename);
+        echo sprintf("Loading NG2019 Affinity Schedule file: %s...\n", $filename);
 
         /** @var Xlsx $reader */
         $reader = new Xlsx();
@@ -183,9 +221,6 @@ class AffinityLoadCommand extends Command
         }
 
     }
-
-    private $gameDate;
-    private $gameField;
 
     private $dataKeys = array(
         'projectId',
@@ -290,148 +325,93 @@ class AffinityLoadCommand extends Command
 //        'assignState',
 //    );
 
+    /**
+     * @param $row
+     * @throws Exception
+     */
     private function processRow($row)
     {
-
-        //read date from row[]
-        $date = date('Y-m-d', strtotime($row[0]));
-
-        if (in_array($date, array_keys($this->project['dates']))) {
-            $this->gameDate = $date;
-
-            return;
-
-        }
-
-        //read field from row[]
-        if (strpos($row[0], $this->venueName) > -1) {
-            //read Field from row[]
-            $r = preg_replace("/[^a-zA-Z0-9\s]/", '', $row[0]);
-            $fields = explode(' ', $r);
-
-            $this->gameField = $fields[count($fields) - 1];
-
+        if (!is_numeric($row[0])) {
             return;
 
         }
 
         //read game from row[]
-        $fields = $row;
-        if (count($fields) > 1) {
-            $game_num = $fields[0];
-//            $flight = $fields[1];
+        if (count($row) > 1) {
+            //read gameNumber from row[0]
+            $game_num = $row[0];
 
-//            if (strpos($flight, 'Club') !== false) {
-//                // is club flight
-//                $flight = explode(' ', $fields[1]);
-//                $program = $flight[0];
-//                $gender = substr($flight[1], 0, 1);
-//                $division = $gender.$flight[2];
-//                $age = $flight[2];
-//            } else {
-//                if (strpos($flight, 'VIP') !== false) {
-//                    // is VIP
-//                    $program = $flight;
-//                    $gender = 'C';
-//                    $division = null;
-//                    $age = null;
-//                } else {
-            // is Core or Extra
-            $flight = explode(' - ', $fields[1]);
-            $program = isset($flight[1]) ? $flight[1] : "Core";
-            $gender = substr($flight[0], 0, 1);
-            $division = $flight[0];
-            $age = substr($flight[0], 1, 3);
-//                }
-//            }
+            //read fieldNum from row[2]
+            $gameField = $row[2];
 
-            $round = $fields[2];
+            //read date from row[4]
+            $gameDate = date('Y-m-d', strtotime($row[4]));
+
+            //read time from row[6]
+
+            $gameStart = date("H:i", strtotime($row[6]));
+            $dt = new DateTime($gameStart);
+            $dt = $dt->modify('+ 50 minutes');
+            $gameFinish = $dt->format("H:i");
+
+            //read division from row[7]
+            $program = "Core";
+            $division = $row[7];
+            $gender = substr($division, -1);
+            $age = substr($division, 0, 3);
+
+            //read HomeTeam from row[9]
+            $homeTeamName = strtoupper($row[9]);
+
+            //read HomeTeamPoolSlot from row[10]
+            $homeTeamSlot = $row[10];
+            $homeTeamNumber = substr($homeTeamSlot, 1);
+            $homePoolSlot = $homeTeamNumber;
+
+            //read AwayTeam from row[12]
+            $awayTeamName = strtoupper($row[12]);
+
+            //read AwayTeamPoolSlot from row[13]
+            $awayTeamSlot = $row[13];
+            $awayTeamNumber = substr($awayTeamSlot, 1);
+            $awayPoolSlot = $awayTeamNumber;
+
+            //read $roundType from row[14]
+            $roundType = $row[14];
             $poolType = null;
-            switch ($round) {
+            switch ($roundType) {
                 case 'Soccerfest':
                     $poolType = 'ZZ';
                     break;
-                case 'Bracket':
+                case 'B':
                     $poolType = 'PP';
                     break;
-                case 'Semi-Final':
+                case 'QF':
+                    $poolType = 'QF';
+                    break;
+                case 'SF':
                     $poolType = 'SF';
                     break;
-                case'Consolation':
+                case'C':
                     $poolType = 'CO';
                     break;
-                case'Final':
+                case'F':
                     $poolType = 'FI';
                     break;
             }
 
-            $game = $fields[3];
-            $poolTeamKeys = explode(' vs ', $game);
-            $gameTime = explode(' -- ', $fields[4]);
+            switch ($poolType) {
+                case 'QF':
+                case 'SF':
+                case 'CO':
+                case 'FI':
+                    $homeTeamSlot = $game_num.'X';
+                    $homePoolSlot = '';
+                    $homeTeamNumber = '';
 
-            if(isset($gameTime[1])){
-                $gameStart = date("H:i:s", strtotime($gameTime[0].'M'));
-                $gameFinish = date("H:i:s", strtotime($gameTime[1].'M'));
-            } else {
-                $dt = ($gameTime[0] * 86400) - ((70 * 365 + 19) * 86400);
-                $gameStart = date("H:i", $dt);
-                $dt = new DateTime($gameStart);
-                $dt = $dt->modify('+ 50 minutes');
-                $gameFinish = $dt->format("H:i");
-            }
-
-            if ($poolType == 'PP') {
-                $homeTeamName = $fields[5];
-                $homeTeamSlot = $poolTeamKeys[0];
-                $home = str_split($homeTeamSlot);
-                $homePoolSlot = $home[0];
-                switch ($homePoolSlot) {
-                    case 'A':
-                        $numBase = 0;
-                        break;
-                    case 'B':
-                        $numBase = 10;
-                        break;
-                    case 'C':
-                        $numBase = 20;
-                        break;
-                    case 'D':
-                        $numBase = 30;
-                        break;
-                    default:
-                        $numBase = 0;
-                }
-                $homeTeamNumber = $numBase + $home[1];
-
-                $awayTeamName = $fields[6];
-                $awayTeamSlot = $poolTeamKeys[1];
-                $away = str_split($awayTeamSlot);
-                $awayPoolSlot = $away[0];
-                switch ($awayPoolSlot) {
-                    case 'A':
-                        $numBase = 0;
-                        break;
-                    case 'B':
-                        $numBase = 10;
-                        break;
-                    case 'C':
-                        $numBase = 20;
-                        break;
-                    case 'D':
-                        $numBase = 30;
-                        break;
-                }
-                $awayTeamNumber = $numBase + $away[1];
-            } else {
-                $homeTeamName = $poolTeamKeys[0];
-                $homeTeamSlot = $game_num.'X';
-                $homePoolSlot = '';
-                $homeTeamNumber = '';
-
-                $awayTeamName = $poolTeamKeys[1];
-                $awayTeamSlot = $game_num.'Y';
-                $awayPoolSlot = '';
-                $awayTeamNumber = '';
+                    $awayTeamSlot = $game_num.'Y';
+                    $awayPoolSlot = '';
+                    $awayTeamNumber = '';
             }
 
             $homeTeamName = sprintf('%s', $homeTeamName); //ensure not NULL
@@ -447,8 +427,8 @@ class AffinityLoadCommand extends Command
 
             $dataValues = [
                 $this->projectId,
-                $this->gameDate,
-                $this->gameField,
+                $gameDate,
+                $gameField,
                 $game_num,
                 $program,
                 $gender,
@@ -479,6 +459,12 @@ class AffinityLoadCommand extends Command
         return;
     }
 
+    /**
+     * @param $data
+     * @param bool $delete
+     * @return array|null
+     * @throws DBALException
+     */
     private function loadGames($data, $delete = false)
     {
         if (empty($data)) {
@@ -560,6 +546,12 @@ class AffinityLoadCommand extends Command
         );
     }
 
+    /**
+     * @param $data
+     * @param bool $delete
+     * @return array|null
+     * @throws DBALException
+     */
     private function loadRegTeams($data, $delete = false)
     {
         if (empty($data)) {
@@ -653,6 +645,12 @@ class AffinityLoadCommand extends Command
         );
     }
 
+    /**
+     * @param $data
+     * @param bool $delete
+     * @return array|null
+     * @throws DBALException
+     */
     private function loadGameTeams($data, $delete = false)
     {
         if (empty($data)) {
@@ -738,6 +736,12 @@ class AffinityLoadCommand extends Command
         );
     }
 
+    /**
+     * @param $data
+     * @param bool $delete
+     * @return array|null
+     * @throws DBALException
+     */
     private function loadPoolTeams($data, $delete = false)
     {
         if (empty($data)) {
@@ -811,7 +815,6 @@ class AffinityLoadCommand extends Command
                     $regTeamName,
                 );
 
-                var_dump($pTeam);die();
                 //load new data
                 try {
                     $sql = 'SELECT * FROM poolTeams WHERE poolTeamId = ?';
@@ -852,6 +855,12 @@ class AffinityLoadCommand extends Command
         );
     }
 
+    /**
+     * @param $games
+     * @param bool $delete
+     * @return array|null
+     * @throws DBALException
+     */
     private function loadGameOfficials($games, $delete = false)
     {
         if (empty($games)) {
@@ -920,6 +929,10 @@ class AffinityLoadCommand extends Command
         );
     }
 
+    /**
+     * @param $data
+     * @return array|null
+     */
     private function prepOutFile(
         $data
     ) {
@@ -939,6 +952,11 @@ class AffinityLoadCommand extends Command
     }
 
 
+    /**
+     * @param $data
+     * @param $filename
+     * @return int|null
+     */
     private function writeCSV($data, $filename)
     {
         if (is_null($data)) {

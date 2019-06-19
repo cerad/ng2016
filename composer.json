@@ -30,7 +30,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "phpoffice/phpspreadsheet": "^1.6",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/swiftmailer-bundle": "^3.2"
+        "symfony/swiftmailer-bundle": "^3.2",
+        "ext-curl": "^7.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

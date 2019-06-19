@@ -236,6 +236,7 @@ class VolCerts
      */
     public function retrieveVolCertData($id)
     {
+        $id = is_string($id) ? null : $id;
 
         return $this->parseCertData($id, $this->curl_get($this->urlCert, ['AYSOID' => $id]));
     }
