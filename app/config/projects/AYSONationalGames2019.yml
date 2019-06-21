@@ -34,8 +34,8 @@ parameters:
         bannerMessage: >
             <div id="banner" style="text-align: center">
                <legend>
-                    <p>Aloha all. The schedule is published. Please consult the <a href="https://ng2019.ayso1ref.com/self-assigning"
-                    target="_blank">Instruction for Self-Assigning</a> and grab some games for you and your crew.</p>
+                    <p>Aloha all. The schedule is published.</p>
+                    <p>Please consult the <a href="https://ng2019.ayso1ref.com/self-assigning" target="_blank">Instruction for Self-Assigning</a> and grab some games for you and your crew.</p>
                     <p>Mahalo NG Referee Staff</p>
                 </legend>
             </div>
