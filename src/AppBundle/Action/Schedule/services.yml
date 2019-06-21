@@ -102,7 +102,6 @@ services:
         parent: schedule_template_2019
         arguments:
             - "Referee Game Schedule"
-            - '%enable_pp_self_assign%'
             - true
             - false
             - "@game_official_assign_workflow"
@@ -149,7 +148,6 @@ services:
         parent: schedule_template_2019
         arguments:
             - "Assignor Game Schedule"
-            - "%enable_pp_self_assign%"
             -  true
             -  true
             - "@game_official_assign_workflow"
@@ -294,5 +292,16 @@ services:
             - "@schedule_medalround_calculator_2019"
             - "@results_finder_2019"
             - "@abstract_exporter_xls"
+
+    # ===============================================================
+    # Schedule Commands
+
+    ayso_games_selfassign_command:
+        class: AppBundle\Action\Schedule\UpdateSelfAssignCommand
+        tags: [{ name: console.command }]
+        arguments:
+            - "@ng.games.connection"
+            - "%app_project_key%"
+            - "%app_project%"
 
 
