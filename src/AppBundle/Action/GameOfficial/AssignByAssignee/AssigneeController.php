@@ -22,11 +22,13 @@ class AssigneeController extends AbstractController2
     public function __construct(
         AssigneeForm        $form,
         GameFinder          $gameFinder,
-        GameOfficialUpdater $gameOfficialUpdater
+        GameOfficialUpdater $gameOfficialUpdater,
+        $enableSelfAssign
     ) {
         $this->form       = $form;
         $this->gameFinder = $gameFinder;
         $this->gameOfficialUpdater = $gameOfficialUpdater;
+        $this->enableSelfAssign = $enableSelfAssign;
     }
     public function __invoke(Request $request, $projectId, $gameNumber, $slot)
     {
@@ -58,7 +60,7 @@ class AssigneeController extends AbstractController2
         $form = $this->form;
         $form->setGame($game);
 
-        $form->setSelfAssign($game->selfAssign);
+        $form->setSelfAssign($game->selfAssign || $this->enableSelfAssign);
         $form->setGameOfficial($gameOfficialOriginal);
         $form->setBackRouteName($backRouteName);
         $form->handleRequest($request);

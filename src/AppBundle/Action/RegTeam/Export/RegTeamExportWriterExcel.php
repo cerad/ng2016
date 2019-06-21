@@ -24,9 +24,9 @@ class RegTeamExportWriterExcel
 
         $this->wb = $wb = new Spreadsheet();
 
-        $ws = $wb->getSheet(0);
+        $this->wb->getSheet(0);
 
-        $ws = $this->ws->getActiveSheet();
+        $ws = $this->wb->getActiveSheet();
         $this->writeRegTeams($ws, $regTeams);
 
         return $this->getContents($filename);
@@ -45,7 +45,7 @@ class RegTeamExportWriterExcel
 
     /**
      * @param  Worksheet $ws
-     * @param   RegTeam[] $regTeams
+     * @param  RegTeam[] $regTeams
      * @throws PhpSpreadsheet\Exception
      */
     private function writeRegTeams(Worksheet $ws,$regTeams)
