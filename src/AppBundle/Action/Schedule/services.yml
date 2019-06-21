@@ -149,6 +149,7 @@ services:
         parent: schedule_template_2019
         arguments:
             - "Assignor Game Schedule"
+            - "%enable_pp_self_assign%"
             -  true
             -  true
             - "@game_official_assign_workflow"
