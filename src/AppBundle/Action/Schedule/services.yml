@@ -100,7 +100,12 @@ services:
     schedule_official_template_2019:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2019
-        arguments: ["Referee Game Schedule", true, false, "@game_official_assign_workflow"]
+        arguments:
+            - "Referee Game Schedule"
+            - '%enable_pp_self_assign%'
+            - true
+            - false
+            - "@game_official_assign_workflow"
 
     schedule_official_view_html_2019:
         class:  AppBundle\Action\Schedule\ScheduleView

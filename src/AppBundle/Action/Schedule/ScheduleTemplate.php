@@ -22,6 +22,8 @@ class ScheduleTemplate extends AbstractTemplate
 
     protected $assignWorkflow;
 
+    private $enableSelfAssign;
+
     /** @var  RegPersonFinder */
     protected $regPersonFinder;
     protected $regPersonId;
@@ -30,6 +32,7 @@ class ScheduleTemplate extends AbstractTemplate
 
     public function __construct(
         $scheduleTitle,
+        $enableSelfAssign,
         $showOfficials = false,
         $showOfficialDetails = false,
         AssignWorkflow $assignWorkflow = null,
@@ -42,6 +45,8 @@ class ScheduleTemplate extends AbstractTemplate
         $this->scheduleTitle = $scheduleTitle;
 
         $this->assignWorkflow = $assignWorkflow;
+
+        $this->enableSelfAssign = $enableSelfAssign;
     }
 
     public function setRegPersonFinder(RegPersonFinder $regPersonFinder)
@@ -214,8 +219,8 @@ EOD;
         $assignUrl = $this->generateUrl($assignRouteName, $params);
 
         $slotView = $gameOfficial->slotView;
-        $selfAssign = $this->showOfficialDetails ? true : $game->selfAssign;
-        $selfAssign = $this->isGranted('ROLE_ADMIN') || $selfAssign;
+        $selfAssign = $this->showOfficialDetails ? true : $game->selfAssign || $this->enableSelfAssign;
+        $selfAssign = $this->isGranted('ROLE_ADMIN') || $selfAssign || $this->enableSelfAssign ;
 
         if ($selfAssign && $this->isGranted('view', $gameOfficial)) {
             $slotView = sprintf('<a href="%s">%s</a>', $assignUrl, $slotView);
