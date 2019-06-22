@@ -243,13 +243,10 @@ EOT;
         }
         return
 <<<EOT
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SCHEDULES <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('schedule_game_2019')}">GAME    SCHEDULES</a></li>
-            <li><a href="{$this->generateUrl('schedule_team_2019')}">TEAM    SCHEDULES</a></li>
-          </ul>
-        </li>
+<li>
+<a href="https://ayso-2019nationalgames.sportsaffinity.com/Tour/public/info/accepted_list.asp?sessionguid=&Tournamentguid={B4AD6CC2-C88A-4EF6-A75F-F08967008E66}" target="_blank">SCHEDULES 
+& RESULTS</a>
+</li>
 EOT;
     }
     
