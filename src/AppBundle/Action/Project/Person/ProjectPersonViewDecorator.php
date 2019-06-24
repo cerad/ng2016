@@ -17,21 +17,21 @@ class ProjectPersonViewDecorator
     private $phoneTransformer;
     private $fedKeyTransformer;
     private $orgKeyTransformer;
-
-    /** @var WillRefereeTransformer */
     private $willRefereeTransformer;
+    private $appProjectRegYear;
 
     public function __construct(
         PhoneTransformer $phoneTransformer,
         VolunteerKeyTransformer $fedKeyTransformer,
         RegionToSarTransformer $orgKeyTransformer,
-        WillRefereeTransformer $willRefereeTransformer
+        WillRefereeTransformer $willRefereeTransformer,
+        array $app_project
     ) {
         $this->phoneTransformer = $phoneTransformer;
         $this->fedKeyTransformer = $fedKeyTransformer;
         $this->orgKeyTransformer = $orgKeyTransformer;
-
         $this->willRefereeTransformer = $willRefereeTransformer;
+        $this->appProjectRegYear = $app_project['info']['regYear'];
     }
 
     public function setProjectPerson(ProjectPerson $person)
@@ -74,7 +74,7 @@ class ProjectPersonViewDecorator
 
     public function getRegYearStyle($regYearProject)
     {
-        return $this->regYear >= $regYearProject ? $this->successStyle : $this->dangerStyle;
+        return $this->regYear >= $regYearProject? $this->successStyle : $this->dangerStyle;
     }
 
     public function getRegYear($regYearProject)
@@ -145,6 +145,7 @@ class ProjectPersonViewDecorator
         };
         $cert = $this->person->getCert($certKey);
         $suffix = $cert->verified ? null : ' ***';
+        $isCert = false;
         if ($certKey !== 'CERT_REFEREE') {
             $isCert = !is_null($cert->badgeDate) && ($cert->badgeDate <> '0000-00-00') AND $cert->verified ;
 
@@ -176,7 +177,7 @@ class ProjectPersonViewDecorator
 
     public function isCurrentMY($regYearProject)
     {
-        $regYearCurrent = $this->regYear >= $regYearProject;
+        $regYearCurrent = $this->regYear >= $this->appProjectRegYear;
 
         return $regYearCurrent;
     }
@@ -188,7 +189,7 @@ class ProjectPersonViewDecorator
         return !is_null($role);
     }
 
-    public function getRoleClass($role, $regYearProject)
+    public function getRoleClass($role)
     {
         if ($role->approved) {
             return $this->successClass;
@@ -196,7 +197,7 @@ class ProjectPersonViewDecorator
 
         switch ($role->role) {
             case 'ROLE_REFEREE':
-                if ($this->person->needsCerts() || !$this->isCurrentMY($regYearProject)) {
+                if ($this->person->needsCerts() || !$this->isCurrentMY($this->regYear)) {
                     $roleClass = $this->dangerClass;
                 } elseif (
                     (bool)$this->person->getCert('ROLE_REFEREE')['verified'] &&
@@ -209,11 +210,11 @@ class ProjectPersonViewDecorator
                 };
                 break;
             case 'ROLE_VOLUNTEER':
-                $roleClass = $this->person->needsCertSafeHaven() || !$this->isCurrentMY($regYearProject) ?
+                $roleClass = $this->person->needsCertSafeHaven() || !$this->isCurrentMY($this->regYear) ?
                     $this->dangerClass : $this->successClass;
                 break;
             default:
-                $roleClass = !$this->hasCertIssues() AND !$this->isCurrentMY($regYearProject) ? $this->dangerClass :
+                $roleClass = !$this->hasCertIssues() AND !$this->isCurrentMY($this->regYear) ? $this->dangerClass :
                     $this->successClass;
         }
 

@@ -228,7 +228,7 @@ parameters:
       willCoach:     { group: plans }
       shirtSize: {}
 
-      availTue:     { group: avail }
+      availTue:      { group: avail }
       availWed:      { group: avail }
       availThu:      { group: avail }
       availFri:      { group: avail }

@@ -226,9 +226,9 @@ EOD;
 
         return <<<EOD
 <table>
-  <tr><td>Will  Referee  </td><td>{$personView->willReferee}  </td></tr>
-  <tr><td>Will  Volunteer</td><td>{$personView->willVolunteer}</td></tr>
-  <tr><td>Will  Coach    </td><td>{$personView->willCoach}    </td></tr>
+  <tr><td>Will Referee  </td><td>{$personView->willReferee}  </td></tr>
+  <tr><td>Will Volunteer</td><td>{$personView->willVolunteer}</td></tr>
+  <tr><td>Will Coach    </td><td>{$personView->willCoach}    </td></tr>
   <tr><td colspan="2" style="max-width: 150px; ">{$notesUser}</td></tr>
 </table>
 EOD;
@@ -239,7 +239,7 @@ EOD;
 
         return <<<EOD
 <table>
-  <tr><td>Avail Tuesday</td><td>{$personView->availTues}     </td></tr>
+  <tr><td>Avail Tuesday</td><td>{$personView->availTue}     </td></tr>
   <tr><td>Avail Wednesday</td><td>{$personView->availWed}     </td></tr>
   <tr><td>Avail Thursday </td><td>{$personView->availThu}     </td></tr>
   <tr><td>Avail Friday   </td><td>{$personView->availFri}     </td></tr>
@@ -260,7 +260,7 @@ EOD;
 EOD;
         foreach($personView->getRoles() as $role) {
             $html .= <<<EOD
-<tr><td class="{$personView->getRoleClass($role, $regYearProject)}">{$role->role}</td></tr>   
+<tr><td class="{$personView->getRoleClass($role)}">{$role->role}</td></tr>
 EOD;
         }
         foreach($personView->getCerts() as $cert) {
@@ -272,7 +272,7 @@ EOD;
         $html .= <<<EOD
 </table>
 EOD;
-//        die();
+
         return $html;
     }
     private function renderUserInfo(ProjectPersonViewDecorator $personView)

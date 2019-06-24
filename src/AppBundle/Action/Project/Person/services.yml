@@ -20,6 +20,7 @@ services:
             - "@ayso.volunteer_key_transformer"
             - "@ayso.region_to_sar_transformer"
             - "@project_person_will_referee_transformer"
+            - "%app_project%"
 
 # ==========================================================================
 # Register
