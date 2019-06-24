@@ -63,12 +63,7 @@ EOT;
 </div>
 <table id="schedule" class="schedule">
   <thead>
-    <tr><th colspan="20" class="text-center">My Game Schedule - Game Count: 
-{
-$gameCount
-}
-
-</th></tr>
+    <tr><th colspan="20" class="text-center">My Game Schedule - Game Count: $gameCount </th></tr>
     <tr>
       <th class="schedule-game" >Game</th>
       <th class="schedule-dow"  >Day</th>
@@ -99,8 +94,10 @@ EOD;
     private function renderScheduleRows($games)
     {
         $html = null;
-
         foreach ($games as $game) {
+            $ref = ucwords(strtolower($game->referee->regPersonName));
+            $ar1 = ucwords(strtolower($game->ar1->regPersonName));
+            $ar2 = ucwords(strtolower($game->ar2->regPersonName));
 
             $html .= <<<EOD
 <tr>
@@ -114,9 +111,9 @@ EOD;
   </td>
   <td class="schedule-referees text-left" >
     <table>
-      <tr><td style="text-align: left">{$game->referee->slotView}: {$game->referee->regPersonName}</td></tr >
-      <tr><td style="text-align: left">{$game->ar1->slotView}: {$game->ar1->regPersonName}</td></tr >
-      <tr><td style="text-align: left">{$game->ar2->slotView}: {$game->ar2->regPersonName}</td></tr >
+      <tr><td style="text-align: left">{$game->referee->slotView}: {$ref}</td></tr >
+      <tr><td style="text-align: left">{$game->ar1->slotView}: {$ar1}</td></tr >
+      <tr><td style="text-align: left">{$game->ar2->slotView}: {$ar2}</td></tr >
     </table >
   </td >
 </tr>

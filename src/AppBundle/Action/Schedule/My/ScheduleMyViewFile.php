@@ -83,9 +83,9 @@ class ScheduleMyViewFile extends AbstractView2
                 $teamHome->regTeamName,
                 $teamAway->regTeamName,
                 $teamAway->poolTeamKey,
-                $game->referee->regPersonName,
-                $game->ar1->regPersonName,
-                $game->ar2->regPersonName
+                ucwords(strtolower($game->referee->regPersonName)),
+                ucwords(strtolower($game->ar1->regPersonName)),
+                ucwords(strtolower($game->ar2->regPersonName))
             );
 
         }
