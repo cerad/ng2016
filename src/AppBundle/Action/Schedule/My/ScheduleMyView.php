@@ -67,6 +67,7 @@ EOT;
     <tr>
       <th class="schedule-game" >Game</th>
       <th class="schedule-dow"  >Date</th>
+      <th class="schedule-dow"  >DOW</th>
       <th class="schedule-time" >Time</th>
       <th class="schedule-field">Field</th>
       <th class="schedule-group">Group</th>
@@ -103,6 +104,7 @@ EOD;
 <tr>
   <td class="schedule-game" >{$game->gameNumber}</td>
   <td class="schedule-dow"  >{$game->date}</td>
+  <td class="schedule-dow"  >{$game->dow}</td>
   <td class="schedule-time" >{$game->time}</td>
   <td class="schedule-field"><a href="{$this->generateUrl('field_map')}" target=_blank}>{$game->fieldName}</a></td>
   <td class="schedule-group">{$game->poolView}</td>
