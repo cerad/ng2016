@@ -103,8 +103,8 @@ EOD;
             $html .= <<<EOD
 <tr>
   <td class="schedule-game" >{$game->gameNumber}</td>
-  <td class="schedule-dow"  >{$game->date}</td>
   <td class="schedule-dow"  >{$game->dow}</td>
+  <td class="schedule-dow"  >{$game->date}</td>
   <td class="schedule-time" >{$game->time}</td>
   <td class="schedule-field"><a href="{$this->generateUrl('field_map')}" target=_blank}>{$game->fieldName}</a></td>
   <td class="schedule-group">{$game->poolView}</td>
