@@ -43,7 +43,7 @@ class ScheduleTeamSearchForm extends AbstractForm
         $projectId = $formData['projectId'];
         $project    = $this->projects[$projectId];
 
-        $program = $formData['program'];
+        $program = 'Core';
 
         $regTeamIds = $formData['regTeams'];
         $criteria = [

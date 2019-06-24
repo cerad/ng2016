@@ -76,7 +76,7 @@ EOD;
     private function renderPoolLinks()
     {
         // Query all the relevant pool teams
-        $program = $this->formData['program'];
+        $program = 'Core';
         $projectId = $this->formData['projectId'];
 
         $sql = <<<EOD

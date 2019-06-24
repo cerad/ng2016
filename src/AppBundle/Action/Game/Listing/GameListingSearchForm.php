@@ -49,7 +49,7 @@ class GameListingSearchForm extends AbstractForm
     public function render()
     {
         $show = $this->formData['show'];
-        $program = $this->formData['program'];
+        $program = 'Core';
         $projectId = $this->formData['projectId'];
         $division = $this->formData['division'];
 

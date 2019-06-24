@@ -27,7 +27,6 @@ class ScheduleGameSearchForm extends AbstractForm
 
         $this->formData = array_replace($this->formData,[
             'projectId' => $this->filterScalar($data,'projectId'),
-            'programs'  => $this->filterArray ($data,'programs'),
             'genders'   => $this->filterArray ($data,'genders'),
             'ages'      => $this->filterArray ($data,'ages'),
             'dates'     => $this->filterArray ($data,'dates'),
@@ -63,7 +62,6 @@ class ScheduleGameSearchForm extends AbstractForm
   <div class="form-group schedule-search">
   <table><tr>
     <td>{$this->renderInputSearchCheckbox($project['dates'],   $formData['dates'],   'dates[]',   'Days')    }</td>
-    <td>{$this->renderInputSearchCheckbox($project['programs'],$formData['programs'],'programs[]','Programs')}</td>
     <td>{$this->renderInputSearchCheckbox($project['ages'],    $formData['ages'],    'ages[]',    'Ages')    }</td>
     <td>{$this->renderInputSearchCheckbox($project['genders'], $formData['genders'], 'genders[]', 'Genders') }</td>
   </tr></table>
