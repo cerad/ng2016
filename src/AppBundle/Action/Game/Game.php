@@ -77,6 +77,11 @@ class Game
             case 'ar1':       return $this->officials[2];
             case 'ar2':       return $this->officials[3];
 
+            case 'date':
+                $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
+                $date = explode(' ', $start);
+                return $date[0];
+
             case 'dow':
                 $start = DateTime::createFromFormat('Y-m-d H:i:s',$this->start);
                 return $start ? $start->format('D') : '???';

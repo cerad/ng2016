@@ -59,7 +59,7 @@ class ScheduleMyViewFile extends AbstractView2
     {
         //set the header labels
         $data =   array(
-            array ('Game','Day','Time','Field','Group','Home Team Pool','Home Team','Away Team','Away Team Pool','Referee', 'Asst Ref 1', 'Asst Ref 2')
+            array ('Game','Date','Time','Field','Group','Home Team Pool','Home Team','Away Team','Away Team Pool','Referee', 'Asst Ref 1', 'Asst Ref 2')
         );
 
         //set the data : game in each row
@@ -75,7 +75,7 @@ class ScheduleMyViewFile extends AbstractView2
 
             $data[] = array(
                 $game->gameNumber,
-                $game->dow,
+                $game->date,
                 $game->time,
                 $game->fieldName,
                 $poolView,

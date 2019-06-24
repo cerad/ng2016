@@ -66,7 +66,7 @@ EOT;
     <tr><th colspan="20" class="text-center">My Game Schedule - Game Count: $gameCount </th></tr>
     <tr>
       <th class="schedule-game" >Game</th>
-      <th class="schedule-dow"  >Day</th>
+      <th class="schedule-dow"  >Date</th>
       <th class="schedule-time" >Time</th>
       <th class="schedule-field">Field</th>
       <th class="schedule-group">Group</th>
@@ -95,14 +95,14 @@ EOD;
     {
         $html = null;
         foreach ($games as $game) {
+
             $ref = ucwords(strtolower($game->referee->regPersonName));
             $ar1 = ucwords(strtolower($game->ar1->regPersonName));
             $ar2 = ucwords(strtolower($game->ar2->regPersonName));
-
             $html .= <<<EOD
 <tr>
   <td class="schedule-game" >{$game->gameNumber}</td>
-  <td class="schedule-dow"  >{$game->dow}</td>
+  <td class="schedule-dow"  >{$game->date}</td>
   <td class="schedule-time" >{$game->time}</td>
   <td class="schedule-field"><a href="{$this->generateUrl('field_map')}" target=_blank}>{$game->fieldName}</a></td>
   <td class="schedule-group">{$game->poolView}</td>
