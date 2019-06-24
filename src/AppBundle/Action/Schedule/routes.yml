@@ -46,7 +46,8 @@ schedule_my_2019:
         _format: html
         _controller: schedule_my_controller_2019
         _view_html:  schedule_my_view_html_2019
-        _view_txt:   schedule_game_view_txt_2019
+        _view_xls:   schedule_my_view_xls_2019
+        _view_txt:   schedule_my_view_txt_2019
 
 schedule_medalroundcalc_2019:
     path: /medalroundcalc.{_format}

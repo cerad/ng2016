@@ -73,13 +73,13 @@ services:
         parent: abstract_view2
         arguments:
             - "@abstract_exporter_xls"
-            
+
     schedule_game_view_csv_2019:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameViewFile
         parent: abstract_view2
         arguments:
             - "@abstract_exporter_csv"
-            
+
     schedule_game_view_txt_2019:
         class:  AppBundle\Action\Schedule\Game\ScheduleGameViewFile
         parent: abstract_view2
@@ -148,8 +148,8 @@ services:
         parent: schedule_template_2019
         arguments:
             - "Assignor Game Schedule"
-            -  true
-            -  true
+            - true
+            - true
             - "@game_official_assign_workflow"
             - "@game_official_details_finder"
 
@@ -190,7 +190,11 @@ services:
     schedule_my_template_2019:
         class:  AppBundle\Action\Schedule\ScheduleTemplate
         parent: schedule_template_2019
-        arguments: ["My Game Schedule", true, false, "@game_official_assign_workflow"]
+        arguments:
+            - "My Game Schedule"
+            - true
+            - false
+            - "@game_official_assign_workflow"
 
     schedule_my_view_html_2019:
         class:  AppBundle\Action\Schedule\My\ScheduleMyView
@@ -198,6 +202,12 @@ services:
         arguments:
             - "@schedule_my_search_form_2019"
             - "@schedule_my_template_2019"
+
+    schedule_my_view_xls_2019:
+        class:  AppBundle\Action\Schedule\My\ScheduleMyViewFile
+        parent: abstract_view2
+        arguments:
+            - "@abstract_exporter_xls"
 
     schedule_my_view_txt_2019:
         class:  AppBundle\Action\Schedule\My\ScheduleMyViewFile
@@ -241,7 +251,7 @@ services:
         parent: abstract_view2
         arguments:
             - "@abstract_exporter_xls"
-            
+
     schedule_team_view_csv_2019:
         class:  AppBundle\Action\Schedule\Team\ScheduleTeamViewFile
         parent: abstract_view2
@@ -253,7 +263,7 @@ services:
         parent: abstract_view2
         arguments:
             - "@abstract_exporter_txt"
-            
+
     # ===============================================================
     # Schedule MedalRoundLogic
     schedule_medalroundcalc_controller_2019:
@@ -265,7 +275,7 @@ services:
 
     schedule_medalround_calculator_2019:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundCalculator
-        
+
     schedule_medalroundcalc_view_xls_qf_2019:
         class: AppBundle\Action\Schedule\MedalRound\ScheduleMedalRoundViewFile
         parent: abstract_view2
