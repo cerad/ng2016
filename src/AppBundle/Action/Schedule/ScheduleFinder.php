@@ -5,6 +5,7 @@ namespace AppBundle\Action\Schedule;
 use AppBundle\Action\RegPerson\RegPersonFinder;
 use AppBundle\Common\QueryBuilderTrait;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL;
 
 class ScheduleFinder
 {
@@ -19,6 +20,12 @@ class ScheduleFinder
     /** @var RegPersonFinder */
     private $regPersonFinder;
 
+    /**
+     * ScheduleFinder constructor.
+     * @param Connection $gameConn
+     * @param Connection $regTeamConn
+     * @param RegPersonFinder $regPersonFinder
+     */
     public function __construct(
         Connection $gameConn,
         Connection $regTeamConn,
@@ -30,9 +37,10 @@ class ScheduleFinder
     }
 
     /**
-     * @param  array $criteria
-     * @param  bool $objects
-     * @return ScheduleGame[]
+     * @param array $criteria
+     * @param bool $objects
+     * @return array|mixed
+     * @throws DBAL\DBALException
      */
     public function findGames(array $criteria, $objects = true)
     {
@@ -74,6 +82,11 @@ class ScheduleFinder
         return $gameObjects;
     }
 
+    /**
+     * @param array $games
+     * @return array
+     * @throws DBAL\DBALException
+     */
     private function joinTeamsToGames(array $games)
     {
         if (!count($games)) {
@@ -113,6 +126,11 @@ EOD;
         return $games;
     }
 
+    /**
+     * @param array $games
+     * @return array
+     * @throws DBAL\DBALException
+     */
     private function joinOfficialsToGames(array $games)
     {
         if (!count($games)) {
@@ -133,6 +151,11 @@ EOD;
         return $games;
     }
 
+    /**
+     * @param $gameIds
+     * @return array
+     * @throws DBAL\DBALException
+     */
     private function findGamesForIds($gameIds)
     {
         if (!count($gameIds)) {
@@ -151,6 +174,11 @@ EOD;
         return $games;
     }
 
+    /**
+     * @param array $criteria
+     * @return array
+     * @throws DBAL\DBALException
+     */
     private function findGameIds(array $criteria)
     {
         // Very much a hack, ignore most of the criteria for my schedule
@@ -203,6 +231,11 @@ EOD;
      * Little bit hackish but want to query all games
      * That impact a particular person
      * Need an or condition
+     */
+    /**
+     * @param array $criteria
+     * @return array
+     * @throws DBAL\DBALException
      */
     private function findGameIdsForRegPerson(array $criteria)
     {
@@ -274,6 +307,11 @@ EOD;
     const SORT_BY_GROUP_DATE_TIME = 4;
     const SORT_BY_PROJECT_GAME_NUMBER = 5;
 
+    /**
+     * @param $games
+     * @param $sortBy
+     * @return mixed
+     */
     protected function sortGames($games, $sortBy)
     {
         if ($sortBy === self::SORT_BY_START_POOL_FIELD) {
@@ -384,6 +422,9 @@ EOD;
                 $games,
                 function (ScheduleGame $game1, ScheduleGame $game2) {
 
+                    $game1Div = substr($game1->poolView, 0,4);
+                    $game2Div = substr($game2->poolView, 0,4);
+
                     if ($game1Div > $game2Div) {
                         return 1;
                     }
@@ -446,7 +487,7 @@ EOD;
      * @param  array $criteria
      * @param  bool $objects
      * @return ScheduleRegTeam[]|array
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBAL\DBALException
      */
     public function findRegTeams(array $criteria, $objects = true)
     {
