@@ -269,9 +269,10 @@ EOD;
      * Plus it is a bit more flexible and readable
      */
     const SORT_BY_START_POOL_FIELD = 1;
-    const SORT_BY_DATE_FIELD_TIME = 2;
-    const SORT_BY_VENUE_FIELD_START = 3;
-    const SORT_BY_PROJECT_GAME_NUMBER = 4;
+    const SORT_BY_VENUE_FIELD_START = 2;
+    const SORT_BY_DATE_FIELD_TIME = 3;
+    const SORT_BY_GROUP_DATE_TIME = 4;
+    const SORT_BY_PROJECT_GAME_NUMBER = 5;
 
     protected function sortGames($games, $sortBy)
     {
@@ -366,6 +367,40 @@ EOD;
                         return 1;
                     }
                     if ($game1->start < $game2->start) {
+                        return -1;
+                    }
+
+                    return 0;
+                }
+            );
+
+            return $games;
+        }
+        if ($sortBy === self::SORT_BY_GROUP_DATE_TIME) {
+            usort(
+                $games,
+                function (ScheduleGame $game1, ScheduleGame $game2) {
+
+                    $game1Div = substr($game1->poolView, 0,4);
+                    $game2Div = substr($game2->poolView, 0,4);
+                    if ($game1Div > $game2Div) {
+                        return 1;
+                    }
+                    if ($game1Div < $game2Div) {
+                        return -1;
+                    }
+
+                    if ($game1->start > $game2->start) {
+                        return 1;
+                    }
+                    if ($game1->start < $game2->start) {
+                        return -1;
+                    }
+
+                    if ($game1->fieldName > $game2->fieldName) {
+                        return 1;
+                    }
+                    if ($game1->fieldName < $game2->fieldName) {
                         return -1;
                     }
 

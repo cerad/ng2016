@@ -31,7 +31,8 @@ parameters:
 
             sortBy:
                 1: 'Date, Time, Group, Field'
-                2: 'Field, Time, Date'
-                3: 'Date, Field, Time'
-                4: 'Game Number'
+                2: 'Date, Field, Time'
+                3: 'Field, Time, Date'
+                4: 'Group, Date, Time, Field'
+                5: 'Game Number'
 
