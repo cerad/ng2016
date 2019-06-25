@@ -193,7 +193,7 @@ class AffinityLoadCommand extends Command
 
         $data = null;
         try {
-            for ($row = 2; $row < $rowMax; $row++) {
+            for ($row = 2; $row <= $rowMax; $row++) {
                 $range = sprintf('A%d:%s%d', $row, $colMax, $row);
                 $data = $ws->rangeToArray($range, null, false, false, false)[0];
                 if (!empty((trim($data[0])))) {
