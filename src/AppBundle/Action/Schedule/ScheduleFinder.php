@@ -288,10 +288,13 @@ EOD;
                         return -1;
                     }
 
-                    if ($game1->poolView > $game2->poolView) {
+                    $game1Div = substr($game1->poolView, 0,4);
+                    $game2Div = substr($game2->poolView, 0,4);
+
+                    if ($game1Div > $game2Div) {
                         return 1;
                     }
-                    if ($game1->poolView < $game2->poolView) {
+                    if ($game1Div < $game2Div) {
                         return -1;
                     }
 
@@ -381,8 +384,6 @@ EOD;
                 $games,
                 function (ScheduleGame $game1, ScheduleGame $game2) {
 
-                    $game1Div = substr($game1->poolView, 0,4);
-                    $game2Div = substr($game2->poolView, 0,4);
                     if ($game1Div > $game2Div) {
                         return 1;
                     }
