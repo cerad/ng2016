@@ -160,7 +160,7 @@ class SummaryWriterExcel
         $this->setColAlignment($ws, $colGameTime);
         $this->setColAlignment($ws, $colOfficialAge);
 
-        $this->setColWidth($ws, $colOfficialName, 24);
+//        $this->setColWidth($ws, $colOfficialName, 36);
         $this->setColWidth($ws, $colOfficialBadge, 6);
         $this->setColWidth($ws, $colOfficialSars, 16);
         $this->setColWidth($ws, $colOfficialAge, 5);
@@ -236,6 +236,9 @@ class SummaryWriterExcel
                 }
             }
         }
+
+        $this->setColAutoSize($ws, $colOfficialName);
+
     }
     /**
      * @param  Worksheet $ws
@@ -309,7 +312,7 @@ class SummaryWriterExcel
         $this->setColAlignment($ws,$colAvailSlotSun2);
         $this->setColAlignment($ws,$colSars,PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-        $this->setColWidth($ws,$colRegPersonName,24);
+//        $this->setColWidth($ws,$colRegPersonName,24);
         $this->setColWidth($ws,$colBadge,         6);
         $this->setColWidth($ws,$colSars,         16);
         $this->setColWidth($ws,$colAge,           5);
@@ -406,16 +409,41 @@ class SummaryWriterExcel
             $this->setCellValueStat($ws,$colStatSlotSat,$row,$stats['sat']);
             $this->setCellValueStat($ws,$colStatSlotSun,$row,$stats['sun']);
 
-            $availCol = $colAvailSlotTue;
-            foreach($regPerson->avail as $value) {
+            foreach($regPerson->avail as $key=>$value) {
                 switch(strtolower($value)) {
                     case 'yes':
                     case 'maybe':
-                        $this->setCellValueStat($ws, $availCol, $row, 'Y');
+                        switch($key){
+                            case 'availTue':
+                                $this->setCellValueStat($ws, $colAvailSlotTue, $row, 'Y');
+                                break;
+                            case 'availWed':
+                                $this->setCellValueStat($ws, $colAvailSlotWed, $row, 'Y');
+                                break;
+                            case 'availThu':
+                                $this->setCellValueStat($ws, $colAvailSlotThu, $row, 'Y');
+                                break;
+                            case 'availFri':
+                                $this->setCellValueStat($ws, $colAvailSlotFri, $row, 'Y');
+                                break;
+                            case 'availSatMorn':
+                                $this->setCellValueStat($ws, $colAvailSlotSat1, $row, 'Y');
+                                break;
+                            case 'availSatAfter':
+                                $this->setCellValueStat($ws, $colAvailSlotSat2, $row, 'Y');
+                                break;
+                            case 'availSunMorn':
+                                $this->setCellValueStat($ws, $colAvailSlotSun1, $row, 'Y');
+                                break;
+                            case 'availSunAfter':
+                                $this->setCellValueStat($ws, $colAvailSlotSun2, $row, 'Y');
+                                break;
+
+                        }
                         break;
                 }
-                $availCol++;
             }
+
 
             $orgView = $this->orgTransformer->transform(($regPerson->orgId));
             switch($orgView){
@@ -439,6 +467,8 @@ class SummaryWriterExcel
 
             $row++;
         }
+
+        $this->setColAutoSize($ws, $colRegPersonName);
     }
 
     /**

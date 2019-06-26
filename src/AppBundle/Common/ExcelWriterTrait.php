@@ -125,6 +125,16 @@ trait ExcelWriterTrait
      * @param $col
      * @param $width
      */
+    private function setColAutoSize(Worksheet $ws,$col)
+    {
+        $ws->getColumnDimension($col )->setAutoSize(true);
+    }
+
+    /**
+     * @param Worksheet $ws
+     * @param $col
+     * @param $width
+     */
     private function setColWidth(Worksheet $ws,$col,$width)
     {
         $ws->getColumnDimension($col )->setWidth($width);
