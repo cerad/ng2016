@@ -133,11 +133,12 @@ trait ExcelWriterTrait
     /**
      * @param Worksheet $ws
      * @param $col
+     * @param $alignment
      * @throws Exception
      */
-    private function setColAlignCenter(Worksheet $ws,$col)
+    private function setColAlignment(Worksheet $ws,$col, $alignment = PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
     {
-        $ws->getStyle($col)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $ws->getStyle($col)->getAlignment()->setHorizontal($alignment);
 
     }
 

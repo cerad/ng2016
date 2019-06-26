@@ -28,7 +28,7 @@ class SummaryViewExcel extends AbstractView2
 
         $response->headers->set('Content-Type', $writer->getContentType());
 
-        $outFileName = 'Summary_' . date('Ymd_His') . '.' . $writer->getFileExtension();
+        $outFileName = 'Referee_Summary_' . date('Ymd_His') . '.' . $writer->getFileExtension();
 
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $outFileName);
 

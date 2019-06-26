@@ -19,6 +19,7 @@ class RegionToSarTransformer implements DataTransformerInterface
     /** 
      * @param string $orgKey AYSOR:0894
      * @return string|null
+     * @throws \Exception
      */
     public function transform($orgKey)
     {
