@@ -225,7 +225,11 @@ class SummaryWriterExcel
                     switch ($orgView) {
                         case null:
                         case '0':
+                        case '00':
+                        case '000':
+                        case '0000':
                             $$orgView = '';
+                            var_dump($orgView);die();
                     }
                     $this->setCellValue($ws, $colOfficialSars, $row, $orgView);
                     $this->setCellValue($ws, $colOfficialAge, $row, $regPerson->age);
@@ -478,6 +482,9 @@ class SummaryWriterExcel
             switch ($orgView) {
                 case null:
                 case '0':
+                case '00':
+                case '000':
+                case '0000':
                     $orgView = '';
             }
             $this->setCellValue($ws, $colSars, $row, $orgView);
