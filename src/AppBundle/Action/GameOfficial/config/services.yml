@@ -114,6 +114,7 @@ services:
         class:  AppBundle\Action\GameOfficial\Summary\SummaryController
         parent: abstract_controller
         arguments:
+            - '%app_project_key%'
             - '@game_finder'
             - '@reg_person_finder'
 
