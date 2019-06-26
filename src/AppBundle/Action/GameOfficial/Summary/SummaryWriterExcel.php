@@ -198,8 +198,14 @@ class SummaryWriterExcel
                 $row++;
                 /** @var GameOfficial $gameOfficial */
                 foreach ($gameOfficialsMap[$regPerson->personId] as $gameOfficial) {
-                    $this->setCellValue($ws, $colOfficialName, $row, $regPerson->name);
-                    $this->setCellValue($ws, $colOfficialBadge, $row, substr($regPerson->refereeBadge, 0, 3));
+                    $this->setCellValue($ws, $colOfficialName, $row, ucwords(mb_strtolower($regPerson->name)));
+                    switch ($regPerson->refereeBadge){
+                        case 'None':
+                            $this->setCellValue($ws, $colOfficialBadge, $row, $regPerson->refereeBadge);
+                            break;
+                        default:
+                            $this->setCellValue($ws, $colOfficialBadge, $row, substr($regPerson->refereeBadge, 0, 3));
+                    }
 
                     $orgView = $this->orgTransformer->transform(($regPerson->orgId));
                     $this->setCellValue($ws,$colOfficialSars,$row,$orgView);
@@ -386,7 +392,7 @@ class SummaryWriterExcel
 
             $stats = $this->generateStats($regPerson, $gameOfficialsMap);
 
-            $this->setCellValue($ws, $colRegPersonName, $row, $regPerson->name);
+            $this->setCellValue($ws, $colRegPersonName, $row, ucwords(mb_strtolower($regPerson->name)));
             switch ($regPerson->refereeBadge){
                 case 'None':
                     $this->setCellValue($ws, $colBadge, $row, $regPerson->refereeBadge);
