@@ -228,8 +228,7 @@ class SummaryWriterExcel
                         case '00':
                         case '000':
                         case '0000':
-                            $$orgView = '';
-                            var_dump($orgView);die();
+                            $orgView = '';
                     }
                     $this->setCellValue($ws, $colOfficialSars, $row, $orgView);
                     $this->setCellValue($ws, $colOfficialAge, $row, $regPerson->age);
