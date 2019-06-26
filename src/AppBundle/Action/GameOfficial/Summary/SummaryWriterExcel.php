@@ -47,15 +47,15 @@ class SummaryWriterExcel
      */
     public function __construct(
         RegionToSarTransformer $orgTransformer,
-        PhoneTransformer       $phoneTransformer,
-        ShirtSizeTransformer   $shirtSizeTransformer,
-        AssignWorkflow         $assignWorkflow
+        PhoneTransformer $phoneTransformer,
+        ShirtSizeTransformer $shirtSizeTransformer,
+        AssignWorkflow $assignWorkflow
     ) {
         $this->assignWorkflow = $assignWorkflow;
 
-        $this->phoneTransformer     = $phoneTransformer;
+        $this->phoneTransformer = $phoneTransformer;
         $this->shirtSizeTransformer = $shirtSizeTransformer;
-        $this->orgTransformer       = $orgTransformer;
+        $this->orgTransformer = $orgTransformer;
     }
 
     /**
@@ -68,29 +68,43 @@ class SummaryWriterExcel
     {
         // Only referees
 
-        $regPersons = array_filter($regPersons,function(RegPerson $regPerson)
-        {
-            if ($regPerson->isReferee) return true;
+        $regPersons = array_filter(
+            $regPersons,
+            function (RegPerson $regPerson) {
+                if ($regPerson->isReferee) {
+                    return true;
+                }
 
-            return false;
-        });
+                return false;
+            }
+        );
 
-        usort($regPersons,function(RegPerson $regPerson1, RegPerson $regPerson2)
-        {
-            //sort on last name
-            $name1 = explode(' ', $regPerson1->name);
-            $name1 = array_pop($name1);
-            $name2 = explode(' ', $regPerson2->name);
-            $name2 = array_pop($name2);
-            return strcmp(strtolower($name1),strtolower($name2));
-        });
+        usort(
+            $regPersons,
+            function (RegPerson $regPerson1, RegPerson $regPerson2) {
+                //sort on last name
+                $name1 = explode(' ', $regPerson1->name);
+                $name1 = array_pop($name1);
+                $name2 = explode(' ', $regPerson2->name);
+                $name2 = array_pop($name2);
 
-        usort($games,function(Game $game1, Game $game2)
-        {
-            if ($game1->start < $game2->start) return -1;
-            if ($game1->start > $game2->start) return +1;
-            return 0;
-        });
+                return strcmp(strtolower($name1), strtolower($name2));
+            }
+        );
+
+        usort(
+            $games,
+            function (Game $game1, Game $game2) {
+                if ($game1->start < $game2->start) {
+                    return -1;
+                }
+                if ($game1->start > $game2->start) {
+                    return +1;
+                }
+
+                return 0;
+            }
+        );
 
         $gameOfficialsMap = $this->generateGameOfficialsMap($games);
 
@@ -127,13 +141,13 @@ class SummaryWriterExcel
     }
 
     /** =========================================
-     * @param  Worksheet $ws
-     * @param   RegPerson[]  $regPersons
-     * @param   array        $gameOfficialsMap
+     * @param Worksheet $ws
+     * @param RegPerson[] $regPersons
+     * @param array $gameOfficialsMap
      * @throws Exception
      * @throws PhpSpreadsheet\Exception
      */
-    private function writeGames(Worksheet $ws,$regPersons,$gameOfficialsMap)
+    private function writeGames(Worksheet $ws, $regPersons, $gameOfficialsMap)
     {
         $ws->setTitle('Referee Games');
 
@@ -178,7 +192,7 @@ class SummaryWriterExcel
         $row = 1;
         $this->setCellValue($ws, $colOfficialName, $row, 'Referee Name');
         $this->setCellValue($ws, $colOfficialBadge, $row, 'Badge');
-        $this->setCellValue($ws, $colOfficialSars, $row, 'SARS');
+        $this->setCellValue($ws, $colOfficialSars, $row, 'S/A/R/St');
         $this->setCellValue($ws, $colOfficialAge, $row, 'Age');
         $this->setCellValue($ws, $colOfficialState, $row, 'State');
         $this->setCellValue($ws, $colOfficialSlot, $row, 'Slot');
@@ -199,7 +213,7 @@ class SummaryWriterExcel
                 /** @var GameOfficial $gameOfficial */
                 foreach ($gameOfficialsMap[$regPerson->personId] as $gameOfficial) {
                     $this->setCellValue($ws, $colOfficialName, $row, ucwords(mb_strtolower($regPerson->name)));
-                    switch ($regPerson->refereeBadge){
+                    switch ($regPerson->refereeBadge) {
                         case 'None':
                             $this->setCellValue($ws, $colOfficialBadge, $row, $regPerson->refereeBadge);
                             break;
@@ -208,15 +222,24 @@ class SummaryWriterExcel
                     }
 
                     $orgView = $this->orgTransformer->transform(($regPerson->orgId));
-                    $this->setCellValue($ws,$colOfficialSars,$row,$orgView);
-                    $this->setCellValue($ws,$colOfficialAge, $row,$regPerson->age);
+                    switch ($orgView) {
+                        case null:
+                        case '0':
+                            $$orgView = '';
+                    }
+                    $this->setCellValue($ws, $colOfficialSars, $row, $orgView);
+                    $this->setCellValue($ws, $colOfficialAge, $row, $regPerson->age);
 
                     $assignStateView = $this->assignWorkflow->assignStateAbbreviations[$gameOfficial->assignState];
                     switch ($assignStateView) {
                         case 'Acc':
                         case 'App':
-                            $this->setCellFillColor($ws, $colOfficialState, $row,
-                                ExcelConstants::COLOR_GREEN);
+                            $this->setCellFillColor(
+                                $ws,
+                                $colOfficialState,
+                                $row,
+                                ExcelConstants::COLOR_GREEN
+                            );
                     }
                     $this->setCellValue($ws, $colOfficialState, $row, $assignStateView);
 
@@ -246,38 +269,39 @@ class SummaryWriterExcel
         $this->setColAutoSize($ws, $colOfficialName);
 
     }
+
     /**
-     * @param  Worksheet $ws
-     * @param   RegPerson[]  $regPersons
-     * @param   array        $gameOfficialsMap
+     * @param Worksheet $ws
+     * @param RegPerson[] $regPersons
+     * @param array $gameOfficialsMap
      * @throws Exception
      * @throws PhpSpreadsheet\Exception
      */
-    private function writeSummary(Worksheet $ws,$regPersons,$gameOfficialsMap)
+    private function writeSummary(Worksheet $ws, $regPersons, $gameOfficialsMap)
     {
         $ws->setTitle('Referee Summary');
 
         $col = 'A';
         $colRegPersonName = $col++;
 
-        $colStatSlotAll  = $col++;
-        $colStatSlotRef  = $col++;
-        $colStatSlotAr   = $col++;
-        $colStatSlotYc   = $col++;
-        $colStatSlotRc   = $col++;
-        $colSkip1        = $col++;
-        $colStatSlotTue  = $col++;
-        $colStatSlotWed  = $col++;
-        $colStatSlotThu  = $col++;
-        $colStatSlotFri  = $col++;
-        $colStatSlotSat  = $col++;
-        $colStatSlotSun  = $col++;
-        $colSkip2        = $col++;
+        $colStatSlotAll = $col++;
+        $colStatSlotRef = $col++;
+        $colStatSlotAr = $col++;
+        $colStatSlotYc = $col++;
+        $colStatSlotRc = $col++;
+        $colSkip1 = $col++;
+        $colStatSlotTue = $col++;
+        $colStatSlotWed = $col++;
+        $colStatSlotThu = $col++;
+        $colStatSlotFri = $col++;
+        $colStatSlotSat = $col++;
+        $colStatSlotSun = $col++;
+        $colSkip2 = $col++;
 
-        $colAvailSlotTue  = $col++;
-        $colAvailSlotWed  = $col++;
-        $colAvailSlotThu  = $col++;
-        $colAvailSlotFri  = $col++;
+        $colAvailSlotTue = $col++;
+        $colAvailSlotWed = $col++;
+        $colAvailSlotThu = $col++;
+        $colAvailSlotFri = $col++;
         $colAvailSlotSat1 = $col++;
         $colAvailSlotSat2 = $col++;
         $colAvailSlotSun1 = $col++;
@@ -292,98 +316,97 @@ class SummaryWriterExcel
         $colShirt = $col;
 
 
-        $this->setColAlignment($ws,$colAge);
-        $this->setColAlignment($ws,$colBadge);
+        $this->setColAlignment($ws, $colAge);
+        $this->setColAlignment($ws, $colBadge);
 
-        $this->setColAlignment($ws,$colStatSlotAll);
-        $this->setColAlignment($ws,$colStatSlotRef);
-        $this->setColAlignment($ws,$colStatSlotAr);
-        $this->setColAlignment($ws,$colStatSlotYc);
-        $this->setColAlignment($ws,$colStatSlotRc);
+        $this->setColAlignment($ws, $colStatSlotAll);
+        $this->setColAlignment($ws, $colStatSlotRef);
+        $this->setColAlignment($ws, $colStatSlotAr);
+        $this->setColAlignment($ws, $colStatSlotYc);
+        $this->setColAlignment($ws, $colStatSlotRc);
 
-        $this->setColAlignment($ws,$colStatSlotTue);
-        $this->setColAlignment($ws,$colStatSlotWed);
-        $this->setColAlignment($ws,$colStatSlotThu);
-        $this->setColAlignment($ws,$colStatSlotFri);
-        $this->setColAlignment($ws,$colStatSlotSat);
-        $this->setColAlignment($ws,$colStatSlotSun);
+        $this->setColAlignment($ws, $colStatSlotTue);
+        $this->setColAlignment($ws, $colStatSlotWed);
+        $this->setColAlignment($ws, $colStatSlotThu);
+        $this->setColAlignment($ws, $colStatSlotFri);
+        $this->setColAlignment($ws, $colStatSlotSat);
+        $this->setColAlignment($ws, $colStatSlotSun);
 
-        $this->setColAlignment($ws,$colAvailSlotTue);
-        $this->setColAlignment($ws,$colAvailSlotWed);
-        $this->setColAlignment($ws,$colAvailSlotThu);
-        $this->setColAlignment($ws,$colAvailSlotFri);
-        $this->setColAlignment($ws,$colAvailSlotSat1);
-        $this->setColAlignment($ws,$colAvailSlotSat2);
-        $this->setColAlignment($ws,$colAvailSlotSun1);
-        $this->setColAlignment($ws,$colAvailSlotSun2);
-        $this->setColAlignment($ws,$colSars,PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+        $this->setColAlignment($ws, $colAvailSlotTue);
+        $this->setColAlignment($ws, $colAvailSlotWed);
+        $this->setColAlignment($ws, $colAvailSlotThu);
+        $this->setColAlignment($ws, $colAvailSlotFri);
+        $this->setColAlignment($ws, $colAvailSlotSat1);
+        $this->setColAlignment($ws, $colAvailSlotSat2);
+        $this->setColAlignment($ws, $colAvailSlotSun1);
+        $this->setColAlignment($ws, $colAvailSlotSun2);
+        $this->setColAlignment($ws, $colSars, PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
 //        $this->setColWidth($ws,$colRegPersonName,24);
-        $this->setColWidth($ws,$colBadge,         6);
-        $this->setColWidth($ws,$colSars,         16);
-        $this->setColWidth($ws,$colAge,           5);
-        $this->setColWidth($ws,$colEmail,        32);
-        $this->setColWidth($ws,$colPhone,        14);
-        $this->setColWidth($ws,$colShirt,         6);
+        $this->setColWidth($ws, $colBadge, 6);
+        $this->setColWidth($ws, $colSars, 16);
+        $this->setColWidth($ws, $colAge, 5);
+        $this->setColWidth($ws, $colEmail, 32);
+        $this->setColWidth($ws, $colPhone, 14);
+        $this->setColWidth($ws, $colShirt, 6);
 
-        $this->setColWidth($ws,$colStatSlotAll,   5);
-        $this->setColWidth($ws,$colStatSlotRef,   5);
-        $this->setColWidth($ws,$colStatSlotAr,    5);
-        $this->setColWidth($ws,$colStatSlotYc,    5);
-        $this->setColWidth($ws,$colStatSlotRc,    5);
-        $this->setColWidth($ws,$colSkip1,         5);
-        $this->setColWidth($ws,$colStatSlotTue,   5);
-        $this->setColWidth($ws,$colStatSlotWed,   5);
-        $this->setColWidth($ws,$colStatSlotThu,   5);
-        $this->setColWidth($ws,$colStatSlotFri,   5);
-        $this->setColWidth($ws,$colStatSlotSat,   5);
-        $this->setColWidth($ws,$colStatSlotSun,   5);
-        $this->setColWidth($ws,$colSkip2,         5);
-        $this->setColWidth($ws,$colAvailSlotTue,  6);
-        $this->setColWidth($ws,$colAvailSlotWed,  6);
-        $this->setColWidth($ws,$colAvailSlotThu,  6);
-        $this->setColWidth($ws,$colAvailSlotFri,  6);
-        $this->setColWidth($ws,$colAvailSlotSat1, 8);
-        $this->setColWidth($ws,$colAvailSlotSat2, 8);
-        $this->setColWidth($ws,$colAvailSlotSun1, 8);
-        $this->setColWidth($ws,$colAvailSlotSun2, 8);
-        $this->setColWidth($ws,$colSkip3,         5);
+        $this->setColWidth($ws, $colStatSlotAll, 5);
+        $this->setColWidth($ws, $colStatSlotRef, 5);
+        $this->setColWidth($ws, $colStatSlotAr, 5);
+        $this->setColWidth($ws, $colStatSlotYc, 5);
+        $this->setColWidth($ws, $colStatSlotRc, 5);
+        $this->setColWidth($ws, $colSkip1, 5);
+        $this->setColWidth($ws, $colStatSlotTue, 5);
+        $this->setColWidth($ws, $colStatSlotWed, 5);
+        $this->setColWidth($ws, $colStatSlotThu, 5);
+        $this->setColWidth($ws, $colStatSlotFri, 5);
+        $this->setColWidth($ws, $colStatSlotSat, 5);
+        $this->setColWidth($ws, $colStatSlotSun, 5);
+        $this->setColWidth($ws, $colSkip2, 5);
+        $this->setColWidth($ws, $colAvailSlotTue, 6);
+        $this->setColWidth($ws, $colAvailSlotWed, 6);
+        $this->setColWidth($ws, $colAvailSlotThu, 6);
+        $this->setColWidth($ws, $colAvailSlotFri, 6);
+        $this->setColWidth($ws, $colAvailSlotSat1, 8);
+        $this->setColWidth($ws, $colAvailSlotSat2, 8);
+        $this->setColWidth($ws, $colAvailSlotSun1, 8);
+        $this->setColWidth($ws, $colAvailSlotSun2, 8);
+        $this->setColWidth($ws, $colSkip3, 5);
 
-        $this->setColWidth($ws,$colEmail,         40);
-        $this->setColWidth($ws,$colPhone,         18);
-        $this->setColWidth($ws,$colShirt,         8);
-
+        $this->setColWidth($ws, $colEmail, 40);
+        $this->setColWidth($ws, $colPhone, 18);
+        $this->setColWidth($ws, $colShirt, 8);
 
 
         $row = 1;
-        $this->setCellValue($ws,$colRegPersonName,$row,'Name');
-        $this->setCellValue($ws,$colBadge,        $row,'Badge');
-        $this->setCellValue($ws,$colSars,         $row,'S/A/R/St');
-        $this->setCellValue($ws,$colAge,          $row,'Age');
-        $this->setCellValue($ws,$colEmail,        $row,'Email');
-        $this->setCellValue($ws,$colPhone,        $row,'Phone');
-        $this->setCellValue($ws,$colShirt,        $row,'Shirt');
+        $this->setCellValue($ws, $colRegPersonName, $row, 'Name');
+        $this->setCellValue($ws, $colBadge, $row, 'Badge');
+        $this->setCellValue($ws, $colSars, $row, 'S/A/R/St');
+        $this->setCellValue($ws, $colAge, $row, 'Age');
+        $this->setCellValue($ws, $colEmail, $row, 'Email');
+        $this->setCellValue($ws, $colPhone, $row, 'Phone');
+        $this->setCellValue($ws, $colShirt, $row, 'Shirt');
 
-        $this->setCellValue($ws,$colStatSlotAll,  $row,'ALL');
-        $this->setCellValue($ws,$colStatSlotRef,  $row,'REF');
-        $this->setCellValue($ws,$colStatSlotAr,   $row,'AR');
-        $this->setCellValue($ws,$colStatSlotYc,   $row,'YC');
-        $this->setCellValue($ws,$colStatSlotRc,   $row,'RC');
-        $this->setCellValue($ws,$colStatSlotTue,  $row,'TUE');
-        $this->setCellValue($ws,$colStatSlotWed,  $row,'WED');
-        $this->setCellValue($ws,$colStatSlotThu,  $row,'THU');
-        $this->setCellValue($ws,$colStatSlotFri,  $row,'FRI');
-        $this->setCellValue($ws,$colStatSlotSat,  $row,'SAT');
-        $this->setCellValue($ws,$colStatSlotSun,  $row,'SUN');
+        $this->setCellValue($ws, $colStatSlotAll, $row, 'ALL');
+        $this->setCellValue($ws, $colStatSlotRef, $row, 'REF');
+        $this->setCellValue($ws, $colStatSlotAr, $row, 'AR');
+        $this->setCellValue($ws, $colStatSlotYc, $row, 'YC');
+        $this->setCellValue($ws, $colStatSlotRc, $row, 'RC');
+        $this->setCellValue($ws, $colStatSlotTue, $row, 'TUE');
+        $this->setCellValue($ws, $colStatSlotWed, $row, 'WED');
+        $this->setCellValue($ws, $colStatSlotThu, $row, 'THU');
+        $this->setCellValue($ws, $colStatSlotFri, $row, 'FRI');
+        $this->setCellValue($ws, $colStatSlotSat, $row, 'SAT');
+        $this->setCellValue($ws, $colStatSlotSun, $row, 'SUN');
 
-        $this->setCellValue($ws,$colAvailSlotTue,  $row,'Tue');
-        $this->setCellValue($ws,$colAvailSlotWed,  $row,'Wed');
-        $this->setCellValue($ws,$colAvailSlotThu,  $row,'Thu');
-        $this->setCellValue($ws,$colAvailSlotFri,  $row,'Fri');
-        $this->setCellValue($ws,$colAvailSlotSat1, $row,'Sat AM');
-        $this->setCellValue($ws,$colAvailSlotSat2, $row,'Sat PM');
-        $this->setCellValue($ws,$colAvailSlotSun1, $row,'Sun AM');
-        $this->setCellValue($ws,$colAvailSlotSun2, $row,'Sun PM');
+        $this->setCellValue($ws, $colAvailSlotTue, $row, 'Tue');
+        $this->setCellValue($ws, $colAvailSlotWed, $row, 'Wed');
+        $this->setCellValue($ws, $colAvailSlotThu, $row, 'Thu');
+        $this->setCellValue($ws, $colAvailSlotFri, $row, 'Fri');
+        $this->setCellValue($ws, $colAvailSlotSat1, $row, 'Sat AM');
+        $this->setCellValue($ws, $colAvailSlotSat2, $row, 'Sat PM');
+        $this->setCellValue($ws, $colAvailSlotSun1, $row, 'Sun AM');
+        $this->setCellValue($ws, $colAvailSlotSun2, $row, 'Sun PM');
 
         $ws->freezePane('B2');
 
@@ -393,7 +416,7 @@ class SummaryWriterExcel
             $stats = $this->generateStats($regPerson, $gameOfficialsMap);
 
             $this->setCellValue($ws, $colRegPersonName, $row, ucwords(mb_strtolower($regPerson->name)));
-            switch ($regPerson->refereeBadge){
+            switch ($regPerson->refereeBadge) {
                 case 'None':
                     $this->setCellValue($ws, $colBadge, $row, $regPerson->refereeBadge);
                     break;
@@ -408,18 +431,18 @@ class SummaryWriterExcel
             $this->setCellValueStat($ws, $colStatSlotYc, $row, $stats['yc']);
             $this->setCellValueStat($ws, $colStatSlotRc, $row, $stats['rc']);
 
-            $this->setCellValueStat($ws,$colStatSlotTue,$row,$stats['tue']);
-            $this->setCellValueStat($ws,$colStatSlotWed,$row,$stats['wed']);
-            $this->setCellValueStat($ws,$colStatSlotThu,$row,$stats['thu']);
-            $this->setCellValueStat($ws,$colStatSlotFri,$row,$stats['fri']);
-            $this->setCellValueStat($ws,$colStatSlotSat,$row,$stats['sat']);
-            $this->setCellValueStat($ws,$colStatSlotSun,$row,$stats['sun']);
+            $this->setCellValueStat($ws, $colStatSlotTue, $row, $stats['tue']);
+            $this->setCellValueStat($ws, $colStatSlotWed, $row, $stats['wed']);
+            $this->setCellValueStat($ws, $colStatSlotThu, $row, $stats['thu']);
+            $this->setCellValueStat($ws, $colStatSlotFri, $row, $stats['fri']);
+            $this->setCellValueStat($ws, $colStatSlotSat, $row, $stats['sat']);
+            $this->setCellValueStat($ws, $colStatSlotSun, $row, $stats['sun']);
 
-            foreach($regPerson->avail as $key=>$value) {
-                switch(strtolower($value)) {
+            foreach ($regPerson->avail as $key => $value) {
+                switch (strtolower($value)) {
                     case 'yes':
                     case 'maybe':
-                        switch($key){
+                        switch ($key) {
                             case 'availTue':
                                 $this->setCellValueStat($ws, $colAvailSlotTue, $row, 'Y');
                                 break;
@@ -452,15 +475,12 @@ class SummaryWriterExcel
 
 
             $orgView = $this->orgTransformer->transform(($regPerson->orgId));
-            switch($orgView){
+            switch ($orgView) {
                 case null:
                 case '0':
-                    $this->setCellValue($ws,$colSars,$row,'');
-                    break;
-                default:
-                    $this->setCellValue($ws,$colSars,$row,$orgView);
-
+                    $orgView = '';
             }
+            $this->setCellValue($ws, $colSars, $row, $orgView);
 
             $this->setCellValue($ws, $colAge, $row, $regPerson->age);
             $this->setCellValue($ws, $colEmail, $row, mb_strtolower($regPerson->email));
