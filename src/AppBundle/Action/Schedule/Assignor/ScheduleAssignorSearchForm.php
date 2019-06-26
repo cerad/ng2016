@@ -50,6 +50,7 @@ class ScheduleAssignorSearchForm extends ScheduleSearchForm
         $reportChoices = [
             'All'           =>  'All Games',
             'Issues'        =>  'Games with Issues',
+            'NoOfficials'   =>  'Games with No Officials',
             'Open'          =>  'Games with Open Slots',
             'Pending'       =>  'Games with Pending Slots',
             'Published'     =>  'Games with Published Slots',

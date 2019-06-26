@@ -8,6 +8,9 @@ use AppBundle\Action\Schedule\ScheduleControllerTrait;
 use AppBundle\Action\Schedule\ScheduleFinder;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+use Doctrine\DBAL;
 
 class ScheduleAssignorController extends AbstractController2
 {
@@ -37,6 +40,12 @@ class ScheduleAssignorController extends AbstractController2
         $this->projectChoices = $projectChoices;
 
     }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse|null
+     * @throws DBAL\DBALException
+     */
     public function __invoke(Request $request)
     {
 //        $this->certifications = $this->getCurrentProjectInfo()['certifications'];
@@ -111,7 +120,6 @@ class ScheduleAssignorController extends AbstractController2
         $games = $this->scheduleFinder->findGames($searchData,true);
 
         $games = $this->filterGames($games,$searchData['filter']);
-        
         //apply report filters on assignState
         $this->reportKey = $searchData['reportKey'];
         $games = $this->filterGamesForReport($games);
@@ -147,6 +155,7 @@ class ScheduleAssignorController extends AbstractController2
         if (in_array($this->reportKey, array(null, 'All'))) return $games;
 
         $gamesReport = [];
+        $openGamesReport = [];
         $reportKey = strtolower($this->reportKey);
         foreach($games as $game) {
             $officials = $game->getOfficials();
@@ -157,6 +166,11 @@ class ScheduleAssignorController extends AbstractController2
                     case 'issues':
                         if ($assignState != "accepted" && $assignState != 'approved') {
                             if (!in_array($game,$gamesReport)) $gamesReport[] = $game;
+                        }
+                        continue;
+                    case 'noofficials':
+                        if ($assignState == "open") {
+                            $openGamesReport[$game->gameNumber][] = $game;
                         }
                         continue;
                     case 'open':
@@ -187,7 +201,16 @@ class ScheduleAssignorController extends AbstractController2
                 }
             }
         }
-        
+
+        $openGames = [];
+        if($reportKey == 'noofficials'){
+            foreach ($openGamesReport as $game) {
+                if(count($game) == 3) $openGames[] = $game[0];
+            }
+
+            return $openGames;
+        }
+
         return $gamesReport;
 
     }
