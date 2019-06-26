@@ -74,10 +74,17 @@ class SummaryWriterExcel
 
             return false;
         });
+
         usort($regPersons,function(RegPerson $regPerson1, RegPerson $regPerson2)
         {
-            return strcmp(strtolower($regPerson1->name),strtolower($regPerson2->name));
+            //sort on last name
+            $name1 = explode(' ', $regPerson1->name);
+            $name1 = array_pop($name1);
+            $name2 = explode(' ', $regPerson2->name);
+            $name2 = array_pop($name2);
+            return strcmp(strtolower($name1),strtolower($name2));
         });
+
         usort($games,function(Game $game1, Game $game2)
         {
             if ($game1->start < $game2->start) return -1;
@@ -422,7 +429,7 @@ class SummaryWriterExcel
             }
 
             $this->setCellValue($ws, $colAge, $row, $regPerson->age);
-            $this->setCellValue($ws, $colEmail, $row, $regPerson->email);
+            $this->setCellValue($ws, $colEmail, $row, mb_strtolower($regPerson->email));
 
             $phone = $this->phoneTransformer->transform(($regPerson->phone));
             $this->setCellValue($ws, $colPhone, $row, $phone);
