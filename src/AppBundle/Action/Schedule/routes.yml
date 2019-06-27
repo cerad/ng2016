@@ -9,9 +9,10 @@ schedule_team_2019:
         _view_txt:   schedule_team_view_txt_2019
 
 schedule_official_2019:
-    path: /official.{_format}
+    path: /official.{_format}/{_default}
     defaults:
         _format: html
+        _default: false
         _controller: schedule_official_controller_2019
         _view_html:  schedule_official_view_html_2019
         _view_xls:   schedule_official_view_xls_2019

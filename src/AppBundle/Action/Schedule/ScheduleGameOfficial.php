@@ -63,6 +63,9 @@ class ScheduleGameOfficial
             case 2: $gameOfficial->slotView = 'AR1'; break;
             case 3: $gameOfficial->slotView = 'AR2'; break;
         }
+
+        $gameOfficial->regPersonName = ucwords(mb_strtolower($gameOfficial->regPersonName));
+
         return $gameOfficial;
     }
 }

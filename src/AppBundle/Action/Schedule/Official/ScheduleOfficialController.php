@@ -20,6 +20,7 @@ class ScheduleOfficialController extends AbstractController2
 
     private $projects;
     private $projectChoices;
+    private $useDefaultSearchData;
 
     public function __construct(
         ScheduleSearchForm $searchForm,
@@ -36,18 +37,20 @@ class ScheduleOfficialController extends AbstractController2
     }
     public function __invoke(Request $request)
     {
+
+        $this->useDefaultSearchData = $request->get('_default');
+
         // First project in list
         $projectId = array_keys($this->projectChoices)[0];
 
         // First date in project
-        $date = array_keys($this->projects[$projectId]['dates'])[0];
-
+        $date = array_keys($this->projects[$projectId]['dates']);
         $searchData = [
             'projectId' => $projectId,
             'programs'   => ['Core'],
-            'genders'    => ['G'],
-            'ages'       => ['10U'],
-            'dates'      => [$date],
+            'genders'    => ['B', 'G'],
+            'ages'       => ['10U', '12U', '14U', '16U', '19U'],
+            'dates'      => $date,
             'sortBy'     => 1,
             'filter'     => null,
         ];
@@ -58,7 +61,7 @@ class ScheduleOfficialController extends AbstractController2
         if ($request->query->has('reset')) {
             $session->remove($sessionKey);
         }
-        if ($session->has($sessionKey)) {
+        if ($session->has($sessionKey) && !$this->useDefaultSearchData) {
             $searchData = array_replace($searchData,$session->get($sessionKey));
         }
         $searchForm = $this->searchForm;

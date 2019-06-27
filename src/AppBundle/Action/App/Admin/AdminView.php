@@ -156,12 +156,11 @@ EOT;
   </div>
   <div class="panel-body">
     <ul>
-<!--
-      <li><a href="{$this->generateUrl('schedule_official_2019')}">View Referee Assignment Requests</a></li>
-      <li><a href="{$this->generateUrl('schedule_official_2019',['_format' => 'xls'])}">Export Referee Assignment Requests</a></li>
--->
-      <li><a href="{$this->generateUrl('schedule_assignor_2019')}">View Assignor Assignments</a></li>
-      <li><a href="{$this->generateUrl('game_official_summary')}">Export Referee Summary</a></li>
+      <li><a href="{$this->generateUrl('schedule_assignor_2019')}">Assignor's View of Assignments</a></li>
+      <li><a href="{$this->generateUrl('game_official_summary')}">Export Detailed Referee Summary</a></li>
+      <li><a href="{$this->generateUrl('schedule_official_2019',['_format' => 'xls', '_default' => true])}">Export 
+      Simple Schedule with Referees</a></li>
+      <hr>
       <li><a href="{$this->generateUrl('detailed_instruction')}" target="_blank">Referee Self-Assignment Instruction</a></li>
 EOT;
 

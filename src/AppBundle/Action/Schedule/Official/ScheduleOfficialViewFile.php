@@ -16,7 +16,7 @@ class ScheduleOfficialViewFile extends AbstractView2
 
     public function __construct(AbstractExporter $exporter)
     {
-        $this->outFileName =  'OfficialSchedule.' . date('Ymd_His') . '.' . $exporter->fileExtension;
+        $this->outFileName =  'Officials_Schedule.' . date('Ymd_His') . '.' . $exporter->fileExtension;
 
         $this->exporter = $exporter;
     }
@@ -42,25 +42,25 @@ class ScheduleOfficialViewFile extends AbstractView2
     {
         //set the header labels
         $data =   array(
-            array ('Game','Day','Time','Field','Group','Home Team Pool','Home Team','Away Team','Away Team Pool','Referee','AR1','AR2')
+            array ('Game','Day','Time','Field','Division','Home Team Pool','Home Team','Away Team','Away Team Pool','Referee','AR1','AR2')
         );
 
         //set the data : game in each row
         foreach ( $games as $game ) {
             $teamHome = $game->homeTeam;
             $teamAway = $game->awayTeam;
-            $officials = $game->referee;
+            $division = $teamHome->division;
 
             $data[] = array(
                 $game->gameNumber,
                 $game->dow,
                 $game->time,
                 $game->fieldName,
-                $game->poolView,
-                $teamHome->poolTeamKey,
+                $division,
+                $teamHome->poolTeamView,
                 $teamHome->regTeamName,
                 $teamAway->regTeamName,
-                $teamAway->poolTeamKey,
+                $teamAway->poolTeamView,
                 $game->referee->regPersonName,
                 $game->ar1->regPersonName,
                 $game->ar2->regPersonName,
@@ -70,6 +70,7 @@ class ScheduleOfficialViewFile extends AbstractView2
 
         $response['GameSchedule']['data'] = $data;
         $response['GameSchedule']['options']['freezePane'] = 'A2';
+        $response['GameSchedule']['options']['horizontalAlignment'] = 'left';
 
         return $response;
     }
