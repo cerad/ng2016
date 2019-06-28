@@ -211,7 +211,8 @@ class ProjectPersonViewDecorator
                     $this->hasRoleReferee() ? $this->successClass : $this->warningClass : $this->dangerClass;
                 break;
             case 'ROLE_VOLUNTEER':
-                $roleClass = $this->__get('approvedVol') ? $certIssue ? $this->warningClass :
+                $roleClass = $this->__get('approvedVol') ? $this->__get('safeHavenCertified') != 'Yes' ?
+                    $this->warningClass :
                     $this->successClass : $this->dangerClass;
                 break;
             default:
