@@ -49,7 +49,7 @@ class AdminViewFilters
                 case 'AvailableReferees':
                     if (in_array($personView->willReferee, $yesMaybe)) {
                         if ($personView->hasRoleReferee()) {
-                            if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
+                            if ($personView->approvedRef) {
                                 $listPersons[] = $person;
                             }
                         }
@@ -58,8 +58,10 @@ class AdminViewFilters
                 case 'Available Volunteers':
                 case 'AvailableVolunteers':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if (!$personView->hasCertIssues() AND $personView->isCurrentMY($regYearProject)) {
-                            $listPersons[] = $person;
+                        if ($personView->hasRoleReferee()) {
+                            if ($personView->approvedVol) {
+                                $listPersons[] = $person;
+                            }
                         }
                     }
                     break;
@@ -96,18 +98,17 @@ class AdminViewFilters
                     }
                     break;
                 case 'Unapproved':
-                    if ((isset($person['roles']['ROLE_REFEREE']) AND in_array($personView->willReferee, $yesMaybe)) OR
-                        (isset($person['roles']['ROLE_VOLUNTEER']) AND in_array($personView->willVolunteer, $yesMaybe)
-                        )) {
-                        if (!$personView->approved
-                            AND $personView->verified
-                            AND !$personView->hasCertIssues()
-                            AND $personView->isCurrentMY(
-                                $regYearProject
-                            )
-                        ) {
+                    if (($personView->hasRoleReferee() && !$personView->approvedRef) ||
+                        ($personView->hasRoleVolunteer() && !$personView->approvedVol)
+                    ) {
                             $listPersons[] = $person;
-                        }
+                    }
+                    break;
+                case 'Unverified':
+                    if (($personView->hasRoleReferee() && !$personView->verifiedRef) ||
+                        ($personView->hasRoleVolunteer() && !$personView->verifiedVol)
+                    ) {
+                        $listPersons[] = $person;
                     }
                     break;
                 case 'AdultRefs':

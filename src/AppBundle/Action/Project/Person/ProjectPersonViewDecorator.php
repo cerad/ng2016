@@ -167,7 +167,7 @@ class ProjectPersonViewDecorator
         }
 
         foreach ($certs as $cert) {
-            if (!$cert->verified) {
+            if (is_null($cert) || is_null($cert->badgeDate) || $cert->badgeDate == '0000-00-00') {
                 return true;
             }
         }
@@ -177,7 +177,7 @@ class ProjectPersonViewDecorator
 
     public function isCurrentMY($regYearProject)
     {
-        $regYearCurrent = $this->regYear >= $this->appProjectRegYear;
+        $regYearCurrent = $regYearProject >= $this->appProjectRegYear;
 
         return $regYearCurrent;
     }
@@ -189,33 +189,34 @@ class ProjectPersonViewDecorator
         return !is_null($role);
     }
 
+    public function hasRoleVolunteer()
+    {
+        $role = $this->person->getRole('ROLE_VOLUNTEER');
+
+        return !is_null($role);
+    }
+
+    /**
+     * @param $role
+     * @return string
+     * @throws \Exception
+     */
     public function getRoleClass($role)
     {
-        if ($role->approved) {
-            return $this->successClass;
-        }
+        $certIssue = $this->hasCertIssues() || !$this->isCurrentMY($this->regYear);
 
         switch ($role->role) {
             case 'ROLE_REFEREE':
-                if ($this->person->needsCerts() || !$this->isCurrentMY($this->regYear)) {
-                    $roleClass = $this->dangerClass;
-                } elseif (
-                    (bool)$this->person->getCert('ROLE_REFEREE')['verified'] &&
-                    (bool)$this->person->getCert('ROLE_REFEREE')['approved'] &&
-                    (bool)$this->person->getCert('ROLE_REFEREE')['badge'] <> 'None'
-                ) {
-                    $roleClass = $this->successClass;
-                } else {
-                    $roleClass = $this->warningClass;
-                };
+                $roleClass = $this->__get('approvedRef') ? !$certIssue &&
+                    $this->hasRoleReferee() ? $this->successClass : $this->warningClass : $this->dangerClass;
                 break;
             case 'ROLE_VOLUNTEER':
-                $roleClass = $this->person->needsCertSafeHaven() || !$this->isCurrentMY($this->regYear) ?
-                    $this->dangerClass : $this->successClass;
+                $roleClass = $this->__get('approvedVol') ? $certIssue ? $this->warningClass :
+                    $this->successClass : $this->dangerClass;
                 break;
             default:
-                $roleClass = !$this->hasCertIssues() AND !$this->isCurrentMY($this->regYear) ? $this->dangerClass :
-                    $this->successClass;
+                $roleClass = !$certIssue ? $this->successClass :
+                    $this->dangerClass;
         }
 
         return $roleClass;
@@ -230,19 +231,32 @@ class ProjectPersonViewDecorator
         return (!$this->hasCertIssues()) ? $this->successStyle : $this->dangerStyle;
     }
 
+    /**
+     * @param $name
+     * @return ProjectPerson|bool|mixed|string|string[]|null
+     * @throws \Exception
+     */
     public function __get($name)
     {
         $person = $this->person;
 
         switch ($name) {
 
-            case 'approved':
+            case 'approvedRef':
+                $role = $person->getRole('ROLE_REFEREE');
+                return $role['approved'];
+
+            case 'approvedVol':
+                $role = $person->getRole('ROLE_VOLUNTEER');
+                return $role['approved'];
+
+            case 'verifiedRef':
                 $role = $person->getRole('ROLE_REFEREE');
 
-                return $role ? ($role['approved'] ? 'Yes' : '') : null;
+                return $role ? ($role['verified'] ? 'Yes' : '') : null;
 
-            case 'verified':
-                $role = $person->getRole('ROLE_REFEREE');
+            case 'verifiedVol':
+                $role = $person->getRole('ROLE_VOLUNTEER');
 
                 return $role ? ($role['verified'] ? 'Yes' : '') : null;
 

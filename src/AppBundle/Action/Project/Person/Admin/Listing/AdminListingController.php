@@ -50,15 +50,6 @@ class AdminListingController extends AbstractController
         $registered = null;
         $verified = null;
 
-        switch ($searchData['reportKey']) {
-            case 'Unverified':
-                $verified = false;
-                break;
-            default:
-                $verified = null;
-                break;
-        }   
-        
         $projectPersons = $this->projectPersonRepository->findByProjectKey($searchData['projectKey'],$searchData['name'],$registered,$verified);
         
         $request->attributes->set('projectPersons',$projectPersons);
