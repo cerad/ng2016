@@ -289,7 +289,7 @@ class ProjectPersonViewDecorator
                 if (!$role) {
                     return null;
                 }
-                switch (strtolower($role->approved)) {
+                switch (strtolower($role->verified)) {
                     case  null:
                     case 'no':
                     case 'none':
@@ -310,7 +310,7 @@ class ProjectPersonViewDecorator
                 if ($role->approved) {
                     return 'Yes';
                 }
-                switch (strtolower($role->approved)) {
+                switch (strtolower($role->verified)) {
                     case  null:
                     case 'no':
                     case 'none':
@@ -330,7 +330,7 @@ class ProjectPersonViewDecorator
                 if ($role->verified) {
                     return 'Yes';
                 }
-                switch (strtolower($role->approved)) {
+                switch (strtolower($role->verified)) {
                     case  null:
                     case 'no':
                     case 'none':
