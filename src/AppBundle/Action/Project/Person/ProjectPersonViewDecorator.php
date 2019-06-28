@@ -85,10 +85,10 @@ class ProjectPersonViewDecorator
     public function getOrgKeyClass()
     {
         $sar = $this->orgKey;
-        if (is_null($this->sar)) {
-            return $this->warningClass;
+        if (empty($sar)) {
+            return $this->dangerClass;
         }
-        $sarClass = ($sar && substr($sar, 0, 1) == 'A') ? $this->successClass : $this->warningClass;
+        $sarClass = ($sar && substr($sar, 0, 1) == 'A') ? empty($sar) ? $this->dangerStyle : $this->successStyle : $this->warningClass;
 
         return $sarClass;
     }
@@ -96,8 +96,8 @@ class ProjectPersonViewDecorator
     public function getOrgKeyStyle()
     {
         $sar = $this->orgKey;
-
-        return ($sar && substr($sar, 0, 1) == 'A') ? $this->successStyle : $this->warningStyle;
+        return ($sar && substr($sar, 0, 1) == 'A') ? empty($sar) ? $this->dangerStyle : $this->successStyle :
+            $this->warningStyle;
     }
 
     public function getCertClass($certKey)
@@ -107,17 +107,17 @@ class ProjectPersonViewDecorator
             return $this->dangerClass;
         };
 
-        return $this->person->getCert($certKey)->verified ? $this->successClass : $this->dangerClass;
+        return $this->isCertValid($this->person->getCert($certKey)) ? $this->successClass : $this->dangerClass;
     }
 
     public function getCertStyle($certKey)
     {
         $cert = $this->person->getCert($certKey);
-        if (is_null($cert) || is_null($cert->badgeDate || $cert->badgeDate == '0000-00-00')) {
+        if (!$this->isCertValid($cert)) {
             return $this->dangerClass;
         };
 
-        return $this->person->getCert($certKey)->verified ? $this->successStyle : $this->dangerStyle;
+        return $this->isCertValid($this->person->getCert($certKey)) ? $this->successStyle : $this->dangerStyle;
     }
 
     public function getConflictedCertBadge()
@@ -144,19 +144,17 @@ class ProjectPersonViewDecorator
             return null;
         };
         $cert = $this->person->getCert($certKey);
-        $suffix = $cert->verified ? null : ' ***';
-        $isCert = false;
         if ($certKey !== 'CERT_REFEREE') {
-            $isCert = !is_null($cert->badgeDate) && ($cert->badgeDate <> '0000-00-00') AND $cert->verified ;
+            $isCert = $this->isCertValid($cert) AND $cert->verified ;
 
-            return $isCert ? 'Yes': 'No'.$suffix;
+            return $isCert ? 'Yes': 'No';
         }
         if ((!$cert->badgeUser) || $cert->badge === $cert->badgeUser) {
 
-            return $cert->badge.$suffix;
+            return $cert->badge;
         }
 
-        return $cert->badge.'/'.$cert->badgeUser.$suffix;
+        return $cert->badge.'/'.$cert->badgeUser;
     }
 
     public function hasCertIssues()
@@ -167,12 +165,23 @@ class ProjectPersonViewDecorator
         }
 
         foreach ($certs as $cert) {
-            if (is_null($cert) || is_null($cert->badgeDate) || $cert->badgeDate == '0000-00-00') {
+            if (!$this->isCertValid($cert)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    protected function isCertValid($cert)
+    {
+        if (empty($cert)) {
+            return true;
+        }
+
+        $isValid = !(is_null($cert) || is_null($cert->badgeDate) || $cert->badgeDate == '0000-00-00');
+
+        return $isValid;
     }
 
     public function isCurrentMY($regYearProject)
@@ -243,21 +252,39 @@ class ProjectPersonViewDecorator
 
         switch ($name) {
 
+            case 'approved':
+                $approved = $this->__get('approvedRef') && $this->__get('approvedVol');
+
+                return $approved;
+                break;
+
             case 'approvedRef':
                 $role = $person->getRole('ROLE_REFEREE');
+                if(empty($role)) {
+                    return true;
+                }
                 return $role['approved'];
 
             case 'approvedVol':
                 $role = $person->getRole('ROLE_VOLUNTEER');
+                if(empty($role)) {
+                    return true;
+                }
                 return $role['approved'];
 
             case 'verifiedRef':
                 $role = $person->getRole('ROLE_REFEREE');
+                if(empty($role)) {
+                    return '';
+                }
 
                 return $role ? ($role['verified'] ? 'Yes' : '') : null;
 
             case 'verifiedVol':
                 $role = $person->getRole('ROLE_VOLUNTEER');
+                if(empty($role)) {
+                    return '';
+                }
 
                 return $role ? ($role['verified'] ? 'Yes' : '') : null;
 
@@ -266,80 +293,44 @@ class ProjectPersonViewDecorator
 
             case 'fedId':
             case 'fedKey':
-                return $this->fedKeyTransformer->transform($person->fedKey);
+                $fedKey = $this->fedKeyTransformer->transform($person->fedKey);
+                return $fedKey;
 
             case 'sar':
             case 'orgKey':
-                return $this->orgKeyTransformer->transform($person->orgKey);
+                $sar = $this->orgKeyTransformer->transform($person->orgKey);
+                if((int)$sar == 0) $sar = '';
+                return $sar;
 
             case 'personKey':
                 return $person->personKey;
 
             case 'refereeBadge':
-                $role = $person->getRole('CERT_REFEREE');
+                $cert = $person->getCert('CERT_REFEREE');
 
-                return $role ? $role->badge : null;
+                return $this->isCertValid($cert) ? $cert->badge : null;
 
             case 'refereeBadgeUser':
-                $role = $person->getRole('CERT_REFEREE');
+                $cert = $person->getCert('CERT_REFEREE');
 
-                return $role ? $role->badgeUser : null;
+                return $this->isCertValid($cert) ? $cert->badgeUser : null;
 
             case 'safeHavenCertified':
-                $role = $person->getRole('CERT_SAFE_HAVEN');
-                if (!$role) {
-                    return null;
-                }
-                switch (strtolower($role->verified)) {
-                    case  null:
-                    case 'no':
-                    case 'none':
-                    case '0':
-                    case '0000-00-00':
-                        return 'No';
-                }
+                $cert = $person->getCert('CERT_SAFE_HAVEN');
 
-                return 'Yes';
+                return $this->isCertValid($cert) ? 'Yes' : 'No';
 
             case 'concussionAware':
             case 'concussionTrained':
             case 'concussionCertified':
-                $role = $person->getRole('CERT_CONCUSSION');
-                if (!$role) {
-                    return null;
-                }
-                if ($role->approved) {
-                    return 'Yes';
-                }
-                switch (strtolower($role->verified)) {
-                    case  null:
-                    case 'no':
-                    case 'none':
-                    case '0':
-                    case '0000-00-00':
-                        return 'No';
-                }
+                $cert = $person->getCert('CERT_CONCUSSION');
 
-                return 'Yes';
+                return $this->isCertValid($cert) ? 'Yes' : 'No';
 
             case 'backgroundChecked':
             case 'floridaResident':
-                $role = $person->getRole('CERT_BACKGROUND_CHECK');
-                if (!$role) {
-                    return 'nr';
-                }
-                if ($role->verified) {
-                    return 'Yes';
-                }
-                switch (strtolower($role->verified)) {
-                    case  null:
-                    case 'no':
-                    case 'none':
-                    case '0':
-                        return 'No';
-                }
-
-                return 'Yes';
+                $cert = $person->getCert('CERT_BACKGROUND_CHECK');
+                return $this->isCertValid($cert) ? 'Yes' : 'No';
 
             case 'willCoach':
             case 'willAttend':

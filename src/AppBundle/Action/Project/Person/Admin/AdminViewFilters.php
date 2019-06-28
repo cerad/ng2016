@@ -98,10 +98,11 @@ class AdminViewFilters
                     }
                     break;
                 case 'Unapproved':
-                    if (($personView->hasRoleReferee() && !$personView->approvedRef) ||
-                        ($personView->hasRoleVolunteer() && !$personView->approvedVol)
-                    ) {
-                            $listPersons[] = $person;
+                    if (
+                        (in_array($personView->willReferee, $yesMaybe) && !$personView->approvedRef) ||
+                        (in_array($personView->willVolunteer, $yesMaybe) && !$personView->approvedVol)
+                        ) {
+                        $listPersons[] = $person;
                     }
                     break;
                 case 'Unverified':

@@ -11,6 +11,8 @@ use AppBundle\Action\Project\Person\Admin\AdminViewFilters;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use PhpOffice\PhpSpreadsheet;
+
 class AdminListingViewFile extends AbstractView
 {
     /** var ProjectPersonViewDecorator **/
@@ -40,6 +42,13 @@ class AdminListingViewFile extends AbstractView
         $this->adminViewFilters = $adminViewFilters;
         $this->regYearProject = $project['info']['regYear'];
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws PhpSpreadsheet\Exception
+     * @throws PhpSpreadsheet\Writer\Exception
+     */
     public function __invoke(Request $request)
     {
         $reportKey = $request->attributes->get('reportKey');
@@ -79,11 +88,21 @@ class AdminListingViewFile extends AbstractView
 
         return $response;
     }
+
+    /**
+     * @param $projectPersons
+     * @param $reportKey
+     * @return mixed
+     */
     protected function generateResponse($projectPersons, $reportKey)
     {
+
+        $yes = ['Yes'];
+        $yesMaybe = ['Yes', 'Maybe'];
+
         //set the header labels
         $data =   array(
-            array ('AYSO ID','projectKey','personKey','Name','eMail','Phone','Age',
+            array ('AYSO ID','Name','eMail','Phone','Age',
                    'Approved','Verified', 'Created On',
                    'MY','S/A/R/State','Certified Badge','Safe Haven','Concussion Aware',
                    'Shirt Size','Notes',
@@ -98,16 +117,19 @@ class AdminListingViewFile extends AbstractView
         foreach ( $projectPersons as $projectPerson ) {
             $personView->setProjectPerson($projectPerson);
 
-            $data[] = array(
+            $approved = !(
+                (in_array($personView->willReferee, $yesMaybe) && !$personView->approvedRef) ||
+                (in_array($personView->willVolunteer, $yesMaybe) && !$personView->approvedVol)
+                );
+
+                $data[] = array(
                 $personView->fedId,
-                $personView->projectKey,
-                $personView->personKey,
                 $personView->name,
                 $personView->email,
                 $personView->phone,
                 $personView->age,
-                $personView->approved,
-                $personView->verified,
+                $approved ? 'Yes' : 'No',
+                $personView->verified ? 'Yes' : 'No',
                 $personView->createdOn,
                 $personView->regYear,
                 $personView->sar,
@@ -129,8 +151,8 @@ class AdminListingViewFile extends AbstractView
             );
         }
         $workbook[$reportKey]['data'] = $data;
-        $workbook[$reportKey]['options']['hideCols'] = array('B','C');
-        
+        $workbook[$reportKey]['options']['freezePane'] = 'A2';
+
         return $workbook;
     }
 }
