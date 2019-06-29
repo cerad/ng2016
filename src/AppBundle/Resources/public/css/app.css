@@ -315,12 +315,6 @@ root {
 display:block;
 }
 
-h3,h4 {
-color:red;
-font-weight:700;
-font-size:18px!important;
-}
-
 #layout-content h3 {
 padding:5px 20px;
 }

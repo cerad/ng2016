@@ -41,6 +41,8 @@ class ResultsSportsmanshipCalculator
             }
         }
 
+        if(is_null($standings)) return $standings;
+
         //compute total & average SP
         foreach($standings as &$team) {
 

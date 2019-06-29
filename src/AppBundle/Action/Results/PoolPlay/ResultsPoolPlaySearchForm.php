@@ -119,19 +119,19 @@ EOD;
       <a href="{$this->generateUrl($routeName,$linkParams)}">{$gender}{$age}</a>
 EOD;
 
-                    foreach ($poolsForAge as $poolKey => $pool) {
-                        $linkParams = [
-                            //'projectId' => $projectId,
-                            'poolKey'   => $poolKey, // This is unique within a project
-                        ];
-                        // Need a short pool name view
-                        //$poolName = $pool['poolKey'];
-                        //$poolName = substr($poolName,strlen($poolName)-1);
-
-                        $html .= <<<EOD
-      <a href="{$this->generateUrl($routeName,$linkParams)}">{$pool['poolSlotView']}</a>
-EOD;
-                    }
+//                    foreach ($poolsForAge as $poolKey => $pool) {
+//                        $linkParams = [
+//                            //'projectId' => $projectId,
+//                            'poolKey'   => $poolKey, // This is unique within a project
+//                        ];
+//                        // Need a short pool name view
+//                        //$poolName = $pool['poolKey'];
+//                        //$poolName = substr($poolName,strlen($poolName)-1);
+//
+//                        $html .= <<<EOD
+//      <a href="{$this->generateUrl($routeName,$linkParams)}">{$pool['poolSlotView']}</a>
+//EOD;
+//                    }
                     // Finish division column
                     $html .= sprintf("    </td>\n");
                 }

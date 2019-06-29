@@ -54,7 +54,7 @@ EOD;
     {
         return <<<EOD
 <div class="results-legend">
-  <h2>
+  <h4>
   <p>Sportsmanship=Total Sportsmanship Points</p>
   <p>Avg SP=Total Points/Games Played</p>
   <br/>
@@ -63,7 +63,7 @@ EOD;
   <br/>
 <p>In each age division, the team that earns the highest average points per game over their pool play games will be honored for outstanding sportsmanship</p>
 <p>and all team members and coaches of those teams will receive medals.&nbsp;&nbsp;In the event of a tie, all team members and coaches will receive medals.</p>
-  </h2>
+  </h4>
   </div>
 </div>
 <hr/>
@@ -128,6 +128,8 @@ EOD;
     }
     protected function renderSportsmanshipStandings($poolTeams)
     {
+        if(empty($poolTeams)) return null;
+
         $html = null;
         //$teamTotalSportsmanship = $team['totalSP'];
         //$avgSportsmanship = $team['avgSP'];
