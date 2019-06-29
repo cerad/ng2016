@@ -58,7 +58,7 @@ class AdminViewFilters
                 case 'Available Volunteers':
                 case 'AvailableVolunteers':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if ($personView->hasRoleReferee()) {
+                        if ($personView->hasRoleVolunteer()) {
                             if ($personView->approvedVol) {
                                 $listPersons[] = $person;
                             }
@@ -92,7 +92,7 @@ class AdminViewFilters
                 case 'VolIssues':
                 case 'Volunteers with Issues':
                     if (in_array($personView->willVolunteer, $yesMaybe)) {
-                        if ($personView->hasCertIssues() OR !$personView->isCurrentMY($regYearProject)) {
+                        if (($personView->safeHavenCertified == 'No') OR !$personView->isCurrentMY($regYearProject)) {
                             $listPersons[] = $person;
                         }
                     }
