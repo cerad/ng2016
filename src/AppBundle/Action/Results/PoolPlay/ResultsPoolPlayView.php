@@ -52,11 +52,11 @@ EOD;
         return <<<EOD
 <div class="results-legend">
   <p><b>
-  GS=Goals Scored, YC=Caution, RC=Sendoff,
+  GS=Goals Scored, SP=Sportsmanship, YC=Caution, RC=Sendoff,
   <br/>
-  TE=Total Ejections, PE=Points Earned, TPE=Points Earned
+  TE=Total Ejections, PE=Points Earned, TPE=Points Earned, WP=Winning Percent
   <br/>
-  GT=Games Total, GP=Games Played, GW=Games Won, GS=Goals Scored, GA=Goals Allowed
+  GT=Games Total, GP=Games Played, GW=Games Won, GS=Goals Scored, GA=Goals Allowed, SF=SoccerFest
   </b></p>
   </div>
 </div>
@@ -94,6 +94,7 @@ EOD;
   <th class="text-center">Pool Slot</th>
   <th class="text-center">Team</th>
   <th class="text-center">TPE</th>
+  <th class="text-center">WP</th>
   <th class="text-center">GT</th>
   <th class="text-center">GP</th>
   <th class="text-center">GW</th>
@@ -102,6 +103,8 @@ EOD;
   <th class="text-center">YC</th>
   <th class="text-center">RC</th>
   <th class="text-center">TE</th>
+  <th class="text-center">SP</th>
+  <th class="text-center">SF</th>
 </tr>
 EOD;
         foreach($poolTeams as $poolTeam) {
@@ -122,6 +125,7 @@ EOD;
   <td>{$poolTeam->poolTeamSlotView}</td>
   <td class="text-left">  {$poolTeam->regTeamName}</td>
   <td class="text-center">{$poolTeam->pointsEarned}</td>
+  <td class="text-center">{$poolTeam->winPercentView}</td>
   <td class="text-center">{$poolTeam->gamesTotal}</td>
   <td class="text-center">{$poolTeam->gamesPlayed}</td>
   <td class="text-center">{$poolTeam->gamesWon}</td>
@@ -130,6 +134,8 @@ EOD;
   <td class="text-center">{$poolTeam->playerWarnings}</td>
   <td class="text-center">{$poolTeam->playerEjections}</td>
   <td class="text-center">{$poolTeam->totalEjections}</td>
+  <td class="text-center">{$poolTeam->sportsmanship}</td>
+  <td class="text-center">{$poolTeam->regTeamPoints}</td>  
 </tr>
 EOD;
     }
@@ -153,6 +159,7 @@ EOD;
   <th class="text-center">Home vs Away</th>
   <th class="text-center">GS</th>
   <th class="text-center">PE</th>
+  <th class="text-center">SP</th>  
   <th class="text-center">YC</th>
   <th class="text-center">RC</th>
   <th class="text-center">TE</th>
@@ -204,6 +211,7 @@ EOD;
   <td class="text-left">{$this->escape($homeTeam->regTeamName)}{$hr}{$this->escape($awayTeam->regTeamName)}</td>
   <td>{$homeTeam->pointsScored} {$hr}{$awayTeam->pointsScored} </td>
   <td>{$homeTeam->pointsEarned} {$hr}{$awayTeam->pointsEarned} </td>
+  <td>{$homeTeam->sportsmanship}{$hr}{$awayTeam->sportsmanship}</td>  
   <td>{$homeTeamPlayerWarnings} {$hr}{$awayTeamPlayerWarnings} </td>
   <td>{$homeTeamPlayerEjections}{$hr}{$awayTeamPlayerEjections}</td>
   <td>{$homeTeamTotalEjections} {$hr}{$awayTeamTotalEjections} </td>

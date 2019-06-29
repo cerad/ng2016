@@ -79,7 +79,7 @@ class GameReportUpdateForm extends AbstractForm
         // Keep it simple for now
         $homeTeam->pointsAllowed = $this->filterScalarInteger($awayTeamData,'goalsScored');
         $homeTeam->pointsScored  = $this->filterScalarInteger($homeTeamData,'goalsScored');
-//        $homeTeam->sportsmanship = $this->filterScalarInteger($homeTeamData,'sportsmanship');
+        $homeTeam->sportsmanship = $this->filterScalarInteger($homeTeamData,'sportsmanship');
         $homeTeam->injuries      = $this->filterScalarInteger($homeTeamData,'injuries');
 
         $homeTeam->misconduct->playerWarnings  = $this->filterScalarInteger($homeTeamData,'playerWarnings');
@@ -90,7 +90,7 @@ class GameReportUpdateForm extends AbstractForm
 
         $awayTeam->pointsAllowed = $this->filterScalarInteger($homeTeamData,'goalsScored');
         $awayTeam->pointsScored  = $this->filterScalarInteger($awayTeamData,'goalsScored');
-//        $awayTeam->sportsmanship = $this->filterScalarInteger($awayTeamData,'sportsmanship');
+        $awayTeam->sportsmanship = $this->filterScalarInteger($awayTeamData,'sportsmanship');
         $awayTeam->injuries      = $this->filterScalarInteger($awayTeamData,'injuries');
 
         $awayTeam->misconduct->playerWarnings  = $this->filterScalarInteger($awayTeamData,'playerWarnings');
@@ -170,6 +170,7 @@ class GameReportUpdateForm extends AbstractForm
         <div class="tab-pane active" id="score">
           {$this->renderPairHeaderRow()}
           {$this->renderPairRow('Goals Scored',   'goalsScored',   $homeTeam->pointsScored,  $awayTeam->pointsScored)}
+          {$this->renderPairRow('Sportsmanship',  'sportsmanship', $homeTeam->sportsmanship, $awayTeam->sportsmanship,'40')}
           {$this->renderPairRow('Points Earned',  'pointsEarned',  $homeTeam->pointsEarned,  $awayTeam->pointsEarned,  null,true)}
           {$this->renderPairRow('Points Deducted','pointsDeducted',$homeTeam->pointsDeducted,$awayTeam->pointsDeducted,null,true)}
         </div>

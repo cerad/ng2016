@@ -68,11 +68,15 @@ EOT;
 EOT;
         if ($this->isGranted('ROLE_SCORE_ENTRY')) {
             $html .= <<<EOT
+      <li><a href="https://ayso-2019nationalgames.sportsaffinity.com/Tour/public/info/accepted_list.asp?sessionguid=&Tournamentguid={B4AD6CC2-C88A-4EF6-A75F-F08967008E66}" target="_blank">Enter Match Results</a></li>
+<!--
       <li><a href="{$this->generateUrl('game_report_update',['projectId' => $this->projectId,'gameNumber' => 11001])}">Enter Match Results</a></li>
+-->
 EOT;
       }
-      
         $html .= <<<EOT
+<!--
+      <li><a href="{$this->generateUrl('results_poolplay_2019')}">Pool Play</a></li>
       <li><a href="{$this->generateUrl('results_poolplay_2019')}">Pool Play</a></li>
 
       <li><a href="{$this->generateUrl('results_medalround_2019')}">Medal Round</a></li>
@@ -80,6 +84,7 @@ EOT;
       <li><a href="{$this->generateUrl('results_sportsmanship_2019')}">Sportsmanship</a></li>
 
       <li><a href="{$this->generateUrl('results_final_2019')}">Final Standings</a></li>
+-->
     </ul>
   </div>
 </div>
