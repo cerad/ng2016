@@ -64,7 +64,7 @@ class TeamsUpdateForm extends AbstractForm
         ];
         $teamChoices = array_merge(
             [null => 'Add Team'],
-            $this->regPersonFinder->findRegTeamChoices($this->getUser()->getProjectId())
+            $this->regPersonFinder->findRegTeamChoices($this->getUser()->getProjectId(), 'Core')
         );
         $html = <<<EOD
 <table class="person-update-form min-width-500" >

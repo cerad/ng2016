@@ -133,15 +133,15 @@ EOD;
      * This is a view routine, should it be in it's own class?
      * Showing program here, better to have a choice view column
      */
-    public function findRegTeamChoices($projectId)
+    public function findRegTeamChoices($projectId, $program = '')
     {
         $sql = <<<EOD
 SELECT regTeamId, teamName, program, gender, age
 FROM regTeams AS regTeam
-WHERE projectId = ?
+WHERE projectId = ? AND program = ?
 ORDER BY regTeamId
 EOD;
-        $stmt = $this->regTeamConn->executeQuery($sql,[$projectId]);
+        $stmt = $this->regTeamConn->executeQuery($sql,[$projectId, $program]);
         $choices = [];
         while($row = $stmt->fetch())
         {
