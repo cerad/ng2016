@@ -250,7 +250,7 @@ EOD;
         if (!$row) {
             return $html;
         }
-        $refereeBadge = substr($row['refereeBadge'], 0, 3);
+        $refereeBadge = $row['refereeBadge'] == 'None' ? 'None' : substr($row['refereeBadge'], 0, 3);
 
         return $html.<<<EOD
         <td class="text-left {$this->styleCertificationConflict(
