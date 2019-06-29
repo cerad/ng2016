@@ -213,9 +213,9 @@ EOD;
   <tr><td>Available Wed (Pool Play) </td><td>{$personView->availWed}</td></tr>
   <tr><td>Available Thu (Pool Play)  </td><td>{$personView->availThu}</td></tr>
   <tr><td>Available Fri (Pool Play)  </td><td>{$personView->availFri}</td></tr>
-  <tr><td>Available Sat Morning  (PP)</td><td>{$personView->availSatMorn}</td></tr>
-  <tr><td>Available Sat Afternoon (QF)</td><td>{$personView->availSatAfter}</td></tr>
-  <tr><td>Available Sun Morning  (SF)</td><td>{$personView->availSunMorn}</td></tr>
+  <tr><td>Available Sat Morning  (QF)</td><td>{$personView->availSatMorn}</td></tr>
+  <tr><td>Available Sat Afternoon (SF)</td><td>{$personView->availSatAfter}</td></tr>
+  <tr><td>Available Sun Morning  (FM)</td><td>{$personView->availSunMorn}</td></tr>
   <tr><td>Available Sun Afternoon (FM)</td><td>{$personView->availSunAfter}</td></tr>
   <tr class="trAction"><td class="text-center" colspan="2">
     <a href="{$this->generateUrl('project_person_update')}">

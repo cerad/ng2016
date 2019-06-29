@@ -451,11 +451,13 @@ EOD;
       <label class="col-xs-3 control-label"><input name="avail[]" value="availFri" type="checkbox" {$this->isChecked($availFri)}>Available Fri (Pool Play)</label>
     </div>    
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatMorn" type="checkbox" {$this->isChecked($availSatMorn)}>Available Sat Morning (PP)</label>
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatAfter" type="checkbox" {$this->isChecked($availSatAfter)}>Available Sat Afternoon(QF)</label>
+        <label class="col-xs-3 control-label"><input name="avail[]" value="availSatMorn" type="checkbox" 
+        {$this->isChecked($availSatMorn)}>Available Sat Morning (QF)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availSatAfter" type="checkbox" {$this->isChecked($availSatAfter)}>Available Sat Afternoon(SF)</label>
     </div>    
     <div class="form-group avail">
-      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" {$this->isChecked($availSunMorn)}>Available Sun Morning (SF)</label>
+      <label class="col-xs-3 control-label"><input name="avail[]" value="availSunMorn" type="checkbox" 
+      {$this->isChecked($availSunMorn)}>Available Sun Morning (FM)</label>
       <label class="col-xs-3 control-label"><input name="avail[]" value="availSunAfter" type="checkbox" {$this->isChecked($availSunAfter)}>Available Sun Afternoon (FM)</label>
     </div>    
     <div class="form-group">
