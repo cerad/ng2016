@@ -193,6 +193,14 @@ class Loade3CertsCommand extends LoadAbstractCommand
                 case 'National Referee Course':
                     $badge = '';
                     break;
+                case 'U8 Official':
+                case 'U-8 Official':
+                case '8U Official':
+                    $badge = 'U-8 Official';
+                    break;
+                case 'Assistant':
+                    $badge = 'Assistant Referee';
+                    break;
                 case 'Regional Referee':
                 case 'Regional Referee & Safe Haven Referee':
                 case 'Regional Referee & Safe Haven Referee / Intermediate Referee Course':

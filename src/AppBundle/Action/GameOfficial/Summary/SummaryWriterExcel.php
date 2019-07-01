@@ -292,14 +292,14 @@ class SummaryWriterExcel
         $colStatSlotAr = $col++;
         $colStatSlotYc = $col++;
         $colStatSlotRc = $col++;
-        $colSkip1 = $col++;
+//        $colSkip1 = $col++;
         $colStatSlotTue = $col++;
         $colStatSlotWed = $col++;
         $colStatSlotThu = $col++;
         $colStatSlotFri = $col++;
         $colStatSlotSat = $col++;
         $colStatSlotSun = $col++;
-        $colSkip2 = $col++;
+//        $colSkip2 = $col++;
 
         $colAvailSlotTue = $col++;
         $colAvailSlotWed = $col++;
@@ -309,7 +309,7 @@ class SummaryWriterExcel
         $colAvailSlotSat2 = $col++;
         $colAvailSlotSun1 = $col++;
         $colAvailSlotSun2 = $col++;
-        $colSkip3 = $col++;
+//        $colSkip3 = $col++;
 
         $colBadge = $col++;
         $colSars = $col++;
@@ -358,14 +358,14 @@ class SummaryWriterExcel
         $this->setColWidth($ws, $colStatSlotAr, 5);
         $this->setColWidth($ws, $colStatSlotYc, 5);
         $this->setColWidth($ws, $colStatSlotRc, 5);
-        $this->setColWidth($ws, $colSkip1, 5);
+//        $this->setColWidth($ws, $colSkip1, 5);
         $this->setColWidth($ws, $colStatSlotTue, 5);
         $this->setColWidth($ws, $colStatSlotWed, 5);
         $this->setColWidth($ws, $colStatSlotThu, 5);
         $this->setColWidth($ws, $colStatSlotFri, 5);
         $this->setColWidth($ws, $colStatSlotSat, 5);
         $this->setColWidth($ws, $colStatSlotSun, 5);
-        $this->setColWidth($ws, $colSkip2, 5);
+//        $this->setColWidth($ws, $colSkip2, 5);
         $this->setColWidth($ws, $colAvailSlotTue, 6);
         $this->setColWidth($ws, $colAvailSlotWed, 6);
         $this->setColWidth($ws, $colAvailSlotThu, 6);
@@ -374,7 +374,7 @@ class SummaryWriterExcel
         $this->setColWidth($ws, $colAvailSlotSat2, 8);
         $this->setColWidth($ws, $colAvailSlotSun1, 8);
         $this->setColWidth($ws, $colAvailSlotSun2, 8);
-        $this->setColWidth($ws, $colSkip3, 5);
+//        $this->setColWidth($ws, $colSkip3, 5);
 
         $this->setColWidth($ws, $colEmail, 40);
         $this->setColWidth($ws, $colPhone, 18);

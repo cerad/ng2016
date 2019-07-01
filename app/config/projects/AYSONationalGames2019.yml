@@ -283,7 +283,7 @@ parameters:
                 National_1:   National 1
                 National_2:   National 2
                 Assistant:    Assistant
-                U8Official:   U8 Official
+                U8Official:   U-8 Official
 
         shirtSize:
             type:    select
