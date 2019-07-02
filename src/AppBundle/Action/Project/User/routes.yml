@@ -6,6 +6,8 @@ user_login:
 
 user_login_check:
     path:  /login-check
+    defaults:
+        _controller: index_controller
 
 user_logout:
     path:  /logout
