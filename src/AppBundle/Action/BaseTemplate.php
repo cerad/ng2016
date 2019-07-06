@@ -244,8 +244,10 @@ EOT;
         return
 <<<EOT
 <li>
-<a href="https://ayso-2019nationalgames.sportsaffinity.com/Tour/public/info/accepted_list.asp?sessionguid=&Tournamentguid={B4AD6CC2-C88A-4EF6-A75F-F08967008E66}" target="_blank">SCHEDULES 
-& RESULTS</a>
+<a href="https://ayso-2019nationalgames.sportsaffinity.com/Tour/public/info/accepted_list.asp?sessionguid=&Tournamentguid={B4AD6CC2-C88A-4EF6-A75F-F08967008E66}" target="_blank">SCHEDULES</a>
+</li>
+<li>
+<a href="https://aysonationalgames.org/game-results/" target="_blank">RESULTS & STANDINGS</a>
 </li>
 EOT;
     }
