@@ -54,7 +54,7 @@ class ScheduleAssignorController extends AbstractController2
         $projectId = array_keys($this->projectChoices)[0];
 
         // Second date in project
-        $date = array_keys($this->projects[$projectId]['dates'])[4];
+        $date = array_keys($this->projects[$projectId]['dates'])[5];
 
         // Save selected teams in session
         $searchData = [
