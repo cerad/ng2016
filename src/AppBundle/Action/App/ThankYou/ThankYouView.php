@@ -13,7 +13,7 @@ class ThankYouView extends AbstractView2
         $title = $project['title'];
         $content = <<<EOD
 <div id="layout-block">
-<h1 class="text-center" style="padding-top:20px; font-style:italic; font-size:1.5em;"><emphasis>Thank you for 
+<h1 class="text-center" style="padding-top:20px; font-style:italic; font-size:1.5em;"><emphasis>MAHALO for 
 participating
  in 
 the 

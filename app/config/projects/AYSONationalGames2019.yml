@@ -18,9 +18,10 @@ parameters:
         fedRoleId: AYSOV
 
         abbv:    "NG2019"
-        title:   "AYSO National Games 2019"
+        title:   "AYSO 2019 National Games"
         shortTitle: "National Games"
-        desc:    "AYSO National Games 2019 - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7, 2019"
+        desc:    "AYSO 2019 National Games - Waipio Peninsula Soccer Complex, Waipahu, HI - June 30 to July 7,
+        2019"
         venue_name: "Waipio Peninsula Soccer Complex"
         venue: "WPSC"
         prefix:  'NatGames2019'
