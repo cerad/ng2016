@@ -34,3 +34,4 @@ parameters:
     show_results_menu: true
     show_user_menu: true
     show_final_results: false
+    show_thank_you: true

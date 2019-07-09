@@ -13,15 +13,18 @@ class BaseTemplate extends AbstractTemplate
     private $showFinalResults;
     /** @var  %show_user_menu% */
     private $showUserMenu;
+    private $showThankYou;
 
 
-    public function __construct($showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showUserMenu,$showFinalResults,$version)
+    public function __construct($showHeaderImage,$showSchedulesMenu,$showResultsMenu,$showUserMenu,$showFinalResults,
+        $showThankYou, $version)
     {
         $this->showHeaderImage = $showHeaderImage;
         $this->showSchedulesMenu = $showSchedulesMenu;
         $this->showResultsMenu = $showResultsMenu;
         $this->showFinalResults = $showFinalResults;
         $this->showUserMenu = $showUserMenu;
+        $this->showThankYou = $showThankYou;
 
         $this->version = $version;
     }
@@ -229,6 +232,10 @@ EOT;
 
     protected function renderTopMenuRules()
     {
+        if($this->showThankYou){
+            return null;;
+        }
+
         return
 <<<EOT
     <li><a href="{$this->generateUrl('rules_of_competition' )}" target="_blank">RULES</a></li>
@@ -238,6 +245,10 @@ EOT;
 
     protected function renderTopMenuSchedules()
     {
+        if($this->showThankYou){
+            return null;;
+        }
+
         if (!$this->showSchedulesMenu) {
             return null;
         }
@@ -246,14 +257,15 @@ EOT;
 <li>
 <a href="https://ayso-2019nationalgames.sportsaffinity.com/Tour/public/info/accepted_list.asp?sessionguid=&Tournamentguid={B4AD6CC2-C88A-4EF6-A75F-F08967008E66}" target="_blank">SCHEDULES</a>
 </li>
-<li>
-<a href="https://aysonationalgames.org/game-results/" target="_blank">RESULTS & STANDINGS</a>
-</li>
 EOT;
     }
     
     protected function renderTopMenuTextAlerts()
     {
+        if($this->showThankYou){
+            return null;;
+        }
+
         $html =
 <<<EOT
             <li><a href="{$this->generateUrl('app_text_alerts')}">TEXT ALERTS</a></li>
@@ -264,33 +276,40 @@ EOT;
 
     protected function renderTopMenuResults()
     {
-        if (!$this->showResultsMenu) {
-            return null;
-        }
-        
-        $html =
-<<<EOT
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="{$this->generateUrl('results_poolplay_2019')}">POOL PLAY</a></li>
-            <li><a href="{$this->generateUrl('results_medalround_2019')}">MEDAL ROUND</a></li>
-            <li><a href="{$this->generateUrl('results_sportsmanship_2019')}">SPORTSMANSHIP</a></li>
-EOT;
-        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
-            $html .=
-<<<EOT
-            <li><a href="{$this->generateUrl('results_final_2019')}">FINAL STANDINGS</a></li>
-EOT;
-        }
-            
-        $html .=
-<<<EOT
-          </ul>
-        </li>
+        return
+            <<<EOT
+<li>
+<a href="https://aysonationalgames.org/game-results/" target="_blank">RESULTS & STANDINGS</a>
+</li>
 EOT;
 
-        return $html;
+//        if (!$this->showResultsMenu) {
+//            return null;
+//        }
+//
+//        $html =
+//<<<EOT
+//        <li class="dropdown">
+//          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RESULTS <span class="caret"></span></a>
+//          <ul class="dropdown-menu">
+//            <li><a href="{$this->generateUrl('results_poolplay_2019')}">POOL PLAY</a></li>
+//            <li><a href="{$this->generateUrl('results_medalround_2019')}">MEDAL ROUND</a></li>
+//            <li><a href="{$this->generateUrl('results_sportsmanship_2019')}">SPORTSMANSHIP</a></li>
+//EOT;
+//        if ($this->isGranted('ROLE_ADMIN') OR $this->showFinalResults) {
+//            $html .=
+//<<<EOT
+//            <li><a href="{$this->generateUrl('results_final_2019')}">FINAL STANDINGS</a></li>
+//EOT;
+//        }
+//
+//        $html .=
+//<<<EOT
+//          </ul>
+//        </li>
+//EOT;
+//
+//        return $html;
     }
     
     protected function renderCreateNewAccount()
@@ -396,9 +415,9 @@ EOT;
     }
     protected function renderWelcome()
     {
-//        if (!$this->showResultsMenu || !$this->showUserMenu) {
-//            return null;
-//        }
+        if ($this->showThankYou) {
+            return null;
+        }
 
         return
             <<<EOT

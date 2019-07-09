@@ -32,6 +32,12 @@ app_text_alerts:
         _view:       text_alerts_view
         _controller: text_alerts_controller
 
+app_tnx:
+    path: /tnx
+    defaults:
+        _controller: tnx_controller
+        _view: tnx_view
+
 rules_of_competition:
     path: /rules
     defaults:

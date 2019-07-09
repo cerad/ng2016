@@ -26,6 +26,7 @@ services:
             - "%show_results_menu%"
             - "%show_user_menu%"
             - "%show_final_results%"
+            - "%show_thank_you%"
             - "%app_version%"
 
     abstract_form:
@@ -65,6 +66,7 @@ services:
         public: true
         class:  AppBundle\Action\App\Welcome\WelcomeController
         parent: abstract_controller
+        arguments: ['%show_thank_you%']
 
     welcome_view:
         public: true
