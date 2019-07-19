@@ -50,6 +50,10 @@ class AppKernel extends Kernel
         return dirname(__DIR__).'/var/logs';
     }
 
+    /**
+     * @param LoaderInterface $loader
+     * @throws Exception
+     */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');

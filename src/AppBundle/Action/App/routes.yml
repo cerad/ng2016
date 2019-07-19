@@ -9,8 +9,6 @@ app_welcome:
     defaults:
         _view:       welcome_view
         _controller: welcome_controller
-#        _view:       tnx_view
-#        _controller: tnx_controller
 
 app_home:
     path: /home

@@ -129,6 +129,7 @@ services:
         parent: abstract_view2
         arguments: ['@admin_switch_user_form']
 
+    # action ThankYou
     tnx_controller:
         public: true;
         class:  AppBundle\Action\App\ThankYou\ThankYouController
@@ -139,4 +140,3 @@ services:
         public: true;
         class:  AppBundle\Action\App\ThankYou\ThankYouView
         parent: abstract_view2
-
