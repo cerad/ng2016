@@ -32,7 +32,7 @@
     "bootstrap": "^3.3.6",
     "bootstrap-fileinput": "^4.5.1",
     "bootstrap-vertical-tabs": "git+https://github.com/dbtek/bootstrap-vertical-tabs.git",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "normalize.css": "^3.0.3"
   }
 }
